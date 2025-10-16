@@ -485,14 +485,22 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     }
   }
 
-  // 切换到默认云服务
-  Future<void> _switchToBuiltin(CloudServiceConfig currentActive) async {
-    if (currentActive.builtin) return;
+  // 通用切换云服务方法
+  Future<void> _switchCloudService({
+    required bool shouldProceed,
+    required String confirmMessage,
+    required Future<bool> Function() switchAction,
+    required String successTitle,
+    required String successMessage,
+    String? failTitle,
+    String? failMessage,
+  }) async {
+    if (!shouldProceed) return;
 
     // 二次确认
     final confirmed = await AppDialog.confirm(context,
         title: AppLocalizations.of(context).cloudSwitchService,
-        message: AppLocalizations.of(context).cloudSwitchToBuiltinConfirm);
+        message: confirmMessage);
     if (!confirmed) return;
 
     setState(() => _saving = true);
@@ -504,65 +512,71 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         }
       } catch (_) {}
 
+      // 执行切换操作
+      final ok = await switchAction();
+
+      if (!ok) {
+        if (mounted) {
+          await AppDialog.error(context,
+              title: failTitle ?? AppLocalizations.of(context).cloudSwitchFailed,
+              message: failMessage ?? AppLocalizations.of(context).cloudActivateFailedMessage);
+        }
+        return;
+      }
+
+      // 刷新Provider状态，让UI立即反映变化
       if (mounted) {
-        await ref.read(cloudServiceStoreProvider).switchToBuiltin();
+        ref.invalidate(activeCloudConfigProvider);
+        ref.invalidate(storedCustomCloudConfigProvider);
       }
 
       if (mounted) {
         await AppDialog.info(context,
-            title: AppLocalizations.of(context).cloudSwitched,
-            message: AppLocalizations.of(context).cloudSwitchedToBuiltin);
+            title: successTitle,
+            message: successMessage);
       }
     } catch (e) {
       if (mounted) {
-        await AppDialog.error(context, title: AppLocalizations.of(context).cloudSwitchFailed, message: '$e');
+        await AppDialog.error(context,
+            title: AppLocalizations.of(context).cloudSwitchFailed,
+            message: '$e');
       }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
   }
 
+  // 切换到默认云服务
+  Future<void> _switchToBuiltin(CloudServiceConfig currentActive) async {
+    await _switchCloudService(
+      shouldProceed: !currentActive.builtin,
+      confirmMessage: AppLocalizations.of(context).cloudSwitchToBuiltinConfirm,
+      switchAction: () async {
+        if (mounted) {
+          await ref.read(cloudServiceStoreProvider).switchToBuiltin();
+        }
+        return true;
+      },
+      successTitle: AppLocalizations.of(context).cloudSwitched,
+      successMessage: AppLocalizations.of(context).cloudSwitchedToBuiltin,
+    );
+  }
+
   // 切换到自定义云服务
   Future<void> _switchToCustom(CloudServiceConfig customConfig, CloudServiceConfig currentActive) async {
-    if (!currentActive.builtin) return;
-
-    // 二次确认
-    final confirmed = await AppDialog.confirm(context,
-        title: AppLocalizations.of(context).cloudSwitchService,
-        message: AppLocalizations.of(context).cloudSwitchToCustomConfirm);
-    if (!confirmed) return;
-
-    setState(() => _saving = true);
-    try {
-      // 登出当前会话
-      try {
-        if (mounted) {
-          await ref.read(authServiceProvider).signOut();
-        }
-      } catch (_) {}
-
-      final ok = mounted ? await ref.read(cloudServiceStoreProvider).activateExistingCustomIfAny() : false;
-      if (!ok) {
-        if (mounted) {
-          await AppDialog.error(context,
-              title: AppLocalizations.of(context).cloudActivateFailed,
-              message: AppLocalizations.of(context).cloudActivateFailedMessage);
-        }
-      } else {
-
-        if (mounted) {
-          await AppDialog.info(context,
-              title: AppLocalizations.of(context).cloudActivated,
-              message: AppLocalizations.of(context).cloudActivatedMessage);
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        await AppDialog.error(context, title: AppLocalizations.of(context).cloudSwitchFailed, message: '$e');
-      }
-    } finally {
-      if (mounted) setState(() => _saving = false);
-    }
+    await _switchCloudService(
+      shouldProceed: currentActive.builtin,
+      confirmMessage: AppLocalizations.of(context).cloudSwitchToCustomConfirm,
+      switchAction: () async {
+        return mounted
+            ? await ref.read(cloudServiceStoreProvider).activateExistingCustomIfAny()
+            : false;
+      },
+      successTitle: AppLocalizations.of(context).cloudActivated,
+      successMessage: AppLocalizations.of(context).cloudActivatedMessage,
+      failTitle: AppLocalizations.of(context).cloudActivateFailed,
+      failMessage: AppLocalizations.of(context).cloudActivateFailedMessage,
+    );
   }
 
   // 添加自定义配置
