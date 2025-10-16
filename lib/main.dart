@@ -13,6 +13,7 @@ import 'utils/route_logger.dart';
 import 'pages/splash_page.dart';
 import 'services/notification_service.dart';
 import 'l10n/app_localizations.dart';
+import 'widgets/widget_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,11 @@ Future<void> main() async {
   }
   // 初始化通知服务
   await NotificationService.initialize();
+
+  // 初始化小组件服务
+  await WidgetService.initialize();
+  await WidgetService.registerInteractivity();
+
   runApp(const ProviderScope(child: MainApp()));
 }
 

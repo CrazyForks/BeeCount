@@ -10,6 +10,7 @@ import 'pages/personalize_page.dart' show headerStyleProvider;
 import 'providers.dart';
 import 'utils/ui_scale_extensions.dart';
 import 'l10n/app_localizations.dart';
+import 'widgets/widget_service.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -28,7 +29,10 @@ class _BeeAppState extends ConsumerState<BeeApp> {
 
   @override
   Widget build(BuildContext context) {
-    // 将 4 个页面映射到 5 槽位（中间为“+”）：页面索引 0,1,2,3 对应视觉槽位 0,1,3,4（槽位 2 为 +）。
+    // 初始化小组件数据监听器
+    ref.watch(widgetDataWatcherProvider);
+
+    // 将 4 个页面映射到 5 槽位（中间为"+"）：页面索引 0,1,2,3 对应视觉槽位 0,1,3,4（槽位 2 为 +）。
     final idx = ref.watch(bottomTabIndexProvider);
     return PopScope(
       canPop: false,

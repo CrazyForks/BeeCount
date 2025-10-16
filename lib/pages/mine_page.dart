@@ -31,6 +31,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../utils/format_utils.dart';
 import '../services/update_service.dart';
 import '../utils/ui_scale_extensions.dart';
+import '../widgets/widget_service.dart';
 
 class MinePage extends ConsumerWidget {
   const MinePage({super.key});
@@ -275,6 +276,50 @@ class MinePage extends ConsumerWidget {
                             MaterialPageRoute(
                                 builder: (_) => const ReminderSettingsPage()),
                           );
+                        },
+                      ),
+                      AppDivider.thin(),
+                      AppListTile(
+                        leading: Icons.widgets_outlined,
+                        title: '小组件测试',
+                        subtitle: '更新小组件数据',
+                        onTap: () async {
+                          try {
+                            await WidgetService.updateWidget(ref);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('小组件数据已更新')),
+                              );
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('更新失败: $e')),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                      AppDivider.thin(),
+                      AppListTile(
+                        leading: Icons.refresh_outlined,
+                        title: '刷新小组件外观',
+                        subtitle: '更新主题色和语言显示',
+                        onTap: () async {
+                          try {
+                            await WidgetService.forceRefreshWidgets();
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('小组件外观已刷新，主题和语言已同步')),
+                              );
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('刷新失败: $e')),
+                              );
+                            }
+                          }
                         },
                       ),
                       AppDivider.thin(),

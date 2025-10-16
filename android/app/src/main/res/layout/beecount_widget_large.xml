@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_background"
+    android:padding="16dp">
+
+    <!-- 顶部区域 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/ledger_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="蜜蜂记账"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="余额"
+            android:textSize="12sp"
+            android:textColor="#666666" />
+
+    </LinearLayout>
+
+    <!-- 余额显示 -->
+    <TextView
+        android:id="@+id/balance_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¥0.00"
+        android:textSize="24sp"
+        android:textColor="#2E7D32"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 统计信息区域 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="今日支出"
+                android:textSize="10sp"
+                android:textColor="#666666" />
+
+            <TextView
+                android:id="@+id/today_expense_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¥0.00"
+                android:textSize="14sp"
+                android:textColor="#D32F2F"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本月支出"
+                android:textSize="10sp"
+                android:textColor="#666666" />
+
+            <TextView
+                android:id="@+id/month_expense_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¥0.00"
+                android:textSize="14sp"
+                android:textColor="#FF9800"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- 底部按钮 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/add_transaction_btn"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="快速记账"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/widget_button_background"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/view_reports_btn"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="查看报表"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/widget_button_background"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

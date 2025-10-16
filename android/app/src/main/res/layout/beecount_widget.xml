@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- 头部：账本名称 -->
+    <TextView
+        android:id="@+id/ledger_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="蜜蜂记账"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal" />
+
+    <!-- 余额显示 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="余额："
+            android:textColor="#666666"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/balance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¥0.00"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- 今日支出 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="今日支出："
+            android:textColor="#666666"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/today_expense_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¥0.00"
+            android:textColor="#ff6b6b"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+    <!-- 快速记账按钮 -->
+    <Button
+        android:id="@+id/add_transaction_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/widget_button_background"
+        android:text="快速记账"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
+</LinearLayout>
