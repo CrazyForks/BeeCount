@@ -86,7 +86,7 @@ A lightweight, open-source, privacy-focused personal accounting app for iOS/Andr
 
 ### Option 1: Direct Installation (Recommended)
 
-1. Go to the [Releases](https://github.com/FBSocial/BeeCount/releases) page
+1. Go to the [Releases](https://github.com/TNT-Likely/BeeCount/releases) page
 2. Download the latest `app-prod-release-*.apk` file
 3. Install and start using (default local mode, no configuration needed)
 
@@ -94,7 +94,7 @@ A lightweight, open-source, privacy-focused personal accounting app for iOS/Andr
 
 ```bash
 # Clone the project
-git clone https://github.com/FBSocial/BeeCount.git
+git clone https://github.com/TNT-Likely/BeeCount.git
 cd BeeCount
 
 # Install dependencies
@@ -236,6 +236,6 @@ A: Configure the same Supabase URL and anon key on all devices, and log in with 
 
 Thanks to all friends who have contributed code, suggestions, and feedback to the BeeCount project!
 
-If you have questions or suggestions, feel free to raise them in [Issues](https://github.com/FBSocial/BeeCount/issues) or participate in discussions at [Discussions](https://github.com/FBSocial/BeeCount/discussions).
+If you have questions or suggestions, feel free to raise them in [Issues](https://github.com/TNT-Likely/BeeCount/issues) or participate in discussions at [Discussions](https://github.com/TNT-Likely/BeeCount/discussions).
 
 **BeeCount 🐝 - Making Accounting Simple and Secure**

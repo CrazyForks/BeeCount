@@ -86,7 +86,7 @@
 
 ### 方式一：直接安装（推荐）
 
-1. 前往 [Releases](https://github.com/FBSocial/BeeCount/releases) 页面
+1. 前往 [Releases](https://github.com/TNT-Likely/BeeCount/releases) 页面
 2. 下载最新版本的 `app-prod-release-*.apk` 文件
 3. 安装后即可开始使用（默认本地模式，无需任何配置）
 
@@ -94,7 +94,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/FBSocial/BeeCount.git
+git clone https://github.com/TNT-Likely/BeeCount.git
 cd BeeCount
 
 # 安装依赖
@@ -237,6 +237,6 @@ A: 在所有设备上配置相同的 Supabase URL 和 anon key，登录同一账
 
 感谢所有为蜜蜂记账项目贡献代码、提出建议和反馈问题的朋友们！
 
-如有问题或建议，欢迎在 [Issues](https://github.com/FBSocial/BeeCount/issues) 中提出，或在 [Discussions](https://github.com/FBSocial/BeeCount/discussions) 中参与讨论。
+如有问题或建议，欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出，或在 [Discussions](https://github.com/TNT-Likely/BeeCount/discussions) 中参与讨论。
 
 **蜜蜂记账 🐝 - 让记账变得简单而安全**
