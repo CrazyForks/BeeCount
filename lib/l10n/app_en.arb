@@ -147,6 +147,7 @@
   "ledgersName": "Name",
   "ledgersDefaultLedgerName": "Default Ledger",
   "ledgersDefaultAccountName": "Cash",
+  "accountTitle": "Account",
   "ledgersCurrency": "Currency",
   "ledgersSelectCurrency": "Select Currency",
   "ledgersSearchCurrency": "Search: Chinese or code",
@@ -349,6 +350,8 @@
   "mineCategoryManagementSubtitle": "Edit custom categories",
   "mineCategoryMigration": "Category Migration",
   "mineCategoryMigrationSubtitle": "Migrate category data to other categories",
+  "mineRecurringTransactions": "Recurring Bills",
+  "mineRecurringTransactionsSubtitle": "Manage recurring bills",
   "mineReminderSettings": "Reminder Settings",
   "mineReminderSettingsSubtitle": "Set daily recording reminders",
   "minePersonalize": "Personalization",
@@ -1174,6 +1177,50 @@
 
   "webdavConfiguredTitle": "WebDAV Cloud Service Configured",
   "webdavConfiguredMessage": "WebDAV cloud service uses the credentials provided during configuration, no additional login required.",
+
+  "recurringTransactionTitle": "Recurring Bills",
+  "recurringTransactionAdd": "Add Recurring Bill",
+  "recurringTransactionEdit": "Edit Recurring Bill",
+  "recurringTransactionFrequency": "Frequency",
+  "recurringTransactionDaily": "Daily",
+  "recurringTransactionWeekly": "Weekly",
+  "recurringTransactionMonthly": "Monthly",
+  "recurringTransactionYearly": "Yearly",
+  "recurringTransactionInterval": "Interval",
+  "recurringTransactionDayOfMonth": "Day of Month",
+  "recurringTransactionStartDate": "Start Date",
+  "recurringTransactionEndDate": "End Date",
+  "recurringTransactionNoEndDate": "Perpetual",
+  "recurringTransactionEnabled": "Enabled",
+  "recurringTransactionDisabled": "Disabled",
+  "recurringTransactionNextGeneration": "Next Generation",
+  "recurringTransactionDeleteConfirm": "Are you sure you want to delete this recurring bill?",
+  "recurringTransactionEmpty": "No Recurring Bills",
+  "recurringTransactionEmptyHint": "Tap the + button in the top right corner to add",
+  "recurringTransactionEveryNDays": "Every {n} day(s)",
+  "@recurringTransactionEveryNDays": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNWeeks": "Every {n} week(s)",
+  "@recurringTransactionEveryNWeeks": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNMonths": "Every {n} month(s)",
+  "@recurringTransactionEveryNMonths": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNYears": "Every {n} year(s)",
+  "@recurringTransactionEveryNYears": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
 
   "cloudDefaultServiceDisplayName": "Default Cloud Service",
   "cloudNotConfiguredDisplay": "Not Configured",

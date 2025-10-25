@@ -147,6 +147,7 @@
   "ledgersName": "名前",
   "ledgersDefaultLedgerName": "デフォルト家計簿",
   "ledgersDefaultAccountName": "現金",
+  "accountTitle": "口座",
   "ledgersCurrency": "通貨",
   "ledgersSelectCurrency": "通貨を選択",
   "ledgersSearchCurrency": "検索：中国語またはコード",
@@ -349,6 +350,8 @@
   "mineCategoryManagementSubtitle": "カスタムカテゴリを編集",
   "mineCategoryMigration": "カテゴリ移行",
   "mineCategoryMigrationSubtitle": "カテゴリデータを他のカテゴリに移行",
+  "mineRecurringTransactions": "定期取引",
+  "mineRecurringTransactionsSubtitle": "定期的な取引を管理",
   "mineReminderSettings": "リマインダー設定",
   "mineReminderSettingsSubtitle": "日次記録リマインダーを設定",
   "minePersonalize": "パーソナライゼーション",
@@ -1174,6 +1177,50 @@
 
   "webdavConfiguredTitle": "WebDAV クラウドサービスが設定されました",
   "webdavConfiguredMessage": "WebDAV クラウドサービスは設定時に提供された資格情報を使用するため、追加のログインは不要です。",
+
+  "recurringTransactionTitle": "定期取引",
+  "recurringTransactionAdd": "定期取引を追加",
+  "recurringTransactionEdit": "定期取引を編集",
+  "recurringTransactionFrequency": "頻度",
+  "recurringTransactionDaily": "毎日",
+  "recurringTransactionWeekly": "毎週",
+  "recurringTransactionMonthly": "毎月",
+  "recurringTransactionYearly": "毎年",
+  "recurringTransactionInterval": "間隔",
+  "recurringTransactionDayOfMonth": "月の日",
+  "recurringTransactionStartDate": "開始日",
+  "recurringTransactionEndDate": "終了日",
+  "recurringTransactionNoEndDate": "終了日なし",
+  "recurringTransactionEnabled": "有効",
+  "recurringTransactionDisabled": "無効",
+  "recurringTransactionNextGeneration": "次回生成",
+  "recurringTransactionDeleteConfirm": "この定期取引を削除してもよろしいですか？",
+  "recurringTransactionEmpty": "定期取引がありません",
+  "recurringTransactionEmptyHint": "右上の + ボタンをタップして追加",
+  "recurringTransactionEveryNDays": "{n} 日ごと",
+  "@recurringTransactionEveryNDays": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNWeeks": "{n} 週ごと",
+  "@recurringTransactionEveryNWeeks": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNMonths": "{n} か月ごと",
+  "@recurringTransactionEveryNMonths": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNYears": "{n} 年ごと",
+  "@recurringTransactionEveryNYears": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
 
   "cloudDefaultServiceDisplayName": "デフォルトクラウドサービス",
   "cloudNotConfiguredDisplay": "設定されていません",

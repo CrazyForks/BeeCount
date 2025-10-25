@@ -342,6 +342,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get ledgersDefaultAccountName => '현금';
 
   @override
+  String get accountTitle => '계정';
+
+  @override
   String get ledgersCurrency => '통화';
 
   @override
@@ -852,6 +855,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mineCategoryMigrationSubtitle => '카테고리 데이터를 다른 카테고리로 이전';
+
+  @override
+  String get mineRecurringTransactions => '반복 거래';
+
+  @override
+  String get mineRecurringTransactionsSubtitle => '반복 거래 관리';
 
   @override
   String get mineReminderSettings => '알림 설정';
@@ -2574,6 +2583,83 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get webdavConfiguredMessage => 'WebDAV 클라우드 서비스는 설정 시 제공된 자격 증명을 사용하므로 추가 로그인이 필요하지 않습니다.';
+
+  @override
+  String get recurringTransactionTitle => '반복 거래';
+
+  @override
+  String get recurringTransactionAdd => '반복 거래 추가';
+
+  @override
+  String get recurringTransactionEdit => '반복 거래 편집';
+
+  @override
+  String get recurringTransactionFrequency => '빈도';
+
+  @override
+  String get recurringTransactionDaily => '매일';
+
+  @override
+  String get recurringTransactionWeekly => '매주';
+
+  @override
+  String get recurringTransactionMonthly => '매월';
+
+  @override
+  String get recurringTransactionYearly => '매년';
+
+  @override
+  String get recurringTransactionInterval => '간격';
+
+  @override
+  String get recurringTransactionDayOfMonth => '월의 일';
+
+  @override
+  String get recurringTransactionStartDate => '시작일';
+
+  @override
+  String get recurringTransactionEndDate => '종료일';
+
+  @override
+  String get recurringTransactionNoEndDate => '종료일 없음';
+
+  @override
+  String get recurringTransactionEnabled => '활성화됨';
+
+  @override
+  String get recurringTransactionDisabled => '비활성화됨';
+
+  @override
+  String get recurringTransactionNextGeneration => '다음 생성';
+
+  @override
+  String get recurringTransactionDeleteConfirm => '이 반복 거래를 삭제하시겠습니까?';
+
+  @override
+  String get recurringTransactionEmpty => '반복 거래가 없습니다';
+
+  @override
+  String get recurringTransactionEmptyHint => '오른쪽 상단의 + 버튼을 눌러 추가하세요';
+
+  @override
+  String recurringTransactionEveryNDays(int n) {
+    return '$n일마다';
+  }
+
+  @override
+  String recurringTransactionEveryNWeeks(int n) {
+    return '$n주마다';
+  }
+
+  @override
+  String recurringTransactionEveryNMonths(int n) {
+    return '$n개월마다';
+  }
+
+  @override
+  String recurringTransactionEveryNYears(int n) {
+    return '$n년마다';
+  }
 
   @override
   String get cloudDefaultServiceDisplayName => '기본 클라우드 서비스';

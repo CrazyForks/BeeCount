@@ -760,6 +760,12 @@ abstract class AppLocalizations {
   /// **'Cash'**
   String get ledgersDefaultAccountName;
 
+  /// No description provided for @accountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountTitle;
+
   /// No description provided for @ledgersCurrency.
   ///
   /// In en, this message translates to:
@@ -1683,6 +1689,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Migrate category data to other categories'**
   String get mineCategoryMigrationSubtitle;
+
+  /// No description provided for @mineRecurringTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring Bills'**
+  String get mineRecurringTransactions;
+
+  /// No description provided for @mineRecurringTransactionsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage recurring bills'**
+  String get mineRecurringTransactionsSubtitle;
 
   /// No description provided for @mineReminderSettings.
   ///
@@ -4923,6 +4941,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'WebDAV cloud service uses the credentials provided during configuration, no additional login required.'**
   String get webdavConfiguredMessage;
+
+  /// No description provided for @recurringTransactionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring Bills'**
+  String get recurringTransactionTitle;
+
+  /// No description provided for @recurringTransactionAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Recurring Bill'**
+  String get recurringTransactionAdd;
+
+  /// No description provided for @recurringTransactionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Recurring Bill'**
+  String get recurringTransactionEdit;
+
+  /// No description provided for @recurringTransactionFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get recurringTransactionFrequency;
+
+  /// No description provided for @recurringTransactionDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get recurringTransactionDaily;
+
+  /// No description provided for @recurringTransactionWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get recurringTransactionWeekly;
+
+  /// No description provided for @recurringTransactionMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get recurringTransactionMonthly;
+
+  /// No description provided for @recurringTransactionYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get recurringTransactionYearly;
+
+  /// No description provided for @recurringTransactionInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Interval'**
+  String get recurringTransactionInterval;
+
+  /// No description provided for @recurringTransactionDayOfMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of Month'**
+  String get recurringTransactionDayOfMonth;
+
+  /// No description provided for @recurringTransactionStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get recurringTransactionStartDate;
+
+  /// No description provided for @recurringTransactionEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get recurringTransactionEndDate;
+
+  /// No description provided for @recurringTransactionNoEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Perpetual'**
+  String get recurringTransactionNoEndDate;
+
+  /// No description provided for @recurringTransactionEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get recurringTransactionEnabled;
+
+  /// No description provided for @recurringTransactionDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get recurringTransactionDisabled;
+
+  /// No description provided for @recurringTransactionNextGeneration.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Generation'**
+  String get recurringTransactionNextGeneration;
+
+  /// No description provided for @recurringTransactionDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this recurring bill?'**
+  String get recurringTransactionDeleteConfirm;
+
+  /// No description provided for @recurringTransactionEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No Recurring Bills'**
+  String get recurringTransactionEmpty;
+
+  /// No description provided for @recurringTransactionEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button in the top right corner to add'**
+  String get recurringTransactionEmptyHint;
+
+  /// No description provided for @recurringTransactionEveryNDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {n} day(s)'**
+  String recurringTransactionEveryNDays(int n);
+
+  /// No description provided for @recurringTransactionEveryNWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {n} week(s)'**
+  String recurringTransactionEveryNWeeks(int n);
+
+  /// No description provided for @recurringTransactionEveryNMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {n} month(s)'**
+  String recurringTransactionEveryNMonths(int n);
+
+  /// No description provided for @recurringTransactionEveryNYears.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {n} year(s)'**
+  String recurringTransactionEveryNYears(int n);
 
   /// No description provided for @cloudDefaultServiceDisplayName.
   ///

@@ -138,6 +138,7 @@
   "ledgersEdit": "Buch bearbeiten",
   "ledgersDelete": "Buch löschen",
   "ledgersName": "Buchname",
+  "accountTitle": "Konto",
   "ledgersNameHint": "Geben Sie den Buchnamen ein",
   "ledgersNameRequired": "Buchname ist erforderlich",
   "ledgersNameExists": "Buchname existiert bereits",
@@ -1161,6 +1162,50 @@
 
   "webdavConfiguredTitle": "WebDAV Cloud-Dienst konfiguriert",
   "webdavConfiguredMessage": "Der WebDAV Cloud-Dienst verwendet die bei der Konfiguration bereitgestellten Anmeldedaten, es ist keine zusätzliche Anmeldung erforderlich.",
+
+  "recurringTransactionTitle": "Wiederkehrende Transaktionen",
+  "recurringTransactionAdd": "Wiederkehrende Transaktion hinzufügen",
+  "recurringTransactionEdit": "Wiederkehrende Transaktion bearbeiten",
+  "recurringTransactionFrequency": "Häufigkeit",
+  "recurringTransactionDaily": "Täglich",
+  "recurringTransactionWeekly": "Wöchentlich",
+  "recurringTransactionMonthly": "Monatlich",
+  "recurringTransactionYearly": "Jährlich",
+  "recurringTransactionInterval": "Intervall",
+  "recurringTransactionDayOfMonth": "Tag des Monats",
+  "recurringTransactionStartDate": "Startdatum",
+  "recurringTransactionEndDate": "Enddatum",
+  "recurringTransactionNoEndDate": "Kein Enddatum",
+  "recurringTransactionEnabled": "Aktiviert",
+  "recurringTransactionDisabled": "Deaktiviert",
+  "recurringTransactionNextGeneration": "Nächste Generierung",
+  "recurringTransactionDeleteConfirm": "Sind Sie sicher, dass Sie diese wiederkehrende Transaktion löschen möchten?",
+  "recurringTransactionEmpty": "Keine wiederkehrenden Transaktionen",
+  "recurringTransactionEmptyHint": "Tippen Sie auf die +-Schaltfläche oben rechts, um hinzuzufügen",
+  "recurringTransactionEveryNDays": "Alle {n} Tag(e)",
+  "@recurringTransactionEveryNDays": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNWeeks": "Alle {n} Woche(n)",
+  "@recurringTransactionEveryNWeeks": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNMonths": "Alle {n} Monat(e)",
+  "@recurringTransactionEveryNMonths": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNYears": "Alle {n} Jahr(e)",
+  "@recurringTransactionEveryNYears": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
 
   "cloudCustomServiceName": "Benutzerdefinierter Cloud-Service",
   "cloudDefaultServiceDisplayName": "Standard-Cloud-Service",

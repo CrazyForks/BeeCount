@@ -147,6 +147,7 @@
   "ledgersName": "이름",
   "ledgersDefaultLedgerName": "기본 가계부",
   "ledgersDefaultAccountName": "현금",
+  "accountTitle": "계정",
   "ledgersCurrency": "통화",
   "ledgersSelectCurrency": "통화 선택",
   "ledgersSearchCurrency": "검색: 중국어 또는 코드",
@@ -349,6 +350,8 @@
   "mineCategoryManagementSubtitle": "사용자 정의 카테고리 편집",
   "mineCategoryMigration": "카테고리 이전",
   "mineCategoryMigrationSubtitle": "카테고리 데이터를 다른 카테고리로 이전",
+  "mineRecurringTransactions": "반복 거래",
+  "mineRecurringTransactionsSubtitle": "반복 거래 관리",
   "mineReminderSettings": "알림 설정",
   "mineReminderSettingsSubtitle": "일일 기록 알림 설정",
   "minePersonalize": "개인화",
@@ -1174,6 +1177,50 @@
 
   "webdavConfiguredTitle": "WebDAV 클라우드 서비스 설정 완료",
   "webdavConfiguredMessage": "WebDAV 클라우드 서비스는 설정 시 제공된 자격 증명을 사용하므로 추가 로그인이 필요하지 않습니다.",
+
+  "recurringTransactionTitle": "반복 거래",
+  "recurringTransactionAdd": "반복 거래 추가",
+  "recurringTransactionEdit": "반복 거래 편집",
+  "recurringTransactionFrequency": "빈도",
+  "recurringTransactionDaily": "매일",
+  "recurringTransactionWeekly": "매주",
+  "recurringTransactionMonthly": "매월",
+  "recurringTransactionYearly": "매년",
+  "recurringTransactionInterval": "간격",
+  "recurringTransactionDayOfMonth": "월의 일",
+  "recurringTransactionStartDate": "시작일",
+  "recurringTransactionEndDate": "종료일",
+  "recurringTransactionNoEndDate": "종료일 없음",
+  "recurringTransactionEnabled": "활성화됨",
+  "recurringTransactionDisabled": "비활성화됨",
+  "recurringTransactionNextGeneration": "다음 생성",
+  "recurringTransactionDeleteConfirm": "이 반복 거래를 삭제하시겠습니까?",
+  "recurringTransactionEmpty": "반복 거래가 없습니다",
+  "recurringTransactionEmptyHint": "오른쪽 상단의 + 버튼을 눌러 추가하세요",
+  "recurringTransactionEveryNDays": "{n}일마다",
+  "@recurringTransactionEveryNDays": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNWeeks": "{n}주마다",
+  "@recurringTransactionEveryNWeeks": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNMonths": "{n}개월마다",
+  "@recurringTransactionEveryNMonths": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNYears": "{n}년마다",
+  "@recurringTransactionEveryNYears": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
 
   "cloudDefaultServiceDisplayName": "기본 클라우드 서비스",
   "cloudNotConfiguredDisplay": "설정되지 않음",

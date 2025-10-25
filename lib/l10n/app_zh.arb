@@ -116,6 +116,7 @@
   "ledgersName": "名称",
   "ledgersDefaultLedgerName": "默认账本",
   "ledgersDefaultAccountName": "现金",
+  "accountTitle": "账户",
   "ledgersCurrency": "币种",
   "ledgersSelectCurrency": "选择币种",
   "ledgersSearchCurrency": "搜索：中文或代码",
@@ -246,6 +247,8 @@
   "mineCategoryManagementSubtitle": "编辑自定义分类",
   "mineCategoryMigration": "分类迁移",
   "mineCategoryMigrationSubtitle": "将分类数据迁移到其他分类",
+  "mineRecurringTransactions": "周期账单",
+  "mineRecurringTransactionsSubtitle": "管理周期性账单",
   "mineReminderSettings": "记账提醒",
   "mineReminderSettingsSubtitle": "设置每日记账提醒",
   "minePersonalize": "个性装扮",
@@ -996,6 +999,50 @@
 
   "webdavConfiguredTitle": "WebDAV 云服务已配置",
   "webdavConfiguredMessage": "WebDAV 云服务使用配置时提供的凭据，无需额外登录。",
+
+  "recurringTransactionTitle": "周期账单",
+  "recurringTransactionAdd": "添加周期账单",
+  "recurringTransactionEdit": "编辑周期账单",
+  "recurringTransactionFrequency": "周期频率",
+  "recurringTransactionDaily": "每天",
+  "recurringTransactionWeekly": "每周",
+  "recurringTransactionMonthly": "每月",
+  "recurringTransactionYearly": "每年",
+  "recurringTransactionInterval": "间隔",
+  "recurringTransactionDayOfMonth": "每月第几天",
+  "recurringTransactionStartDate": "开始日期",
+  "recurringTransactionEndDate": "结束日期",
+  "recurringTransactionNoEndDate": "永久周期",
+  "recurringTransactionEnabled": "已启用",
+  "recurringTransactionDisabled": "已禁用",
+  "recurringTransactionNextGeneration": "下次生成",
+  "recurringTransactionDeleteConfirm": "确定要删除这个周期账单吗？",
+  "recurringTransactionEmpty": "暂无周期账单",
+  "recurringTransactionEmptyHint": "点击右上角 + 按钮添加",
+  "recurringTransactionEveryNDays": "每 {n} 天",
+  "@recurringTransactionEveryNDays": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNWeeks": "每 {n} 周",
+  "@recurringTransactionEveryNWeeks": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNMonths": "每 {n} 个月",
+  "@recurringTransactionEveryNMonths": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "recurringTransactionEveryNYears": "每 {n} 年",
+  "@recurringTransactionEveryNYears": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
 
   "cloudDefaultServiceDisplayName": "默认云服务",
   "cloudNotConfiguredDisplay": "未配置",

@@ -342,6 +342,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get ledgersDefaultAccountName => '現金';
 
   @override
+  String get accountTitle => '口座';
+
+  @override
   String get ledgersCurrency => '通貨';
 
   @override
@@ -852,6 +855,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mineCategoryMigrationSubtitle => 'カテゴリデータを他のカテゴリに移行';
+
+  @override
+  String get mineRecurringTransactions => '定期取引';
+
+  @override
+  String get mineRecurringTransactionsSubtitle => '定期的な取引を管理';
 
   @override
   String get mineReminderSettings => 'リマインダー設定';
@@ -2574,6 +2583,83 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get webdavConfiguredMessage => 'WebDAV クラウドサービスは設定時に提供された資格情報を使用するため、追加のログインは不要です。';
+
+  @override
+  String get recurringTransactionTitle => '定期取引';
+
+  @override
+  String get recurringTransactionAdd => '定期取引を追加';
+
+  @override
+  String get recurringTransactionEdit => '定期取引を編集';
+
+  @override
+  String get recurringTransactionFrequency => '頻度';
+
+  @override
+  String get recurringTransactionDaily => '毎日';
+
+  @override
+  String get recurringTransactionWeekly => '毎週';
+
+  @override
+  String get recurringTransactionMonthly => '毎月';
+
+  @override
+  String get recurringTransactionYearly => '毎年';
+
+  @override
+  String get recurringTransactionInterval => '間隔';
+
+  @override
+  String get recurringTransactionDayOfMonth => '月の日';
+
+  @override
+  String get recurringTransactionStartDate => '開始日';
+
+  @override
+  String get recurringTransactionEndDate => '終了日';
+
+  @override
+  String get recurringTransactionNoEndDate => '終了日なし';
+
+  @override
+  String get recurringTransactionEnabled => '有効';
+
+  @override
+  String get recurringTransactionDisabled => '無効';
+
+  @override
+  String get recurringTransactionNextGeneration => '次回生成';
+
+  @override
+  String get recurringTransactionDeleteConfirm => 'この定期取引を削除してもよろしいですか？';
+
+  @override
+  String get recurringTransactionEmpty => '定期取引がありません';
+
+  @override
+  String get recurringTransactionEmptyHint => '右上の + ボタンをタップして追加';
+
+  @override
+  String recurringTransactionEveryNDays(int n) {
+    return '$n 日ごと';
+  }
+
+  @override
+  String recurringTransactionEveryNWeeks(int n) {
+    return '$n 週ごと';
+  }
+
+  @override
+  String recurringTransactionEveryNMonths(int n) {
+    return '$n か月ごと';
+  }
+
+  @override
+  String recurringTransactionEveryNYears(int n) {
+    return '$n 年ごと';
+  }
 
   @override
   String get cloudDefaultServiceDisplayName => 'デフォルトクラウドサービス';

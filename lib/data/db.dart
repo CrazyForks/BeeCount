@@ -42,14 +42,43 @@ class Transactions extends Table {
   IntColumn get toAccountId => integer().nullable()();
   DateTimeColumn get happenedAt => dateTime().withDefault(currentDateAndTime)();
   TextColumn get note => text().nullable()();
+  IntColumn get recurringId => integer().nullable()(); // 关联到重复交易模板
 }
 
-@DriftDatabase(tables: [Ledgers, Accounts, Categories, Transactions])
+class RecurringTransactions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get ledgerId => integer()();
+  TextColumn get type => text()(); // expense / income
+  RealColumn get amount => real()();
+  IntColumn get categoryId => integer()();
+  IntColumn get accountId => integer().nullable()();
+  TextColumn get note => text().nullable()();
+
+  // 重复规则
+  TextColumn get frequency => text()(); // daily / weekly / monthly / yearly
+  IntColumn get interval => integer().withDefault(const Constant(1))(); // 间隔（每1天、每2周等）
+  IntColumn get dayOfMonth => integer().nullable()(); // 月的第几天（1-31）
+  IntColumn get dayOfWeek => integer().nullable()(); // 周几（1=周一, 7=周日）
+  IntColumn get monthOfYear => integer().nullable()(); // 哪个月（1-12，用于yearly）
+
+  // 时间范围
+  DateTimeColumn get startDate => dateTime()();
+  DateTimeColumn get endDate => dateTime().nullable()(); // 为空表示永久
+  DateTimeColumn get lastGeneratedDate => dateTime().nullable()(); // 最后一次生成交易的日期
+
+  // 状态
+  BoolColumn get enabled => boolean().withDefault(const Constant(true))();
+
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@DriftDatabase(tables: [Ledgers, Accounts, Categories, Transactions, RecurringTransactions])
 class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -67,6 +96,13 @@ class BeeDatabase extends _$BeeDatabase {
             WHERE c2.id <= categories.id
           ) - 1;
         ''');
+      }
+      if (from < 3) {
+        // 创建重复交易表
+        await migrator.createTable(recurringTransactions);
+
+        // 为 transactions 表添加 recurring_id 字段
+        await customStatement('ALTER TABLE transactions ADD COLUMN recurring_id INTEGER;');
       }
     },
   );

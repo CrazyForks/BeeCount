@@ -342,6 +342,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ledgersDefaultAccountName => 'Cash';
 
   @override
+  String get accountTitle => 'Compte';
+
+  @override
   String get ledgersCurrency => 'Currency';
 
   @override
@@ -852,6 +855,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mineCategoryMigrationSubtitle => 'Migrate category data to other categories';
+
+  @override
+  String get mineRecurringTransactions => 'Recurring Bills';
+
+  @override
+  String get mineRecurringTransactionsSubtitle => 'Manage recurring bills';
 
   @override
   String get mineReminderSettings => 'Reminder Settings';
@@ -2574,6 +2583,83 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get webdavConfiguredMessage => 'Le service cloud WebDAV utilise les identifiants fournis lors de la configuration, aucune connexion supplémentaire n\'est requise.';
+
+  @override
+  String get recurringTransactionTitle => 'Transactions Récurrentes';
+
+  @override
+  String get recurringTransactionAdd => 'Ajouter une Transaction Récurrente';
+
+  @override
+  String get recurringTransactionEdit => 'Modifier une Transaction Récurrente';
+
+  @override
+  String get recurringTransactionFrequency => 'Fréquence';
+
+  @override
+  String get recurringTransactionDaily => 'Quotidien';
+
+  @override
+  String get recurringTransactionWeekly => 'Hebdomadaire';
+
+  @override
+  String get recurringTransactionMonthly => 'Mensuel';
+
+  @override
+  String get recurringTransactionYearly => 'Annuel';
+
+  @override
+  String get recurringTransactionInterval => 'Intervalle';
+
+  @override
+  String get recurringTransactionDayOfMonth => 'Jour du Mois';
+
+  @override
+  String get recurringTransactionStartDate => 'Date de Début';
+
+  @override
+  String get recurringTransactionEndDate => 'Date de Fin';
+
+  @override
+  String get recurringTransactionNoEndDate => 'Sans Date de Fin';
+
+  @override
+  String get recurringTransactionEnabled => 'Activé';
+
+  @override
+  String get recurringTransactionDisabled => 'Désactivé';
+
+  @override
+  String get recurringTransactionNextGeneration => 'Prochaine Génération';
+
+  @override
+  String get recurringTransactionDeleteConfirm => 'Êtes-vous sûr de vouloir supprimer cette transaction récurrente ?';
+
+  @override
+  String get recurringTransactionEmpty => 'Aucune Transaction Récurrente';
+
+  @override
+  String get recurringTransactionEmptyHint => 'Appuyez sur le bouton + en haut à droite pour ajouter';
+
+  @override
+  String recurringTransactionEveryNDays(int n) {
+    return 'Tous les $n jour(s)';
+  }
+
+  @override
+  String recurringTransactionEveryNWeeks(int n) {
+    return 'Toutes les $n semaine(s)';
+  }
+
+  @override
+  String recurringTransactionEveryNMonths(int n) {
+    return 'Tous les $n mois';
+  }
+
+  @override
+  String recurringTransactionEveryNYears(int n) {
+    return 'Tous les $n an(s)';
+  }
 
   @override
   String get cloudDefaultServiceDisplayName => 'Service cloud par défaut';

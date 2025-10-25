@@ -14,6 +14,8 @@ import 'utils/route_logger.dart';
 import 'pages/splash_page.dart';
 import 'services/notification_service.dart';
 import 'services/reminder_monitor_service.dart';
+import 'services/recurring_transaction_service.dart';
+import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
@@ -33,6 +35,9 @@ Future<void> main() async {
 
   // 启动提醒监控服务（监听应用生命周期，自动恢复丢失的提醒）
   ReminderMonitorService().startMonitoring();
+
+  // 生成待处理的重复交易
+  await _generatePendingRecurringTransactions();
 
   runApp(const ProviderScope(child: MainApp()));
 }
@@ -70,6 +75,30 @@ Future<void> _restoreUserReminder() async {
     }
   } catch (e) {
     print('❌ 恢复记账提醒失败: $e');
+    // 不抛出异常，避免影响应用启动
+  }
+}
+
+/// 生成待处理的重复交易
+///
+/// 在应用启动时检查所有重复交易模板，生成到期的交易记录
+Future<void> _generatePendingRecurringTransactions() async {
+  try {
+    print('🔄 检查待生成的重复交易...');
+    final db = BeeDatabase();
+    final service = RecurringTransactionService(db);
+
+    final generatedTransactions = await service.generatePendingTransactions();
+
+    if (generatedTransactions.isNotEmpty) {
+      print('✅ 成功生成 ${generatedTransactions.length} 条重复交易记录');
+    } else {
+      print('ℹ️  没有待生成的重复交易');
+    }
+
+    await db.close();
+  } catch (e) {
+    print('❌ 生成重复交易失败: $e');
     // 不抛出异常，避免影响应用启动
   }
 }

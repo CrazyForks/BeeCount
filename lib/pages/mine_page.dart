@@ -25,6 +25,7 @@ import '../l10n/app_localizations.dart';
 import 'font_settings_page.dart';
 import 'category_manage_page.dart';
 import 'category_migration_page.dart';
+import 'recurring_transaction_page.dart';
 import 'reminder_settings_page.dart';
 import 'language_settings_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -273,6 +274,18 @@ class MinePage extends ConsumerWidget {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (_) => const CategoryMigrationPage()),
+                          );
+                        },
+                      ),
+                      AppDivider.thin(),
+                      AppListTile(
+                        leading: Icons.repeat,
+                        title: AppLocalizations.of(context).mineRecurringTransactions,
+                        subtitle: AppLocalizations.of(context).mineRecurringTransactionsSubtitle,
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => const RecurringTransactionPage()),
                           );
                         },
                       ),

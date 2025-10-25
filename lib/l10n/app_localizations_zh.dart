@@ -342,6 +342,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ledgersDefaultAccountName => '现金';
 
   @override
+  String get accountTitle => '账户';
+
+  @override
   String get ledgersCurrency => '币种';
 
   @override
@@ -852,6 +855,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineCategoryMigrationSubtitle => '将分类数据迁移到其他分类';
+
+  @override
+  String get mineRecurringTransactions => '周期账单';
+
+  @override
+  String get mineRecurringTransactionsSubtitle => '管理周期性账单';
 
   @override
   String get mineReminderSettings => '记账提醒';
@@ -2576,6 +2585,83 @@ class AppLocalizationsZh extends AppLocalizations {
   String get webdavConfiguredMessage => 'WebDAV 云服务使用配置时提供的凭据，无需额外登录。';
 
   @override
+  String get recurringTransactionTitle => '周期账单';
+
+  @override
+  String get recurringTransactionAdd => '添加周期账单';
+
+  @override
+  String get recurringTransactionEdit => '编辑周期账单';
+
+  @override
+  String get recurringTransactionFrequency => '周期频率';
+
+  @override
+  String get recurringTransactionDaily => '每天';
+
+  @override
+  String get recurringTransactionWeekly => '每周';
+
+  @override
+  String get recurringTransactionMonthly => '每月';
+
+  @override
+  String get recurringTransactionYearly => '每年';
+
+  @override
+  String get recurringTransactionInterval => '间隔';
+
+  @override
+  String get recurringTransactionDayOfMonth => '每月第几天';
+
+  @override
+  String get recurringTransactionStartDate => '开始日期';
+
+  @override
+  String get recurringTransactionEndDate => '结束日期';
+
+  @override
+  String get recurringTransactionNoEndDate => '永久周期';
+
+  @override
+  String get recurringTransactionEnabled => '已启用';
+
+  @override
+  String get recurringTransactionDisabled => '已禁用';
+
+  @override
+  String get recurringTransactionNextGeneration => '下次生成';
+
+  @override
+  String get recurringTransactionDeleteConfirm => '确定要删除这个周期账单吗？';
+
+  @override
+  String get recurringTransactionEmpty => '暂无周期账单';
+
+  @override
+  String get recurringTransactionEmptyHint => '点击右上角 + 按钮添加';
+
+  @override
+  String recurringTransactionEveryNDays(int n) {
+    return '每 $n 天';
+  }
+
+  @override
+  String recurringTransactionEveryNWeeks(int n) {
+    return '每 $n 周';
+  }
+
+  @override
+  String recurringTransactionEveryNMonths(int n) {
+    return '每 $n 个月';
+  }
+
+  @override
+  String recurringTransactionEveryNYears(int n) {
+    return '每 $n 年';
+  }
+
+  @override
   String get cloudDefaultServiceDisplayName => '默认云服务';
 
   @override
@@ -2935,6 +3021,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get ledgersDefaultAccountName => '現金';
+
+  @override
+  String get accountTitle => '帳戶';
 
   @override
   String get ledgersCurrency => '幣種';
@@ -3447,6 +3536,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineCategoryMigrationSubtitle => '將分類資料遷移到其他分類';
+
+  @override
+  String get mineRecurringTransactions => '週期帳單';
+
+  @override
+  String get mineRecurringTransactionsSubtitle => '管理週期性帳單';
 
   @override
   String get mineReminderSettings => '記帳提醒';
@@ -5169,6 +5264,83 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get webdavConfiguredMessage => 'WebDAV 雲服務使用設定時提供的憑證，無需額外登入。';
+
+  @override
+  String get recurringTransactionTitle => '週期帳單';
+
+  @override
+  String get recurringTransactionAdd => '新增週期帳單';
+
+  @override
+  String get recurringTransactionEdit => '編輯週期帳單';
+
+  @override
+  String get recurringTransactionFrequency => '週期頻率';
+
+  @override
+  String get recurringTransactionDaily => '每天';
+
+  @override
+  String get recurringTransactionWeekly => '每週';
+
+  @override
+  String get recurringTransactionMonthly => '每月';
+
+  @override
+  String get recurringTransactionYearly => '每年';
+
+  @override
+  String get recurringTransactionInterval => '間隔';
+
+  @override
+  String get recurringTransactionDayOfMonth => '每月第幾天';
+
+  @override
+  String get recurringTransactionStartDate => '開始日期';
+
+  @override
+  String get recurringTransactionEndDate => '結束日期';
+
+  @override
+  String get recurringTransactionNoEndDate => '永久週期';
+
+  @override
+  String get recurringTransactionEnabled => '已啟用';
+
+  @override
+  String get recurringTransactionDisabled => '已停用';
+
+  @override
+  String get recurringTransactionNextGeneration => '下次生成';
+
+  @override
+  String get recurringTransactionDeleteConfirm => '確定要刪除這個週期帳單嗎？';
+
+  @override
+  String get recurringTransactionEmpty => '暫無週期帳單';
+
+  @override
+  String get recurringTransactionEmptyHint => '點擊右上角 + 按鈕新增';
+
+  @override
+  String recurringTransactionEveryNDays(int n) {
+    return '每 $n 天';
+  }
+
+  @override
+  String recurringTransactionEveryNWeeks(int n) {
+    return '每 $n 週';
+  }
+
+  @override
+  String recurringTransactionEveryNMonths(int n) {
+    return '每 $n 個月';
+  }
+
+  @override
+  String recurringTransactionEveryNYears(int n) {
+    return '每 $n 年';
+  }
 
   @override
   String get cloudDefaultServiceDisplayName => '預設雲服務';
