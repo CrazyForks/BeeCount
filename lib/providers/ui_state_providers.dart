@@ -10,6 +10,9 @@ import '../data/db.dart';
 // 底部导航索引（0: 明细, 1: 图表, 2: 账本, 3: 我的）
 final bottomTabIndexProvider = StateProvider<int>((ref) => 0);
 
+// 首页滚动到顶部触发器（每次改变值时触发滚动）
+final homeScrollToTopProvider = StateProvider<int>((ref) => 0);
+
 // Currently selected month (first day), default to now
 final selectedMonthProvider = StateProvider<DateTime>((ref) {
   final now = DateTime.now();

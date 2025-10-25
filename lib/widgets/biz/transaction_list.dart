@@ -69,6 +69,15 @@ class TransactionListState extends ConsumerState<TransactionList> {
     super.dispose();
   }
 
+  /// 跳转到列表顶部
+  void jumpToTop() {
+    try {
+      _controller.sliverController.jumpToIndex(0);
+    } catch (e) {
+      // 跳转失败，忽略错误
+    }
+  }
+
   /// 跳转到指定月份
   bool jumpToMonth(DateTime targetMonth) {
     final monthKey =

@@ -26,6 +26,10 @@ class _BeeAppState extends ConsumerState<BeeApp> {
     MinePage(),
   ];
 
+  // 双击检测：记录最后一次点击的时间和索引
+  DateTime? _lastTapTime;
+  int? _lastTappedIndex;
+
   @override
   Widget build(BuildContext context) {
     // 将 4 个页面映射到 5 槽位（中间为“+”）：页面索引 0,1,2,3 对应视觉槽位 0,1,3,4（槽位 2 为 +）。
@@ -85,9 +89,27 @@ class _BeeAppState extends ConsumerState<BeeApp> {
                 }
                 return Expanded(
                   child: InkWell(
-                    onTap: () => ref
-                        .read(bottomTabIndexProvider.notifier)
-                        .state = pageIndex,
+                    onTap: () {
+                      final now = DateTime.now();
+                      // 检测双击：同一个标签在300ms内连续点击两次
+                      if (_lastTappedIndex == pageIndex &&
+                          _lastTapTime != null &&
+                          now.difference(_lastTapTime!) < const Duration(milliseconds: 300)) {
+                        // 双击首页标签，触发滚动到顶部
+                        if (pageIndex == 0) {
+                          ref.read(homeScrollToTopProvider.notifier).state++;
+                        }
+                        // 重置双击状态
+                        _lastTapTime = null;
+                        _lastTappedIndex = null;
+                      } else {
+                        // 记录本次点击
+                        _lastTapTime = now;
+                        _lastTappedIndex = pageIndex;
+                        // 切换标签
+                        ref.read(bottomTabIndexProvider.notifier).state = pageIndex;
+                      }
+                    },
                     child: Padding(
                       padding: EdgeInsets.only(top: 8.0.scaled(context, ref)),
                       child: Column(

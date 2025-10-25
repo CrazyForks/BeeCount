@@ -140,6 +140,14 @@ class _HomePageState extends ConsumerState<HomePage> {
     final month = ref.watch(selectedMonthProvider);
     final hide = ref.watch(hideAmountsProvider);
 
+    // 监听滚动到顶部的信号
+    ref.listen<int>(homeScrollToTopProvider, (previous, next) {
+      if (previous != next) {
+        // 滚动到列表顶部
+        _transactionListKey.currentState?.jumpToTop();
+      }
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
