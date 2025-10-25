@@ -29,6 +29,49 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
   bool _localHeaderDismissed = false; // 本地快速隐藏，实际持久化在 provider 中
   bool _localChartDismissed = false;
 
+  // 切换到下一个周期
+  void _goToNextPeriod() {
+    if (_scope == 'all') return; // All scope doesn't swipe
+    final m = ref.read(selectedMonthProvider);
+    final now = DateTime.now();
+    if (_scope == 'month') {
+      var y = m.year;
+      var mon = m.month + 1;
+      if (mon > 12) {
+        mon = 1;
+        y++;
+      }
+      final cand = DateTime(y, mon, 1);
+      final lastAllowed = DateTime(now.year, now.month, 1);
+      if (!cand.isAfter(lastAllowed)) {
+        ref.read(selectedMonthProvider.notifier).state = cand;
+      }
+    } else if (_scope == 'year') {
+      final cand = DateTime(m.year + 1, 1, 1);
+      final lastAllowed = DateTime(now.year, 1, 1);
+      if (!cand.isAfter(lastAllowed)) {
+        ref.read(selectedMonthProvider.notifier).state = cand;
+      }
+    }
+  }
+
+  // 切换到上一个周期
+  void _goToPreviousPeriod() {
+    if (_scope == 'all') return;
+    final m = ref.read(selectedMonthProvider);
+    if (_scope == 'month') {
+      var y = m.year;
+      var mon = m.month - 1;
+      if (mon < 1) {
+        mon = 12;
+        y--;
+      }
+      ref.read(selectedMonthProvider.notifier).state = DateTime(y, mon, 1);
+    } else if (_scope == 'year') {
+      ref.read(selectedMonthProvider.notifier).state = DateTime(m.year - 1, 1, 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final repo = ref.watch(repositoryProvider);
@@ -211,9 +254,13 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           false) ||
                       _localHeaderDismissed;
                   return GestureDetector(
-                    onHorizontalDragEnd: (_) {
-                      setState(() =>
-                          _type = _type == 'expense' ? 'income' : 'expense');
+                    onHorizontalDragEnd: (details) {
+                      // 修改为切换周期，而不是切换收入/支出
+                      if (details.primaryVelocity! > 0) {
+                        _goToPreviousPeriod(); // 向右滑动 -> 上一周期
+                      } else {
+                        _goToNextPeriod(); // 向左滑动 -> 下一周期
+                      }
                     },
                     child: ListView(
                       padding: const EdgeInsets.all(16),
@@ -380,50 +427,12 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           yLabelFontSize: AppChartTokens.yLabelFontSize,
                           onSwipeLeft: () {
                             // 下一周期
-                            if (_scope == 'all') return; // All scope doesn't swipe
-                            final m = ref.read(selectedMonthProvider);
-                            final now = DateTime.now();
-                            if (_scope == 'month') {
-                              var y = m.year;
-                              var mon = m.month + 1;
-                              if (mon > 12) {
-                                mon = 1;
-                                y++;
-                              }
-                              final cand = DateTime(y, mon, 1);
-                              final lastAllowed =
-                                  DateTime(now.year, now.month, 1);
-                              if (!cand.isAfter(lastAllowed)) {
-                                ref.read(selectedMonthProvider.notifier).state =
-                                    cand;
-                              }
-                            } else if (_scope == 'year') {
-                              final cand = DateTime(m.year + 1, 1, 1);
-                              final lastAllowed = DateTime(now.year, 1, 1);
-                              if (!cand.isAfter(lastAllowed)) {
-                                ref.read(selectedMonthProvider.notifier).state =
-                                    cand;
-                              }
-                            }
+                            _goToNextPeriod();
                             setState(() => _chartSwiped = true);
                           },
                           onSwipeRight: () {
                             // 上一周期
-                            if (_scope == 'all') return;
-                            final m = ref.read(selectedMonthProvider);
-                            if (_scope == 'month') {
-                              var y = m.year;
-                              var mon = m.month - 1;
-                              if (mon < 1) {
-                                mon = 12;
-                                y--;
-                              }
-                              ref.read(selectedMonthProvider.notifier).state =
-                                  DateTime(y, mon, 1);
-                            } else if (_scope == 'year') {
-                              ref.read(selectedMonthProvider.notifier).state =
-                                  DateTime(m.year - 1, 1, 1);
-                            }
+                            _goToPreviousPeriod();
                             setState(() => _chartSwiped = true);
                           },
                           showHint: !chartDismissed,

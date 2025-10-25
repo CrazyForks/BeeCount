@@ -248,7 +248,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get analyticsCurrentPeriod => '現在の期間';
 
   @override
-  String get analyticsNoDataSubtext => '左右にスワイプして収入/支出を切り替えるか、上の期間切り替えを使用してください';
+  String get analyticsNoDataSubtext => '左右にスワイプして期間を切り替えるか、ボタンをタップして収入/支出を切り替えてください';
 
   @override
   String get analyticsSwipeHint => '左右にスワイプして期間を変更';

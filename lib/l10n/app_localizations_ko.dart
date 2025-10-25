@@ -248,7 +248,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get analyticsCurrentPeriod => '현재 기간';
 
   @override
-  String get analyticsNoDataSubtext => '좌우로 스와이프하여 수입/지출을 전환하거나, 위의 기간 전환을 사용하세요';
+  String get analyticsNoDataSubtext => '좌우로 스와이프하여 기간을 전환하거나, 버튼을 탭하여 수입/지출을 전환하세요';
 
   @override
   String get analyticsSwipeHint => '좌우로 스와이프하여 기간을 변경하세요';

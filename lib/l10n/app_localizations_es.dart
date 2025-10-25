@@ -248,7 +248,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get analyticsCurrentPeriod => 'Current Period';
 
   @override
-  String get analyticsNoDataSubtext => 'Swipe left/right to toggle income/expense, or use the period switcher above';
+  String get analyticsNoDataSubtext => 'Swipe left/right to switch periods, or tap button to toggle income/expense';
 
   @override
   String get analyticsSwipeHint => 'Swipe left/right to change period';

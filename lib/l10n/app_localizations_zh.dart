@@ -248,7 +248,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get analyticsCurrentPeriod => '当前周期';
 
   @override
-  String get analyticsNoDataSubtext => '可左右滑动切换 收入/支出，或用上方周期切换';
+  String get analyticsNoDataSubtext => '可左右滑动切换周期，或点击按钮切换收入/支出';
 
   @override
   String get analyticsSwipeHint => '左右滑动切换周期';
@@ -2756,7 +2756,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get analyticsCurrentPeriod => '當前週期';
 
   @override
-  String get analyticsNoDataSubtext => '可左右滑動切換收入/支出，或用上方週期切換';
+  String get analyticsNoDataSubtext => '可左右滑動切換週期，或點擊按鈕切換收入/支出';
 
   @override
   String get analyticsSwipeHint => '左右滑動切換週期';

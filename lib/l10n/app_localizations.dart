@@ -583,7 +583,7 @@ abstract class AppLocalizations {
   /// No description provided for @analyticsNoDataSubtext.
   ///
   /// In en, this message translates to:
-  /// **'Swipe left/right to toggle income/expense, or use the period switcher above'**
+  /// **'Swipe left/right to switch periods, or tap button to toggle income/expense'**
   String get analyticsNoDataSubtext;
 
   /// No description provided for @analyticsSwipeHint.

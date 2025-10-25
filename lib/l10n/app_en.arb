@@ -101,7 +101,7 @@
   "analyticsSummary": "Summary",
   "analyticsCategoryRanking": "Category Ranking",
   "analyticsCurrentPeriod": "Current Period",
-  "analyticsNoDataSubtext": "Swipe left/right to toggle income/expense, or use the period switcher above",
+  "analyticsNoDataSubtext": "Swipe left/right to switch periods, or tap button to toggle income/expense",
   "analyticsSwipeHint": "Swipe left/right to change period",
   "analyticsTipContent": "1) Swipe left/right at the top to switch \"Month/Year/All\"\\n2) Swipe left/right in chart area to switch periods\\n3) Tap month or year to quickly select",
   "analyticsSwitchTo": "Switch to {type}",
