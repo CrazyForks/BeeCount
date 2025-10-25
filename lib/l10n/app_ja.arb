@@ -1172,6 +1172,9 @@
   "supportProjectViewDonationMethods": "寄付方法を見る",
   "supportProjectNote": "ボタンをクリックするとGitHubにリダイレクトされ、詳細な寄付方法が表示されます",
 
+  "webdavConfiguredTitle": "WebDAV クラウドサービスが設定されました",
+  "webdavConfiguredMessage": "WebDAV クラウドサービスは設定時に提供された資格情報を使用するため、追加のログインは不要です。",
+
   "cloudDefaultServiceDisplayName": "デフォルトクラウドサービス",
   "cloudNotConfiguredDisplay": "設定されていません",
 

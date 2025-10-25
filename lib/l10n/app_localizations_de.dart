@@ -2570,6 +2570,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get supportProjectNote => 'Durch Klicken auf die Schaltfläche werden Sie zu GitHub weitergeleitet, um detaillierte Spendenmethoden anzuzeigen';
 
   @override
+  String get webdavConfiguredTitle => 'WebDAV Cloud-Dienst konfiguriert';
+
+  @override
+  String get webdavConfiguredMessage => 'Der WebDAV Cloud-Dienst verwendet die bei der Konfiguration bereitgestellten Anmeldedaten, es ist keine zusätzliche Anmeldung erforderlich.';
+
+  @override
   String get cloudDefaultServiceDisplayName => 'Standard-Cloud-Service';
 
   @override

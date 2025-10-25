@@ -994,6 +994,9 @@
   "supportProjectViewDonationMethods": "查看捐赠方式",
   "supportProjectNote": "点击按钮将跳转到 GitHub 查看详细捐赠方式",
 
+  "webdavConfiguredTitle": "WebDAV 云服务已配置",
+  "webdavConfiguredMessage": "WebDAV 云服务使用配置时提供的凭据，无需额外登录。",
+
   "cloudDefaultServiceDisplayName": "默认云服务",
   "cloudNotConfiguredDisplay": "未配置",
 

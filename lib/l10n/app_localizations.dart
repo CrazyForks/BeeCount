@@ -4912,6 +4912,18 @@ abstract class AppLocalizations {
   /// **'Clicking the button will redirect to GitHub for detailed donation methods'**
   String get supportProjectNote;
 
+  /// No description provided for @webdavConfiguredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'WebDAV Cloud Service Configured'**
+  String get webdavConfiguredTitle;
+
+  /// No description provided for @webdavConfiguredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'WebDAV cloud service uses the credentials provided during configuration, no additional login required.'**
+  String get webdavConfiguredMessage;
+
   /// No description provided for @cloudDefaultServiceDisplayName.
   ///
   /// In en, this message translates to:

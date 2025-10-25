@@ -213,13 +213,13 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                         ),
                         const SizedBox(height: 24),
                         Text(
-                          'WebDAV 云服务已配置',
+                          AppLocalizations.of(context).webdavConfiguredTitle,
                           style: theme.textTheme.titleLarge,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'WebDAV 云服务使用配置时提供的凭据，无需额外登录。',
+                          AppLocalizations.of(context).webdavConfiguredMessage,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: Colors.grey[600],
                           ),

@@ -1159,6 +1159,9 @@
   "supportProjectViewDonationMethods": "Ver métodos de donación",
   "supportProjectNote": "Al hacer clic en el botón, serás redirigido a GitHub para ver los métodos de donación detallados",
 
+  "webdavConfiguredTitle": "Servicio de nube WebDAV configurado",
+  "webdavConfiguredMessage": "El servicio de nube WebDAV utiliza las credenciales proporcionadas durante la configuración, no se requiere inicio de sesión adicional.",
+
   "cloudCustomServiceName": "Servicio de nube personalizado",
   "cloudDefaultServiceDisplayName": "Servicio de nube predeterminado",
   "cloudNotConfiguredDisplay": "No configurado",

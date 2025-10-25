@@ -2570,6 +2570,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get supportProjectNote => '버튼을 클릭하면 GitHub로 리디렉션되어 자세한 기부 방법을 확인할 수 있습니다';
 
   @override
+  String get webdavConfiguredTitle => 'WebDAV 클라우드 서비스 설정 완료';
+
+  @override
+  String get webdavConfiguredMessage => 'WebDAV 클라우드 서비스는 설정 시 제공된 자격 증명을 사용하므로 추가 로그인이 필요하지 않습니다.';
+
+  @override
   String get cloudDefaultServiceDisplayName => '기본 클라우드 서비스';
 
   @override

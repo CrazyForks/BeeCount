@@ -955,6 +955,9 @@
   "supportProjectViewDonationMethods": "查看捐贈方式",
   "supportProjectNote": "點擊按鈕將跳轉到 GitHub 查看詳細捐贈方式",
 
+  "webdavConfiguredTitle": "WebDAV 雲服務已設定",
+  "webdavConfiguredMessage": "WebDAV 雲服務使用設定時提供的憑證，無需額外登入。",
+
   "cloudDefaultServiceDisplayName": "預設雲服務",
   "cloudNotConfiguredDisplay": "未設定",
 

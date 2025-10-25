@@ -2570,6 +2570,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get supportProjectNote => '点击按钮将跳转到 GitHub 查看详细捐赠方式';
 
   @override
+  String get webdavConfiguredTitle => 'WebDAV 云服务已配置';
+
+  @override
+  String get webdavConfiguredMessage => 'WebDAV 云服务使用配置时提供的凭据，无需额外登录。';
+
+  @override
   String get cloudDefaultServiceDisplayName => '默认云服务';
 
   @override
@@ -5157,6 +5163,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get supportProjectNote => '點擊按鈕將跳轉到 GitHub 查看詳細捐贈方式';
+
+  @override
+  String get webdavConfiguredTitle => 'WebDAV 雲服務已設定';
+
+  @override
+  String get webdavConfiguredMessage => 'WebDAV 雲服務使用設定時提供的憑證，無需額外登入。';
 
   @override
   String get cloudDefaultServiceDisplayName => '預設雲服務';
