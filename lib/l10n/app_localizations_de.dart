@@ -254,7 +254,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get analyticsSwipeHint => 'Swipe left/right to change period';
 
   @override
-  String get analyticsTipContent => '1) Swipe left/right at the top to switch \"Month/Year/All\"\\n2) Swipe left/right in chart area to switch periods\\n3) Tap month or year to quickly select';
+  String get analyticsTipContent => '1) Swipe left/right at bottom to switch Expense/Income/Balance\\n2) Swipe left/right in chart area to switch periods';
 
   @override
   String analyticsSwitchTo(String type) {

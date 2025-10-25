@@ -86,7 +86,7 @@
   "analyticsCurrentPeriod": "當前週期",
   "analyticsNoDataSubtext": "可左右滑動切換週期，或點擊按鈕切換收入/支出",
   "analyticsSwipeHint": "左右滑動切換週期",
-  "analyticsTipContent": "1) 頂部左右滑動可在\"月/年/全部\"切換\\n2) 圖表區域左右滑動可切換上一/下一週期\\n3) 點擊月份或年份可快速選擇",
+  "analyticsTipContent": "1) 底部左右滑動可切換收入/支出/結餘\\n2) 圖表區域左右滑動可切換上一/下一週期",
   "analyticsSwitchTo": "切換到{type}",
   "analyticsTipHeader": "提示：頂部膠囊可切換月/年/全部",
   "analyticsSwipeToSwitch": "橫滑切換",

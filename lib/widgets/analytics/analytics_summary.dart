@@ -17,6 +17,7 @@ class AnalyticsSummary extends StatelessWidget {
   final bool showIncome; // 是否显示收入信息
   final Color? expenseColor; // 支出颜色
   final Color? incomeColor; // 收入颜色
+  final bool isBalance; // 是否是结余视角
 
   const AnalyticsSummary({
     super.key,
@@ -33,6 +34,7 @@ class AnalyticsSummary extends StatelessWidget {
     this.showIncome = true,
     this.expenseColor,
     this.incomeColor,
+    this.isBalance = false,
   });
 
   @override
@@ -165,7 +167,13 @@ class AnalyticsSummary extends StatelessWidget {
       );
     } else {
       // 单一视角：原有逻辑
-      final titleWord = isExpense ? l10n.analyticsExpense : l10n.analyticsIncome;
+      final titleWord = isBalance
+          ? l10n.analyticsBalance
+          : (isExpense ? l10n.analyticsExpense : l10n.analyticsIncome);
+      final color = isBalance
+          ? (total >= 0 ? Colors.green : Colors.red)
+          : (isExpense ? (expenseColor ?? Colors.red) : (incomeColor ?? Colors.green));
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -180,7 +188,7 @@ class AnalyticsSummary extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
-                      ?.copyWith(color: isExpense ? (expenseColor ?? Colors.red) : (incomeColor ?? Colors.green), fontWeight: FontWeight.w600)),
+                      ?.copyWith(color: color, fontWeight: FontWeight.w600)),
             ],
           ),
           const SizedBox(height: 4),

@@ -254,7 +254,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get analyticsSwipeHint => '左右にスワイプして期間を変更';
 
   @override
-  String get analyticsTipContent => '1) 上部を左右にスワイプして「月/年/すべて」を切り替え\\n2) チャートエリアを左右にスワイプして期間を切り替え\\n3) 月や年をタップして素早く選択';
+  String get analyticsTipContent => '1) 下部を左右にスワイプして支出/収入/残高を切り替え\\n2) チャートエリアを左右にスワイプして期間を切り替え';
 
   @override
   String analyticsSwitchTo(String type) {

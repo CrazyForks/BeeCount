@@ -254,7 +254,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get analyticsSwipeHint => '左右滑动切换周期';
 
   @override
-  String get analyticsTipContent => '1) 顶部左右滑动可在\"月/年/全部\"切换\\n2) 图表区域左右滑动可切换上一/下一周期\\n3) 点击月份或年份可快速选择';
+  String get analyticsTipContent => '1) 底部左右滑动可切换收入/支出/结余\\n2) 图表区域左右滑动可切换上一/下一周期';
 
   @override
   String analyticsSwitchTo(String type) {
@@ -2935,7 +2935,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get analyticsSwipeHint => '左右滑動切換週期';
 
   @override
-  String get analyticsTipContent => '1) 頂部左右滑動可在\"月/年/全部\"切換\\n2) 圖表區域左右滑動可切換上一/下一週期\\n3) 點擊月份或年份可快速選擇';
+  String get analyticsTipContent => '1) 底部左右滑動可切換收入/支出/結餘\\n2) 圖表區域左右滑動可切換上一/下一週期';
 
   @override
   String analyticsSwitchTo(String type) {

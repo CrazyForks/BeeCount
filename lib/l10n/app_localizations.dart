@@ -595,7 +595,7 @@ abstract class AppLocalizations {
   /// No description provided for @analyticsTipContent.
   ///
   /// In en, this message translates to:
-  /// **'1) Swipe left/right at the top to switch \"Month/Year/All\"\\n2) Swipe left/right in chart area to switch periods\\n3) Tap month or year to quickly select'**
+  /// **'1) Swipe left/right at bottom to switch Expense/Income/Balance\\n2) Swipe left/right in chart area to switch periods'**
   String get analyticsTipContent;
 
   /// No description provided for @analyticsSwitchTo.

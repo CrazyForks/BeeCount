@@ -103,7 +103,7 @@
   "analyticsCurrentPeriod": "現在の期間",
   "analyticsNoDataSubtext": "左右にスワイプして期間を切り替えるか、ボタンをタップして収入/支出を切り替えてください",
   "analyticsSwipeHint": "左右にスワイプして期間を変更",
-  "analyticsTipContent": "1) 上部を左右にスワイプして「月/年/すべて」を切り替え\\n2) チャートエリアを左右にスワイプして期間を切り替え\\n3) 月や年をタップして素早く選択",
+  "analyticsTipContent": "1) 下部を左右にスワイプして支出/収入/残高を切り替え\\n2) チャートエリアを左右にスワイプして期間を切り替え",
   "analyticsSwitchTo": "{type}に切り替え",
   "@analyticsSwitchTo": {
     "placeholders": {
