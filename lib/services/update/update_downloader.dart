@@ -11,7 +11,12 @@ import 'update_notifications.dart';
 class UpdateDownloader {
   UpdateDownloader._();
 
-  static final Dio _dio = Dio();
+  static final Dio _dio = Dio()
+    ..options.connectTimeout = const Duration(seconds: 30)
+    ..options.receiveTimeout = const Duration(minutes: 10) // 大文件需要更长接收时间
+    ..options.sendTimeout = const Duration(minutes: 2)
+    ..options.followRedirects = true
+    ..options.maxRedirects = 5;
 
   /// 生成随机User-Agent，避免被GitHub限制
   static String _generateRandomUserAgent() {
@@ -123,6 +128,12 @@ class UpdateDownloader {
         options: Options(
           headers: {
             'User-Agent': _generateRandomUserAgent(),
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Referer': 'https://github.com/TNT-Likely/BeeCount/releases',
           },
         ),
         onReceiveProgress: (received, total) {
