@@ -100,6 +100,14 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
   // _setToday 移除，改为点击日历按钮选择日期
 
   void _pickDate() async {
+    // 关闭键盘，避免选择日期后键盘重新弹出
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    // 等待键盘完全关闭
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    if (!mounted) return;
+
     final res = await showWheelDatePicker(
       context,
       initial: _date,
