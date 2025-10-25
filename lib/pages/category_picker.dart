@@ -95,7 +95,7 @@ class _CategoryPickerPageState extends ConsumerState<CategoryPickerPage>
                             indicator: const UnderlineTabIndicator(
                               borderSide:
                                   BorderSide(width: 2, color: Colors.black),
-                              insets: EdgeInsets.symmetric(horizontal: 24),
+                              insets: EdgeInsets.symmetric(horizontal: 0),
                             ),
                             tabs: [
                               Tab(text: AppLocalizations.of(context)!.categoryExpense),
