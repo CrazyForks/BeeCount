@@ -1229,5 +1229,8 @@
   "syncNotLoggedInMessage": "ログインしていません",
   "syncCloudBackupCorruptedMessage": "クラウドバックアップの内容が破損しています、以前のバージョンのエンコーディング問題が原因の可能性があります。「現在の家計簿をクラウドにアップロード」をクリックして上書きして修正してください。",
   "syncNoCloudBackupMessage": "クラウドバックアップなし",
-  "syncAccessDeniedMessage": "403 アクセス拒否（ストレージRLSポリシーとパスを確認）"
+  "syncAccessDeniedMessage": "403 アクセス拒否（ストレージRLSポリシーとパスを確認）",
+
+  "updateCorruptedFileTitle": "インストールパッケージが破損しています",
+  "updateCorruptedFileMessage": "以前ダウンロードしたインストールパッケージが不完全または破損していることが検出されました。削除して再ダウンロードしますか？"
 }

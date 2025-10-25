@@ -103,26 +103,53 @@ class UpdateService {
 
       if (cachedApkPath != null) {
         logI('UpdateService', '找到缓存的APK: $cachedApkPath');
-        if (context.mounted) {
-          // 显示缓存APK安装确认弹窗
-          final shouldInstall = await AppDialog.confirm<bool>(
-            context,
-            title: AppLocalizations.of(context).updateCachedVersionTitle,
-            message: AppLocalizations.of(context).updateCachedVersionMessage,
-          );
 
-          if (shouldInstall == true) {
-            // 安装缓存的APK
-            await UpdateInstaller.installApk(cachedApkPath);
-            return UpdateResult(
-              hasUpdate: true,
-              success: true,
-              message: AppLocalizations.of(context).updateInstallingCachedApk,
-              filePath: cachedApkPath,
+        // 验证APK文件完整性
+        final isValid = await UpdateCache.validateApkFile(cachedApkPath);
+
+        if (!isValid) {
+          // APK文件损坏，询问用户是否重新下载
+          logW('UpdateService', '缓存的APK文件损坏或不完整');
+
+          if (context.mounted) {
+            final shouldRedownload = await AppDialog.confirm<bool>(
+              context,
+              title: AppLocalizations.of(context).updateCorruptedFileTitle,
+              message: AppLocalizations.of(context).updateCorruptedFileMessage,
             );
-          } else {
-            // 用户选择取消，直接返回
-            return UpdateResult.userCancelled();
+
+            if (shouldRedownload == true) {
+              // 删除损坏的文件
+              await UpdateCache.deleteApkFile(cachedApkPath);
+              logI('UpdateService', '已删除损坏的APK文件，继续下载');
+              // 继续执行下载流程（不return，让代码继续往下走）
+            } else {
+              // 用户取消
+              return UpdateResult.userCancelled();
+            }
+          }
+        } else {
+          // APK文件验证通过，询问是否安装
+          if (context.mounted) {
+            final shouldInstall = await AppDialog.confirm<bool>(
+              context,
+              title: AppLocalizations.of(context).updateCachedVersionTitle,
+              message: AppLocalizations.of(context).updateCachedVersionMessage,
+            );
+
+            if (shouldInstall == true) {
+              // 安装缓存的APK
+              await UpdateInstaller.installApk(cachedApkPath);
+              return UpdateResult(
+                hasUpdate: true,
+                success: true,
+                message: AppLocalizations.of(context).updateInstallingCachedApk,
+                filePath: cachedApkPath,
+              );
+            } else {
+              // 用户选择取消，直接返回
+              return UpdateResult.userCancelled();
+            }
           }
         }
       }

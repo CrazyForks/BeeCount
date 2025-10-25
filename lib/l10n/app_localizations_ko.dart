@@ -2681,4 +2681,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 액세스 거부 (스토리지 RLS 정책 및 경로 확인)';
+
+  @override
+  String get updateCorruptedFileTitle => '설치 패키지가 손상되었습니다';
+
+  @override
+  String get updateCorruptedFileMessage => '이전에 다운로드한 설치 패키지가 불완전하거나 손상된 것으로 감지되었습니다. 삭제하고 다시 다운로드하시겠습니까？';
 }

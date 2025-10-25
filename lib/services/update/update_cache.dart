@@ -131,6 +131,57 @@ class UpdateCache {
     }
   }
 
+  /// 验证APK文件完整性
+  /// 返回true表示文件可能完整，false表示明显损坏
+  static Future<bool> validateApkFile(String filePath) async {
+    try {
+      final file = File(filePath);
+
+      // 1. 检查文件是否存在
+      if (!await file.exists()) {
+        logW('UpdateCache', 'APK文件不存在: $filePath');
+        return false;
+      }
+
+      // 2. 检查文件大小是否合理（APK通常至少几MB）
+      final fileSize = await file.length();
+      const minValidSize = 5 * 1024 * 1024; // 5MB
+      const maxValidSize = 200 * 1024 * 1024; // 200MB
+
+      if (fileSize < minValidSize) {
+        logW('UpdateCache', 'APK文件太小，可能不完整: $fileSize字节 (最小$minValidSize字节)');
+        return false;
+      }
+
+      if (fileSize > maxValidSize) {
+        logW('UpdateCache', 'APK文件太大，可能异常: $fileSize字节 (最大$maxValidSize字节)');
+        return false;
+      }
+
+      // 3. 检查文件是否可读
+      try {
+        await file.open();
+      } catch (e) {
+        logW('UpdateCache', 'APK文件无法打开: $e');
+        return false;
+      }
+
+      // 4. 检查ZIP魔数（APK本质是ZIP文件）
+      final bytes = await file.openRead(0, 4).first;
+      // ZIP文件魔数: PK (0x50 0x4B)
+      if (bytes.length < 2 || bytes[0] != 0x50 || bytes[1] != 0x4B) {
+        logW('UpdateCache', 'APK文件格式错误，不是有效的ZIP/APK文件');
+        return false;
+      }
+
+      logI('UpdateCache', 'APK文件验证通过: $filePath ($fileSize字节)');
+      return true;
+    } catch (e) {
+      logE('UpdateCache', '验证APK文件失败', e);
+      return false;
+    }
+  }
+
   /// 清理缓存的APK
   static Future<void> clearCachedApk() async {
     try {
@@ -152,6 +203,19 @@ class UpdateCache {
       logI('UpdateCache', '已清理APK缓存');
     } catch (e) {
       logE('UpdateCache', '清理APK缓存失败', e);
+    }
+  }
+
+  /// 删除指定的APK文件
+  static Future<void> deleteApkFile(String filePath) async {
+    try {
+      final file = File(filePath);
+      if (await file.exists()) {
+        await file.delete();
+        logI('UpdateCache', '已删除APK文件: $filePath');
+      }
+    } catch (e) {
+      logE('UpdateCache', '删除APK文件失败', e);
     }
   }
 }

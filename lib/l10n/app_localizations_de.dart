@@ -2681,4 +2681,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 Zugriff verweigert (Speicher-RLS-Richtlinie und Pfad überprüfen)';
+
+  @override
+  String get updateCorruptedFileTitle => 'Corrupted Installation Package';
+
+  @override
+  String get updateCorruptedFileMessage => 'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?';
 }

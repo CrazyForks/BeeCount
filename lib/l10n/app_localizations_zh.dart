@@ -2681,6 +2681,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 拒绝访问（检查 storage RLS 策略与路径）';
+
+  @override
+  String get updateCorruptedFileTitle => '安装包已损坏';
+
+  @override
+  String get updateCorruptedFileMessage => '检测到之前下载的安装包不完整或已损坏，是否删除并重新下载？';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -5362,4 +5368,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get syncAccessDeniedMessage => '403 拒絕存取（檢查 storage RLS 策略與路徑）';
+
+  @override
+  String get updateCorruptedFileTitle => '安裝包已損壞';
+
+  @override
+  String get updateCorruptedFileMessage => '檢測到之前下載的安裝包不完整或已損壞，是否刪除並重新下載？';
 }

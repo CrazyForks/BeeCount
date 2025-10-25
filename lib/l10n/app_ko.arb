@@ -1229,5 +1229,8 @@
   "syncNotLoggedInMessage": "로그인되지 않았습니다",
   "syncCloudBackupCorruptedMessage": "클라우드 백업 내용이 손상되었습니다. 이전 버전의 인코딩 문제로 인한 것일 수 있습니다. '현재 가계부를 클라우드에 업로드'를 클릭하여 덮어쓰고 수정하세요.",
   "syncNoCloudBackupMessage": "클라우드 백업 없음",
-  "syncAccessDeniedMessage": "403 액세스 거부 (스토리지 RLS 정책 및 경로 확인)"
+  "syncAccessDeniedMessage": "403 액세스 거부 (스토리지 RLS 정책 및 경로 확인)",
+
+  "updateCorruptedFileTitle": "설치 패키지가 손상되었습니다",
+  "updateCorruptedFileMessage": "이전에 다운로드한 설치 패키지가 불완전하거나 손상된 것으로 감지되었습니다. 삭제하고 다시 다운로드하시겠습니까？"
 }

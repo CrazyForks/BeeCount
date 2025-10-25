@@ -2681,4 +2681,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 アクセス拒否（ストレージRLSポリシーとパスを確認）';
+
+  @override
+  String get updateCorruptedFileTitle => 'インストールパッケージが破損しています';
+
+  @override
+  String get updateCorruptedFileMessage => '以前ダウンロードしたインストールパッケージが不完全または破損していることが検出されました。削除して再ダウンロードしますか？';
 }

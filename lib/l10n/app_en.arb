@@ -1229,5 +1229,8 @@
   "syncNotLoggedInMessage": "Not logged in",
   "syncCloudBackupCorruptedMessage": "Cloud backup content is corrupted, possibly due to encoding issues from earlier versions. Please click 'Upload Current Ledger to Cloud' to overwrite and fix.",
   "syncNoCloudBackupMessage": "No cloud backup",
-  "syncAccessDeniedMessage": "403 Access denied (check storage RLS policy and path)"
+  "syncAccessDeniedMessage": "403 Access denied (check storage RLS policy and path)",
+
+  "updateCorruptedFileTitle": "Corrupted Installation Package",
+  "updateCorruptedFileMessage": "The previously downloaded installation package is incomplete or corrupted. Delete and re-download?"
 }

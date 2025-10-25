@@ -941,6 +941,8 @@
   "updateNotificationDownloadCompleteMessage": "新版本已下载完成，点击安装",
   "updateCachedVersionTitle": "发现已下载版本",
   "updateCachedVersionMessage": "已找到之前下载的安装包...点击\\\"确定\\\"立即安装，点击\\\"取消\\\"关闭...",
+  "updateCorruptedFileTitle": "安装包已损坏",
+  "updateCorruptedFileMessage": "检测到之前下载的安装包不完整或已损坏，是否删除并重新下载？",
   "updateConfirmDownload": "立即下载并安装",
   "updateDownloadCompleteTitle": "下载完成",
   "updateInstallConfirmMessage": "新版本已下载完成，是否立即安装？",

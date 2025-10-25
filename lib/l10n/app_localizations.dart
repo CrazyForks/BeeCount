@@ -5121,6 +5121,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'403 Access denied (check storage RLS policy and path)'**
   String get syncAccessDeniedMessage;
+
+  /// No description provided for @updateCorruptedFileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Corrupted Installation Package'**
+  String get updateCorruptedFileTitle;
+
+  /// No description provided for @updateCorruptedFileMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?'**
+  String get updateCorruptedFileMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

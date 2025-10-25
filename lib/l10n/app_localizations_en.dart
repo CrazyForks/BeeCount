@@ -2681,4 +2681,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 Access denied (check storage RLS policy and path)';
+
+  @override
+  String get updateCorruptedFileTitle => 'Corrupted Installation Package';
+
+  @override
+  String get updateCorruptedFileMessage => 'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?';
 }
