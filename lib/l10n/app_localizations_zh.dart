@@ -1699,6 +1699,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudAddCustomService => '添加自定义云服务';
 
   @override
+  String get cloudCustomServiceName => '自定义云服务';
+
+  @override
   String get cloudDefaultServiceName => '默认云服务';
 
   @override
@@ -1769,6 +1772,33 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudValidationServiceRoleKey => '禁止使用 service_role Key';
+
+  @override
+  String get cloudValidationHttpRequired => 'URL 需以 http:// 或 https:// 开头';
+
+  @override
+  String get cloudSelectServiceType => '选择服务类型';
+
+  @override
+  String get cloudWebdavUrlLabel => 'WebDAV 服务器地址';
+
+  @override
+  String get cloudWebdavUrlHint => 'https://dav.jianguoyun.com/dav/';
+
+  @override
+  String get cloudWebdavUsernameLabel => '用户名';
+
+  @override
+  String get cloudWebdavPasswordLabel => '密码';
+
+  @override
+  String get cloudWebdavPathLabel => '远程路径';
+
+  @override
+  String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudWebdavHint => '支持坚果云、Nextcloud、群晖等';
 
   @override
   String get cloudConfigUpdated => '配置已更新';
@@ -4207,6 +4237,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudAddCustomService => '新增自訂雲服務';
 
   @override
+  String get cloudCustomServiceName => '自訂雲服務';
+
+  @override
   String get cloudDefaultServiceName => '預設雲服務';
 
   @override
@@ -4277,6 +4310,33 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudValidationServiceRoleKey => '禁止使用 service_role Key';
+
+  @override
+  String get cloudValidationHttpRequired => 'URL 需以 http:// 或 https:// 開頭';
+
+  @override
+  String get cloudSelectServiceType => '選擇服務類型';
+
+  @override
+  String get cloudWebdavUrlLabel => 'WebDAV 伺服器地址';
+
+  @override
+  String get cloudWebdavUrlHint => 'https://dav.jianguoyun.com/dav/';
+
+  @override
+  String get cloudWebdavUsernameLabel => '使用者名稱';
+
+  @override
+  String get cloudWebdavPasswordLabel => '密碼';
+
+  @override
+  String get cloudWebdavPathLabel => '遠端路徑';
+
+  @override
+  String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudWebdavHint => '支援堅果雲、Nextcloud、群暉等';
 
   @override
   String get cloudConfigUpdated => '設定已更新';

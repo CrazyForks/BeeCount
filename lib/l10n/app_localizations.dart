@@ -3286,6 +3286,12 @@ abstract class AppLocalizations {
   /// **'Add custom cloud service'**
   String get cloudAddCustomService;
 
+  /// No description provided for @cloudCustomServiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Cloud Service'**
+  String get cloudCustomServiceName;
+
   /// No description provided for @cloudDefaultServiceName.
   ///
   /// In en, this message translates to:
@@ -3429,6 +3435,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'service_role Key is not allowed'**
   String get cloudValidationServiceRoleKey;
+
+  /// No description provided for @cloudValidationHttpRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'URL must start with http:// or https://'**
+  String get cloudValidationHttpRequired;
+
+  /// No description provided for @cloudSelectServiceType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Service Type'**
+  String get cloudSelectServiceType;
+
+  /// No description provided for @cloudWebdavUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'WebDAV Server URL'**
+  String get cloudWebdavUrlLabel;
+
+  /// No description provided for @cloudWebdavUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'https://dav.jianguoyun.com/dav/'**
+  String get cloudWebdavUrlHint;
+
+  /// No description provided for @cloudWebdavUsernameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get cloudWebdavUsernameLabel;
+
+  /// No description provided for @cloudWebdavPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get cloudWebdavPasswordLabel;
+
+  /// No description provided for @cloudWebdavPathLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote Path'**
+  String get cloudWebdavPathLabel;
+
+  /// No description provided for @cloudWebdavPathHint.
+  ///
+  /// In en, this message translates to:
+  /// **'/BeeCount'**
+  String get cloudWebdavPathHint;
+
+  /// No description provided for @cloudWebdavHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Supports Nutstore, Nextcloud, Synology, etc.'**
+  String get cloudWebdavHint;
 
   /// No description provided for @cloudConfigUpdated.
   ///

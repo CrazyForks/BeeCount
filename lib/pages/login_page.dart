@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as s;
 import '../providers.dart';
 import '../cloud/auth.dart';
+import '../cloud/cloud_service_config.dart';
 import '../widgets/ui/ui.dart';
 import '../utils/logger.dart';
 import '../l10n/app_localizations.dart';
@@ -174,6 +175,72 @@ class _AuthPageState extends ConsumerState<AuthPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final radius = BorderRadius.circular(12);
+
+    // 检测云服务类型
+    final cloudConfig = ref.watch(activeCloudConfigProvider);
+    if (cloudConfig.hasValue && cloudConfig.value!.type == CloudBackendType.webdav) {
+      // WebDAV 不需要登录页面
+      return Scaffold(
+        body: Column(
+          children: [
+            PrimaryHeader(title: AppLocalizations.of(context).authLogin, showBack: true),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.check_circle_outline,
+                          size: 64,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          'WebDAV 云服务已配置',
+                          style: theme.textTheme.titleLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'WebDAV 云服务使用配置时提供的凭据，无需额外登录。',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey[600],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 32),
+                        FilledButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(AppLocalizations.of(context).commonBack),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       body: Column(
         children: [

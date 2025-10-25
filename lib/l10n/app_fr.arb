@@ -1122,8 +1122,23 @@
   "currencyINR": "Roupie indienne",
   "currencyRUB": "Rouble russe",
 
+  "cloudCustomServiceName": "Service cloud personnalisé",
   "cloudDefaultServiceDisplayName": "Service cloud par défaut",
   "cloudNotConfiguredDisplay": "Non configuré",
+
+  "cloudValidationEmptyFields": "L'URL et la clé ne peuvent pas être vides",
+  "cloudValidationHttpsRequired": "L'URL doit commencer par https://",
+  "cloudValidationKeyTooShort": "La longueur de la clé est trop courte, peut être invalide",
+  "cloudValidationServiceRoleKey": "La clé service_role n'est pas autorisée",
+  "cloudValidationHttpRequired": "L'URL doit commencer par http:// ou https://",
+  "cloudSelectServiceType": "Sélectionner le type de service",
+  "cloudWebdavUrlLabel": "URL du serveur WebDAV",
+  "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
+  "cloudWebdavUsernameLabel": "Nom d'utilisateur",
+  "cloudWebdavPasswordLabel": "Mot de passe",
+  "cloudWebdavPathLabel": "Chemin distant",
+  "cloudWebdavPathHint": "/BeeCount",
+  "cloudWebdavHint": "Compatible avec Nutstore, Nextcloud, Synology, etc.",
 
   "syncNotConfiguredMessage": "Cloud non configuré",
   "syncNotLoggedInMessage": "Non connecté",

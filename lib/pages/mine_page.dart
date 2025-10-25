@@ -14,6 +14,7 @@ import '../styles/design.dart';
 import '../styles/colors.dart';
 import '../cloud/auth.dart';
 import '../cloud/sync.dart';
+import '../cloud/cloud_service_config.dart';
 import 'cloud_service_page.dart';
 import '../utils/logger.dart';
 import '../services/restore_service.dart';
@@ -192,9 +193,20 @@ class MinePage extends ConsumerWidget {
                           subtitle: activeCfg.when(
                             loading: () => AppLocalizations.of(context).mineCloudServiceLoading,
                             error: (e, _) => '${AppLocalizations.of(context).commonError}: $e',
-                            data: (cfg) => cfg.builtin
-                                ? (cfg.valid ? AppLocalizations.of(context).mineCloudServiceDefault : AppLocalizations.of(context).mineCloudServiceOffline)
-                                : AppLocalizations.of(context).mineCloudServiceCustom,
+                            data: (cfg) {
+                              if (cfg.builtin) {
+                                return cfg.valid
+                                  ? AppLocalizations.of(context).mineCloudServiceDefault
+                                  : AppLocalizations.of(context).mineCloudServiceOffline;
+                              } else {
+                                // 自定义云服务：根据类型显示
+                                if (cfg.type == CloudBackendType.webdav) {
+                                  return '自定义云服务 (WebDAV)';
+                                } else {
+                                  return AppLocalizations.of(context).mineCloudServiceCustom;
+                                }
+                              }
+                            },
                           ),
                           onTap: () async {
                             await Navigator.of(context).push(
@@ -607,12 +619,27 @@ class MinePage extends ConsumerWidget {
           ),
           AppDivider.thin(),
           // 登录/登出
-          Builder(builder: (_) {
+          Consumer(builder: (ctx, r, _) {
             final userNow = user; // capture
+            final cloudConfig = r.watch(activeCloudConfigProvider);
+
+            // 根据云服务类型显示不同的用户信息
+            String getUserDisplayName() {
+              if (userNow == null) return AppLocalizations.of(context).mineLoginTitle;
+
+              if (cloudConfig.hasValue && cloudConfig.value!.type == CloudBackendType.webdav) {
+                // WebDAV: 显示用户名（去掉 @webdav 后缀）
+                return userNow.id;
+              } else {
+                // Supabase: 显示邮箱
+                return userNow.email ?? AppLocalizations.of(context).mineLoggedInEmail;
+              }
+            }
+
             return AppListTile(
               leading:
                   userNow == null ? Icons.login : Icons.verified_user_outlined,
-              title: userNow == null ? AppLocalizations.of(context).mineLoginTitle : (userNow.email ?? AppLocalizations.of(context).mineLoggedInEmail),
+              title: getUserDisplayName(),
               subtitle: userNow == null ? AppLocalizations.of(context).mineLoginSubtitle : AppLocalizations.of(context).mineLogoutSubtitle,
               onTap: () async {
                 if (userNow == null) {

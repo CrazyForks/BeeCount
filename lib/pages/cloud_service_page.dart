@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../cloud/cloud_service_config.dart';
 import '../providers/sync_providers.dart';
 import '../widgets/ui/dialog.dart' show AppDialog;
@@ -247,17 +249,21 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    config.builtin
-                                      ? AppLocalizations.of(context).cloudDefaultServiceName
-                                      : config.name,
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w600,
+                                  Flexible(
+                                    child: Text(
+                                      config.builtin
+                                        ? AppLocalizations.of(context).cloudDefaultServiceName
+                                        : AppLocalizations.of(context).cloudCustomServiceName,
+                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'Supabase',
+                                    _getBackendTypeName(config.type),
                                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: BeeColors.secondaryText,
                                     ),
@@ -478,10 +484,18 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     if (config.builtin) {
       return config.valid ? AppLocalizations.of(context).cloudServiceDescription : AppLocalizations.of(context).cloudServiceDescriptionNotConfigured;
     } else {
-      final url = config.obfuscatedUrl();
-      return AppLocalizations.of(context).cloudServiceDescriptionCustom(
-        url == '__NOT_CONFIGURED__' ? AppLocalizations.of(context).cloudNotConfigured : url
-      );
+      // 自定义服务：根据类型显示不同描述
+      if (config.type == CloudBackendType.webdav) {
+        // WebDAV: 显示服务器地址
+        final url = config.webdavUrl ?? AppLocalizations.of(context).cloudNotConfigured;
+        return '服务器: $url';
+      } else {
+        // Supabase: 显示混淆后的URL
+        final url = config.obfuscatedUrl();
+        return AppLocalizations.of(context).cloudServiceDescriptionCustom(
+          url == '__NOT_CONFIGURED__' ? AppLocalizations.of(context).cloudNotConfigured : url
+        );
+      }
     }
   }
 
@@ -595,9 +609,19 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
   // 显示自定义配置对话框
   Future<void> _showCustomConfigDialog(CloudServiceConfig? existingConfig) async {
-    final urlController = TextEditingController(text: existingConfig?.supabaseUrl ?? '');
-    final keyController = TextEditingController(text: existingConfig?.supabaseAnonKey ?? '');
+    // Supabase controllers
+    final supabaseUrlController = TextEditingController(text: existingConfig?.supabaseUrl ?? '');
+    final supabaseKeyController = TextEditingController(text: existingConfig?.supabaseAnonKey ?? '');
+
+    // WebDAV controllers
+    final webdavUrlController = TextEditingController(text: existingConfig?.webdavUrl ?? '');
+    final webdavUsernameController = TextEditingController(text: existingConfig?.webdavUsername ?? '');
+    final webdavPasswordController = TextEditingController(text: existingConfig?.webdavPassword ?? '');
+    final webdavPathController = TextEditingController(text: existingConfig?.webdavRemotePath ?? '/');
+
+    CloudBackendType selectedType = existingConfig?.type ?? CloudBackendType.supabase;
     bool isSaving = false;
+    bool obscurePassword = true;
 
     await showDialog<bool>(
       context: context,
@@ -605,35 +629,156 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(existingConfig != null ? AppLocalizations.of(context).cloudEditCustomService : AppLocalizations.of(context).cloudAddCustomServiceTitle),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+              maxWidth: 500,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextField(
-                  controller: urlController,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).cloudSupabaseUrlLabel,
-                    hintText: AppLocalizations.of(context).cloudSupabaseUrlHint,
+                // 云服务类型选择
+                Text(
+                  AppLocalizations.of(context).cloudSelectServiceType,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 12),
+                SegmentedButton<CloudBackendType>(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return Theme.of(context).primaryColor;
+                      }
+                      return Colors.transparent;
+                    }),
+                    foregroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return Colors.white;
+                      }
+                      return BeeColors.secondaryText;
+                    }),
+                    iconColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return Colors.white;
+                      }
+                      return BeeColors.secondaryText;
+                    }),
+                    side: WidgetStateProperty.all(
+                      BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
+                    ),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    padding: WidgetStateProperty.all(
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    ),
                   ),
-                  keyboardType: TextInputType.url,
-                  enabled: !isSaving,
+                  segments: [
+                    ButtonSegment(
+                      value: CloudBackendType.supabase,
+                      label: Text(_getBackendTypeName(CloudBackendType.supabase)),
+                      icon: Icon(Icons.cloud, size: 18),
+                    ),
+                    ButtonSegment(
+                      value: CloudBackendType.webdav,
+                      label: Text(_getBackendTypeName(CloudBackendType.webdav)),
+                      icon: Icon(Icons.folder_shared, size: 18),
+                    ),
+                  ],
+                  selected: {selectedType},
+                  onSelectionChanged: isSaving ? null : (Set<CloudBackendType> newSelection) {
+                    setDialogState(() {
+                      selectedType = newSelection.first;
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
-                TextField(
-                  controller: keyController,
-                  minLines: 2,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).cloudAnonKeyLabel,
+
+                // 根据选择的类型显示不同的配置表单
+                if (selectedType == CloudBackendType.supabase) ...[
+                  TextField(
+                    controller: supabaseUrlController,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).cloudSupabaseUrlLabel,
+                      hintText: AppLocalizations.of(context).cloudSupabaseUrlHint,
+                    ),
+                    keyboardType: TextInputType.url,
+                    enabled: !isSaving,
                   ),
-                  enabled: !isSaving,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  AppLocalizations.of(context).cloudAnonKeyHint,
-                  style: const TextStyle(fontSize: 12, color: Colors.orange),
-                ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: supabaseKeyController,
+                    minLines: 2,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).cloudAnonKeyLabel,
+                    ),
+                    enabled: !isSaving,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    AppLocalizations.of(context).cloudAnonKeyHint,
+                    style: const TextStyle(fontSize: 12, color: Colors.orange),
+                  ),
+                ] else if (selectedType == CloudBackendType.webdav) ...[
+                  TextField(
+                    controller: webdavUrlController,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).cloudWebdavUrlLabel,
+                      hintText: AppLocalizations.of(context).cloudWebdavUrlHint,
+                    ),
+                    keyboardType: TextInputType.url,
+                    enabled: !isSaving,
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: webdavUsernameController,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).cloudWebdavUsernameLabel,
+                    ),
+                    enabled: !isSaving,
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: webdavPasswordController,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).cloudWebdavPasswordLabel,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          setDialogState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                      ),
+                    ),
+                    obscureText: obscurePassword,
+                    enabled: !isSaving,
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: webdavPathController,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).cloudWebdavPathLabel,
+                      hintText: AppLocalizations.of(context).cloudWebdavPathHint,
+                    ),
+                    enabled: !isSaving,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    AppLocalizations.of(context).cloudWebdavHint,
+                    style: const TextStyle(fontSize: 12, color: Colors.blue),
+                  ),
+                ],
               ],
+            ),
             ),
           ),
           actions: [
@@ -643,9 +788,40 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
             ),
             FilledButton(
               onPressed: isSaving ? null : () async {
-                final url = urlController.text.trim();
-                final key = keyController.text.trim();
-                final err = _validate(url, key);
+                // 根据类型验证输入
+                final String? err;
+                final CloudServiceConfig cfg;
+
+                if (selectedType == CloudBackendType.supabase) {
+                  final url = supabaseUrlController.text.trim();
+                  final key = supabaseKeyController.text.trim();
+                  err = _validateSupabase(url, key);
+                  cfg = CloudServiceConfig(
+                    id: 'custom',
+                    type: CloudBackendType.supabase,
+                    name: AppLocalizations.of(context).cloudCustomServiceName,
+                    supabaseUrl: url,
+                    supabaseAnonKey: key,
+                    builtin: false,
+                  );
+                } else {
+                  final url = webdavUrlController.text.trim();
+                  final username = webdavUsernameController.text.trim();
+                  final password = webdavPasswordController.text.trim();
+                  final path = webdavPathController.text.trim();
+                  err = _validateWebdav(url, username, password);
+                  cfg = CloudServiceConfig(
+                    id: 'custom',
+                    type: CloudBackendType.webdav,
+                    name: AppLocalizations.of(context).cloudCustomServiceName,
+                    webdavUrl: url,
+                    webdavUsername: username,
+                    webdavPassword: password,
+                    webdavRemotePath: path.isEmpty ? '/' : path,
+                    builtin: false,
+                  );
+                }
+
                 if (err != null) {
                   await AppDialog.error(context,
                       title: AppLocalizations.of(context).cloudInvalidInput, message: err);
@@ -654,15 +830,6 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
                 setDialogState(() => isSaving = true);
                 try {
-                  final cfg = CloudServiceConfig(
-                    id: 'custom',
-                    type: CloudBackendType.supabase,
-                    name: AppLocalizations.of(context).cloudAddCustomService,
-                    supabaseUrl: url,
-                    supabaseAnonKey: key,
-                    builtin: false,
-                  );
-
                   // 统一处理：仅保存配置，不自动启用
                   if (mounted) {
                     logI('cloudCfg', '开始保存自定义配置...');
@@ -716,12 +883,16 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
     // 延迟 dispose，确保所有动画和重建完成后再清理资源
     Future.delayed(const Duration(milliseconds: 500), () {
-      urlController.dispose();
-      keyController.dispose();
+      supabaseUrlController.dispose();
+      supabaseKeyController.dispose();
+      webdavUrlController.dispose();
+      webdavUsernameController.dispose();
+      webdavPasswordController.dispose();
+      webdavPathController.dispose();
     });
   }
 
-  String? _validate(String url, String key) {
+  String? _validateSupabase(String url, String key) {
     final context = this.context;
     if (url.isEmpty || key.isEmpty) return AppLocalizations.of(context).cloudValidationEmptyFields;
     if (!url.startsWith('https://')) return AppLocalizations.of(context).cloudValidationHttpsRequired;
@@ -729,6 +900,26 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     final lower = key.toLowerCase();
     if (lower.contains('service_role')) return AppLocalizations.of(context).cloudValidationServiceRoleKey;
     return null;
+  }
+
+  String? _validateWebdav(String url, String username, String password) {
+    final context = this.context;
+    if (url.isEmpty || username.isEmpty || password.isEmpty) {
+      return AppLocalizations.of(context).cloudValidationEmptyFields;
+    }
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return AppLocalizations.of(context).cloudValidationHttpRequired;
+    }
+    return null;
+  }
+
+  String _getBackendTypeName(CloudBackendType type) {
+    switch (type) {
+      case CloudBackendType.supabase:
+        return 'Supabase';
+      case CloudBackendType.webdav:
+        return 'WebDAV';
+    }
   }
 
   Color _getConnectionStatusColor(CloudServiceConfig config) {
@@ -780,21 +971,73 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
     setState(() => _testingConnection = true);
     try {
-      // 这里模拟连接测试 - 实际项目中应该调用真实的连接测试
-      // 可以尝试创建 Supabase 客户端或调用健康检查端点
-
-      // 简单的URL格式检查和超时测试
       bool connectionSuccess = false;
-      try {
-        // 这里应该使用 http 包或 Supabase 客户端进行真实测试
-        // 暂时使用简单的URL验证
-        final uri = Uri.parse(config.supabaseUrl!);
-        connectionSuccess = uri.host.isNotEmpty && config.supabaseAnonKey!.length > 50;
+      String? errorDetail;
 
-        // 模拟网络延迟
-        await Future.delayed(const Duration(seconds: 1));
+      try {
+        switch (config.type) {
+          case CloudBackendType.supabase:
+            // Supabase 连接测试 - 尝试访问 REST API
+            final testUrl = Uri.parse('${config.supabaseUrl}/rest/v1/');
+            final response = await http.get(
+              testUrl,
+              headers: {
+                'apikey': config.supabaseAnonKey!,
+                'Authorization': 'Bearer ${config.supabaseAnonKey}',
+              },
+            ).timeout(const Duration(seconds: 10));
+
+            if (response.statusCode == 200 || response.statusCode == 404) {
+              // 200 或 404 都表示服务器可访问
+              connectionSuccess = true;
+            } else if (response.statusCode == 401 || response.statusCode == 403) {
+              throw Exception('Authentication failed: Invalid API key');
+            } else {
+              throw Exception('Server returned status ${response.statusCode}');
+            }
+            break;
+
+          case CloudBackendType.webdav:
+            // WebDAV 连接测试 - 发送 OPTIONS 请求测试连接和认证
+            final testUrl = Uri.parse(config.webdavUrl!);
+            final credentials = base64Encode(
+              utf8.encode('${config.webdavUsername}:${config.webdavPassword}'),
+            );
+
+            final request = http.Request('OPTIONS', testUrl);
+            request.headers['Authorization'] = 'Basic $credentials';
+
+            final streamedResponse = await request.send().timeout(const Duration(seconds: 10));
+            final response = await http.Response.fromStream(streamedResponse);
+
+            if (response.statusCode == 200 || response.statusCode == 204) {
+              // 检查是否支持 WebDAV
+              final davHeader = response.headers['dav'];
+              if (davHeader != null || response.headers.containsKey('allow')) {
+                connectionSuccess = true;
+              } else {
+                throw Exception('Server does not support WebDAV protocol');
+              }
+            } else if (response.statusCode == 401) {
+              throw Exception('Authentication failed: Invalid username or password');
+            } else if (response.statusCode == 403) {
+              throw Exception('Access denied: Check permissions');
+            } else if (response.statusCode == 404) {
+              throw Exception('Server path not found: ${testUrl.path}');
+            } else {
+              throw Exception('Server returned status ${response.statusCode}');
+            }
+            break;
+        }
+      } on http.ClientException catch (e) {
+        connectionSuccess = false;
+        errorDetail = 'Network error: ${e.message}';
+      } on Exception catch (e) {
+        connectionSuccess = false;
+        errorDetail = e.toString().replaceFirst('Exception: ', '');
       } catch (e) {
         connectionSuccess = false;
+        errorDetail = e.toString();
       }
 
       setState(() {
@@ -802,16 +1045,24 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
       });
 
       if (mounted) {
-        await AppDialog.info(context,
-            title: AppLocalizations.of(context).cloudTestComplete,
-            message: connectionSuccess ? AppLocalizations.of(context).cloudTestSuccess : AppLocalizations.of(context).cloudTestFailed);
+        if (connectionSuccess) {
+          await AppDialog.info(context,
+              title: AppLocalizations.of(context).cloudTestComplete,
+              message: AppLocalizations.of(context).cloudTestSuccess);
+        } else {
+          await AppDialog.error(context,
+              title: AppLocalizations.of(context).cloudTestFailed,
+              message: errorDetail ?? AppLocalizations.of(context).cloudTestFailed);
+        }
       }
     } catch (e) {
       setState(() {
         _connectionTestResults[config.id] = false;
       });
       if (mounted) {
-        await AppDialog.error(context, title: AppLocalizations.of(context).cloudTestError, message: '$e');
+        await AppDialog.error(context,
+            title: AppLocalizations.of(context).cloudTestError,
+            message: e.toString());
       }
     } finally {
       if (mounted) setState(() => _testingConnection = false);

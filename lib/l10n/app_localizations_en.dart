@@ -1699,6 +1699,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudAddCustomService => 'Add custom cloud service';
 
   @override
+  String get cloudCustomServiceName => 'Custom Cloud Service';
+
+  @override
   String get cloudDefaultServiceName => 'Default Cloud Service';
 
   @override
@@ -1769,6 +1772,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudValidationServiceRoleKey => 'service_role Key is not allowed';
+
+  @override
+  String get cloudValidationHttpRequired => 'URL must start with http:// or https://';
+
+  @override
+  String get cloudSelectServiceType => 'Select Service Type';
+
+  @override
+  String get cloudWebdavUrlLabel => 'WebDAV Server URL';
+
+  @override
+  String get cloudWebdavUrlHint => 'https://dav.jianguoyun.com/dav/';
+
+  @override
+  String get cloudWebdavUsernameLabel => 'Username';
+
+  @override
+  String get cloudWebdavPasswordLabel => 'Password';
+
+  @override
+  String get cloudWebdavPathLabel => 'Remote Path';
+
+  @override
+  String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudWebdavHint => 'Supports Nutstore, Nextcloud, Synology, etc.';
 
   @override
   String get cloudConfigUpdated => 'Configuration updated';

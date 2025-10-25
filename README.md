@@ -4,7 +4,7 @@
 
 **Your Data, Your Control - Open Source Accounting App**
 
-A lightweight, open-source, privacy-focused personal accounting app for iOS/Android. Features complete ledger management, category statistics, data analysis, import/export functionality, and customizable cloud backup. **Core Advantage: Support for custom Supabase backend, giving you complete control over your data.**
+A lightweight, open-source, privacy-focused personal accounting app for iOS/Android. Features complete ledger management, category statistics, data analysis, import/export functionality, and multiple cloud backup solutions. **Core Advantage: Support for custom Supabase backend and WebDAV servers, giving you complete control over your data.**
 
 ## 📱 Product Demo
 
@@ -37,10 +37,11 @@ A lightweight, open-source, privacy-focused personal accounting app for iOS/Andr
 
 ### 🔒 Data Security & Privacy
 
-- **Complete Autonomy**: Support for custom Supabase backend, data stored in your own project
+- **Complete Autonomy**: Support for custom Supabase backend and WebDAV servers, data stored in locations you control
 - **Open & Transparent**: Fully open-source code, auditable logic, no black boxes
 - **Offline First**: Based on local SQLite database, works without network connection
 - **Optional Sync**: Cloud sync is an enhancement feature, works completely without external services
+- **Flexible Expansion**: Architecture designed to support more cloud service options in the future (e.g., Nutstore, Nextcloud, etc.)
 
 ### 📊 Complete Accounting Features
 
@@ -52,7 +53,10 @@ A lightweight, open-source, privacy-focused personal accounting app for iOS/Andr
 ### 🔄 Data Management
 
 - **CSV Import/Export**: Support migration from other accounting apps or regular backups
-- **Cloud Backup**: Optional upload to your own Supabase project for backup
+- **Multiple Cloud Backup Solutions**:
+  - Custom Supabase project
+  - WebDAV servers (supports UGREEN Cloud, Synology NAS, Nextcloud, etc.)
+  - More services coming soon...
 - **Multi-Device Sync**: Configure same cloud service to sync data across multiple devices
 - **Category Migration**: Support batch migration of transaction records to other categories
 
@@ -126,12 +130,17 @@ flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
 
 ### Why Choose Self-Hosted Cloud Service?
 
-- **Data Sovereignty**: Data completely stored in your own Supabase project
+- **Data Sovereignty**: Data completely stored in servers or cloud platforms you control
 - **Privacy Protection**: Developers cannot access any of your data
-- **Cost Control**: Supabase free tier is sufficient for personal use
-- **Stable & Reliable**: No dependency on third-party hosting services
+- **Cost Control**: Most solutions offer free tiers or one-time purchase options
+- **Stable & Reliable**: No dependency on third-party hosting services, full control
+- **Flexible Choice**: Choose the most suitable solution based on your needs
 
-### Configuration Steps
+### Option 1: Custom Supabase (Recommended for Beginners)
+
+**Use Case**: Suitable for users without NAS devices who want to get started quickly
+
+**Configuration Steps**:
 
 1. **Create Supabase Project**
    - Visit [supabase.com](https://supabase.com) to register an account
@@ -144,11 +153,75 @@ flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
 
 3. **App Configuration**
    - Open BeeCount → Profile → Cloud Service
-   - Select "Custom Cloud Service"
+   - Tap "Add Custom Cloud Service"
+   - Select service type: **Supabase**
    - Enter your Supabase URL and anon key
-   - Login/register and start syncing
+   - Save and enable configuration
+   - Tap "Login", register/sign in and start syncing
 
-For detailed configuration guide, please refer to the project documentation.
+### Option 2: WebDAV Server (Recommended for NAS Users)
+
+**Use Case**: For users with NAS devices or private cloud storage
+
+**Supported Services**:
+- ✅ UGREEN Cloud NAS
+- ✅ Synology NAS
+- ✅ Nextcloud
+- ✅ Nutstore WebDAV
+- ✅ ownCloud
+- ✅ Any server supporting WebDAV protocol
+
+**Configuration Steps**:
+
+1. **Enable WebDAV Service**
+   - Enable WebDAV functionality on your NAS or cloud storage platform
+   - Note the WebDAV server address (e.g., `http://nas.local:5005`)
+   - Create or use existing user account
+
+2. **Prepare Storage Directory** (Optional)
+   - Create a `BeeCount` folder in WebDAV root directory
+   - Or use any path (specify during configuration)
+
+3. **App Configuration**
+   - Open BeeCount → Profile → Cloud Service
+   - Tap "Add Custom Cloud Service"
+   - Select service type: **WebDAV**
+   - Fill in configuration:
+     - **WebDAV Server URL**: e.g., `http://nas.local:5005`
+     - **Username**: Your WebDAV username
+     - **Password**: Your WebDAV password
+     - **Remote Path**: Storage path (e.g., `/home/BeeCount` or `/BeeCount`)
+   - Tap "Test Connection" to verify configuration
+   - Save and enable configuration
+   - WebDAV requires no additional login, can sync directly after configuration
+
+**Common WebDAV Configuration Examples**:
+
+```
+UGREEN Cloud NAS:
+- URL: http://your-nas-address:5005
+- Remote Path: /home/BeeCount
+
+Synology NAS:
+- URL: http://your-nas-address:5005 or https://your-domain
+- Remote Path: /BeeCount
+
+Nutstore:
+- URL: https://dav.jianguoyun.com/dav/
+- Remote Path: /BeeCount
+```
+
+### Future Plans
+
+We will continue expanding cloud service support, planning to add:
+- 📦 Alibaba Cloud OSS
+- 📦 Tencent Cloud COS
+- 📦 AWS S3
+- 📦 Google Drive
+- 📦 Dropbox
+- 📦 More...
+
+If you'd like to prioritize support for a specific cloud service, welcome to create a feature request in [Issues](https://github.com/TNT-Likely/BeeCount/issues)!
 
 ## 🛠️ Development Guide
 
@@ -216,19 +289,38 @@ This project is open-sourced under the [MIT License](LICENSE). You are free to u
 ## 💬 FAQ
 
 **Q: Can I use it normally without configuring cloud services?**
-A: Absolutely! The app uses local storage by default, and all features work normally. You can still export CSV at any time.
+A: Absolutely! The app uses local storage by default, and all features work normally. You can still export CSV backups at any time.
+
+**Q: Should I choose Supabase or WebDAV?**
+A:
+- If you have a NAS device or private cloud, we recommend WebDAV (fully localized data)
+- If you don't have a NAS, we recommend Supabase (free, stable, easy to configure)
+- Both support complete sync functionality, choose based on your needs
+
+**Q: Why can't I upload after configuring WebDAV?**
+A:
+- Check if WebDAV service is enabled and port is correct
+- Verify username and password are correct
+- Some NAS WebDAV requires specific paths for write access (e.g., UGREEN Cloud requires `/home/` path)
+- Click "Test Connection" button to view detailed error messages
 
 **Q: Can I switch back to default mode after configuring custom cloud service?**
 A: Yes, you can switch anytime. The saved custom configuration won't be lost and can be re-enabled.
 
 **Q: How to ensure data security?**
-A: We recommend using your own Supabase project, configuring proper access policies, regularly exporting CSV backups, using strong passwords and enabling two-factor authentication.
+A:
+- Use your own Supabase project or WebDAV server
+- Regularly export CSV backups to local storage
+- Use strong passwords and enable two-factor authentication (if supported)
+- For WebDAV, recommend using HTTPS for encrypted transmission
 
 **Q: What data formats are supported?**
 A: Currently supports CSV format for import/export, compatible with data formats from most mainstream accounting apps.
 
 **Q: How to sync data across multiple devices?**
-A: Configure the same Supabase URL and anon key on all devices, and log in with the same account for automatic sync.
+A:
+- **Supabase**: Configure same URL and anon key on all devices, log in with same account
+- **WebDAV**: Configure same WebDAV server address and credentials on all devices
 
 ---
 

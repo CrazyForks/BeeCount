@@ -9,6 +9,8 @@ import '../cloud/auth.dart';
 import '../cloud/sync.dart';
 import '../cloud/supabase_auth.dart';
 import '../cloud/supabase_sync.dart';
+import '../cloud/webdav_auth.dart';
+import '../cloud/webdav_sync.dart';
 import 'database_providers.dart';
 
 // 同步状态（根据 ledgerId 与刷新 tick 缓存），避免因 UI 重建重复拉取
@@ -116,18 +118,43 @@ final supabaseClientProvider = Provider<s.SupabaseClient?>((ref) {
 });
 
 final authServiceProvider = Provider<AuthService>((ref) {
-  final client = ref.watch(supabaseClientProvider);
-  if (client == null) return NoopAuthService();
-  return SupabaseAuthService(client);
+  final activeAsync = ref.watch(activeCloudConfigProvider);
+  if (!activeAsync.hasValue) return NoopAuthService();
+
+  final config = activeAsync.value!;
+  if (!config.valid) return NoopAuthService();
+
+  switch (config.type) {
+    case CloudBackendType.supabase:
+      final client = ref.watch(supabaseClientProvider);
+      if (client == null) return NoopAuthService();
+      return SupabaseAuthService(client);
+
+    case CloudBackendType.webdav:
+      return WebdavAuthService(config);
+  }
 });
 
 final syncServiceProvider = Provider<SyncService>((ref) {
-  final client = ref.watch(supabaseClientProvider);
+  final activeAsync = ref.watch(activeCloudConfigProvider);
+  if (!activeAsync.hasValue) return LocalOnlySyncService();
+
+  final config = activeAsync.value!;
+  if (!config.valid) return LocalOnlySyncService();
+
   final db = ref.watch(databaseProvider);
   final repo = ref.watch(repositoryProvider);
   final auth = ref.watch(authServiceProvider);
-  if (client == null) return LocalOnlySyncService();
-  return SupabaseSyncService(client: client, db: db, repo: repo, auth: auth);
+
+  switch (config.type) {
+    case CloudBackendType.supabase:
+      final client = ref.watch(supabaseClientProvider);
+      if (client == null) return LocalOnlySyncService();
+      return SupabaseSyncService(client: client, db: db, repo: repo, auth: auth);
+
+    case CloudBackendType.webdav:
+      return WebdavSyncService(config: config, db: db, repo: repo, auth: auth);
+  }
 });
 
 // 用于触发设置页同步状态的刷新（每次 +1 即可触发 FutureBuilder 重新获取）

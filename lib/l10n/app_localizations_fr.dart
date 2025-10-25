@@ -1699,6 +1699,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cloudAddCustomService => 'Add custom cloud service';
 
   @override
+  String get cloudCustomServiceName => 'Service cloud personnalisé';
+
+  @override
   String get cloudDefaultServiceName => 'Default Cloud Service';
 
   @override
@@ -1759,16 +1762,43 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cloudInvalidInput => 'Invalid input';
 
   @override
-  String get cloudValidationEmptyFields => 'URL and Key cannot be empty';
+  String get cloudValidationEmptyFields => 'L\'URL et la clé ne peuvent pas être vides';
 
   @override
-  String get cloudValidationHttpsRequired => 'URL must start with https://';
+  String get cloudValidationHttpsRequired => 'L\'URL doit commencer par https://';
 
   @override
-  String get cloudValidationKeyTooShort => 'Key length is too short, may be invalid';
+  String get cloudValidationKeyTooShort => 'La longueur de la clé est trop courte, peut être invalide';
 
   @override
-  String get cloudValidationServiceRoleKey => 'service_role Key is not allowed';
+  String get cloudValidationServiceRoleKey => 'La clé service_role n\'est pas autorisée';
+
+  @override
+  String get cloudValidationHttpRequired => 'L\'URL doit commencer par http:// ou https://';
+
+  @override
+  String get cloudSelectServiceType => 'Sélectionner le type de service';
+
+  @override
+  String get cloudWebdavUrlLabel => 'URL du serveur WebDAV';
+
+  @override
+  String get cloudWebdavUrlHint => 'https://dav.jianguoyun.com/dav/';
+
+  @override
+  String get cloudWebdavUsernameLabel => 'Nom d\'utilisateur';
+
+  @override
+  String get cloudWebdavPasswordLabel => 'Mot de passe';
+
+  @override
+  String get cloudWebdavPathLabel => 'Chemin distant';
+
+  @override
+  String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudWebdavHint => 'Compatible avec Nutstore, Nextcloud, Synology, etc.';
 
   @override
   String get cloudConfigUpdated => 'Configuration updated';

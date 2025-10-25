@@ -1699,6 +1699,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cloudAddCustomService => '사용자 정의 클라우드 서비스 추가';
 
   @override
+  String get cloudCustomServiceName => '사용자 정의 클라우드 서비스';
+
+  @override
   String get cloudDefaultServiceName => '기본 클라우드 서비스';
 
   @override
@@ -1769,6 +1772,33 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get cloudValidationServiceRoleKey => 'service_role Key는 허용되지 않습니다';
+
+  @override
+  String get cloudValidationHttpRequired => 'URL은 http:// 또는 https://로 시작해야 합니다';
+
+  @override
+  String get cloudSelectServiceType => '서비스 유형 선택';
+
+  @override
+  String get cloudWebdavUrlLabel => 'WebDAV 서버 URL';
+
+  @override
+  String get cloudWebdavUrlHint => 'https://dav.jianguoyun.com/dav/';
+
+  @override
+  String get cloudWebdavUsernameLabel => '사용자 이름';
+
+  @override
+  String get cloudWebdavPasswordLabel => '비밀번호';
+
+  @override
+  String get cloudWebdavPathLabel => '원격 경로';
+
+  @override
+  String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudWebdavHint => 'Nutstore, Nextcloud, Synology 등 지원';
 
   @override
   String get cloudConfigUpdated => '설정이 업데이트되었습니다';
