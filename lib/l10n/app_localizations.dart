@@ -4822,6 +4822,12 @@ abstract class AppLocalizations {
   /// **'Russian Ruble'**
   String get currencyRUB;
 
+  /// No description provided for @currencyBYN.
+  ///
+  /// In en, this message translates to:
+  /// **'Belarusian Ruble'**
+  String get currencyBYN;
+
   /// No description provided for @cloudDefaultServiceDisplayName.
   ///
   /// In en, this message translates to:

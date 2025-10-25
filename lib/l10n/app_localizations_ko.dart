@@ -2519,6 +2519,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get currencyRUB => '러시아 루블';
 
   @override
+  String get currencyBYN => '벨라루스 루블';
+
+  @override
   String get cloudDefaultServiceDisplayName => '기본 클라우드 서비스';
 
   @override

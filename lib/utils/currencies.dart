@@ -23,6 +23,7 @@ const List<String> kCurrencyCodes = [
   'IDR',
   'INR',
   'RUB',
+  'BYN',
 ];
 
 /// 获取本地化的货币信息列表
@@ -44,6 +45,7 @@ List<CurrencyInfo> getCurrencies(BuildContext context) {
     CurrencyInfo('IDR', l10n.currencyIDR),
     CurrencyInfo('INR', l10n.currencyINR),
     CurrencyInfo('RUB', l10n.currencyRUB),
+    CurrencyInfo('BYN', l10n.currencyBYN),
   ];
 }
 
@@ -95,6 +97,8 @@ String getCurrencySymbol(String code) {
       return '₹';
     case 'RUB':
       return '₽';
+    case 'BYN':
+      return 'Br';
     default:
       return code;
   }

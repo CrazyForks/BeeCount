@@ -1134,6 +1134,7 @@
   "currencyIDR": "Indonesian Rupiah",
   "currencyINR": "Indian Rupee",
   "currencyRUB": "Russian Ruble",
+  "currencyBYN": "Belarusian Ruble",
 
   "cloudDefaultServiceDisplayName": "Default Cloud Service",
   "cloudNotConfiguredDisplay": "Not Configured",

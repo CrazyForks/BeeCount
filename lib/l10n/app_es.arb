@@ -1121,6 +1121,7 @@
   "currencyIDR": "Rupia indonesia",
   "currencyINR": "Rupia india",
   "currencyRUB": "Rublo ruso",
+  "currencyBYN": "Rublo bielorruso",
 
   "cloudCustomServiceName": "Servicio de nube personalizado",
   "cloudDefaultServiceDisplayName": "Servicio de nube predeterminado",

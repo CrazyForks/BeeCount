@@ -2519,6 +2519,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currencyRUB => 'Russian Ruble';
 
   @override
+  String get currencyBYN => 'Belarusian Ruble';
+
+  @override
   String get cloudDefaultServiceDisplayName => 'Default Cloud Service';
 
   @override

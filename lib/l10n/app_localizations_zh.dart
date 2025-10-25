@@ -2519,6 +2519,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currencyRUB => '卢布';
 
   @override
+  String get currencyBYN => '白俄罗斯卢布';
+
+  @override
   String get cloudDefaultServiceDisplayName => '默认云服务';
 
   @override
@@ -5055,6 +5058,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get currencyRUB => '盧布';
+
+  @override
+  String get currencyBYN => '白俄羅斯盧布';
 
   @override
   String get cloudDefaultServiceDisplayName => '預設雲服務';
