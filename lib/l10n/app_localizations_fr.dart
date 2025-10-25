@@ -2522,6 +2522,51 @@ class AppLocalizationsFr extends AppLocalizations {
   String get currencyBYN => 'Rouble biélorusse';
 
   @override
+  String get supportProjectTitle => 'Soutenir le projet';
+
+  @override
+  String get supportProjectWhyTitle => 'Pourquoi avons-nous besoin de votre soutien?';
+
+  @override
+  String get supportProjectWhyDescription => 'BeeCount est un projet entièrement gratuit et open-source sans publicités ni fonctionnalités payantes. Cependant, pour le rendre disponible aux utilisateurs iOS, nous avons besoin d\'un compte développeur Apple (\$99/an) pour signer l\'application.';
+
+  @override
+  String get supportProjectGoalTitle => 'Objectif de financement';
+
+  @override
+  String supportProjectCurrentAmount(String amount) {
+    return 'Collecté: $amount';
+  }
+
+  @override
+  String supportProjectTargetAmount(String amount) {
+    return 'Objectif: $amount';
+  }
+
+  @override
+  String supportProjectProgress(String progress) {
+    return 'Progrès: $progress';
+  }
+
+  @override
+  String get supportProjectUsageTitle => 'Comment les dons sont utilisés';
+
+  @override
+  String get supportProjectUsage1 => 'Frais annuels du compte développeur Apple (\$99/an)';
+
+  @override
+  String get supportProjectUsage2 => 'Distribuer la version iOS via TestFlight';
+
+  @override
+  String get supportProjectUsage3 => 'Développement et maintenance continus du projet';
+
+  @override
+  String get supportProjectViewDonationMethods => 'Voir les méthodes de don';
+
+  @override
+  String get supportProjectNote => 'Cliquer sur le bouton vous redirigera vers GitHub pour les méthodes de don détaillées';
+
+  @override
   String get cloudDefaultServiceDisplayName => 'Service cloud par défaut';
 
   @override

@@ -324,6 +324,75 @@ A:
 
 ---
 
+## 💝 Support This Project
+
+### Why We Need Your Support?
+
+BeeCount is a **completely free and open-source** project with no ads or paid features. However, to make it available for iOS users, we need an **Apple Developer Account** ($99/year) to sign the app.
+
+Your donation will be used for:
+- ✅ Apple Developer Account annual fee ($99/year)
+- ✅ Distributing iOS version via TestFlight
+- ✅ Continuous project development and maintenance
+
+### Donation Methods
+
+#### 🌍 International
+
+- **PayPal**: https://paypal.me/sunxiaoyes
+
+#### 🇨🇳 China
+
+<details>
+<summary>Click to view QR codes</summary>
+
+| Alipay | WeChat Pay |
+|:---:|:---:|
+| ![Alipay](docs/donate/alipay.png) | ![WeChat Pay](docs/donate/wechat.png) |
+
+</details>
+
+#### 🪙 Cryptocurrency
+
+- **USDT (TRC20)**: `TKBV69B2AoU67p3vDhnJUbMJtZ1DxuUF5C`
+- **Binance**:
+
+<details>
+<summary>Click to view QR code</summary>
+
+![Binance](docs/donate/binance.png)
+
+</details>
+
+### 📊 Funding Progress
+
+- 🎯 **Goal**: $99 (Apple Developer Account annual fee)
+- 💰 **Raised**: $0
+- 📈 **Progress**: 0%
+
+```
+Progress: [----------] 0%
+```
+
+**Once goal is reached, we will**:
+1. Apply for Apple Developer Account
+2. Sign the iOS application
+3. Distribute to iOS users via TestFlight
+4. Transparently report fund usage
+
+### 🌟 Special Thanks to Our Supporters
+
+Thank you to the following generous supporters (in chronological order):
+
+<!--
+After donating, please leave a message in Issues or send an email, and we'll add you to the list
+Format: Nickname - Amount - Date
+-->
+
+- To be updated...
+
+---
+
 ## 🙏 Acknowledgments
 
 Thanks to all friends who have contributed code, suggestions, and feedback to the BeeCount project!

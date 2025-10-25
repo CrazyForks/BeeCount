@@ -2522,6 +2522,51 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currencyBYN => '白俄罗斯卢布';
 
   @override
+  String get supportProjectTitle => '支持项目';
+
+  @override
+  String get supportProjectWhyTitle => '为什么需要您的支持?';
+
+  @override
+  String get supportProjectWhyDescription => '蜜蜂记账是完全免费开源的项目,没有任何广告和付费功能。但要让 iOS 用户能够正常使用,需要申请 Apple 开发者账号(\$99/年)来签名应用。';
+
+  @override
+  String get supportProjectGoalTitle => '筹款目标';
+
+  @override
+  String supportProjectCurrentAmount(String amount) {
+    return '已筹集: $amount';
+  }
+
+  @override
+  String supportProjectTargetAmount(String amount) {
+    return '目标: $amount';
+  }
+
+  @override
+  String supportProjectProgress(String progress) {
+    return '进度: $progress';
+  }
+
+  @override
+  String get supportProjectUsageTitle => '捐赠用途';
+
+  @override
+  String get supportProjectUsage1 => '申请 Apple 开发者账号(\$99/年)';
+
+  @override
+  String get supportProjectUsage2 => '通过 TestFlight 分发 iOS 版本';
+
+  @override
+  String get supportProjectUsage3 => '维护项目的持续开发';
+
+  @override
+  String get supportProjectViewDonationMethods => '查看捐赠方式';
+
+  @override
+  String get supportProjectNote => '点击按钮将跳转到 GitHub 查看详细捐赠方式';
+
+  @override
   String get cloudDefaultServiceDisplayName => '默认云服务';
 
   @override
@@ -5061,6 +5106,51 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get currencyBYN => '白俄羅斯盧布';
+
+  @override
+  String get supportProjectTitle => '支持項目';
+
+  @override
+  String get supportProjectWhyTitle => '為什麼需要您的支持?';
+
+  @override
+  String get supportProjectWhyDescription => '蜜蜂記帳是完全免費開源的專案,沒有任何廣告和付費功能。但要讓 iOS 用戶能夠正常使用,需要申請 Apple 開發者帳號(\$99/年)來簽名應用程式。';
+
+  @override
+  String get supportProjectGoalTitle => '籌款目標';
+
+  @override
+  String supportProjectCurrentAmount(String amount) {
+    return '已籌集: $amount';
+  }
+
+  @override
+  String supportProjectTargetAmount(String amount) {
+    return '目標: $amount';
+  }
+
+  @override
+  String supportProjectProgress(String progress) {
+    return '進度: $progress';
+  }
+
+  @override
+  String get supportProjectUsageTitle => '捐贈用途';
+
+  @override
+  String get supportProjectUsage1 => '申請 Apple 開發者帳號(\$99/年)';
+
+  @override
+  String get supportProjectUsage2 => '通過 TestFlight 分發 iOS 版本';
+
+  @override
+  String get supportProjectUsage3 => '維護項目的持續開發';
+
+  @override
+  String get supportProjectViewDonationMethods => '查看捐贈方式';
+
+  @override
+  String get supportProjectNote => '點擊按鈕將跳轉到 GitHub 查看詳細捐贈方式';
 
   @override
   String get cloudDefaultServiceDisplayName => '預設雲服務';

@@ -1123,6 +1123,41 @@
   "currencyRUB": "Russischer Rubel",
   "currencyBYN": "Weißrussischer Rubel",
 
+  "supportProjectTitle": "Projekt unterstützen",
+  "supportProjectWhyTitle": "Warum brauchen wir Ihre Unterstützung?",
+  "supportProjectWhyDescription": "BeeCount ist ein völlig kostenloses Open-Source-Projekt ohne Werbung oder kostenpflichtige Funktionen. Um es jedoch für iOS-Benutzer verfügbar zu machen, benötigen wir ein Apple Developer Account ($99/Jahr) zum Signieren der App.",
+  "supportProjectGoalTitle": "Finanzierungsziel",
+  "supportProjectCurrentAmount": "Gesammelt: {amount}",
+  "@supportProjectCurrentAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "supportProjectTargetAmount": "Ziel: {amount}",
+  "@supportProjectTargetAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "supportProjectProgress": "Fortschritt: {progress}",
+  "@supportProjectProgress": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "supportProjectUsageTitle": "Verwendung der Spenden",
+  "supportProjectUsage1": "Apple Developer Account Jahresgebühr ($99/Jahr)",
+  "supportProjectUsage2": "iOS-Version über TestFlight verteilen",
+  "supportProjectUsage3": "Kontinuierliche Projektentwicklung und -wartung",
+  "supportProjectViewDonationMethods": "Spendenmethoden anzeigen",
+  "supportProjectNote": "Durch Klicken auf die Schaltfläche werden Sie zu GitHub weitergeleitet, um detaillierte Spendenmethoden anzuzeigen",
+
   "cloudCustomServiceName": "Benutzerdefinierter Cloud-Service",
   "cloudDefaultServiceDisplayName": "Standard-Cloud-Service",
   "cloudNotConfiguredDisplay": "Nicht konfiguriert",

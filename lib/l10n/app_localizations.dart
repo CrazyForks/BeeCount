@@ -4828,6 +4828,84 @@ abstract class AppLocalizations {
   /// **'Belarusian Ruble'**
   String get currencyBYN;
 
+  /// No description provided for @supportProjectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Project'**
+  String get supportProjectTitle;
+
+  /// No description provided for @supportProjectWhyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Why We Need Your Support?'**
+  String get supportProjectWhyTitle;
+
+  /// No description provided for @supportProjectWhyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount is a completely free and open-source project with no ads or paid features. However, to make it available for iOS users, we need an Apple Developer Account (\$99/year) to sign the app.'**
+  String get supportProjectWhyDescription;
+
+  /// No description provided for @supportProjectGoalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Funding Goal'**
+  String get supportProjectGoalTitle;
+
+  /// No description provided for @supportProjectCurrentAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Raised: {amount}'**
+  String supportProjectCurrentAmount(String amount);
+
+  /// No description provided for @supportProjectTargetAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal: {amount}'**
+  String supportProjectTargetAmount(String amount);
+
+  /// No description provided for @supportProjectProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress: {progress}'**
+  String supportProjectProgress(String progress);
+
+  /// No description provided for @supportProjectUsageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How Donations Are Used'**
+  String get supportProjectUsageTitle;
+
+  /// No description provided for @supportProjectUsage1.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Developer Account annual fee (\$99/year)'**
+  String get supportProjectUsage1;
+
+  /// No description provided for @supportProjectUsage2.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribute iOS version via TestFlight'**
+  String get supportProjectUsage2;
+
+  /// No description provided for @supportProjectUsage3.
+  ///
+  /// In en, this message translates to:
+  /// **'Continuous project development and maintenance'**
+  String get supportProjectUsage3;
+
+  /// No description provided for @supportProjectViewDonationMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'View Donation Methods'**
+  String get supportProjectViewDonationMethods;
+
+  /// No description provided for @supportProjectNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Clicking the button will redirect to GitHub for detailed donation methods'**
+  String get supportProjectNote;
+
   /// No description provided for @cloudDefaultServiceDisplayName.
   ///
   /// In en, this message translates to:

@@ -7,6 +7,7 @@ import 'import_page.dart';
 import 'login_page.dart';
 import 'export_page.dart';
 import 'personalize_page.dart';
+import 'support_project_page.dart';
 import '../providers.dart';
 import '../widgets/ui/ui.dart';
 import '../widgets/biz/biz.dart';
@@ -319,6 +320,9 @@ class MinePage extends ConsumerWidget {
                 // 语言设置
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildLanguageSection(context, ref),
+                // 支持项目
+                SizedBox(height: 8.0.scaled(context, ref)),
+                _buildSupportSection(context, ref),
                 // 关于与版本
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAboutSection(context, ref),
@@ -863,6 +867,23 @@ class MinePage extends ConsumerWidget {
           },
         ),
       ]),
+    );
+  }
+
+  Widget _buildSupportSection(BuildContext context, WidgetRef ref) {
+    return SectionCard(
+      margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+      child: AppListTile(
+        leading: Icons.favorite_outline,
+        title: AppLocalizations.of(context).supportProjectTitle,
+        subtitle: AppLocalizations.of(context).supportProjectWhyTitle,
+        onTap: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (_) => const SupportProjectPage()),
+          );
+        },
+      ),
     );
   }
 
