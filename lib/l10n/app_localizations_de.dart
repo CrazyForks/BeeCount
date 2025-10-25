@@ -889,6 +889,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mineUpdateDownload => 'Download Update';
 
   @override
+  String get mineFeedback => 'Feedback';
+
+  @override
+  String get mineFeedbackSubtitle => 'Problem oder Vorschlag melden';
+
+  @override
   String get mineRefreshStats => 'Refresh Stats (Debug)';
 
   @override

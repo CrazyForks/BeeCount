@@ -360,6 +360,8 @@
   "mineCheckUpdateInProgress": "アップデートを確認中...",
   "mineCheckUpdateSubtitle": "最新バージョンを確認中",
   "mineUpdateDownload": "アップデートをダウンロード",
+  "mineFeedback": "フィードバック",
+  "mineFeedbackSubtitle": "問題や提案を報告",
   "mineRefreshStats": "統計を更新（デバッグ）",
   "mineRefreshStatsSubtitle": "グローバル統計プロバイダーの再計算をトリガー",
   "mineRefreshSync": "同期ステータスを更新（デバッグ）",

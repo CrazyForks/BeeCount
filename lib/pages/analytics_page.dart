@@ -102,8 +102,12 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                     context: context,
                     builder: (ctx) => AlertDialog(
                       title: Text(AppLocalizations.of(context).commonHelp),
-                      content: Text(
-                          AppLocalizations.of(context).analyticsTipContent),
+                      content: SingleChildScrollView(
+                        child: Text(
+                          AppLocalizations.of(context).analyticsTipContent.replaceAll('\\n', '\n'),
+                          style: const TextStyle(height: 1.5),
+                        ),
+                      ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(ctx).pop(),

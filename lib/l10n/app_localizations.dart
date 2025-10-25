@@ -1750,6 +1750,18 @@ abstract class AppLocalizations {
   /// **'Download Update'**
   String get mineUpdateDownload;
 
+  /// No description provided for @mineFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get mineFeedback;
+
+  /// No description provided for @mineFeedbackSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report issues or suggestions'**
+  String get mineFeedbackSubtitle;
+
   /// No description provided for @mineRefreshStats.
   ///
   /// In en, this message translates to:

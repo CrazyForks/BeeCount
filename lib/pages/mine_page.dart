@@ -25,10 +25,8 @@ import 'category_manage_page.dart';
 import 'category_migration_page.dart';
 import 'reminder_settings_page.dart';
 import 'language_settings_page.dart';
-import '../l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../utils/format_utils.dart';
 import '../services/update_service.dart';
 import '../utils/ui_scale_extensions.dart';
 
@@ -802,6 +800,16 @@ class MinePage extends ConsumerWidget {
                   },
           );
         }),
+        AppDivider.thin(),
+        AppListTile(
+          leading: Icons.feedback_outlined,
+          title: AppLocalizations.of(context).mineFeedback,
+          subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,
+          onTap: () async {
+            final url = Uri.parse('https://github.com/TNT-Likely/BeeCount/issues');
+            await _tryOpenUrl(url);
+          },
+        ),
       ]),
     );
   }

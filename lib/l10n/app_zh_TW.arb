@@ -257,6 +257,8 @@
   "mineCheckUpdateInProgress": "檢測更新中...",
   "mineCheckUpdateSubtitle": "正在檢查最新版本",
   "mineUpdateDownload": "下載更新",
+  "mineFeedback": "問題回饋",
+  "mineFeedbackSubtitle": "提交問題或建議",
   "mineRefreshStats": "重新整理統計資訊（臨時）",
   "mineRefreshStatsSubtitle": "觸發全域統計 Provider 重新計算",
   "mineRefreshSync": "重新整理同步狀態（臨時）",

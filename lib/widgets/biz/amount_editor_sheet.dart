@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:beecount/widgets/ui/wheel_date_picker.dart';
 import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/note_history_service.dart';
 
 typedef AmountEditorResult = ({double amount, String? note, DateTime date});
 
@@ -34,6 +35,9 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
   double _acc = 0;
   String _op = '+'; // 最近一次运算符
 
+  // 最近使用的备注列表
+  List<String> _recentNotes = [];
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +51,16 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
         : s;
     _amountStr = trimmed.isEmpty ? '0' : trimmed;
     _noteCtrl.text = widget.initialNote ?? '';
+
+    // 加载最近使用的备注
+    _loadRecentNotes();
+  }
+
+  Future<void> _loadRecentNotes() async {
+    final notes = await NoteHistoryService.getRecentNotes(limit: 8);
+    setState(() {
+      _recentNotes = notes;
+    });
   }
 
   void _append(String s) {
@@ -210,6 +224,50 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               ),
             ),
+            // 最近使用的备注
+            if (_recentNotes.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 32,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _recentNotes.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: 8),
+                  itemBuilder: (context, index) {
+                    final note = _recentNotes[index];
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          _noteCtrl.text = note;
+                          _noteCtrl.selection = TextSelection.fromPosition(
+                            TextPosition(offset: note.length),
+                          );
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Center(
+                          child: Text(
+                            note,
+                            style: text.labelSmall?.copyWith(
+                              color: BeeColors.primaryText,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
             const SizedBox(height: 10),
             // 数字键盘
             LayoutBuilder(builder: (ctx, c) {
@@ -268,7 +326,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
-                        onTap: () {
+                        onTap: () async {
                           // 计算总额（包含最后一段）
                           final cur = parsed();
                           double total = _acc;
@@ -279,6 +337,12 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                           } else {
                             total = cur;
                           }
+
+                          // 保存备注到历史记录
+                          if (_noteCtrl.text.isNotEmpty) {
+                            await NoteHistoryService.saveNote(_noteCtrl.text);
+                          }
+
                           HapticFeedback.lightImpact();
                           SystemSound.play(SystemSoundType.click);
                           widget.onSubmit((

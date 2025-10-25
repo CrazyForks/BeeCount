@@ -360,6 +360,8 @@
   "mineCheckUpdateInProgress": "Checking update...",
   "mineCheckUpdateSubtitle": "Checking for latest version",
   "mineUpdateDownload": "Download Update",
+  "mineFeedback": "Feedback",
+  "mineFeedbackSubtitle": "Report issues or suggestions",
   "mineRefreshStats": "Refresh Stats (Debug)",
   "mineRefreshStatsSubtitle": "Trigger global stats provider recalculation",
   "mineRefreshSync": "Refresh Sync Status (Debug)",

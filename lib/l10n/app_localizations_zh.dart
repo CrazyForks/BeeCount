@@ -889,6 +889,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineUpdateDownload => '下载更新';
 
   @override
+  String get mineFeedback => '问题反馈';
+
+  @override
+  String get mineFeedbackSubtitle => '提交问题或建议';
+
+  @override
   String get mineRefreshStats => '刷新统计信息（临时）';
 
   @override
@@ -3389,6 +3395,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineUpdateDownload => '下載更新';
+
+  @override
+  String get mineFeedback => '問題回饋';
+
+  @override
+  String get mineFeedbackSubtitle => '提交問題或建議';
 
   @override
   String get mineRefreshStats => '重新整理統計資訊（臨時）';

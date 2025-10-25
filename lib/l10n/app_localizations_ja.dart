@@ -889,6 +889,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mineUpdateDownload => 'アップデートをダウンロード';
 
   @override
+  String get mineFeedback => 'フィードバック';
+
+  @override
+  String get mineFeedbackSubtitle => '問題や提案を報告';
+
+  @override
   String get mineRefreshStats => '統計を更新（デバッグ）';
 
   @override

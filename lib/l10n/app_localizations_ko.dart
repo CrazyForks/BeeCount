@@ -889,6 +889,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mineUpdateDownload => '업데이트 다운로드';
 
   @override
+  String get mineFeedback => '피드백';
+
+  @override
+  String get mineFeedbackSubtitle => '문제 또는 제안 보고';
+
+  @override
   String get mineRefreshStats => '통계 새로고침 (디버그)';
 
   @override

@@ -360,6 +360,8 @@
   "mineCheckUpdateInProgress": "업데이트 확인 중...",
   "mineCheckUpdateSubtitle": "최신 버전 확인 중",
   "mineUpdateDownload": "업데이트 다운로드",
+  "mineFeedback": "피드백",
+  "mineFeedbackSubtitle": "문제 또는 제안 보고",
   "mineRefreshStats": "통계 새로고침 (디버그)",
   "mineRefreshStatsSubtitle": "글로벌 통계 프로바이더 재계산 트리거",
   "mineRefreshSync": "동기화 상태 새로고침 (디버그)",
