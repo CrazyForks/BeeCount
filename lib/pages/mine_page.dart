@@ -320,9 +320,6 @@ class MinePage extends ConsumerWidget {
                 // 语言设置
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildLanguageSection(context, ref),
-                // 支持项目
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildSupportSection(context, ref),
                 // 关于与版本
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAboutSection(context, ref),
@@ -331,6 +328,9 @@ class MinePage extends ConsumerWidget {
                   SizedBox(height: 8.0.scaled(context, ref)),
                   _buildDebugSection(context, ref),
                 ],
+                // 支持项目（放在最下面）
+                SizedBox(height: 8.0.scaled(context, ref)),
+                _buildSupportSection(context, ref),
                 SizedBox(height: AppDimens.p16.scaled(context, ref)),
               ],
             ),
