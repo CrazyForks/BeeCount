@@ -299,6 +299,7 @@
   "mineCloudServiceDefault": "デフォルトクラウド（有効）",
   "mineCloudServiceOffline": "デフォルトモード（オフライン）",
   "mineCloudServiceCustom": "カスタムSupabase",
+  "mineCloudServiceWebDAV": "カスタムクラウドサービス (WebDAV)",
   "mineFirstFullUpload": "初回フルアップロード",
   "mineFirstFullUploadSubtitle": "すべてのローカル家計簿を現在のSupabaseにアップロード",
   "mineFirstFullUploadComplete": "完了",

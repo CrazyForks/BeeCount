@@ -299,6 +299,7 @@
   "mineCloudServiceDefault": "Default Cloud (Enabled)",
   "mineCloudServiceOffline": "Default Mode (Offline)",
   "mineCloudServiceCustom": "Custom Supabase",
+  "mineCloudServiceWebDAV": "Custom Cloud Service (WebDAV)",
   "mineFirstFullUpload": "First Full Upload",
   "mineFirstFullUploadSubtitle": "Upload all local ledgers to current Supabase",
   "mineFirstFullUploadComplete": "Complete",

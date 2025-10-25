@@ -202,7 +202,7 @@ class MinePage extends ConsumerWidget {
                               } else {
                                 // 自定义云服务：根据类型显示
                                 if (cfg.type == CloudBackendType.webdav) {
-                                  return '自定义云服务 (WebDAV)';
+                                  return AppLocalizations.of(context).mineCloudServiceWebDAV;
                                 } else {
                                   return AppLocalizations.of(context).mineCloudServiceCustom;
                                 }

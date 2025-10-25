@@ -682,6 +682,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mineCloudServiceCustom => '사용자 정의 Supabase';
 
   @override
+  String get mineCloudServiceWebDAV => '사용자 정의 클라우드 서비스 (WebDAV)';
+
+  @override
   String get mineFirstFullUpload => '첫 번째 전체 업로드';
 
   @override

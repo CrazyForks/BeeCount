@@ -1384,6 +1384,12 @@ abstract class AppLocalizations {
   /// **'Custom Supabase'**
   String get mineCloudServiceCustom;
 
+  /// No description provided for @mineCloudServiceWebDAV.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Cloud Service (WebDAV)'**
+  String get mineCloudServiceWebDAV;
+
   /// No description provided for @mineFirstFullUpload.
   ///
   /// In en, this message translates to:

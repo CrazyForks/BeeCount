@@ -682,6 +682,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineCloudServiceCustom => '自定义 Supabase';
 
   @override
+  String get mineCloudServiceWebDAV => '自定义云服务 (WebDAV)';
+
+  @override
   String get mineFirstFullUpload => '首次全量上传';
 
   @override
@@ -3266,6 +3269,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineCloudServiceCustom => '自訂 Supabase';
+
+  @override
+  String get mineCloudServiceWebDAV => '自訂雲服務 (WebDAV)';
 
   @override
   String get mineFirstFullUpload => '首次全量上傳';

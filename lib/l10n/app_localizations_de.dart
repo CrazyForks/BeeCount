@@ -682,6 +682,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mineCloudServiceCustom => 'Custom Supabase';
 
   @override
+  String get mineCloudServiceWebDAV => 'Benutzerdefinierter Cloud-Dienst (WebDAV)';
+
+  @override
   String get mineFirstFullUpload => 'First Full Upload';
 
   @override

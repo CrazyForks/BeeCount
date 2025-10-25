@@ -185,6 +185,7 @@
   "mineAbout": "Acerca de",
   "mineSettings": "Configuración",
   "mineCloudSync": "Sincronización en la nube",
+  "mineCloudServiceWebDAV": "Servicio de nube personalizado (WebDAV)",
   "mineDataManagement": "Gestión de datos",
   "minePreferences": "Preferencias",
   "mineSupport": "Soporte",

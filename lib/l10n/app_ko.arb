@@ -299,6 +299,7 @@
   "mineCloudServiceDefault": "기본 클라우드 (활성화됨)",
   "mineCloudServiceOffline": "기본 모드 (오프라인)",
   "mineCloudServiceCustom": "사용자 정의 Supabase",
+  "mineCloudServiceWebDAV": "사용자 정의 클라우드 서비스 (WebDAV)",
   "mineFirstFullUpload": "첫 번째 전체 업로드",
   "mineFirstFullUploadSubtitle": "모든 로컬 가계부를 현재 Supabase에 업로드",
   "mineFirstFullUploadComplete": "완료",

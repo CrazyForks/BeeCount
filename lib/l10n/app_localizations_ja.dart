@@ -682,6 +682,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mineCloudServiceCustom => 'カスタムSupabase';
 
   @override
+  String get mineCloudServiceWebDAV => 'カスタムクラウドサービス (WebDAV)';
+
+  @override
   String get mineFirstFullUpload => '初回フルアップロード';
 
   @override

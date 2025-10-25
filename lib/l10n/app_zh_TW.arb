@@ -196,6 +196,7 @@
   "mineCloudServiceDefault": "預設雲服務 (已啟用)",
   "mineCloudServiceOffline": "預設模式 (離線)",
   "mineCloudServiceCustom": "自訂 Supabase",
+  "mineCloudServiceWebDAV": "自訂雲服務 (WebDAV)",
   "mineFirstFullUpload": "首次全量上傳",
   "mineFirstFullUploadSubtitle": "將所有本地帳本上傳到當前 Supabase",
   "mineFirstFullUploadComplete": "完成",
