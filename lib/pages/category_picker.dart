@@ -140,6 +140,9 @@ class _CategoryPickerPageState extends ConsumerState<CategoryPickerPage>
       Navigator.pop(context, c);
       return;
     }
+    final db = ref.read(databaseProvider);
+    final ledgerId = ref.read(currentLedgerIdProvider);
+
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -152,9 +155,10 @@ class _CategoryPickerPageState extends ConsumerState<CategoryPickerPage>
         initialDate: widget.initialDate ?? DateTime.now(),
         initialAmount: widget.initialAmount,
         initialNote: widget.initialNote,
+        db: db,
+        ledgerId: ledgerId,
         onSubmit: (res) async {
           final repo = ref.read(repositoryProvider);
-          final ledgerId = ref.read(currentLedgerIdProvider);
           if (widget.editingTransactionId != null) {
             await repo.updateTransaction(
               id: widget.editingTransactionId!,

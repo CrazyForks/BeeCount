@@ -4,6 +4,7 @@ import 'package:beecount/widgets/ui/wheel_date_picker.dart';
 import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/note_history_service.dart';
+import '../../data/db.dart';
 
 typedef AmountEditorResult = ({double amount, String? note, DateTime date});
 
@@ -13,6 +14,9 @@ class AmountEditorSheet extends StatefulWidget {
   final double? initialAmount;
   final String? initialNote;
   final ValueChanged<AmountEditorResult> onSubmit;
+  final BeeDatabase db;
+  final int ledgerId;
+
   const AmountEditorSheet({
     super.key,
     required this.categoryName,
@@ -20,6 +24,8 @@ class AmountEditorSheet extends StatefulWidget {
     this.initialAmount,
     this.initialNote,
     required this.onSubmit,
+    required this.db,
+    required this.ledgerId,
   });
 
   @override
@@ -35,8 +41,8 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
   double _acc = 0;
   String _op = '+'; // 最近一次运算符
 
-  // 最近使用的备注列表
-  List<String> _recentNotes = [];
+  // 高频备注列表（包含使用次数）
+  List<({String note, int count})> _frequentNotes = [];
 
   @override
   void initState() {
@@ -57,9 +63,13 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
   }
 
   Future<void> _loadRecentNotes() async {
-    final notes = await NoteHistoryService.getRecentNotes(limit: 8);
+    final notes = await NoteHistoryService.getFrequentNotes(
+      widget.db,
+      widget.ledgerId,
+      limit: 20,
+    );
     setState(() {
-      _recentNotes = notes;
+      _frequentNotes = notes;
     });
   }
 
@@ -232,23 +242,23 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               ),
             ),
-            // 最近使用的备注
-            if (_recentNotes.isNotEmpty) ...[
+            // 高频备注推荐
+            if (_frequentNotes.isNotEmpty) ...[
               const SizedBox(height: 8),
               SizedBox(
                 height: 32,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemCount: _recentNotes.length,
+                  itemCount: _frequentNotes.length,
                   separatorBuilder: (context, index) => const SizedBox(width: 8),
                   itemBuilder: (context, index) {
-                    final note = _recentNotes[index];
+                    final item = _frequentNotes[index];
                     return InkWell(
                       onTap: () {
                         setState(() {
-                          _noteCtrl.text = note;
+                          _noteCtrl.text = item.note;
                           _noteCtrl.selection = TextSelection.fromPosition(
-                            TextPosition(offset: note.length),
+                            TextPosition(offset: item.note.length),
                           );
                         });
                       },
@@ -262,13 +272,35 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Center(
-                          child: Text(
-                            note,
-                            style: text.labelSmall?.copyWith(
-                              color: BeeColors.primaryText,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              item.note,
+                              style: text.labelSmall?.copyWith(
+                                color: BeeColors.primaryText,
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 1,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '${item.count}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -344,11 +376,6 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                             total -= cur;
                           } else {
                             total = cur;
-                          }
-
-                          // 保存备注到历史记录
-                          if (_noteCtrl.text.isNotEmpty) {
-                            await NoteHistoryService.saveNote(_noteCtrl.text);
                           }
 
                           HapticFeedback.lightImpact();

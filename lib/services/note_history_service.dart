@@ -1,46 +1,48 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import '../data/db.dart';
+
+/// 备注频率数据
+typedef NoteFrequency = ({String note, int count});
 
 /// 备注历史记录服务
-/// 存储并提供最近使用的备注列表，用于快速输入
+/// 从交易记录中统计备注使用频率，提供高频备注列表
 class NoteHistoryService {
-  static const String _keyRecentNotes = 'recent_notes';
-  static const int _maxHistoryCount = 20; // 最多保存20条
+  /// 获取高频备注列表（按使用次数从高到低排序）
+  /// [db] 数据库实例
+  /// [ledgerId] 账本ID
+  /// [limit] 限制返回数量，默认10条
+  static Future<List<NoteFrequency>> getFrequentNotes(
+    BeeDatabase db,
+    int ledgerId, {
+    int limit = 10,
+  }) async {
+    // 查询当前账本的所有交易
+    final transactions = await (db.select(db.transactions)
+          ..where((t) => t.ledgerId.equals(ledgerId)))
+        .get();
 
-  /// 保存备注到历史记录
-  static Future<void> saveNote(String note) async {
-    // 去除前后空格
-    final trimmedNote = note.trim();
-    if (trimmedNote.isEmpty) return;
-
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> history = prefs.getStringList(_keyRecentNotes) ?? [];
-
-    // 如果已存在，先移除（移到最前面）
-    history.remove(trimmedNote);
-
-    // 添加到最前面
-    history.insert(0, trimmedNote);
-
-    // 限制数量
-    if (history.length > _maxHistoryCount) {
-      history.removeRange(_maxHistoryCount, history.length);
+    // 统计备注使用频率
+    final Map<String, int> noteFrequency = {};
+    for (final transaction in transactions) {
+      final note = transaction.note?.trim();
+      if (note != null && note.isNotEmpty) {
+        noteFrequency[note] = (noteFrequency[note] ?? 0) + 1;
+      }
     }
 
-    await prefs.setStringList(_keyRecentNotes, history);
+    // 按频率排序（从高到低）
+    final sortedNotes = noteFrequency.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    // 返回前N个备注及其使用次数
+    return sortedNotes
+        .take(limit)
+        .map((e) => (note: e.key, count: e.value))
+        .toList();
   }
 
-  /// 获取最近使用的备注列表
-  /// [limit] 限制返回数量，默认10条
-  static Future<List<String>> getRecentNotes({int limit = 10}) async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> history = prefs.getStringList(_keyRecentNotes) ?? [];
-
-    return history.take(limit).toList();
-  }
-
-  /// 清空历史记录
-  static Future<void> clearHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_keyRecentNotes);
+  /// 保存备注到历史记录（兼容旧代码，实际不再需要）
+  @Deprecated('备注已从数据库交易记录中统计，无需单独保存')
+  static Future<void> saveNote(String note) async {
+    // 空实现，保留接口兼容性
   }
 }
