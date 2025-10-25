@@ -385,6 +385,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryDefault => 'Default Category';
 
   @override
+  String get categoryCustomTag => 'Custom';
+
+  @override
+  String get categoryReorderTip => 'Long press to drag and reorder categories';
+
+  @override
   String categoryLoadFailed(String error) {
     return 'Load failed: $error';
   }

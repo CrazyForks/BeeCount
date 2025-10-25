@@ -130,6 +130,8 @@
   "categoryIncome": "收入分類",
   "categoryEmpty": "暫無分類",
   "categoryDefault": "預設分類",
+  "categoryCustomTag": "自訂",
+  "categoryReorderTip": "長按分類可拖曳調整順序",
   "categoryLoadFailed": "載入失敗: {error}",
 
   "iconPickerTitle": "選擇圖示",

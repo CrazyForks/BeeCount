@@ -385,6 +385,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get categoryDefault => '기본 카테고리';
 
   @override
+  String get categoryCustomTag => '사용자 정의';
+
+  @override
+  String get categoryReorderTip => '길게 눌러 드래그하여 순서를 변경할 수 있습니다';
+
+  @override
   String categoryLoadFailed(String error) {
     return '로딩 실패: $error';
   }

@@ -861,11 +861,12 @@ class BeeRepository {
         c.name as category_name,
         c.kind as category_kind,
         c.icon as category_icon,
+        c.sort_order as category_sort_order,
         COALESCE(COUNT(t.id), 0) as transaction_count
       FROM categories c
       LEFT JOIN transactions t ON c.id = t.category_id
-      GROUP BY c.id, c.name, c.kind, c.icon
-      ORDER BY c.id
+      GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order
+      ORDER BY c.sort_order
       ''',
       readsFrom: {db.categories, db.transactions},
     ).watch().map((rows) {
@@ -875,6 +876,7 @@ class BeeRepository {
           name: row.read<String>('category_name'),
           kind: row.read<String>('category_kind'),
           icon: row.read<String?>('category_icon'),
+          sortOrder: row.read<int>('category_sort_order'),
         );
         final transactionCount = row.read<int>('transaction_count');
         return (category: category, transactionCount: transactionCount);

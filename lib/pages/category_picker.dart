@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
 import '../data/db.dart';
-import 'package:drift/drift.dart' as drift;
+import 'package:drift/drift.dart' as drift show Value, OrderingTerm;
 // Compact top bar instead of PrimaryHeader to remove extra whitespace
 import '../widgets/category_icon.dart';
 import '../widgets/biz/amount_editor_sheet.dart';
@@ -211,24 +211,39 @@ class _CategoryGridState extends ConsumerState<_CategoryGrid> {
   Widget build(BuildContext context) {
     final db = ref.watch(databaseProvider);
     final q = (db.select(db.categories)
-          ..where((c) => c.kind.equals(widget.kind)))
+          ..where((c) => c.kind.equals(widget.kind))
+          ..orderBy([(c) => drift.OrderingTerm(expression: c.sortOrder)]))
         .watch();
     return StreamBuilder<List<Category>>(
       stream: q,
       builder: (context, snap) {
         final dbCategories = snap.data ?? [];
 
-        // 合并默认分类与数据库分类
-        final list = CategoryService.mergeDefaultAndDbCategories<Category>(
-          dbCategories: dbCategories,
-          kind: widget.kind,
-          createCategory: ({required int id, required String name, required String kind, required String icon}) {
-            return Category(id: id, name: name, kind: kind, icon: icon);
-          },
-          getNameFn: (category) => category.name,
-          getKindFn: (category) => category.kind,
-          getIdFn: (category) => category.id,
-        );
+        // 获取默认分类名单
+        final defaultCategoryNames = widget.kind == 'expense'
+            ? CategoryService.defaultExpenseCategories
+            : CategoryService.defaultIncomeCategories;
+
+        // 创建数据库分类名称的集合，用于快速查找
+        final dbCategoryNames = dbCategories.map((c) => c.name).toSet();
+
+        // 创建虚拟的默认分类（数据库中不存在的）
+        final virtualCategories = <Category>[];
+        for (final name in defaultCategoryNames) {
+          if (!dbCategoryNames.contains(name)) {
+            virtualCategories.add(Category(
+              id: -1,
+              name: name,
+              kind: widget.kind,
+              icon: CategoryService.getDefaultCategoryIcon(name, widget.kind),
+              sortOrder: 999, // 虚拟分类排在最后
+            ));
+          }
+        }
+
+        // 合并数据库分类和虚拟分类，按 sortOrder 排序（数据库分类已经排序）
+        final list = [...dbCategories, ...virtualCategories];
+        list.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
         if (list.isEmpty) {
           return Center(child: Text(AppLocalizations.of(context)!.categoryEmpty));
@@ -270,11 +285,21 @@ class _CategoryGridState extends ConsumerState<_CategoryGrid> {
 
                 // 如果是虚拟分类（ID为-1），需要先创建到数据库
                 if (c.id == -1) {
-                  final db = ref.read(databaseProvider);
-                  final newId = await db.into(db.categories).insert(CategoriesCompanion.insert(
+                  final database = ref.read(databaseProvider);
+
+                  // 获取当前该类型分类的最大 sortOrder，新分类排在最后
+                  final existingCategories = await (database.select(database.categories)
+                        ..where((cat) => cat.kind.equals(c.kind)))
+                      .get();
+                  final maxSortOrder = existingCategories.isEmpty
+                      ? 0
+                      : existingCategories.map((cat) => cat.sortOrder).reduce((a, b) => a > b ? a : b);
+
+                  final newId = await database.into(database.categories).insert(CategoriesCompanion.insert(
                     name: c.name,
                     kind: c.kind,
                     icon: drift.Value(c.icon),
+                    sortOrder: drift.Value(maxSortOrder + 1),
                   ));
 
                   // 创建一个新的Category对象，包含真实的数据库ID
@@ -283,6 +308,7 @@ class _CategoryGridState extends ConsumerState<_CategoryGrid> {
                     name: c.name,
                     kind: c.kind,
                     icon: c.icon,
+                    sortOrder: maxSortOrder + 1,
                   );
                   widget.onPick(realCategory);
                 } else {

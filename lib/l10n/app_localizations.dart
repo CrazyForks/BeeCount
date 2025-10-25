@@ -838,6 +838,18 @@ abstract class AppLocalizations {
   /// **'Default Category'**
   String get categoryDefault;
 
+  /// No description provided for @categoryCustomTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get categoryCustomTag;
+
+  /// No description provided for @categoryReorderTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press to drag and reorder categories'**
+  String get categoryReorderTip;
+
   /// No description provided for @categoryLoadFailed.
   ///
   /// In en, this message translates to:

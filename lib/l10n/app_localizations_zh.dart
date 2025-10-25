@@ -385,6 +385,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryDefault => '默认分类';
 
   @override
+  String get categoryCustomTag => '自定义';
+
+  @override
+  String get categoryReorderTip => '长按分类可拖拽调整顺序';
+
+  @override
   String categoryLoadFailed(String error) {
     return '加载失败: $error';
   }
@@ -2879,6 +2885,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryDefault => '預設分類';
+
+  @override
+  String get categoryCustomTag => '自訂';
+
+  @override
+  String get categoryReorderTip => '長按分類可拖曳調整順序';
 
   @override
   String categoryLoadFailed(String error) {

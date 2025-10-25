@@ -385,6 +385,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryDefault => 'デフォルトカテゴリ';
 
   @override
+  String get categoryCustomTag => 'カスタム';
+
+  @override
+  String get categoryReorderTip => '長押しでドラッグして順序を変更できます';
+
+  @override
   String categoryLoadFailed(String error) {
     return '読み込み失敗：$error';
   }

@@ -175,6 +175,8 @@
   "categoryIncome": "Income Categories",
   "categoryEmpty": "No categories",
   "categoryDefault": "Default Category",
+  "categoryCustomTag": "Custom",
+  "categoryReorderTip": "Long press to drag and reorder categories",
   "categoryLoadFailed": "Load failed: {error}",
   "@categoryLoadFailed": {
     "placeholders": {

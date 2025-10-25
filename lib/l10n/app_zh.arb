@@ -130,6 +130,8 @@
   "categoryIncome": "收入分类",
   "categoryEmpty": "暂无分类",
   "categoryDefault": "默认分类",
+  "categoryCustomTag": "自定义",
+  "categoryReorderTip": "长按分类可拖拽调整顺序",
   "categoryLoadFailed": "加载失败: {error}",
 
   "iconPickerTitle": "选择图标",

@@ -29,6 +29,7 @@ class Categories extends Table {
   TextColumn get name => text()();
   TextColumn get kind => text()(); // expense / income
   TextColumn get icon => text().nullable()();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))(); // 排序顺序，数字越小越靠前
 }
 
 class Transactions extends Table {
@@ -48,7 +49,27 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) {
+        // 添加 sortOrder 字段（使用原始 SQL，因为此时代码还未生成）
+        await customStatement('ALTER TABLE categories ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0;');
+
+        // 为现有分类设置默认的 sortOrder（按 id 顺序）
+        await customStatement('''
+          UPDATE categories
+          SET sort_order = (
+            SELECT COUNT(*)
+            FROM categories AS c2
+            WHERE c2.id <= categories.id
+          ) - 1;
+        ''');
+      }
+    },
+  );
 
   // Seed minimal data
   Future<void> ensureSeed() async {
@@ -144,40 +165,65 @@ class BeeDatabase extends _$BeeDatabase {
       }
     } catch (_) {}
 
-    // 为分类名称分配默认图标
+    // 为分类名称分配默认图标和排序顺序
 
-    for (final name in defaultExpense) {
+    // 处理支出分类
+    for (var i = 0; i < defaultExpense.length; i++) {
+      final name = defaultExpense[i];
       final existingCategories = await (select(categories)
             ..where((c) => c.name.equals(name) & c.kind.equals(expense)))
           .get();
       if (existingCategories.isEmpty) {
+        // 新增默认分类，使用列表索引作为 sortOrder
         await into(categories).insert(CategoriesCompanion.insert(
-            name: name, kind: expense, icon: Value(CategoryService.getDefaultCategoryIcon(name, expense))));
+            name: name,
+            kind: expense,
+            icon: Value(CategoryService.getDefaultCategoryIcon(name, expense)),
+            sortOrder: Value(i)));
       } else {
-        // 更新现有分类的图标（如果图标为空或不正确）
+        // 更新现有分类的图标（但不覆盖用户自定义的 sortOrder）
         for (final category in existingCategories) {
           final correctIcon = CategoryService.getDefaultCategoryIcon(name, expense);
+          // 只有当图标不正确时才更新
           if (category.icon != correctIcon) {
             await (update(categories)..where((c) => c.id.equals(category.id)))
                 .write(CategoriesCompanion(icon: Value(correctIcon)));
           }
+          // 如果 sortOrder 是 0，可能是初次创建，更新为正确的顺序
+          if (category.sortOrder == 0) {
+            await (update(categories)..where((c) => c.id.equals(category.id)))
+                .write(CategoriesCompanion(sortOrder: Value(i)));
+          }
         }
       }
     }
-    for (final name in defaultIncome) {
+
+    // 处理收入分类
+    for (var i = 0; i < defaultIncome.length; i++) {
+      final name = defaultIncome[i];
       final existingCategories = await (select(categories)
             ..where((c) => c.name.equals(name) & c.kind.equals(income)))
           .get();
       if (existingCategories.isEmpty) {
+        // 新增默认分类，使用列表索引作为 sortOrder
         await into(categories).insert(CategoriesCompanion.insert(
-            name: name, kind: income, icon: Value(CategoryService.getDefaultCategoryIcon(name, income))));
+            name: name,
+            kind: income,
+            icon: Value(CategoryService.getDefaultCategoryIcon(name, income)),
+            sortOrder: Value(i)));
       } else {
-        // 更新现有分类的图标（如果图标为空或不正确）
+        // 更新现有分类的图标（但不覆盖用户自定义的 sortOrder）
         for (final category in existingCategories) {
           final correctIcon = CategoryService.getDefaultCategoryIcon(name, income);
+          // 只有当图标不正确时才更新
           if (category.icon != correctIcon) {
             await (update(categories)..where((c) => c.id.equals(category.id)))
                 .write(CategoriesCompanion(icon: Value(correctIcon)));
+          }
+          // 如果 sortOrder 是 0，可能是初次创建，更新为正确的顺序
+          if (category.sortOrder == 0) {
+            await (update(categories)..where((c) => c.id.equals(category.id)))
+                .write(CategoriesCompanion(sortOrder: Value(i)));
           }
         }
       }

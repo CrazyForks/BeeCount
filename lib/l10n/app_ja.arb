@@ -175,6 +175,8 @@
   "categoryIncome": "収入カテゴリ",
   "categoryEmpty": "カテゴリなし",
   "categoryDefault": "デフォルトカテゴリ",
+  "categoryCustomTag": "カスタム",
+  "categoryReorderTip": "長押しでドラッグして順序を変更できます",
   "categoryLoadFailed": "読み込み失敗：{error}",
   "@categoryLoadFailed": {
     "placeholders": {

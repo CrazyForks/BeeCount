@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:drift/drift.dart';
 import '../data/db.dart';
 import '../data/repository.dart';
 import 'sync_providers.dart';
@@ -84,7 +85,9 @@ final appInitProvider = FutureProvider<void>((ref) async {
 // 分类Provider
 final categoriesProvider = FutureProvider<List<Category>>((ref) async {
   final db = ref.watch(databaseProvider);
-  return await db.select(db.categories).get();
+  return await (db.select(db.categories)
+        ..orderBy([(c) => OrderingTerm(expression: c.sortOrder)]))
+      .get();
 });
 
 // 分类与交易笔数组合Provider（响应式版本）
