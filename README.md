@@ -1,402 +1,403 @@
-# BeeCount
+# 蜜蜂记账（BeeCount）
 
-> [中文](README_CN.md) | English
+> 中文 | [English](README_EN.md)
 
-**Your Data, Your Control - Open Source Accounting App**
+**你的数据，你做主的开源记账应用**
 
-A lightweight, open-source, privacy-focused personal accounting app for iOS/Android. Features complete ledger management, category statistics, data analysis, import/export functionality, and multiple cloud backup solutions. **Core Advantage: Support for custom Supabase backend and WebDAV servers, giving you complete control over your data.**
+一款轻量、开源、隐私可控的个人记账 App，支持 iOS/Android 双平台。内置完整的账本管理、分类统计、数据分析、导入导出功能，并支持多种云备份方案。**核心优势：支持自定义 Supabase 后端和 WebDAV 服务器，数据完全由你掌控。**
 
-## 📱 Product Demo
+## 📱 产品演示
 
-### Core Features
+### 核心功能展示
 
 <div align="center">
-  <img src="demo/preview/en/01-home.png" alt="Home Screen" width="200" />
-  <img src="demo/preview/en/02-search.png" alt="Smart Search" width="200" />
-  <img src="demo/preview/en/03-edit-transaction.png" alt="Edit Transaction" width="200" />
-  <img src="demo/preview/en/04-chart-analysis.png" alt="Chart Analysis" width="200" />
+  <img src="demo/preview/zh/01-home.png" alt="首页主界面" width="200" />
+  <img src="demo/preview/zh/02-search.png" alt="智能搜索" width="200" />
+  <img src="demo/preview/zh/03-edit-transaction.png" alt="编辑交易" width="200" />
+  <img src="demo/preview/zh/04-chart-analysis.png" alt="图表分析" width="200" />
 </div>
 
 <div align="center">
-  <img src="demo/preview/en/05-ledger-management.png" alt="Ledger Management" width="200" />
-  <img src="demo/preview/en/06-profile.png" alt="Profile" width="200" />
-  <img src="demo/preview/en/07-category-detail.png" alt="Category Details" width="200" />
-  <img src="demo/preview/en/08-category-migration.png" alt="Category Migration" width="200" />
+  <img src="demo/preview/zh/05-ledger-management.png" alt="账本管理" width="200" />
+  <img src="demo/preview/zh/06-profile.png" alt="个人中心" width="200" />
+  <img src="demo/preview/zh/07-category-detail.png" alt="分类详情" width="200" />
+  <img src="demo/preview/zh/08-category-migration.png" alt="分类迁移" width="200" />
 </div>
 
-### Advanced Features
+### 高级功能
 
 <div align="center">
-  <img src="demo/preview/en/09-category-management.png" alt="Category Management" width="200" />
-  <img src="demo/preview/en/10-personalization.png" alt="Personalization" width="200" />
-  <img src="demo/preview/en/11-cloud-service.png" alt="Cloud Service" width="200" />
-  <img src="demo/preview/en/12-import-confirm.png" alt="Import Confirmation" width="200" />
+  <img src="demo/preview/zh/09-category-management.png" alt="分类管理" width="200" />
+  <img src="demo/preview/zh/10-personalization.png" alt="个性装扮" width="200" />
+  <img src="demo/preview/zh/11-cloud-service.png" alt="云服务" width="200" />
+  <img src="demo/preview/zh/12-import-confirm.png" alt="导入确认" width="200" />
 </div>
 
-## 🌟 Key Features
+## 🌟 核心特性
 
-### 🔒 Data Security & Privacy
+### 🔒 数据安全与隐私
 
-- **Complete Autonomy**: Support for custom Supabase backend and WebDAV servers, data stored in locations you control
-- **Open & Transparent**: Fully open-source code, auditable logic, no black boxes
-- **Offline First**: Based on local SQLite database, works without network connection
-- **Optional Sync**: Cloud sync is an enhancement feature, works completely without external services
-- **Flexible Expansion**: Architecture designed to support more cloud service options in the future (e.g., Nutstore, Nextcloud, etc.)
+- **完全自主**：支持自定义 Supabase 后端和 WebDAV 服务器，数据存储在你自己控制的位置
+- **开源透明**：代码完全开源，逻辑可审计，无黑箱操作
+- **离线优先**：基于本地 SQLite 数据库，无网络也能正常记账
+- **可选同步**：云同步是增强功能，不依赖外部服务也能完整使用
+- **灵活扩展**：架构设计支持后期添加更多云服务选项（如坚果云、Nextcloud 等）
 
-### 📊 Complete Accounting Features
+### 📊 完整记账功能
 
-- **Smart Accounting**: Support for income/expense categories, amounts, dates, notes, and complete information
-- **Multi-Ledger Management**: Create multiple ledgers for different scenarios like personal, work, etc.
-- **Category Statistics**: Automatically generate monthly income/expense reports, category rankings, trend analysis
-- **Data Analysis**: Intuitive charts to help understand spending habits and financial status
+- **智能记账**：支持收入/支出分类、金额、日期、备注等完整信息
+- **多账本管理**：创建多个账本，分别管理生活、工作等不同场景
+- **分类统计**：自动生成月度收支报表、分类排行、趋势分析
+- **数据分析**：直观的图表展示，帮助了解消费习惯和财务状况
 
-### 🔄 Data Management
+### 🔄 数据管理
 
-- **CSV Import/Export**: Support migration from other accounting apps or regular backups
-- **Multiple Cloud Backup Solutions**:
-  - Custom Supabase project
-  - WebDAV servers (supports UGREEN Cloud, Synology NAS, Nextcloud, etc.)
-  - More services coming soon...
-- **Multi-Device Sync**: Configure same cloud service to sync data across multiple devices
-- **Category Migration**: Support batch migration of transaction records to other categories
+- **CSV 导入导出**：支持从其他记账应用迁移数据，或定期备份
+- **多种云备份方案**：
+  - 自定义 Supabase 项目
+  - WebDAV 服务器（支持绿联云、群晖NAS、Nextcloud 等）
+  - 更多服务即将支持...
+- **多设备同步**：配置相同云服务即可在多设备间同步数据
+- **分类迁移**：支持批量迁移交易记录到其他分类
 
-### 🎨 Personalization
+### 🎨 个性化定制
 
-- **Theme Customization**: Multiple theme colors available to create your personal interface style
-- **Multi-Language Support**: Supports 8 language interface switching, covering major international languages
-- **Flexible Configuration**: Adjust various usage preferences according to personal habits
+- **主题装扮**：多种主题色彩可选，打造专属界面风格
+- **多语言支持**：支持9种语言界面切换，包含主要国际语言
+- **灵活配置**：可根据个人习惯调整各种使用偏好
 
-### 🌍 Internationalization Support
+### 🌍 国际化支持
 
-- **Supported Languages**:
-  - Simplified Chinese 🇨🇳
-  - Traditional Chinese 🇨🇳
+- **已支持语言**：
+  - 简体中文 🇨🇳
+  - 繁体中文 🇨🇳
   - English 🇬🇧
   - 日本語 🇯🇵
   - 한국어 🇰🇷
   - Español 🇪🇸
   - Français 🇫🇷
   - Deutsch 🇩🇪
-- **Language Features**:
-  - Complete interface translation including all menus, buttons, and prompts
-  - Smart category name translation and mapping
-  - Localized date and number format display
-  - Automatic recognition and matching of multi-language category names during CSV import
-  - Support for system follow or manual language selection
+- **语言特性**：
+  - 完整的界面翻译，包括所有菜单、按钮、提示信息
+  - 智能的分类名称翻译和映射
+  - 本地化的日期、数字格式显示
+  - CSV 导入时自动识别和匹配多语言分类名称
+  - 支持系统跟随或手动选择语言
 
-> If you'd like to add support for a new language, welcome to create an issue or submit a PR directly!
+> 如果你希望添加新的语言支持，欢迎在 Issues 中提出或直接提交 PR！
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
-### Option 1: Direct Installation (Recommended)
+### 方式一：直接安装（推荐）
 
-1. Go to the [Releases](https://github.com/TNT-Likely/BeeCount/releases) page
-2. Download the latest `app-prod-release-*.apk` file
-3. Install and start using (default local mode, no configuration needed)
+1. 前往 [Releases](https://github.com/TNT-Likely/BeeCount/releases) 页面
+2. 下载最新版本的 `app-prod-release-*.apk` 文件
+3. 安装后即可开始使用（默认本地模式，无需任何配置）
 
-### Option 2: Build from Source
+### 方式二：自行构建
 
 ```bash
-# Clone the project
+# 克隆项目
 git clone https://github.com/TNT-Likely/BeeCount.git
 cd BeeCount
 
-# Install dependencies
+# 安装依赖
 flutter pub get
 dart run build_runner build -d
 
-# Run the app
+# 运行应用
 flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
 ```
 
-## 📖 User Guide
+## 📖 使用说明
 
-### Basic Operations
+### 基础操作
 
-- **Add Transaction**: Tap the "+" button at the bottom of the home screen
-- **Edit Record**: Tap any transaction record to enter edit page
-- **Delete Record**: Long press transaction record to select delete
-- **Switch Months**: Tap the date at the top or scroll up/down in the list to flip pages
-- **Hide Amounts**: Tap the eye icon in the top right of the home screen
+- **添加记账**：点击首页底部的"+"按钮
+- **编辑记录**：点击任意交易记录进入编辑页面
+- **删除记录**：长按交易记录选择删除
+- **切换月份**：点击顶部日期或在列表中上下滑动翻页
+- **隐藏金额**：点击首页右上角眼睛图标
 
-### Data Management
+### 数据管理
 
-- **Import Data**: Profile → Import Data → Select CSV file
-- **Export Backup**: Profile → Export Data → Select export format
-- **Category Management**: Profile → Category Management → Add/Edit/Delete categories
-- **Ledger Switching**: Bottom navigation → Ledgers → Select or create new ledger
+- **导入数据**：个人中心 → 导入数据 → 选择 CSV 文件
+- **导出备份**：个人中心 → 导出数据 → 选择导出格式
+- **分类管理**：个人中心 → 分类管理 → 添加/编辑/删除分类
+- **账本切换**：底部导航 → 账本 → 选择或创建新账本
 
-## ☁️ Cloud Backup Configuration (Optional)
+## ☁️ 云备份配置（可选）
 
-### Why Choose Self-Hosted Cloud Service?
+### 为什么选择自建云服务？
 
-- **Data Sovereignty**: Data completely stored in servers or cloud platforms you control
-- **Privacy Protection**: Developers cannot access any of your data
-- **Cost Control**: Most solutions offer free tiers or one-time purchase options
-- **Stable & Reliable**: No dependency on third-party hosting services, full control
-- **Flexible Choice**: Choose the most suitable solution based on your needs
+- **数据主权**：数据完全存储在你自己控制的服务器或云平台中
+- **隐私保护**：开发者无法访问你的任何数据
+- **成本可控**：大多数方案都提供免费额度或一次性购买
+- **稳定可靠**：不依赖第三方托管服务，自主掌控
+- **灵活选择**：根据自己的需求选择最合适的方案
 
-### Option 1: Custom Supabase (Recommended for Beginners)
+### 方案一：自定义 Supabase（推荐新手）
 
-**Use Case**: Suitable for users without NAS devices who want to get started quickly
+**适用场景**：适合没有 NAS 设备，想要快速开始的用户
 
-**Configuration Steps**:
+**配置步骤**：
 
-1. **Create Supabase Project**
-   - Visit [supabase.com](https://supabase.com) to register an account
-   - Create a new project, select appropriate region
-   - Get URL and anon key from project settings
+1. **创建 Supabase 项目**
+   - 访问 [supabase.com](https://supabase.com) 注册账号
+   - 创建新项目，选择合适的区域
+   - 在项目设置中获取 URL 和 anon key
 
-2. **Configure Storage**
-   - Create a Storage Bucket named `beecount-backups` in Supabase console
-   - Set as Private and configure RLS access policies
+2. **配置 Storage**
+   - 在 Supabase 控制台创建名为 `beecount-backups` 的 Storage Bucket
+   - 设置为 Private 并配置 RLS 访问策略
 
-3. **App Configuration**
-   - Open BeeCount → Profile → Cloud Service
-   - Tap "Add Custom Cloud Service"
-   - Select service type: **Supabase**
-   - Enter your Supabase URL and anon key
-   - Save and enable configuration
-   - Tap "Login", register/sign in and start syncing
+3. **应用内配置**
+   - 打开蜜蜂记账 → 个人中心 → 云服务
+   - 点击"添加自定义云服务"
+   - 选择服务类型：**Supabase**
+   - 填入你的 Supabase URL 和 anon key
+   - 保存并启用配置
+   - 点击"登录"，注册/登录账号后即可开始同步
 
-### Option 2: WebDAV Server (Recommended for NAS Users)
+### 方案二：WebDAV 服务器（推荐有 NAS 的用户）
 
-**Use Case**: For users with NAS devices or private cloud storage
+**适用场景**：已有 NAS 设备或私有云存储的用户
 
-**Supported Services**:
-- ✅ UGREEN Cloud NAS
-- ✅ Synology NAS
+**支持的服务**：
+- ✅ 绿联云 NAS
+- ✅ 群晖 Synology NAS
 - ✅ Nextcloud
-- ✅ Nutstore WebDAV
+- ✅ 坚果云 WebDAV
 - ✅ ownCloud
-- ✅ Any server supporting WebDAV protocol
+- ✅ 其他支持 WebDAV 协议的服务器
 
-**Configuration Steps**:
+**配置步骤**：
 
-1. **Enable WebDAV Service**
-   - Enable WebDAV functionality on your NAS or cloud storage platform
-   - Note the WebDAV server address (e.g., `http://nas.local:5005`)
-   - Create or use existing user account
+1. **启用 WebDAV 服务**
+   - 在 NAS 或云存储平台启用 WebDAV 功能
+   - 记录 WebDAV 服务器地址（如 `http://nas.local:5005`）
+   - 创建或使用现有的用户账号
 
-2. **Prepare Storage Directory** (Optional)
-   - Create a `BeeCount` folder in WebDAV root directory
-   - Or use any path (specify during configuration)
+2. **准备存储目录**（可选）
+   - 在 WebDAV 根目录下创建 `BeeCount` 文件夹
+   - 或使用任意路径（配置时指定即可）
 
-3. **App Configuration**
-   - Open BeeCount → Profile → Cloud Service
-   - Tap "Add Custom Cloud Service"
-   - Select service type: **WebDAV**
-   - Fill in configuration:
-     - **WebDAV Server URL**: e.g., `http://nas.local:5005`
-     - **Username**: Your WebDAV username
-     - **Password**: Your WebDAV password
-     - **Remote Path**: Storage path (e.g., `/home/BeeCount` or `/BeeCount`)
-   - Tap "Test Connection" to verify configuration
-   - Save and enable configuration
-   - WebDAV requires no additional login, can sync directly after configuration
+3. **应用内配置**
+   - 打开蜜蜂记账 → 个人中心 → 云服务
+   - 点击"添加自定义云服务"
+   - 选择服务类型：**WebDAV**
+   - 填写配置信息：
+     - **WebDAV 服务器 URL**：如 `http://nas.local:5005`
+     - **用户名**：你的 WebDAV 用户名
+     - **密码**：你的 WebDAV 密码
+     - **远程路径**：存储路径（如 `/home/BeeCount` 或 `/BeeCount`）
+   - 点击"测试连接"验证配置
+   - 保存并启用配置
+   - WebDAV 无需额外登录，配置后即可直接同步
 
-**Common WebDAV Configuration Examples**:
+**常见 WebDAV 配置示例**：
 
 ```
-UGREEN Cloud NAS:
-- URL: http://your-nas-address:5005
-- Remote Path: /home/BeeCount
+绿联云 NAS：
+- URL: http://你的NAS地址:5005
+- 远程路径: /home/BeeCount
 
-Synology NAS:
-- URL: http://your-nas-address:5005 or https://your-domain
-- Remote Path: /BeeCount
+群晖 NAS：
+- URL: http://你的NAS地址:5005 或 https://你的域名
+- 远程路径: /BeeCount
 
-Nutstore:
+坚果云：
 - URL: https://dav.jianguoyun.com/dav/
-- Remote Path: /BeeCount
+- 远程路径: /BeeCount
 ```
 
-### Future Plans
+### 后续计划
 
-We will continue expanding cloud service support, planning to add:
-- 📦 Alibaba Cloud OSS
-- 📦 Tencent Cloud COS
+我们将持续扩展云服务支持，计划添加：
+- 📦 阿里云 OSS
+- 📦 腾讯云 COS
 - 📦 AWS S3
 - 📦 Google Drive
 - 📦 Dropbox
-- 📦 More...
+- 📦 更多...
 
-If you'd like to prioritize support for a specific cloud service, welcome to create a feature request in [Issues](https://github.com/TNT-Likely/BeeCount/issues)!
+如果你希望优先支持某个云服务，欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出需求！
 
-## 🛠️ Development Guide
+## 🛠️ 开发指南
 
-### Tech Stack
+### 技术栈
 
-- **Flutter 3.27+**: Cross-platform UI framework
-- **Riverpod**: State management solution
-- **Drift (SQLite)**: Local database ORM
-- **Supabase**: Cloud backup and sync service
+- **Flutter 3.27+**：跨平台 UI 框架
+- **Riverpod**：状态管理解决方案
+- **Drift (SQLite)**：本地数据库 ORM
+- **Supabase**：云端备份和同步服务
 
-### Project Structure
+### 项目结构
 
 ```
 lib/
-├── data/           # Data models and database operations
-├── pages/          # Application pages
-├── widgets/        # Reusable components
-├── cloud/          # Cloud service integration
-├── l10n/           # Internationalization resources
-├── providers/      # Riverpod state providers
-└── utils/          # Utility functions
+├── data/           # 数据模型和数据库操作
+├── pages/          # 应用页面
+├── widgets/        # 可复用组件
+├── cloud/          # 云服务集成
+├── l10n/           # 国际化资源
+├── providers/      # Riverpod 状态提供者
+└── utils/          # 工具函数
 ```
 
-### Development Commands
+### 开发命令
 
 ```bash
-# Install dependencies
+# 安装依赖
 flutter pub get
 
-# Code generation
+# 代码生成
 dart run build_runner build --delete-conflicting-outputs
 
-# Run tests
+# 运行测试
 flutter test
 
-# Build release version
+# 构建发布版本
 flutter build apk --flavor prod --release
 ```
 
-### Contribution Guidelines
+### 贡献指南
 
-1. Fork this project
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'feat: add some feature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Create Pull Request
+1. Fork 本项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'feat: 添加某个功能'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
 
-**Commit Convention**: Use Chinese commit messages in format `type: brief description`
-- `feat:` New feature
-- `fix:` Bug fix
-- `refactor:` Code refactoring
-- `style:` Style adjustments
-- `docs:` Documentation updates
+**提交规范**：使用中文提交信息，格式为 `类型: 简洁描述`
 
-## 📄 Open Source License
+- `feat:` 新功能
+- `fix:` 修复问题
+- `refactor:` 代码重构
+- `style:` 样式调整
+- `docs:` 文档更新
 
-This project is open-sourced under the [MIT License](LICENSE). You are free to use, modify, and distribute.
+## 📄 开源协议
 
-## ⚠️ Disclaimer
+本项目基于 [MIT 协议](LICENSE) 开源，你可以自由使用、修改和分发。
 
-- This software is provided "as is" without any express or implied warranties
-- Users are responsible for any data loss or financial loss caused by using this software
-- Please ensure legal and compliant use of this software
+## ⚠️ 免责声明
 
-## 💬 FAQ
+- 本软件按"现状"提供，不提供任何明示或暗示的保证
+- 使用本软件造成的数据丢失、经济损失等由使用者自行承担
+- 请确保合法、合规地使用本软件
 
-**Q: Can I use it normally without configuring cloud services?**
-A: Absolutely! The app uses local storage by default, and all features work normally. You can still export CSV backups at any time.
+## 💬 常见问题
 
-**Q: Should I choose Supabase or WebDAV?**
+**Q: 不配置云服务能正常使用吗？**
+A: 完全可以！应用默认使用本地存储，所有功能都能正常使用。你仍可随时导出 CSV 进行备份。
+
+**Q: 应该选择 Supabase 还是 WebDAV？**
 A:
-- If you have a NAS device or private cloud, we recommend WebDAV (fully localized data)
-- If you don't have a NAS, we recommend Supabase (free, stable, easy to configure)
-- Both support complete sync functionality, choose based on your needs
+- 如果你有 NAS 设备或私有云，推荐使用 WebDAV（数据完全本地化）
+- 如果没有 NAS，推荐使用 Supabase（免费、稳定、易配置）
+- 两者都支持完整的同步功能，可根据自己的需求选择
 
-**Q: Why can't I upload after configuring WebDAV?**
+**Q: WebDAV 配置后为什么无法上传？**
 A:
-- Check if WebDAV service is enabled and port is correct
-- Verify username and password are correct
-- Some NAS WebDAV requires specific paths for write access (e.g., UGREEN Cloud requires `/home/` path)
-- Click "Test Connection" button to view detailed error messages
+- 检查 WebDAV 服务是否启用且端口正确
+- 确认用户名和密码正确
+- 某些 NAS 的 WebDAV 需要在特定路径下才能写入（如绿联云需要 `/home/` 路径）
+- 点击"测试连接"按钮查看详细错误信息
 
-**Q: Can I switch back to default mode after configuring custom cloud service?**
-A: Yes, you can switch anytime. The saved custom configuration won't be lost and can be re-enabled.
+**Q: 配置自定义云服务后还能切回默认模式吗？**
+A: 可以随时切换。已保存的自定义配置不会丢失，可以再次启用。
 
-**Q: How to ensure data security?**
+**Q: 如何确保数据安全？**
 A:
-- Use your own Supabase project or WebDAV server
-- Regularly export CSV backups to local storage
-- Use strong passwords and enable two-factor authentication (if supported)
-- For WebDAV, recommend using HTTPS for encrypted transmission
+- 使用自己的 Supabase 项目或 WebDAV 服务器
+- 定期导出 CSV 备份到本地
+- 使用强密码并开启两步验证（如果支持）
+- WebDAV 建议使用 HTTPS 加密传输
 
-**Q: What data formats are supported?**
-A: Currently supports CSV format for import/export, compatible with data formats from most mainstream accounting apps.
+**Q: 支持哪些数据格式？**
+A: 目前支持 CSV 格式的导入导出，兼容大部分主流记账应用的数据格式。
 
-**Q: How to sync data across multiple devices?**
+**Q: 如何在多设备间同步数据？**
 A:
-- **Supabase**: Configure same URL and anon key on all devices, log in with same account
-- **WebDAV**: Configure same WebDAV server address and credentials on all devices
+- **Supabase**：在所有设备上配置相同的 URL 和 anon key，登录同一账号即可
+- **WebDAV**：在所有设备上配置相同的 WebDAV 服务器地址和凭据即可
 
 ---
 
-## 💝 Support This Project
+## 💝 支持项目
 
-### Why We Need Your Support?
+### 为什么需要您的支持？
 
-BeeCount is a **completely free and open-source** project with no ads or paid features. However, to make it available for iOS users, we need an **Apple Developer Account** ($99/year) to sign the app.
+蜜蜂记账是**完全免费开源**的项目，没有任何广告和付费功能。但要让 iOS 用户能够正常使用，需要申请 **Apple 开发者账号**（$99/年）来签名应用。
 
-Your donation will be used for:
-- ✅ Apple Developer Account annual fee ($99/year)
-- ✅ Distributing iOS version via TestFlight
-- ✅ Continuous project development and maintenance
+您的捐赠将直接用于：
+- ✅ 申请 Apple 开发者账号（$99/年）
+- ✅ 通过 TestFlight 分发 iOS 版本
+- ✅ 维护项目的持续开发
 
-### Donation Methods
+### 捐赠方式
 
-#### 🌍 International
+#### 🌍 国际用户
 
 - **PayPal**: https://paypal.me/sunxiaoyes
 
-#### 🇨🇳 China
+#### 🇨🇳 中国用户
 
 <details>
-<summary>Click to view QR codes</summary>
+<summary>点击查看二维码</summary>
 
-| Alipay | WeChat Pay |
+| 支付宝 | 微信支付 |
 |:---:|:---:|
-| ![Alipay](docs/donate/alipay.png) | ![WeChat Pay](docs/donate/wechat.png) |
+| ![支付宝](docs/donate/alipay.png) | ![微信支付](docs/donate/wechat.png) |
 
 </details>
 
-#### 🪙 Cryptocurrency
+#### 🪙 加密货币
 
 - **USDT (TRC20)**: `TKBV69B2AoU67p3vDhnJUbMJtZ1DxuUF5C`
-- **Binance**:
+- **币安**:
 
 <details>
-<summary>Click to view QR code</summary>
+<summary>点击查看二维码</summary>
 
-![Binance](docs/donate/binance.png)
+![币安](docs/donate/binance.png)
 
 </details>
 
-### 📊 Funding Progress
+### 📊 筹款进度
 
-- 🎯 **Goal**: $99 (Apple Developer Account annual fee)
-- 💰 **Raised**: $0
-- 📈 **Progress**: 0%
+- 🎯 **目标**: $99（约 ¥720，Apple 开发者账号年费）
+- 💰 **已筹集**: $0
+- 📈 **进度**: 0%
 
 ```
-Progress: [----------] 0%
+进度条: [----------] 0%
 ```
 
-**Once goal is reached, we will**:
-1. Apply for Apple Developer Account
-2. Sign the iOS application
-3. Distribute to iOS users via TestFlight
-4. Transparently report fund usage
+**达到目标后将立即**：
+1. 申请 Apple 开发者账号
+2. 签名 iOS 应用
+3. 通过 TestFlight 分发给 iOS 用户
+4. 公开透明地说明资金使用情况
 
-### 🌟 Special Thanks to Our Supporters
+### 🌟 感谢支持者
 
-Thank you to the following generous supporters (in chronological order):
+感谢以下朋友的慷慨支持（按捐赠时间排序）：
 
 <!--
-After donating, please leave a message in Issues or send an email, and we'll add you to the list
-Format: Nickname - Amount - Date
+捐赠后请在 Issue 中留言或发邮件告知，我会将您添加到感谢名单中
+格式：昵称 - 金额 - 日期
 -->
 
-- To be updated...
+- 待更新...
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 致谢
 
-Thanks to all friends who have contributed code, suggestions, and feedback to the BeeCount project!
+感谢所有为蜜蜂记账项目贡献代码、提出建议和反馈问题的朋友们！
 
-If you have questions or suggestions, feel free to raise them in [Issues](https://github.com/TNT-Likely/BeeCount/issues) or participate in discussions at [Discussions](https://github.com/TNT-Likely/BeeCount/discussions).
+如有问题或建议，欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出，或在 [Discussions](https://github.com/TNT-Likely/BeeCount/discussions) 中参与讨论。
 
-**BeeCount 🐝 - Making Accounting Simple and Secure**
+**蜜蜂记账 🐝 - 让记账变得简单而安全**
