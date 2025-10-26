@@ -528,11 +528,11 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                       _localHeaderDismissed;
                   return GestureDetector(
                     onHorizontalDragEnd: (details) {
-                      // 左右滑动切换收入/支出/结余
+                      // 左右滑动切换周期（月份/年份）
                       if (details.primaryVelocity! > 0) {
-                        _cycleTypeBackward(); // 向右滑动 -> 上一个类型
+                        _onChartSwipeRight(); // 向右滑动 -> 上一个周期
                       } else {
-                        _cycleTypeForward(); // 向左滑动 -> 下一个类型
+                        _onChartSwipeLeft(); // 向左滑动 -> 下一个周期
                       }
                     },
                     child: ListView(
