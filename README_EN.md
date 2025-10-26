@@ -1,100 +1,146 @@
 # BeeCount
 
-> [中文](README.md) | English
+<div align="center">
+
+![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey.svg)
+![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
+![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
 **Your Data, Your Control - Open Source Accounting App**
 
-A lightweight, open-source, privacy-focused personal accounting app for iOS/Android. Features complete ledger management, category statistics, data analysis, import/export functionality, and multiple cloud backup solutions. **Core Advantage: Support for custom Supabase backend and WebDAV servers, giving you complete control over your data.**
+**Core Advantage: Self-hosted Supabase/WebDAV servers - Your data, Your control**
 
-## 📱 Product Demo
+[📥 Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 Documentation](#-user-guide) | [💬 Issues](https://github.com/TNT-Likely/BeeCount/issues) | [🇨🇳 中文](README.md)
 
-### Core Features
+</div>
+
+---
+
+## 💡 Why Choose BeeCount?
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔒 Problems with Traditional Apps
+- ❌ Data stored on third-party servers
+- ❌ Privacy risks, data may be analyzed
+- ❌ Data loss if service shuts down
+- ❌ Premium features behind paywalls
+- ❌ Forced ads and loan recommendations
+- ❌ Closed-source, cannot audit code
+
+</td>
+<td width="50%">
+
+### ✅ BeeCount Advantages
+- ✅ **Self-hosted**, complete data control
+- ✅ **Open source**, auditable code
+- ✅ **Offline-first**, works without network
+- ✅ **Completely free**, no ads or paywalls
+- ✅ **Privacy-first**, developers cannot access your data
+- ✅ **MIT License**, free to use and modify
+
+</td>
+</tr>
+</table>
+
+A lightweight, open-source, privacy-focused personal accounting app for iOS/Android. Features complete ledger management, category statistics, data analysis, import/export, and self-hosted Supabase/WebDAV cloud sync.
+
+## 📱 Core Features Showcase
 
 <div align="center">
   <img src="demo/preview/en/01-home.png" alt="Home Screen" width="200" />
-  <img src="demo/preview/en/02-search.png" alt="Smart Search" width="200" />
-  <img src="demo/preview/en/03-edit-transaction.png" alt="Edit Transaction" width="200" />
   <img src="demo/preview/en/04-chart-analysis.png" alt="Chart Analysis" width="200" />
+  <img src="demo/preview/en/11-cloud-service.png" alt="☁️ Cloud Service - Core Feature" width="200" />
+  <img src="demo/preview/en/05-ledger-management.png" alt="Ledger Management" width="200" />
 </div>
 
+<details>
+<summary>📸 View More Screenshots</summary>
+
+### Data Management
 <div align="center">
-  <img src="demo/preview/en/05-ledger-management.png" alt="Ledger Management" width="200" />
-  <img src="demo/preview/en/06-profile.png" alt="Profile" width="200" />
+  <img src="demo/preview/en/02-search.png" alt="Smart Search" width="200" />
+  <img src="demo/preview/en/03-edit-transaction.png" alt="Edit Transaction" width="200" />
   <img src="demo/preview/en/07-category-detail.png" alt="Category Details" width="200" />
   <img src="demo/preview/en/08-category-migration.png" alt="Category Migration" width="200" />
 </div>
 
-### Advanced Features
-
+### Personalization & Management
 <div align="center">
+  <img src="demo/preview/en/06-profile.png" alt="Profile" width="200" />
   <img src="demo/preview/en/09-category-management.png" alt="Category Management" width="200" />
   <img src="demo/preview/en/10-personalization.png" alt="Personalization" width="200" />
-  <img src="demo/preview/en/11-cloud-service.png" alt="Cloud Service" width="200" />
   <img src="demo/preview/en/12-import-confirm.png" alt="Import Confirmation" width="200" />
 </div>
 
+</details>
+
 ## 🌟 Key Features
+
+### ☁️ Self-Hosted Cloud Service - Core Differentiator
+
+> **This is BeeCount's biggest feature: Complete control over your data!**
+
+| Solution | Best For | Features |
+|----------|----------|----------|
+| **Supabase** | Users without NAS | Free tier sufficient, easy setup, cloud-hosted |
+| **WebDAV** | Users with NAS | Fully localized data, supports Synology/UGREEN/Nextcloud |
+
+**Why Self-Hosted?**
+- 🔐 **Privacy First**: Developers cannot access your data
+- 💰 **Cost Effective**: Supabase free tier sufficient, WebDAV one-time investment
+- 🛡️ **Data Security**: No worries about service shutdowns or data breaches
+- 🔓 **Open Source**: All cloud sync code is open source and auditable
+
+[📖 View Cloud Service Setup Guide](#️-cloud-backup-configuration-optional)
 
 ### 🔒 Data Security & Privacy
 
-- **Complete Autonomy**: Support for custom Supabase backend and WebDAV servers, data stored in locations you control
-- **Open & Transparent**: Fully open-source code, auditable logic, no black boxes
-- **Offline First**: Based on local SQLite database, works without network connection
-- **Optional Sync**: Cloud sync is an enhancement feature, works completely without external services
-- **Flexible Expansion**: Architecture designed to support more cloud service options in the future (e.g., Nutstore, Nextcloud, etc.)
+- **Offline First**: Based on local SQLite, works without network
+- **Open & Transparent**: MIT License, auditable code
+- **Optional Sync**: Works completely without cloud configuration
+- **Zero Tracking**: No analytics, no ads, no data collection
 
 ### 📊 Complete Accounting Features
 
-- **Smart Accounting**: Support for income/expense categories, amounts, dates, notes, and complete information
-- **Multi-Ledger Management**: Create multiple ledgers for different scenarios like personal, work, etc.
-- **Category Statistics**: Automatically generate monthly income/expense reports, category rankings, trend analysis
-- **Data Analysis**: Intuitive charts to help understand spending habits and financial status
+- **Smart Accounting**: Income/expense categories, amounts, dates, notes
+- **Multi-Ledger Management**: Separate management for personal, work, investment
+- **Chart Analysis**: Monthly reports, category rankings, trend analysis
+- **Data Import/Export**: CSV format, compatible with mainstream apps
 
-### 🔄 Data Management
+### 🎨 Personalization & Internationalization
 
-- **CSV Import/Export**: Support migration from other accounting apps or regular backups
-- **Multiple Cloud Backup Solutions**:
-  - Custom Supabase project
-  - WebDAV servers (supports UGREEN Cloud, Synology NAS, Nextcloud, etc.)
-  - More services coming soon...
-- **Multi-Device Sync**: Configure same cloud service to sync data across multiple devices
-- **Category Migration**: Support batch migration of transaction records to other categories
+- **Theme Customization**: Multiple theme colors for personalized style
+- **9 Languages**: Simplified Chinese, Traditional Chinese, English, 日本語, 한국어, Español, Français, Deutsch
+  - Complete UI translation + smart category mapping
+  - Localized date/number formats
+  - CSV import auto-recognizes multi-language categories
 
-### 🎨 Personalization
-
-- **Theme Customization**: Multiple theme colors available to create your personal interface style
-- **Multi-Language Support**: Supports 8 language interface switching, covering major international languages
-- **Flexible Configuration**: Adjust various usage preferences according to personal habits
-
-### 🌍 Internationalization Support
-
-- **Supported Languages**:
-  - Simplified Chinese 🇨🇳
-  - Traditional Chinese 🇨🇳
-  - English 🇬🇧
-  - 日本語 🇯🇵
-  - 한국어 🇰🇷
-  - Español 🇪🇸
-  - Français 🇫🇷
-  - Deutsch 🇩🇪
-- **Language Features**:
-  - Complete interface translation including all menus, buttons, and prompts
-  - Smart category name translation and mapping
-  - Localized date and number format display
-  - Automatic recognition and matching of multi-language category names during CSV import
-  - Support for system follow or manual language selection
-
-> If you'd like to add support for a new language, welcome to create an issue or submit a PR directly!
+> 💡 Want to add a new language? Welcome to create an [Issue](https://github.com/TNT-Likely/BeeCount/issues)!
 
 ## 🚀 Quick Start
 
-### Option 1: Direct Installation (Recommended)
+### 📥 Option 1: Direct Download (Recommended)
 
-1. Go to the [Releases](https://github.com/TNT-Likely/BeeCount/releases) page
+<div align="center">
+
+[![Download Android APK](https://img.shields.io/badge/Download_Android_APK-Latest_Version-brightgreen?style=for-the-badge&logo=android)](https://github.com/TNT-Likely/BeeCount/releases/latest)
+
+</div>
+
+**Steps:**
+
+1. Click the button above to go to [Releases](https://github.com/TNT-Likely/BeeCount/releases) page
 2. Download the latest `app-prod-release-*.apk` file
 3. Install and start using (default local mode, no configuration needed)
 
-### Option 2: Build from Source
+> **iOS Users**: Requires Apple Developer Account for signing, currently [crowdfunding](#-support-this-project)
+
+### 🔨 Option 2: Build from Source
 
 ```bash
 # Clone the project
