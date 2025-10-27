@@ -55,7 +55,7 @@
 </tr>
 </table>
 
-A lightweight, open-source, privacy-focused personal accounting app for iOS/Android. Features complete ledger management, category statistics, data analysis, import/export, and self-hosted Supabase/WebDAV cloud sync.
+A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, category statistics, **chart analysis**, data import/export, and self-hosted Supabase/WebDAV cloud sync. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
 
 ## 📱 Core Features Showcase
 
