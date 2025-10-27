@@ -109,7 +109,7 @@ class SupportProjectPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  l10n.supportProjectCurrentAmount('\$0'),
+                                  l10n.supportProjectCurrentAmount('¥12 (\$1.65)'),
                                   style: theme.textTheme.bodyMedium,
                                 ),
                                 Text(
@@ -124,7 +124,7 @@ class SupportProjectPage extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
-                                value: 0.0,
+                                value: 0.0167,
                                 minHeight: 8,
                                 backgroundColor: theme.colorScheme.surfaceContainerHighest,
                                 valueColor: AlwaysStoppedAnimation<Color>(
@@ -134,7 +134,7 @@ class SupportProjectPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              l10n.supportProjectProgress('0%'),
+                              l10n.supportProjectProgress('1.67%'),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurfaceVariant,
                               ),

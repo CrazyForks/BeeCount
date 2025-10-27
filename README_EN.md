@@ -413,11 +413,11 @@ Your donation will be used for:
 ### 📊 Funding Progress
 
 - 🎯 **Goal**: $99 (Apple Developer Account annual fee)
-- 💰 **Raised**: $0
-- 📈 **Progress**: 0%
+- 💰 **Raised**: ¥12 (≈ $1.65)
+- 📈 **Progress**: 1.67%
 
 ```
-Progress: [----------] 0%
+Progress: [■---------] 1.67%
 ```
 
 **Once goal is reached, we will**:
@@ -435,7 +435,7 @@ After donating, please leave a message in Issues or send an email, and we'll add
 Format: Nickname - Amount - Date
 -->
 
-- To be updated...
+- **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
 
 ---
 
