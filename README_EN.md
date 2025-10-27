@@ -18,6 +18,14 @@
 
 ---
 
+> ## 🎉 Great News
+>
+> **iOS TestFlight funding goal achieved!** Target $99, raised ¥732 ($101, 101.67%)
+>
+> 🍎 **iOS version will be available via TestFlight in 5-7 days**
+
+---
+
 ## 💡 Why Choose BeeCount?
 
 <table>
