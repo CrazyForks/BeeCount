@@ -949,8 +949,32 @@ abstract class AppLocalizations {
   /// No description provided for @importSelectFile.
   ///
   /// In en, this message translates to:
-  /// **'Please select a CSV/TSV file to import (default first row as header)'**
+  /// **'Please select a file to import (CSV/TSV/XLSX supported)'**
   String get importSelectFile;
+
+  /// No description provided for @importBillType.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill Type'**
+  String get importBillType;
+
+  /// No description provided for @importBillTypeGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Generic CSV'**
+  String get importBillTypeGeneric;
+
+  /// No description provided for @importBillTypeAlipay.
+  ///
+  /// In en, this message translates to:
+  /// **'Alipay'**
+  String get importBillTypeAlipay;
+
+  /// No description provided for @importBillTypeWechat.
+  ///
+  /// In en, this message translates to:
+  /// **'WeChat'**
+  String get importBillTypeWechat;
 
   /// No description provided for @importChooseFile.
   ///
@@ -967,7 +991,7 @@ abstract class AppLocalizations {
   /// No description provided for @importHint.
   ///
   /// In en, this message translates to:
-  /// **'Tip: Please select a CSV/TSV file to start importing'**
+  /// **'Tip: Please select a file to start importing (CSV/TSV/XLSX)'**
   String get importHint;
 
   /// No description provided for @importReading.
@@ -3763,7 +3787,7 @@ abstract class AppLocalizations {
   /// No description provided for @importSelectCsvFile.
   ///
   /// In en, this message translates to:
-  /// **'Please select CSV/TSV file to import (first row as header by default)'**
+  /// **'Please select a file to import (CSV/TSV/XLSX supported)'**
   String get importSelectCsvFile;
 
   /// No description provided for @exportTitle.

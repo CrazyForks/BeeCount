@@ -441,7 +441,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get importTitle => '請求書のインポート';
 
   @override
-  String get importSelectFile => 'インポートするCSV/TSVファイルを選択してください（デフォルトで最初の行をヘッダーとします）';
+  String get importSelectFile => 'インポートするファイルを選択してください（CSV/TSV/XLSX対応）';
+
+  @override
+  String get importBillType => '請求書タイプ';
+
+  @override
+  String get importBillTypeGeneric => '汎用CSV';
+
+  @override
+  String get importBillTypeAlipay => 'アリペイ';
+
+  @override
+  String get importBillTypeWechat => 'WeChat';
 
   @override
   String get importChooseFile => 'ファイルを選択';
@@ -450,7 +462,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get importNoFileSelected => 'ファイルが選択されていません';
 
   @override
-  String get importHint => 'ヒント：CSV/TSVファイルを選択してインポートを開始してください';
+  String get importHint => 'ヒント：ファイルを選択してインポートを開始してください（CSV/TSV/XLSX）';
 
   @override
   String get importReading => 'ファイルを読み込み中…';
@@ -1944,7 +1956,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get importSelectCsvFile => 'インポートするCSV/TSVファイルを選択してください（デフォルトで最初の行をヘッダーとします）';
+  String get importSelectCsvFile => 'インポートするファイルを選択してください（CSV/TSV/XLSX対応）';
 
   @override
   String get exportTitle => 'エクスポート';

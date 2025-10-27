@@ -441,7 +441,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importTitle => '导入账单';
 
   @override
-  String get importSelectFile => '请选择 CSV/TSV 文件进行导入（默认第一行为表头）';
+  String get importSelectFile => '请选择文件进行导入（支持 CSV/TSV/XLSX 格式）';
+
+  @override
+  String get importBillType => '账单类型';
+
+  @override
+  String get importBillTypeGeneric => '通用CSV';
+
+  @override
+  String get importBillTypeAlipay => '支付宝';
+
+  @override
+  String get importBillTypeWechat => '微信';
 
   @override
   String get importChooseFile => '选择文件';
@@ -450,7 +462,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importNoFileSelected => '未选择文件';
 
   @override
-  String get importHint => '提示：请选择一个 CSV/TSV 文件开始导入';
+  String get importHint => '提示：请选择一个文件开始导入（支持 CSV/TSV/XLSX）';
 
   @override
   String get importReading => '读取文件中…';
@@ -1944,7 +1956,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get importSelectCsvFile => '请选择 CSV/TSV 文件进行导入（默认第一行为表头）';
+  String get importSelectCsvFile => '请选择文件进行导入（支持 CSV/TSV/XLSX 格式）';
 
   @override
   String get exportTitle => '导出';
@@ -3128,7 +3140,19 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get importTitle => '匯入帳單';
 
   @override
-  String get importSelectFile => '請選擇 CSV/TSV 檔案進行匯入（預設第一行為標頭）';
+  String get importSelectFile => '請選擇檔案進行匯入（支援 CSV/TSV/XLSX 格式）';
+
+  @override
+  String get importBillType => '帳單類型';
+
+  @override
+  String get importBillTypeGeneric => '通用CSV';
+
+  @override
+  String get importBillTypeAlipay => '支付寶';
+
+  @override
+  String get importBillTypeWechat => '微信';
 
   @override
   String get importChooseFile => '選擇檔案';
@@ -3137,7 +3161,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get importNoFileSelected => '未選擇檔案';
 
   @override
-  String get importHint => '提示：請選擇一個 CSV/TSV 檔案開始匯入';
+  String get importHint => '提示：請選擇一個檔案開始匯入（支援 CSV/TSV/XLSX）';
 
   @override
   String get importReading => '讀取檔案中…';
@@ -4631,7 +4655,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get importSelectCsvFile => '請選擇 CSV/TSV 檔案進行匯入（預設第一行為標頭）';
+  String get importSelectCsvFile => '請選擇檔案進行匯入（支援 CSV/TSV/XLSX 格式）';
 
   @override
   String get exportTitle => '匯出';

@@ -1,11 +1,21 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/ui/ui.dart';
+import '../widgets/ui/capsule_switcher.dart';
+import '../utils/xlsx_reader.dart';
 import 'import_confirm_page.dart';
+
+/// 账单类型
+enum BillSourceType {
+  generic, // 通用CSV
+  alipay,  // 支付宝
+  wechat,  // 微信
+}
 
 class ImportPage extends ConsumerStatefulWidget {
   const ImportPage({super.key});
@@ -21,6 +31,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
   bool _reading = false;
   double? _readProgress; // 0~1
   bool _cancelRead = false;
+  BillSourceType _billType = BillSourceType.generic; // 默认通用CSV
 
   @override
   void initState() {
@@ -45,7 +56,33 @@ class _ImportPageState extends ConsumerState<ImportPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(AppLocalizations.of(context)!.importSelectCsvFile),
+                      const SizedBox(height: 16),
+                      // 账单类型选择器
+                      Text(AppLocalizations.of(context)!.importBillType, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
                       const SizedBox(height: 8),
+                      CapsuleSwitcher<BillSourceType>(
+                        selectedValue: _billType,
+                        options: [
+                          CapsuleOption(
+                            value: BillSourceType.generic,
+                            label: AppLocalizations.of(context)!.importBillTypeGeneric,
+                          ),
+                          CapsuleOption(
+                            value: BillSourceType.alipay,
+                            label: AppLocalizations.of(context)!.importBillTypeAlipay,
+                          ),
+                          CapsuleOption(
+                            value: BillSourceType.wechat,
+                            label: AppLocalizations.of(context)!.importBillTypeWechat,
+                          ),
+                        ],
+                        onChanged: (BillSourceType value) {
+                          setState(() {
+                            _billType = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
                       Row(
                         children: [
                           FilledButton.icon(
@@ -124,8 +161,11 @@ class _ImportPageState extends ConsumerState<ImportPage> {
     // 跳转到确认映射页，批量导入在新页面执行
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) =>
-            ImportConfirmPage(csvText: csvText, hasHeader: _hasHeader),
+        builder: (_) => ImportConfirmPage(
+          csvText: csvText,
+          hasHeader: _hasHeader,
+          billType: _billType,
+        ),
       ),
     );
     if (!mounted) return;
@@ -135,7 +175,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
     try {
       final res = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['csv', 'tsv', 'txt'],
+        allowedExtensions: ['csv', 'tsv', 'txt', 'xlsx'],
         allowMultiple: false,
         withData: true, // iOS 模拟器/沙盒下读取 bytes
       );
@@ -155,17 +195,22 @@ class _ImportPageState extends ConsumerState<ImportPage> {
   // 流式读取文件并显示进度（State 内部方法，可使用 setState）
   Future<String> _readFileStreaming(PlatformFile picked) async {
     if (!mounted) return '';
+
+    // 检查文件扩展名
+    final fileName = picked.name.toLowerCase();
+    final isXlsx = fileName.endsWith('.xlsx');
+
     if (picked.path == null || picked.path!.isEmpty) {
       final b = picked.bytes;
       if (b == null || b.isEmpty) return '';
-      return _decodeBytes(b);
+      return isXlsx ? _convertXlsxBytes(b) : _decodeBytes(b);
     }
     final file = File(picked.path!);
     final exists = await file.exists();
     if (!exists) {
       final b = picked.bytes;
       if (b == null || b.isEmpty) return '';
-      return _decodeBytes(b);
+      return isXlsx ? _convertXlsxBytes(b) : _decodeBytes(b);
     }
 
     const int chunkSize = 256 * 1024; // 256KB
@@ -202,7 +247,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
       for (final c in chunks) {
         all.addAll(c);
       }
-      final text = _decodeBytes(all);
+      final text = isXlsx ? _convertXlsxBytes(all) : _decodeBytes(all);
       setState(() {
         _reading = false;
         _readProgress = null;
@@ -210,6 +255,18 @@ class _ImportPageState extends ConsumerState<ImportPage> {
       return text;
     } finally {
       await raf.close();
+    }
+  }
+
+  // 转换 XLSX 字节为 CSV 字符串
+  String _convertXlsxBytes(List<int> bytes) {
+    try {
+      return XlsxReader.convertXlsxToCSV(Uint8List.fromList(bytes));
+    } catch (e) {
+      if (mounted) {
+        showToast(context, AppLocalizations.of(context).importFileOpenError(e.toString()));
+      }
+      return '';
     }
   }
 }

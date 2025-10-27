@@ -8,12 +8,18 @@ import '../widgets/ui/ui.dart';
 import '../data/db.dart' as schema;
 import '../l10n/app_localizations.dart';
 import '../services/category_service.dart';
+import 'import_page.dart';
 
 class ImportConfirmPage extends ConsumerStatefulWidget {
   final String csvText;
   final bool hasHeader;
-  const ImportConfirmPage(
-      {super.key, required this.csvText, required this.hasHeader});
+  final BillSourceType billType;
+  const ImportConfirmPage({
+    super.key,
+    required this.csvText,
+    required this.hasHeader,
+    required this.billType,
+  });
 
   @override
   ConsumerState<ImportConfirmPage> createState() => _ImportConfirmPageState();
@@ -51,14 +57,63 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         parsing = false;
       });
       // 解析完成
-      // 需求：总是将第一行作为表头
+      // 根据用户选择的账单类型查找表头
       if (widget.hasHeader && rows.isNotEmpty) {
-        headerRow = 0;
+        headerRow = _findHeaderRowByType(rows, widget.billType);
       }
       _autoDetectMapping();
       // 预取分类列表供第二步选择
       allCategoriesFuture = _loadAllCategories(ref);
     }();
+  }
+
+  /// 根据账单类型查找表头行号
+  int _findHeaderRowByType(List<List<String>> rows, BillSourceType type) {
+    switch (type) {
+      case BillSourceType.generic:
+        // 通用CSV：使用第0行作为表头
+        return 0;
+
+      case BillSourceType.alipay:
+        // 支付宝：在前30行查找包含"交易时间"、"商品说明"的行
+        return _findHeaderRow(rows, ['交易时间', '商品说明']) ?? 0;
+
+      case BillSourceType.wechat:
+        // 微信：在前30行查找包含"交易时间"、"交易类型"的行
+        return _findHeaderRow(rows, ['交易时间', '交易类型']) ?? 0;
+    }
+  }
+
+  /// 在前30行中查找包含指定关键词的行
+  int? _findHeaderRow(List<List<String>> rows, List<String> keywords) {
+    final maxRows = rows.length < 30 ? rows.length : 30;
+    for (int i = 0; i < maxRows; i++) {
+      final row = rows[i];
+      if (row.isEmpty) continue;
+
+      final rowStr = row.map((e) => e.toString().trim()).toList();
+
+      // 检查是否包含所有关键词
+      bool containsAll = true;
+      for (final keyword in keywords) {
+        bool found = false;
+        for (final cell in rowStr) {
+          if (cell.contains(keyword)) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          containsAll = false;
+          break;
+        }
+      }
+
+      if (containsAll) {
+        return i;
+      }
+    }
+    return null;
   }
 
   void _autoDetectMapping() {
@@ -99,20 +154,22 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       if (containsAny(s, ['日期', '时间', '交易时间', '账单时间', '创建时间'])) {
         return 'date';
       }
-      if (containsAny(s, ['类型', '收支', '方向', '交易类型'])) {
-        return 'type';
-      }
       if (containsAny(s, ['金额', '金额(元)', '交易金额', '变动金额', '收支金额'])) {
         return 'amount';
       }
-      if (containsAny(s, ['分类', '类别', '账目名称', '科目', '标签'])) {
+      // 先匹配"交易类型"等更具体的分类字段（避免被"类型"匹配为type）
+      if (containsAny(s, ['分类', '类别', '账目名称', '科目', '标签', '交易分类', '交易类型'])) {
         return 'category';
       }
-      if (containsAny(s, ['备注', '说明', '标题', '摘要', '附言'])) {
+      // 再匹配收支类型字段
+      if (containsAny(s, ['类型', '收支', '收/支', '方向'])) {
+        return 'type';
+      }
+      if (containsAny(s, ['备注', '说明', '标题', '摘要', '附言', '商品名称', '商品说明', '交易对方', '商家'])) {
         return 'note';
       }
       // 明确忽略
-      if (containsAny(s, ['账目编号', '编号', '单号', '流水号', '相关图片', '图片', '附件'])) {
+      if (containsAny(s, ['账目编号', '编号', '单号', '流水号', '交易号', '相关图片', '图片', '附件', '交易单号', '订单号'])) {
         return null;
       }
       return null;

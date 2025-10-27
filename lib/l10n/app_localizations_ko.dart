@@ -441,7 +441,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importTitle => '계산서 가져오기';
 
   @override
-  String get importSelectFile => '가져올 CSV/TSV 파일을 선택하세요 (기본적으로 첫 번째 행을 헤더로 사용)';
+  String get importSelectFile => '가져올 파일을 선택하세요 (CSV/TSV/XLSX 지원)';
+
+  @override
+  String get importBillType => '계산서 유형';
+
+  @override
+  String get importBillTypeGeneric => '일반 CSV';
+
+  @override
+  String get importBillTypeAlipay => '알리페이';
+
+  @override
+  String get importBillTypeWechat => '위챗';
 
   @override
   String get importChooseFile => '파일 선택';
@@ -450,7 +462,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importNoFileSelected => '파일이 선택되지 않았습니다';
 
   @override
-  String get importHint => '팁: CSV/TSV 파일을 선택하여 가져오기를 시작하세요';
+  String get importHint => '팁: 파일을 선택하여 가져오기를 시작하세요 (CSV/TSV/XLSX)';
 
   @override
   String get importReading => '파일 읽는 중…';
@@ -1944,7 +1956,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get importSelectCsvFile => '가져올 CSV/TSV 파일을 선택하세요 (기본적으로 첫 번째 행을 헤더로 사용)';
+  String get importSelectCsvFile => '가져올 파일을 선택하세요 (CSV/TSV/XLSX 지원)';
 
   @override
   String get exportTitle => '내보내기';

@@ -149,10 +149,14 @@
   "iconCategoryOther": "其他",
 
   "importTitle": "匯入帳單",
-  "importSelectFile": "請選擇 CSV/TSV 檔案進行匯入（預設第一行為標頭）",
+  "importSelectFile": "請選擇檔案進行匯入（支援 CSV/TSV/XLSX 格式）",
+  "importBillType": "帳單類型",
+  "importBillTypeGeneric": "通用CSV",
+  "importBillTypeAlipay": "支付寶",
+  "importBillTypeWechat": "微信",
   "importChooseFile": "選擇檔案",
   "importNoFileSelected": "未選擇檔案",
-  "importHint": "提示：請選擇一個 CSV/TSV 檔案開始匯入",
+  "importHint": "提示：請選擇一個檔案開始匯入（支援 CSV/TSV/XLSX）",
   "importReading": "讀取檔案中…",
   "importPreparing": "準備中…",
   "importFileOpenError": "無法開啟檔案選擇器：{error}",
@@ -667,7 +671,11 @@
     }
   },
 
-  "importSelectCsvFile": "請選擇 CSV/TSV 檔案進行匯入（預設第一行為標頭）",
+  "importSelectCsvFile": "請選擇檔案進行匯入（支援 CSV/TSV/XLSX 格式）",
+  "importBillType": "帳單類型",
+  "importBillTypeGeneric": "通用CSV",
+  "importBillTypeAlipay": "支付寶",
+  "importBillTypeWechat": "微信",
   "@importFileOpenError": {
     "placeholders": {
       "error": {
