@@ -109,8 +109,11 @@ class SupportProjectPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  l10n.supportProjectCurrentAmount('¥12 (\$1.65)'),
-                                  style: theme.textTheme.bodyMedium,
+                                  l10n.supportProjectCurrentAmount('¥732 (\$101)'),
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.primary,
+                                  ),
                                 ),
                                 Text(
                                   l10n.supportProjectTargetAmount('\$99'),
@@ -124,7 +127,7 @@ class SupportProjectPage extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
-                                value: 0.0167,
+                                value: 1.0, // 已完成
                                 minHeight: 8,
                                 backgroundColor: theme.colorScheme.surfaceContainerHighest,
                                 valueColor: AlwaysStoppedAnimation<Color>(
@@ -133,11 +136,22 @@ class SupportProjectPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Text(
-                              l10n.supportProjectProgress('1.67%'),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  size: 16,
+                                  color: theme.colorScheme.primary,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  l10n.supportProjectProgress('101.67% - 🎉 目标达成！'),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -184,6 +198,21 @@ class SupportProjectPage extends StatelessWidget {
                         _buildUsageItem(
                           context,
                           l10n.supportProjectUsage3,
+                        ),
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '💡 多余资金将用于续费 Apple 开发者账号（下一年度）及其他开发维护必要费用',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurface,
+                              height: 1.5,
+                            ),
+                          ),
                         ),
                       ],
                     ),

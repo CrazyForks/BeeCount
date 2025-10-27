@@ -413,18 +413,24 @@ Your donation will be used for:
 ### 📊 Funding Progress
 
 - 🎯 **Goal**: $99 (Apple Developer Account annual fee)
-- 💰 **Raised**: ¥12 (≈ $1.65)
-- 📈 **Progress**: 1.67%
+- 💰 **Raised**: ¥732 (≈ $101)
+- 📈 **Progress**: 101.67% ✅
 
 ```
-Progress: [■---------] 1.67%
+Progress: [██████████] 101.67% - 🎉 Goal Achieved!
 ```
 
-**Once goal is reached, we will**:
-1. Apply for Apple Developer Account
-2. Sign the iOS application
-3. Distribute to iOS users via TestFlight
-4. Transparently report fund usage
+**Goal achieved! Next steps**:
+1. ✅ Register Apple Developer Account (in progress)
+2. ⏳ Configure signing certificates and TestFlight
+3. ⏳ Distribute to iOS users via TestFlight
+4. ✅ Transparently report fund usage
+
+**Fund Usage**:
+- Apple Developer Account annual fee: ¥720
+- Surplus funds (¥12) will be used for:
+  - Renewing Apple Developer Account (next year)
+  - Other necessary development and maintenance expenses (e.g., domain, certificates)
 
 ### 🌟 Special Thanks to Our Supporters
 
@@ -436,6 +442,7 @@ Format: Nickname - Amount - Date
 -->
 
 - **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
+- **\*Rui** - ¥720 - 2025-10-27 (WeChat) 🎉
 
 ---
 
