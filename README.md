@@ -331,19 +331,23 @@ flutter build apk --flavor prod --release
 
 ### 贡献指南
 
+我们欢迎所有形式的贡献！请查看详细的[贡献指南](docs/contributing/CONTRIBUTING_ZH.md)了解如何参与：
+
+- 🐛 [报告 Bug](https://github.com/TNT-Likely/BeeCount/issues/new)
+- 💡 [提出功能建议](https://github.com/TNT-Likely/BeeCount/discussions/new?category=ideas)
+- 💻 [贡献代码](docs/contributing/CONTRIBUTING_ZH.md#代码贡献流程)
+- 🌍 [贡献翻译](docs/contributing/CONTRIBUTING_ZH.md#翻译贡献)
+- 📝 [完善文档](docs/contributing/CONTRIBUTING_ZH.md#文档贡献)
+
+**快速开始**：
+
 1. Fork 本项目
 2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
 3. 提交更改 (`git commit -m 'feat: 添加某个功能'`)
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 创建 Pull Request
 
-**提交规范**：使用中文提交信息，格式为 `类型: 简洁描述`
-
-- `feat:` 新功能
-- `fix:` 修复问题
-- `refactor:` 代码重构
-- `style:` 样式调整
-- `docs:` 文档更新
+详细规范请参考[完整贡献指南](docs/contributing/CONTRIBUTING_ZH.md)。
 
 ## 📄 开源协议
 

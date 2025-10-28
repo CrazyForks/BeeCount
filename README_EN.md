@@ -332,18 +332,23 @@ flutter build apk --flavor prod --release
 
 ### Contribution Guidelines
 
+We welcome all forms of contributions! Please see our detailed [Contributing Guide](docs/contributing/CONTRIBUTING_EN.md) to learn how to participate:
+
+- 🐛 [Report Bugs](https://github.com/TNT-Likely/BeeCount/issues/new)
+- 💡 [Suggest Features](https://github.com/TNT-Likely/BeeCount/discussions/new?category=ideas)
+- 💻 [Contribute Code](docs/contributing/CONTRIBUTING_EN.md#code-contribution-workflow)
+- 🌍 [Contribute Translations](docs/contributing/CONTRIBUTING_EN.md#translation-contributions)
+- 📝 [Improve Documentation](docs/contributing/CONTRIBUTING_EN.md#documentation-contributions)
+
+**Quick Start**:
+
 1. Fork this project
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit changes (`git commit -m 'feat: add some feature'`)
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Create Pull Request
 
-**Commit Convention**: Use Chinese commit messages in format `type: brief description`
-- `feat:` New feature
-- `fix:` Bug fix
-- `refactor:` Code refactoring
-- `style:` Style adjustments
-- `docs:` Documentation updates
+For detailed standards, please refer to the [Complete Contributing Guide](docs/contributing/CONTRIBUTING_EN.md).
 
 ## 📄 Open Source License
 
