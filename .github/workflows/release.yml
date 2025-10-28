@@ -124,18 +124,6 @@ jobs:
             echo "No Android signing secrets provided; will use fallback CI keystore in Gradle."
           fi
 
-      - name: Check Supabase secrets
-        run: |
-          test -n "${{ secrets.SUPABASE_URL }}" || (echo "Missing SUPABASE_URL" >&2; exit 1)
-          test -n "${{ secrets.SUPABASE_ANON_KEY }}" || (echo "Missing SUPABASE_ANON_KEY" >&2; exit 1)
-
-      - name: Print define length (debug, safe)
-        run: |
-          export SUPABASE_URL='${{ secrets.SUPABASE_URL }}'
-          export SUPABASE_ANON_KEY='${{ secrets.SUPABASE_ANON_KEY }}'
-          echo "SUPABASE_URL length: ${#SUPABASE_URL}"
-          echo "SUPABASE_ANON_KEY length: ${#SUPABASE_ANON_KEY}"
-
       - name: Update pubspec.yaml version
         run: |
           VERSION='${{ steps.meta.outputs.tag_name }}'
@@ -154,30 +142,22 @@ jobs:
 
       - name: Build APK (release)
         run: |
-          export SUPABASE_URL='${{ secrets.SUPABASE_URL }}'
-          export SUPABASE_ANON_KEY='${{ secrets.SUPABASE_ANON_KEY }}'
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
           echo "Debug: CI_VERSION=$CI_VERSION"
           echo "Debug: TAG_NAME=${{ steps.meta.outputs.tag_name }}"
           flutter build apk --release --flavor prod \
-            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-            --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
             --dart-define=CI_VERSION="$CI_VERSION" \
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
 
       - name: Build App Bundle (AAB)
         run: |
-          export SUPABASE_URL='${{ secrets.SUPABASE_URL }}'
-          export SUPABASE_ANON_KEY='${{ secrets.SUPABASE_ANON_KEY }}'
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
           flutter build appbundle --release --flavor prod \
-            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-            --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
             --dart-define=CI_VERSION="$CI_VERSION" \
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
@@ -261,18 +241,6 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
-      - name: Check Supabase secrets
-        run: |
-          test -n "${{ secrets.SUPABASE_URL }}" || (echo "Missing SUPABASE_URL" >&2; exit 1)
-          test -n "${{ secrets.SUPABASE_ANON_KEY }}" || (echo "Missing SUPABASE_ANON_KEY" >&2; exit 1)
-
-      - name: Print define length (debug, safe)
-        run: |
-          export SUPABASE_URL='${{ secrets.SUPABASE_URL }}'
-          export SUPABASE_ANON_KEY='${{ secrets.SUPABASE_ANON_KEY }}'
-          echo "SUPABASE_URL length: ${#SUPABASE_URL}"
-          echo "SUPABASE_ANON_KEY length: ${#SUPABASE_ANON_KEY}"
-
       - name: Update pubspec.yaml version (iOS)
         run: |
           VERSION='${{ steps.meta.outputs.tag_name }}'
@@ -291,28 +259,20 @@ jobs:
 
       - name: Build iOS (no codesign)
         run: |
-          export SUPABASE_URL='${{ secrets.SUPABASE_URL }}'
-          export SUPABASE_ANON_KEY='${{ secrets.SUPABASE_ANON_KEY }}'
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
           flutter build ios --release --no-codesign \
-            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-            --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
             --dart-define=CI_VERSION="$CI_VERSION" \
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
 
       - name: Build iOS (debug simulator, unsigned)
         run: |
-          export SUPABASE_URL='${{ secrets.SUPABASE_URL }}'
-          export SUPABASE_ANON_KEY='${{ secrets.SUPABASE_ANON_KEY }}'
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
           flutter build ios --debug --simulator \
-            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-            --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
             --dart-define=CI_VERSION="$CI_VERSION" \
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"

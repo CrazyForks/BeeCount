@@ -8,7 +8,6 @@ import 'theme.dart';
 import 'providers.dart';
 import 'styles/colors.dart';
 import 'providers/font_scale_provider.dart';
-import 'config.dart';
 import 'utils/route_logger.dart';
 import 'pages/splash_page.dart';
 import 'services/notification_service.dart';
@@ -21,7 +20,6 @@ import 'cloud/supabase_initializer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppConfig.init();
 
   // 全局初始化Supabase（如果配置了自定义Supabase服务）
   await _initializeSupabase();
