@@ -291,33 +291,32 @@ jobs:
             # 设置 codesign 权限
             security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
-            # 动态生成 ExportOptions.plist
-            cat > ios/ExportOptions.plist <<'END_OF_PLIST'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>method</key>
-    <string>app-store</string>
-    <key>teamID</key>
-    <string>TEAM_ID_PLACEHOLDER</string>
-    <key>uploadBitcode</key>
-    <false/>
-    <key>uploadSymbols</key>
-    <true/>
-    <key>signingStyle</key>
-    <string>manual</string>
-    <key>signingCertificate</key>
-    <string>Apple Distribution</string>
-    <key>provisioningProfiles</key>
-    <dict>
-        <key>com.tntlikely.beecount</key>
-        <string>BeeCount AppStore</string>
-    </dict>
-</dict>
-</plist>
-END_OF_PLIST
-            sed -i '' "s/TEAM_ID_PLACEHOLDER/${IOS_TEAM_ID}/g" ios/ExportOptions.plist
+            # 动态生成 ExportOptions.plist（使用 printf 避免 heredoc YAML 冲突）
+            printf '%s\n' \
+              '<?xml version="1.0" encoding="UTF-8"?>' \
+              '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' \
+              '<plist version="1.0">' \
+              '<dict>' \
+              '    <key>method</key>' \
+              '    <string>app-store</string>' \
+              '    <key>teamID</key>' \
+              "    <string>${IOS_TEAM_ID}</string>" \
+              '    <key>uploadBitcode</key>' \
+              '    <false/>' \
+              '    <key>uploadSymbols</key>' \
+              '    <true/>' \
+              '    <key>signingStyle</key>' \
+              '    <string>manual</string>' \
+              '    <key>signingCertificate</key>' \
+              '    <string>Apple Distribution</string>' \
+              '    <key>provisioningProfiles</key>' \
+              '    <dict>' \
+              '        <key>com.tntlikely.beecount</key>' \
+              '        <string>BeeCount AppStore</string>' \
+              '    </dict>' \
+              '</dict>' \
+              '</plist>' \
+              > ios/ExportOptions.plist
 
             echo "✅ iOS signing configured"
             echo "IOS_SIGNING_ENABLED=true" >> $GITHUB_ENV
