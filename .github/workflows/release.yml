@@ -337,30 +337,36 @@ jobs:
 
       - name: Build iOS (signed, release)
         if: env.IOS_SIGNING_ENABLED == 'true'
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
-          flutter build ios --release \
+
+          # 使用 flutter build ios 并通过 --export-options-plist 指定签名配置
+          flutter build ipa --release \
+            --export-options-plist=ios/ExportOptions.plist \
             --dart-define=CI_VERSION="$CI_VERSION" \
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
 
-      - name: Package iOS signed IPA
+      - name: Copy signed IPA to release directory
         if: env.IOS_SIGNING_ENABLED == 'true'
         run: |
           set -euo pipefail
           VERSION="${{ steps.meta.outputs.tag_name }}"
 
-          # Create IPA from signed Runner.app
-          cd build/ios/iphoneos
-          mkdir -p Payload
-          cp -R Runner.app Payload/
-          /usr/bin/zip -qry ../../../beecount-${VERSION}-signed.ipa Payload
-          cd ../../..
-
-          echo "Generated signed IPA: beecount-${VERSION}-signed.ipa"
-          ls -lh beecount-${VERSION}-signed.ipa
+          # flutter build ipa 会在 build/ios/ipa 目录生成 IPA
+          if [ -f build/ios/ipa/*.ipa ]; then
+            cp build/ios/ipa/*.ipa beecount-${VERSION}-signed.ipa
+            echo "✅ Copied signed IPA: beecount-${VERSION}-signed.ipa"
+            ls -lh beecount-${VERSION}-signed.ipa
+          else
+            echo "❌ Signed IPA not found in build/ios/ipa/"
+            ls -la build/ios/ipa/ || true
+            exit 1
+          fi
 
       - name: Cleanup iOS keychain
         if: always() && env.IOS_SIGNING_ENABLED == 'true'
