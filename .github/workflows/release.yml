@@ -285,8 +285,15 @@ jobs:
             # 安装provisioning profile
             PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
             echo "$IOS_PROVISION_PROFILE_BASE64" | base64 -d > $PP_PATH
+
+            # 从 provisioning profile 中提取 UUID
+            PP_UUID=$(security cms -D -i $PP_PATH | plutil -extract UUID raw -)
+            echo "Provisioning Profile UUID: $PP_UUID"
+
+            # 使用 UUID 作为文件名安装到正确位置
             mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-            cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
+            cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/${PP_UUID}.mobileprovision
+            echo "Installed provisioning profile: ${PP_UUID}.mobileprovision"
 
             # 设置 codesign 权限
             security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
