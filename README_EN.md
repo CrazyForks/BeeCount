@@ -203,7 +203,22 @@ flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
 
 2. **Configure Storage**
    - Create a Storage Bucket named `beecount-backups` in Supabase console
-   - Set as Private and configure RLS access policies
+   - Set as Private (uncheck Public bucket)
+   - **Configure RLS Access Policies**: Create 4 policies to ensure users can only access their own data
+     - Go to the bucket's Policies tab
+     - Create the following 4 policies (each with the same configuration):
+       - **SELECT**: Allow users to read their own backup files
+       - **INSERT**: Allow users to create new backup files
+       - **UPDATE**: Allow users to update their own backup files
+       - **DELETE**: Allow users to delete their own backup files
+     - Configuration for each policy:
+       - **Policy name**: Customizable (e.g., `Allow user access to own backups`)
+       - **Target roles**: Select `authenticated`
+       - **Policy definition**: Enter the following expression
+         ```sql
+         ((bucket_id = 'beecount-backups'::text) AND ((storage.foldername(name))[1] = 'users'::text) AND ((storage.foldername(name))[2] = (auth.uid())::text))
+         ```
+       - This policy ensures users can only access files under `beecount-backups/users/<their-user-id>/` path
 
 3. **App Configuration**
    - Open BeeCount → Profile → Cloud Service

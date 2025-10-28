@@ -202,7 +202,22 @@ flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
 
 2. **配置 Storage**
    - 在 Supabase 控制台创建名为 `beecount-backups` 的 Storage Bucket
-   - 设置为 Private 并配置 RLS 访问策略
+   - 设置为 Private（不勾选 Public bucket）
+   - **配置 RLS 访问策略**：需要创建 4 条策略，确保用户只能访问自己的数据
+     - 进入 bucket 的 Policies 标签页
+     - 分别创建以下 4 条策略（每条策略配置相同）：
+       - **SELECT**：允许用户读取自己的备份文件
+       - **INSERT**：允许用户创建新的备份文件
+       - **UPDATE**：允许用户更新自己的备份文件
+       - **DELETE**：允许用户删除自己的备份文件
+     - 每条策略的配置：
+       - **Policy name**: 可自定义（如 `Allow user access to own backups`）
+       - **Target roles**: 选择 `authenticated`
+       - **Policy definition**: 输入以下表达式
+         ```sql
+         ((bucket_id = 'beecount-backups'::text) AND ((storage.foldername(name))[1] = 'users'::text) AND ((storage.foldername(name))[2] = (auth.uid())::text))
+         ```
+       - 此策略确保用户只能访问 `beecount-backups/users/<自己的用户ID>/` 路径下的文件
 
 3. **应用内配置**
    - 打开蜜蜂记账 → 个人中心 → 云服务
