@@ -3,7 +3,7 @@
 <div align="center">
 
 ![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![License](https://img.shields.io/badge/license-Business%20Source%20License-orange.svg)
 ![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
@@ -12,7 +12,7 @@
 
 **Core Advantage: Self-hosted Supabase/WebDAV servers - Your data, Your control**
 
-[📥 Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 Documentation](#-user-guide) | [💬 Issues](https://github.com/TNT-Likely/BeeCount/issues) | [🇨🇳 中文](README.md)
+[📥 Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 Documentation](#-user-guide) | [💬 Issues](https://github.com/TNT-Likely/BeeCount/issues) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -47,9 +47,9 @@
 - ✅ **Self-hosted**, complete data control
 - ✅ **Open source**, auditable code
 - ✅ **Offline-first**, works without network
-- ✅ **Completely free**, no ads or paywalls
+- ✅ **Free for personal use**, no ads or paywalls
 - ✅ **Privacy-first**, developers cannot access your data
-- ✅ **MIT License**, free to use and modify
+- ✅ **Open source code**, auditable codebase
 
 </td>
 </tr>
@@ -109,7 +109,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 ### 🔒 Data Security & Privacy
 
 - **Offline First**: Based on local SQLite, works without network
-- **Open & Transparent**: MIT License, auditable code
+- **Open & Transparent**: Open source code, auditable
 - **Optional Sync**: Works completely without cloud configuration
 - **Zero Tracking**: No analytics, no ads, no data collection
 
@@ -352,7 +352,7 @@ For detailed standards, please refer to the [Complete Contributing Guide](docs/c
 
 ## 📄 Open Source License
 
-This project is open-sourced under the [MIT License](LICENSE). You are free to use, modify, and distribute.
+This project uses a Business Source License. Free for personal use, commercial use requires paid authorization. See [LICENSE](LICENSE) for details.
 
 ## ⚠️ Disclaimer
 
@@ -471,6 +471,33 @@ Format: Nickname - Amount - Date
 
 - **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
 - **\*Rui** - ¥720 - 2025-10-27 (WeChat) 🎉
+
+---
+
+## 📜 License
+
+This project is licensed under the **Business Source License**:
+
+- ✅ **Personal Use** - Completely Free
+- ✅ **Learning & Research** - Completely Free
+- ✅ **Open Source Contribution** - Welcome
+- ❌ **Commercial Use** - Paid License Required
+
+### What is Commercial Use?
+
+Commercial license is required for:
+- Providing this software as part of commercial products or services
+- Using this software in for-profit organizations
+- Developing commercial products based on this software
+- Providing paid cloud services based on this software
+
+### How to Obtain a Commercial License?
+
+For commercial use, please contact us via:
+- 📧 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues)
+- 💬 [Telegram Group](https://t.me/beecount)
+
+For detailed license terms, please see the [LICENSE](LICENSE) file.
 
 ---
 
