@@ -196,12 +196,10 @@ class MinePage extends ConsumerWidget {
                             loading: () => AppLocalizations.of(context).mineCloudServiceLoading,
                             error: (e, _) => '${AppLocalizations.of(context).commonError}: $e',
                             data: (cfg) {
-                              if (cfg.builtin) {
-                                return cfg.valid
-                                  ? AppLocalizations.of(context).mineCloudServiceDefault
-                                  : AppLocalizations.of(context).mineCloudServiceOffline;
+                              if (cfg.type == CloudBackendType.local) {
+                                return AppLocalizations.of(context).mineCloudServiceOffline;
                               } else {
-                                // 自定义云服务：根据类型显示
+                                // 云服务：根据类型显示
                                 if (cfg.type == CloudBackendType.webdav) {
                                   return AppLocalizations.of(context).mineCloudServiceWebDAV;
                                 } else {
@@ -441,7 +439,7 @@ class MinePage extends ConsumerWidget {
             final firstFlag = r3.watch(firstFullUploadPendingProvider);
             final activeCfg = r3.watch(activeCloudConfigProvider);
             final show = firstFlag.asData?.value == true &&
-                activeCfg.asData?.value.builtin == false &&
+                activeCfg.asData?.value.type != CloudBackendType.local &&
                 canUseCloud &&
                 !notLoggedIn;
             if (!show) return const SizedBox();

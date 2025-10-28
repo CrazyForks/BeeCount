@@ -40,6 +40,9 @@
   "commonHelp": "Ayuda",
   "commonAbout": "Acerca de",
   "commonLanguage": "Idioma",
+  "commonCurrent": "Actual",
+  "commonTutorial": "Tutorial",
+  "commonConfigure": "Configurar",
   "commonWeekdayMonday": "Lunes",
   "commonWeekdayTuesday": "Martes",
   "commonWeekdayWednesday": "Miércoles",
@@ -1229,5 +1232,70 @@
   "syncNotLoggedInMessage": "No conectado",
   "syncCloudBackupCorruptedMessage": "El contenido de la copia de seguridad en la nube está corrupto, posiblemente debido a problemas de codificación de versiones anteriores. Por favor haz clic en 'Subir libro actual a la nube' para sobrescribir y corregir.",
   "syncNoCloudBackupMessage": "Sin copia de seguridad en la nube",
-  "syncAccessDeniedMessage": "403 Acceso denegado (verificar política RLS de almacenamiento y ruta)"
+  "syncAccessDeniedMessage": "403 Acceso denegado (verificar política RLS de almacenamiento y ruta)",
+
+  "cloudTestConnection": "Probar conexión",
+  "cloudLocalStorageTitle": "Almacenamiento local",
+  "cloudLocalStorageSubtitle": "Los datos solo se guardan en el dispositivo local",
+  "cloudCustomSupabaseTitle": "Supabase personalizado",
+  "cloudCustomSupabaseSubtitle": "Haga clic para configurar Supabase autohospedado",
+  "cloudCustomWebdavTitle": "WebDAV personalizado",
+  "cloudCustomWebdavSubtitle": "Haga clic para configurar Nutstore/Nextcloud etc.",
+  "cloudStatusNotTested": "No probado",
+  "cloudStatusNormal": "Conexión normal",
+  "cloudStatusFailed": "Conexión fallida",
+  "cloudCannotOpenLink": "No se puede abrir el enlace",
+  "cloudErrorAuthFailed": "Autenticación fallida: Clave API no válida",
+  "cloudErrorServerStatus": "El servidor devolvió el código de estado {code}",
+  "@cloudErrorServerStatus": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorWebdavNotSupported": "El servidor no admite el protocolo WebDAV",
+  "cloudErrorAuthFailedCredentials": "Autenticación fallida: Nombre de usuario o contraseña incorrectos",
+  "cloudErrorAccessDenied": "Acceso denegado: Verifique los permisos",
+  "cloudErrorPathNotFound": "Ruta del servidor no encontrada: {path}",
+  "@cloudErrorPathNotFound": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorNetwork": "Error de red: {message}",
+  "@cloudErrorNetwork": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudTestSuccessTitle": "Prueba exitosa",
+  "cloudTestSuccessMessage": "Conexión normal, configuración válida",
+  "cloudTestFailedTitle": "Prueba fallida",
+  "cloudTestFailedMessage": "Conexión fallida",
+  "cloudTestErrorTitle": "Error de prueba",
+  "cloudSwitchConfirmTitle": "Cambiar servicio en la nube",
+  "cloudSwitchConfirmMessage": "Cambiar el servicio en la nube cerrará la sesión de la cuenta actual. ¿Confirmar?",
+  "cloudSwitchFailedTitle": "Cambio fallido",
+  "cloudSwitchFailedConfigMissing": "Por favor configure este servicio en la nube primero",
+  "cloudConfigInvalidTitle": "Configuración no válida",
+  "cloudConfigInvalidMessage": "Por favor ingrese información completa",
+  "cloudSaveFailed": "Error al guardar",
+  "cloudSwitchedTo": "Cambiado a {type}",
+  "@cloudSwitchedTo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudConfigureSupabaseTitle": "Configurar Supabase",
+  "cloudConfigureWebdavTitle": "Configurar WebDAV",
+  "cloudSupabaseAnonKeyHintLong": "Pegue la clave anon completa",
+  "cloudWebdavRemotePathLabel": "Ruta remota",
+  "cloudWebdavRemotePathHelperText": "Ruta del directorio remoto para almacenamiento de datos"
 }

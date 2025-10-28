@@ -160,7 +160,7 @@ flutter pub get
 dart run build_runner build -d
 
 # Run the app
-flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
+flutter run --flavor dev -d android
 ```
 
 ## 📖 User Guide

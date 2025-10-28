@@ -112,6 +112,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get commonLanguage => '언어';
 
   @override
+  String get commonCurrent => '현재';
+
+  @override
+  String get commonTutorial => '튜토리얼';
+
+  @override
+  String get commonConfigure => '구성';
+
+  @override
   String get commonWeekdayMonday => '월요일';
 
   @override
@@ -1801,7 +1810,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cloudValidationHttpRequired => 'URL은 http:// 또는 https://로 시작해야 합니다';
 
   @override
-  String get cloudSelectServiceType => '서비스 유형 선택';
+  String get cloudSelectServiceType => '클라우드 서비스 유형 선택';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV 서버 URL';
@@ -2693,6 +2702,122 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 액세스 거부 (스토리지 RLS 정책 및 경로 확인)';
+
+  @override
+  String get cloudTestConnection => '연결 테스트';
+
+  @override
+  String get cloudLocalStorageTitle => '로컬 저장소';
+
+  @override
+  String get cloudLocalStorageSubtitle => '데이터는 로컬 기기에만 저장됩니다';
+
+  @override
+  String get cloudCustomSupabaseTitle => '사용자 정의 Supabase';
+
+  @override
+  String get cloudCustomSupabaseSubtitle => '자체 호스팅 Supabase 구성하려면 클릭';
+
+  @override
+  String get cloudCustomWebdavTitle => '사용자 정의 WebDAV';
+
+  @override
+  String get cloudCustomWebdavSubtitle => 'Nutstore/Nextcloud 등을 구성하려면 클릭';
+
+  @override
+  String get cloudStatusNotTested => '테스트되지 않음';
+
+  @override
+  String get cloudStatusNormal => '연결 정상';
+
+  @override
+  String get cloudStatusFailed => '연결 실패';
+
+  @override
+  String get cloudCannotOpenLink => '링크를 열 수 없습니다';
+
+  @override
+  String get cloudErrorAuthFailed => '인증 실패: 잘못된 API 키';
+
+  @override
+  String cloudErrorServerStatus(String code) {
+    return '서버가 상태 코드 $code를 반환했습니다';
+  }
+
+  @override
+  String get cloudErrorWebdavNotSupported => '서버가 WebDAV 프로토콜을 지원하지 않습니다';
+
+  @override
+  String get cloudErrorAuthFailedCredentials => '인증 실패: 사용자 이름 또는 비밀번호가 올바르지 않습니다';
+
+  @override
+  String get cloudErrorAccessDenied => '액세스 거부됨: 권한을 확인하세요';
+
+  @override
+  String cloudErrorPathNotFound(String path) {
+    return '서버 경로를 찾을 수 없습니다: $path';
+  }
+
+  @override
+  String cloudErrorNetwork(String message) {
+    return '네트워크 오류: $message';
+  }
+
+  @override
+  String get cloudTestSuccessTitle => '테스트 성공';
+
+  @override
+  String get cloudTestSuccessMessage => '연결 정상, 구성 유효';
+
+  @override
+  String get cloudTestFailedTitle => '테스트 실패';
+
+  @override
+  String get cloudTestFailedMessage => '연결 실패';
+
+  @override
+  String get cloudTestErrorTitle => '테스트 오류';
+
+  @override
+  String get cloudSwitchConfirmTitle => '클라우드 서비스 전환';
+
+  @override
+  String get cloudSwitchConfirmMessage => '클라우드 서비스를 전환하면 현재 계정이 로그아웃됩니다. 전환하시겠습니까?';
+
+  @override
+  String get cloudSwitchFailedTitle => '전환 실패';
+
+  @override
+  String get cloudSwitchFailedConfigMissing => '먼저 이 클라우드 서비스를 구성하세요';
+
+  @override
+  String get cloudConfigInvalidTitle => '잘못된 구성';
+
+  @override
+  String get cloudConfigInvalidMessage => '완전한 정보를 입력하세요';
+
+  @override
+  String get cloudSaveFailed => '저장 실패';
+
+  @override
+  String cloudSwitchedTo(String type) {
+    return '$type(으)로 전환했습니다';
+  }
+
+  @override
+  String get cloudConfigureSupabaseTitle => 'Supabase 구성';
+
+  @override
+  String get cloudConfigureWebdavTitle => 'WebDAV 구성';
+
+  @override
+  String get cloudSupabaseAnonKeyHintLong => '완전한 anon key를 붙여넣으세요';
+
+  @override
+  String get cloudWebdavRemotePathLabel => '원격 경로';
+
+  @override
+  String get cloudWebdavRemotePathHelperText => '데이터 저장을 위한 원격 디렉토리 경로';
 
   @override
   String get updateCorruptedFileTitle => '설치 패키지가 손상되었습니다';

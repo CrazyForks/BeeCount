@@ -112,6 +112,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonLanguage => '语言';
 
   @override
+  String get commonCurrent => '当前';
+
+  @override
+  String get commonTutorial => '教程';
+
+  @override
+  String get commonConfigure => '配置';
+
+  @override
   String get commonWeekdayMonday => '星期一';
 
   @override
@@ -1801,7 +1810,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudValidationHttpRequired => 'URL 需以 http:// 或 https:// 开头';
 
   @override
-  String get cloudSelectServiceType => '选择服务类型';
+  String get cloudSelectServiceType => '选择云服务类型';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV 服务器地址';
@@ -2695,6 +2704,122 @@ class AppLocalizationsZh extends AppLocalizations {
   String get syncAccessDeniedMessage => '403 拒绝访问（检查 storage RLS 策略与路径）';
 
   @override
+  String get cloudTestConnection => '测试连接';
+
+  @override
+  String get cloudLocalStorageTitle => '本地存储';
+
+  @override
+  String get cloudLocalStorageSubtitle => '数据仅保存在本地设备';
+
+  @override
+  String get cloudCustomSupabaseTitle => '自定义 Supabase';
+
+  @override
+  String get cloudCustomSupabaseSubtitle => '点击配置自建Supabase服务';
+
+  @override
+  String get cloudCustomWebdavTitle => '自定义 WebDAV';
+
+  @override
+  String get cloudCustomWebdavSubtitle => '点击配置坚果云/Nextcloud等';
+
+  @override
+  String get cloudStatusNotTested => '未测试';
+
+  @override
+  String get cloudStatusNormal => '连接正常';
+
+  @override
+  String get cloudStatusFailed => '连接失败';
+
+  @override
+  String get cloudCannotOpenLink => '无法打开链接';
+
+  @override
+  String get cloudErrorAuthFailed => '认证失败: API Key 无效';
+
+  @override
+  String cloudErrorServerStatus(String code) {
+    return '服务器返回状态码 $code';
+  }
+
+  @override
+  String get cloudErrorWebdavNotSupported => '服务器不支持 WebDAV 协议';
+
+  @override
+  String get cloudErrorAuthFailedCredentials => '认证失败: 用户名或密码错误';
+
+  @override
+  String get cloudErrorAccessDenied => '访问被拒绝: 请检查权限';
+
+  @override
+  String cloudErrorPathNotFound(String path) {
+    return '服务器路径不存在: $path';
+  }
+
+  @override
+  String cloudErrorNetwork(String message) {
+    return '网络错误: $message';
+  }
+
+  @override
+  String get cloudTestSuccessTitle => '测试成功';
+
+  @override
+  String get cloudTestSuccessMessage => '连接正常,配置有效';
+
+  @override
+  String get cloudTestFailedTitle => '测试失败';
+
+  @override
+  String get cloudTestFailedMessage => '连接失败';
+
+  @override
+  String get cloudTestErrorTitle => '测试错误';
+
+  @override
+  String get cloudSwitchConfirmTitle => '切换云服务';
+
+  @override
+  String get cloudSwitchConfirmMessage => '切换云服务将登出当前账号,确认切换?';
+
+  @override
+  String get cloudSwitchFailedTitle => '切换失败';
+
+  @override
+  String get cloudSwitchFailedConfigMissing => '请先配置该云服务';
+
+  @override
+  String get cloudConfigInvalidTitle => '配置无效';
+
+  @override
+  String get cloudConfigInvalidMessage => '请填写完整信息';
+
+  @override
+  String get cloudSaveFailed => '保存失败';
+
+  @override
+  String cloudSwitchedTo(String type) {
+    return '已切换到$type';
+  }
+
+  @override
+  String get cloudConfigureSupabaseTitle => '配置 Supabase';
+
+  @override
+  String get cloudConfigureWebdavTitle => '配置 WebDAV';
+
+  @override
+  String get cloudSupabaseAnonKeyHintLong => '粘贴完整的 anon key';
+
+  @override
+  String get cloudWebdavRemotePathLabel => '远程路径';
+
+  @override
+  String get cloudWebdavRemotePathHelperText => '数据存储的远程目录路径';
+
+  @override
   String get updateCorruptedFileTitle => '安装包已损坏';
 
   @override
@@ -2809,6 +2934,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonLanguage => '語言';
+
+  @override
+  String get commonCurrent => '當前';
+
+  @override
+  String get commonTutorial => '教學';
+
+  @override
+  String get commonConfigure => '配置';
 
   @override
   String get commonWeekdayMonday => '星期一';
@@ -4500,7 +4634,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudValidationHttpRequired => 'URL 需以 http:// 或 https:// 開頭';
 
   @override
-  String get cloudSelectServiceType => '選擇服務類型';
+  String get cloudSelectServiceType => '選擇雲端服務類型';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV 伺服器地址';
@@ -5392,6 +5526,122 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get syncAccessDeniedMessage => '403 拒絕存取（檢查 storage RLS 策略與路徑）';
+
+  @override
+  String get cloudTestConnection => '測試連線';
+
+  @override
+  String get cloudLocalStorageTitle => '本機儲存';
+
+  @override
+  String get cloudLocalStorageSubtitle => '資料僅儲存在本機裝置';
+
+  @override
+  String get cloudCustomSupabaseTitle => '自訂 Supabase';
+
+  @override
+  String get cloudCustomSupabaseSubtitle => '點擊設定自建Supabase服務';
+
+  @override
+  String get cloudCustomWebdavTitle => '自訂 WebDAV';
+
+  @override
+  String get cloudCustomWebdavSubtitle => '點擊設定堅果雲/Nextcloud等';
+
+  @override
+  String get cloudStatusNotTested => '未測試';
+
+  @override
+  String get cloudStatusNormal => '連線正常';
+
+  @override
+  String get cloudStatusFailed => '連線失敗';
+
+  @override
+  String get cloudCannotOpenLink => '無法開啟連結';
+
+  @override
+  String get cloudErrorAuthFailed => '認證失敗: API Key 無效';
+
+  @override
+  String cloudErrorServerStatus(String code) {
+    return '伺服器返回狀態碼 $code';
+  }
+
+  @override
+  String get cloudErrorWebdavNotSupported => '伺服器不支援 WebDAV 通訊協定';
+
+  @override
+  String get cloudErrorAuthFailedCredentials => '認證失敗: 使用者名稱或密碼錯誤';
+
+  @override
+  String get cloudErrorAccessDenied => '存取被拒絕: 請檢查權限';
+
+  @override
+  String cloudErrorPathNotFound(String path) {
+    return '伺服器路徑不存在: $path';
+  }
+
+  @override
+  String cloudErrorNetwork(String message) {
+    return '網路錯誤: $message';
+  }
+
+  @override
+  String get cloudTestSuccessTitle => '測試成功';
+
+  @override
+  String get cloudTestSuccessMessage => '連線正常，設定有效';
+
+  @override
+  String get cloudTestFailedTitle => '測試失敗';
+
+  @override
+  String get cloudTestFailedMessage => '連線失敗';
+
+  @override
+  String get cloudTestErrorTitle => '測試錯誤';
+
+  @override
+  String get cloudSwitchConfirmTitle => '切換雲端服務';
+
+  @override
+  String get cloudSwitchConfirmMessage => '切換雲端服務將登出目前帳號。確認切換？';
+
+  @override
+  String get cloudSwitchFailedTitle => '切換失敗';
+
+  @override
+  String get cloudSwitchFailedConfigMissing => '請先設定此雲端服務';
+
+  @override
+  String get cloudConfigInvalidTitle => '無效設定';
+
+  @override
+  String get cloudConfigInvalidMessage => '請填寫完整資訊';
+
+  @override
+  String get cloudSaveFailed => '儲存失敗';
+
+  @override
+  String cloudSwitchedTo(String type) {
+    return '已切換至 $type';
+  }
+
+  @override
+  String get cloudConfigureSupabaseTitle => '設定 Supabase';
+
+  @override
+  String get cloudConfigureWebdavTitle => '設定 WebDAV';
+
+  @override
+  String get cloudSupabaseAnonKeyHintLong => '貼上完整的 anon key';
+
+  @override
+  String get cloudWebdavRemotePathLabel => '遠端路徑';
+
+  @override
+  String get cloudWebdavRemotePathHelperText => '資料儲存的遠端目錄路徑';
 
   @override
   String get updateCorruptedFileTitle => '安裝包已損壞';

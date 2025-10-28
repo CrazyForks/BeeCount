@@ -1,19 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../cloud/cloud_service_config.dart';
+import '../cloud/supabase_initializer.dart';
 import '../providers/sync_providers.dart';
-import '../widgets/ui/dialog.dart' show AppDialog;
 import '../widgets/ui/ui.dart';
-import '../widgets/ui/toast.dart';
 import '../widgets/biz/section_card.dart';
 import '../styles/colors.dart';
-import '../utils/logger.dart';
 import '../l10n/app_localizations.dart';
+
+// GitHub配置教程链接
+const _kSupabaseGuideUrl = 'https://github.com/TNT-Likely/BeeCount#%E8%87%AA%E5%BB%BAsupabase%E6%9C%8D%E5%8A%A1';
+const _kWebdavGuideUrl = 'https://github.com/TNT-Likely/BeeCount#webdav%E9%85%8D%E7%BD%AE';
 
 class CloudServicePage extends ConsumerStatefulWidget {
   const CloudServicePage({super.key});
@@ -22,899 +22,552 @@ class CloudServicePage extends ConsumerStatefulWidget {
 }
 
 class _CloudServicePageState extends ConsumerState<CloudServicePage> {
-  bool _saving = false;
   bool _testingConnection = false;
-  Map<String, bool> _connectionTestResults = {};
+  final Map<String, bool> _connectionTestResults = {};
+  bool _hasAutoTested = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // 延迟执行自动测试，等待页面加载完成
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoTestActiveConnection();
+    });
+  }
+
+  Future<void> _autoTestActiveConnection() async {
+    if (_hasAutoTested) return;
+    _hasAutoTested = true;
+
+    final activeAsync = ref.read(activeCloudConfigProvider);
+    if (!activeAsync.hasValue) return;
+
+    final active = activeAsync.value!;
+    if (active.type == CloudBackendType.local || !active.valid) return;
+
+    // 自动测试当前激活的云服务连接（静默测试，不显示对话框）
+    await _testConnection(active, showDialog: false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    logI('cloudCfg', 'CloudServicePage build() 开始');
     final activeAsync = ref.watch(activeCloudConfigProvider);
-    final builtin = ref.watch(builtinCloudConfigProvider);
-    final storedCustom = ref.watch(storedCustomCloudConfigProvider);
-    final firstUpload = ref.watch(firstFullUploadPendingProvider);
-
-    logI('cloudCfg', 'Provider 状态: active=${activeAsync.hasValue}, storedCustom=${storedCustom.hasValue}');
+    final supabaseAsync = ref.watch(supabaseConfigProvider);
+    final webdavAsync = ref.watch(webdavConfigProvider);
 
     return Scaffold(
       backgroundColor: BeeColors.greyBg,
       body: Column(
         children: [
-            PrimaryHeader(
+          activeAsync.when(
+            loading: () => PrimaryHeader(
               title: AppLocalizations.of(context).mineCloudService,
               showBack: true,
-              actions: kDebugMode ? [
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, color: Colors.black87),
-                  onPressed: _clearCustomConfig,
-                  tooltip: 'Clear custom config (Dev)',
-                ),
-              ] : null,
-              content: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-                child: activeAsync.when(
-                  loading: () => const SizedBox(
-                      height: 36,
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: CircularProgressIndicator(strokeWidth: 2))),
-                  error: (e, _) => Text('${AppLocalizations.of(context).commonLoading}: $e',
-                      style: const TextStyle(color: Colors.redAccent)),
-                  data: (active) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).cloudCurrentService,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.cloud_outlined,
-                              size: 16,
-                              color: BeeColors.secondaryText,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              active.builtin
-                                ? AppLocalizations.of(context).cloudDefaultServiceName
-                                : active.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: active.valid ? Colors.green.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                active.valid ? AppLocalizations.of(context).cloudConnected : AppLocalizations.of(context).cloudOfflineMode,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: active.valid ? Colors.green : Colors.orange,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
             ),
-            Expanded(
-              child: activeAsync.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('${AppLocalizations.of(context).commonError}: $e')),
-                data: (active) {
-                  return ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).cloudAvailableServices,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall
-                            ?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: BeeColors.secondaryText,
-                            ),
-                      ),
-                      const SizedBox(height: 12),
-
-                      // 默认云服务选项
-                      _buildCloudServiceItem(
-                        config: builtin,
-                        isSelected: active.builtin,
-                        onSelect: () => _switchToBuiltin(active),
-                        actionButtons: null, // 默认服务不需要按钮
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      // 自定义云服务选项
-                      storedCustom.when(
-                        loading: () => const SizedBox(
-                          height: 60,
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                        error: (e, _) => _buildErrorItem('${AppLocalizations.of(context).cloudReadCustomConfigFailed}: $e'),
-                        data: (customConfig) {
-                          final hasCustom = customConfig != null && customConfig.valid;
-                          final isCustomSelected = !active.builtin;
-
-                          logI('cloudCfg', 'storedCustom data: hasCustom=$hasCustom, isCustomSelected=$isCustomSelected');
-
-                          if (hasCustom) {
-                            // 显示已有的自定义配置
-                            return _buildCloudServiceItem(
-                              config: customConfig,
-                              isSelected: isCustomSelected,
-                              onSelect: () => _switchToCustom(customConfig, active),
-                              actionButtons: [
-                                _buildTestButton(customConfig),
-                                _buildEditButton(() => _editCustomConfig(customConfig)),
-                              ],
-                            );
-                          } else {
-                            // 显示新增自定义配置选项
-                            return _buildAddCustomServiceItem();
-                          }
-                        },
-                      ),
-
-                      // 首次上传提醒
-                      if (!active.builtin && firstUpload.asData?.value == true) ...[
-                        const SizedBox(height: 16),
-                        Card(
-                          color: Colors.orange.withValues(alpha: 0.1),
-                          child: ListTile(
-                            leading: const Icon(Icons.cloud_upload_outlined, color: Colors.orange),
-                            title: Text(AppLocalizations.of(context).cloudFirstUploadNotComplete),
-                            subtitle: Text(AppLocalizations.of(context).cloudFirstUploadInstruction),
-                          ),
-                        ),
-                      ],
-                    ],
-                  );
-                },
-              ),
+            error: (e, _) => PrimaryHeader(
+              title: AppLocalizations.of(context).mineCloudService,
+              showBack: true,
             ),
-          ],
-        ),
-      );
-  }
-
-  Widget _buildCloudServiceItem({
-    required CloudServiceConfig config,
-    required bool isSelected,
-    required VoidCallback onSelect,
-    required List<Widget>? actionButtons,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        border: isSelected
-            ? Border.all(color: BeeColors.success, width: 2)
-            : null,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: SectionCard(
-        margin: EdgeInsets.zero,
-        child: Column(
-          children: [
-            InkWell(
-              onTap: isSelected ? null : onSelect,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        // 图标
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: _getServiceColor(config).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            _getServiceIcon(config),
-                            color: _getServiceColor(config),
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-
-                        // 信息
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      config.builtin
-                                        ? AppLocalizations.of(context).cloudDefaultServiceName
-                                        : AppLocalizations.of(context).cloudCustomServiceName,
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    _getBackendTypeName(config.type),
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: BeeColors.secondaryText,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  // 连接状态指示器
-                                  Container(
-                                    width: 6,
-                                    height: 6,
-                                    decoration: BoxDecoration(
-                                      color: _getConnectionStatusColor(config),
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    _getConnectionStatusText(config),
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: _getConnectionStatusColor(config),
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                _getServiceDescription(config),
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: BeeColors.secondaryText,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // 右上角勾选图标
-                  if (isSelected)
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: BeeColors.success,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 16,
-                        ),
+            data: (active) => PrimaryHeader(
+              title: AppLocalizations.of(context).mineCloudService,
+              showBack: true,
+              actions: active.type != CloudBackendType.local && active.valid
+                  ? [
+                      IconButton(
+                        icon: _testingConnection
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.wifi_find),
+                        onPressed: _testingConnection ? null : () => _testConnection(active),
+                        tooltip: AppLocalizations.of(context).cloudTestConnection,
                       ),
-                    ),
-                ],
-              ),
+                    ]
+                  : null,
+              content: active.type != CloudBackendType.local
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                      child: _buildConnectionStatus(active),
+                    )
+                  : null,
             ),
-
-            // 操作按钮区域
-            if (actionButtons != null && actionButtons.isNotEmpty)
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.grey.withValues(alpha: 0.2),
-                      width: 1,
-                    ),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: actionButtons
-                        .expand((button) => [button, const SizedBox(width: 8)])
-                        .take(actionButtons.length * 2 - 1)
-                        .toList(),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAddCustomServiceItem() {
-    return SectionCard(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: InkWell(
-        onTap: () => _addCustomConfig(),
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              // 占位的Radio位置
-              const SizedBox(width: 48),
-              const SizedBox(width: 12),
-
-              // 图标
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.withValues(alpha: 0.3), style: BorderStyle.solid),
-                ),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.grey,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-
-              // 信息
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          Expanded(
+            child: activeAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('${AppLocalizations.of(context).commonError}: $e')),
+              data: (active) {
+                return ListView(
+                  padding: const EdgeInsets.all(16),
                   children: [
                     Text(
-                      AppLocalizations.of(context).cloudAddCustomService,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      AppLocalizations.of(context).cloudSelectServiceType,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: BeeColors.secondaryText,
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      AppLocalizations.of(context).cloudUseYourSupabase,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: BeeColors.secondaryText,
+                    const SizedBox(height: 12),
+
+                    // 1. 本地存储 Card
+                    _buildServiceCard(
+                      context: context,
+                      icon: Icons.phone_android,
+                      iconColor: Colors.grey,
+                      title: AppLocalizations.of(context).cloudLocalStorageTitle,
+                      subtitle: AppLocalizations.of(context).cloudLocalStorageSubtitle,
+                      isSelected: active.type == CloudBackendType.local,
+                      onTap: () => _switchService(CloudBackendType.local),
+                      showGuide: false,
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // 2. 自定义 Supabase Card
+                    supabaseAsync.when(
+                      loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                      error: (e, _) => const SizedBox.shrink(),
+                      data: (supabaseCfg) => _buildServiceCard(
+                        context: context,
+                        icon: Icons.cloud,
+                        iconColor: Colors.blue,
+                        title: AppLocalizations.of(context).cloudCustomSupabaseTitle,
+                        subtitle: supabaseCfg?.valid == true
+                            ? supabaseCfg!.obfuscatedUrl()
+                            : AppLocalizations.of(context).cloudCustomSupabaseSubtitle,
+                        isSelected: active.type == CloudBackendType.supabase,
+                        isConfigured: supabaseCfg?.valid == true,
+                        onTap: () => supabaseCfg?.valid == true
+                            ? _switchService(CloudBackendType.supabase)
+                            : _configureService(CloudBackendType.supabase),
+                        onConfigure: supabaseCfg?.valid == true
+                            ? () => _configureService(CloudBackendType.supabase)
+                            : null,
+                        showGuide: true,
+                        guideUrl: _kSupabaseGuideUrl,
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // 3. 自定义 WebDAV Card
+                    webdavAsync.when(
+                      loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                      error: (e, _) => const SizedBox.shrink(),
+                      data: (webdavCfg) => _buildServiceCard(
+                        context: context,
+                        icon: Icons.folder_shared,
+                        iconColor: Colors.orange,
+                        title: AppLocalizations.of(context).cloudCustomWebdavTitle,
+                        subtitle: webdavCfg?.valid == true
+                            ? webdavCfg!.obfuscatedUrl()
+                            : AppLocalizations.of(context).cloudCustomWebdavSubtitle,
+                        isSelected: active.type == CloudBackendType.webdav,
+                        isConfigured: webdavCfg?.valid == true,
+                        onTap: () => webdavCfg?.valid == true
+                            ? _switchService(CloudBackendType.webdav)
+                            : _configureService(CloudBackendType.webdav),
+                        onConfigure: webdavCfg?.valid == true
+                            ? () => _configureService(CloudBackendType.webdav)
+                            : null,
+                        showGuide: true,
+                        guideUrl: _kWebdavGuideUrl,
                       ),
                     ),
                   ],
-                ),
-              ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: BeeColors.secondaryText,
+  Widget _buildConnectionStatus(CloudServiceConfig config) {
+    final testResult = _connectionTestResults[config.id];
+    final Color statusColor;
+    final IconData statusIcon;
+    final String statusText;
+
+    if (testResult == null) {
+      // 未测试
+      statusColor = Colors.orange;
+      statusIcon = Icons.help_outline;
+      statusText = AppLocalizations.of(context).cloudStatusNotTested;
+    } else if (testResult) {
+      // 测试成功
+      statusColor = BeeColors.success;
+      statusIcon = Icons.check_circle_outline;
+      statusText = AppLocalizations.of(context).cloudStatusNormal;
+    } else {
+      // 测试失败
+      statusColor = BeeColors.danger;
+      statusIcon = Icons.error_outline;
+      statusText = AppLocalizations.of(context).cloudStatusFailed;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              '${AppLocalizations.of(context).commonCurrent}: ${_getTypeName(config.type)}',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
               ),
-            ],
+            ),
+            const SizedBox(width: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: statusColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    statusText,
+                    style: TextStyle(
+                      color: statusColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          config.obfuscatedUrl(),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: BeeColors.secondaryText,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildServiceCard({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required bool isSelected,
+    bool isConfigured = true,
+    required VoidCallback onTap,
+    VoidCallback? onConfigure,
+    required bool showGuide,
+    String? guideUrl,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        border: isSelected ? Border.all(color: BeeColors.success, width: 2) : null,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SectionCard(
+        margin: EdgeInsets.zero,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    // 图标
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: iconColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(icon, color: iconColor, size: 24),
+                    ),
+                    const SizedBox(width: 16),
+
+                    // 文字信息
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            subtitle,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: BeeColors.secondaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 选中标记
+                    if (isSelected)
+                      Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: BeeColors.success,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.check, color: Colors.white, size: 18),
+                      ),
+                  ],
+                ),
+
+                // 底部按钮行
+                if (isConfigured && (onConfigure != null || showGuide))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (showGuide && guideUrl != null)
+                          TextButton.icon(
+                            onPressed: () => _openGuide(guideUrl),
+                            icon: const Icon(Icons.help_outline, size: 16),
+                            label: Text(AppLocalizations.of(context).commonTutorial, style: const TextStyle(fontSize: 12)),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
+                        if (onConfigure != null) ...[
+                          if (showGuide) const SizedBox(width: 8),
+                          OutlinedButton.icon(
+                            onPressed: onConfigure,
+                            icon: const Icon(Icons.settings, size: 16),
+                            label: Text(AppLocalizations.of(context).commonConfigure, style: const TextStyle(fontSize: 12)),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildEditButton(VoidCallback onPressed) {
-    return OutlinedButton(
-      onPressed: (_saving || _testingConnection) ? null : onPressed,
-      style: OutlinedButton.styleFrom(
-        minimumSize: const Size(60, 32),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-      ),
-      child: Text(
-        AppLocalizations.of(context).commonEdit,
-        style: const TextStyle(fontSize: 12),
-      ),
-    );
-  }
-
-  Widget _buildTestButton(CloudServiceConfig config) {
-    return OutlinedButton(
-      onPressed: (_saving || _testingConnection) ? null : () => _testConnection(config),
-      style: OutlinedButton.styleFrom(
-        minimumSize: const Size(60, 32),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-      ),
-      child: _testingConnection
-          ? const SizedBox(
-              width: 14,
-              height: 14,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : Text(
-              AppLocalizations.of(context).cloudTest,
-              style: const TextStyle(fontSize: 12),
-            ),
-    );
-  }
-
-  Widget _buildErrorItem(String error) {
-    return SectionCard(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: const Icon(Icons.error_outline, color: Colors.red),
-        title: Text(error),
-      ),
-    );
-  }
-
-  Color _getServiceColor(CloudServiceConfig config) {
-    if (config.builtin) {
-      return config.valid ? Colors.blue : Colors.grey;
+  Future<void> _openGuide(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      return Colors.green;
-    }
-  }
-
-  IconData _getServiceIcon(CloudServiceConfig config) {
-    if (config.builtin) {
-      return config.valid ? Icons.cloud : Icons.cloud_off;
-    } else {
-      return Icons.cloud_done;
-    }
-  }
-
-  String _getServiceDescription(CloudServiceConfig config) {
-    final context = this.context;
-    if (config.builtin) {
-      return config.valid ? AppLocalizations.of(context).cloudServiceDescription : AppLocalizations.of(context).cloudServiceDescriptionNotConfigured;
-    } else {
-      // 自定义服务：根据类型显示不同描述
-      if (config.type == CloudBackendType.webdav) {
-        // WebDAV: 显示服务器地址
-        final url = config.webdavUrl ?? AppLocalizations.of(context).cloudNotConfigured;
-        return '服务器: $url';
-      } else {
-        // Supabase: 显示混淆后的URL
-        final url = config.obfuscatedUrl();
-        return AppLocalizations.of(context).cloudServiceDescriptionCustom(
-          url == '__NOT_CONFIGURED__' ? AppLocalizations.of(context).cloudNotConfigured : url
-        );
+      if (mounted) {
+        showToast(context, AppLocalizations.of(context).cloudCannotOpenLink);
       }
     }
   }
 
-  // 通用切换云服务方法
-  Future<void> _switchCloudService({
-    required bool shouldProceed,
-    required String confirmMessage,
-    required Future<bool> Function() switchAction,
-    required String successTitle,
-    required String successMessage,
-    String? failTitle,
-    String? failMessage,
-  }) async {
-    if (!shouldProceed) return;
+  Future<void> _switchService(CloudBackendType type) async {
+    final store = ref.read(cloudServiceStoreProvider);
+    final active = await ref.read(activeCloudConfigProvider.future);
 
-    // 二次确认
-    final confirmed = await AppDialog.confirm(context,
-        title: AppLocalizations.of(context).cloudSwitchService,
-        message: confirmMessage);
-    if (!confirmed) return;
+    if (active.type == type) return; // 已经是当前类型
 
-    setState(() => _saving = true);
+    // 确认切换
+    if (!mounted) return;
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: AppLocalizations.of(context).cloudSwitchConfirmTitle,
+      message: AppLocalizations.of(context).cloudSwitchConfirmMessage,
+    );
+    if (!confirmed || !mounted) return;
+
     try {
-      // 登出当前会话
-      try {
-        if (mounted) {
-          await ref.read(authServiceProvider).signOut();
-        }
-      } catch (_) {}
+      // 登出
+      await ref.read(authServiceProvider).signOut();
 
-      // 执行切换操作
-      final ok = await switchAction();
-
-      if (!ok) {
+      // 激活新配置
+      final success = await store.activate(type);
+      if (!success && type != CloudBackendType.local) {
         if (mounted) {
-          await AppDialog.error(context,
-              title: failTitle ?? AppLocalizations.of(context).cloudSwitchFailed,
-              message: failMessage ?? AppLocalizations.of(context).cloudActivateFailedMessage);
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudSwitchFailedTitle, message: AppLocalizations.of(context).cloudSwitchFailedConfigMissing);
         }
         return;
       }
 
-      // 刷新Provider状态，让UI立即反映变化
-      if (mounted) {
-        ref.invalidate(activeCloudConfigProvider);
-        ref.invalidate(storedCustomCloudConfigProvider);
+      // 重新初始化 Supabase（如果切换到了 Supabase 服务）
+      final newConfig = await store.loadActive();
+      if (newConfig.type == CloudBackendType.supabase && newConfig.valid) {
+        await SupabaseInitializer.initialize(newConfig);
+      } else {
+        // 切换到非 Supabase 服务，清理 Supabase 实例
+        await SupabaseInitializer.dispose();
       }
 
+      // 刷新
+      ref.invalidate(activeCloudConfigProvider);
+      ref.invalidate(supabaseConfigProvider);
+      ref.invalidate(webdavConfigProvider);
+      ref.invalidate(supabaseClientProvider);
+
       if (mounted) {
-        await AppDialog.info(context,
-            title: successTitle,
-            message: successMessage);
+        showToast(context, AppLocalizations.of(context).cloudSwitchedTo(_getTypeName(type)));
       }
     } catch (e) {
       if (mounted) {
-        await AppDialog.error(context,
-            title: AppLocalizations.of(context).cloudSwitchFailed,
-            message: '$e');
+        await AppDialog.error(context, title: AppLocalizations.of(context).cloudSwitchFailedTitle, message: '$e');
       }
-    } finally {
-      if (mounted) setState(() => _saving = false);
     }
   }
 
-  // 切换到默认云服务
-  Future<void> _switchToBuiltin(CloudServiceConfig currentActive) async {
-    await _switchCloudService(
-      shouldProceed: !currentActive.builtin,
-      confirmMessage: AppLocalizations.of(context).cloudSwitchToBuiltinConfirm,
-      switchAction: () async {
-        if (mounted) {
-          await ref.read(cloudServiceStoreProvider).switchToBuiltin();
-        }
-        return true;
-      },
-      successTitle: AppLocalizations.of(context).cloudSwitched,
-      successMessage: AppLocalizations.of(context).cloudSwitchedToBuiltin,
-    );
+  Future<void> _configureService(CloudBackendType type) async {
+    // 根据类型显示配置对话框
+    if (type == CloudBackendType.supabase) {
+      await _showSupabaseConfigDialog();
+    } else if (type == CloudBackendType.webdav) {
+      await _showWebdavConfigDialog();
+    }
   }
 
-  // 切换到自定义云服务
-  Future<void> _switchToCustom(CloudServiceConfig customConfig, CloudServiceConfig currentActive) async {
-    await _switchCloudService(
-      shouldProceed: currentActive.builtin,
-      confirmMessage: AppLocalizations.of(context).cloudSwitchToCustomConfirm,
-      switchAction: () async {
-        return mounted
-            ? await ref.read(cloudServiceStoreProvider).activateExistingCustomIfAny()
-            : false;
-      },
-      successTitle: AppLocalizations.of(context).cloudActivated,
-      successMessage: AppLocalizations.of(context).cloudActivatedMessage,
-      failTitle: AppLocalizations.of(context).cloudActivateFailed,
-      failMessage: AppLocalizations.of(context).cloudActivateFailedMessage,
-    );
-  }
+  Future<void> _showSupabaseConfigDialog() async {
+    final existing = await ref.read(supabaseConfigProvider.future);
 
-  // 添加自定义配置
-  Future<void> _addCustomConfig() async {
-    logI('cloudCfg', '开始添加自定义配置');
-    await _showCustomConfigDialog(null);
-    logI('cloudCfg', '添加自定义配置对话框已关闭');
-  }
+    if (!mounted) return;
 
-  // 编辑自定义配置
-  Future<void> _editCustomConfig(CloudServiceConfig config) async {
-    logI('cloudCfg', '开始编辑自定义配置');
-    await _showCustomConfigDialog(config);
-    logI('cloudCfg', '编辑自定义配置对话框已关闭');
-  }
-
-  // 显示自定义配置对话框
-  Future<void> _showCustomConfigDialog(CloudServiceConfig? existingConfig) async {
-    // Supabase controllers
-    final supabaseUrlController = TextEditingController(text: existingConfig?.supabaseUrl ?? '');
-    final supabaseKeyController = TextEditingController(text: existingConfig?.supabaseAnonKey ?? '');
-
-    // WebDAV controllers
-    final webdavUrlController = TextEditingController(text: existingConfig?.webdavUrl ?? '');
-    final webdavUsernameController = TextEditingController(text: existingConfig?.webdavUsername ?? '');
-    final webdavPasswordController = TextEditingController(text: existingConfig?.webdavPassword ?? '');
-    final webdavPathController = TextEditingController(text: existingConfig?.webdavRemotePath ?? '/');
-
-    CloudBackendType selectedType = existingConfig?.type ?? CloudBackendType.supabase;
-    bool isSaving = false;
-    bool obscurePassword = true;
-
-    await showDialog<bool>(
+    final result = await showDialog<Map<String, dynamic>?>(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(existingConfig != null ? AppLocalizations.of(context).cloudEditCustomService : AppLocalizations.of(context).cloudAddCustomServiceTitle),
-          content: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.6,
-              maxWidth: 500,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 云服务类型选择
-                Text(
-                  AppLocalizations.of(context).cloudSelectServiceType,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 12),
-                SegmentedButton<CloudBackendType>(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return Theme.of(context).primaryColor;
-                      }
-                      return Colors.transparent;
-                    }),
-                    foregroundColor: WidgetStateProperty.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return Colors.white;
-                      }
-                      return BeeColors.secondaryText;
-                    }),
-                    iconColor: WidgetStateProperty.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return Colors.white;
-                      }
-                      return BeeColors.secondaryText;
-                    }),
-                    side: WidgetStateProperty.all(
-                      BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
-                    ),
-                    shape: WidgetStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    padding: WidgetStateProperty.all(
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    ),
-                  ),
-                  segments: [
-                    ButtonSegment(
-                      value: CloudBackendType.supabase,
-                      label: Text(_getBackendTypeName(CloudBackendType.supabase)),
-                      icon: Icon(Icons.cloud, size: 18),
-                    ),
-                    ButtonSegment(
-                      value: CloudBackendType.webdav,
-                      label: Text(_getBackendTypeName(CloudBackendType.webdav)),
-                      icon: Icon(Icons.folder_shared, size: 18),
-                    ),
-                  ],
-                  selected: {selectedType},
-                  onSelectionChanged: isSaving ? null : (Set<CloudBackendType> newSelection) {
-                    setDialogState(() {
-                      selectedType = newSelection.first;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // 根据选择的类型显示不同的配置表单
-                if (selectedType == CloudBackendType.supabase) ...[
-                  TextField(
-                    controller: supabaseUrlController,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).cloudSupabaseUrlLabel,
-                      hintText: AppLocalizations.of(context).cloudSupabaseUrlHint,
-                    ),
-                    keyboardType: TextInputType.url,
-                    enabled: !isSaving,
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: supabaseKeyController,
-                    minLines: 2,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).cloudAnonKeyLabel,
-                    ),
-                    enabled: !isSaving,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppLocalizations.of(context).cloudAnonKeyHint,
-                    style: const TextStyle(fontSize: 12, color: Colors.orange),
-                  ),
-                ] else if (selectedType == CloudBackendType.webdav) ...[
-                  TextField(
-                    controller: webdavUrlController,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).cloudWebdavUrlLabel,
-                      hintText: AppLocalizations.of(context).cloudWebdavUrlHint,
-                    ),
-                    keyboardType: TextInputType.url,
-                    enabled: !isSaving,
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: webdavUsernameController,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).cloudWebdavUsernameLabel,
-                    ),
-                    enabled: !isSaving,
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: webdavPasswordController,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).cloudWebdavPasswordLabel,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                          size: 20,
-                        ),
-                        onPressed: () {
-                          setDialogState(() {
-                            obscurePassword = !obscurePassword;
-                          });
-                        },
-                      ),
-                    ),
-                    obscureText: obscurePassword,
-                    enabled: !isSaving,
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: webdavPathController,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).cloudWebdavPathLabel,
-                      hintText: AppLocalizations.of(context).cloudWebdavPathHint,
-                    ),
-                    enabled: !isSaving,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppLocalizations.of(context).cloudWebdavHint,
-                    style: const TextStyle(fontSize: 12, color: Colors.blue),
-                  ),
-                ],
-              ],
-            ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: isSaving ? null : () => Navigator.of(context).pop(false),
-              child: Text(AppLocalizations.of(context).commonCancel),
-            ),
-            FilledButton(
-              onPressed: isSaving ? null : () async {
-                // 根据类型验证输入
-                final String? err;
-                final CloudServiceConfig cfg;
-
-                if (selectedType == CloudBackendType.supabase) {
-                  final url = supabaseUrlController.text.trim();
-                  final key = supabaseKeyController.text.trim();
-                  err = _validateSupabase(url, key);
-                  cfg = CloudServiceConfig(
-                    id: 'custom',
-                    type: CloudBackendType.supabase,
-                    name: AppLocalizations.of(context).cloudCustomServiceName,
-                    supabaseUrl: url,
-                    supabaseAnonKey: key,
-                    builtin: false,
-                  );
-                } else {
-                  final url = webdavUrlController.text.trim();
-                  final username = webdavUsernameController.text.trim();
-                  final password = webdavPasswordController.text.trim();
-                  final path = webdavPathController.text.trim();
-                  err = _validateWebdav(url, username, password);
-                  cfg = CloudServiceConfig(
-                    id: 'custom',
-                    type: CloudBackendType.webdav,
-                    name: AppLocalizations.of(context).cloudCustomServiceName,
-                    webdavUrl: url,
-                    webdavUsername: username,
-                    webdavPassword: password,
-                    webdavRemotePath: path.isEmpty ? '/' : path,
-                    builtin: false,
-                  );
-                }
-
-                if (err != null) {
-                  await AppDialog.error(context,
-                      title: AppLocalizations.of(context).cloudInvalidInput, message: err);
-                  return;
-                }
-
-                setDialogState(() => isSaving = true);
-                try {
-                  // 统一处理：仅保存配置，不自动启用
-                  if (mounted) {
-                    logI('cloudCfg', '开始保存自定义配置...');
-                    await ref.read(cloudServiceStoreProvider).saveCustomOnly(cfg);
-                    logI('cloudCfg', '配置保存完成');
-
-                    // 刷新Provider状态，让UI立即反映变化
-                    ref.invalidate(storedCustomCloudConfigProvider);
-                    ref.invalidate(activeCloudConfigProvider);
-                    logI('cloudCfg', 'Provider状态已刷新');
-                  }
-
-                  // 清除测试结果缓存（如果有的话）
-                  if (mounted) {
-                    logI('cloudCfg', '清除测试结果缓存');
-                    setState(() {
-                      _connectionTestResults.remove(cfg.id);
-                    });
-                  }
-
-                  if (context.mounted) {
-                    logI('cloudCfg', '关闭对话框并显示提示');
-                    Navigator.of(context).pop(true);
-
-                    // 使用 Toast 显示成功提示
-                    showToast(context, existingConfig != null ? AppLocalizations.of(context).cloudConfigUpdated : AppLocalizations.of(context).cloudConfigSaved);
-                    logI('cloudCfg', '保存流程完成');
-                  }
-                } catch (e) {
-                  logE('cloudCfg', '保存失败', e);
-                  if (context.mounted) {
-                    await AppDialog.error(context,
-                        title: AppLocalizations.of(context).commonFailed, message: '$e');
-                  }
-                } finally {
-                  setDialogState(() => isSaving = false);
-                }
-              },
-              child: isSaving
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(AppLocalizations.of(context).commonSave),
-            ),
-          ],
-        ),
+      builder: (dialogContext) => _SupabaseConfigDialog(
+        initialUrl: existing?.supabaseUrl ?? '',
+        initialKey: existing?.supabaseAnonKey ?? '',
       ),
     );
 
-    // 延迟 dispose，确保所有动画和重建完成后再清理资源
-    Future.delayed(const Duration(milliseconds: 500), () {
-      supabaseUrlController.dispose();
-      supabaseKeyController.dispose();
-      webdavUrlController.dispose();
-      webdavUsernameController.dispose();
-      webdavPasswordController.dispose();
-      webdavPathController.dispose();
-    });
-  }
+    if (result != null) {
+      final url = result['url'] as String;
+      final key = result['key'] as String;
 
-  String? _validateSupabase(String url, String key) {
-    final context = this.context;
-    if (url.isEmpty || key.isEmpty) return AppLocalizations.of(context).cloudValidationEmptyFields;
-    if (!url.startsWith('https://')) return AppLocalizations.of(context).cloudValidationHttpsRequired;
-    if (key.length < 20) return AppLocalizations.of(context).cloudValidationKeyTooShort;
-    final lower = key.toLowerCase();
-    if (lower.contains('service_role')) return AppLocalizations.of(context).cloudValidationServiceRoleKey;
-    return null;
-  }
+      if (url.isEmpty || key.isEmpty) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudConfigInvalidTitle, message: AppLocalizations.of(context).cloudConfigInvalidMessage);
+        }
+        return;
+      }
 
-  String? _validateWebdav(String url, String username, String password) {
-    final context = this.context;
-    if (url.isEmpty || username.isEmpty || password.isEmpty) {
-      return AppLocalizations.of(context).cloudValidationEmptyFields;
+      final cfg = CloudServiceConfig(
+        type: CloudBackendType.supabase,
+        name: AppLocalizations.of(context).cloudCustomSupabaseTitle,
+        supabaseUrl: url,
+        supabaseAnonKey: key,
+      );
+
+      if (!cfg.valid) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudConfigInvalidTitle, message: AppLocalizations.of(context).cloudConfigInvalidMessage);
+        }
+        return;
+      }
+
+      try {
+        await ref.read(cloudServiceStoreProvider).saveOnly(cfg);
+        ref.invalidate(supabaseConfigProvider);
+        if (mounted) showToast(context, AppLocalizations.of(context).cloudConfigSaved);
+      } catch (e) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudSaveFailed, message: e.toString());
+        }
+      }
     }
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      return AppLocalizations.of(context).cloudValidationHttpRequired;
-    }
-    return null;
   }
 
-  String _getBackendTypeName(CloudBackendType type) {
+  Future<void> _showWebdavConfigDialog() async {
+    final existing = await ref.read(webdavConfigProvider.future);
+
+    if (!mounted) return;
+
+    final result = await showDialog<Map<String, dynamic>?>(
+      context: context,
+      builder: (dialogContext) => _WebdavConfigDialog(
+        initialUrl: existing?.webdavUrl ?? '',
+        initialUsername: existing?.webdavUsername ?? '',
+        initialPassword: existing?.webdavPassword ?? '',
+        initialPath: existing?.webdavRemotePath ?? '/',
+      ),
+    );
+
+    if (result != null) {
+      final url = result['url'] as String;
+      final username = result['username'] as String;
+      final password = result['password'] as String;
+      final path = result['path'] as String;
+
+      if (url.isEmpty || username.isEmpty || password.isEmpty) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudConfigInvalidTitle, message: AppLocalizations.of(context).cloudConfigInvalidMessage);
+        }
+        return;
+      }
+
+      final cfg = CloudServiceConfig(
+        type: CloudBackendType.webdav,
+        name: AppLocalizations.of(context).cloudCustomWebdavTitle,
+        webdavUrl: url,
+        webdavUsername: username,
+        webdavPassword: password,
+        webdavRemotePath: path.isEmpty ? '/' : path,
+      );
+
+      if (!cfg.valid) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudConfigInvalidTitle, message: AppLocalizations.of(context).cloudConfigInvalidMessage);
+        }
+        return;
+      }
+
+      try {
+        await ref.read(cloudServiceStoreProvider).saveOnly(cfg);
+        ref.invalidate(webdavConfigProvider);
+        if (mounted) showToast(context, AppLocalizations.of(context).cloudConfigSaved);
+      } catch (e) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudSaveFailed, message: e.toString());
+        }
+      }
+    }
+  }
+
+  String _getTypeName(CloudBackendType type) {
     switch (type) {
+      case CloudBackendType.local:
+        return AppLocalizations.of(context).cloudLocalStorageTitle;
       case CloudBackendType.supabase:
         return 'Supabase';
       case CloudBackendType.webdav:
@@ -922,52 +575,9 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     }
   }
 
-  Color _getConnectionStatusColor(CloudServiceConfig config) {
-    if (!config.valid) {
-      return BeeColors.warning; // 黄色：未配置
-    }
-
-    // 对于自定义配置，检查测试结果
-    if (!config.builtin) {
-      final testResult = _connectionTestResults[config.id];
-      if (testResult == null) {
-        return BeeColors.warning; // 黄色：未测试
-      } else if (testResult) {
-        return BeeColors.success; // 绿色：测试成功
-      } else {
-        return BeeColors.danger; // 红色：测试失败
-      }
-    }
-
-    // 内置配置如果valid就认为可连接
-    return BeeColors.success; // 绿色：已连接
-  }
-
-  String _getConnectionStatusText(CloudServiceConfig config) {
-    final context = this.context;
-    if (!config.valid) {
-      return AppLocalizations.of(context).cloudNotConfigured;
-    }
-
-    // 对于自定义配置，显示测试状态
-    if (!config.builtin) {
-      final testResult = _connectionTestResults[config.id];
-      if (testResult == null) {
-        return AppLocalizations.of(context).cloudNotTested;
-      } else if (testResult) {
-        return AppLocalizations.of(context).cloudConnectionNormal;
-      } else {
-        return AppLocalizations.of(context).cloudConnectionFailed;
-      }
-    }
-
-    // 内置配置
-    return AppLocalizations.of(context).cloudConnected;
-  }
-
-  // 测试连接状态
-  Future<void> _testConnection(CloudServiceConfig config) async {
-    if (!config.valid || config.builtin) return;
+  // 测试连接
+  Future<void> _testConnection(CloudServiceConfig config, {bool showDialog = true}) async {
+    if (!config.valid || config.type == CloudBackendType.local) return;
 
     setState(() => _testingConnection = true);
     try {
@@ -976,6 +586,9 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
       try {
         switch (config.type) {
+          case CloudBackendType.local:
+            break;
+
           case CloudBackendType.supabase:
             // Supabase 连接测试 - 尝试访问 REST API
             final testUrl = Uri.parse('${config.supabaseUrl}/rest/v1/');
@@ -988,17 +601,16 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
             ).timeout(const Duration(seconds: 10));
 
             if (response.statusCode == 200 || response.statusCode == 404) {
-              // 200 或 404 都表示服务器可访问
               connectionSuccess = true;
             } else if (response.statusCode == 401 || response.statusCode == 403) {
-              throw Exception('Authentication failed: Invalid API key');
+              throw Exception(AppLocalizations.of(context).cloudErrorAuthFailed);
             } else {
-              throw Exception('Server returned status ${response.statusCode}');
+              throw Exception(AppLocalizations.of(context).cloudErrorServerStatus('${response.statusCode}'));
             }
             break;
 
           case CloudBackendType.webdav:
-            // WebDAV 连接测试 - 发送 OPTIONS 请求测试连接和认证
+            // WebDAV 连接测试 - 发送 OPTIONS 请求
             final testUrl = Uri.parse(config.webdavUrl!);
             final credentials = base64Encode(
               utf8.encode('${config.webdavUsername}:${config.webdavPassword}'),
@@ -1011,27 +623,26 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
             final response = await http.Response.fromStream(streamedResponse);
 
             if (response.statusCode == 200 || response.statusCode == 204) {
-              // 检查是否支持 WebDAV
               final davHeader = response.headers['dav'];
               if (davHeader != null || response.headers.containsKey('allow')) {
                 connectionSuccess = true;
               } else {
-                throw Exception('Server does not support WebDAV protocol');
+                throw Exception(AppLocalizations.of(context).cloudErrorWebdavNotSupported);
               }
             } else if (response.statusCode == 401) {
-              throw Exception('Authentication failed: Invalid username or password');
+              throw Exception(AppLocalizations.of(context).cloudErrorAuthFailedCredentials);
             } else if (response.statusCode == 403) {
-              throw Exception('Access denied: Check permissions');
+              throw Exception(AppLocalizations.of(context).cloudErrorAccessDenied);
             } else if (response.statusCode == 404) {
-              throw Exception('Server path not found: ${testUrl.path}');
+              throw Exception(AppLocalizations.of(context).cloudErrorPathNotFound(testUrl.path));
             } else {
-              throw Exception('Server returned status ${response.statusCode}');
+              throw Exception(AppLocalizations.of(context).cloudErrorServerStatus('${response.statusCode}'));
             }
             break;
         }
       } on http.ClientException catch (e) {
         connectionSuccess = false;
-        errorDetail = 'Network error: ${e.message}';
+        errorDetail = AppLocalizations.of(context).cloudErrorNetwork(e.message);
       } on Exception catch (e) {
         connectionSuccess = false;
         errorDetail = e.toString().replaceFirst('Exception: ', '');
@@ -1044,69 +655,228 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         _connectionTestResults[config.id] = connectionSuccess;
       });
 
-      if (mounted) {
+      // 只在手动测试时显示对话框
+      if (mounted && showDialog) {
         if (connectionSuccess) {
           await AppDialog.info(context,
-              title: AppLocalizations.of(context).cloudTestComplete,
-              message: AppLocalizations.of(context).cloudTestSuccess);
+              title: AppLocalizations.of(context).cloudTestSuccessTitle,
+              message: AppLocalizations.of(context).cloudTestSuccessMessage);
         } else {
           await AppDialog.error(context,
-              title: AppLocalizations.of(context).cloudTestFailed,
-              message: errorDetail ?? AppLocalizations.of(context).cloudTestFailed);
+              title: AppLocalizations.of(context).cloudTestFailedTitle,
+              message: errorDetail ?? AppLocalizations.of(context).cloudTestFailedMessage);
         }
       }
     } catch (e) {
       setState(() {
         _connectionTestResults[config.id] = false;
       });
-      if (mounted) {
+      // 只在手动测试时显示错误对话框
+      if (mounted && showDialog) {
         await AppDialog.error(context,
-            title: AppLocalizations.of(context).cloudTestError,
+            title: AppLocalizations.of(context).cloudTestErrorTitle,
             message: e.toString());
       }
     } finally {
       if (mounted) setState(() => _testingConnection = false);
     }
   }
+}
 
-  // 开发环境清空自定义配置
-  Future<void> _clearCustomConfig() async {
-    if (!kDebugMode) return;
+// Supabase配置对话框(独立Widget,避免controller生命周期问题)
+class _SupabaseConfigDialog extends StatefulWidget {
+  final String initialUrl;
+  final String initialKey;
 
-    final confirmed = await AppDialog.confirm(context,
-        title: AppLocalizations.of(context).cloudClearConfig,
-        message: AppLocalizations.of(context).cloudClearConfigConfirm);
-    if (!confirmed) return;
+  const _SupabaseConfigDialog({
+    required this.initialUrl,
+    required this.initialKey,
+  });
 
-    setState(() => _saving = true);
-    try {
-      final sp = await SharedPreferences.getInstance();
-      await sp.remove('cloud_custom_supabase_cfg');
-      await sp.setString('cloud_active', 'builtin');
+  @override
+  State<_SupabaseConfigDialog> createState() => _SupabaseConfigDialogState();
+}
 
-      // 刷新Provider状态，让UI重新加载数据
-      ref.invalidate(storedCustomCloudConfigProvider);
-      ref.invalidate(activeCloudConfigProvider);
+class _SupabaseConfigDialogState extends State<_SupabaseConfigDialog> {
+  late final TextEditingController urlController;
+  late final TextEditingController keyController;
 
+  @override
+  void initState() {
+    super.initState();
+    urlController = TextEditingController(text: widget.initialUrl);
+    keyController = TextEditingController(text: widget.initialKey);
+  }
 
-      // 使用 Toast 显示清空成功提示，避免 Widget 生命周期问题
-      if (mounted && context.mounted) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          if (mounted && context.mounted) {
-            showToast(context, AppLocalizations.of(context).cloudConfigCleared);
-          }
-        });
-      }
-    } catch (e) {
-      if (mounted && context.mounted) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          if (mounted && context.mounted) {
-            showToast(context, '${AppLocalizations.of(context).cloudClearFailed}: $e');
-          }
-        });
-      }
-    } finally {
-      if (mounted) setState(() => _saving = false);
-    }
+  @override
+  void dispose() {
+    urlController.dispose();
+    keyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context).cloudConfigureSupabaseTitle),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: urlController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudSupabaseUrlLabel,
+                hintText: AppLocalizations.of(context).cloudSupabaseUrlHint,
+              ),
+              keyboardType: TextInputType.url,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: keyController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudAnonKeyLabel,
+                hintText: AppLocalizations.of(context).cloudSupabaseAnonKeyHintLong,
+              ),
+              keyboardType: TextInputType.text,
+              minLines: 1,
+              maxLines: 5,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(null),
+          child: Text(AppLocalizations.of(context).commonCancel),
+        ),
+        FilledButton(
+          onPressed: () {
+            Navigator.of(context).pop({
+              'url': urlController.text.trim(),
+              'key': keyController.text.trim(),
+            });
+          },
+          child: Text(AppLocalizations.of(context).commonSave),
+        ),
+      ],
+    );
+  }
+}
+
+// WebDAV配置对话框(独立Widget,避免controller生命周期问题)
+class _WebdavConfigDialog extends StatefulWidget {
+  final String initialUrl;
+  final String initialUsername;
+  final String initialPassword;
+  final String initialPath;
+
+  const _WebdavConfigDialog({
+    required this.initialUrl,
+    required this.initialUsername,
+    required this.initialPassword,
+    required this.initialPath,
+  });
+
+  @override
+  State<_WebdavConfigDialog> createState() => _WebdavConfigDialogState();
+}
+
+class _WebdavConfigDialogState extends State<_WebdavConfigDialog> {
+  late final TextEditingController urlController;
+  late final TextEditingController usernameController;
+  late final TextEditingController passwordController;
+  late final TextEditingController pathController;
+  bool obscurePassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    urlController = TextEditingController(text: widget.initialUrl);
+    usernameController = TextEditingController(text: widget.initialUsername);
+    passwordController = TextEditingController(text: widget.initialPassword);
+    pathController = TextEditingController(text: widget.initialPath);
+  }
+
+  @override
+  void dispose() {
+    urlController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    pathController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context).cloudConfigureWebdavTitle),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: urlController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudWebdavUrlLabel,
+                hintText: AppLocalizations.of(context).cloudWebdavUrlHint,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: usernameController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudWebdavUsernameLabel,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudWebdavPasswordLabel,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                ),
+              ),
+              obscureText: obscurePassword,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: pathController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudWebdavRemotePathLabel,
+                hintText: AppLocalizations.of(context).cloudWebdavPathHint,
+                helperText: AppLocalizations.of(context).cloudWebdavRemotePathHelperText,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(null),
+          child: Text(AppLocalizations.of(context).commonCancel),
+        ),
+        FilledButton(
+          onPressed: () {
+            Navigator.of(context).pop({
+              'url': urlController.text.trim(),
+              'username': usernameController.text.trim(),
+              'password': passwordController.text.trim(),
+              'path': pathController.text.trim(),
+            });
+          },
+          child: Text(AppLocalizations.of(context).commonSave),
+        ),
+      ],
+    );
   }
 }

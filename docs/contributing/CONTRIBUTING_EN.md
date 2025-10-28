@@ -267,28 +267,17 @@ flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-5. **Configure Development Environment**
-
-Create `assets/config.json` (development only):
-
-```json
-{
-  "supabaseUrl": "your-supabase-url",
-  "supabaseAnonKey": "your-supabase-anon-key"
-}
-```
-
-**Note**: This file is in `.gitignore` and won't be committed.
-
-6. **Run Application**
+5. **Run Application**
 
 ```bash
 # Android
-flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
+flutter run --flavor dev -d android
 
 # iOS
-flutter run -d ios --dart-define-from-file=assets/config.json
+flutter run -d ios
 ```
+
+**Note**: Cloud service configuration is done through the app's UI (Profile → Cloud Service). No configuration file needed.
 
 ### Project Structure
 

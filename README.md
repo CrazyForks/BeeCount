@@ -159,7 +159,7 @@ flutter pub get
 dart run build_runner build -d
 
 # 运行应用
-flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
+flutter run --flavor dev -d android
 ```
 
 ## 📖 使用说明

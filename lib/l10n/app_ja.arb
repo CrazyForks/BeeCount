@@ -40,6 +40,9 @@
   "commonHelp": "ヘルプ",
   "commonAbout": "について",
   "commonLanguage": "言語",
+  "commonCurrent": "現在",
+  "commonTutorial": "チュートリアル",
+  "commonConfigure": "設定",
   "commonWeekdayMonday": "月曜日",
   "commonWeekdayTuesday": "火曜日",
   "commonWeekdayWednesday": "水曜日",
@@ -1238,6 +1241,74 @@
   "syncCloudBackupCorruptedMessage": "クラウドバックアップの内容が破損しています、以前のバージョンのエンコーディング問題が原因の可能性があります。「現在の家計簿をクラウドにアップロード」をクリックして上書きして修正してください。",
   "syncNoCloudBackupMessage": "クラウドバックアップなし",
   "syncAccessDeniedMessage": "403 アクセス拒否（ストレージRLSポリシーとパスを確認）",
+
+  "cloudTestConnection": "接続テスト",
+  "cloudSelectServiceType": "クラウドサービスタイプを選択",
+  "cloudLocalStorageTitle": "ローカルストレージ",
+  "cloudLocalStorageSubtitle": "データはローカルデバイスにのみ保存されます",
+  "cloudCustomSupabaseTitle": "カスタム Supabase",
+  "cloudCustomSupabaseSubtitle": "セルフホストSupabaseを設定するにはクリック",
+  "cloudCustomWebdavTitle": "カスタム WebDAV",
+  "cloudCustomWebdavSubtitle": "Nutstore/Nextcloudなどを設定するにはクリック",
+  "cloudStatusNotTested": "未テスト",
+  "cloudStatusNormal": "接続正常",
+  "cloudStatusFailed": "接続失敗",
+  "cloudCannotOpenLink": "リンクを開けません",
+  "cloudErrorAuthFailed": "認証失敗: 無効なAPIキー",
+  "cloudErrorServerStatus": "サーバーがステータスコード {code} を返しました",
+  "@cloudErrorServerStatus": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorWebdavNotSupported": "サーバーはWebDAVプロトコルをサポートしていません",
+  "cloudErrorAuthFailedCredentials": "認証失敗: ユーザー名またはパスワードが正しくありません",
+  "cloudErrorAccessDenied": "アクセス拒否: 権限を確認してください",
+  "cloudErrorPathNotFound": "サーバーパスが見つかりません: {path}",
+  "@cloudErrorPathNotFound": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorNetwork": "ネットワークエラー: {message}",
+  "@cloudErrorNetwork": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudTestSuccessTitle": "テスト成功",
+  "cloudTestSuccessMessage": "接続正常、設定有効",
+  "cloudTestFailedTitle": "テスト失敗",
+  "cloudTestFailedMessage": "接続失敗",
+  "cloudTestErrorTitle": "テストエラー",
+  "cloudSwitchConfirmTitle": "クラウドサービス切り替え",
+  "cloudSwitchConfirmMessage": "クラウドサービスを切り替えると現在のアカウントがログアウトされます。切り替えを確認しますか？",
+  "cloudSwitchFailedTitle": "切り替え失敗",
+  "cloudSwitchFailedConfigMissing": "まずこのクラウドサービスを設定してください",
+  "cloudConfigInvalidTitle": "無効な設定",
+  "cloudConfigInvalidMessage": "完全な情報を入力してください",
+  "cloudSaveFailed": "保存失敗",
+  "cloudSwitchedTo": "{type} に切り替えました",
+  "@cloudSwitchedTo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudConfigureSupabaseTitle": "Supabase設定",
+  "cloudConfigureWebdavTitle": "WebDAV設定",
+  "cloudSupabaseAnonKeyHintLong": "完全な anon key を貼り付けてください",
+  "cloudWebdavUsernameLabel": "ユーザー名",
+  "cloudWebdavPasswordLabel": "パスワード",
+  "cloudWebdavRemotePathLabel": "リモートパス",
+  "cloudWebdavRemotePathHelperText": "データ保存用のリモートディレクトリパス",
 
   "updateCorruptedFileTitle": "インストールパッケージが破損しています",
   "updateCorruptedFileMessage": "以前ダウンロードしたインストールパッケージが不完全または破損していることが検出されました。削除して再ダウンロードしますか？"

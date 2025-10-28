@@ -267,28 +267,17 @@ flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-5. **配置开发环境**
-
-创建 `assets/config.json`（仅用于开发）：
-
-```json
-{
-  "supabaseUrl": "your-supabase-url",
-  "supabaseAnonKey": "your-supabase-anon-key"
-}
-```
-
-**注意**: 这个文件已在 `.gitignore` 中，不会被提交。
-
-6. **运行应用**
+5. **运行应用**
 
 ```bash
 # Android
-flutter run --flavor dev -d android --dart-define-from-file=assets/config.json
+flutter run --flavor dev -d android
 
 # iOS
-flutter run -d ios --dart-define-from-file=assets/config.json
+flutter run -d ios
 ```
+
+**注意**: 云服务配置通过应用内 UI 完成（个人中心 → 云服务），无需配置文件。
 
 ### 项目结构
 

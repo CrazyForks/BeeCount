@@ -112,6 +112,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get commonLanguage => 'Idioma';
 
   @override
+  String get commonCurrent => 'Actual';
+
+  @override
+  String get commonTutorial => 'Tutorial';
+
+  @override
+  String get commonConfigure => 'Configurar';
+
+  @override
   String get commonWeekdayMonday => 'Lunes';
 
   @override
@@ -2693,6 +2702,122 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 Acceso denegado (verificar política RLS de almacenamiento y ruta)';
+
+  @override
+  String get cloudTestConnection => 'Probar conexión';
+
+  @override
+  String get cloudLocalStorageTitle => 'Almacenamiento local';
+
+  @override
+  String get cloudLocalStorageSubtitle => 'Los datos solo se guardan en el dispositivo local';
+
+  @override
+  String get cloudCustomSupabaseTitle => 'Supabase personalizado';
+
+  @override
+  String get cloudCustomSupabaseSubtitle => 'Haga clic para configurar Supabase autohospedado';
+
+  @override
+  String get cloudCustomWebdavTitle => 'WebDAV personalizado';
+
+  @override
+  String get cloudCustomWebdavSubtitle => 'Haga clic para configurar Nutstore/Nextcloud etc.';
+
+  @override
+  String get cloudStatusNotTested => 'No probado';
+
+  @override
+  String get cloudStatusNormal => 'Conexión normal';
+
+  @override
+  String get cloudStatusFailed => 'Conexión fallida';
+
+  @override
+  String get cloudCannotOpenLink => 'No se puede abrir el enlace';
+
+  @override
+  String get cloudErrorAuthFailed => 'Autenticación fallida: Clave API no válida';
+
+  @override
+  String cloudErrorServerStatus(String code) {
+    return 'El servidor devolvió el código de estado $code';
+  }
+
+  @override
+  String get cloudErrorWebdavNotSupported => 'El servidor no admite el protocolo WebDAV';
+
+  @override
+  String get cloudErrorAuthFailedCredentials => 'Autenticación fallida: Nombre de usuario o contraseña incorrectos';
+
+  @override
+  String get cloudErrorAccessDenied => 'Acceso denegado: Verifique los permisos';
+
+  @override
+  String cloudErrorPathNotFound(String path) {
+    return 'Ruta del servidor no encontrada: $path';
+  }
+
+  @override
+  String cloudErrorNetwork(String message) {
+    return 'Error de red: $message';
+  }
+
+  @override
+  String get cloudTestSuccessTitle => 'Prueba exitosa';
+
+  @override
+  String get cloudTestSuccessMessage => 'Conexión normal, configuración válida';
+
+  @override
+  String get cloudTestFailedTitle => 'Prueba fallida';
+
+  @override
+  String get cloudTestFailedMessage => 'Conexión fallida';
+
+  @override
+  String get cloudTestErrorTitle => 'Error de prueba';
+
+  @override
+  String get cloudSwitchConfirmTitle => 'Cambiar servicio en la nube';
+
+  @override
+  String get cloudSwitchConfirmMessage => 'Cambiar el servicio en la nube cerrará la sesión de la cuenta actual. ¿Confirmar?';
+
+  @override
+  String get cloudSwitchFailedTitle => 'Cambio fallido';
+
+  @override
+  String get cloudSwitchFailedConfigMissing => 'Por favor configure este servicio en la nube primero';
+
+  @override
+  String get cloudConfigInvalidTitle => 'Configuración no válida';
+
+  @override
+  String get cloudConfigInvalidMessage => 'Por favor ingrese información completa';
+
+  @override
+  String get cloudSaveFailed => 'Error al guardar';
+
+  @override
+  String cloudSwitchedTo(String type) {
+    return 'Cambiado a $type';
+  }
+
+  @override
+  String get cloudConfigureSupabaseTitle => 'Configurar Supabase';
+
+  @override
+  String get cloudConfigureWebdavTitle => 'Configurar WebDAV';
+
+  @override
+  String get cloudSupabaseAnonKeyHintLong => 'Pegue la clave anon completa';
+
+  @override
+  String get cloudWebdavRemotePathLabel => 'Ruta remota';
+
+  @override
+  String get cloudWebdavRemotePathHelperText => 'Ruta del directorio remoto para almacenamiento de datos';
 
   @override
   String get updateCorruptedFileTitle => 'Corrupted Installation Package';

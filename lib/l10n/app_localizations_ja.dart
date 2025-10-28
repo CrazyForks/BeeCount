@@ -112,6 +112,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonLanguage => '言語';
 
   @override
+  String get commonCurrent => '現在';
+
+  @override
+  String get commonTutorial => 'チュートリアル';
+
+  @override
+  String get commonConfigure => '設定';
+
+  @override
   String get commonWeekdayMonday => '月曜日';
 
   @override
@@ -1801,7 +1810,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cloudValidationHttpRequired => 'URLはhttp://またはhttps://で始まる必要があります';
 
   @override
-  String get cloudSelectServiceType => 'サービスタイプを選択';
+  String get cloudSelectServiceType => 'クラウドサービスタイプを選択';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAVサーバーURL';
@@ -2693,6 +2702,122 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 アクセス拒否（ストレージRLSポリシーとパスを確認）';
+
+  @override
+  String get cloudTestConnection => '接続テスト';
+
+  @override
+  String get cloudLocalStorageTitle => 'ローカルストレージ';
+
+  @override
+  String get cloudLocalStorageSubtitle => 'データはローカルデバイスにのみ保存されます';
+
+  @override
+  String get cloudCustomSupabaseTitle => 'カスタム Supabase';
+
+  @override
+  String get cloudCustomSupabaseSubtitle => 'セルフホストSupabaseを設定するにはクリック';
+
+  @override
+  String get cloudCustomWebdavTitle => 'カスタム WebDAV';
+
+  @override
+  String get cloudCustomWebdavSubtitle => 'Nutstore/Nextcloudなどを設定するにはクリック';
+
+  @override
+  String get cloudStatusNotTested => '未テスト';
+
+  @override
+  String get cloudStatusNormal => '接続正常';
+
+  @override
+  String get cloudStatusFailed => '接続失敗';
+
+  @override
+  String get cloudCannotOpenLink => 'リンクを開けません';
+
+  @override
+  String get cloudErrorAuthFailed => '認証失敗: 無効なAPIキー';
+
+  @override
+  String cloudErrorServerStatus(String code) {
+    return 'サーバーがステータスコード $code を返しました';
+  }
+
+  @override
+  String get cloudErrorWebdavNotSupported => 'サーバーはWebDAVプロトコルをサポートしていません';
+
+  @override
+  String get cloudErrorAuthFailedCredentials => '認証失敗: ユーザー名またはパスワードが正しくありません';
+
+  @override
+  String get cloudErrorAccessDenied => 'アクセス拒否: 権限を確認してください';
+
+  @override
+  String cloudErrorPathNotFound(String path) {
+    return 'サーバーパスが見つかりません: $path';
+  }
+
+  @override
+  String cloudErrorNetwork(String message) {
+    return 'ネットワークエラー: $message';
+  }
+
+  @override
+  String get cloudTestSuccessTitle => 'テスト成功';
+
+  @override
+  String get cloudTestSuccessMessage => '接続正常、設定有効';
+
+  @override
+  String get cloudTestFailedTitle => 'テスト失敗';
+
+  @override
+  String get cloudTestFailedMessage => '接続失敗';
+
+  @override
+  String get cloudTestErrorTitle => 'テストエラー';
+
+  @override
+  String get cloudSwitchConfirmTitle => 'クラウドサービス切り替え';
+
+  @override
+  String get cloudSwitchConfirmMessage => 'クラウドサービスを切り替えると現在のアカウントがログアウトされます。切り替えを確認しますか？';
+
+  @override
+  String get cloudSwitchFailedTitle => '切り替え失敗';
+
+  @override
+  String get cloudSwitchFailedConfigMissing => 'まずこのクラウドサービスを設定してください';
+
+  @override
+  String get cloudConfigInvalidTitle => '無効な設定';
+
+  @override
+  String get cloudConfigInvalidMessage => '完全な情報を入力してください';
+
+  @override
+  String get cloudSaveFailed => '保存失敗';
+
+  @override
+  String cloudSwitchedTo(String type) {
+    return '$type に切り替えました';
+  }
+
+  @override
+  String get cloudConfigureSupabaseTitle => 'Supabase設定';
+
+  @override
+  String get cloudConfigureWebdavTitle => 'WebDAV設定';
+
+  @override
+  String get cloudSupabaseAnonKeyHintLong => '完全な anon key を貼り付けてください';
+
+  @override
+  String get cloudWebdavRemotePathLabel => 'リモートパス';
+
+  @override
+  String get cloudWebdavRemotePathHelperText => 'データ保存用のリモートディレクトリパス';
 
   @override
   String get updateCorruptedFileTitle => 'インストールパッケージが破損しています';

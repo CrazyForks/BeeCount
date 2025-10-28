@@ -40,6 +40,9 @@
   "commonHelp": "도움말",
   "commonAbout": "정보",
   "commonLanguage": "언어",
+  "commonCurrent": "현재",
+  "commonTutorial": "튜토리얼",
+  "commonConfigure": "구성",
   "commonWeekdayMonday": "월요일",
   "commonWeekdayTuesday": "화요일",
   "commonWeekdayWednesday": "수요일",
@@ -1238,6 +1241,74 @@
   "syncCloudBackupCorruptedMessage": "클라우드 백업 내용이 손상되었습니다. 이전 버전의 인코딩 문제로 인한 것일 수 있습니다. '현재 가계부를 클라우드에 업로드'를 클릭하여 덮어쓰고 수정하세요.",
   "syncNoCloudBackupMessage": "클라우드 백업 없음",
   "syncAccessDeniedMessage": "403 액세스 거부 (스토리지 RLS 정책 및 경로 확인)",
+
+  "cloudTestConnection": "연결 테스트",
+  "cloudSelectServiceType": "클라우드 서비스 유형 선택",
+  "cloudLocalStorageTitle": "로컬 저장소",
+  "cloudLocalStorageSubtitle": "데이터는 로컬 기기에만 저장됩니다",
+  "cloudCustomSupabaseTitle": "사용자 정의 Supabase",
+  "cloudCustomSupabaseSubtitle": "자체 호스팅 Supabase 구성하려면 클릭",
+  "cloudCustomWebdavTitle": "사용자 정의 WebDAV",
+  "cloudCustomWebdavSubtitle": "Nutstore/Nextcloud 등을 구성하려면 클릭",
+  "cloudStatusNotTested": "테스트되지 않음",
+  "cloudStatusNormal": "연결 정상",
+  "cloudStatusFailed": "연결 실패",
+  "cloudCannotOpenLink": "링크를 열 수 없습니다",
+  "cloudErrorAuthFailed": "인증 실패: 잘못된 API 키",
+  "cloudErrorServerStatus": "서버가 상태 코드 {code}를 반환했습니다",
+  "@cloudErrorServerStatus": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorWebdavNotSupported": "서버가 WebDAV 프로토콜을 지원하지 않습니다",
+  "cloudErrorAuthFailedCredentials": "인증 실패: 사용자 이름 또는 비밀번호가 올바르지 않습니다",
+  "cloudErrorAccessDenied": "액세스 거부됨: 권한을 확인하세요",
+  "cloudErrorPathNotFound": "서버 경로를 찾을 수 없습니다: {path}",
+  "@cloudErrorPathNotFound": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorNetwork": "네트워크 오류: {message}",
+  "@cloudErrorNetwork": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudTestSuccessTitle": "테스트 성공",
+  "cloudTestSuccessMessage": "연결 정상, 구성 유효",
+  "cloudTestFailedTitle": "테스트 실패",
+  "cloudTestFailedMessage": "연결 실패",
+  "cloudTestErrorTitle": "테스트 오류",
+  "cloudSwitchConfirmTitle": "클라우드 서비스 전환",
+  "cloudSwitchConfirmMessage": "클라우드 서비스를 전환하면 현재 계정이 로그아웃됩니다. 전환하시겠습니까?",
+  "cloudSwitchFailedTitle": "전환 실패",
+  "cloudSwitchFailedConfigMissing": "먼저 이 클라우드 서비스를 구성하세요",
+  "cloudConfigInvalidTitle": "잘못된 구성",
+  "cloudConfigInvalidMessage": "완전한 정보를 입력하세요",
+  "cloudSaveFailed": "저장 실패",
+  "cloudSwitchedTo": "{type}(으)로 전환했습니다",
+  "@cloudSwitchedTo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudConfigureSupabaseTitle": "Supabase 구성",
+  "cloudConfigureWebdavTitle": "WebDAV 구성",
+  "cloudSupabaseAnonKeyHintLong": "완전한 anon key를 붙여넣으세요",
+  "cloudWebdavUsernameLabel": "사용자 이름",
+  "cloudWebdavPasswordLabel": "비밀번호",
+  "cloudWebdavRemotePathLabel": "원격 경로",
+  "cloudWebdavRemotePathHelperText": "데이터 저장을 위한 원격 디렉토리 경로",
 
   "updateCorruptedFileTitle": "설치 패키지가 손상되었습니다",
   "updateCorruptedFileMessage": "이전에 다운로드한 설치 패키지가 불완전하거나 손상된 것으로 감지되었습니다. 삭제하고 다시 다운로드하시겠습니까？"

@@ -40,6 +40,9 @@
   "commonHelp": "Help",
   "commonAbout": "About",
   "commonLanguage": "Language",
+  "commonCurrent": "Current",
+  "commonTutorial": "Tutorial",
+  "commonConfigure": "Configure",
   "commonWeekdayMonday": "Monday",
   "commonWeekdayTuesday": "Tuesday",
   "commonWeekdayWednesday": "Wednesday",
@@ -1238,6 +1241,66 @@
   "syncCloudBackupCorruptedMessage": "Cloud backup content is corrupted, possibly due to encoding issues from earlier versions. Please click 'Upload Current Ledger to Cloud' to overwrite and fix.",
   "syncNoCloudBackupMessage": "No cloud backup",
   "syncAccessDeniedMessage": "403 Access denied (check storage RLS policy and path)",
+
+  "cloudTestConnection": "Test Connection",
+  "cloudSelectServiceType": "Select Cloud Service Type",
+  "cloudLocalStorageTitle": "Local Storage",
+  "cloudLocalStorageSubtitle": "Data is only saved on local device",
+  "cloudCustomSupabaseTitle": "Custom Supabase",
+  "cloudCustomSupabaseSubtitle": "Click to configure self-hosted Supabase",
+  "cloudCustomWebdavTitle": "Custom WebDAV",
+  "cloudCustomWebdavSubtitle": "Click to configure Nutstore/Nextcloud etc.",
+  "cloudStatusNotTested": "Not tested",
+  "cloudStatusNormal": "Connection normal",
+  "cloudStatusFailed": "Connection failed",
+  "cloudCannotOpenLink": "Cannot open link",
+  "cloudErrorAuthFailed": "Authentication failed: Invalid API Key",
+  "cloudErrorServerStatus": "Server returned status code {code}",
+  "@cloudErrorServerStatus": {
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+  "cloudErrorWebdavNotSupported": "Server does not support WebDAV protocol",
+  "cloudErrorAuthFailedCredentials": "Authentication failed: Incorrect username or password",
+  "cloudErrorAccessDenied": "Access denied: Please check permissions",
+  "cloudErrorPathNotFound": "Server path not found: {path}",
+  "@cloudErrorPathNotFound": {
+    "placeholders": {
+      "path": {"type": "String"}
+    }
+  },
+  "cloudErrorNetwork": "Network error: {message}",
+  "@cloudErrorNetwork": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "cloudTestSuccessTitle": "Test Successful",
+  "cloudTestSuccessMessage": "Connection normal, configuration valid",
+  "cloudTestFailedTitle": "Test Failed",
+  "cloudTestFailedMessage": "Connection failed",
+  "cloudTestErrorTitle": "Test Error",
+  "cloudSwitchConfirmTitle": "Switch Cloud Service",
+  "cloudSwitchConfirmMessage": "Switching cloud service will log out current account. Confirm switch?",
+  "cloudSwitchFailedTitle": "Switch Failed",
+  "cloudSwitchFailedConfigMissing": "Please configure this cloud service first",
+  "cloudConfigInvalidTitle": "Invalid Configuration",
+  "cloudConfigInvalidMessage": "Please fill in complete information",
+  "cloudSaveFailed": "Save Failed",
+  "cloudSwitchedTo": "Switched to {type}",
+  "@cloudSwitchedTo": {
+    "placeholders": {
+      "type": {"type": "String"}
+    }
+  },
+  "cloudConfigureSupabaseTitle": "Configure Supabase",
+  "cloudConfigureWebdavTitle": "Configure WebDAV",
+  "cloudSupabaseAnonKeyHintLong": "Paste complete anon key",
+  "cloudWebdavUsernameLabel": "Username",
+  "cloudWebdavPasswordLabel": "Password",
+  "cloudWebdavRemotePathLabel": "Remote Path",
+  "cloudWebdavRemotePathHelperText": "Remote directory path for data storage",
 
   "updateCorruptedFileTitle": "Corrupted Installation Package",
   "updateCorruptedFileMessage": "The previously downloaded installation package is incomplete or corrupted. Delete and re-download?"

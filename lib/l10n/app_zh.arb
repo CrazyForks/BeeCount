@@ -44,6 +44,9 @@
   "commonWeekdayFriday": "星期五",
   "commonWeekdaySaturday": "星期六",
   "commonWeekdaySunday": "星期日",
+  "commonCurrent": "当前",
+  "commonTutorial": "教程",
+  "commonConfigure": "配置",
 
   "homeTitle": "蜜蜂记账",
   "homeIncome": "收入",
@@ -610,6 +613,30 @@
   "cloudServiceDescription": "应用内置的云端服务（免费但可能不稳定，建议使用自己的或定期备份）",
   "cloudServiceDescriptionNotConfigured": "当前构建未内置云服务配置",
   "cloudServiceDescriptionCustom": "服务器: {url}",
+  "cloudLocalStorageTitle": "本地存储",
+  "cloudLocalStorageSubtitle": "数据仅保存在本地设备",
+  "cloudCustomSupabaseTitle": "自定义 Supabase",
+  "cloudCustomWebdavTitle": "自定义 WebDAV",
+  "cloudSwitchConfirmTitle": "切换云服务",
+  "cloudSwitchConfirmMessage": "切换云服务将登出当前账号,确认切换?",
+  "cloudSwitchFailedTitle": "切换失败",
+  "cloudSwitchFailedConfigMissing": "请先配置该云服务",
+  "cloudConfigInvalidTitle": "配置无效",
+  "cloudConfigInvalidMessage": "请填写完整信息",
+  "cloudSaveFailed": "保存失败",
+  "cloudSwitchedTo": "已切换到{type}",
+  "@cloudSwitchedTo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudConfigureSupabaseTitle": "配置 Supabase",
+  "cloudConfigureWebdavTitle": "配置 WebDAV",
+  "cloudSupabaseAnonKeyHintShort": "粘贴完整的 anon key",
+  "cloudWebdavRemotePathHelp": "数据存储的远程目录路径",
+  "cloudHelperTextRemotePath": "数据存储的远程目录路径",
   "@cloudServiceDescriptionCustom": {
     "placeholders": {
       "url": {
@@ -1061,5 +1088,52 @@
   "syncNotLoggedInMessage": "未登录",
   "syncCloudBackupCorruptedMessage": "云端备份内容无法解析，可能是早期版本编码问题造成的损坏。请点击\\\"上传当前账本到云端\\\"覆盖修复。",
   "syncNoCloudBackupMessage": "云端暂无备份",
-  "syncAccessDeniedMessage": "403 拒绝访问（检查 storage RLS 策略与路径）"
+  "syncAccessDeniedMessage": "403 拒绝访问（检查 storage RLS 策略与路径）",
+
+  "cloudTestConnection": "测试连接",
+  "cloudSelectServiceType": "选择云服务类型",
+  "cloudCustomSupabaseSubtitle": "点击配置自建Supabase服务",
+  "cloudCustomWebdavSubtitle": "点击配置坚果云/Nextcloud等",
+  "cloudStatusNotTested": "未测试",
+  "cloudStatusNormal": "连接正常",
+  "cloudStatusFailed": "连接失败",
+  "cloudCannotOpenLink": "无法打开链接",
+  "cloudErrorAuthFailed": "认证失败: API Key 无效",
+  "cloudErrorServerStatus": "服务器返回状态码 {code}",
+  "@cloudErrorServerStatus": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorWebdavNotSupported": "服务器不支持 WebDAV 协议",
+  "cloudErrorAuthFailedCredentials": "认证失败: 用户名或密码错误",
+  "cloudErrorAccessDenied": "访问被拒绝: 请检查权限",
+  "cloudErrorPathNotFound": "服务器路径不存在: {path}",
+  "@cloudErrorPathNotFound": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudErrorNetwork": "网络错误: {message}",
+  "@cloudErrorNetwork": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudTestSuccessTitle": "测试成功",
+  "cloudTestSuccessMessage": "连接正常,配置有效",
+  "cloudTestFailedTitle": "测试失败",
+  "cloudTestFailedMessage": "连接失败",
+  "cloudTestErrorTitle": "测试错误",
+  "cloudSupabaseAnonKeyHintLong": "粘贴完整的 anon key",
+  "cloudWebdavUsernameLabel": "用户名",
+  "cloudWebdavPasswordLabel": "密码",
+  "cloudWebdavRemotePathLabel": "远程路径",
+  "cloudWebdavRemotePathHelperText": "数据存储的远程目录路径"
 }

@@ -316,6 +316,24 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get commonLanguage;
 
+  /// No description provided for @commonCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get commonCurrent;
+
+  /// No description provided for @commonTutorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutorial'**
+  String get commonTutorial;
+
+  /// No description provided for @commonConfigure.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure'**
+  String get commonConfigure;
+
   /// No description provided for @commonWeekdayMonday.
   ///
   /// In en, this message translates to:
@@ -3493,7 +3511,7 @@ abstract class AppLocalizations {
   /// No description provided for @cloudSelectServiceType.
   ///
   /// In en, this message translates to:
-  /// **'Select Service Type'**
+  /// **'Select Cloud Service Type'**
   String get cloudSelectServiceType;
 
   /// No description provided for @cloudWebdavUrlLabel.
@@ -5145,6 +5163,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'403 Access denied (check storage RLS policy and path)'**
   String get syncAccessDeniedMessage;
+
+  /// No description provided for @cloudTestConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Connection'**
+  String get cloudTestConnection;
+
+  /// No description provided for @cloudLocalStorageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Storage'**
+  String get cloudLocalStorageTitle;
+
+  /// No description provided for @cloudLocalStorageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data is only saved on local device'**
+  String get cloudLocalStorageSubtitle;
+
+  /// No description provided for @cloudCustomSupabaseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Supabase'**
+  String get cloudCustomSupabaseTitle;
+
+  /// No description provided for @cloudCustomSupabaseSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to configure self-hosted Supabase'**
+  String get cloudCustomSupabaseSubtitle;
+
+  /// No description provided for @cloudCustomWebdavTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom WebDAV'**
+  String get cloudCustomWebdavTitle;
+
+  /// No description provided for @cloudCustomWebdavSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to configure Nutstore/Nextcloud etc.'**
+  String get cloudCustomWebdavSubtitle;
+
+  /// No description provided for @cloudStatusNotTested.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tested'**
+  String get cloudStatusNotTested;
+
+  /// No description provided for @cloudStatusNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection normal'**
+  String get cloudStatusNormal;
+
+  /// No description provided for @cloudStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed'**
+  String get cloudStatusFailed;
+
+  /// No description provided for @cloudCannotOpenLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open link'**
+  String get cloudCannotOpenLink;
+
+  /// No description provided for @cloudErrorAuthFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed: Invalid API Key'**
+  String get cloudErrorAuthFailed;
+
+  /// No description provided for @cloudErrorServerStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Server returned status code {code}'**
+  String cloudErrorServerStatus(String code);
+
+  /// No description provided for @cloudErrorWebdavNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Server does not support WebDAV protocol'**
+  String get cloudErrorWebdavNotSupported;
+
+  /// No description provided for @cloudErrorAuthFailedCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed: Incorrect username or password'**
+  String get cloudErrorAuthFailedCredentials;
+
+  /// No description provided for @cloudErrorAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access denied: Please check permissions'**
+  String get cloudErrorAccessDenied;
+
+  /// No description provided for @cloudErrorPathNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Server path not found: {path}'**
+  String cloudErrorPathNotFound(String path);
+
+  /// No description provided for @cloudErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error: {message}'**
+  String cloudErrorNetwork(String message);
+
+  /// No description provided for @cloudTestSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Successful'**
+  String get cloudTestSuccessTitle;
+
+  /// No description provided for @cloudTestSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection normal, configuration valid'**
+  String get cloudTestSuccessMessage;
+
+  /// No description provided for @cloudTestFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Failed'**
+  String get cloudTestFailedTitle;
+
+  /// No description provided for @cloudTestFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed'**
+  String get cloudTestFailedMessage;
+
+  /// No description provided for @cloudTestErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Error'**
+  String get cloudTestErrorTitle;
+
+  /// No description provided for @cloudSwitchConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Cloud Service'**
+  String get cloudSwitchConfirmTitle;
+
+  /// No description provided for @cloudSwitchConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Switching cloud service will log out current account. Confirm switch?'**
+  String get cloudSwitchConfirmMessage;
+
+  /// No description provided for @cloudSwitchFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Failed'**
+  String get cloudSwitchFailedTitle;
+
+  /// No description provided for @cloudSwitchFailedConfigMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Please configure this cloud service first'**
+  String get cloudSwitchFailedConfigMissing;
+
+  /// No description provided for @cloudConfigInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Configuration'**
+  String get cloudConfigInvalidTitle;
+
+  /// No description provided for @cloudConfigInvalidMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in complete information'**
+  String get cloudConfigInvalidMessage;
+
+  /// No description provided for @cloudSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Failed'**
+  String get cloudSaveFailed;
+
+  /// No description provided for @cloudSwitchedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to {type}'**
+  String cloudSwitchedTo(String type);
+
+  /// No description provided for @cloudConfigureSupabaseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure Supabase'**
+  String get cloudConfigureSupabaseTitle;
+
+  /// No description provided for @cloudConfigureWebdavTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure WebDAV'**
+  String get cloudConfigureWebdavTitle;
+
+  /// No description provided for @cloudSupabaseAnonKeyHintLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste complete anon key'**
+  String get cloudSupabaseAnonKeyHintLong;
+
+  /// No description provided for @cloudWebdavRemotePathLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote Path'**
+  String get cloudWebdavRemotePathLabel;
+
+  /// No description provided for @cloudWebdavRemotePathHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote directory path for data storage'**
+  String get cloudWebdavRemotePathHelperText;
 
   /// No description provided for @updateCorruptedFileTitle.
   ///

@@ -9,7 +9,6 @@ import 'providers.dart';
 import 'styles/colors.dart';
 import 'providers/font_scale_provider.dart';
 import 'config.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as s;
 import 'utils/route_logger.dart';
 import 'pages/splash_page.dart';
 import 'services/notification_service.dart';
@@ -17,16 +16,16 @@ import 'services/reminder_monitor_service.dart';
 import 'services/recurring_transaction_service.dart';
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
+import 'cloud/cloud_service_store.dart';
+import 'cloud/supabase_initializer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig.init();
-  if (AppConfig.hasSupabase) {
-    await s.Supabase.initialize(
-      url: AppConfig.supabaseUrl,
-      anonKey: AppConfig.supabaseAnonKey,
-    );
-  }
+
+  // 全局初始化Supabase（如果配置了自定义Supabase服务）
+  await _initializeSupabase();
+
   // 初始化通知服务
   await NotificationService.initialize();
 
@@ -40,6 +39,23 @@ Future<void> main() async {
   await _generatePendingRecurringTransactions();
 
   runApp(const ProviderScope(child: MainApp()));
+}
+
+/// 全局初始化Supabase
+///
+/// 在应用启动时检查用户是否配置了自定义Supabase服务，如果配置了则全局初始化
+/// 这样可以确保session在应用重启后能够正确恢复
+Future<void> _initializeSupabase() async {
+  try {
+    final store = CloudServiceStore();
+    final config = await store.loadActive();
+
+    // 只在配置了Supabase服务时才初始化
+    await SupabaseInitializer.initialize(config);
+  } catch (e) {
+    print('⚠️  Supabase 初始化失败（非致命错误）: $e');
+    // 不抛出异常，避免影响应用启动
+  }
 }
 
 /// 恢复用户之前设置的记账提醒

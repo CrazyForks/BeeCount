@@ -112,6 +112,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonLanguage => 'Language';
 
   @override
+  String get commonCurrent => 'Current';
+
+  @override
+  String get commonTutorial => 'Tutorial';
+
+  @override
+  String get commonConfigure => 'Configure';
+
+  @override
   String get commonWeekdayMonday => 'Monday';
 
   @override
@@ -1801,7 +1810,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudValidationHttpRequired => 'URL must start with http:// or https://';
 
   @override
-  String get cloudSelectServiceType => 'Select Service Type';
+  String get cloudSelectServiceType => 'Select Cloud Service Type';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV Server URL';
@@ -2693,6 +2702,122 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncAccessDeniedMessage => '403 Access denied (check storage RLS policy and path)';
+
+  @override
+  String get cloudTestConnection => 'Test Connection';
+
+  @override
+  String get cloudLocalStorageTitle => 'Local Storage';
+
+  @override
+  String get cloudLocalStorageSubtitle => 'Data is only saved on local device';
+
+  @override
+  String get cloudCustomSupabaseTitle => 'Custom Supabase';
+
+  @override
+  String get cloudCustomSupabaseSubtitle => 'Click to configure self-hosted Supabase';
+
+  @override
+  String get cloudCustomWebdavTitle => 'Custom WebDAV';
+
+  @override
+  String get cloudCustomWebdavSubtitle => 'Click to configure Nutstore/Nextcloud etc.';
+
+  @override
+  String get cloudStatusNotTested => 'Not tested';
+
+  @override
+  String get cloudStatusNormal => 'Connection normal';
+
+  @override
+  String get cloudStatusFailed => 'Connection failed';
+
+  @override
+  String get cloudCannotOpenLink => 'Cannot open link';
+
+  @override
+  String get cloudErrorAuthFailed => 'Authentication failed: Invalid API Key';
+
+  @override
+  String cloudErrorServerStatus(String code) {
+    return 'Server returned status code $code';
+  }
+
+  @override
+  String get cloudErrorWebdavNotSupported => 'Server does not support WebDAV protocol';
+
+  @override
+  String get cloudErrorAuthFailedCredentials => 'Authentication failed: Incorrect username or password';
+
+  @override
+  String get cloudErrorAccessDenied => 'Access denied: Please check permissions';
+
+  @override
+  String cloudErrorPathNotFound(String path) {
+    return 'Server path not found: $path';
+  }
+
+  @override
+  String cloudErrorNetwork(String message) {
+    return 'Network error: $message';
+  }
+
+  @override
+  String get cloudTestSuccessTitle => 'Test Successful';
+
+  @override
+  String get cloudTestSuccessMessage => 'Connection normal, configuration valid';
+
+  @override
+  String get cloudTestFailedTitle => 'Test Failed';
+
+  @override
+  String get cloudTestFailedMessage => 'Connection failed';
+
+  @override
+  String get cloudTestErrorTitle => 'Test Error';
+
+  @override
+  String get cloudSwitchConfirmTitle => 'Switch Cloud Service';
+
+  @override
+  String get cloudSwitchConfirmMessage => 'Switching cloud service will log out current account. Confirm switch?';
+
+  @override
+  String get cloudSwitchFailedTitle => 'Switch Failed';
+
+  @override
+  String get cloudSwitchFailedConfigMissing => 'Please configure this cloud service first';
+
+  @override
+  String get cloudConfigInvalidTitle => 'Invalid Configuration';
+
+  @override
+  String get cloudConfigInvalidMessage => 'Please fill in complete information';
+
+  @override
+  String get cloudSaveFailed => 'Save Failed';
+
+  @override
+  String cloudSwitchedTo(String type) {
+    return 'Switched to $type';
+  }
+
+  @override
+  String get cloudConfigureSupabaseTitle => 'Configure Supabase';
+
+  @override
+  String get cloudConfigureWebdavTitle => 'Configure WebDAV';
+
+  @override
+  String get cloudSupabaseAnonKeyHintLong => 'Paste complete anon key';
+
+  @override
+  String get cloudWebdavRemotePathLabel => 'Remote Path';
+
+  @override
+  String get cloudWebdavRemotePathHelperText => 'Remote directory path for data storage';
 
   @override
   String get updateCorruptedFileTitle => 'Corrupted Installation Package';
