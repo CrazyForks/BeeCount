@@ -340,32 +340,31 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          # 配置手动签名
-          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' ios/Runner.xcodeproj/project.pbxproj
-          sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";/g' ios/Runner.xcodeproj/project.pbxproj
+          PROJECT_FILE="ios/Runner.xcodeproj/project.pbxproj"
 
-          # 在所有 Release buildSettings 中添加签名配置
-          awk -v team="$APPLE_TEAM_ID" '
-            /name = Release;/,/^[[:space:]]*\};/ {
-              if (/buildSettings = \{/) {
-                print
-                getline
-                if ($0 !~ /DEVELOPMENT_TEAM/) {
-                  print "\t\t\t\tDEVELOPMENT_TEAM = " team ";"
-                }
-                if ($0 !~ /PROVISIONING_PROFILE_SPECIFIER/) {
-                  print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount AppStore\";"
-                }
-                print
-                next
-              }
-            }
-            {print}
-          ' ios/Runner.xcodeproj/project.pbxproj > ios/Runner.xcodeproj/project.pbxproj.tmp
-          mv ios/Runner.xcodeproj/project.pbxproj.tmp ios/Runner.xcodeproj/project.pbxproj
+          # 1. 配置手动签名
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PROJECT_FILE"
+
+          # 2. 修改签名身份为发布证书
+          sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";/g' "$PROJECT_FILE"
+
+          # 3. 在 buildSettings 后添加 DEVELOPMENT_TEAM（如果不存在）
+          if ! grep -q "DEVELOPMENT_TEAM = ${APPLE_TEAM_ID}" "$PROJECT_FILE"; then
+            sed -i '' "/buildSettings = {/a\\
+\\				DEVELOPMENT_TEAM = ${APPLE_TEAM_ID};\\
+" "$PROJECT_FILE"
+          fi
+
+          # 4. 在 buildSettings 后添加 PROVISIONING_PROFILE_SPECIFIER（如果不存在）
+          if ! grep -q 'PROVISIONING_PROFILE_SPECIFIER = "BeeCount AppStore"' "$PROJECT_FILE"; then
+            sed -i '' "/buildSettings = {/a\\
+\\				PROVISIONING_PROFILE_SPECIFIER = \"BeeCount AppStore\";\\
+" "$PROJECT_FILE"
+          fi
 
           echo "✅ Configured manual signing for Xcode project"
-          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" ios/Runner.xcodeproj/project.pbxproj | head -20
+          echo "Signing configuration:"
+          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" "$PROJECT_FILE" | head -30
 
       - name: Build iOS (signed, release)
         if: env.IOS_SIGNING_ENABLED == 'true'
