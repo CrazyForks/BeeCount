@@ -340,24 +340,32 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          # 在所有 buildSettings 中添加 DEVELOPMENT_TEAM
-          # 使用 awk 在每个 buildSettings 块中添加 DEVELOPMENT_TEAM
+          # 配置手动签名
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";/g' ios/Runner.xcodeproj/project.pbxproj
+
+          # 在所有 Release buildSettings 中添加签名配置
           awk -v team="$APPLE_TEAM_ID" '
-            /buildSettings = \{/ {
-              print
-              getline
-              if ($0 !~ /DEVELOPMENT_TEAM/) {
-                print "\t\t\t\tDEVELOPMENT_TEAM = " team ";"
+            /name = Release;/,/^[[:space:]]*\};/ {
+              if (/buildSettings = \{/) {
+                print
+                getline
+                if ($0 !~ /DEVELOPMENT_TEAM/) {
+                  print "\t\t\t\tDEVELOPMENT_TEAM = " team ";"
+                }
+                if ($0 !~ /PROVISIONING_PROFILE_SPECIFIER/) {
+                  print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount AppStore\";"
+                }
+                print
+                next
               }
-              print
-              next
             }
             {print}
           ' ios/Runner.xcodeproj/project.pbxproj > ios/Runner.xcodeproj/project.pbxproj.tmp
           mv ios/Runner.xcodeproj/project.pbxproj.tmp ios/Runner.xcodeproj/project.pbxproj
 
-          echo "✅ Added DEVELOPMENT_TEAM to Xcode project"
-          grep -A 1 "buildSettings = {" ios/Runner.xcodeproj/project.pbxproj | head -20
+          echo "✅ Configured manual signing for Xcode project"
+          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" ios/Runner.xcodeproj/project.pbxproj | head -20
 
       - name: Build iOS (signed, release)
         if: env.IOS_SIGNING_ENABLED == 'true'
