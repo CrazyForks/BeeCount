@@ -257,6 +257,74 @@ jobs:
           echo "Updated version in pubspec.yaml:"
           grep "^version:" pubspec.yaml
 
+      - name: Setup iOS signing (optional)
+        env:
+          IOS_P12_BASE64: ${{ secrets.IOS_P12_BASE64 }}
+          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
+          IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
+          IOS_TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          if [ -n "${IOS_P12_BASE64:-}" ]; then
+            echo "📱 Setting up iOS code signing from secrets..."
+
+            # 创建临时keychain
+            KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+            KEYCHAIN_PASSWORD=$(openssl rand -base64 32)
+
+            security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+            security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+            security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+            # 导入证书
+            CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+            echo "$IOS_P12_BASE64" | base64 -d > $CERTIFICATE_PATH
+            security import $CERTIFICATE_PATH -P "$IOS_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+            security list-keychain -d user -s $KEYCHAIN_PATH
+
+            # 安装provisioning profile
+            PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+            echo "$IOS_PROVISION_PROFILE_BASE64" | base64 -d > $PP_PATH
+            mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+            cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
+
+            # 设置 codesign 权限
+            security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+            # 动态生成 ExportOptions.plist
+            cat > ios/ExportOptions.plist <<EOF
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+            <plist version="1.0">
+            <dict>
+                <key>method</key>
+                <string>app-store</string>
+                <key>teamID</key>
+                <string>${IOS_TEAM_ID}</string>
+                <key>uploadBitcode</key>
+                <false/>
+                <key>uploadSymbols</key>
+                <true/>
+                <key>signingStyle</key>
+                <string>manual</string>
+                <key>signingCertificate</key>
+                <string>Apple Distribution</string>
+                <key>provisioningProfiles</key>
+                <dict>
+                    <key>com.tntlikely.beecount</key>
+                    <string>BeeCount AppStore</string>
+                </dict>
+            </dict>
+            </plist>
+            EOF
+
+            echo "✅ iOS signing configured"
+            echo "IOS_SIGNING_ENABLED=true" >> $GITHUB_ENV
+          else
+            echo "⚠️  No iOS signing secrets provided; will build unsigned only"
+            echo "IOS_SIGNING_ENABLED=false" >> $GITHUB_ENV
+          fi
+
       - name: Build iOS (no codesign)
         run: |
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
@@ -266,6 +334,38 @@ jobs:
             --dart-define=CI_VERSION="$CI_VERSION" \
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
+
+      - name: Build iOS (signed, release)
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
+          export GIT_COMMIT='${{ github.sha }}'
+          export BUILD_TIME='${{ github.run_id }}'
+          flutter build ios --release \
+            --dart-define=CI_VERSION="$CI_VERSION" \
+            --dart-define=GIT_COMMIT="$GIT_COMMIT" \
+            --dart-define=BUILD_TIME="$BUILD_TIME"
+
+      - name: Package iOS signed IPA
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+
+          # Create IPA from signed Runner.app
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -R Runner.app Payload/
+          /usr/bin/zip -qry ../../../beecount-${VERSION}-signed.ipa Payload
+          cd ../../..
+
+          echo "Generated signed IPA: beecount-${VERSION}-signed.ipa"
+          ls -lh beecount-${VERSION}-signed.ipa
+
+      - name: Cleanup iOS keychain
+        if: always() && env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db || true
 
       - name: Build iOS (debug simulator, unsigned)
         run: |
@@ -315,6 +415,7 @@ jobs:
           path: |
             beecount-*-iphoneos.app.zip
             beecount-*-unsigned.ipa
+            beecount-*-signed.ipa
             beecount-*-iphonesimulator.app.zip
 
   release:
