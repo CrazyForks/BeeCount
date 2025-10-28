@@ -348,19 +348,8 @@ jobs:
           # 2. 修改签名身份为发布证书
           sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";/g' "$PROJECT_FILE"
 
-          # 3. 在 buildSettings 后添加 DEVELOPMENT_TEAM（如果不存在）
-          if ! grep -q "DEVELOPMENT_TEAM = ${APPLE_TEAM_ID}" "$PROJECT_FILE"; then
-            sed -i '' "/buildSettings = {/a\\
-\\				DEVELOPMENT_TEAM = ${APPLE_TEAM_ID};\\
-" "$PROJECT_FILE"
-          fi
-
-          # 4. 在 buildSettings 后添加 PROVISIONING_PROFILE_SPECIFIER（如果不存在）
-          if ! grep -q 'PROVISIONING_PROFILE_SPECIFIER = "BeeCount AppStore"' "$PROJECT_FILE"; then
-            sed -i '' "/buildSettings = {/a\\
-\\				PROVISIONING_PROFILE_SPECIFIER = \"BeeCount AppStore\";\\
-" "$PROJECT_FILE"
-          fi
+          # 3. 使用perl在每个buildSettings块后添加配置（更可靠）
+          perl -i -pe "s/(buildSettings = \\{)/\$1\n\t\t\t\tDEVELOPMENT_TEAM = ${APPLE_TEAM_ID};\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \\\"BeeCount AppStore\\\";/g" "$PROJECT_FILE"
 
           echo "✅ Configured manual signing for Xcode project"
           echo "Signing configuration:"
