@@ -312,7 +312,7 @@ jobs:
               '    <key>provisioningProfiles</key>' \
               '    <dict>' \
               '        <key>com.tntlikely.beecount</key>' \
-              '        <string>BeeCount AppStore</string>' \
+              '        <string>BeeCount_AppStore</string>' \
               '    </dict>' \
               '</dict>' \
               '</plist>' \
@@ -349,7 +349,7 @@ jobs:
           sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";/g' "$PROJECT_FILE"
 
           # 3. 使用perl在每个buildSettings块后添加配置（更可靠）
-          perl -i -pe "s/(buildSettings = \\{)/\$1\n\t\t\t\tDEVELOPMENT_TEAM = ${APPLE_TEAM_ID};\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \\\"BeeCount AppStore\\\";/g" "$PROJECT_FILE"
+          perl -i -pe "s/(buildSettings = \\{)/\$1\n\t\t\t\tDEVELOPMENT_TEAM = ${APPLE_TEAM_ID};\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \\\"BeeCount_AppStore\\\";/g" "$PROJECT_FILE"
 
           echo "✅ Configured manual signing for Xcode project"
           echo "Signing configuration:"
