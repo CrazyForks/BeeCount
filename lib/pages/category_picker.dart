@@ -282,7 +282,7 @@ class _CategoryGridState extends ConsumerState<_CategoryGrid> {
             final key = _keys.putIfAbsent(c.id, () => GlobalKey());
             return _CategoryItem(
               key: key,
-              name: c.name,
+              category: c,
               selected: selected || _selectedId == c.id,
               onTap: () async {
                 setState(() => _selectedId = c.id);
@@ -329,16 +329,16 @@ class _CategoryGridState extends ConsumerState<_CategoryGrid> {
 }
 
 class _CategoryItem extends StatelessWidget {
-  final String name;
+  final Category category;
   final VoidCallback onTap;
   final bool selected;
   const _CategoryItem(
       {super.key,
-      required this.name,
+      required this.category,
       required this.onTap,
       this.selected = false});
 
-  IconData _iconFor(String n) => iconForCategory(n);
+  IconData _iconFor(Category c) => getCategoryIconData(category: c);
 
   @override
   Widget build(BuildContext context) {
@@ -360,14 +360,14 @@ class _CategoryItem extends StatelessWidget {
                   : Colors.grey[200],
               shape: BoxShape.circle,
             ),
-            child: Icon(_iconFor(name),
+            child: Icon(_iconFor(category),
                 color: selected
                     ? Theme.of(context).colorScheme.primary
                     : Colors.grey[700]),
           ),
           const SizedBox(height: 8),
           Text(
-            CategoryUtils.getDisplayName(name, context),
+            CategoryUtils.getDisplayName(category.name, context),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall,

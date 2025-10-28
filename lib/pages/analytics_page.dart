@@ -472,7 +472,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
 
                 // 在balance模式下，需要计算结余数据
                 dynamic seriesRaw;
-                List<({int? id, String name, double total})> catData;
+                List<({int? id, String name, String? icon, double total})> catData;
                 int txCount;
                 double sum;
 
@@ -485,7 +485,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                   seriesRaw = _calculateBalanceSeries(incomeData, expenseData);
 
                   // 分类数据显示支出分类（但结余模式下不显示排行榜）
-                  catData = (list[0] as List<({int? id, String name, double total})>);
+                  catData = (list[0] as List<({int? id, String name, String? icon, double total})>);
 
                   // 获取收入和支出的交易数量
                   final expenseCount = list[2] as int;
@@ -497,7 +497,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                   final expenseSum = _getSumFromSeries(expenseData);
                   sum = incomeSum - expenseSum;
                 } else {
-                  catData = (list[0] as List<({int? id, String name, double total})>);
+                  catData = (list[0] as List<({int? id, String name, String? icon, double total})>);
                   seriesRaw = list[1];
                   txCount = list[2] as int;
                   sum = catData.fold<double>(0, (a, b) => a + b.total);
@@ -780,6 +780,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                                 context, item.id, item.name, start, end, _type),
                             child: CategoryRankRow(
                               name: item.name,
+                              iconName: item.icon,
                               value: item.total,
                               percent: sum == 0 ? 0 : item.total / sum,
                               color: Theme.of(context).colorScheme.primary,

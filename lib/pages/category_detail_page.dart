@@ -447,9 +447,10 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
 
   IconData _getTransactionIcon(db.Transaction transaction) {
     final categoryAsync = ref.read(_categoryStreamProvider(widget.categoryId));
-    final categoryName = categoryAsync.value?.name ?? widget.categoryName;
-    // 使用与首页相同的图标获取逻辑
-    return iconForCategory(categoryName);
+    final category = categoryAsync.value;
+    final categoryName = category?.name ?? widget.categoryName;
+    // 使用统一的图标获取逻辑,优先使用分类对象的icon字段
+    return getCategoryIconData(category: category, categoryName: categoryName);
   }
 
   String _getTransactionTitle(db.Transaction transaction) {

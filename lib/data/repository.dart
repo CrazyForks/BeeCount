@@ -78,7 +78,7 @@ class BeeRepository {
   }
 
   // Aggregation: totals by category for a period and type (income/expense)
-  Future<List<({int? id, String name, double total})>> totalsByCategory({
+  Future<List<({int? id, String name, String? icon, double total})>> totalsByCategory({
     required int ledgerId,
     required String type, // 'income' or 'expense'
     required DateTime start,
@@ -96,16 +96,19 @@ class BeeRepository {
     final rows = await q.get();
     final map = <int?, double>{}; // categoryId (nullable) -> total
     final names = <int?, String>{};
+    final icons = <int?, String?>{};
     for (final r in rows) {
       final t = r.readTable(db.transactions);
       final c = r.readTableOrNull(db.categories);
       final id = c?.id;
       final name = c?.name ?? '未分类';
+      final icon = c?.icon;
       names[id] = name;
+      icons[id] = icon;
       map.update(id, (v) => v + t.amount, ifAbsent: () => t.amount);
     }
     final list = map.entries
-        .map((e) => (id: e.key, name: names[e.key] ?? '未分类', total: e.value))
+        .map((e) => (id: e.key, name: names[e.key] ?? '未分类', icon: icons[e.key], total: e.value))
         .toList()
       ..sort((a, b) => b.total.compareTo(a.total));
     return list;

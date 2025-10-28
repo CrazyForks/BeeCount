@@ -4,6 +4,7 @@ import '../../widgets/category_icon.dart';
 import '../biz/biz.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
+import '../../services/category_service.dart';
 
 class CategoryRankRow extends StatelessWidget {
   final String name;
@@ -12,6 +13,7 @@ class CategoryRankRow extends StatelessWidget {
   final Color color;
   final bool isIncome; // 是否为收入分类
   final bool isExpense; // 是否为支出分类
+  final String? iconName; // 图标名称,从数据库icon字段获取
 
   const CategoryRankRow({
     super.key,
@@ -21,7 +23,16 @@ class CategoryRankRow extends StatelessWidget {
     required this.color,
     this.isIncome = false,
     this.isExpense = false,
+    this.iconName,
   });
+
+  IconData _getIconData() {
+    // 优先使用iconName(从数据库icon字段获取),否则根据分类名称推导
+    if (iconName != null && iconName!.isNotEmpty) {
+      return CategoryService.getCategoryIcon(iconName);
+    }
+    return getCategoryIconData(categoryName: name);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +49,10 @@ class CategoryRankRow extends StatelessWidget {
                   Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-            child: Icon(iconForCategory(name), color: color),
+            child: Icon(
+              _getIconData(),
+              color: color
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(

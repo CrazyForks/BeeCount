@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/database_providers.dart';
 import '../data/db.dart' as db;
 import '../widgets/ui/ui.dart';
-import '../widgets/biz/biz.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/category_utils.dart';
+import '../widgets/category_icon.dart';
 
 class CategoryMigrationPage extends ConsumerStatefulWidget {
   final db.Category? preselectedFromCategory; // 预填充的来源分类
@@ -294,7 +294,7 @@ class _CategoryDropdownItem extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Icon(
-            _getCategoryIcon(category.icon),
+            getCategoryIconData(category: category),
             color: Theme.of(context).colorScheme.primary,
             size: 18,
           ),
@@ -322,24 +322,5 @@ class _CategoryDropdownItem extends StatelessWidget {
         ),
       ],
     );
-  }
-  
-  IconData _getCategoryIcon(String? iconName) {
-    if (iconName == null || iconName.isEmpty) {
-      return Icons.category;
-    }
-    
-    // 这里可以复用分类管理页面的图标映射逻辑
-    // 为了简化，暂时使用默认图标
-    switch (iconName) {
-      case 'restaurant': return Icons.restaurant;
-      case 'directions_car': return Icons.directions_car;
-      case 'shopping_cart': return Icons.shopping_cart;
-      case 'home': return Icons.home;
-      case 'work': return Icons.work;
-      case 'savings': return Icons.savings;
-      case 'card_giftcard': return Icons.card_giftcard;
-      default: return Icons.category;
-    }
   }
 }

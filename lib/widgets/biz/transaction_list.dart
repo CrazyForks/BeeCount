@@ -239,7 +239,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
               child: Column(
                 children: [
                   TransactionListItem(
-                    icon: iconForCategory(categoryName),
+                    icon: getCategoryIconData(category: it.category, categoryName: categoryName),
                     title: subtitle.isNotEmpty ? subtitle : categoryName,
                     categoryName: subtitle.isNotEmpty ? null : categoryName,
                     amount: it.t.amount,
