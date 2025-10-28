@@ -335,16 +335,38 @@ jobs:
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
 
-      - name: Build iOS (signed, release)
+      - name: Configure Xcode project for signing
         if: env.IOS_SIGNING_ENABLED == 'true'
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          # 在所有 buildSettings 中添加 DEVELOPMENT_TEAM
+          # 使用 awk 在每个 buildSettings 块中添加 DEVELOPMENT_TEAM
+          awk -v team="$APPLE_TEAM_ID" '
+            /buildSettings = \{/ {
+              print
+              getline
+              if ($0 !~ /DEVELOPMENT_TEAM/) {
+                print "\t\t\t\tDEVELOPMENT_TEAM = " team ";"
+              }
+              print
+              next
+            }
+            {print}
+          ' ios/Runner.xcodeproj/project.pbxproj > ios/Runner.xcodeproj/project.pbxproj.tmp
+          mv ios/Runner.xcodeproj/project.pbxproj.tmp ios/Runner.xcodeproj/project.pbxproj
+
+          echo "✅ Added DEVELOPMENT_TEAM to Xcode project"
+          grep -A 1 "buildSettings = {" ios/Runner.xcodeproj/project.pbxproj | head -20
+
+      - name: Build iOS (signed, release)
+        if: env.IOS_SIGNING_ENABLED == 'true'
         run: |
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
 
-          # 使用 flutter build ios 并通过 --export-options-plist 指定签名配置
+          # 使用 flutter build ipa 并通过 --export-options-plist 指定签名配置
           flutter build ipa --release \
             --export-options-plist=ios/ExportOptions.plist \
             --dart-define=CI_VERSION="$CI_VERSION" \
