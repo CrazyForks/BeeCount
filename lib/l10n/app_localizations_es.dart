@@ -2829,6 +2829,86 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cloudWebdavRemotePathHelperText => 'Ruta del directorio remoto para almacenamiento de datos';
 
   @override
+  String get accountsTitle => 'Cuentas';
+
+  @override
+  String get accountsEmptyMessage => 'No accounts yet, tap the top right to add';
+
+  @override
+  String get accountAddTooltip => 'Add Account';
+
+  @override
+  String get accountAddButton => 'Add Account';
+
+  @override
+  String get accountBalance => 'Balance';
+
+  @override
+  String get accountEditTitle => 'Edit Account';
+
+  @override
+  String get accountNewTitle => 'New Account';
+
+  @override
+  String get accountNameLabel => 'Account Name';
+
+  @override
+  String get accountNameHint => 'e.g.: ICBC, Alipay, etc.';
+
+  @override
+  String get accountNameRequired => 'Please enter account name';
+
+  @override
+  String get accountTypeLabel => 'Account Type';
+
+  @override
+  String get accountTypeCash => 'Cash';
+
+  @override
+  String get accountTypeBankCard => 'Bank Card';
+
+  @override
+  String get accountTypeCreditCard => 'Credit Card';
+
+  @override
+  String get accountTypeAlipay => 'Alipay';
+
+  @override
+  String get accountTypeWechat => 'WeChat';
+
+  @override
+  String get accountTypeOther => 'Other';
+
+  @override
+  String get accountInitialBalance => 'Initial Balance';
+
+  @override
+  String get accountInitialBalanceHint => 'Enter initial balance (optional)';
+
+  @override
+  String get accountDeleteWarningTitle => 'Confirm Delete';
+
+  @override
+  String accountDeleteWarningMessage(int count) {
+    return 'This account has $count related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?';
+  }
+
+  @override
+  String get accountDeleteConfirm => 'Confirm to delete this account?';
+
+  @override
+  String get accountSelectTitle => 'Select Account';
+
+  @override
+  String get accountNone => 'No Account';
+
+  @override
+  String get accountsEnableFeature => 'Enable Account Feature';
+
+  @override
+  String get accountsFeatureDescription => 'Manage multiple payment accounts and track balance changes for each account';
+
+  @override
   String get updateCorruptedFileTitle => 'Corrupted Installation Package';
 
   @override

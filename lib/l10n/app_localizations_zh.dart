@@ -2829,6 +2829,86 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudWebdavRemotePathHelperText => '数据存储的远程目录路径';
 
   @override
+  String get accountsTitle => '账户管理';
+
+  @override
+  String get accountsEmptyMessage => '还没有账户，点击右上角添加';
+
+  @override
+  String get accountAddTooltip => '添加账户';
+
+  @override
+  String get accountAddButton => '添加账户';
+
+  @override
+  String get accountBalance => '余额';
+
+  @override
+  String get accountEditTitle => '编辑账户';
+
+  @override
+  String get accountNewTitle => '新建账户';
+
+  @override
+  String get accountNameLabel => '账户名称';
+
+  @override
+  String get accountNameHint => '例如：工商银行、支付宝等';
+
+  @override
+  String get accountNameRequired => '请输入账户名称';
+
+  @override
+  String get accountTypeLabel => '账户类型';
+
+  @override
+  String get accountTypeCash => '现金';
+
+  @override
+  String get accountTypeBankCard => '银行卡';
+
+  @override
+  String get accountTypeCreditCard => '信用卡';
+
+  @override
+  String get accountTypeAlipay => '支付宝';
+
+  @override
+  String get accountTypeWechat => '微信';
+
+  @override
+  String get accountTypeOther => '其他';
+
+  @override
+  String get accountInitialBalance => '初始资金';
+
+  @override
+  String get accountInitialBalanceHint => '请输入初始资金（可选）';
+
+  @override
+  String get accountDeleteWarningTitle => '确认删除';
+
+  @override
+  String accountDeleteWarningMessage(int count) {
+    return '该账户有 $count 笔关联交易，删除后交易记录中的账户信息将被清空。确认删除吗？';
+  }
+
+  @override
+  String get accountDeleteConfirm => '确认删除该账户吗？';
+
+  @override
+  String get accountSelectTitle => '选择账户';
+
+  @override
+  String get accountNone => '不选择账户';
+
+  @override
+  String get accountsEnableFeature => '启用账户功能';
+
+  @override
+  String get accountsFeatureDescription => '启用后可以管理多个支付账户，追踪每个账户的余额变化';
+
+  @override
   String get updateCorruptedFileTitle => '安装包已损坏';
 
   @override

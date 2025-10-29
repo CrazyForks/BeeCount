@@ -22,6 +22,7 @@ class Accounts extends Table {
   IntColumn get ledgerId => integer()();
   TextColumn get name => text()();
   TextColumn get type => text().withDefault(const Constant('cash'))();
+  RealColumn get initialBalance => real().withDefault(const Constant(0.0))();
 }
 
 class Categories extends Table {
@@ -78,7 +79,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -103,6 +104,10 @@ class BeeDatabase extends _$BeeDatabase {
 
         // 为 transactions 表添加 recurring_id 字段
         await customStatement('ALTER TABLE transactions ADD COLUMN recurring_id INTEGER;');
+      }
+      if (from < 4) {
+        // 为 accounts 表添加 initial_balance 字段
+        await customStatement('ALTER TABLE accounts ADD COLUMN initial_balance REAL NOT NULL DEFAULT 0.0;');
       }
     },
   );

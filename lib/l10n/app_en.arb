@@ -1304,6 +1304,39 @@
   "cloudWebdavPasswordLabel": "Password",
   "cloudWebdavRemotePathLabel": "Remote Path",
   "cloudWebdavRemotePathHelperText": "Remote directory path for data storage",
+  "accountsTitle": "Account Management",
+  "accountsEmptyMessage": "No accounts yet, tap the top right to add",
+  "accountAddTooltip": "Add Account",
+  "accountAddButton": "Add Account",
+  "accountBalance": "Balance",
+  "accountEditTitle": "Edit Account",
+  "accountNewTitle": "New Account",
+  "accountNameLabel": "Account Name",
+  "accountNameHint": "e.g.: ICBC, Alipay, etc.",
+  "accountNameRequired": "Please enter account name",
+  "accountTypeLabel": "Account Type",
+  "accountTypeCash": "Cash",
+  "accountTypeBankCard": "Bank Card",
+  "accountTypeCreditCard": "Credit Card",
+  "accountTypeAlipay": "Alipay",
+  "accountTypeWechat": "WeChat",
+  "accountTypeOther": "Other",
+  "accountInitialBalance": "Initial Balance",
+  "accountInitialBalanceHint": "Enter initial balance (optional)",
+  "accountDeleteWarningTitle": "Confirm Delete",
+  "accountDeleteWarningMessage": "This account has {count} related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?",
+  "@accountDeleteWarningMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountDeleteConfirm": "Confirm to delete this account?",
+  "accountSelectTitle": "Select Account",
+  "accountNone": "No Account",
+  "accountsEnableFeature": "Enable Account Feature",
+  "accountsFeatureDescription": "Manage multiple payment accounts and track balance changes for each account",
 
   "updateCorruptedFileTitle": "Corrupted Installation Package",
   "updateCorruptedFileMessage": "The previously downloaded installation package is incomplete or corrupted. Delete and re-download?"

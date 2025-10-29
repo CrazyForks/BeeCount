@@ -1138,5 +1138,38 @@
   "cloudWebdavUsernameLabel": "用户名",
   "cloudWebdavPasswordLabel": "密码",
   "cloudWebdavRemotePathLabel": "远程路径",
-  "cloudWebdavRemotePathHelperText": "数据存储的远程目录路径"
+  "cloudWebdavRemotePathHelperText": "数据存储的远程目录路径",
+  "accountsTitle": "账户管理",
+  "accountsEmptyMessage": "还没有账户，点击右上角添加",
+  "accountAddTooltip": "添加账户",
+  "accountAddButton": "添加账户",
+  "accountBalance": "余额",
+  "accountEditTitle": "编辑账户",
+  "accountNewTitle": "新建账户",
+  "accountNameLabel": "账户名称",
+  "accountNameHint": "例如：工商银行、支付宝等",
+  "accountNameRequired": "请输入账户名称",
+  "accountTypeLabel": "账户类型",
+  "accountTypeCash": "现金",
+  "accountTypeBankCard": "银行卡",
+  "accountTypeCreditCard": "信用卡",
+  "accountTypeAlipay": "支付宝",
+  "accountTypeWechat": "微信",
+  "accountTypeOther": "其他",
+  "accountInitialBalance": "初始资金",
+  "accountInitialBalanceHint": "请输入初始资金（可选）",
+  "accountDeleteWarningTitle": "确认删除",
+  "accountDeleteWarningMessage": "该账户有 {count} 笔关联交易，删除后交易记录中的账户信息将被清空。确认删除吗？",
+  "@accountDeleteWarningMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountDeleteConfirm": "确认删除该账户吗？",
+  "accountSelectTitle": "选择账户",
+  "accountNone": "不选择账户",
+  "accountsEnableFeature": "启用账户功能",
+  "accountsFeatureDescription": "启用后可以管理多个支付账户，追踪每个账户的余额变化"
 }

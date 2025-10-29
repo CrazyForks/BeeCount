@@ -104,3 +104,15 @@ final recurringTransactionsProvider = FutureProvider.family<List<RecurringTransa
         ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
       .get();
 });
+
+// 账户Provider
+final accountsStreamProvider = StreamProvider.family<List<Account>, int>((ref, ledgerId) {
+  final repo = ref.watch(repositoryProvider);
+  return repo.accountsForLedger(ledgerId);
+});
+
+// 获取单个账户信息
+final accountByIdProvider = FutureProvider.family<Account?, int>((ref, accountId) async {
+  final repo = ref.watch(repositoryProvider);
+  return await repo.getAccount(accountId);
+});

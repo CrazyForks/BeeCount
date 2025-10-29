@@ -29,6 +29,7 @@ import 'category_migration_page.dart';
 import 'recurring_transaction_page.dart';
 import 'reminder_settings_page.dart';
 import 'language_settings_page.dart';
+import 'accounts_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/update_service.dart';
@@ -305,6 +306,18 @@ class MinePage extends ConsumerWidget {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (_) => const CategoryMigrationPage()),
+                          );
+                        },
+                      ),
+                      AppDivider.thin(),
+                      // 账户管理入口
+                      AppListTile(
+                        leading: Icons.account_balance_wallet_outlined,
+                        title: AppLocalizations.of(context).accountsTitle,
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => const AccountsPage()),
                           );
                         },
                       ),

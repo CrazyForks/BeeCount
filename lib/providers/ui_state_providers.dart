@@ -91,6 +91,26 @@ final searchSettingsSetterProvider = Provider<SearchSettingsSetter>((ref) {
   return SearchSettingsSetter();
 });
 
+// 账户功能启用状态持久化
+final accountFeatureEnabledProvider =
+    FutureProvider.autoDispose<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return prefs.getBool('account_feature_enabled') ?? false;
+});
+
+class AccountFeatureSetter {
+  Future<void> setEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('account_feature_enabled', enabled);
+  }
+}
+
+final accountFeatureSetterProvider = Provider<AccountFeatureSetter>((ref) {
+  return AccountFeatureSetter();
+});
+
 // 缓存的交易数据Provider（用于首屏快速展示）
 final cachedTransactionsWithCategoryProvider = StateProvider<List<({Transaction t, Category? category})>?>((ref) => null);
 

@@ -5398,6 +5398,162 @@ abstract class AppLocalizations {
   /// **'Remote directory path for data storage'**
   String get cloudWebdavRemotePathHelperText;
 
+  /// No description provided for @accountsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Management'**
+  String get accountsTitle;
+
+  /// No description provided for @accountsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No accounts yet, tap the top right to add'**
+  String get accountsEmptyMessage;
+
+  /// No description provided for @accountAddTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Account'**
+  String get accountAddTooltip;
+
+  /// No description provided for @accountAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Account'**
+  String get accountAddButton;
+
+  /// No description provided for @accountBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get accountBalance;
+
+  /// No description provided for @accountEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Account'**
+  String get accountEditTitle;
+
+  /// No description provided for @accountNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Account'**
+  String get accountNewTitle;
+
+  /// No description provided for @accountNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Name'**
+  String get accountNameLabel;
+
+  /// No description provided for @accountNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g.: ICBC, Alipay, etc.'**
+  String get accountNameHint;
+
+  /// No description provided for @accountNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter account name'**
+  String get accountNameRequired;
+
+  /// No description provided for @accountTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Type'**
+  String get accountTypeLabel;
+
+  /// No description provided for @accountTypeCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get accountTypeCash;
+
+  /// No description provided for @accountTypeBankCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Card'**
+  String get accountTypeBankCard;
+
+  /// No description provided for @accountTypeCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Card'**
+  String get accountTypeCreditCard;
+
+  /// No description provided for @accountTypeAlipay.
+  ///
+  /// In en, this message translates to:
+  /// **'Alipay'**
+  String get accountTypeAlipay;
+
+  /// No description provided for @accountTypeWechat.
+  ///
+  /// In en, this message translates to:
+  /// **'WeChat'**
+  String get accountTypeWechat;
+
+  /// No description provided for @accountTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get accountTypeOther;
+
+  /// No description provided for @accountInitialBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial Balance'**
+  String get accountInitialBalance;
+
+  /// No description provided for @accountInitialBalanceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter initial balance (optional)'**
+  String get accountInitialBalanceHint;
+
+  /// No description provided for @accountDeleteWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get accountDeleteWarningTitle;
+
+  /// No description provided for @accountDeleteWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has {count} related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?'**
+  String accountDeleteWarningMessage(int count);
+
+  /// No description provided for @accountDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm to delete this account?'**
+  String get accountDeleteConfirm;
+
+  /// No description provided for @accountSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Account'**
+  String get accountSelectTitle;
+
+  /// No description provided for @accountNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No Account'**
+  String get accountNone;
+
+  /// No description provided for @accountsEnableFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Account Feature'**
+  String get accountsEnableFeature;
+
+  /// No description provided for @accountsFeatureDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage multiple payment accounts and track balance changes for each account'**
+  String get accountsFeatureDescription;
+
   /// No description provided for @updateCorruptedFileTitle.
   ///
   /// In en, this message translates to:

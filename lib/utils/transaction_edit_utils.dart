@@ -20,6 +20,7 @@ class TransactionEditUtils {
           initialDate: transaction.happenedAt,
           initialNote: transaction.note,
           editingTransactionId: transaction.id,
+          initialAccountId: transaction.accountId,
         ),
       ),
     );

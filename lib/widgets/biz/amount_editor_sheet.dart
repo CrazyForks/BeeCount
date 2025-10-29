@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beecount/widgets/ui/wheel_date_picker.dart';
 import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/note_history_service.dart';
 import '../../data/db.dart';
+import 'account_picker.dart';
+import '../../providers.dart';
 
-typedef AmountEditorResult = ({double amount, String? note, DateTime date});
+typedef AmountEditorResult = ({double amount, String? note, DateTime date, int? accountId});
 
 class AmountEditorSheet extends StatefulWidget {
   final String categoryName; // 仅用于上层提交，不在UI展示
   final DateTime initialDate;
   final double? initialAmount;
   final String? initialNote;
+  final int? initialAccountId;
+  final bool showAccountPicker; // 是否显示账户选择
   final ValueChanged<AmountEditorResult> onSubmit;
   final BeeDatabase db;
   final int ledgerId;
@@ -23,6 +28,8 @@ class AmountEditorSheet extends StatefulWidget {
     required this.initialDate,
     this.initialAmount,
     this.initialNote,
+    this.initialAccountId,
+    this.showAccountPicker = false,
     required this.onSubmit,
     required this.db,
     required this.ledgerId,
@@ -35,6 +42,7 @@ class AmountEditorSheet extends StatefulWidget {
 class _AmountEditorSheetState extends State<AmountEditorSheet> {
   late String _amountStr;
   late DateTime _date;
+  int? _selectedAccountId;
   final bool _negative = false; // 显示用途，仅影响UI，不改变保存逻辑
   final TextEditingController _noteCtrl = TextEditingController();
   // 运算缓存：支持简单 + / - 键入累计
@@ -48,6 +56,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
   void initState() {
     super.initState();
     _date = widget.initialDate;
+    _selectedAccountId = widget.initialAccountId;
     // 保留原始小数（最多两位），避免编辑已有记录时小数被截断为整数
     final init = widget.initialAmount ?? 0;
     final s = init.toStringAsFixed(2);
@@ -308,6 +317,39 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                 ),
               ),
             ],
+            // 账户选择（仅在启用时显示）
+            if (widget.showAccountPicker) ...[
+              const SizedBox(height: 8),
+              Consumer(
+                builder: (context, ref, child) {
+                  // 检查账户功能是否启用
+                  final accountFeatureAsync = ref.watch(accountFeatureEnabledProvider);
+                  return accountFeatureAsync.when(
+                    data: (enabled) {
+                      if (!enabled) return const SizedBox.shrink();
+
+                      // 获取选中的账户信息
+                      String accountLabel = AppLocalizations.of(context)!.accountNone;
+                      if (_selectedAccountId != null) {
+                        // 使用FutureBuilder获取账户名称
+                        return FutureBuilder<Account?>(
+                          future: ref.read(repositoryProvider).getAccount(_selectedAccountId!),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData && snapshot.data != null) {
+                              accountLabel = snapshot.data!.name;
+                            }
+                            return _buildAccountButton(context, accountLabel);
+                          },
+                        );
+                      }
+                      return _buildAccountButton(context, accountLabel);
+                    },
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  );
+                },
+              ),
+            ],
             const SizedBox(height: 10),
             // 数字键盘
             LayoutBuilder(builder: (ctx, c) {
@@ -385,6 +427,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                             note:
                                 _noteCtrl.text.isEmpty ? null : _noteCtrl.text,
                             date: _date,
+                            accountId: _selectedAccountId,
                           ));
                         },
                         child: SizedBox(
@@ -463,6 +506,55 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                 ],
               );
             })
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAccountButton(BuildContext context, String accountLabel) {
+    final text = Theme.of(context).textTheme;
+    return InkWell(
+      onTap: () async {
+        final result = await AccountPicker.show(
+          context,
+          selectedAccountId: _selectedAccountId,
+          allowNull: true,
+        );
+        if (result != null || result != _selectedAccountId) {
+          setState(() {
+            _selectedAccountId = result;
+          });
+        }
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF3F4F6),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.account_balance_wallet_outlined,
+              size: 18,
+              color: BeeColors.primaryText,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                accountLabel,
+                style: text.bodyMedium?.copyWith(
+                  color: BeeColors.primaryText,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: Colors.grey[400],
+            ),
           ],
         ),
       ),
