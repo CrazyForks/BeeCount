@@ -451,6 +451,36 @@ jobs:
             ls -la build/ios/iphonesimulator || true
           fi
 
+      - name: Upload to TestFlight
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+          IPA_FILE="beecount-${VERSION}-signed.ipa"
+
+          if [ -z "${APPLE_ID:-}" ] || [ -z "${APPLE_APP_SPECIFIC_PASSWORD:-}" ]; then
+            echo "⚠️  APPLE_ID or APPLE_APP_SPECIFIC_PASSWORD not set, skipping TestFlight upload"
+            exit 0
+          fi
+
+          if [ ! -f "$IPA_FILE" ]; then
+            echo "❌ Signed IPA not found: $IPA_FILE"
+            exit 1
+          fi
+
+          echo "📤 Uploading $IPA_FILE to TestFlight..."
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$IPA_FILE" \
+            --username "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --verbose
+
+          echo "✅ Successfully uploaded to TestFlight!"
+
       - name: Upload iOS artifacts
         uses: actions/upload-artifact@v4
         with:
