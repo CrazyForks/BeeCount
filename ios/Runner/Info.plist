@@ -51,5 +51,11 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<!-- Privacy - Photo Library Usage Description -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>蜜蜂记账需要访问您的照片库，以便导入或分享账单数据文件</string>
+	<!-- Privacy - Photo Library Additions Usage Description -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>蜜蜂记账需要保存文件到您的照片库</string>
 </dict>
 </plist>
