@@ -629,8 +629,10 @@ jobs:
             COMMITS=$(git log --no-merges --pretty=format:"- %s")
           fi
 
+          # 转义 Markdown 特殊字符，然后进行 URL 编码
+          COMMITS_ESCAPED=$(echo "$COMMITS" | sed 's/\*/\\*/g; s/_/\\_/g; s/\[/\\[/g; s/\]/\\]/g; s/`/\\`/g')
           # URL 编码变更内容（换行符转为 %0A）
-          COMMITS_ENCODED=$(echo "$COMMITS" | sed 's/$/%0A/g' | tr -d '\n')
+          COMMITS_ENCODED=$(echo "$COMMITS_ESCAPED" | sed 's/$/%0A/g' | tr -d '\n')
 
           # 构建消息
           if [ "$IS_PRERELEASE" == "true" ]; then
