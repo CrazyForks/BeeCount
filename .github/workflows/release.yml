@@ -293,10 +293,22 @@ jobs:
             # 使用 UUID 作为文件名安装到正确位置
             mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
             cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/${PP_UUID}.mobileprovision
-            echo "Installed provisioning profile: ${PP_UUID}.mobileprovision"
+            echo "✅ Installed provisioning profile: ${PP_UUID}.mobileprovision"
+
+            # 调试：显示 provisioning profile 详细信息
+            echo "📋 Provisioning Profile details:"
+            security cms -D -i $PP_PATH | plutil -p - | grep -A 5 -E "(Name|UUID|TeamIdentifier|AppIDName)"
 
             # 设置 codesign 权限
             security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+            # 调试：列出所有可用的签名身份
+            echo "📋 Available signing identities in keychain:"
+            security find-identity -v -p codesigning $KEYCHAIN_PATH
+
+            echo ""
+            echo "📋 All signing identities on system:"
+            security find-identity -v -p codesigning
 
             # 动态生成 ExportOptions.plist（使用 printf 避免 heredoc YAML 冲突）
             printf '%s\n' \
