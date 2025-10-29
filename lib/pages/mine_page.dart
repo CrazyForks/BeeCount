@@ -56,7 +56,8 @@ class MinePage extends ConsumerWidget {
         if (!context.mounted) return;
         final ok = await AppDialog.confirm<bool>(context,
                 title: AppLocalizations.of(context).cloudBackupFound,
-                message: AppLocalizations.of(context).cloudBackupRestoreMessage) ??
+                message:
+                    AppLocalizations.of(context).cloudBackupRestoreMessage) ??
             false;
         if (!ok || !context.mounted) return;
         RestoreService.startBackgroundRestore(check.backups, ref);
@@ -67,7 +68,9 @@ class MinePage extends ConsumerWidget {
         ref.read(statsRefreshProvider.notifier).state++;
       } catch (e) {
         if (!context.mounted) return;
-        await AppDialog.error(context, title: AppLocalizations.of(context).cloudBackupRestoreFailed, message: '$e');
+        await AppDialog.error(context,
+            title: AppLocalizations.of(context).cloudBackupRestoreFailed,
+            message: '$e');
       }
     });
 
@@ -81,7 +84,11 @@ class MinePage extends ConsumerWidget {
             compact: true,
             showTitleSection: false,
             content: Padding(
-              padding: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 8.0.scaled(context, ref), 12.0.scaled(context, ref), 10.0.scaled(context, ref)),
+              padding: EdgeInsets.fromLTRB(
+                  12.0.scaled(context, ref),
+                  8.0.scaled(context, ref),
+                  12.0.scaled(context, ref),
+                  10.0.scaled(context, ref)),
               child: IntrinsicHeight(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +101,8 @@ class MinePage extends ConsumerWidget {
                           color: Theme.of(context).colorScheme.primary,
                           size: 48.0.scaled(context, ref),
                         ),
-                        Text(AppLocalizations.of(context).mineTitle, style: AppTextTokens.title(context)),
+                        Text(AppLocalizations.of(context).mineTitle,
+                            style: AppTextTokens.title(context)),
                       ],
                     ),
                     SizedBox(width: 12.0.scaled(context, ref)),
@@ -114,7 +122,8 @@ class MinePage extends ConsumerWidget {
                                 ),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 5.0.scaled(context, ref)), // 标语与统计区间距增大
+                          SizedBox(
+                              height: 5.0.scaled(context, ref)), // 标语与统计区间距增大
                           Builder(builder: (ctx) {
                             // 获取当前账本信息
                             final currentLedgerId =
@@ -123,16 +132,23 @@ class MinePage extends ConsumerWidget {
                                 countsForLedgerProvider(currentLedgerId));
                             final balanceAsync = ref
                                 .watch(currentBalanceProvider(currentLedgerId));
-                            final currentLedgerAsync = ref.watch(currentLedgerProvider);
+                            final currentLedgerAsync =
+                                ref.watch(currentLedgerProvider);
                             final selectedLocale = ref.watch(languageProvider);
 
                             final day = countsAsync.asData?.value.dayCount ?? 0;
                             final tx = countsAsync.asData?.value.txCount ?? 0;
                             final balance = balanceAsync.asData?.value ?? 0.0;
-                            final currentLedger = currentLedgerAsync.asData?.value;
-                            final currencyCode = currentLedger?.currency ?? 'CNY';
-                            final isChineseLocale = selectedLocale?.languageCode == 'zh' ||
-                                (selectedLocale == null && Localizations.localeOf(context).languageCode == 'zh');
+                            final currentLedger =
+                                currentLedgerAsync.asData?.value;
+                            final currencyCode =
+                                currentLedger?.currency ?? 'CNY';
+                            final isChineseLocale =
+                                selectedLocale?.languageCode == 'zh' ||
+                                    (selectedLocale == null &&
+                                        Localizations.localeOf(context)
+                                                .languageCode ==
+                                            'zh');
 
                             final labelStyle = Theme.of(context)
                                 .textTheme
@@ -146,20 +162,25 @@ class MinePage extends ConsumerWidget {
                               child: Row(children: [
                                 Expanded(
                                     child: _StatCell(
-                                        label: AppLocalizations.of(context).mineDaysCount,
+                                        label: AppLocalizations.of(context)
+                                            .mineDaysCount,
                                         value: day.toString(),
                                         labelStyle: labelStyle,
                                         numStyle: numStyle)),
                                 Expanded(
                                     child: _StatCell(
-                                        label: AppLocalizations.of(context).mineTotalRecords,
+                                        label: AppLocalizations.of(context)
+                                            .mineTotalRecords,
                                         value: tx.toString(),
                                         labelStyle: labelStyle,
                                         numStyle: numStyle)),
                                 Expanded(
                                     child: _StatCell(
-                                        label: AppLocalizations.of(context).mineCurrentBalance,
-                                        value: formatBalance(balance, currencyCode, isChineseLocale: isChineseLocale),
+                                        label: AppLocalizations.of(context)
+                                            .mineCurrentBalance,
+                                        value: formatBalance(
+                                            balance, currencyCode,
+                                            isChineseLocale: isChineseLocale),
                                         labelStyle: labelStyle,
                                         numStyle: numStyle.copyWith(
                                           color: balance >= 0
@@ -185,7 +206,8 @@ class MinePage extends ConsumerWidget {
                 SizedBox(height: 8.0.scaled(context, ref)),
                 // 同步分组
                 SectionCard(
-                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
                   child: Column(
                     children: [
                       Consumer(builder: (ctx, r, _) {
@@ -194,17 +216,22 @@ class MinePage extends ConsumerWidget {
                           leading: Icons.cloud_queue_outlined,
                           title: AppLocalizations.of(context).mineCloudService,
                           subtitle: activeCfg.when(
-                            loading: () => AppLocalizations.of(context).mineCloudServiceLoading,
-                            error: (e, _) => '${AppLocalizations.of(context).commonError}: $e',
+                            loading: () => AppLocalizations.of(context)
+                                .mineCloudServiceLoading,
+                            error: (e, _) =>
+                                '${AppLocalizations.of(context).commonError}: $e',
                             data: (cfg) {
                               if (cfg.type == CloudBackendType.local) {
-                                return AppLocalizations.of(context).mineCloudServiceOffline;
+                                return AppLocalizations.of(context)
+                                    .mineCloudServiceOffline;
                               } else {
                                 // 云服务：根据类型显示
                                 if (cfg.type == CloudBackendType.webdav) {
-                                  return AppLocalizations.of(context).mineCloudServiceWebDAV;
+                                  return AppLocalizations.of(context)
+                                      .mineCloudServiceWebDAV;
                                 } else {
-                                  return AppLocalizations.of(context).mineCloudServiceCustom;
+                                  return AppLocalizations.of(context)
+                                      .mineCloudServiceCustom;
                                 }
                               }
                             },
@@ -250,13 +277,16 @@ class MinePage extends ConsumerWidget {
                 // 个性化
                 SizedBox(height: 8.0.scaled(context, ref)),
                 SectionCard(
-                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
                   child: Column(
                     children: [
                       AppListTile(
                         leading: Icons.category_outlined,
-                        title: AppLocalizations.of(context).mineCategoryManagement,
-                        subtitle: AppLocalizations.of(context).mineCategoryManagementSubtitle,
+                        title:
+                            AppLocalizations.of(context).mineCategoryManagement,
+                        subtitle: AppLocalizations.of(context)
+                            .mineCategoryManagementSubtitle,
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -267,8 +297,10 @@ class MinePage extends ConsumerWidget {
                       AppDivider.thin(),
                       AppListTile(
                         leading: Icons.swap_horiz,
-                        title: AppLocalizations.of(context).mineCategoryMigration,
-                        subtitle: AppLocalizations.of(context).mineCategoryMigrationSubtitle,
+                        title:
+                            AppLocalizations.of(context).mineCategoryMigration,
+                        subtitle: AppLocalizations.of(context)
+                            .mineCategoryMigrationSubtitle,
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -279,20 +311,25 @@ class MinePage extends ConsumerWidget {
                       AppDivider.thin(),
                       AppListTile(
                         leading: Icons.repeat,
-                        title: AppLocalizations.of(context).mineRecurringTransactions,
-                        subtitle: AppLocalizations.of(context).mineRecurringTransactionsSubtitle,
+                        title: AppLocalizations.of(context)
+                            .mineRecurringTransactions,
+                        subtitle: AppLocalizations.of(context)
+                            .mineRecurringTransactionsSubtitle,
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (_) => const RecurringTransactionPage()),
+                                builder: (_) =>
+                                    const RecurringTransactionPage()),
                           );
                         },
                       ),
                       AppDivider.thin(),
                       AppListTile(
                         leading: Icons.notifications_outlined,
-                        title: AppLocalizations.of(context).mineReminderSettings,
-                        subtitle: AppLocalizations.of(context).mineReminderSettingsSubtitle,
+                        title:
+                            AppLocalizations.of(context).mineReminderSettings,
+                        subtitle: AppLocalizations.of(context)
+                            .mineReminderSettingsSubtitle,
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -316,11 +353,13 @@ class MinePage extends ConsumerWidget {
                 ),
                 SizedBox(height: 8.0.scaled(context, ref)),
                 SectionCard(
-                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
                   child: AppListTile(
                     leading: Icons.zoom_out_map_outlined,
                     title: AppLocalizations.of(context).mineDisplayScale,
-                    subtitle: AppLocalizations.of(context).mineDisplayScaleSubtitle,
+                    subtitle:
+                        AppLocalizations.of(context).mineDisplayScaleSubtitle,
                     onTap: () async {
                       await Navigator.of(context).push(
                         MaterialPageRoute(
@@ -389,7 +428,8 @@ class MinePage extends ConsumerWidget {
           inSync = true;
           break;
         case SyncDiff.localNewer:
-          subtitle = AppLocalizations.of(context).mineSyncLocalNewer(st.localCount);
+          subtitle =
+              AppLocalizations.of(context).mineSyncLocalNewer(st.localCount);
           icon = Icons.upload_outlined;
           break;
         case SyncDiff.cloudNewer:
@@ -406,25 +446,31 @@ class MinePage extends ConsumerWidget {
           if (st.message != null) {
             switch (st.message!) {
               case '__SYNC_NOT_CONFIGURED__':
-                localizedMessage = AppLocalizations.of(context).syncNotConfiguredMessage;
+                localizedMessage =
+                    AppLocalizations.of(context).syncNotConfiguredMessage;
                 break;
               case '__SYNC_NOT_LOGGED_IN__':
-                localizedMessage = AppLocalizations.of(context).syncNotLoggedInMessage;
+                localizedMessage =
+                    AppLocalizations.of(context).syncNotLoggedInMessage;
                 break;
               case '__SYNC_CLOUD_BACKUP_CORRUPTED__':
-                localizedMessage = AppLocalizations.of(context).syncCloudBackupCorruptedMessage;
+                localizedMessage = AppLocalizations.of(context)
+                    .syncCloudBackupCorruptedMessage;
                 break;
               case '__SYNC_NO_CLOUD_BACKUP__':
-                localizedMessage = AppLocalizations.of(context).syncNoCloudBackupMessage;
+                localizedMessage =
+                    AppLocalizations.of(context).syncNoCloudBackupMessage;
                 break;
               case '__SYNC_ACCESS_DENIED__':
-                localizedMessage = AppLocalizations.of(context).syncAccessDeniedMessage;
+                localizedMessage =
+                    AppLocalizations.of(context).syncAccessDeniedMessage;
                 break;
               default:
                 localizedMessage = st.message;
             }
           }
-          subtitle = localizedMessage ?? AppLocalizations.of(context).mineSyncError;
+          subtitle =
+              localizedMessage ?? AppLocalizations.of(context).mineSyncError;
           icon = Icons.error_outline;
           break;
       }
@@ -448,13 +494,17 @@ class MinePage extends ConsumerWidget {
               AppListTile(
                 leading: Icons.cloud_upload,
                 title: AppLocalizations.of(context).mineFirstFullUpload,
-                subtitle: AppLocalizations.of(context).mineFirstFullUploadSubtitle,
+                subtitle:
+                    AppLocalizations.of(context).mineFirstFullUploadSubtitle,
                 onTap: () async {
                   try {
                     await sync.uploadCurrentLedger(ledgerId: ledgerId);
                     if (context.mounted) {
                       await AppDialog.info(context,
-                          title: AppLocalizations.of(context).mineFirstFullUploadComplete, message: AppLocalizations.of(context).mineFirstFullUploadMessage);
+                          title: AppLocalizations.of(context)
+                              .mineFirstFullUploadComplete,
+                          message: AppLocalizations.of(context)
+                              .mineFirstFullUploadMessage);
                     }
                     await r3
                         .read(cloudServiceStoreProvider)
@@ -464,7 +514,9 @@ class MinePage extends ConsumerWidget {
                   } catch (e) {
                     if (context.mounted) {
                       await AppDialog.error(context,
-                          title: AppLocalizations.of(context).mineFirstFullUploadFailed, message: '$e');
+                          title: AppLocalizations.of(context)
+                              .mineFirstFullUploadFailed,
+                          message: '$e');
                     }
                   }
                 },
@@ -497,37 +549,52 @@ class MinePage extends ConsumerWidget {
                 : () async {
                     if (!context.mounted) return;
                     final lines = <String>[
-                      AppLocalizations.of(context).mineSyncLocalRecords(st.localCount),
-                      if (st.cloudCount != null) AppLocalizations.of(context).mineSyncCloudRecords(st.cloudCount!),
+                      AppLocalizations.of(context)
+                          .mineSyncLocalRecords(st.localCount),
+                      if (st.cloudCount != null)
+                        AppLocalizations.of(context)
+                            .mineSyncCloudRecords(st.cloudCount!),
                       if (st.cloudExportedAt != null)
-                        AppLocalizations.of(context).mineSyncCloudLatest(DateFormat('yyyy-MM-dd HH:mm:ss').format(st.cloudExportedAt!.toLocal())),
-                      AppLocalizations.of(context).mineSyncLocalFingerprint(st.localFingerprint),
+                        AppLocalizations.of(context).mineSyncCloudLatest(
+                            DateFormat('yyyy-MM-dd HH:mm:ss')
+                                .format(st.cloudExportedAt!.toLocal())),
+                      AppLocalizations.of(context)
+                          .mineSyncLocalFingerprint(st.localFingerprint),
                       if (st.cloudFingerprint != null)
-                        AppLocalizations.of(context).mineSyncCloudFingerprint(st.cloudFingerprint!),
-                      if (st.message != null) () {
-                        String localizedMessage = st.message!;
-                        switch (st.message!) {
-                          case '__SYNC_NOT_CONFIGURED__':
-                            localizedMessage = AppLocalizations.of(context).syncNotConfiguredMessage;
-                            break;
-                          case '__SYNC_NOT_LOGGED_IN__':
-                            localizedMessage = AppLocalizations.of(context).syncNotLoggedInMessage;
-                            break;
-                          case '__SYNC_CLOUD_BACKUP_CORRUPTED__':
-                            localizedMessage = AppLocalizations.of(context).syncCloudBackupCorruptedMessage;
-                            break;
-                          case '__SYNC_NO_CLOUD_BACKUP__':
-                            localizedMessage = AppLocalizations.of(context).syncNoCloudBackupMessage;
-                            break;
-                          case '__SYNC_ACCESS_DENIED__':
-                            localizedMessage = AppLocalizations.of(context).syncAccessDeniedMessage;
-                            break;
-                        }
-                        return AppLocalizations.of(context).mineSyncMessage(localizedMessage);
-                      }(),
+                        AppLocalizations.of(context)
+                            .mineSyncCloudFingerprint(st.cloudFingerprint!),
+                      if (st.message != null)
+                        () {
+                          String localizedMessage = st.message!;
+                          switch (st.message!) {
+                            case '__SYNC_NOT_CONFIGURED__':
+                              localizedMessage = AppLocalizations.of(context)
+                                  .syncNotConfiguredMessage;
+                              break;
+                            case '__SYNC_NOT_LOGGED_IN__':
+                              localizedMessage = AppLocalizations.of(context)
+                                  .syncNotLoggedInMessage;
+                              break;
+                            case '__SYNC_CLOUD_BACKUP_CORRUPTED__':
+                              localizedMessage = AppLocalizations.of(context)
+                                  .syncCloudBackupCorruptedMessage;
+                              break;
+                            case '__SYNC_NO_CLOUD_BACKUP__':
+                              localizedMessage = AppLocalizations.of(context)
+                                  .syncNoCloudBackupMessage;
+                              break;
+                            case '__SYNC_ACCESS_DENIED__':
+                              localizedMessage = AppLocalizations.of(context)
+                                  .syncAccessDeniedMessage;
+                              break;
+                          }
+                          return AppLocalizations.of(context)
+                              .mineSyncMessage(localizedMessage);
+                        }(),
                     ];
                     await AppDialog.info(context,
-                        title: AppLocalizations.of(context).mineSyncDetailTitle, message: lines.join('\n'));
+                        title: AppLocalizations.of(context).mineSyncDetailTitle,
+                        message: lines.join('\n'));
                   },
           ),
           AppDivider.thin(),
@@ -540,7 +607,11 @@ class MinePage extends ConsumerWidget {
                     ? AppLocalizations.of(context).mineUploadNeedLogin
                     : uploadBusy
                         ? AppLocalizations.of(context).mineUploadInProgress
-                        : (refreshing ? AppLocalizations.of(context).mineUploadRefreshing : (inSync ? AppLocalizations.of(context).mineUploadSynced : null)),
+                        : (refreshing
+                            ? AppLocalizations.of(context).mineUploadRefreshing
+                            : (inSync
+                                ? AppLocalizations.of(context).mineUploadSynced
+                                : null)),
             enabled: canUseCloud &&
                 !inSync &&
                 !notLoggedIn &&
@@ -560,7 +631,9 @@ class MinePage extends ConsumerWidget {
                 await sync.uploadCurrentLedger(ledgerId: ledgerId);
                 if (!context.mounted) return;
                 await AppDialog.info(context,
-                    title: AppLocalizations.of(context).mineUploadSuccess, message: AppLocalizations.of(context).mineUploadSuccessMessage);
+                    title: AppLocalizations.of(context).mineUploadSuccess,
+                    message:
+                        AppLocalizations.of(context).mineUploadSuccessMessage);
                 Future(() async {
                   try {
                     await sync.refreshCloudFingerprint(ledgerId: ledgerId);
@@ -586,7 +659,9 @@ class MinePage extends ConsumerWidget {
                 });
               } catch (e) {
                 if (!context.mounted) return;
-                await AppDialog.info(context, title: AppLocalizations.of(context).commonFailed, message: '$e');
+                await AppDialog.info(context,
+                    title: AppLocalizations.of(context).commonFailed,
+                    message: '$e');
               } finally {
                 if (ctx.mounted) setSB(() => uploadBusy = false);
               }
@@ -600,7 +675,11 @@ class MinePage extends ConsumerWidget {
                 ? null
                 : (!canUseCloud || notLoggedIn)
                     ? AppLocalizations.of(context).mineUploadNeedLogin
-                    : (refreshing ? AppLocalizations.of(context).mineUploadRefreshing : (inSync ? AppLocalizations.of(context).mineUploadSynced : null)),
+                    : (refreshing
+                        ? AppLocalizations.of(context).mineUploadRefreshing
+                        : (inSync
+                            ? AppLocalizations.of(context).mineUploadSynced
+                            : null)),
             enabled: canUseCloud &&
                 !inSync &&
                 !notLoggedIn &&
@@ -621,13 +700,17 @@ class MinePage extends ConsumerWidget {
                 final res = await sync.downloadAndRestoreToCurrentLedger(
                     ledgerId: ledgerId);
                 if (!context.mounted) return;
-                final msg = AppLocalizations.of(context).mineDownloadResult(res.inserted, res.skipped, res.deletedDup);
+                final msg = AppLocalizations.of(context).mineDownloadResult(
+                    res.inserted, res.skipped, res.deletedDup);
                 await AppDialog.info(context,
-                    title: AppLocalizations.of(context).mineDownloadComplete, message: msg);
+                    title: AppLocalizations.of(context).mineDownloadComplete,
+                    message: msg);
                 ref.read(syncStatusRefreshProvider.notifier).state++;
               } catch (e) {
                 if (!context.mounted) return;
-                await AppDialog.error(context, title: AppLocalizations.of(context).commonFailed, message: '$e');
+                await AppDialog.error(context,
+                    title: AppLocalizations.of(context).commonFailed,
+                    message: '$e');
               } finally {
                 if (ctx.mounted) setSB(() => downloadBusy = false);
               }
@@ -641,14 +724,17 @@ class MinePage extends ConsumerWidget {
 
             // 根据云服务类型显示不同的用户信息
             String getUserDisplayName() {
-              if (userNow == null) return AppLocalizations.of(context).mineLoginTitle;
+              if (userNow == null)
+                return AppLocalizations.of(context).mineLoginTitle;
 
-              if (cloudConfig.hasValue && cloudConfig.value!.type == CloudBackendType.webdav) {
+              if (cloudConfig.hasValue &&
+                  cloudConfig.value!.type == CloudBackendType.webdav) {
                 // WebDAV: 显示用户名（去掉 @webdav 后缀）
                 return userNow.id;
               } else {
                 // Supabase: 显示邮箱
-                return userNow.email ?? AppLocalizations.of(context).mineLoggedInEmail;
+                return userNow.email ??
+                    AppLocalizations.of(context).mineLoggedInEmail;
               }
             }
 
@@ -656,7 +742,9 @@ class MinePage extends ConsumerWidget {
               leading:
                   userNow == null ? Icons.login : Icons.verified_user_outlined,
               title: getUserDisplayName(),
-              subtitle: userNow == null ? AppLocalizations.of(context).mineLoginSubtitle : AppLocalizations.of(context).mineLogoutSubtitle,
+              subtitle: userNow == null
+                  ? AppLocalizations.of(context).mineLoginSubtitle
+                  : AppLocalizations.of(context).mineLogoutSubtitle,
               onTap: () async {
                 if (userNow == null) {
                   await Navigator.of(context).push(
@@ -665,13 +753,16 @@ class MinePage extends ConsumerWidget {
                   ref.read(statsRefreshProvider.notifier).state++;
                 } else {
                   final confirmed = await AppDialog.confirm<bool>(
-                    context,
-                    title: AppLocalizations.of(context).mineLogoutConfirmTitle,
-                    message: AppLocalizations.of(context).mineLogoutConfirmMessage,
-                    okLabel: AppLocalizations.of(context).mineLogoutButton,
-                    cancelLabel: AppLocalizations.of(context).commonCancel,
-                  ) ?? false;
-                  
+                        context,
+                        title:
+                            AppLocalizations.of(context).mineLogoutConfirmTitle,
+                        message: AppLocalizations.of(context)
+                            .mineLogoutConfirmMessage,
+                        okLabel: AppLocalizations.of(context).mineLogoutButton,
+                        cancelLabel: AppLocalizations.of(context).commonCancel,
+                      ) ??
+                      false;
+
                   if (confirmed) {
                     await ref.read(authServiceProvider).signOut();
                     ref.read(syncStatusRefreshProvider.notifier).state++;
@@ -689,7 +780,9 @@ class MinePage extends ConsumerWidget {
             final can = canUseCloud;
             return SwitchListTile(
               title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
-              subtitle: can ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle) : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
+              subtitle: can
+                  ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
+                  : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
               value: can ? value : false,
               onChanged: can
                   ? (v) async {
@@ -705,7 +798,8 @@ class MinePage extends ConsumerWidget {
 
   Widget _buildImportExportSection(BuildContext context, WidgetRef ref) {
     return SectionCard(
-      margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+      margin: EdgeInsets.fromLTRB(
+          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
       child: Column(
         children: [
           Consumer(builder: (ctx, r, _) {
@@ -727,7 +821,8 @@ class MinePage extends ConsumerWidget {
               return AppListTile(
                 leading: Icons.upload_outlined,
                 title: AppLocalizations.of(context).mineImportProgressTitle,
-                subtitle: AppLocalizations.of(context).mineImportProgressSubtitle(p.done, p.total, p.ok, p.fail),
+                subtitle: AppLocalizations.of(context)
+                    .mineImportProgressSubtitle(p.done, p.total, p.ok, p.fail),
                 trailing: SizedBox(
                     width: 72, child: LinearProgressIndicator(value: percent)),
                 onTap: null,
@@ -738,7 +833,8 @@ class MinePage extends ConsumerWidget {
             return AppListTile(
               leading: Icons.info_outline,
               title: AppLocalizations.of(context).mineImportCompleteTitle,
-              subtitle: '${AppLocalizations.of(context).commonSuccess} ${p.ok}，${AppLocalizations.of(context).commonFailed} ${p.fail}',
+              subtitle:
+                  '${AppLocalizations.of(context).commonSuccess} ${p.ok}，${AppLocalizations.of(context).commonFailed} ${p.fail}',
               onTap: null,
             );
           }),
@@ -759,7 +855,8 @@ class MinePage extends ConsumerWidget {
 
   Widget _buildAboutSection(BuildContext context, WidgetRef ref) {
     return SectionCard(
-      margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+      margin: EdgeInsets.fromLTRB(
+          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
       child: Column(children: [
         AppListTile(
           leading: Icons.info_outline,
@@ -802,25 +899,24 @@ class MinePage extends ConsumerWidget {
 
             if (isLoading) {
               title = AppLocalizations.of(context).mineCheckUpdateDetecting;
-              subtitle = AppLocalizations.of(context).mineCheckUpdateSubtitleDetecting;
+              subtitle =
+                  AppLocalizations.of(context).mineCheckUpdateSubtitleDetecting;
               icon = Icons.hourglass_empty;
               trailing = const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2)
-              );
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2));
             } else if (downloadProgress.isActive) {
               showProgress = true;
               title = AppLocalizations.of(context).mineUpdateDownloadTitle;
               icon = Icons.download_outlined;
               trailing = SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  value: downloadProgress.progress,
-                )
-              );
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    value: downloadProgress.progress,
+                  ));
             }
 
             return AppListTile(
@@ -833,26 +929,31 @@ class MinePage extends ConsumerWidget {
                   : () async {
                       await UpdateService.checkUpdateWithUI(
                         context,
-                        setLoading: (loading) => ref2.read(checkUpdateLoadingProvider.notifier).state = loading,
+                        setLoading: (loading) => ref2
+                            .read(checkUpdateLoadingProvider.notifier)
+                            .state = loading,
                         setProgress: (progress, status) {
                           if (status.isEmpty) {
-                            ref2.read(updateProgressProvider.notifier).state = UpdateProgress.idle();
+                            ref2.read(updateProgressProvider.notifier).state =
+                                UpdateProgress.idle();
                           } else {
-                            ref2.read(updateProgressProvider.notifier).state = UpdateProgress.active(progress, status);
+                            ref2.read(updateProgressProvider.notifier).state =
+                                UpdateProgress.active(progress, status);
                           }
                         },
                       );
                     },
             );
           }),
-          AppDivider.thin(),
         ],
+        AppDivider.thin(),
         AppListTile(
           leading: Icons.feedback_outlined,
           title: AppLocalizations.of(context).mineFeedback,
           subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,
           onTap: () async {
-            final url = Uri.parse('https://github.com/TNT-Likely/BeeCount/issues');
+            final url =
+                Uri.parse('https://github.com/TNT-Likely/BeeCount/issues');
             await _tryOpenUrl(url);
           },
         ),
@@ -862,7 +963,8 @@ class MinePage extends ConsumerWidget {
 
   Widget _buildDebugSection(BuildContext context, WidgetRef ref) {
     return SectionCard(
-      margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+      margin: EdgeInsets.fromLTRB(
+          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
       child: Column(children: [
         AppListTile(
           leading: Icons.refresh,
@@ -887,15 +989,15 @@ class MinePage extends ConsumerWidget {
 
   Widget _buildSupportSection(BuildContext context, WidgetRef ref) {
     return SectionCard(
-      margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+      margin: EdgeInsets.fromLTRB(
+          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
       child: AppListTile(
         leading: Icons.favorite_outline,
         title: AppLocalizations.of(context).supportProjectTitle,
         subtitle: AppLocalizations.of(context).supportProjectWhyTitle,
         onTap: () async {
           await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (_) => const SupportProjectPage()),
+            MaterialPageRoute(builder: (_) => const SupportProjectPage()),
           );
         },
       ),
@@ -924,7 +1026,8 @@ class MinePage extends ConsumerWidget {
     }
 
     return SectionCard(
-      margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+      margin: EdgeInsets.fromLTRB(
+          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
       child: AppListTile(
         leading: Icons.language_outlined,
         title: l10n.mineLanguageSettings,
@@ -949,8 +1052,7 @@ class MinePage extends ConsumerWidget {
         ),
         onTap: () async {
           await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (_) => const LanguageSettingsPage()),
+            MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
           );
         },
       ),
@@ -1036,14 +1138,6 @@ Future<_AppInfo> _getAppInfo() async {
       buildTime: buildTime.isEmpty ? null : buildTime);
 }
 
-
-
-
-
-
-
-
-
 /// 尝试使用多种方式打开URL，提供更好的兼容性
 Future<bool> _tryOpenUrl(Uri url) async {
   try {
@@ -1072,4 +1166,3 @@ Future<bool> _tryOpenUrl(Uri url) async {
     return false;
   }
 }
-
