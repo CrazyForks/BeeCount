@@ -1406,6 +1406,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reminderTestSent => '테스트 알림을 전송했습니다';
 
   @override
+  String get reminderTestTitle => '테스트 알림';
+
+  @override
+  String get reminderTestBody => '테스트 알림입니다. 탭하여 효과를 확인하세요';
+
+  @override
+  String get reminderTestDelayBody => '15초 지연된 테스트 알림입니다';
+
+  @override
   String get reminderQuickTest => '빠른 테스트 (15초 후)';
 
   @override

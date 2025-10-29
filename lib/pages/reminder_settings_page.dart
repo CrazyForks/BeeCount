@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/reminder_providers.dart';
-import '../widgets/ui/wheel_time_picker.dart';
-import '../services/notification_service.dart';
+import '../utils/notification_factory.dart';
+import '../utils/notification_android.dart';
 import '../styles/colors.dart';
 import '../widgets/ui/ui.dart';
 
@@ -117,7 +117,12 @@ class ReminderSettingsPage extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                await NotificationService.showTestNotification();
+                final notificationUtil = NotificationFactory.getInstance();
+                await notificationUtil.showNotification(
+                  id: 9999,
+                  title: AppLocalizations.of(context)!.reminderTestTitle,
+                  body: AppLocalizations.of(context)!.reminderTestBody,
+                );
                 if (context.mounted) {
                   showToast(context, AppLocalizations.of(context)!.reminderTestSent);
                 }
@@ -140,163 +145,60 @@ class ReminderSettingsPage extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 16),
 
-          // 15秒测试按钮
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () async {
-                await NotificationService.scheduleQuickTest();
-
-                if (context.mounted) {
-                  showToast(context, AppLocalizations.of(context)!.reminderQuickTestMessage);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.reminderQuickTest,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-
-          // 开发环境专用调试按钮
-          if (kDebugMode) ...[
+          // Android专用电池和渠道检查按钮
+          if (Platform.isAndroid) ...[
             const SizedBox(height: 16),
 
-            // Flutter通知点击测试按钮
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  // 创建一个简单的测试通知来验证点击功能
-                  await NotificationService.showTestNotification();
-                  if (context.mounted) {
-                    showToast(context, AppLocalizations.of(context)!.reminderFlutterTestSent);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.reminderFlutterTest,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // AlarmManager通知点击测试按钮
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  await NotificationService.testAlarmManagerNotificationClick();
-                  if (context.mounted) {
-                    showToast(context, AppLocalizations.of(context)!.reminderAlarmTestMessage);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.reminderAlarmTest,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // 直接测试NotificationReceiver按钮
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  await NotificationService.testDirectNotificationReceiver();
-                  if (context.mounted) {
-                    showToast(context, AppLocalizations.of(context)!.reminderDirectTestMessage);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.reminderDirectTest,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // 权限检查按钮
+            // 电池优化状态检查
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () async {
-                  final pendingNotifications = await NotificationService.getPendingNotifications();
+                  final androidUtil = NotificationFactory.getInstance() as AndroidNotificationUtil;
+                  final batteryInfo = await androidUtil.getBatteryOptimizationInfo();
                   if (context.mounted) {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text(AppLocalizations.of(context)!.reminderNotificationStatus),
+                        title: Text(AppLocalizations.of(context)!.reminderBatteryStatus),
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(AppLocalizations.of(context)!.reminderPendingCount(pendingNotifications.length)),
+                            Text(AppLocalizations.of(context)!.reminderManufacturer(batteryInfo['manufacturer'] ?? 'Unknown')),
+                            Text(AppLocalizations.of(context)!.reminderModel(batteryInfo['model'] ?? 'Unknown')),
+                            Text(AppLocalizations.of(context)!.reminderAndroidVersion(batteryInfo['androidVersion'] ?? 'Unknown')),
                             const SizedBox(height: 8),
-                            if (pendingNotifications.isNotEmpty)
-                              ...pendingNotifications.map((notif) =>
-                                Text('• ID: ${notif.id}, 标题: ${notif.title ?? ''}')
+                            Text(
+                              (batteryInfo['isIgnoring'] == true)
+                                  ? AppLocalizations.of(context)!.reminderBatteryIgnored
+                                  : AppLocalizations.of(context)!.reminderBatteryNotIgnored,
+                              style: TextStyle(
+                                color: (batteryInfo['isIgnoring'] == true) ? Colors.green : Colors.orange,
+                                fontWeight: FontWeight.w500,
                               ),
-                            if (pendingNotifications.isEmpty)
-                              Text(AppLocalizations.of(context)!.reminderNoPending),
+                            ),
+                            if (batteryInfo['isIgnoring'] != true) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                AppLocalizations.of(context)!.reminderBatteryAdvice,
+                                style: const TextStyle(fontSize: 12, color: Colors.red),
+                              ),
+                            ],
                           ],
                         ),
                         actions: [
+                          if (batteryInfo['isIgnoring'] != true && batteryInfo['canRequest'] == true)
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                final androidUtil = NotificationFactory.getInstance() as AndroidNotificationUtil;
+                                await androidUtil.requestIgnoreBatteryOptimizations();
+                              },
+                              child: Text(AppLocalizations.of(context)!.commonSettings),
+                            ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text(AppLocalizations.of(context)!.commonConfirm),
@@ -313,7 +215,7 @@ class ReminderSettingsPage extends ConsumerWidget {
                   ),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)!.reminderCheckStatus,
+                  AppLocalizations.of(context)!.reminderCheckBattery,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -321,206 +223,70 @@ class ReminderSettingsPage extends ConsumerWidget {
                 ),
               ),
             ),
-          ],
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          // 电池优化状态检查
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () async {
-                final batteryInfo = await NotificationService.getBatteryOptimizationInfo();
-                if (context.mounted) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.reminderBatteryStatus),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(AppLocalizations.of(context)!.reminderManufacturer(batteryInfo['manufacturer'] ?? 'Unknown')),
-                          Text(AppLocalizations.of(context)!.reminderModel(batteryInfo['model'] ?? 'Unknown')),
-                          Text(AppLocalizations.of(context)!.reminderAndroidVersion(batteryInfo['androidVersion'] ?? 'Unknown')),
-                          const SizedBox(height: 8),
-                          Text(
-                            '电池优化状态: ${(batteryInfo['isIgnoring'] == true) ? AppLocalizations.of(context)!.reminderBatteryIgnored : AppLocalizations.of(context)!.reminderBatteryNotIgnored}',
-                            style: TextStyle(
-                              color: (batteryInfo['isIgnoring'] == true) ? Colors.green : Colors.orange,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          if (batteryInfo['isIgnoring'] != true) ...[
-                            const SizedBox(height: 8),
-                            Text(
-                              '建议关闭电池优化以确保通知正常工作',
-                              style: const TextStyle(fontSize: 12, color: Colors.red),
-                            ),
-                          ],
-                        ],
-                      ),
-                      actions: [
-                        if (batteryInfo['isIgnoring'] != true && batteryInfo['canRequest'] == true)
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                              await NotificationService.requestIgnoreBatteryOptimizations();
-                            },
-                            child: Text('去设置'),
-                          ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text(AppLocalizations.of(context)!.commonConfirm),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.reminderCheckBattery,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // 通知渠道设置检查
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () async {
-                final channelInfo = await NotificationService.getNotificationChannelInfo();
-                if (context.mounted) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.reminderChannelStatus),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('渠道启用: ${(channelInfo['isEnabled'] == true) ? '是 ✅' : '否 ❌'}'),
-                          Text(AppLocalizations.of(context)!.reminderChannelImportance(channelInfo['importance'] ?? 'unknown')),
-                          Text('声音: ${(channelInfo['sound'] == true) ? '开启 🔊' : '关闭 🔇'}'),
-                          Text('震动: ${(channelInfo['vibration'] == true) ? '开启 📳' : '关闭'}'),
-                          if (channelInfo['bypassDnd'] != null)
-                            Text('勿扰模式: ${(channelInfo['bypassDnd'] == true) ? '可绕过' : '不可绕过'}'),
-                          const SizedBox(height: 8),
-                          if (channelInfo['isEnabled'] != true ||
-                              channelInfo['importance'] == 'none' ||
-                              channelInfo['importance'] == 'min' ||
-                              channelInfo['importance'] == 'low') ...[
-                            Text(
-                              AppLocalizations.of(context)!.reminderChannelAdvice,
-                              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orange),
-                            ),
-                            Text(AppLocalizations.of(context)!.reminderChannelAdviceImportance),
-                            Text(AppLocalizations.of(context)!.reminderChannelAdviceSound),
-                            Text(AppLocalizations.of(context)!.reminderChannelAdviceBanner),
-                            Text(AppLocalizations.of(context)!.reminderChannelAdviceXiaomi),
-                          ] else ...[
-                            Text(
-                              AppLocalizations.of(context)!.reminderChannelGood,
-                              style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                            await NotificationService.openNotificationChannelSettings();
-                          },
-                          child: Text('去设置'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text(AppLocalizations.of(context)!.commonConfirm),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.reminderCheckChannel,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // 打开应用设置
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () async {
-                await NotificationService.openAppSettings();
-                if (context.mounted) {
-                  showToast(context, AppLocalizations.of(context)!.reminderAppSettingsMessage);
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.reminderOpenAppSettings,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // iOS通知调试按钮
-          if (Theme.of(context).platform == TargetPlatform.iOS) ...[
+            // 通知渠道设置检查
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               width: double.infinity,
-              child: ElevatedButton(
+              child: OutlinedButton(
                 onPressed: () async {
-                  await NotificationService.showTestNotification();
+                  final androidUtil = NotificationFactory.getInstance() as AndroidNotificationUtil;
+                  final channelInfo = await androidUtil.getNotificationChannelInfo();
                   if (context.mounted) {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text(AppLocalizations.of(context)!.reminderIOSTestTitle),
-                        content: Text(
-                          AppLocalizations.of(context)!.reminderIOSTestMessage,
+                        title: Text(AppLocalizations.of(context)!.reminderChannelStatus),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text((channelInfo['isEnabled'] == true)
+                                ? AppLocalizations.of(context)!.reminderChannelEnabled
+                                : AppLocalizations.of(context)!.reminderChannelDisabled),
+                            Text(AppLocalizations.of(context)!.reminderChannelImportance(channelInfo['importance'] ?? 'unknown')),
+                            Text((channelInfo['sound'] == true)
+                                ? AppLocalizations.of(context)!.reminderChannelSoundOn
+                                : AppLocalizations.of(context)!.reminderChannelSoundOff),
+                            Text((channelInfo['vibration'] == true)
+                                ? AppLocalizations.of(context)!.reminderChannelVibrationOn
+                                : AppLocalizations.of(context)!.reminderChannelVibrationOff),
+                            if (channelInfo['bypassDnd'] != null)
+                              Text((channelInfo['bypassDnd'] == true)
+                                  ? AppLocalizations.of(context)!.reminderChannelDndBypass
+                                  : AppLocalizations.of(context)!.reminderChannelDndNoBypass),
+                            const SizedBox(height: 8),
+                            if (channelInfo['isEnabled'] != true ||
+                                channelInfo['importance'] == 'none' ||
+                                channelInfo['importance'] == 'min' ||
+                                channelInfo['importance'] == 'low') ...[
+                              Text(
+                                AppLocalizations.of(context)!.reminderChannelAdvice,
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orange),
+                              ),
+                              Text(AppLocalizations.of(context)!.reminderChannelAdviceImportance),
+                              Text(AppLocalizations.of(context)!.reminderChannelAdviceSound),
+                              Text(AppLocalizations.of(context)!.reminderChannelAdviceBanner),
+                              Text(AppLocalizations.of(context)!.reminderChannelAdviceXiaomi),
+                            ] else ...[
+                              Text(
+                                AppLocalizations.of(context)!.reminderChannelGood,
+                                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ],
                         ),
                         actions: [
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              final androidUtil = NotificationFactory.getInstance() as AndroidNotificationUtil;
+                              await androidUtil.openNotificationChannelSettings();
+                            },
+                            child: Text(AppLocalizations.of(context)!.commonSettings),
+                          ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text(AppLocalizations.of(context)!.commonConfirm),
@@ -530,16 +296,14 @@ class ReminderSettingsPage extends ConsumerWidget {
                     );
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
+                style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)!.reminderIOSTest,
+                  AppLocalizations.of(context)!.reminderCheckChannel,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -547,6 +311,37 @@ class ReminderSettingsPage extends ConsumerWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: 16),
+
+            // 打开应用设置
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () async {
+                  final androidUtil = NotificationFactory.getInstance() as AndroidNotificationUtil;
+                  await androidUtil.openAppSettings();
+                  if (context.mounted) {
+                    showToast(context, AppLocalizations.of(context)!.reminderAppSettingsMessage);
+                  }
+                },
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  AppLocalizations.of(context)!.reminderOpenAppSettings,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
             const SizedBox(height: 16),
           ],
 
@@ -575,7 +370,7 @@ class ReminderSettingsPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  Theme.of(context).platform == TargetPlatform.iOS
+                  Platform.isIOS
                       ? AppLocalizations.of(context)!.reminderIOSInstructions
                       : AppLocalizations.of(context)!.reminderAndroidInstructions,
                   style: const TextStyle(

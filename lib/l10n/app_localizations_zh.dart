@@ -1406,6 +1406,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reminderTestSent => '测试通知已发送';
 
   @override
+  String get reminderTestTitle => '测试通知';
+
+  @override
+  String get reminderTestBody => '这是一条测试通知，点击查看效果';
+
+  @override
+  String get reminderTestDelayBody => '这是一条15秒延迟的测试通知';
+
+  @override
   String get reminderQuickTest => '快速测试 (15秒后)';
 
   @override
@@ -4228,6 +4237,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderTestSent => '測試通知已發送';
+
+  @override
+  String get reminderTestTitle => '測試通知';
+
+  @override
+  String get reminderTestBody => '這是一條測試通知，點擊檢視效果';
+
+  @override
+  String get reminderTestDelayBody => '這是一條15秒延遲的測試通知';
 
   @override
   String get reminderQuickTest => '快速測試 (15秒後)';

@@ -2740,6 +2740,24 @@ abstract class AppLocalizations {
   /// **'Test notification sent'**
   String get reminderTestSent;
 
+  /// No description provided for @reminderTestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Notification'**
+  String get reminderTestTitle;
+
+  /// No description provided for @reminderTestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a test notification, tap to see the effect'**
+  String get reminderTestBody;
+
+  /// No description provided for @reminderTestDelayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a 15-second delayed test notification'**
+  String get reminderTestDelayBody;
+
   /// No description provided for @reminderQuickTest.
   ///
   /// In en, this message translates to:

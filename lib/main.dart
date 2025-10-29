@@ -9,8 +9,8 @@ import 'providers.dart';
 import 'styles/colors.dart';
 import 'providers/font_scale_provider.dart';
 import 'utils/route_logger.dart';
+import 'utils/notification_factory.dart';
 import 'pages/splash_page.dart';
-import 'services/notification_service.dart';
 import 'services/reminder_monitor_service.dart';
 import 'services/recurring_transaction_service.dart';
 import 'data/db.dart';
@@ -21,11 +21,15 @@ import 'cloud/supabase_initializer.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 初始化时区（必须在通知服务之前，修复iOS通知问题）
+  NotificationFactory.initializeTimeZone();
+
   // 全局初始化Supabase（如果配置了自定义Supabase服务）
   await _initializeSupabase();
 
   // 初始化通知服务
-  await NotificationService.initialize();
+  final notificationUtil = NotificationFactory.getInstance();
+  await notificationUtil.initialize();
 
   // 恢复用户的记账提醒设置（关键修复：应用重启后自动恢复提醒）
   await _restoreUserReminder();
@@ -78,7 +82,11 @@ Future<void> _restoreUserReminder() async {
       print('✅ 发现用户已启用记账提醒: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}');
       print('🔔 正在重新设置提醒任务...');
 
-      await NotificationService.scheduleAccountingReminder(
+      final notificationUtil = NotificationFactory.getInstance();
+      await notificationUtil.scheduleDailyReminder(
+        id: 1001,
+        title: '记账提醒',
+        body: '别忘了记录今天的收支哦 💰',
         hour: hour,
         minute: minute,
       );

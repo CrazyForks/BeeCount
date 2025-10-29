@@ -57,5 +57,11 @@
 	<!-- Privacy - Photo Library Additions Usage Description -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>蜜蜂记账需要保存文件到您的照片库</string>
+	<!-- Background Modes for Notifications -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

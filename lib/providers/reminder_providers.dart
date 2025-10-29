@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/notification_service.dart';
+import '../utils/notification_factory.dart';
 
 /// 记账提醒设置
 class ReminderSettings {
@@ -97,14 +97,18 @@ class ReminderSettingsNotifier extends StateNotifier<ReminderSettings> {
   Future<void> updateEnabled(bool enabled) async {
     state = state.copyWith(isEnabled: enabled);
     await _saveSettings();
-    
+
+    final notificationUtil = NotificationFactory.getInstance();
     if (enabled) {
-      await NotificationService.scheduleAccountingReminder(
+      await notificationUtil.scheduleDailyReminder(
+        id: 1001,
+        title: '记账提醒',
+        body: '别忘了记录今天的收支哦 💰',
         hour: state.hour,
         minute: state.minute,
       );
     } else {
-      await NotificationService.cancelAccountingReminder();
+      await notificationUtil.cancelNotification(1001);
     }
   }
 
@@ -112,10 +116,14 @@ class ReminderSettingsNotifier extends StateNotifier<ReminderSettings> {
   Future<void> updateTime(int hour, int minute) async {
     state = state.copyWith(hour: hour, minute: minute);
     await _saveSettings();
-    
+
     // 如果提醒已启用，重新设置通知
     if (state.isEnabled) {
-      await NotificationService.scheduleAccountingReminder(
+      final notificationUtil = NotificationFactory.getInstance();
+      await notificationUtil.scheduleDailyReminder(
+        id: 1001,
+        title: '记账提醒',
+        body: '别忘了记录今天的收支哦 💰',
         hour: hour,
         minute: minute,
       );
@@ -126,14 +134,18 @@ class ReminderSettingsNotifier extends StateNotifier<ReminderSettings> {
   Future<void> updateSettings(ReminderSettings settings) async {
     state = settings;
     await _saveSettings();
-    
+
+    final notificationUtil = NotificationFactory.getInstance();
     if (settings.isEnabled) {
-      await NotificationService.scheduleAccountingReminder(
+      await notificationUtil.scheduleDailyReminder(
+        id: 1001,
+        title: '记账提醒',
+        body: '别忘了记录今天的收支哦 💰',
         hour: settings.hour,
         minute: settings.minute,
       );
     } else {
-      await NotificationService.cancelAccountingReminder();
+      await notificationUtil.cancelNotification(1001);
     }
   }
 }

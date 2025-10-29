@@ -1406,6 +1406,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reminderTestSent => 'Test-Benachrichtigung gesendet';
 
   @override
+  String get reminderTestTitle => 'Test-Benachrichtigung';
+
+  @override
+  String get reminderTestBody => 'Dies ist eine Test-Benachrichtigung, tippen Sie, um die Wirkung zu sehen';
+
+  @override
+  String get reminderTestDelayBody => 'Dies ist eine Test-Benachrichtigung mit 15 Sekunden Verzögerung';
+
+  @override
   String get reminderQuickTest => 'Schnelltest (15s später)';
 
   @override

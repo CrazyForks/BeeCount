@@ -1406,6 +1406,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reminderTestSent => 'テスト通知を送信しました';
 
   @override
+  String get reminderTestTitle => 'テスト通知';
+
+  @override
+  String get reminderTestBody => 'これはテスト通知です。タップして効果を確認してください';
+
+  @override
+  String get reminderTestDelayBody => 'これは15秒遅延のテスト通知です';
+
+  @override
   String get reminderQuickTest => 'クイックテスト（15秒後）';
 
   @override

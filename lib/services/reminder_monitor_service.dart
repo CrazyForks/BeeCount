@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'notification_service.dart';
+import '../utils/notification_factory.dart';
 
 /// 记账提醒监控服务
 ///
@@ -60,7 +60,8 @@ class ReminderMonitorService with WidgetsBindingObserver {
       }
 
       // 检查是否有待处理的提醒
-      final pending = await NotificationService.getPendingNotifications();
+      final notificationUtil = NotificationFactory.getInstance();
+      final pending = await notificationUtil.getPendingNotifications();
       final hasMainReminder = pending.any((n) => n.id == 1001);
 
       if (!hasMainReminder) {
@@ -69,7 +70,10 @@ class ReminderMonitorService with WidgetsBindingObserver {
         final hour = prefs.getInt('reminder_hour') ?? 21;
         final minute = prefs.getInt('reminder_minute') ?? 0;
 
-        await NotificationService.scheduleAccountingReminder(
+        await notificationUtil.scheduleDailyReminder(
+          id: 1001,
+          title: '记账提醒',
+          body: '别忘了记录今天的收支哦 💰',
           hour: hour,
           minute: minute,
         );

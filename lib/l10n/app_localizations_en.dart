@@ -1406,6 +1406,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderTestSent => 'Test notification sent';
 
   @override
+  String get reminderTestTitle => 'Test Notification';
+
+  @override
+  String get reminderTestBody => 'This is a test notification, tap to see the effect';
+
+  @override
+  String get reminderTestDelayBody => 'This is a 15-second delayed test notification';
+
+  @override
   String get reminderQuickTest => 'Quick Test (15s later)';
 
   @override
