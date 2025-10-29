@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:drift/drift.dart' as d;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../providers.dart';
 import '../widgets/ui/ui.dart';
 import '../data/db.dart' as schema;
 import '../l10n/app_localizations.dart';
 import '../services/category_service.dart';
+import '../utils/date_parser.dart';
 import 'import_page.dart';
 
 class ImportConfirmPage extends ConsumerStatefulWidget {
@@ -556,31 +556,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
             (amountStr ?? '0').toString().replaceAll(RegExp(r'[¥$,]'), '');
         final amount = double.parse(amountClean);
 
-        // 日期解析
-        DateTime date;
-        if (dateStr == null || dateStr.trim().isEmpty) {
-          date = DateTime.now();
-        } else {
-          DateTime? tryParse(String s) {
-            try {
-              return DateTime.parse(s);
-            } catch (_) {
-              return null;
-            }
-          }
-
-          DateTime? d = tryParse(dateStr);
-          d ??= _tryParseWithFormats(dateStr, [
-            'yyyy-MM-dd HH:mm:ss',
-            'yyyy-MM-dd HH:mm',
-            'yyyy/MM/dd HH:mm:ss',
-            'yyyy/MM/dd HH:mm',
-            'yyyy-MM-dd',
-            'yyyy/M/d',
-            'yyyy/MM/dd',
-          ]);
-          date = (d ?? DateTime.now()).toLocal();
-        }
+        // 日期解析 - 使用通用日期解析工具
+        final date = DateParser.parse(dateStr);
 
         int? categoryId;
         if (categoryName != null && categoryName.trim().isNotEmpty) {
@@ -732,16 +709,6 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     // 初始化分类映射为null，后续在FutureBuilder中进行自动匹配
     categoryMapping = {for (final n in distinctCategories) n: null};
   }
-}
-
-DateTime? _tryParseWithFormats(String input, List<String> formats) {
-  for (final f in formats) {
-    try {
-      final d = DateFormat(f).parse(input, true);
-      return d;
-    } catch (_) {}
-  }
-  return null;
 }
 
 List<List<String>> _parseRows(String input) {
