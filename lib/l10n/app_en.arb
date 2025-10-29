@@ -1156,8 +1156,10 @@
 
   "supportProjectTitle": "Support Project",
   "supportProjectWhyTitle": "Why We Need Your Support?",
-  "supportProjectWhyDescription": "BeeCount is a completely free and open-source project with no ads or paid features. However, to make it available for iOS users, we need an Apple Developer Account ($99/year) to sign the app.",
-  "supportProjectGoalTitle": "Funding Goal",
+  "supportProjectWhyDescription": "BeeCount is a completely free and open-source project with no ads or paid features. Ongoing operations require annual renewal of Apple Developer Account ($99/year) to keep the iOS version accessible. Your support helps the project continue to grow and benefit more users.",
+  "supportProjectAchievementTitle": "Initial Goal Achieved",
+  "supportProjectAchievementDescription": "Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.",
+  "supportProjectOngoingTitle": "Ongoing Operation Costs",
   "supportProjectCurrentAmount": "Raised: {amount}",
   "@supportProjectCurrentAmount": {
     "placeholders": {
@@ -1182,12 +1184,13 @@
       }
     }
   },
-  "supportProjectUsageTitle": "How Donations Are Used",
-  "supportProjectUsage1": "Apple Developer Account annual fee ($99/year)",
-  "supportProjectUsage2": "Distribute iOS version via TestFlight",
-  "supportProjectUsage3": "Continuous project development and maintenance",
+  "supportProjectUsageTitle": "How Funds Are Used",
+  "supportProjectUsage1": "Annual Apple Developer Account renewal ($99/year)",
+  "supportProjectUsage2": "Continuous maintenance and new feature development",
+  "supportProjectUsage3": "Support for HarmonyOS and cross-platform adaptation",
   "supportProjectViewDonationMethods": "View Donation Methods",
-  "supportProjectNote": "Clicking the button will redirect to GitHub for detailed donation methods",
+  "supportProjectNote": "💡 Donations are completely voluntary, the project remains free and open-source forever",
+  "supportProjectVoluntaryNote": "Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.",
 
   "webdavConfiguredTitle": "WebDAV Cloud Service Configured",
   "webdavConfiguredMessage": "WebDAV cloud service uses the credentials provided during configuration, no additional login required.",

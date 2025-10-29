@@ -4927,14 +4927,26 @@ abstract class AppLocalizations {
   /// No description provided for @supportProjectWhyDescription.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount is a completely free and open-source project with no ads or paid features. However, to make it available for iOS users, we need an Apple Developer Account (\$99/year) to sign the app.'**
+  /// **'BeeCount is a completely free and open-source project with no ads or paid features. Ongoing operations require annual renewal of Apple Developer Account (\$99/year) to keep the iOS version accessible. Your support helps the project continue to grow and benefit more users.'**
   String get supportProjectWhyDescription;
 
-  /// No description provided for @supportProjectGoalTitle.
+  /// No description provided for @supportProjectAchievementTitle.
   ///
   /// In en, this message translates to:
-  /// **'Funding Goal'**
-  String get supportProjectGoalTitle;
+  /// **'Initial Goal Achieved'**
+  String get supportProjectAchievementTitle;
+
+  /// No description provided for @supportProjectAchievementDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.'**
+  String get supportProjectAchievementDescription;
+
+  /// No description provided for @supportProjectOngoingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing Operation Costs'**
+  String get supportProjectOngoingTitle;
 
   /// No description provided for @supportProjectCurrentAmount.
   ///
@@ -4957,25 +4969,25 @@ abstract class AppLocalizations {
   /// No description provided for @supportProjectUsageTitle.
   ///
   /// In en, this message translates to:
-  /// **'How Donations Are Used'**
+  /// **'How Funds Are Used'**
   String get supportProjectUsageTitle;
 
   /// No description provided for @supportProjectUsage1.
   ///
   /// In en, this message translates to:
-  /// **'Apple Developer Account annual fee (\$99/year)'**
+  /// **'Annual Apple Developer Account renewal (\$99/year)'**
   String get supportProjectUsage1;
 
   /// No description provided for @supportProjectUsage2.
   ///
   /// In en, this message translates to:
-  /// **'Distribute iOS version via TestFlight'**
+  /// **'Continuous maintenance and new feature development'**
   String get supportProjectUsage2;
 
   /// No description provided for @supportProjectUsage3.
   ///
   /// In en, this message translates to:
-  /// **'Continuous project development and maintenance'**
+  /// **'Support for HarmonyOS and cross-platform adaptation'**
   String get supportProjectUsage3;
 
   /// No description provided for @supportProjectViewDonationMethods.
@@ -4987,8 +4999,14 @@ abstract class AppLocalizations {
   /// No description provided for @supportProjectNote.
   ///
   /// In en, this message translates to:
-  /// **'Clicking the button will redirect to GitHub for detailed donation methods'**
+  /// **'💡 Donations are completely voluntary, the project remains free and open-source forever'**
   String get supportProjectNote;
+
+  /// No description provided for @supportProjectVoluntaryNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.'**
+  String get supportProjectVoluntaryNote;
 
   /// No description provided for @webdavConfiguredTitle.
   ///

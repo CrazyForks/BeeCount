@@ -43,176 +43,58 @@ class SupportProjectPage extends StatelessWidget {
                 // 说明卡片
                 Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.favorite,
-                              color: theme.colorScheme.primary,
-                              size: 24,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              l10n.supportProjectWhyTitle,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          l10n.supportProjectWhyDescription,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            height: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // 筹款目标卡片
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.track_changes,
-                              color: theme.colorScheme.primary,
-                              size: 24,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              l10n.supportProjectGoalTitle,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                        Icon(
+                          Icons.favorite,
+                          color: theme.colorScheme.primary,
+                          size: 48,
                         ),
                         const SizedBox(height: 16),
+                        Text(
+                          l10n.supportProjectWhyDescription,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            height: 1.6,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
 
-                        // 进度条
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  l10n.supportProjectCurrentAmount('¥732 (\$101)'),
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: theme.colorScheme.primary,
-                                  ),
-                                ),
-                                Text(
-                                  l10n.supportProjectTargetAmount('\$99'),
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: LinearProgressIndicator(
-                                value: 1.0, // 已完成
-                                minHeight: 8,
-                                backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  theme.colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.check_circle,
-                                  size: 16,
-                                  color: theme.colorScheme.primary,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  l10n.supportProjectProgress('101.67% - 🎉 目标达成！'),
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // 用途说明卡片
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: theme.colorScheme.primary,
-                              size: 24,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              l10n.supportProjectUsageTitle,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        _buildUsageItem(
-                          context,
-                          l10n.supportProjectUsage1,
-                        ),
-                        const SizedBox(height: 8),
-                        _buildUsageItem(
-                          context,
-                          l10n.supportProjectUsage2,
-                        ),
-                        const SizedBox(height: 8),
-                        _buildUsageItem(
-                          context,
-                          l10n.supportProjectUsage3,
-                        ),
-                        const SizedBox(height: 12),
+                        // 资金用途
                         Container(
-                          padding: const EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(8),
+                            color: theme.colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Text(
-                            '💡 多余资金将用于续费 Apple 开发者账号（下一年度）及其他开发维护必要费用',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface,
-                              height: 1.5,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.supportProjectUsageTitle,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              _buildUsageItem(context, l10n.supportProjectUsage1),
+                              const SizedBox(height: 6),
+                              _buildUsageItem(context, l10n.supportProjectUsage2),
+                              const SizedBox(height: 6),
+                              _buildUsageItem(context, l10n.supportProjectUsage3),
+                            ],
                           ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // 自愿说明
+                        Text(
+                          l10n.supportProjectNote,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -229,18 +111,6 @@ class SupportProjectPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                 ),
-                const SizedBox(height: 12),
-
-                // 说明文字
-                Center(
-                  child: Text(
-                    l10n.supportProjectNote,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               ],
             ),
           ),
@@ -255,16 +125,16 @@ class SupportProjectPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
-          Icons.check,
-          size: 20,
+          Icons.check_circle,
+          size: 16,
           color: theme.colorScheme.primary,
         ),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              height: 1.5,
+            style: theme.textTheme.bodySmall?.copyWith(
+              height: 1.4,
             ),
           ),
         ),

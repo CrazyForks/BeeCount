@@ -2570,10 +2570,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportProjectWhyTitle => 'Why We Need Your Support?';
 
   @override
-  String get supportProjectWhyDescription => 'BeeCount is a completely free and open-source project with no ads or paid features. However, to make it available for iOS users, we need an Apple Developer Account (\$99/year) to sign the app.';
+  String get supportProjectWhyDescription => 'BeeCount is a completely free and open-source project with no ads or paid features. Ongoing operations require annual renewal of Apple Developer Account (\$99/year) to keep the iOS version accessible. Your support helps the project continue to grow and benefit more users.';
 
   @override
-  String get supportProjectGoalTitle => 'Funding Goal';
+  String get supportProjectAchievementTitle => 'Initial Goal Achieved';
+
+  @override
+  String get supportProjectAchievementDescription => 'Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.';
+
+  @override
+  String get supportProjectOngoingTitle => 'Ongoing Operation Costs';
 
   @override
   String supportProjectCurrentAmount(String amount) {
@@ -2591,22 +2597,25 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get supportProjectUsageTitle => 'How Donations Are Used';
+  String get supportProjectUsageTitle => 'How Funds Are Used';
 
   @override
-  String get supportProjectUsage1 => 'Apple Developer Account annual fee (\$99/year)';
+  String get supportProjectUsage1 => 'Annual Apple Developer Account renewal (\$99/year)';
 
   @override
-  String get supportProjectUsage2 => 'Distribute iOS version via TestFlight';
+  String get supportProjectUsage2 => 'Continuous maintenance and new feature development';
 
   @override
-  String get supportProjectUsage3 => 'Continuous project development and maintenance';
+  String get supportProjectUsage3 => 'Support for HarmonyOS and cross-platform adaptation';
 
   @override
   String get supportProjectViewDonationMethods => 'View Donation Methods';
 
   @override
-  String get supportProjectNote => 'Clicking the button will redirect to GitHub for detailed donation methods';
+  String get supportProjectNote => '💡 Donations are completely voluntary, the project remains free and open-source forever';
+
+  @override
+  String get supportProjectVoluntaryNote => 'Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV Cloud Service Configured';

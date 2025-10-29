@@ -2573,7 +2573,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get supportProjectWhyDescription => 'BeeCount ist ein völlig kostenloses Open-Source-Projekt ohne Werbung oder kostenpflichtige Funktionen. Um es jedoch für iOS-Benutzer verfügbar zu machen, benötigen wir ein Apple Developer Account (\$99/Jahr) zum Signieren der App.';
 
   @override
-  String get supportProjectGoalTitle => 'Finanzierungsziel';
+  String get supportProjectAchievementTitle => 'Initial Goal Achieved';
+
+  @override
+  String get supportProjectAchievementDescription => 'Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.';
+
+  @override
+  String get supportProjectOngoingTitle => 'Ongoing Operation Costs';
 
   @override
   String supportProjectCurrentAmount(String amount) {
@@ -2607,6 +2613,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get supportProjectNote => 'Durch Klicken auf die Schaltfläche werden Sie zu GitHub weitergeleitet, um detaillierte Spendenmethoden anzuzeigen';
+
+  @override
+  String get supportProjectVoluntaryNote => 'Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV Cloud-Dienst konfiguriert';
