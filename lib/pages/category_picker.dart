@@ -24,6 +24,7 @@ class CategoryPickerPage extends ConsumerStatefulWidget {
   final double? initialAmount;
   final DateTime? initialDate;
   final int? editingTransactionId;
+  final int? initialAccountId;
   const CategoryPickerPage(
       {super.key,
       required this.initialKind,
@@ -32,7 +33,8 @@ class CategoryPickerPage extends ConsumerStatefulWidget {
       this.initialNote,
       this.initialAmount,
       this.initialDate,
-      this.editingTransactionId});
+      this.editingTransactionId,
+      this.initialAccountId});
 
   @override
   ConsumerState<CategoryPickerPage> createState() => _CategoryPickerPageState();
@@ -155,6 +157,8 @@ class _CategoryPickerPageState extends ConsumerState<CategoryPickerPage>
         initialDate: widget.initialDate ?? DateTime.now(),
         initialAmount: widget.initialAmount,
         initialNote: widget.initialNote,
+        initialAccountId: widget.initialAccountId,
+        showAccountPicker: true,
         db: db,
         ledgerId: ledgerId,
         onSubmit: (res) async {
@@ -167,6 +171,7 @@ class _CategoryPickerPageState extends ConsumerState<CategoryPickerPage>
               categoryId: c.id,
               note: res.note,
               happenedAt: res.date,
+              accountId: drift.Value(res.accountId),
             );
           } else {
             await repo.addTransaction(
@@ -176,6 +181,7 @@ class _CategoryPickerPageState extends ConsumerState<CategoryPickerPage>
               categoryId: c.id,
               happenedAt: res.date,
               note: res.note,
+              accountId: res.accountId,
             );
           }
           // 统一处理：自动/手动同步与状态刷新（后台静默）

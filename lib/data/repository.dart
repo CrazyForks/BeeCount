@@ -596,6 +596,7 @@ class BeeRepository {
     int? categoryId,
     String? note,
     DateTime? happenedAt,
+    d.Value<int?>? accountId,
   }) async {
     await (db.update(db.transactions)..where((t) => t.id.equals(id))).write(
       TransactionsCompanion(
@@ -605,6 +606,7 @@ class BeeRepository {
         note: d.Value(note),
         happenedAt:
             happenedAt != null ? d.Value(happenedAt) : const d.Value.absent(),
+        accountId: accountId ?? const d.Value.absent(),
       ),
     );
   }
@@ -885,5 +887,162 @@ class BeeRepository {
         return (category: category, transactionCount: transactionCount);
       }).toList();
     });
+  }
+
+  // ========== Account Management ==========
+
+  /// 获取指定账本下的所有账户
+  Stream<List<Account>> accountsForLedger(int ledgerId) {
+    return (db.select(db.accounts)
+          ..where((a) => a.ledgerId.equals(ledgerId)))
+        .watch();
+  }
+
+  /// 创建账户
+  Future<int> createAccount({
+    required int ledgerId,
+    required String name,
+    String type = 'cash',
+    double initialBalance = 0.0,
+  }) async {
+    return await db.into(db.accounts).insert(
+      AccountsCompanion.insert(
+        ledgerId: ledgerId,
+        name: name,
+        type: d.Value(type),
+        initialBalance: d.Value(initialBalance),
+      ),
+    );
+  }
+
+  /// 更新账户
+  Future<void> updateAccount(
+    int id, {
+    String? name,
+    String? type,
+    double? initialBalance,
+  }) async {
+    await (db.update(db.accounts)..where((a) => a.id.equals(id))).write(
+      AccountsCompanion(
+        name: name != null ? d.Value(name) : const d.Value.absent(),
+        type: type != null ? d.Value(type) : const d.Value.absent(),
+        initialBalance: initialBalance != null ? d.Value(initialBalance) : const d.Value.absent(),
+      ),
+    );
+  }
+
+  /// 删除账户
+  Future<void> deleteAccount(int id) async {
+    await (db.delete(db.accounts)..where((a) => a.id.equals(id))).go();
+  }
+
+  /// 获取账户余额（收入 - 支出 + 转入 - 转出）
+  Future<double> getAccountBalance(int accountId) async {
+    // 获取账户初始资金
+    final account = await (db.select(db.accounts)
+          ..where((a) => a.id.equals(accountId)))
+        .getSingleOrNull();
+
+    double balance = account?.initialBalance ?? 0.0;
+
+    // 收入和支出
+    final normalTxs = await (db.select(db.transactions)
+          ..where((t) => t.accountId.equals(accountId)))
+        .get();
+
+    for (final t in normalTxs) {
+      if (t.type == 'income') {
+        balance += t.amount;
+      } else if (t.type == 'expense') {
+        balance -= t.amount;
+      } else if (t.type == 'transfer') {
+        // 作为转出账户
+        balance -= t.amount;
+      }
+    }
+
+    // 作为转入账户的转账
+    final transfersIn = await (db.select(db.transactions)
+          ..where((t) => t.toAccountId.equals(accountId) & t.type.equals('transfer')))
+        .get();
+
+    for (final t in transfersIn) {
+      balance += t.amount;
+    }
+
+    return balance;
+  }
+
+  /// 批量获取所有账户余额
+  Future<Map<int, double>> getAllAccountBalances(int ledgerId) async {
+    final accounts = await (db.select(db.accounts)
+          ..where((a) => a.ledgerId.equals(ledgerId)))
+        .get();
+
+    final Map<int, double> balances = {};
+    for (final account in accounts) {
+      balances[account.id] = await getAccountBalance(account.id);
+    }
+
+    return balances;
+  }
+
+  /// 获取账户的交易数量
+  Future<int> getTransactionCountByAccount(int accountId) async {
+    // 统计作为主账户的交易数
+    final mainCount = await db.customSelect(
+      'SELECT COUNT(*) AS count FROM transactions WHERE account_id = ?1',
+      variables: [d.Variable.withInt(accountId)],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    // 统计作为转入账户的交易数
+    final toCount = await db.customSelect(
+      'SELECT COUNT(*) AS count FROM transactions WHERE to_account_id = ?1',
+      variables: [d.Variable.withInt(accountId)],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    int parseCount(dynamic v) {
+      if (v is int) return v;
+      if (v is BigInt) return v.toInt();
+      if (v is num) return v.toInt();
+      return 0;
+    }
+
+    return parseCount(mainCount.data['count']) + parseCount(toCount.data['count']);
+  }
+
+  /// 账户迁移：将fromAccountId的所有交易迁移到toAccountId
+  Future<int> migrateAccount({
+    required int fromAccountId,
+    required int toAccountId,
+  }) async {
+    final beforeCount = await getTransactionCountByAccount(fromAccountId);
+
+    // 迁移作为主账户的交易
+    await (db.update(db.transactions)
+          ..where((t) => t.accountId.equals(fromAccountId)))
+        .write(TransactionsCompanion(accountId: d.Value(toAccountId)));
+
+    // 迁移作为转入账户的交易
+    await (db.update(db.transactions)
+          ..where((t) => t.toAccountId.equals(fromAccountId)))
+        .write(TransactionsCompanion(toAccountId: d.Value(toAccountId)));
+
+    return beforeCount;
+  }
+
+  /// 获取单个账户信息
+  Future<Account?> getAccount(int accountId) async {
+    return await (db.select(db.accounts)
+          ..where((a) => a.id.equals(accountId)))
+        .getSingleOrNull();
+  }
+
+  /// 响应式监听账户信息变化
+  Stream<Account?> watchAccount(int accountId) {
+    return (db.select(db.accounts)..where((a) => a.id.equals(accountId)))
+        .watchSingleOrNull();
   }
 }

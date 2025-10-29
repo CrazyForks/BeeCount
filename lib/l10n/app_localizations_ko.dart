@@ -2573,7 +2573,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get supportProjectWhyDescription => 'BeeCount는 광고나 유료 기능이 없는 완전 무료 오픈소스 프로젝트입니다. 하지만 iOS 사용자가 사용할 수 있도록 하려면 앱에 서명하기 위한 Apple Developer Account(\$99/년)가 필요합니다.';
 
   @override
-  String get supportProjectGoalTitle => '모금 목표';
+  String get supportProjectAchievementTitle => 'Initial Goal Achieved';
+
+  @override
+  String get supportProjectAchievementDescription => 'Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.';
+
+  @override
+  String get supportProjectOngoingTitle => 'Ongoing Operation Costs';
 
   @override
   String supportProjectCurrentAmount(String amount) {
@@ -2607,6 +2613,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get supportProjectNote => '버튼을 클릭하면 GitHub로 리디렉션되어 자세한 기부 방법을 확인할 수 있습니다';
+
+  @override
+  String get supportProjectVoluntaryNote => 'Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV 클라우드 서비스 설정 완료';
@@ -2827,6 +2836,86 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get cloudWebdavRemotePathHelperText => '데이터 저장을 위한 원격 디렉토리 경로';
+
+  @override
+  String get accountsTitle => 'Account Management';
+
+  @override
+  String get accountsEmptyMessage => 'No accounts yet, tap the top right to add';
+
+  @override
+  String get accountAddTooltip => 'Add Account';
+
+  @override
+  String get accountAddButton => 'Add Account';
+
+  @override
+  String get accountBalance => 'Balance';
+
+  @override
+  String get accountEditTitle => 'Edit Account';
+
+  @override
+  String get accountNewTitle => 'New Account';
+
+  @override
+  String get accountNameLabel => 'Account Name';
+
+  @override
+  String get accountNameHint => 'e.g.: ICBC, Alipay, etc.';
+
+  @override
+  String get accountNameRequired => 'Please enter account name';
+
+  @override
+  String get accountTypeLabel => 'Account Type';
+
+  @override
+  String get accountTypeCash => 'Cash';
+
+  @override
+  String get accountTypeBankCard => 'Bank Card';
+
+  @override
+  String get accountTypeCreditCard => 'Credit Card';
+
+  @override
+  String get accountTypeAlipay => 'Alipay';
+
+  @override
+  String get accountTypeWechat => 'WeChat';
+
+  @override
+  String get accountTypeOther => 'Other';
+
+  @override
+  String get accountInitialBalance => 'Initial Balance';
+
+  @override
+  String get accountInitialBalanceHint => 'Enter initial balance (optional)';
+
+  @override
+  String get accountDeleteWarningTitle => 'Confirm Delete';
+
+  @override
+  String accountDeleteWarningMessage(int count) {
+    return 'This account has $count related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?';
+  }
+
+  @override
+  String get accountDeleteConfirm => 'Confirm to delete this account?';
+
+  @override
+  String get accountSelectTitle => 'Select Account';
+
+  @override
+  String get accountNone => 'No Account';
+
+  @override
+  String get accountsEnableFeature => 'Enable Account Feature';
+
+  @override
+  String get accountsFeatureDescription => 'Manage multiple payment accounts and track balance changes for each account';
 
   @override
   String get updateCorruptedFileTitle => '설치 패키지가 손상되었습니다';

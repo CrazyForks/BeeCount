@@ -2570,10 +2570,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportProjectWhyTitle => 'Why We Need Your Support?';
 
   @override
-  String get supportProjectWhyDescription => 'BeeCount is a completely free and open-source project with no ads or paid features. However, to make it available for iOS users, we need an Apple Developer Account (\$99/year) to sign the app.';
+  String get supportProjectWhyDescription => 'BeeCount is a completely free and open-source project with no ads or paid features. Ongoing operations require annual renewal of Apple Developer Account (\$99/year) to keep the iOS version accessible. Your support helps the project continue to grow and benefit more users.';
 
   @override
-  String get supportProjectGoalTitle => 'Funding Goal';
+  String get supportProjectAchievementTitle => 'Initial Goal Achieved';
+
+  @override
+  String get supportProjectAchievementDescription => 'Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.';
+
+  @override
+  String get supportProjectOngoingTitle => 'Ongoing Operation Costs';
 
   @override
   String supportProjectCurrentAmount(String amount) {
@@ -2591,22 +2597,25 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get supportProjectUsageTitle => 'How Donations Are Used';
+  String get supportProjectUsageTitle => 'How Funds Are Used';
 
   @override
-  String get supportProjectUsage1 => 'Apple Developer Account annual fee (\$99/year)';
+  String get supportProjectUsage1 => 'Annual Apple Developer Account renewal (\$99/year)';
 
   @override
-  String get supportProjectUsage2 => 'Distribute iOS version via TestFlight';
+  String get supportProjectUsage2 => 'Continuous maintenance and new feature development';
 
   @override
-  String get supportProjectUsage3 => 'Continuous project development and maintenance';
+  String get supportProjectUsage3 => 'Support for HarmonyOS and cross-platform adaptation';
 
   @override
   String get supportProjectViewDonationMethods => 'View Donation Methods';
 
   @override
-  String get supportProjectNote => 'Clicking the button will redirect to GitHub for detailed donation methods';
+  String get supportProjectNote => '💡 Donations are completely voluntary, the project remains free and open-source forever';
+
+  @override
+  String get supportProjectVoluntaryNote => 'Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV Cloud Service Configured';
@@ -2827,6 +2836,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudWebdavRemotePathHelperText => 'Remote directory path for data storage';
+
+  @override
+  String get accountsTitle => 'Account Management';
+
+  @override
+  String get accountsEmptyMessage => 'No accounts yet, tap the top right to add';
+
+  @override
+  String get accountAddTooltip => 'Add Account';
+
+  @override
+  String get accountAddButton => 'Add Account';
+
+  @override
+  String get accountBalance => 'Balance';
+
+  @override
+  String get accountEditTitle => 'Edit Account';
+
+  @override
+  String get accountNewTitle => 'New Account';
+
+  @override
+  String get accountNameLabel => 'Account Name';
+
+  @override
+  String get accountNameHint => 'e.g.: ICBC, Alipay, etc.';
+
+  @override
+  String get accountNameRequired => 'Please enter account name';
+
+  @override
+  String get accountTypeLabel => 'Account Type';
+
+  @override
+  String get accountTypeCash => 'Cash';
+
+  @override
+  String get accountTypeBankCard => 'Bank Card';
+
+  @override
+  String get accountTypeCreditCard => 'Credit Card';
+
+  @override
+  String get accountTypeAlipay => 'Alipay';
+
+  @override
+  String get accountTypeWechat => 'WeChat';
+
+  @override
+  String get accountTypeOther => 'Other';
+
+  @override
+  String get accountInitialBalance => 'Initial Balance';
+
+  @override
+  String get accountInitialBalanceHint => 'Enter initial balance (optional)';
+
+  @override
+  String get accountDeleteWarningTitle => 'Confirm Delete';
+
+  @override
+  String accountDeleteWarningMessage(int count) {
+    return 'This account has $count related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?';
+  }
+
+  @override
+  String get accountDeleteConfirm => 'Confirm to delete this account?';
+
+  @override
+  String get accountSelectTitle => 'Select Account';
+
+  @override
+  String get accountNone => 'No Account';
+
+  @override
+  String get accountsEnableFeature => 'Enable Account Feature';
+
+  @override
+  String get accountsFeatureDescription => 'Manage multiple payment accounts and track balance changes for each account';
 
   @override
   String get updateCorruptedFileTitle => 'Corrupted Installation Package';

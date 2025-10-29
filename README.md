@@ -20,9 +20,9 @@
 
 > ## 🎉 重大消息
 >
-> **iOS TestFlight 筹款目标已达成！** 目标 $99，实际筹集 ¥732（101.67%）
+> **iOS TestFlight 公测已上线！**
 >
-> 🍎 **iOS 版本预计 5-7 天后通过 TestFlight 发布**
+> 🍎 **[立即加入 TestFlight 公测](https://testflight.apple.com/join/Eaw2rWxa)**
 
 ---
 
@@ -137,15 +137,19 @@
 <div align="center">
 
 [![下载 Android APK](https://img.shields.io/badge/下载_Android_APK-最新版本-brightgreen?style=for-the-badge&logo=android)](https://github.com/TNT-Likely/BeeCount/releases/latest)
+[![加入 iOS TestFlight](https://img.shields.io/badge/加入_iOS_TestFlight-公测版本-blue?style=for-the-badge&logo=apple)](https://testflight.apple.com/join/Eaw2rWxa)
 
 </div>
 
-**步骤：**
+**Android 用户：**
 1. 点击上方按钮前往 [Releases](https://github.com/TNT-Likely/BeeCount/releases) 页面
 2. 下载最新版本的 `app-prod-release-*.apk` 文件
 3. 安装后即可开始使用（默认本地模式，无需任何配置）
 
-> **iOS 用户**：需要 Apple 开发者账号签名，正在 [众筹中](#-支持项目)
+**iOS 用户：**
+1. 在 iPhone/iPad 上安装 [TestFlight](https://apps.apple.com/app/testflight/id899247664)
+2. 点击 [TestFlight 公测链接](https://testflight.apple.com/join/Eaw2rWxa) 加入
+3. 在 TestFlight 中安装蜜蜂记账
 
 ### 🔨 方式二：自行构建
 
@@ -401,12 +405,11 @@ A:
 
 ### 为什么需要您的支持？
 
-蜜蜂记账是**完全免费开源**的项目，没有任何广告和付费功能。但要让 iOS 用户能够正常使用，需要申请 **Apple 开发者账号**（$99/年）来签名应用。
+蜜蜂记账是**完全免费开源**的项目，没有任何广告和付费功能。为了保持项目的持续运营，我们需要您的支持。
 
 您的捐赠将直接用于：
-- ✅ 申请 Apple 开发者账号（$99/年）
-- ✅ 通过 TestFlight 分发 iOS 版本
-- ✅ 维护项目的持续开发
+- 📱 **续费 Apple 开发者账号** - 保持 iOS TestFlight 公测可用（$99/年）
+- 🔧 **维护项目持续开发** - 支持持续开发和维护
 
 ### 捐赠方式
 
@@ -437,27 +440,16 @@ A:
 
 </details>
 
-### 📊 筹款进度
+### 📊 资金使用透明度
 
-- 🎯 **目标**: $99（约 ¥720，Apple 开发者账号年费）
-- 💰 **已筹集**: ¥732（约 $101）
-- 📈 **进度**: 101.67% ✅
+**已完成**：
+- ✅ Apple 开发者账号注册（$99/年）
+- ✅ iOS TestFlight 公测上线
 
-```
-进度条: [██████████] 101.67% - 🎉 已达成目标！
-```
+**持续成本**：
+- 📱 Apple 开发者账号续费：$99/年
 
-**目标已达成！接下来将**：
-1. ✅ 注册 Apple 开发者账号（进行中）
-2. ⏳ 配置签名证书和 TestFlight
-3. ⏳ 通过 TestFlight 分发给 iOS 用户
-4. ✅ 公开透明地说明资金使用情况
-
-**资金使用说明**：
-- Apple 开发者账号年费：¥720
-- 多余资金（¥12）将用于：
-  - 续费 Apple 开发者账号（下一年度）
-  - 其他开发和维护必要费用（如域名、证书等）
+所有捐赠资金的使用情况都会在这里公开透明地说明。
 
 ### 🌟 感谢支持者
 

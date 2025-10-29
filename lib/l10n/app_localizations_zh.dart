@@ -2570,10 +2570,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get supportProjectWhyTitle => '为什么需要您的支持?';
 
   @override
-  String get supportProjectWhyDescription => '蜜蜂记账是完全免费开源的项目,没有任何广告和付费功能。但要让 iOS 用户能够正常使用,需要申请 Apple 开发者账号(\$99/年)来签名应用。';
+  String get supportProjectWhyDescription => '蜜蜂记账是完全免费开源的项目,没有任何广告和付费功能。项目的持续运营需要每年续费 Apple 开发者账号（\$99/年）以保持 iOS 版本可用。您的支持将帮助项目持续发展,让更多用户受益。';
 
   @override
-  String get supportProjectGoalTitle => '筹款目标';
+  String get supportProjectAchievementTitle => '初期目标已完成';
+
+  @override
+  String get supportProjectAchievementDescription => '感谢所有支持者!首期 iOS TestFlight 公测目标已达成,应用现已上线。';
+
+  @override
+  String get supportProjectOngoingTitle => '持续运营成本';
 
   @override
   String supportProjectCurrentAmount(String amount) {
@@ -2591,22 +2597,25 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get supportProjectUsageTitle => '捐赠用途';
+  String get supportProjectUsageTitle => '资金用途';
 
   @override
-  String get supportProjectUsage1 => '申请 Apple 开发者账号(\$99/年)';
+  String get supportProjectUsage1 => '每年续费 Apple 开发者账号（\$99/年）';
 
   @override
-  String get supportProjectUsage2 => '通过 TestFlight 分发 iOS 版本';
+  String get supportProjectUsage2 => '持续维护和开发新功能';
 
   @override
-  String get supportProjectUsage3 => '维护项目的持续开发';
+  String get supportProjectUsage3 => '支持鸿蒙版本等跨平台适配';
 
   @override
   String get supportProjectViewDonationMethods => '查看捐赠方式';
 
   @override
-  String get supportProjectNote => '点击按钮将跳转到 GitHub 查看详细捐赠方式';
+  String get supportProjectNote => '💡 捐赠完全自愿，项目永久免费开源';
+
+  @override
+  String get supportProjectVoluntaryNote => '您的每一份支持都将用于项目的长期维护，让蜜蜂记账持续为用户服务。';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV 云服务已配置';
@@ -2827,6 +2836,86 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudWebdavRemotePathHelperText => '数据存储的远程目录路径';
+
+  @override
+  String get accountsTitle => '账户管理';
+
+  @override
+  String get accountsEmptyMessage => '还没有账户，点击右上角添加';
+
+  @override
+  String get accountAddTooltip => '添加账户';
+
+  @override
+  String get accountAddButton => '添加账户';
+
+  @override
+  String get accountBalance => '余额';
+
+  @override
+  String get accountEditTitle => '编辑账户';
+
+  @override
+  String get accountNewTitle => '新建账户';
+
+  @override
+  String get accountNameLabel => '账户名称';
+
+  @override
+  String get accountNameHint => '例如：工商银行、支付宝等';
+
+  @override
+  String get accountNameRequired => '请输入账户名称';
+
+  @override
+  String get accountTypeLabel => '账户类型';
+
+  @override
+  String get accountTypeCash => '现金';
+
+  @override
+  String get accountTypeBankCard => '银行卡';
+
+  @override
+  String get accountTypeCreditCard => '信用卡';
+
+  @override
+  String get accountTypeAlipay => '支付宝';
+
+  @override
+  String get accountTypeWechat => '微信';
+
+  @override
+  String get accountTypeOther => '其他';
+
+  @override
+  String get accountInitialBalance => '初始资金';
+
+  @override
+  String get accountInitialBalanceHint => '请输入初始资金（可选）';
+
+  @override
+  String get accountDeleteWarningTitle => '确认删除';
+
+  @override
+  String accountDeleteWarningMessage(int count) {
+    return '该账户有 $count 笔关联交易，删除后交易记录中的账户信息将被清空。确认删除吗？';
+  }
+
+  @override
+  String get accountDeleteConfirm => '确认删除该账户吗？';
+
+  @override
+  String get accountSelectTitle => '选择账户';
+
+  @override
+  String get accountNone => '不选择账户';
+
+  @override
+  String get accountsEnableFeature => '启用账户功能';
+
+  @override
+  String get accountsFeatureDescription => '启用后可以管理多个支付账户，追踪每个账户的余额变化';
 
   @override
   String get updateCorruptedFileTitle => '安装包已损坏';
@@ -5404,9 +5493,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get supportProjectWhyDescription => '蜜蜂記帳是完全免費開源的專案,沒有任何廣告和付費功能。但要讓 iOS 用戶能夠正常使用,需要申請 Apple 開發者帳號(\$99/年)來簽名應用程式。';
-
-  @override
-  String get supportProjectGoalTitle => '籌款目標';
 
   @override
   String supportProjectCurrentAmount(String amount) {

@@ -20,9 +20,9 @@
 
 > ## 🎉 Great News
 >
-> **iOS TestFlight funding goal achieved!** Target $99, raised ¥732 ($101, 101.67%)
+> **iOS TestFlight Public Beta is Now Live!**
 >
-> 🍎 **iOS version will be available via TestFlight in 5-7 days**
+> 🍎 **[Join iOS TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa)**
 
 ---
 
@@ -137,16 +137,21 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 <div align="center">
 
 [![Download Android APK](https://img.shields.io/badge/Download_Android_APK-Latest_Version-brightgreen?style=for-the-badge&logo=android)](https://github.com/TNT-Likely/BeeCount/releases/latest)
+[![Join iOS TestFlight](https://img.shields.io/badge/Join_iOS_TestFlight-Beta_Version-blue?style=for-the-badge&logo=apple)](https://testflight.apple.com/join/Eaw2rWxa)
 
 </div>
 
-**Steps:**
+**Android Users:**
 
 1. Click the button above to go to [Releases](https://github.com/TNT-Likely/BeeCount/releases) page
 2. Download the latest `app-prod-release-*.apk` file
 3. Install and start using (default local mode, no configuration needed)
 
-> **iOS Users**: Requires Apple Developer Account for signing, currently [crowdfunding](#-support-this-project)
+**iOS Users:**
+
+1. Install [TestFlight](https://apps.apple.com/app/testflight/id899247664) on your iPhone/iPad
+2. Click [TestFlight Beta Link](https://testflight.apple.com/join/Eaw2rWxa) to join
+3. Install BeeCount from TestFlight
 
 ### 🔨 Option 2: Build from Source
 
@@ -405,9 +410,8 @@ A:
 BeeCount is a **completely free and open-source** project with no ads or paid features. However, to make it available for iOS users, we need an **Apple Developer Account** ($99/year) to sign the app.
 
 Your donation will be used for:
-- ✅ Apple Developer Account annual fee ($99/year)
-- ✅ Distributing iOS version via TestFlight
-- ✅ Continuous project development and maintenance
+- 📱 **Renew Apple Developer Account** - Keep iOS TestFlight beta accessible ($99/year)
+- 🔧 **Support continuous development and maintenance** - Keep the project actively developed
 
 ### Donation Methods
 
@@ -448,17 +452,16 @@ Your donation will be used for:
 Progress: [██████████] 101.67% - 🎉 Goal Achieved!
 ```
 
-**Goal achieved! Next steps**:
-1. ✅ Register Apple Developer Account (in progress)
-2. ⏳ Configure signing certificates and TestFlight
-3. ⏳ Distribute to iOS users via TestFlight
-4. ✅ Transparently report fund usage
+**Completed**:
+- ✅ Apple Developer Account registration ($99/year)
+- ✅ iOS TestFlight public beta launched
 
-**Fund Usage**:
-- Apple Developer Account annual fee: ¥720
-- Surplus funds (¥12) will be used for:
-  - Renewing Apple Developer Account (next year)
-  - Other necessary development and maintenance expenses (e.g., domain, certificates)
+**Ongoing Costs**:
+- 📱 Apple Developer Account renewal: $99/year
+
+**🚀 Next Steps**:
+- Preparing to submit to Apple App Store
+- Developing HarmonyOS native version
 
 ### 🌟 Special Thanks to Our Supporters
 

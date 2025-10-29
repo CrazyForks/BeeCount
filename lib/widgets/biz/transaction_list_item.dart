@@ -13,6 +13,7 @@ class TransactionListItem extends StatelessWidget {
   final VoidCallback? onCategoryTap; // 点击分类图标/名称的回调
   final String? categoryName; // 分类名称，用于显示
   final VoidCallback? onDelete; // 删除回调
+  final String? accountName; // 账户名称，用于显示
   const TransactionListItem(
       {super.key,
       required this.icon,
@@ -23,7 +24,8 @@ class TransactionListItem extends StatelessWidget {
       this.onTap,
       this.onCategoryTap,
       this.categoryName,
-      this.onDelete});
+      this.onDelete,
+      this.accountName});
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,28 @@ class TransactionListItem extends StatelessWidget {
                           color: Theme.of(context).colorScheme.outline,
                         ),
                       ),
+                    ),
+                  // 如果有账户名称，则显示账户信息
+                  if (accountName != null)
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.account_balance_wallet_outlined,
+                          size: 12,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            accountName!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                 ],
               ),

@@ -4927,14 +4927,26 @@ abstract class AppLocalizations {
   /// No description provided for @supportProjectWhyDescription.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount is a completely free and open-source project with no ads or paid features. However, to make it available for iOS users, we need an Apple Developer Account (\$99/year) to sign the app.'**
+  /// **'BeeCount is a completely free and open-source project with no ads or paid features. Ongoing operations require annual renewal of Apple Developer Account (\$99/year) to keep the iOS version accessible. Your support helps the project continue to grow and benefit more users.'**
   String get supportProjectWhyDescription;
 
-  /// No description provided for @supportProjectGoalTitle.
+  /// No description provided for @supportProjectAchievementTitle.
   ///
   /// In en, this message translates to:
-  /// **'Funding Goal'**
-  String get supportProjectGoalTitle;
+  /// **'Initial Goal Achieved'**
+  String get supportProjectAchievementTitle;
+
+  /// No description provided for @supportProjectAchievementDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.'**
+  String get supportProjectAchievementDescription;
+
+  /// No description provided for @supportProjectOngoingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing Operation Costs'**
+  String get supportProjectOngoingTitle;
 
   /// No description provided for @supportProjectCurrentAmount.
   ///
@@ -4957,25 +4969,25 @@ abstract class AppLocalizations {
   /// No description provided for @supportProjectUsageTitle.
   ///
   /// In en, this message translates to:
-  /// **'How Donations Are Used'**
+  /// **'How Funds Are Used'**
   String get supportProjectUsageTitle;
 
   /// No description provided for @supportProjectUsage1.
   ///
   /// In en, this message translates to:
-  /// **'Apple Developer Account annual fee (\$99/year)'**
+  /// **'Annual Apple Developer Account renewal (\$99/year)'**
   String get supportProjectUsage1;
 
   /// No description provided for @supportProjectUsage2.
   ///
   /// In en, this message translates to:
-  /// **'Distribute iOS version via TestFlight'**
+  /// **'Continuous maintenance and new feature development'**
   String get supportProjectUsage2;
 
   /// No description provided for @supportProjectUsage3.
   ///
   /// In en, this message translates to:
-  /// **'Continuous project development and maintenance'**
+  /// **'Support for HarmonyOS and cross-platform adaptation'**
   String get supportProjectUsage3;
 
   /// No description provided for @supportProjectViewDonationMethods.
@@ -4987,8 +4999,14 @@ abstract class AppLocalizations {
   /// No description provided for @supportProjectNote.
   ///
   /// In en, this message translates to:
-  /// **'Clicking the button will redirect to GitHub for detailed donation methods'**
+  /// **'💡 Donations are completely voluntary, the project remains free and open-source forever'**
   String get supportProjectNote;
+
+  /// No description provided for @supportProjectVoluntaryNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.'**
+  String get supportProjectVoluntaryNote;
 
   /// No description provided for @webdavConfiguredTitle.
   ///
@@ -5397,6 +5415,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remote directory path for data storage'**
   String get cloudWebdavRemotePathHelperText;
+
+  /// No description provided for @accountsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Management'**
+  String get accountsTitle;
+
+  /// No description provided for @accountsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No accounts yet, tap the top right to add'**
+  String get accountsEmptyMessage;
+
+  /// No description provided for @accountAddTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Account'**
+  String get accountAddTooltip;
+
+  /// No description provided for @accountAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Account'**
+  String get accountAddButton;
+
+  /// No description provided for @accountBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get accountBalance;
+
+  /// No description provided for @accountEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Account'**
+  String get accountEditTitle;
+
+  /// No description provided for @accountNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Account'**
+  String get accountNewTitle;
+
+  /// No description provided for @accountNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Name'**
+  String get accountNameLabel;
+
+  /// No description provided for @accountNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g.: ICBC, Alipay, etc.'**
+  String get accountNameHint;
+
+  /// No description provided for @accountNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter account name'**
+  String get accountNameRequired;
+
+  /// No description provided for @accountTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Type'**
+  String get accountTypeLabel;
+
+  /// No description provided for @accountTypeCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get accountTypeCash;
+
+  /// No description provided for @accountTypeBankCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Card'**
+  String get accountTypeBankCard;
+
+  /// No description provided for @accountTypeCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Card'**
+  String get accountTypeCreditCard;
+
+  /// No description provided for @accountTypeAlipay.
+  ///
+  /// In en, this message translates to:
+  /// **'Alipay'**
+  String get accountTypeAlipay;
+
+  /// No description provided for @accountTypeWechat.
+  ///
+  /// In en, this message translates to:
+  /// **'WeChat'**
+  String get accountTypeWechat;
+
+  /// No description provided for @accountTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get accountTypeOther;
+
+  /// No description provided for @accountInitialBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial Balance'**
+  String get accountInitialBalance;
+
+  /// No description provided for @accountInitialBalanceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter initial balance (optional)'**
+  String get accountInitialBalanceHint;
+
+  /// No description provided for @accountDeleteWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get accountDeleteWarningTitle;
+
+  /// No description provided for @accountDeleteWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has {count} related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?'**
+  String accountDeleteWarningMessage(int count);
+
+  /// No description provided for @accountDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm to delete this account?'**
+  String get accountDeleteConfirm;
+
+  /// No description provided for @accountSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Account'**
+  String get accountSelectTitle;
+
+  /// No description provided for @accountNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No Account'**
+  String get accountNone;
+
+  /// No description provided for @accountsEnableFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Account Feature'**
+  String get accountsEnableFeature;
+
+  /// No description provided for @accountsFeatureDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage multiple payment accounts and track balance changes for each account'**
+  String get accountsFeatureDescription;
 
   /// No description provided for @updateCorruptedFileTitle.
   ///

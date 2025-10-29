@@ -203,6 +203,15 @@ class TransactionListState extends ConsumerState<TransactionList> {
             // 检查是否是当天最后一项
             final isLastInGroup = allItemsInDay.last.t.id == it.t.id;
 
+            // 获取账户名称（仅在账户功能启用且有账户ID时）
+            final accountFeatureEnabled = ref.watch(accountFeatureEnabledProvider).value ?? false;
+            String? accountName;
+            if (accountFeatureEnabled && it.t.accountId != null) {
+              // 通过 ref.watch 获取账户名称
+              final accountAsync = ref.watch(accountByIdProvider(it.t.accountId!));
+              accountName = accountAsync.value?.name;
+            }
+
             return Dismissible(
               key: Key('tx-${it.t.id}-$index'), // 添加索引避免key冲突
               direction: DismissDirection.endToStart,
@@ -245,6 +254,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                     amount: it.t.amount,
                     isExpense: isExpense,
                     hide: widget.hideAmounts,
+                    accountName: accountName,
                     onTap: () async {
                       await TransactionEditUtils.editTransaction(
                         context,
