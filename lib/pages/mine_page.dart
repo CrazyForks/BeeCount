@@ -835,7 +835,7 @@ class MinePage extends ConsumerWidget {
                 leading: Icons.upload_outlined,
                 title: AppLocalizations.of(context).mineImportProgressTitle,
                 subtitle: AppLocalizations.of(context)
-                    .mineImportProgressSubtitle(p.done, p.total, p.ok, p.fail),
+                    .mineImportProgressSubtitle(p.done, p.fail, p.ok, p.total),
                 trailing: SizedBox(
                     width: 72, child: LinearProgressIndicator(value: percent)),
                 onTap: null,
