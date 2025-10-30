@@ -4,7 +4,7 @@
 
 ![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
 ![License](https://img.shields.io/badge/license-商业源代码许可-orange.svg)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey.svg)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20HarmonyOS-lightgrey.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
@@ -20,9 +20,13 @@
 
 > ## 🎉 重大消息
 >
-> **iOS TestFlight 公测已上线！**
+> **iOS 版本正在上架 App Store！**
 >
-> 🍎 **[立即加入 TestFlight 公测](https://testflight.apple.com/join/Eaw2rWxa)**
+> 🍎 公测版本可通过 **[TestFlight 加入](https://testflight.apple.com/join/Eaw2rWxa)**
+>
+> **鸿蒙版本正在上架中！**
+>
+> 📱 **支持 HarmonyOS 5.0+** - [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
 ---
 

@@ -4,7 +4,7 @@
 
 ![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
 ![License](https://img.shields.io/badge/license-Business%20Source%20License-orange.svg)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey.svg)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20HarmonyOS-lightgrey.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
@@ -20,9 +20,13 @@
 
 > ## 🎉 Great News
 >
-> **iOS TestFlight Public Beta is Now Live!**
+> **iOS Version Submitting to App Store!**
 >
-> 🍎 **[Join iOS TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa)**
+> 🍎 Beta version available via **[TestFlight](https://testflight.apple.com/join/Eaw2rWxa)**
+>
+> **HarmonyOS Version Coming Soon!**
+>
+> 📱 **Supports HarmonyOS 5.0+** - [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 
 ---
 
