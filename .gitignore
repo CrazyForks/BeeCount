@@ -54,3 +54,4 @@ android/app/*.keystore
 
 .docs
 .tmp
+tmp
