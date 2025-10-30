@@ -499,6 +499,8 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
       try {
         await ref.read(cloudServiceStoreProvider).saveOnly(cfg);
         ref.invalidate(supabaseConfigProvider);
+        // 刷新激活配置，确保同步服务使用最新配置
+        ref.invalidate(activeCloudConfigProvider);
         if (mounted) showToast(context, AppLocalizations.of(context).cloudConfigSaved);
       } catch (e) {
         if (mounted) {
@@ -555,6 +557,8 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
       try {
         await ref.read(cloudServiceStoreProvider).saveOnly(cfg);
         ref.invalidate(webdavConfigProvider);
+        // 刷新激活配置，确保同步服务使用最新配置
+        ref.invalidate(activeCloudConfigProvider);
         if (mounted) showToast(context, AppLocalizations.of(context).cloudConfigSaved);
       } catch (e) {
         if (mounted) {
