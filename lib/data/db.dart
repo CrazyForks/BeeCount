@@ -121,7 +121,10 @@ class BeeDatabase extends _$BeeDatabase {
       await into(accounts)
           .insert(AccountsCompanion.insert(ledgerId: ledgerId, name: 'Cash')); // Will be displayed with localization in UI
     }
-    // 总是确保默认分类存在
+    // 仅在首次初始化时创建默认分类(检查是否已有任何分类)
+    final categoryCount = await (select(categories).get()).then((v) => v.length);
+    final isFirstInit = categoryCount == 0;
+
     const expense = 'expense';
     const income = 'income';
     final defaultExpense = CategoryService.defaultExpenseCategories;
@@ -214,14 +217,14 @@ class BeeDatabase extends _$BeeDatabase {
       final existingCategories = await (select(categories)
             ..where((c) => c.name.equals(name) & c.kind.equals(expense)))
           .get();
-      if (existingCategories.isEmpty) {
-        // 新增默认分类，使用列表索引作为 sortOrder
+      if (existingCategories.isEmpty && isFirstInit) {
+        // 仅在首次初始化时新增默认分类，使用列表索引作为 sortOrder
         await into(categories).insert(CategoriesCompanion.insert(
             name: name,
             kind: expense,
             icon: Value(CategoryService.getDefaultCategoryIcon(name, expense)),
             sortOrder: Value(i)));
-      } else {
+      } else if (existingCategories.isNotEmpty) {
         // 更新现有分类的图标（但不覆盖用户自定义的 sortOrder）
         for (final category in existingCategories) {
           final correctIcon = CategoryService.getDefaultCategoryIcon(name, expense);
@@ -245,14 +248,14 @@ class BeeDatabase extends _$BeeDatabase {
       final existingCategories = await (select(categories)
             ..where((c) => c.name.equals(name) & c.kind.equals(income)))
           .get();
-      if (existingCategories.isEmpty) {
-        // 新增默认分类，使用列表索引作为 sortOrder
+      if (existingCategories.isEmpty && isFirstInit) {
+        // 仅在首次初始化时新增默认分类，使用列表索引作为 sortOrder
         await into(categories).insert(CategoriesCompanion.insert(
             name: name,
             kind: income,
             icon: Value(CategoryService.getDefaultCategoryIcon(name, income)),
             sortOrder: Value(i)));
-      } else {
+      } else if (existingCategories.isNotEmpty) {
         // 更新现有分类的图标（但不覆盖用户自定义的 sortOrder）
         for (final category in existingCategories) {
           final correctIcon = CategoryService.getDefaultCategoryIcon(name, income);
