@@ -206,7 +206,7 @@
   "mineCloudServiceCustom": "自訂 Supabase",
   "mineCloudServiceWebDAV": "自訂雲服務 (WebDAV)",
   "mineFirstFullUpload": "首次全量上傳",
-  "mineFirstFullUploadSubtitle": "將所有本地帳本上傳到當前 Supabase",
+  "mineFirstFullUploadSubtitle": "將所有本地帳本上傳到雲端",
   "mineFirstFullUploadComplete": "完成",
   "mineFirstFullUploadMessage": "已上傳當前帳本。其它帳本請切換後再上傳。",
   "mineFirstFullUploadFailed": "失敗",
@@ -940,40 +940,6 @@
   "currencyRUB": "盧布",
   "currencyBYN": "白俄羅斯盧布",
 
-  "supportProjectTitle": "支持項目",
-  "supportProjectWhyTitle": "為什麼需要您的支持?",
-  "supportProjectWhyDescription": "蜜蜂記帳是完全免費開源的專案,沒有任何廣告和付費功能。但要讓 iOS 用戶能夠正常使用,需要申請 Apple 開發者帳號($99/年)來簽名應用程式。",
-  "supportProjectGoalTitle": "籌款目標",
-  "supportProjectCurrentAmount": "已籌集: {amount}",
-  "@supportProjectCurrentAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectTargetAmount": "目標: {amount}",
-  "@supportProjectTargetAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectProgress": "進度: {progress}",
-  "@supportProjectProgress": {
-    "placeholders": {
-      "progress": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectUsageTitle": "捐贈用途",
-  "supportProjectUsage1": "申請 Apple 開發者帳號($99/年)",
-  "supportProjectUsage2": "通過 TestFlight 分發 iOS 版本",
-  "supportProjectUsage3": "維護項目的持續開發",
-  "supportProjectViewDonationMethods": "查看捐贈方式",
-  "supportProjectNote": "點擊按鈕將跳轉到 GitHub 查看詳細捐贈方式",
 
   "webdavConfiguredTitle": "WebDAV 雲服務已設定",
   "webdavConfiguredMessage": "WebDAV 雲服務使用設定時提供的憑證，無需額外登入。",

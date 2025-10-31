@@ -309,7 +309,7 @@
   "mineCloudServiceCustom": "Custom Supabase",
   "mineCloudServiceWebDAV": "Custom Cloud Service (WebDAV)",
   "mineFirstFullUpload": "First Full Upload",
-  "mineFirstFullUploadSubtitle": "Upload all local ledgers to current Supabase",
+  "mineFirstFullUploadSubtitle": "Upload all local ledgers to cloud",
   "mineFirstFullUploadComplete": "Complete",
   "mineFirstFullUploadMessage": "Current ledger uploaded. Switch to other ledgers to upload them.",
   "mineFirstFullUploadFailed": "Failed",
@@ -1157,43 +1157,6 @@
   "currencyRUB": "Russian Ruble",
   "currencyBYN": "Belarusian Ruble",
 
-  "supportProjectTitle": "Support Project",
-  "supportProjectWhyTitle": "Why We Need Your Support?",
-  "supportProjectWhyDescription": "BeeCount is a completely free and open-source project with no ads or paid features. Ongoing operations require annual renewal of Apple Developer Account ($99/year) to keep the iOS version accessible. Your support helps the project continue to grow and benefit more users.",
-  "supportProjectAchievementTitle": "Initial Goal Achieved",
-  "supportProjectAchievementDescription": "Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.",
-  "supportProjectOngoingTitle": "Ongoing Operation Costs",
-  "supportProjectCurrentAmount": "Raised: {amount}",
-  "@supportProjectCurrentAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectTargetAmount": "Goal: {amount}",
-  "@supportProjectTargetAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectProgress": "Progress: {progress}",
-  "@supportProjectProgress": {
-    "placeholders": {
-      "progress": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectUsageTitle": "How Funds Are Used",
-  "supportProjectUsage1": "Annual Apple Developer Account renewal ($99/year)",
-  "supportProjectUsage2": "Continuous maintenance and new feature development",
-  "supportProjectUsage3": "Support for HarmonyOS and cross-platform adaptation",
-  "supportProjectViewDonationMethods": "View Donation Methods",
-  "supportProjectNote": "💡 Donations are completely voluntary, the project remains free and open-source forever",
-  "supportProjectVoluntaryNote": "Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.",
 
   "webdavConfiguredTitle": "WebDAV Cloud Service Configured",
   "webdavConfiguredMessage": "WebDAV cloud service uses the credentials provided during configuration, no additional login required.",

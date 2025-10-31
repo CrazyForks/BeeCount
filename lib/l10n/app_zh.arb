@@ -206,7 +206,7 @@
   "mineCloudServiceCustom": "自定义 Supabase",
   "mineCloudServiceWebDAV": "自定义云服务 (WebDAV)",
   "mineFirstFullUpload": "首次全量上传",
-  "mineFirstFullUploadSubtitle": "将所有本地账本上传到当前 Supabase",
+  "mineFirstFullUploadSubtitle": "将所有本地账本上传到云端",
   "mineFirstFullUploadComplete": "完成",
   "mineFirstFullUploadMessage": "已上传当前账本。其它账本请切换后再上传。",
   "mineFirstFullUploadFailed": "失败",
@@ -1002,44 +1002,6 @@
   "currencyRUB": "卢布",
   "currencyBYN": "白俄罗斯卢布",
 
-  "supportProjectTitle": "支持项目",
-  "supportProjectWhyTitle": "为什么需要您的支持?",
-  "supportProjectWhyDescription": "蜜蜂记账是完全免费开源的项目,没有任何广告和付费功能。项目的持续运营需要每年续费 Apple 开发者账号（$99/年）以保持 iOS 版本可用。您的支持将帮助项目持续发展,让更多用户受益。",
-  "supportProjectAchievementTitle": "初期目标已完成",
-  "supportProjectAchievementDescription": "感谢所有支持者!首期 iOS TestFlight 公测目标已达成,应用现已上线。",
-  "supportProjectOngoingTitle": "持续运营成本",
-  "supportProjectGoalTitle": "筹款目标",
-  "supportProjectCurrentAmount": "已筹集: {amount}",
-  "@supportProjectCurrentAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectTargetAmount": "目标: {amount}",
-  "@supportProjectTargetAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectProgress": "进度: {progress}",
-  "@supportProjectProgress": {
-    "placeholders": {
-      "progress": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectUsageTitle": "资金用途",
-  "supportProjectUsage1": "每年续费 Apple 开发者账号（$99/年）",
-  "supportProjectUsage2": "持续维护和开发新功能",
-  "supportProjectUsage3": "支持鸿蒙版本等跨平台适配",
-  "supportProjectViewDonationMethods": "查看捐赠方式",
-  "supportProjectNote": "💡 捐赠完全自愿，项目永久免费开源",
-  "supportProjectVoluntaryNote": "您的每一份支持都将用于项目的长期维护，让蜜蜂记账持续为用户服务。",
 
   "webdavConfiguredTitle": "WebDAV 云服务已配置",
   "webdavConfiguredMessage": "WebDAV 云服务使用配置时提供的凭据，无需额外登录。",

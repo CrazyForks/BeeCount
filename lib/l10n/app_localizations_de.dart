@@ -712,7 +712,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mineFirstFullUpload => 'First Full Upload';
 
   @override
-  String get mineFirstFullUploadSubtitle => 'Upload all local ledgers to current Supabase';
+  String get mineFirstFullUploadSubtitle => 'Upload all local ledgers to cloud';
 
   @override
   String get mineFirstFullUploadComplete => 'Complete';
@@ -2571,60 +2571,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get currencyBYN => 'Weißrussischer Rubel';
-
-  @override
-  String get supportProjectTitle => 'Projekt unterstützen';
-
-  @override
-  String get supportProjectWhyTitle => 'Warum brauchen wir Ihre Unterstützung?';
-
-  @override
-  String get supportProjectWhyDescription => 'BeeCount ist ein völlig kostenloses Open-Source-Projekt ohne Werbung oder kostenpflichtige Funktionen. Um es jedoch für iOS-Benutzer verfügbar zu machen, benötigen wir ein Apple Developer Account (\$99/Jahr) zum Signieren der App.';
-
-  @override
-  String get supportProjectAchievementTitle => 'Initial Goal Achieved';
-
-  @override
-  String get supportProjectAchievementDescription => 'Thanks to all supporters! The first iOS TestFlight beta goal has been achieved, and the app is now live.';
-
-  @override
-  String get supportProjectOngoingTitle => 'Ongoing Operation Costs';
-
-  @override
-  String supportProjectCurrentAmount(String amount) {
-    return 'Gesammelt: $amount';
-  }
-
-  @override
-  String supportProjectTargetAmount(String amount) {
-    return 'Ziel: $amount';
-  }
-
-  @override
-  String supportProjectProgress(String progress) {
-    return 'Fortschritt: $progress';
-  }
-
-  @override
-  String get supportProjectUsageTitle => 'Verwendung der Spenden';
-
-  @override
-  String get supportProjectUsage1 => 'Apple Developer Account Jahresgebühr (\$99/Jahr)';
-
-  @override
-  String get supportProjectUsage2 => 'iOS-Version über TestFlight verteilen';
-
-  @override
-  String get supportProjectUsage3 => 'Kontinuierliche Projektentwicklung und -wartung';
-
-  @override
-  String get supportProjectViewDonationMethods => 'Spendenmethoden anzeigen';
-
-  @override
-  String get supportProjectNote => 'Durch Klicken auf die Schaltfläche werden Sie zu GitHub weitergeleitet, um detaillierte Spendenmethoden anzuzeigen';
-
-  @override
-  String get supportProjectVoluntaryNote => 'Every contribution goes toward long-term maintenance, keeping BeeCount available for all users.';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV Cloud-Dienst konfiguriert';

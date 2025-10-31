@@ -712,7 +712,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineFirstFullUpload => '首次全量上传';
 
   @override
-  String get mineFirstFullUploadSubtitle => '将所有本地账本上传到当前 Supabase';
+  String get mineFirstFullUploadSubtitle => '将所有本地账本上传到云端';
 
   @override
   String get mineFirstFullUploadComplete => '完成';
@@ -2573,60 +2573,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currencyBYN => '白俄罗斯卢布';
 
   @override
-  String get supportProjectTitle => '支持项目';
-
-  @override
-  String get supportProjectWhyTitle => '为什么需要您的支持?';
-
-  @override
-  String get supportProjectWhyDescription => '蜜蜂记账是完全免费开源的项目,没有任何广告和付费功能。项目的持续运营需要每年续费 Apple 开发者账号（\$99/年）以保持 iOS 版本可用。您的支持将帮助项目持续发展,让更多用户受益。';
-
-  @override
-  String get supportProjectAchievementTitle => '初期目标已完成';
-
-  @override
-  String get supportProjectAchievementDescription => '感谢所有支持者!首期 iOS TestFlight 公测目标已达成,应用现已上线。';
-
-  @override
-  String get supportProjectOngoingTitle => '持续运营成本';
-
-  @override
-  String supportProjectCurrentAmount(String amount) {
-    return '已筹集: $amount';
-  }
-
-  @override
-  String supportProjectTargetAmount(String amount) {
-    return '目标: $amount';
-  }
-
-  @override
-  String supportProjectProgress(String progress) {
-    return '进度: $progress';
-  }
-
-  @override
-  String get supportProjectUsageTitle => '资金用途';
-
-  @override
-  String get supportProjectUsage1 => '每年续费 Apple 开发者账号（\$99/年）';
-
-  @override
-  String get supportProjectUsage2 => '持续维护和开发新功能';
-
-  @override
-  String get supportProjectUsage3 => '支持鸿蒙版本等跨平台适配';
-
-  @override
-  String get supportProjectViewDonationMethods => '查看捐赠方式';
-
-  @override
-  String get supportProjectNote => '💡 捐赠完全自愿，项目永久免费开源';
-
-  @override
-  String get supportProjectVoluntaryNote => '您的每一份支持都将用于项目的长期维护，让蜜蜂记账持续为用户服务。';
-
-  @override
   String get webdavConfiguredTitle => 'WebDAV 云服务已配置';
 
   @override
@@ -3643,7 +3589,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineFirstFullUpload => '首次全量上傳';
 
   @override
-  String get mineFirstFullUploadSubtitle => '將所有本地帳本上傳到當前 Supabase';
+  String get mineFirstFullUploadSubtitle => '將所有本地帳本上傳到雲端';
 
   @override
   String get mineFirstFullUploadComplete => '完成';
@@ -5502,48 +5448,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get currencyBYN => '白俄羅斯盧布';
-
-  @override
-  String get supportProjectTitle => '支持項目';
-
-  @override
-  String get supportProjectWhyTitle => '為什麼需要您的支持?';
-
-  @override
-  String get supportProjectWhyDescription => '蜜蜂記帳是完全免費開源的專案,沒有任何廣告和付費功能。但要讓 iOS 用戶能夠正常使用,需要申請 Apple 開發者帳號(\$99/年)來簽名應用程式。';
-
-  @override
-  String supportProjectCurrentAmount(String amount) {
-    return '已籌集: $amount';
-  }
-
-  @override
-  String supportProjectTargetAmount(String amount) {
-    return '目標: $amount';
-  }
-
-  @override
-  String supportProjectProgress(String progress) {
-    return '進度: $progress';
-  }
-
-  @override
-  String get supportProjectUsageTitle => '捐贈用途';
-
-  @override
-  String get supportProjectUsage1 => '申請 Apple 開發者帳號(\$99/年)';
-
-  @override
-  String get supportProjectUsage2 => '通過 TestFlight 分發 iOS 版本';
-
-  @override
-  String get supportProjectUsage3 => '維護項目的持續開發';
-
-  @override
-  String get supportProjectViewDonationMethods => '查看捐贈方式';
-
-  @override
-  String get supportProjectNote => '點擊按鈕將跳轉到 GitHub 查看詳細捐贈方式';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV 雲服務已設定';
