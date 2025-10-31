@@ -1001,6 +1001,12 @@ class MinePage extends ConsumerWidget {
   }
 
   Widget _buildSupportSection(BuildContext context, WidgetRef ref) {
+    // iOS平台不显示支持页面,避免违反App Store审核规则(Guideline 3.1.1)
+    // 该规则禁止使用非IAP的支付方式接收与数字内容相关的款项
+    if (Platform.isIOS) {
+      return const SizedBox.shrink();
+    }
+
     return SectionCard(
       margin: EdgeInsets.fromLTRB(
           12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
