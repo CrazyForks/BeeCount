@@ -397,7 +397,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryDefault => '默认分类';
 
   @override
-  String get categoryCustomTag => '自定义';
+  String get categoryCustomTag => 'Custom';
 
   @override
   String get categoryReorderTip => '长按分类可拖拽调整顺序';

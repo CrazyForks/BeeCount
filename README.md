@@ -12,7 +12,7 @@
 
 **核心优势：支持自建 Supabase/WebDAV 服务器，数据完全掌控在你手中**
 
-[📥 下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 使用文档](#-使用说明) | [💬 问题反馈](https://github.com/TNT-Likely/BeeCount/issues) | [💬 Telegram 群组](https://t.me/beecount) | [🌐 English](README_EN.md)
+[📥 下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 使用文档](#-使用说明) | [💝 捐赠支持](#-捐赠) | [💬 问题反馈](https://github.com/TNT-Likely/BeeCount/issues) | [💬 Telegram 群组](https://t.me/beecount) | [🌐 English](README_EN.md)
 
 </div>
 
@@ -405,7 +405,7 @@ A:
 
 ---
 
-## 💝 支持项目
+## 💝 捐赠
 
 ### 为什么需要您的支持？
 

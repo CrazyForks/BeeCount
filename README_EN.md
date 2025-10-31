@@ -12,7 +12,7 @@
 
 **Core Advantage: Self-hosted Supabase/WebDAV servers - Your data, Your control**
 
-[📥 Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 Documentation](#-user-guide) | [💬 Issues](https://github.com/TNT-Likely/BeeCount/issues) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
+[📥 Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [💬 Issues](https://github.com/TNT-Likely/BeeCount/issues) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -407,7 +407,7 @@ A:
 
 ---
 
-## 💝 Support This Project
+## 💝 Donate
 
 ### Why We Need Your Support?
 

@@ -350,26 +350,6 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
                     ],
                   ),
                 ),
-                if (!item.isDefault)
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.orange[500],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.categoryCustomTag,
-                        style: const TextStyle(
-                          fontSize: 8,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
               ],
             ),
           ),
@@ -466,27 +446,6 @@ class _CategoryCard extends ConsumerWidget {
                 ],
               ),
             ),
-            // 自定义分类标签
-            if (!isDefault)
-              Positioned(
-                top: 4,
-                right: 4,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.orange[500],
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.categoryCustomTag,
-                    style: const TextStyle(
-                      fontSize: 8,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),
