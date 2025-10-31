@@ -219,7 +219,7 @@ class MainApp extends ConsumerWidget {
         scrollBehavior: const NoGlowScrollBehavior(),
         debugShowCheckedModeBanner: false,
         theme: theme,
-        darkTheme: BeeTheme.darkTheme(),
+        themeMode: ThemeMode.light,
         navigatorObservers: [LoggingNavigatorObserver()],
         localizationsDelegates: const [
           AppLocalizations.delegate,
