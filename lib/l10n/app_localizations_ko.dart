@@ -794,6 +794,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mineUploadNeedLogin => '로그인이 필요합니다';
 
   @override
+  String get mineUploadNeedCloudService => '클라우드 서비스 모드에서만 사용 가능';
+
+  @override
   String get mineUploadInProgress => '업로드 중...';
 
   @override
@@ -810,6 +813,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mineDownloadTitle => '다운로드';
+
+  @override
+  String get mineDownloadNeedCloudService => '클라우드 서비스 모드에서만 사용 가능';
 
   @override
   String get mineDownloadComplete => '완료';
@@ -848,6 +854,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mineAutoSyncNeedLogin => '활성화하려면 로그인이 필요합니다';
+
+  @override
+  String get mineAutoSyncNeedCloudService => '클라우드 서비스 모드에서만 사용 가능';
 
   @override
   String get mineImportProgressTitle => '백그라운드에서 가져오는 중...';

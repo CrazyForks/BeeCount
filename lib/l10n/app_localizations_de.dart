@@ -794,6 +794,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mineUploadNeedLogin => 'Login required';
 
   @override
+  String get mineUploadNeedCloudService => 'Available in cloud service mode only';
+
+  @override
   String get mineUploadInProgress => 'Uploading...';
 
   @override
@@ -810,6 +813,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get mineDownloadTitle => 'Download';
+
+  @override
+  String get mineDownloadNeedCloudService => 'Available in cloud service mode only';
 
   @override
   String get mineDownloadComplete => 'Complete';
@@ -848,6 +854,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get mineAutoSyncNeedLogin => 'Login required to enable';
+
+  @override
+  String get mineAutoSyncNeedCloudService => 'Available in cloud service mode only';
 
   @override
   String get mineImportProgressTitle => 'Importing in background...';

@@ -794,6 +794,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineUploadNeedLogin => '需登录';
 
   @override
+  String get mineUploadNeedCloudService => '仅限云服务模式可用';
+
+  @override
   String get mineUploadInProgress => '正在上传中…';
 
   @override
@@ -810,6 +813,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineDownloadTitle => '下载';
+
+  @override
+  String get mineDownloadNeedCloudService => '仅限云服务模式可用';
 
   @override
   String get mineDownloadComplete => '完成';
@@ -848,6 +854,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineAutoSyncNeedLogin => '需登录后可开启';
+
+  @override
+  String get mineAutoSyncNeedCloudService => '仅限云服务模式可用';
 
   @override
   String get mineImportProgressTitle => '后台导入中…';
@@ -928,16 +937,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineFeedbackSubtitle => '提交问题或建议';
 
   @override
-  String get mineRefreshStats => '刷新统计信息（临时）';
+  String get mineRefreshStats => 'Refresh Stats (Debug)';
 
   @override
-  String get mineRefreshStatsSubtitle => '触发全局统计 Provider 重新计算';
+  String get mineRefreshStatsSubtitle => 'Trigger global stats provider recalculation';
 
   @override
-  String get mineRefreshSync => '刷新同步状态（临时）';
+  String get mineRefreshSync => 'Refresh Sync Status (Debug)';
 
   @override
-  String get mineRefreshSyncSubtitle => '触发同步状态 Provider 重新获取';
+  String get mineRefreshSyncSubtitle => 'Trigger sync status provider refresh';
 
   @override
   String get categoryEditTitle => '编辑分类';
@@ -3716,6 +3725,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineUploadNeedLogin => '需登入';
 
   @override
+  String get mineUploadNeedCloudService => '僅限雲端服務模式可用';
+
+  @override
   String get mineUploadInProgress => '正在上傳中…';
 
   @override
@@ -3732,6 +3744,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineDownloadTitle => '下載';
+
+  @override
+  String get mineDownloadNeedCloudService => '僅限雲端服務模式可用';
 
   @override
   String get mineDownloadComplete => '完成';
@@ -3770,6 +3785,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineAutoSyncNeedLogin => '需登入後可開啟';
+
+  @override
+  String get mineAutoSyncNeedCloudService => '僅限雲端服務模式可用';
 
   @override
   String get mineImportProgressTitle => '後台匯入中…';

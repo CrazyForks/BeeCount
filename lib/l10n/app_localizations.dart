@@ -1576,6 +1576,12 @@ abstract class AppLocalizations {
   /// **'Login required'**
   String get mineUploadNeedLogin;
 
+  /// No description provided for @mineUploadNeedCloudService.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in cloud service mode only'**
+  String get mineUploadNeedCloudService;
+
   /// No description provided for @mineUploadInProgress.
   ///
   /// In en, this message translates to:
@@ -1611,6 +1617,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download'**
   String get mineDownloadTitle;
+
+  /// No description provided for @mineDownloadNeedCloudService.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in cloud service mode only'**
+  String get mineDownloadNeedCloudService;
 
   /// No description provided for @mineDownloadComplete.
   ///
@@ -1683,6 +1695,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login required to enable'**
   String get mineAutoSyncNeedLogin;
+
+  /// No description provided for @mineAutoSyncNeedCloudService.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in cloud service mode only'**
+  String get mineAutoSyncNeedCloudService;
 
   /// No description provided for @mineImportProgressTitle.
   ///

@@ -8,7 +8,6 @@ import 'import_page.dart';
 import 'login_page.dart';
 import 'export_page.dart';
 import 'personalize_page.dart';
-import 'support_project_page.dart';
 import '../providers.dart';
 import '../widgets/ui/ui.dart';
 import '../widgets/biz/biz.dart';
@@ -250,7 +249,12 @@ class MinePage extends ConsumerWidget {
                         stream: authUserStream,
                         builder: (ctx, snap) {
                           final user = snap.data;
-                          final canUseCloud = user != null;
+                          // 检查云服务配置，本地存储模式下禁用云功能
+                          final cloudConfig =
+                              ref.watch(activeCloudConfigProvider);
+                          final isLocalMode = cloudConfig.hasValue &&
+                              cloudConfig.value!.type == CloudBackendType.local;
+                          final canUseCloud = user != null && !isLocalMode;
                           final asyncSt =
                               ref.watch(syncStatusProvider(ledgerId));
                           final cached =
@@ -387,14 +391,6 @@ class MinePage extends ConsumerWidget {
                 // 关于与版本
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAboutSection(context, ref),
-                // 调试
-                if (!const bool.fromEnvironment('dart.vm.product')) ...[
-                  SizedBox(height: 8.0.scaled(context, ref)),
-                  _buildDebugSection(context, ref),
-                ],
-                // 支持项目（放在最下面）
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildSupportSection(context, ref),
                 SizedBox(height: AppDimens.p16.scaled(context, ref)),
               ],
             ),
@@ -616,15 +612,17 @@ class MinePage extends ConsumerWidget {
             title: AppLocalizations.of(context).mineUploadTitle,
             subtitle: isFirstLoad
                 ? null
-                : (!canUseCloud || notLoggedIn)
-                    ? AppLocalizations.of(context).mineUploadNeedLogin
-                    : uploadBusy
-                        ? AppLocalizations.of(context).mineUploadInProgress
-                        : (refreshing
-                            ? AppLocalizations.of(context).mineUploadRefreshing
-                            : (inSync
-                                ? AppLocalizations.of(context).mineUploadSynced
-                                : null)),
+                : !canUseCloud
+                    ? AppLocalizations.of(context).mineUploadNeedCloudService
+                    : notLoggedIn
+                        ? AppLocalizations.of(context).mineUploadNeedLogin
+                        : uploadBusy
+                            ? AppLocalizations.of(context).mineUploadInProgress
+                            : (refreshing
+                                ? AppLocalizations.of(context).mineUploadRefreshing
+                                : (inSync
+                                    ? AppLocalizations.of(context).mineUploadSynced
+                                    : null)),
             enabled: canUseCloud &&
                 !inSync &&
                 !notLoggedIn &&
@@ -686,13 +684,15 @@ class MinePage extends ConsumerWidget {
             title: AppLocalizations.of(context).mineDownloadTitle,
             subtitle: isFirstLoad
                 ? null
-                : (!canUseCloud || notLoggedIn)
-                    ? AppLocalizations.of(context).mineUploadNeedLogin
-                    : (refreshing
-                        ? AppLocalizations.of(context).mineUploadRefreshing
-                        : (inSync
-                            ? AppLocalizations.of(context).mineUploadSynced
-                            : null)),
+                : !canUseCloud
+                    ? AppLocalizations.of(context).mineDownloadNeedCloudService
+                    : notLoggedIn
+                        ? AppLocalizations.of(context).mineUploadNeedLogin
+                        : (refreshing
+                            ? AppLocalizations.of(context).mineUploadRefreshing
+                            : (inSync
+                                ? AppLocalizations.of(context).mineUploadSynced
+                                : null)),
             enabled: canUseCloud &&
                 !inSync &&
                 !notLoggedIn &&
@@ -735,10 +735,18 @@ class MinePage extends ConsumerWidget {
             final userNow = user; // capture
             final cloudConfig = r.watch(activeCloudConfigProvider);
 
+            // 本地存储模式不显示登录入口
+            final isLocalMode = cloudConfig.hasValue &&
+                cloudConfig.value!.type == CloudBackendType.local;
+            if (isLocalMode) {
+              return const SizedBox.shrink();
+            }
+
             // 根据云服务类型显示不同的用户信息
             String getUserDisplayName() {
-              if (userNow == null)
+              if (userNow == null) {
                 return AppLocalizations.of(context).mineLoginTitle;
+              }
 
               if (cloudConfig.hasValue &&
                   cloudConfig.value!.type == CloudBackendType.webdav) {
@@ -751,51 +759,66 @@ class MinePage extends ConsumerWidget {
               }
             }
 
-            return AppListTile(
-              leading:
-                  userNow == null ? Icons.login : Icons.verified_user_outlined,
-              title: getUserDisplayName(),
-              subtitle: userNow == null
-                  ? AppLocalizations.of(context).mineLoginSubtitle
-                  : AppLocalizations.of(context).mineLogoutSubtitle,
-              onTap: () async {
-                if (userNow == null) {
-                  await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const LoginPage()));
-                  ref.read(syncStatusRefreshProvider.notifier).state++;
-                  ref.read(statsRefreshProvider.notifier).state++;
-                } else {
-                  final confirmed = await AppDialog.confirm<bool>(
-                        context,
-                        title:
-                            AppLocalizations.of(context).mineLogoutConfirmTitle,
-                        message: AppLocalizations.of(context)
-                            .mineLogoutConfirmMessage,
-                        okLabel: AppLocalizations.of(context).mineLogoutButton,
-                        cancelLabel: AppLocalizations.of(context).commonCancel,
-                      ) ??
-                      false;
+            return Column(
+              children: [
+                AppListTile(
+                  leading: userNow == null
+                      ? Icons.login
+                      : Icons.verified_user_outlined,
+                  title: getUserDisplayName(),
+                  subtitle: userNow == null
+                      ? AppLocalizations.of(context).mineLoginSubtitle
+                      : AppLocalizations.of(context).mineLogoutSubtitle,
+                  onTap: () async {
+                    if (userNow == null) {
+                      await Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const LoginPage()));
+                      ref.read(syncStatusRefreshProvider.notifier).state++;
+                      ref.read(statsRefreshProvider.notifier).state++;
+                    } else {
+                      final confirmed = await AppDialog.confirm<bool>(
+                            context,
+                            title: AppLocalizations.of(context)
+                                .mineLogoutConfirmTitle,
+                            message: AppLocalizations.of(context)
+                                .mineLogoutConfirmMessage,
+                            okLabel:
+                                AppLocalizations.of(context).mineLogoutButton,
+                            cancelLabel:
+                                AppLocalizations.of(context).commonCancel,
+                          ) ??
+                          false;
 
-                  if (confirmed) {
-                    await ref.read(authServiceProvider).signOut();
-                    ref.read(syncStatusRefreshProvider.notifier).state++;
-                    ref.read(statsRefreshProvider.notifier).state++;
-                  }
-                }
-              },
+                      if (confirmed) {
+                        await ref.read(authServiceProvider).signOut();
+                        ref.read(syncStatusRefreshProvider.notifier).state++;
+                        ref.read(statsRefreshProvider.notifier).state++;
+                      }
+                    }
+                  },
+                ),
+                AppDivider.thin(),
+              ],
             );
           }),
-          AppDivider.thin(),
           Consumer(builder: (ctx, r, _) {
             final autoSync = r.watch(autoSyncValueProvider);
             final setter = r.read(autoSyncSetterProvider);
             final value = autoSync.asData?.value ?? false;
             final can = canUseCloud;
+
+            // 检查云服务类型以显示合适的提示信息
+            final cloudConfig = r.watch(activeCloudConfigProvider);
+            final isLocalMode = cloudConfig.hasValue &&
+                cloudConfig.value!.type == CloudBackendType.local;
+
             return SwitchListTile(
               title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
               subtitle: can
                   ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
-                  : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
+                  : Text(isLocalMode
+                      ? AppLocalizations.of(context).mineAutoSyncNeedCloudService
+                      : AppLocalizations.of(context).mineAutoSyncNeedLogin),
               value: can ? value : false,
               onChanged: can
                   ? (v) async {
@@ -882,18 +905,16 @@ class MinePage extends ConsumerWidget {
                 : info.version;
             final msg =
                 '${AppLocalizations.of(context).mineAboutAppName}\n${AppLocalizations.of(context).mineAboutVersion(versionText)}\n${AppLocalizations.of(context).mineAboutRepo}\n${AppLocalizations.of(context).mineAboutLicense}';
-            final open = await AppDialog.confirm<bool>(
-                  context,
-                  title: AppLocalizations.of(context).mineAboutTitle,
-                  message: msg,
-                  okLabel: AppLocalizations.of(context).mineAboutOpenGitHub,
-                  cancelLabel: AppLocalizations.of(context).commonClose,
-                ) ??
-                false;
-            if (open) {
-              final url = Uri.parse('https://github.com/TNT-Likely/BeeCount');
-              await _tryOpenUrl(url);
-            }
+            await AppDialog.info<void>(
+              context,
+              title: AppLocalizations.of(context).mineAboutTitle,
+              message: msg,
+              okLabel: AppLocalizations.of(context).mineAboutOpenGitHub,
+              onOk: () async {
+                final url = Uri.parse('https://github.com/TNT-Likely/BeeCount');
+                await _tryOpenUrl(url);
+              },
+            );
           },
         ),
         // iOS 平台隐藏检查更新功能（使用 App Store/TestFlight 分发）
@@ -974,54 +995,7 @@ class MinePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildDebugSection(BuildContext context, WidgetRef ref) {
-    return SectionCard(
-      margin: EdgeInsets.fromLTRB(
-          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-      child: Column(children: [
-        AppListTile(
-          leading: Icons.refresh,
-          title: AppLocalizations.of(context).mineDebugRefreshStats,
-          subtitle: AppLocalizations.of(context).mineDebugRefreshStatsSubtitle,
-          onTap: () {
-            ref.read(statsRefreshProvider.notifier).state++;
-          },
-        ),
-        AppDivider.thin(),
-        AppListTile(
-          leading: Icons.sync,
-          title: AppLocalizations.of(context).mineDebugRefreshSync,
-          subtitle: AppLocalizations.of(context).mineDebugRefreshSyncSubtitle,
-          onTap: () {
-            ref.read(syncStatusRefreshProvider.notifier).state++;
-          },
-        ),
-      ]),
-    );
-  }
 
-  Widget _buildSupportSection(BuildContext context, WidgetRef ref) {
-    // iOS平台不显示支持页面,避免违反App Store审核规则(Guideline 3.1.1)
-    // 该规则禁止使用非IAP的支付方式接收与数字内容相关的款项
-    if (Platform.isIOS) {
-      return const SizedBox.shrink();
-    }
-
-    return SectionCard(
-      margin: EdgeInsets.fromLTRB(
-          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-      child: AppListTile(
-        leading: Icons.favorite_outline,
-        title: AppLocalizations.of(context).supportProjectTitle,
-        subtitle: AppLocalizations.of(context).supportProjectWhyTitle,
-        onTap: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const SupportProjectPage()),
-          );
-        },
-      ),
-    );
-  }
 
   Widget _buildLanguageSection(BuildContext context, WidgetRef ref) {
     final currentLanguage = ref.watch(languageProvider);

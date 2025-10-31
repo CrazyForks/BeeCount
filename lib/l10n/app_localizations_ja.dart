@@ -794,6 +794,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mineUploadNeedLogin => 'ログインが必要です';
 
   @override
+  String get mineUploadNeedCloudService => 'クラウドサービスモードでのみ利用可能';
+
+  @override
   String get mineUploadInProgress => 'アップロード中...';
 
   @override
@@ -810,6 +813,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mineDownloadTitle => 'ダウンロード';
+
+  @override
+  String get mineDownloadNeedCloudService => 'クラウドサービスモードでのみ利用可能';
 
   @override
   String get mineDownloadComplete => '完了';
@@ -848,6 +854,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mineAutoSyncNeedLogin => '有効にするにはログインが必要です';
+
+  @override
+  String get mineAutoSyncNeedCloudService => 'クラウドサービスモードでのみ利用可能';
 
   @override
   String get mineImportProgressTitle => 'バックグラウンドでインポート中...';
