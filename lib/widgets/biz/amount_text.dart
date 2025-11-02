@@ -56,7 +56,8 @@ class AmountText extends ConsumerWidget {
                 Localizations.localeOf(context).languageCode == 'zh');
 
         // 使用formatBalance,然后根据开关移除不需要的部分
-        String formatted = formatBalance(value, effectiveCurrencyCode, isChineseLocale: isChinese);
+        String formatted = formatBalance(value, effectiveCurrencyCode,
+            isChineseLocale: isChinese);
 
         if (!showCurrency) {
           // 移除币种符号(¥/$等)
@@ -65,7 +66,8 @@ class AmountText extends ConsumerWidget {
 
         if (!useCompactFormat) {
           // 不使用大金额缩写,回退到formatMoneyCompact
-          displayText = formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
+          displayText =
+              formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
           // 但如果需要币种符号,添加上去
           if (showCurrency) {
             final currencySymbol = _getCurrencySymbol(effectiveCurrencyCode);
@@ -76,11 +78,13 @@ class AmountText extends ConsumerWidget {
         }
       } else {
         // 如果没有币种,使用简单格式化
-        displayText = formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
+        displayText =
+            formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
       }
     } else {
       // 默认使用简单格式化
-      displayText = formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
+      displayText =
+          formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
     }
 
     return Text(

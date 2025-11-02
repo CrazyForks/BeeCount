@@ -264,118 +264,15 @@ class MinePage extends ConsumerWidget {
                     ],
                   ),
                 ),
-                // 导入导出
+                // 数据管理
                 SizedBox(height: 8.0.scaled(context, ref)),
-                _buildImportExportSection(context, ref),
-                // 个性化
+                _buildDataManagementSection(context, ref),
+                // 自动化功能
                 SizedBox(height: 8.0.scaled(context, ref)),
-                SectionCard(
-                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
-                      12.0.scaled(context, ref), 0),
-                  child: Column(
-                    children: [
-                      AppListTile(
-                        leading: Icons.category_outlined,
-                        title:
-                            AppLocalizations.of(context).mineCategoryManagement,
-                        subtitle: AppLocalizations.of(context)
-                            .mineCategoryManagementSubtitle,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const CategoryManagePage()),
-                          );
-                        },
-                      ),
-                      AppDivider.thin(),
-                      AppListTile(
-                        leading: Icons.swap_horiz,
-                        title:
-                            AppLocalizations.of(context).mineCategoryMigration,
-                        subtitle: AppLocalizations.of(context)
-                            .mineCategoryMigrationSubtitle,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const CategoryMigrationPage()),
-                          );
-                        },
-                      ),
-                      AppDivider.thin(),
-                      // 账户管理入口
-                      AppListTile(
-                        leading: Icons.account_balance_wallet_outlined,
-                        title: AppLocalizations.of(context).accountsTitle,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const AccountsPage()),
-                          );
-                        },
-                      ),
-                      AppDivider.thin(),
-                      AppListTile(
-                        leading: Icons.repeat,
-                        title: AppLocalizations.of(context)
-                            .mineRecurringTransactions,
-                        subtitle: AppLocalizations.of(context)
-                            .mineRecurringTransactionsSubtitle,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) =>
-                                    const RecurringTransactionPage()),
-                          );
-                        },
-                      ),
-                      AppDivider.thin(),
-                      AppListTile(
-                        leading: Icons.notifications_outlined,
-                        title:
-                            AppLocalizations.of(context).mineReminderSettings,
-                        subtitle: AppLocalizations.of(context)
-                            .mineReminderSettingsSubtitle,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const ReminderSettingsPage()),
-                          );
-                        },
-                      ),
-                      AppDivider.thin(),
-                      AppListTile(
-                        leading: Icons.brush_outlined,
-                        title: AppLocalizations.of(context).minePersonalize,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const PersonalizePage()),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                _buildAutomationSection(context, ref),
+                // 外观与显示
                 SizedBox(height: 8.0.scaled(context, ref)),
-                SectionCard(
-                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
-                      12.0.scaled(context, ref), 0),
-                  child: AppListTile(
-                    leading: Icons.zoom_out_map_outlined,
-                    title: AppLocalizations.of(context).mineDisplayScale,
-                    subtitle:
-                        AppLocalizations.of(context).mineDisplayScaleSubtitle,
-                    onTap: () async {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => const FontSettingsPage()),
-                      );
-                    },
-                  ),
-                ),
-                // 语言设置
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildLanguageSection(context, ref),
+                _buildAppearanceSection(context, ref),
                 // 关于与版本
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAboutSection(context, ref),
@@ -820,63 +717,6 @@ class MinePage extends ConsumerWidget {
     });
   }
 
-  Widget _buildImportExportSection(BuildContext context, WidgetRef ref) {
-    return SectionCard(
-      margin: EdgeInsets.fromLTRB(
-          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-      child: Column(
-        children: [
-          Consumer(builder: (ctx, r, _) {
-            final p = r.watch(importProgressProvider);
-            if (!p.running && p.total == 0) {
-              return AppListTile(
-                leading: Icons.file_upload_outlined,
-                title: AppLocalizations.of(context).mineImport,
-                onTap: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ImportPage()),
-                  );
-                },
-              );
-            }
-            if (p.running) {
-              final percent =
-                  p.total == 0 ? null : (p.done / p.total).clamp(0.0, 1.0);
-              return AppListTile(
-                leading: Icons.upload_outlined,
-                title: AppLocalizations.of(context).mineImportProgressTitle,
-                subtitle: AppLocalizations.of(context)
-                    .mineImportProgressSubtitle(p.done, p.fail, p.ok, p.total),
-                trailing: SizedBox(
-                    width: 72, child: LinearProgressIndicator(value: percent)),
-                onTap: null,
-              );
-            }
-            final allOk = (p.done == p.total) && (p.fail == 0);
-            if (allOk) return const _ImportSuccessTile();
-            return AppListTile(
-              leading: Icons.info_outline,
-              title: AppLocalizations.of(context).mineImportCompleteTitle,
-              subtitle:
-                  '${AppLocalizations.of(context).commonSuccess} ${p.ok}，${AppLocalizations.of(context).commonFailed} ${p.fail}',
-              onTap: null,
-            );
-          }),
-          AppDivider.thin(),
-          AppListTile(
-            leading: Icons.file_download_outlined,
-            title: AppLocalizations.of(context).mineExport,
-            onTap: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const ExportPage()),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildAboutSection(BuildContext context, WidgetRef ref) {
     return SectionCard(
       margin: EdgeInsets.fromLTRB(
@@ -982,63 +822,6 @@ class MinePage extends ConsumerWidget {
       ]),
     );
   }
-
-
-
-  Widget _buildLanguageSection(BuildContext context, WidgetRef ref) {
-    final currentLanguage = ref.watch(languageProvider);
-    final l10n = AppLocalizations.of(context);
-
-    // 获取当前语言显示名称
-    String currentLanguageDisplay;
-    if (currentLanguage == null) {
-      currentLanguageDisplay = l10n.languageSystemDefault;
-    } else {
-      switch (currentLanguage.languageCode) {
-        case 'zh':
-          currentLanguageDisplay = l10n.languageChinese;
-          break;
-        case 'en':
-          currentLanguageDisplay = l10n.languageEnglish;
-          break;
-        default:
-          currentLanguageDisplay = currentLanguage.languageCode;
-      }
-    }
-
-    return SectionCard(
-      margin: EdgeInsets.fromLTRB(
-          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-      child: AppListTile(
-        leading: Icons.language_outlined,
-        title: l10n.mineLanguageSettings,
-        subtitle: l10n.mineLanguageSettingsSubtitle,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              currentLanguageDisplay,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              Icons.chevron_right,
-              color: Colors.grey[400],
-              size: 20,
-            ),
-          ],
-        ),
-        onTap: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
-          );
-        },
-      ),
-    );
-  }
 }
 
 class _StatCell extends ConsumerWidget {
@@ -1114,6 +897,201 @@ class _ImportSuccessTile extends StatelessWidget {
       },
     );
   }
+}
+
+// 数据管理分组
+Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
+  return SectionCard(
+    margin: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+    child: Column(
+      children: [
+        // 导入数据
+        Consumer(builder: (ctx, r, _) {
+          final p = r.watch(importProgressProvider);
+          if (!p.running && p.total == 0) {
+            return AppListTile(
+              leading: Icons.file_upload_outlined,
+              title: AppLocalizations.of(context).mineImport,
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ImportPage()),
+                );
+              },
+            );
+          }
+          if (p.running) {
+            final percent =
+                p.total == 0 ? null : (p.done / p.total).clamp(0.0, 1.0);
+            return AppListTile(
+              leading: Icons.upload_outlined,
+              title: AppLocalizations.of(context).mineImportProgressTitle,
+              subtitle: AppLocalizations.of(context)
+                  .mineImportProgressSubtitle(p.done, p.fail, p.ok, p.total),
+              trailing: SizedBox(
+                  width: 72, child: LinearProgressIndicator(value: percent)),
+              onTap: null,
+            );
+          }
+          final allOk = (p.done == p.total) && (p.fail == 0);
+          if (allOk) return const _ImportSuccessTile();
+          return AppListTile(
+            leading: Icons.info_outline,
+            title: AppLocalizations.of(context).mineImportCompleteTitle,
+            subtitle:
+                '${AppLocalizations.of(context).commonSuccess} ${p.ok}，${AppLocalizations.of(context).commonFailed} ${p.fail}',
+            onTap: null,
+          );
+        }),
+        AppDivider.thin(),
+        // 导出数据
+        AppListTile(
+          leading: Icons.file_download_outlined,
+          title: AppLocalizations.of(context).mineExport,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ExportPage()),
+            );
+          },
+        ),
+        AppDivider.thin(),
+        // 分类管理
+        AppListTile(
+          leading: Icons.category_outlined,
+          title: AppLocalizations.of(context).mineCategoryManagement,
+          subtitle: AppLocalizations.of(context).mineCategoryManagementSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const CategoryManagePage()),
+            );
+          },
+        ),
+        AppDivider.thin(),
+        // 分类迁移
+        AppListTile(
+          leading: Icons.swap_horiz,
+          title: AppLocalizations.of(context).mineCategoryMigration,
+          subtitle: AppLocalizations.of(context).mineCategoryMigrationSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const CategoryMigrationPage()),
+            );
+          },
+        ),
+        AppDivider.thin(),
+        // 账户管理
+        AppListTile(
+          leading: Icons.account_balance_wallet_outlined,
+          title: AppLocalizations.of(context).accountsTitle,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const AccountsPage()),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+// 自动化功能分组
+Widget _buildAutomationSection(BuildContext context, WidgetRef ref) {
+  return SectionCard(
+    margin: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+    child: Column(
+      children: [
+        // 周期记账
+        AppListTile(
+          leading: Icons.repeat,
+          title: AppLocalizations.of(context).mineRecurringTransactions,
+          subtitle: AppLocalizations.of(context).mineRecurringTransactionsSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const RecurringTransactionPage()),
+            );
+          },
+        ),
+        AppDivider.thin(),
+        // 记账提醒
+        AppListTile(
+          leading: Icons.notifications_outlined,
+          title: AppLocalizations.of(context).mineReminderSettings,
+          subtitle: AppLocalizations.of(context).mineReminderSettingsSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ReminderSettingsPage()),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+// 外观与显示分组
+Widget _buildAppearanceSection(BuildContext context, WidgetRef ref) {
+  final currentLanguage = ref.watch(languageProvider);
+  final l10n = AppLocalizations.of(context);
+
+  String languageDisplay;
+  if (currentLanguage == null) {
+    languageDisplay = l10n.languageSystemDefault;
+  } else {
+    switch (currentLanguage.languageCode) {
+      case 'zh':
+        languageDisplay = l10n.languageChinese;
+        break;
+      case 'en':
+        languageDisplay = l10n.languageEnglish;
+        break;
+      default:
+        languageDisplay = currentLanguage.languageCode;
+    }
+  }
+
+  return SectionCard(
+    margin: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+    child: Column(
+      children: [
+        // 个性化
+        AppListTile(
+          leading: Icons.brush_outlined,
+          title: AppLocalizations.of(context).minePersonalize,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PersonalizePage()),
+            );
+          },
+        ),
+        AppDivider.thin(),
+        // 显示缩放
+        AppListTile(
+          leading: Icons.zoom_out_map_outlined,
+          title: AppLocalizations.of(context).mineDisplayScale,
+          subtitle: AppLocalizations.of(context).mineDisplayScaleSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const FontSettingsPage()),
+            );
+          },
+        ),
+        AppDivider.thin(),
+        // 语言设置
+        AppListTile(
+          leading: Icons.language_outlined,
+          title: l10n.mineLanguageSettings,
+          subtitle: languageDisplay,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
+            );
+          },
+        ),
+      ],
+    ),
+  );
 }
 
 // -------- 工具方法：关于与更新 --------
