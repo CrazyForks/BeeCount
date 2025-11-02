@@ -5,7 +5,6 @@ import '../data/db.dart' as db;
 import '../widgets/ui/ui.dart';
 import '../widgets/biz/biz.dart';
 import '../widgets/category_icon.dart';
-import '../utils/format_utils.dart';
 import 'package:intl/intl.dart';
 import 'category_edit_page.dart';
 import 'category_migration_page.dart';
@@ -188,12 +187,6 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
   }
   
   Widget _buildSummaryCard(({int totalCount, double totalAmount, double averageAmount}) summary) {
-    final currentLedgerAsync = ref.watch(currentLedgerProvider);
-    final selectedLocale = ref.watch(languageProvider);
-    final currentLedger = currentLedgerAsync.asData?.value;
-    final currencyCode = currentLedger?.currency ?? 'CNY';
-    final isChineseLocale = selectedLocale?.languageCode == 'zh' ||
-        (selectedLocale == null && Localizations.localeOf(context).languageCode == 'zh');
     return Container(
       margin: const EdgeInsets.all(16),
       child: SectionCard(
@@ -235,16 +228,18 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                   Expanded(
                     child: _SummaryItem(
                       label: AppLocalizations.of(context).categoryDetailTotalAmount,
-                      value: formatBalance(summary.totalAmount, currencyCode, isChineseLocale: isChineseLocale),
-                      color: summary.totalAmount >= 0 
-                        ? Colors.green 
+                      value: summary.totalAmount,
+                      isAmount: true,
+                      color: summary.totalAmount >= 0
+                        ? Colors.green
                         : Colors.red,
                     ),
                   ),
                   Expanded(
                     child: _SummaryItem(
                       label: AppLocalizations.of(context).categoryDetailAverageAmount,
-                      value: formatBalance(summary.averageAmount, currencyCode, isChineseLocale: isChineseLocale),
+                      value: summary.averageAmount,
+                      isAmount: true,
                       color: Theme.of(context).colorScheme.outline,
                     ),
                   ),
@@ -504,28 +499,46 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
   }
 }
 
-class _SummaryItem extends StatelessWidget {
+class _SummaryItem extends ConsumerWidget {
   final String label;
-  final String value;
+  final dynamic value; // 可以是 String 或 double
   final Color color;
-  
+  final bool isAmount; // 是否为金额类型
+
   const _SummaryItem({
     required this.label,
     required this.value,
     required this.color,
+    this.isAmount = false,
   });
-  
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Widget valueWidget;
+    if (isAmount && value is double) {
+      // 金额类型,使用 AmountText
+      valueWidget = AmountText(
+        value: value as double,
+        signed: false,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+    } else {
+      // 其他类型,直接显示字符串
+      valueWidget = Text(
+        value.toString(),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+    }
+
     return Column(
       children: [
-        Text(
-          value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: color,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        valueWidget,
         const SizedBox(height: 4),
         Text(
           label,

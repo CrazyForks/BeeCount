@@ -666,6 +666,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                             ?.value ??
                         false) ||
                     _localChartDismissed;
+                final hide = ref.watch(hideAmountsProvider);
 
                 return GestureDetector(
                   onHorizontalDragEnd: (details) {
@@ -699,6 +700,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           values: values,
                           xLabels: xLabels,
                           highlightIndex: highlightIndex,
+                          hideAmounts: hide,
                           themeColor: Theme.of(context).colorScheme.primary,
                           // 使用统一图表令牌
                           lineWidth: AppChartTokens.lineWidth,

@@ -129,6 +129,8 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
       ref.watch(appInitProvider.future),
       // 等待字体缩放初始化
       ref.watch(fontScaleInitProvider.future),
+      // 等待隐私模式初始化
+      ref.watch(hideAmountsInitProvider.future),
     ]);
     print('✅ 基础配置初始化完成');
     

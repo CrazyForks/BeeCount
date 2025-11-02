@@ -20,7 +20,6 @@ import 'cloud_service_page.dart';
 import '../utils/logger.dart';
 import '../services/restore_service.dart';
 import 'restore_progress_page.dart';
-import '../utils/format_utils.dart';
 import '../l10n/app_localizations.dart';
 import 'font_settings_page.dart';
 import 'category_manage_page.dart';
@@ -132,23 +131,12 @@ class MinePage extends ConsumerWidget {
                                 countsForLedgerProvider(currentLedgerId));
                             final balanceAsync = ref
                                 .watch(currentBalanceProvider(currentLedgerId));
-                            final currentLedgerAsync =
-                                ref.watch(currentLedgerProvider);
-                            final selectedLocale = ref.watch(languageProvider);
+                            final currentLedgerAsync = ref.watch(currentLedgerProvider);
 
                             final day = countsAsync.asData?.value.dayCount ?? 0;
                             final tx = countsAsync.asData?.value.txCount ?? 0;
                             final balance = balanceAsync.asData?.value ?? 0.0;
-                            final currentLedger =
-                                currentLedgerAsync.asData?.value;
-                            final currencyCode =
-                                currentLedger?.currency ?? 'CNY';
-                            final isChineseLocale =
-                                selectedLocale?.languageCode == 'zh' ||
-                                    (selectedLocale == null &&
-                                        Localizations.localeOf(context)
-                                                .languageCode ==
-                                            'zh');
+                            final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
 
                             final labelStyle = Theme.of(context)
                                 .textTheme
@@ -178,9 +166,9 @@ class MinePage extends ConsumerWidget {
                                     child: _StatCell(
                                         label: AppLocalizations.of(context)
                                             .mineCurrentBalance,
-                                        value: formatBalance(
-                                            balance, currencyCode,
-                                            isChineseLocale: isChineseLocale),
+                                        value: balance,
+                                        isAmount: true,
+                                        currencyCode: currencyCode,
                                         labelStyle: labelStyle,
                                         numStyle: numStyle.copyWith(
                                           color: balance >= 0
@@ -1055,21 +1043,43 @@ class MinePage extends ConsumerWidget {
 
 class _StatCell extends ConsumerWidget {
   final String label;
-  final String value;
+  final dynamic value; // 可以是 String 或 double
   final TextStyle? labelStyle;
   final TextStyle? numStyle;
-  const _StatCell(
-      {required this.label,
-      required this.value,
-      this.labelStyle,
-      this.numStyle});
+  final bool isAmount; // 是否为金额类型
+  final String? currencyCode; // 币种代码
+
+  const _StatCell({
+    required this.label,
+    required this.value,
+    this.labelStyle,
+    this.numStyle,
+    this.isAmount = false,
+    this.currencyCode,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Widget valueWidget;
+    if (isAmount && value is double) {
+      // 金额类型,使用 AmountText
+      valueWidget = AmountText(
+        value: value as double,
+        signed: false,
+        showCurrency: true,
+        useCompactFormat: true,
+        currencyCode: currencyCode,
+        style: numStyle,
+      );
+    } else {
+      // 其他类型,直接显示字符串
+      valueWidget = Text(value.toString(), style: numStyle);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(value, style: numStyle),
+        valueWidget,
         SizedBox(height: 4.0.scaled(context, ref)), // 数字与标签间距增大
         Text(label, style: labelStyle),
       ],
