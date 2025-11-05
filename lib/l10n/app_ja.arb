@@ -86,6 +86,12 @@
   },
   "homeNoRecordsSubtext": "下のプラスボタンをタップして記録を追加してください",
 
+  "widgetTodayExpense": "本日の支出",
+  "widgetTodayIncome": "本日の収入",
+  "widgetMonthExpense": "今月の支出",
+  "widgetMonthIncome": "今月の収入",
+  "widgetMonthSuffix": "月",
+
   "searchTitle": "検索",
   "searchHint": "メモ、カテゴリ、金額を検索...",
   "searchAmountRange": "金額範囲フィルター",

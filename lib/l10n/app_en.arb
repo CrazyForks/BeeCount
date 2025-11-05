@@ -86,6 +86,12 @@
   },
   "homeNoRecordsSubtext": "Tap the plus button at the bottom to add a record",
 
+  "widgetTodayExpense": "Today's Expense",
+  "widgetTodayIncome": "Today's Income",
+  "widgetMonthExpense": "Month's Expense",
+  "widgetMonthIncome": "Month's Income",
+  "widgetMonthSuffix": "",
+
   "searchTitle": "Search",
   "searchHint": "Search notes, categories or amounts...",
   "searchAmountRange": "Amount range filter",
@@ -1333,7 +1339,7 @@
   "privacyOpenSourceTitle": "Open Source Verification",
   "privacyOpenSourcePublic": "All code is publicly auditable",
   "privacyOpenSourceCommunity": "Community supervision, no hidden code",
-  "privacyOpenSourceMIT": "MIT Open Source License",
+  "privacyOpenSourceMIT": "Free for Personal Use",
   "privacyOpenSourceViewCode": "View Source Code on GitHub",
   "privacyOpenSourceUrlError": "Cannot open link",
 
@@ -1347,7 +1353,7 @@
   "welcomeOpenSourceTitle": "Open Source & Transparent",
   "welcomeOpenSourceFeature1": "100% open source code",
   "welcomeOpenSourceFeature2": "Community supervision, no backdoors",
-  "welcomeOpenSourceFeature3": "MIT Open Source License",
+  "welcomeOpenSourceFeature3": "Free for Personal Use",
   "welcomeViewGitHub": "View Source Code on GitHub",
   "welcomeCloudSyncTitle": "Optional Cloud Sync",
   "welcomeCloudSyncDescription": "Don't want to use commercial cloud services? BeeCount supports multiple sync methods",

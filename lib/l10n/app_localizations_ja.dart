@@ -206,6 +206,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeNoRecordsSubtext => '下のプラスボタンをタップして記録を追加してください';
 
   @override
+  String get widgetTodayExpense => '本日の支出';
+
+  @override
+  String get widgetTodayIncome => '本日の収入';
+
+  @override
+  String get widgetMonthExpense => '今月の支出';
+
+  @override
+  String get widgetMonthIncome => '今月の収入';
+
+  @override
+  String get widgetMonthSuffix => '月';
+
+  @override
   String get searchTitle => '検索';
 
   @override
@@ -2948,7 +2963,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get privacyOpenSourceCommunity => 'Community supervision, no hidden code';
 
   @override
-  String get privacyOpenSourceMIT => 'MIT Open Source License';
+  String get privacyOpenSourceMIT => 'Free for Personal Use';
 
   @override
   String get privacyOpenSourceViewCode => 'View Source Code on GitHub';
@@ -2987,7 +3002,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get welcomeOpenSourceFeature2 => 'Community supervision, no backdoors';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'MIT Open Source License';
+  String get welcomeOpenSourceFeature3 => 'Free for Personal Use';
 
   @override
   String get welcomeViewGitHub => 'View Source Code on GitHub';

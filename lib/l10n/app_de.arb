@@ -1300,5 +1300,11 @@
   "cloudConfigureWebdavTitle": "WebDAV konfigurieren",
   "cloudSupabaseAnonKeyHintLong": "Vollständigen anon key einfügen",
   "cloudWebdavRemotePathLabel": "Remote-Pfad",
-  "cloudWebdavRemotePathHelperText": "Remote-Verzeichnispfad für Datenspeicherung"
+  "cloudWebdavRemotePathHelperText": "Remote-Verzeichnispfad für Datenspeicherung",
+
+  "widgetTodayExpense": "Heutige Ausgabe",
+  "widgetTodayIncome": "Heutiges Einkommen",
+  "widgetMonthExpense": "Monatsausgabe",
+  "widgetMonthIncome": "Monatseinkommen",
+  "widgetMonthSuffix": ""
 }

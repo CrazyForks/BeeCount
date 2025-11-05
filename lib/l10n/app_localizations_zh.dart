@@ -206,6 +206,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeNoRecordsSubtext => '点击底部加号，马上记一笔';
 
   @override
+  String get widgetTodayExpense => '今日支出';
+
+  @override
+  String get widgetTodayIncome => '今日收入';
+
+  @override
+  String get widgetMonthExpense => '本月支出';
+
+  @override
+  String get widgetMonthIncome => '本月收入';
+
+  @override
+  String get widgetMonthSuffix => '月';
+
+  @override
   String get searchTitle => '搜索';
 
   @override
@@ -2948,7 +2963,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get privacyOpenSourceCommunity => '社区监督，无隐藏代码';
 
   @override
-  String get privacyOpenSourceMIT => 'MIT开源协议';
+  String get privacyOpenSourceMIT => '个人用户免费';
 
   @override
   String get privacyOpenSourceViewCode => '在GitHub查看源代码';
@@ -2987,7 +3002,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeOpenSourceFeature2 => '社区监督，无后门';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'MIT开源协议';
+  String get welcomeOpenSourceFeature3 => '个人用户免费使用';
 
   @override
   String get welcomeViewGitHub => '在GitHub查看源代码';
@@ -3210,6 +3225,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get homeNoRecordsSubtext => '點擊底部加號，馬上記一筆';
+
+  @override
+  String get widgetTodayExpense => '今日支出';
+
+  @override
+  String get widgetTodayIncome => '今日收入';
+
+  @override
+  String get widgetMonthExpense => '本月支出';
+
+  @override
+  String get widgetMonthIncome => '本月收入';
+
+  @override
+  String get widgetMonthSuffix => '月';
 
   @override
   String get searchTitle => '搜尋';

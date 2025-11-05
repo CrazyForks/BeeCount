@@ -496,6 +496,36 @@ abstract class AppLocalizations {
   /// **'Tap the plus button at the bottom to add a record'**
   String get homeNoRecordsSubtext;
 
+  /// No description provided for @widgetTodayExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Expense'**
+  String get widgetTodayExpense;
+
+  /// No description provided for @widgetTodayIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Income'**
+  String get widgetTodayIncome;
+
+  /// No description provided for @widgetMonthExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Month\'s Expense'**
+  String get widgetMonthExpense;
+
+  /// No description provided for @widgetMonthIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Month\'s Income'**
+  String get widgetMonthIncome;
+
+  /// No description provided for @widgetMonthSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get widgetMonthSuffix;
+
   /// No description provided for @searchTitle.
   ///
   /// In en, this message translates to:
@@ -5647,7 +5677,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyOpenSourceMIT.
   ///
   /// In en, this message translates to:
-  /// **'MIT Open Source License'**
+  /// **'Free for Personal Use'**
   String get privacyOpenSourceMIT;
 
   /// No description provided for @privacyOpenSourceViewCode.
@@ -5725,7 +5755,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeOpenSourceFeature3.
   ///
   /// In en, this message translates to:
-  /// **'MIT Open Source License'**
+  /// **'Free for Personal Use'**
   String get welcomeOpenSourceFeature3;
 
   /// No description provided for @welcomeViewGitHub.

@@ -333,7 +333,7 @@ class _LedgerBalance extends ConsumerWidget {
     return Row(
       children: [
         Text(
-          '${AppLocalizations.of(context).ledgersBalance('')}：',
+          AppLocalizations.of(context).ledgersBalance(''),
           style: Theme.of(context).textTheme.bodySmall,
         ),
         AmountText(

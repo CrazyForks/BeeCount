@@ -69,6 +69,12 @@
   "homeMonth": "{month}月",
   "homeNoRecordsSubtext": "点击底部加号，马上记一笔",
 
+  "widgetTodayExpense": "今日支出",
+  "widgetTodayIncome": "今日收入",
+  "widgetMonthExpense": "本月支出",
+  "widgetMonthIncome": "本月收入",
+  "widgetMonthSuffix": "月",
+
   "searchTitle": "搜索",
   "searchHint": "搜索备注、分类或金额...",
   "searchAmountRange": "金额范围筛选",
@@ -1161,7 +1167,7 @@
   "privacyOpenSourceTitle": "开源验证",
   "privacyOpenSourcePublic": "所有代码公开可审计",
   "privacyOpenSourceCommunity": "社区监督，无隐藏代码",
-  "privacyOpenSourceMIT": "MIT开源协议",
+  "privacyOpenSourceMIT": "个人用户免费",
   "privacyOpenSourceViewCode": "在GitHub查看源代码",
   "privacyOpenSourceUrlError": "无法打开链接",
 
@@ -1175,7 +1181,7 @@
   "welcomeOpenSourceTitle": "开源 & 透明",
   "welcomeOpenSourceFeature1": "100%开源代码",
   "welcomeOpenSourceFeature2": "社区监督，无后门",
-  "welcomeOpenSourceFeature3": "MIT开源协议",
+  "welcomeOpenSourceFeature3": "个人用户免费使用",
   "welcomeViewGitHub": "在GitHub查看源代码",
   "welcomeCloudSyncTitle": "可选的云同步",
   "welcomeCloudSyncDescription": "不想使用商业云服务？BeeCount支持多种同步方式",

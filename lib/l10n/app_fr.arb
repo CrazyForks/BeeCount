@@ -1300,5 +1300,11 @@
   "cloudConfigureWebdavTitle": "Configurer WebDAV",
   "cloudSupabaseAnonKeyHintLong": "Collez la clé anon complète",
   "cloudWebdavRemotePathLabel": "Chemin distant",
-  "cloudWebdavRemotePathHelperText": "Chemin du répertoire distant pour le stockage des données"
+  "cloudWebdavRemotePathHelperText": "Chemin du répertoire distant pour le stockage des données",
+
+  "widgetTodayExpense": "Dépense d'Aujourd'hui",
+  "widgetTodayIncome": "Revenu d'Aujourd'hui",
+  "widgetMonthExpense": "Dépense du Mois",
+  "widgetMonthIncome": "Revenu du Mois",
+  "widgetMonthSuffix": ""
 }

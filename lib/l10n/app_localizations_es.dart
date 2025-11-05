@@ -206,6 +206,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNoRecordsSubtext => 'Toca el botón más en la parte inferior para agregar un registro';
 
   @override
+  String get widgetTodayExpense => 'Gasto de Hoy';
+
+  @override
+  String get widgetTodayIncome => 'Ingreso de Hoy';
+
+  @override
+  String get widgetMonthExpense => 'Gasto del Mes';
+
+  @override
+  String get widgetMonthIncome => 'Ingreso del Mes';
+
+  @override
+  String get widgetMonthSuffix => '';
+
+  @override
   String get searchTitle => 'Buscar';
 
   @override
@@ -2948,7 +2963,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyOpenSourceCommunity => 'Community supervision, no hidden code';
 
   @override
-  String get privacyOpenSourceMIT => 'MIT Open Source License';
+  String get privacyOpenSourceMIT => 'Free for Personal Use';
 
   @override
   String get privacyOpenSourceViewCode => 'View Source Code on GitHub';
@@ -2987,7 +3002,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get welcomeOpenSourceFeature2 => 'Community supervision, no backdoors';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'MIT Open Source License';
+  String get welcomeOpenSourceFeature3 => 'Free for Personal Use';
 
   @override
   String get welcomeViewGitHub => 'View Source Code on GitHub';

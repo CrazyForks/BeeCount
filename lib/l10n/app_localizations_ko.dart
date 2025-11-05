@@ -206,6 +206,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get homeNoRecordsSubtext => '아래 플러스 버튼을 눌러 기록을 추가하세요';
 
   @override
+  String get widgetTodayExpense => '오늘 지출';
+
+  @override
+  String get widgetTodayIncome => '오늘 수입';
+
+  @override
+  String get widgetMonthExpense => '이번 달 지출';
+
+  @override
+  String get widgetMonthIncome => '이번 달 수입';
+
+  @override
+  String get widgetMonthSuffix => '월';
+
+  @override
   String get searchTitle => '검색';
 
   @override
@@ -2948,7 +2963,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get privacyOpenSourceCommunity => 'Community supervision, no hidden code';
 
   @override
-  String get privacyOpenSourceMIT => 'MIT Open Source License';
+  String get privacyOpenSourceMIT => 'Free for Personal Use';
 
   @override
   String get privacyOpenSourceViewCode => 'View Source Code on GitHub';
@@ -2987,7 +3002,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get welcomeOpenSourceFeature2 => 'Community supervision, no backdoors';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'MIT Open Source License';
+  String get welcomeOpenSourceFeature3 => 'Free for Personal Use';
 
   @override
   String get welcomeViewGitHub => 'View Source Code on GitHub';

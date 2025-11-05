@@ -69,6 +69,12 @@
   "homeMonth": "{month}月",
   "homeNoRecordsSubtext": "點擊底部加號，馬上記一筆",
 
+  "widgetTodayExpense": "今日支出",
+  "widgetTodayIncome": "今日收入",
+  "widgetMonthExpense": "本月支出",
+  "widgetMonthIncome": "本月收入",
+  "widgetMonthSuffix": "月",
+
   "searchTitle": "搜尋",
   "searchHint": "搜尋備註、分類或金額...",
   "searchAmountRange": "金額範圍篩選",
