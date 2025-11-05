@@ -28,6 +28,7 @@ import 'recurring_transaction_page.dart';
 import 'reminder_settings_page.dart';
 import 'language_settings_page.dart';
 import 'accounts_page.dart';
+import 'privacy_dashboard_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/update_service.dart';
@@ -273,6 +274,9 @@ class MinePage extends ConsumerWidget {
                 // 外观与显示
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAppearanceSection(context, ref),
+                // 隐私报告
+                SizedBox(height: 8.0.scaled(context, ref)),
+                _buildPrivacySection(context, ref),
                 // 关于与版本
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAboutSection(context, ref),
@@ -1086,6 +1090,29 @@ Widget _buildAppearanceSection(BuildContext context, WidgetRef ref) {
           onTap: () async {
             await Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+// 隐私报告分组
+Widget _buildPrivacySection(BuildContext context, WidgetRef ref) {
+  return SectionCard(
+    margin: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+    child: Column(
+      children: [
+        // 隐私报告
+        AppListTile(
+          leading: Icons.shield_outlined,
+          title: AppLocalizations.of(context).privacyDashboardTitle,
+          subtitle: AppLocalizations.of(context).privacyScoreExcellent,
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PrivacyDashboardPage()),
             );
           },
         ),

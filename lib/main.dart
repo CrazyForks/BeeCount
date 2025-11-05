@@ -11,6 +11,7 @@ import 'providers/font_scale_provider.dart';
 import 'utils/route_logger.dart';
 import 'utils/notification_factory.dart';
 import 'pages/splash_page.dart';
+import 'pages/welcome_page.dart';
 import 'services/reminder_monitor_service.dart';
 import 'services/recurring_transaction_service.dart';
 import 'data/db.dart';
@@ -137,12 +138,31 @@ class NoGlowScrollBehavior extends MaterialScrollBehavior {
 class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
+  // 根据初始化状态和欢迎页面状态决定显示哪个页面
+  Widget _getHomePage(AppInitState initState, WidgetRef ref) {
+    // 首先检查是否需要显示欢迎页面
+    final shouldShowWelcome = ref.watch(shouldShowWelcomeProvider);
+    if (shouldShowWelcome) {
+      return const WelcomePage();
+    }
+
+    // 欢迎页面完成后，根据初始化状态显示对应页面
+    if (initState != AppInitState.ready) {
+      return const SplashPage();
+    }
+
+    return const BeeApp();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // 首先检查是否需要显示欢迎页面
+    ref.watch(welcomeCheckProvider);
+
     // 检查应用初始化状态
     final initState = ref.watch(appInitStateProvider);
     final selectedLanguage = ref.watch(languageProvider);
-    
+
     // 如果是启屏状态，启动初始化
     if (initState == AppInitState.splash) {
       ref.watch(appSplashInitProvider);
@@ -239,12 +259,12 @@ class MainApp extends ConsumerWidget {
         ],
         locale: selectedLanguage,
         // 显式命名根路由，便于路由日志与 popUntil 精确识别
-        home: initState == AppInitState.ready ? const BeeApp() : const SplashPage(),
+        home: _getHomePage(initState, ref),
         onGenerateRoute: (settings) {
           if (settings.name == Navigator.defaultRouteName ||
               settings.name == '/') {
             return MaterialPageRoute(
-                builder: (_) => initState == AppInitState.ready ? const BeeApp() : const SplashPage(),
+                builder: (_) => _getHomePage(initState, ref),
                 settings: const RouteSettings(name: '/'));
           }
           return null;

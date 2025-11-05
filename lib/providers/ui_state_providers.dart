@@ -22,7 +22,7 @@ final selectedMonthProvider = StateProvider<DateTime>((ref) {
 // 视角：'month' 或 'year'
 final selectedViewProvider = StateProvider<String>((ref) => 'month');
 
-// 检查更新状态 - 防止重复点击  
+// 检查更新状态 - 防止重复点击
 final checkUpdateLoadingProvider = StateProvider<bool>((ref) => false);
 
 // 下载进度状态
@@ -63,13 +63,14 @@ final analyticsHintsSetterProvider = Provider<AnalyticsHintsSetter>((ref) {
 
 // 应用初始化状态
 enum AppInitState {
-  splash,    // 显示启屏页
-  loading,   // 正在初始化
-  ready      // 初始化完成，显示主应用
+  splash, // 显示启屏页
+  loading, // 正在初始化
+  ready // 初始化完成，显示主应用
 }
 
 // 应用初始化状态Provider
-final appInitStateProvider = StateProvider<AppInitState>((ref) => AppInitState.splash);
+final appInitStateProvider =
+    StateProvider<AppInitState>((ref) => AppInitState.splash);
 
 // 搜索页面金额范围筛选开关持久化
 final searchAmountFilterEnabledProvider =
@@ -112,13 +113,14 @@ final accountFeatureSetterProvider = Provider<AccountFeatureSetter>((ref) {
 });
 
 // 缓存的交易数据Provider（用于首屏快速展示）
-final cachedTransactionsWithCategoryProvider = StateProvider<List<({Transaction t, Category? category})>?>((ref) => null);
+final cachedTransactionsWithCategoryProvider =
+    StateProvider<List<({Transaction t, Category? category})>?>((ref) => null);
 
 // 应用初始化Provider - 管理数据预加载
 final appSplashInitProvider = FutureProvider<void>((ref) async {
   print('🚀 开始启屏页预加载');
   final startTime = DateTime.now();
-  
+
   try {
     // 确保基础providers已初始化
     print('📱 初始化基础配置...');
@@ -133,51 +135,70 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
       ref.watch(hideAmountsInitProvider.future),
     ]);
     print('✅ 基础配置初始化完成');
-    
+
     // 确保数据库已初始化
     ref.read(databaseProvider);
     print('🗄️ 数据库初始化完成');
-    
+
     // 预加载当前账本的关键数据
     final ledgerId = ref.read(currentLedgerIdProvider);
     final now = DateTime.now();
     final currentMonth = DateTime(now.year, now.month, 1);
     print('📊 开始预加载账本数据, ledgerId=$ledgerId');
-    
+
     // 预加载本月统计数据
     final monthlyParams = (ledgerId: ledgerId, month: currentMonth);
-    final monthlyResult = await ref.read(monthlyTotalsProvider(monthlyParams).future);
-    ref.read(lastMonthlyTotalsProvider(monthlyParams).notifier).state = monthlyResult;
+    final monthlyResult =
+        await ref.read(monthlyTotalsProvider(monthlyParams).future);
+    ref.read(lastMonthlyTotalsProvider(monthlyParams).notifier).state =
+        monthlyResult;
     print('💰 月度统计预加载完成: $monthlyResult');
-    
+
     // 预加载账本总数统计
-    final countsResult = await ref.read(countsForLedgerProvider(ledgerId).future);
+    final countsResult =
+        await ref.read(countsForLedgerProvider(ledgerId).future);
     print('🔢 账本统计预加载完成: $countsResult');
 
     // 预加载首屏交易数据（包含分类信息）
     final repo = ref.read(repositoryProvider);
-    final recentTransactionsWithCategory = await repo.transactionsWithCategoryAll(ledgerId: ledgerId).first;
-    ref.read(cachedTransactionsWithCategoryProvider.notifier).state = recentTransactionsWithCategory;
+    final recentTransactionsWithCategory =
+        await repo.transactionsWithCategoryAll(ledgerId: ledgerId).first;
+    ref.read(cachedTransactionsWithCategoryProvider.notifier).state =
+        recentTransactionsWithCategory;
     print('💳 交易列表预加载完成: ${recentTransactionsWithCategory.length}条记录');
-
   } catch (e) {
     print('❌ 预加载数据失败: $e');
   }
-  
+
   // 计算数据预加载耗时
   final dataLoadTime = DateTime.now().difference(startTime);
   print('⏱️ 数据预加载耗时: ${dataLoadTime.inMilliseconds}ms');
-  
+
   // 确保启屏页展示时间至少2秒
   const minDisplayDuration = Duration(seconds: 2);
   final remainingTime = minDisplayDuration - dataLoadTime;
-  
+
   if (remainingTime.inMilliseconds > 0) {
     print('⏱️ 启屏页还需展示${remainingTime.inMilliseconds}ms以满足最小展示时间...');
     await Future.delayed(remainingTime);
   }
-  
+
   // 标记初始化完成
   print('🎉 预加载完成，切换到主应用');
   ref.read(appInitStateProvider.notifier).state = AppInitState.ready;
+});
+
+// 是否应该显示欢迎页面的Provider
+final shouldShowWelcomeProvider = StateProvider<bool>((ref) => false);
+
+// 初始化检查是否需要显示欢迎页面
+final welcomeCheckProvider = FutureProvider<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final welcomeShown = prefs.getBool('welcome_shown5') ?? false;
+  if (!welcomeShown) {
+    print('👋 首次启动，需要展示欢迎页面');
+    ref.read(shouldShowWelcomeProvider.notifier).state = true;
+    return true;
+  }
+  return false;
 });

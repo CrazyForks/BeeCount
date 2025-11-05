@@ -5505,6 +5505,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?'**
   String get updateCorruptedFileMessage;
+
+  /// No description provided for @privacyDashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Report'**
+  String get privacyDashboardTitle;
+
+  /// No description provided for @privacyScoreExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Protection: Excellent'**
+  String get privacyScoreExcellent;
+
+  /// No description provided for @privacyScoreDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is completely secure with no privacy risks'**
+  String get privacyScoreDescription;
+
+  /// No description provided for @privacyDataStorageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Storage Location'**
+  String get privacyDataStorageTitle;
+
+  /// No description provided for @privacyDataStorageLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'All financial data is stored locally on your device'**
+  String get privacyDataStorageLocal;
+
+  /// No description provided for @privacyDataStorageNoUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Never uploaded to any third-party servers'**
+  String get privacyDataStorageNoUpload;
+
+  /// No description provided for @privacyDataStorageOptionalSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional cloud sync is fully controlled by you'**
+  String get privacyDataStorageOptionalSync;
+
+  /// No description provided for @privacyNetworkMonitorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Request Monitoring'**
+  String get privacyNetworkMonitorTitle;
+
+  /// No description provided for @privacyNetworkMonitorSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Since app installation:'**
+  String get privacyNetworkMonitorSince;
+
+  /// No description provided for @privacyNetworkDataRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Data requests sent'**
+  String get privacyNetworkDataRequests;
+
+  /// No description provided for @privacyNetworkTrackers.
+  ///
+  /// In en, this message translates to:
+  /// **'Third-party trackers'**
+  String get privacyNetworkTrackers;
+
+  /// No description provided for @privacyNetworkAdRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad network requests'**
+  String get privacyNetworkAdRequests;
+
+  /// No description provided for @privacyNetworkAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics service calls'**
+  String get privacyNetworkAnalytics;
+
+  /// No description provided for @privacyPermissionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission Usage'**
+  String get privacyPermissionsTitle;
+
+  /// No description provided for @privacyPermissionsOnlyRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'This app only requests the following permissions:'**
+  String get privacyPermissionsOnlyRequest;
+
+  /// No description provided for @privacyPermissionsStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage permission (save transaction data)'**
+  String get privacyPermissionsStorage;
+
+  /// No description provided for @privacyPermissionsNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission (recording reminders)'**
+  String get privacyPermissionsNotifications;
+
+  /// No description provided for @privacyPermissionsNoLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'No location permission needed'**
+  String get privacyPermissionsNoLocation;
+
+  /// No description provided for @privacyPermissionsNoContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'No contacts permission needed'**
+  String get privacyPermissionsNoContacts;
+
+  /// No description provided for @privacyPermissionsNoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'No camera permission needed'**
+  String get privacyPermissionsNoCamera;
+
+  /// No description provided for @privacyOpenSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source Verification'**
+  String get privacyOpenSourceTitle;
+
+  /// No description provided for @privacyOpenSourcePublic.
+  ///
+  /// In en, this message translates to:
+  /// **'All code is publicly auditable'**
+  String get privacyOpenSourcePublic;
+
+  /// No description provided for @privacyOpenSourceCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Community supervision, no hidden code'**
+  String get privacyOpenSourceCommunity;
+
+  /// No description provided for @privacyOpenSourceMIT.
+  ///
+  /// In en, this message translates to:
+  /// **'MIT Open Source License'**
+  String get privacyOpenSourceMIT;
+
+  /// No description provided for @privacyOpenSourceViewCode.
+  ///
+  /// In en, this message translates to:
+  /// **'View Source Code on GitHub'**
+  String get privacyOpenSourceViewCode;
+
+  /// No description provided for @privacyOpenSourceUrlError.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open link'**
+  String get privacyOpenSourceUrlError;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to BeeCount'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An accounting app that truly respects your privacy'**
+  String get welcomeDescription;
+
+  /// No description provided for @welcomePrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Data, Your Control'**
+  String get welcomePrivacyTitle;
+
+  /// No description provided for @welcomePrivacyFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'Data stored locally on your device'**
+  String get welcomePrivacyFeature1;
+
+  /// No description provided for @welcomePrivacyFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Never uploaded to any third-party servers'**
+  String get welcomePrivacyFeature2;
+
+  /// No description provided for @welcomePrivacyFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads, no data collection'**
+  String get welcomePrivacyFeature3;
+
+  /// No description provided for @welcomePrivacyFeature4.
+  ///
+  /// In en, this message translates to:
+  /// **'No account registration required'**
+  String get welcomePrivacyFeature4;
+
+  /// No description provided for @welcomeOpenSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source & Transparent'**
+  String get welcomeOpenSourceTitle;
+
+  /// No description provided for @welcomeOpenSourceFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'100% open source code'**
+  String get welcomeOpenSourceFeature1;
+
+  /// No description provided for @welcomeOpenSourceFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Community supervision, no backdoors'**
+  String get welcomeOpenSourceFeature2;
+
+  /// No description provided for @welcomeOpenSourceFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'MIT Open Source License'**
+  String get welcomeOpenSourceFeature3;
+
+  /// No description provided for @welcomeViewGitHub.
+  ///
+  /// In en, this message translates to:
+  /// **'View Source Code on GitHub'**
+  String get welcomeViewGitHub;
+
+  /// No description provided for @welcomeCloudSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Cloud Sync'**
+  String get welcomeCloudSyncTitle;
+
+  /// No description provided for @welcomeCloudSyncDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t want to use commercial cloud services? BeeCount supports multiple sync methods'**
+  String get welcomeCloudSyncDescription;
+
+  /// No description provided for @welcomeCloudSyncFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'Completely offline usage'**
+  String get welcomeCloudSyncFeature1;
+
+  /// No description provided for @welcomeCloudSyncFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-hosted WebDAV sync'**
+  String get welcomeCloudSyncFeature2;
+
+  /// No description provided for @welcomeCloudSyncFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-hosted Supabase service'**
+  String get welcomeCloudSyncFeature3;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

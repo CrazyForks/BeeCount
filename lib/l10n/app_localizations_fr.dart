@@ -2877,4 +2877,133 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get updateCorruptedFileMessage => 'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?';
+
+  @override
+  String get privacyDashboardTitle => 'Privacy Report';
+
+  @override
+  String get privacyScoreExcellent => 'Privacy Protection: Excellent';
+
+  @override
+  String get privacyScoreDescription => 'Your data is completely secure with no privacy risks';
+
+  @override
+  String get privacyDataStorageTitle => 'Data Storage Location';
+
+  @override
+  String get privacyDataStorageLocal => 'All financial data is stored locally on your device';
+
+  @override
+  String get privacyDataStorageNoUpload => 'Never uploaded to any third-party servers';
+
+  @override
+  String get privacyDataStorageOptionalSync => 'Optional cloud sync is fully controlled by you';
+
+  @override
+  String get privacyNetworkMonitorTitle => 'Network Request Monitoring';
+
+  @override
+  String get privacyNetworkMonitorSince => 'Since app installation:';
+
+  @override
+  String get privacyNetworkDataRequests => 'Data requests sent';
+
+  @override
+  String get privacyNetworkTrackers => 'Third-party trackers';
+
+  @override
+  String get privacyNetworkAdRequests => 'Ad network requests';
+
+  @override
+  String get privacyNetworkAnalytics => 'Analytics service calls';
+
+  @override
+  String get privacyPermissionsTitle => 'Permission Usage';
+
+  @override
+  String get privacyPermissionsOnlyRequest => 'This app only requests the following permissions:';
+
+  @override
+  String get privacyPermissionsStorage => 'Storage permission (save transaction data)';
+
+  @override
+  String get privacyPermissionsNotifications => 'Notification permission (recording reminders)';
+
+  @override
+  String get privacyPermissionsNoLocation => 'No location permission needed';
+
+  @override
+  String get privacyPermissionsNoContacts => 'No contacts permission needed';
+
+  @override
+  String get privacyPermissionsNoCamera => 'No camera permission needed';
+
+  @override
+  String get privacyOpenSourceTitle => 'Open Source Verification';
+
+  @override
+  String get privacyOpenSourcePublic => 'All code is publicly auditable';
+
+  @override
+  String get privacyOpenSourceCommunity => 'Community supervision, no hidden code';
+
+  @override
+  String get privacyOpenSourceMIT => 'MIT Open Source License';
+
+  @override
+  String get privacyOpenSourceViewCode => 'View Source Code on GitHub';
+
+  @override
+  String get privacyOpenSourceUrlError => 'Cannot open link';
+
+  @override
+  String get welcomeTitle => 'Welcome to BeeCount';
+
+  @override
+  String get welcomeDescription => 'An accounting app that truly respects your privacy';
+
+  @override
+  String get welcomePrivacyTitle => 'Your Data, Your Control';
+
+  @override
+  String get welcomePrivacyFeature1 => 'Data stored locally on your device';
+
+  @override
+  String get welcomePrivacyFeature2 => 'Never uploaded to any third-party servers';
+
+  @override
+  String get welcomePrivacyFeature3 => 'No ads, no data collection';
+
+  @override
+  String get welcomePrivacyFeature4 => 'No account registration required';
+
+  @override
+  String get welcomeOpenSourceTitle => 'Open Source & Transparent';
+
+  @override
+  String get welcomeOpenSourceFeature1 => '100% open source code';
+
+  @override
+  String get welcomeOpenSourceFeature2 => 'Community supervision, no backdoors';
+
+  @override
+  String get welcomeOpenSourceFeature3 => 'MIT Open Source License';
+
+  @override
+  String get welcomeViewGitHub => 'View Source Code on GitHub';
+
+  @override
+  String get welcomeCloudSyncTitle => 'Optional Cloud Sync';
+
+  @override
+  String get welcomeCloudSyncDescription => 'Don\'t want to use commercial cloud services? BeeCount supports multiple sync methods';
+
+  @override
+  String get welcomeCloudSyncFeature1 => 'Completely offline usage';
+
+  @override
+  String get welcomeCloudSyncFeature2 => 'Self-hosted WebDAV sync';
+
+  @override
+  String get welcomeCloudSyncFeature3 => 'Self-hosted Supabase service';
 }

@@ -2877,6 +2877,135 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updateCorruptedFileMessage => '检测到之前下载的安装包不完整或已损坏，是否删除并重新下载？';
+
+  @override
+  String get privacyDashboardTitle => '隐私报告';
+
+  @override
+  String get privacyScoreExcellent => '隐私保护：优秀';
+
+  @override
+  String get privacyScoreDescription => '您的数据完全安全，没有任何隐私泄露风险';
+
+  @override
+  String get privacyDataStorageTitle => '数据存储位置';
+
+  @override
+  String get privacyDataStorageLocal => '所有财务数据存储在您的设备本地';
+
+  @override
+  String get privacyDataStorageNoUpload => '不会上传到任何第三方服务器';
+
+  @override
+  String get privacyDataStorageOptionalSync => '可选的云同步完全由您自己控制';
+
+  @override
+  String get privacyNetworkMonitorTitle => '网络请求监控';
+
+  @override
+  String get privacyNetworkMonitorSince => '自应用安装以来：';
+
+  @override
+  String get privacyNetworkDataRequests => '发送的数据请求';
+
+  @override
+  String get privacyNetworkTrackers => '第三方追踪器';
+
+  @override
+  String get privacyNetworkAdRequests => '广告网络请求';
+
+  @override
+  String get privacyNetworkAnalytics => '分析服务调用';
+
+  @override
+  String get privacyPermissionsTitle => '权限使用说明';
+
+  @override
+  String get privacyPermissionsOnlyRequest => '本应用仅请求以下权限：';
+
+  @override
+  String get privacyPermissionsStorage => '存储权限（保存账单数据）';
+
+  @override
+  String get privacyPermissionsNotifications => '通知权限（记账提醒）';
+
+  @override
+  String get privacyPermissionsNoLocation => '不需要位置权限';
+
+  @override
+  String get privacyPermissionsNoContacts => '不需要通讯录权限';
+
+  @override
+  String get privacyPermissionsNoCamera => '不需要相机权限';
+
+  @override
+  String get privacyOpenSourceTitle => '开源验证';
+
+  @override
+  String get privacyOpenSourcePublic => '所有代码公开可审计';
+
+  @override
+  String get privacyOpenSourceCommunity => '社区监督，无隐藏代码';
+
+  @override
+  String get privacyOpenSourceMIT => 'MIT开源协议';
+
+  @override
+  String get privacyOpenSourceViewCode => '在GitHub查看源代码';
+
+  @override
+  String get privacyOpenSourceUrlError => '无法打开链接';
+
+  @override
+  String get welcomeTitle => '欢迎使用 BeeCount';
+
+  @override
+  String get welcomeDescription => '一个真正尊重您隐私的记账应用';
+
+  @override
+  String get welcomePrivacyTitle => '您的数据，您做主';
+
+  @override
+  String get welcomePrivacyFeature1 => '数据存储在您的设备本地';
+
+  @override
+  String get welcomePrivacyFeature2 => '不会上传到任何第三方服务器';
+
+  @override
+  String get welcomePrivacyFeature3 => '无广告，无数据收集';
+
+  @override
+  String get welcomePrivacyFeature4 => '无需注册账号';
+
+  @override
+  String get welcomeOpenSourceTitle => '开源 & 透明';
+
+  @override
+  String get welcomeOpenSourceFeature1 => '100%开源代码';
+
+  @override
+  String get welcomeOpenSourceFeature2 => '社区监督，无后门';
+
+  @override
+  String get welcomeOpenSourceFeature3 => 'MIT开源协议';
+
+  @override
+  String get welcomeViewGitHub => '在GitHub查看源代码';
+
+  @override
+  String get welcomeCloudSyncTitle => '可选的云同步';
+
+  @override
+  String get welcomeCloudSyncDescription => '不想使用商业云服务？BeeCount支持多种同步方式';
+
+  @override
+  String get welcomeCloudSyncFeature1 => '完全离线使用';
+
+  @override
+  String get welcomeCloudSyncFeature2 => '自建WebDAV同步';
+
+  @override
+  String get welcomeCloudSyncFeature3 => '自建Supabase服务';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
