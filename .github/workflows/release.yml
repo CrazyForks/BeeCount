@@ -447,14 +447,14 @@ jobs:
           echo "📦 Building iOS archive with xcodebuild..."
 
           # Archive the app
-          # 注意：不在命令行指定PROVISIONING_PROFILE_SPECIFIER，因为会应用到所有targets
-          # 我们已经在project.pbxproj中为Runner和BeeCountWidgetExtension配置了正确的profile
+          # 完全依赖project.pbxproj中的配置
+          # 不使用-allowProvisioningUpdates,因为会让Xcode自动选择profile(可能选错)
+          # 不传递任何命令行签名参数,完全使用project.pbxproj中为每个target配置的设置
           xcodebuild archive \
             -workspace ios/Runner.xcworkspace \
             -scheme Runner \
             -configuration Release \
             -archivePath build/ios/Runner.xcarchive \
-            -allowProvisioningUpdates \
             | tee xcodebuild-archive.log
 
           # 检查archive是否成功
