@@ -419,8 +419,8 @@ jobs:
             if (/^\s+PRODUCT_BUNDLE_IDENTIFIER = com\.tntlikely\.beecount\.BeeCountWidgetExtension;/) {
               print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount_Widget_AppStore\";\n";
             }
-            # 主应用: 在其Bundle ID行前插入Profile配置（使用负向前瞻确保不匹配Widget）
-            elsif (/^\s+PRODUCT_BUNDLE_IDENTIFIER = com\.tntlikely\.beecount;$/) {
+            # 主应用: 主应用使用变量形式的Bundle ID,通过CODE_SIGN_ENTITLEMENTS识别
+            elsif (/^\s+CODE_SIGN_ENTITLEMENTS = Runner\/Runner\.entitlements;/) {
               print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount_AppStore\";\n";
             }
           ' "$PROJECT_FILE"
