@@ -373,12 +373,30 @@ jobs:
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
 
+      - name: Debug - Show signing configuration before modification
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          echo "📋 ===== BEFORE modification ====="
+          echo "Signing settings in Xcode project:"
+          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" \
+            ios/Runner.xcodeproj/project.pbxproj | head -60 || true
+
+          echo ""
+          echo "Installed provisioning profiles:"
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ 2>/dev/null || echo "Directory not found"
+
+          echo ""
+          echo "Available signing identities:"
+          security find-identity -v -p codesigning
+
       - name: Configure Xcode project for signing
         if: env.IOS_SIGNING_ENABLED == 'true'
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           PROJECT_FILE="ios/Runner.xcodeproj/project.pbxproj"
+
+          echo "🔧 Configuring manual signing for iOS..."
 
           # 1. 配置手动签名
           sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PROJECT_FILE"
@@ -407,23 +425,89 @@ jobs:
             }
           ' "$PROJECT_FILE"
 
-          echo "✅ Configured manual signing for Xcode project (main app + widget extension)"
-          echo "Signing configuration:"
-          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" "$PROJECT_FILE" | head -50
+          echo "✅ Configured manual signing for Xcode project"
 
-      - name: Build iOS (signed, release)
+      - name: Debug - Show signing configuration after modification
         if: env.IOS_SIGNING_ENABLED == 'true'
         run: |
-          export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
-          export GIT_COMMIT='${{ github.sha }}'
-          export BUILD_TIME='${{ github.run_id }}'
+          echo "📋 ===== AFTER modification ====="
+          echo "Signing settings in Xcode project:"
+          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" \
+            ios/Runner.xcodeproj/project.pbxproj | head -60
 
-          # 使用 flutter build ipa 并通过 --export-options-plist 指定签名配置
-          flutter build ipa --release \
-            --export-options-plist=ios/ExportOptions.plist \
-            --dart-define=CI_VERSION="$CI_VERSION" \
-            --dart-define=GIT_COMMIT="$GIT_COMMIT" \
-            --dart-define=BUILD_TIME="$BUILD_TIME"
+          echo ""
+          echo "ExportOptions.plist content:"
+          cat ios/ExportOptions.plist
+
+      - name: Build iOS archive with xcodebuild
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          echo "📦 Building iOS archive with xcodebuild..."
+
+          # Archive the app (配置主应用和Widget Extension的签名)
+          xcodebuild archive \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath build/ios/Runner.xcarchive \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            DEVELOPMENT_TEAM="${APPLE_TEAM_ID}" \
+            PROVISIONING_PROFILE_SPECIFIER="BeeCount_AppStore" \
+            OTHER_CODE_SIGN_FLAGS="--deep" \
+            | tee xcodebuild-archive.log
+
+          echo ""
+          echo "✅ Archive created successfully"
+
+          # 显示archive内容和签名信息
+          echo "Archive structure:"
+          ls -lh build/ios/Runner.xcarchive/Products/Applications/ || true
+
+          echo ""
+          echo "Archive info:"
+          cat build/ios/Runner.xcarchive/Info.plist | grep -A 2 "Name\|SchemeName" || true
+
+      - name: Export IPA from archive
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          echo "📤 Exporting IPA from archive..."
+
+          # Export IPA
+          if xcodebuild -exportArchive \
+            -archivePath build/ios/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist ios/ExportOptions.plist \
+            2>&1 | tee xcodebuild-export.log; then
+
+            echo ""
+            echo "✅ IPA exported successfully"
+            echo "Export directory contents:"
+            ls -lh build/ios/ipa/
+
+            # 验证IPA文件
+            if [ -f build/ios/ipa/*.ipa ]; then
+              echo ""
+              echo "IPA file details:"
+              ls -lh build/ios/ipa/*.ipa
+
+              # 显示IPA签名信息
+              echo ""
+              echo "IPA signing info:"
+              unzip -l build/ios/ipa/*.ipa | grep -E "Payload|PlugIns|\.app" | head -20
+            else
+              echo "❌ Error: IPA file not found in build/ios/ipa/"
+              exit 1
+            fi
+          else
+            echo ""
+            echo "❌ Export failed. Check xcodebuild-export.log for details"
+            echo "Last 50 lines of export log:"
+            tail -50 xcodebuild-export.log
+            exit 1
+          fi
 
       - name: Copy signed IPA to release directory
         if: env.IOS_SIGNING_ENABLED == 'true'
