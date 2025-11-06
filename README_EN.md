@@ -123,6 +123,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - **Multi-Ledger Management**: Separate management for personal, work, investment
 - **Chart Analysis**: Monthly reports, category rankings, trend analysis
 - **Data Import/Export**: CSV format, compatible with mainstream apps
+- **Home Screen Widgets**: iOS/Android widgets for quick overview of income and expenses
 
 ### 🎨 Personalization & Internationalization
 

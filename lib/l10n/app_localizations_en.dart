@@ -3021,4 +3021,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeCloudSyncFeature3 => 'Self-hosted Supabase service';
+
+  @override
+  String get lab => 'Lab';
+
+  @override
+  String get labDesc => 'Try experimental features';
+
+  @override
+  String get widgetManagement => 'Home Screen Widget';
+
+  @override
+  String get widgetManagementDesc => 'Quick view of income and expenses on home screen';
+
+  @override
+  String get widgetPreview => 'Widget Preview';
+
+  @override
+  String get widgetPreviewDesc => 'Widget automatically displays actual data from current ledger, theme color follows app settings';
+
+  @override
+  String get howToAddWidget => 'How to Add Widget';
+
+  @override
+  String get iosWidgetStep1 => 'Long press on home screen blank area to enter edit mode';
+
+  @override
+  String get iosWidgetStep2 => 'Tap the \"+\" button in upper left corner';
+
+  @override
+  String get iosWidgetStep3 => 'Search and select \"BeeCount\"';
+
+  @override
+  String get iosWidgetStep4 => 'Select medium widget and add to home screen';
+
+  @override
+  String get androidWidgetStep1 => 'Long press on home screen blank area';
+
+  @override
+  String get androidWidgetStep2 => 'Select \"Widgets\"';
+
+  @override
+  String get androidWidgetStep3 => 'Find and long press \"BeeCount\" widget';
+
+  @override
+  String get androidWidgetStep4 => 'Drag to suitable position on home screen';
+
+  @override
+  String get aboutWidget => 'About Widget';
+
+  @override
+  String get widgetDescription => 'Widget automatically syncs to display today\'s and this month\'s income and expense data, refreshing every 30 minutes. Data updates immediately when app is opened.';
+
+  @override
+  String get appName => 'BeeCount';
+
+  @override
+  String get monthSuffix => '';
+
+  @override
+  String get todayExpense => 'Today\'s Expense';
+
+  @override
+  String get todayIncome => 'Today\'s Income';
+
+  @override
+  String get monthExpense => 'Month\'s Expense';
+
+  @override
+  String get monthIncome => 'Month\'s Income';
 }

@@ -28,6 +28,7 @@ import 'recurring_transaction_page.dart';
 import 'reminder_settings_page.dart';
 import 'language_settings_page.dart';
 import 'accounts_page.dart';
+import 'lab_page.dart';
 import 'privacy_dashboard_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -275,6 +276,9 @@ class MinePage extends ConsumerWidget {
                 // 外观与显示
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAppearanceSection(context, ref),
+                // 实验室
+                SizedBox(height: 8.0.scaled(context, ref)),
+                _buildLabSection(context, ref),
                 // 隐私报告
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildPrivacySection(context, ref),
@@ -1091,6 +1095,44 @@ Widget _buildAppearanceSection(BuildContext context, WidgetRef ref) {
           onTap: () async {
             await Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+// 实验室分组
+Widget _buildLabSection(BuildContext context, WidgetRef ref) {
+  return SectionCard(
+    margin: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+    child: Column(
+      children: [
+        // 实验室
+        AppListTile(
+          leading: Icons.science_outlined,
+          title: AppLocalizations.of(context).lab,
+          subtitle: AppLocalizations.of(context).labDesc,
+          trailing: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              'NEW',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const LabPage()),
             );
           },
         ),

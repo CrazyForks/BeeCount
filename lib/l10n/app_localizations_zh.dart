@@ -3021,6 +3021,75 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeCloudSyncFeature3 => '自建Supabase服务';
+
+  @override
+  String get lab => '实验室';
+
+  @override
+  String get labDesc => '体验实验性功能';
+
+  @override
+  String get widgetManagement => '桌面小组件';
+
+  @override
+  String get widgetManagementDesc => '在主屏幕快速查看收支情况';
+
+  @override
+  String get widgetPreview => '小组件预览';
+
+  @override
+  String get widgetPreviewDesc => '小组件会自动显示当前账本的实际数据，主题色跟随应用设置';
+
+  @override
+  String get howToAddWidget => '如何添加小组件';
+
+  @override
+  String get iosWidgetStep1 => '长按主屏幕空白区域，进入编辑模式';
+
+  @override
+  String get iosWidgetStep2 => '点击左上角的\"+\"按钮';
+
+  @override
+  String get iosWidgetStep3 => '搜索并选择\"蜜蜂记账\"';
+
+  @override
+  String get iosWidgetStep4 => '选择中型小组件，添加到主屏幕';
+
+  @override
+  String get androidWidgetStep1 => '长按主屏幕空白区域';
+
+  @override
+  String get androidWidgetStep2 => '选择\"小组件\"或\"Widgets\"';
+
+  @override
+  String get androidWidgetStep3 => '找到并长按\"蜜蜂记账\"小组件';
+
+  @override
+  String get androidWidgetStep4 => '拖动到主屏幕合适位置';
+
+  @override
+  String get aboutWidget => '关于小组件';
+
+  @override
+  String get widgetDescription => '小组件会自动同步显示今日和本月的收支数据，每30分钟自动刷新一次。打开应用后会立即更新数据。';
+
+  @override
+  String get appName => '蜜蜂记账';
+
+  @override
+  String get monthSuffix => '月';
+
+  @override
+  String get todayExpense => '今日支出';
+
+  @override
+  String get todayIncome => '今日收入';
+
+  @override
+  String get monthExpense => '本月支出';
+
+  @override
+  String get monthIncome => '本月收入';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
