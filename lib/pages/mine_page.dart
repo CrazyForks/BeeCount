@@ -43,7 +43,6 @@ class MinePage extends ConsumerWidget {
     final ledgerId = ref.watch(currentLedgerIdProvider);
     final auth = ref.watch(authServiceProvider);
     final sync = ref.watch(syncServiceProvider);
-    final authUserStream = auth.authStateChanges();
 
     // 登录后一次性触发云端备份检查
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -196,77 +195,89 @@ class MinePage extends ConsumerWidget {
                 const Divider(height: 1),
                 SizedBox(height: 8.0.scaled(context, ref)),
                 // 同步分组
-                SectionCard(
-                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
-                      12.0.scaled(context, ref), 0),
-                  child: Column(
-                    children: [
-                      Consumer(builder: (ctx, r, _) {
-                        final activeCfg = r.watch(activeCloudConfigProvider);
-                        return AppListTile(
+                Consumer(builder: (sectionContext, sectionRef, _) {
+                  // 添加错误边界,防止provider错误导致整个section消失
+                  final activeCfg = sectionRef.watch(activeCloudConfigProvider);
+
+                  return SectionCard(
+                    margin: EdgeInsets.fromLTRB(12.0.scaled(sectionContext, sectionRef), 0,
+                        12.0.scaled(sectionContext, sectionRef), 0),
+                    child: Column(
+                      children: [
+                        AppListTile(
                           leading: Icons.cloud_queue_outlined,
-                          title: AppLocalizations.of(context).mineCloudService,
+                          title: AppLocalizations.of(sectionContext).mineCloudService,
                           subtitle: activeCfg.when(
-                            loading: () => AppLocalizations.of(context)
+                            loading: () => AppLocalizations.of(sectionContext)
                                 .mineCloudServiceLoading,
                             error: (e, _) =>
-                                '${AppLocalizations.of(context).commonError}: $e',
+                                '${AppLocalizations.of(sectionContext).commonError}: $e',
                             data: (cfg) {
                               if (cfg.type == CloudBackendType.local) {
-                                return AppLocalizations.of(context)
+                                return AppLocalizations.of(sectionContext)
                                     .mineCloudServiceOffline;
                               } else {
                                 // 云服务：根据类型显示
                                 if (cfg.type == CloudBackendType.webdav) {
-                                  return AppLocalizations.of(context)
+                                  return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceWebDAV;
                                 } else {
-                                  return AppLocalizations.of(context)
+                                  return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceCustom;
                                 }
                               }
                             },
                           ),
                           onTap: () async {
-                            await Navigator.of(context).push(
+                            await Navigator.of(sectionContext).push(
                               MaterialPageRoute(
                                   builder: (_) => const CloudServicePage()),
                             );
                           },
-                        );
-                      }),
-                      AppDivider.thin(),
-                      StreamBuilder<AuthUser?>(
-                        stream: authUserStream,
-                        builder: (ctx, snap) {
-                          final user = snap.data;
-                          // 检查云服务配置，本地存储模式下禁用云功能
-                          final cloudConfig =
-                              ref.watch(activeCloudConfigProvider);
-                          final isLocalMode = cloudConfig.hasValue &&
-                              cloudConfig.value!.type == CloudBackendType.local;
-                          final canUseCloud = user != null && !isLocalMode;
-                          final asyncSt =
-                              ref.watch(syncStatusProvider(ledgerId));
-                          final cached =
-                              ref.watch(lastSyncStatusProvider(ledgerId));
-                          final st = asyncSt.asData?.value ?? cached;
-                          // (旧代码遗留变量 isFirstLoad 已不需要)
-                          return _buildSyncSection(
-                            context: context,
-                            ref: ref,
-                            sync: sync,
-                            ledgerId: ledgerId,
-                            user: user,
-                            canUseCloud: canUseCloud,
-                            asyncStIsLoading: asyncSt.isLoading,
-                            st: st,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                        ),
+                        FutureBuilder<AuthUser?>(
+                          future: auth.currentUser(),
+                          builder: (ctx, snap) {
+                            // 添加错误处理,确保即使stream出错也不会导致整个widget崩溃
+                            if (snap.hasError) {
+                              return Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  '${AppLocalizations.of(sectionContext).commonError}: ${snap.error}',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              );
+                            }
+
+                            final user = snap.data;
+                            // 检查云服务配置，本地存储模式下禁用云功能
+                            final cloudConfig =
+                                sectionRef.watch(activeCloudConfigProvider);
+                            final isLocalMode = cloudConfig.hasValue &&
+                                cloudConfig.value!.type == CloudBackendType.local;
+                            final canUseCloud = user != null && !isLocalMode;
+                            final asyncSt =
+                                sectionRef.watch(syncStatusProvider(ledgerId));
+                            final cached =
+                                sectionRef.watch(lastSyncStatusProvider(ledgerId));
+                            final st = asyncSt.asData?.value ?? cached;
+                            // (旧代码遗留变量 isFirstLoad 已不需要)
+                            return _buildSyncSection(
+                              context: sectionContext,
+                              ref: sectionRef,
+                              sync: sync,
+                              ledgerId: ledgerId,
+                              user: user,
+                              canUseCloud: canUseCloud,
+                              asyncStIsLoading: asyncSt.isLoading,
+                              st: st,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }),
                 // 数据管理
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildDataManagementSection(context, ref),
@@ -392,8 +403,9 @@ class MinePage extends ConsumerWidget {
                 activeCfg.asData?.value.type != CloudBackendType.local &&
                 canUseCloud &&
                 !notLoggedIn;
-            if (!show) return const SizedBox();
+            if (!show) return const SizedBox.shrink();
             return Column(children: [
+              AppDivider.thin(),
               AppListTile(
                 leading: Icons.cloud_upload,
                 title: AppLocalizations.of(context).mineFirstFullUpload,
@@ -424,9 +436,9 @@ class MinePage extends ConsumerWidget {
                   }
                 },
               ),
-              AppDivider.thin(),
             ]);
           }),
+          AppDivider.thin(),
           AppListTile(
             leading: icon,
             title: AppLocalizations.of(context).mineSyncTitle,
@@ -623,7 +635,6 @@ class MinePage extends ConsumerWidget {
               }
             },
           ),
-          AppDivider.thin(),
           // 登录/登出
           Consumer(builder: (ctx, r, _) {
             final userNow = user; // capture
@@ -655,6 +666,7 @@ class MinePage extends ConsumerWidget {
 
             return Column(
               children: [
+                AppDivider.thin(),
                 AppListTile(
                   leading: userNow == null
                       ? Icons.login
@@ -691,34 +703,40 @@ class MinePage extends ConsumerWidget {
                     }
                   },
                 ),
-                AppDivider.thin(),
               ],
             );
           }),
           Consumer(builder: (ctx, r, _) {
+            final cloudConfig = r.watch(activeCloudConfigProvider);
+
+            // 本地存储模式下不显示自动同步选项
+            final isLocalMode = cloudConfig.hasValue &&
+                cloudConfig.value!.type == CloudBackendType.local;
+            if (isLocalMode) {
+              return const SizedBox.shrink();
+            }
+
             final autoSync = r.watch(autoSyncValueProvider);
             final setter = r.read(autoSyncSetterProvider);
             final value = autoSync.asData?.value ?? false;
             final can = canUseCloud;
 
-            // 检查云服务类型以显示合适的提示信息
-            final cloudConfig = r.watch(activeCloudConfigProvider);
-            final isLocalMode = cloudConfig.hasValue &&
-                cloudConfig.value!.type == CloudBackendType.local;
-
-            return SwitchListTile(
-              title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
-              subtitle: can
-                  ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
-                  : Text(isLocalMode
-                      ? AppLocalizations.of(context).mineAutoSyncNeedCloudService
-                      : AppLocalizations.of(context).mineAutoSyncNeedLogin),
-              value: can ? value : false,
-              onChanged: can
-                  ? (v) async {
-                      await setter.set(v);
-                    }
-                  : null,
+            return Column(
+              children: [
+                AppDivider.thin(),
+                SwitchListTile(
+                  title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
+                  subtitle: can
+                      ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
+                      : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
+                  value: can ? value : false,
+                  onChanged: can
+                      ? (v) async {
+                          await setter.set(v);
+                        }
+                      : null,
+                ),
+              ],
             );
           }),
         ],
