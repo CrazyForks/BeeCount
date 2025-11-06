@@ -446,29 +446,37 @@ jobs:
         run: |
           echo "📦 Building iOS archive with xcodebuild..."
 
-          # Archive the app (配置主应用和Widget Extension的签名)
+          # Archive the app
+          # 注意：不在命令行指定PROVISIONING_PROFILE_SPECIFIER，因为会应用到所有targets
+          # 我们已经在project.pbxproj中为Runner和BeeCountWidgetExtension配置了正确的profile
           xcodebuild archive \
             -workspace ios/Runner.xcworkspace \
             -scheme Runner \
             -configuration Release \
             -archivePath build/ios/Runner.xcarchive \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            DEVELOPMENT_TEAM="${APPLE_TEAM_ID}" \
-            PROVISIONING_PROFILE_SPECIFIER="BeeCount_AppStore" \
-            OTHER_CODE_SIGN_FLAGS="--deep" \
+            -allowProvisioningUpdates \
             | tee xcodebuild-archive.log
 
-          echo ""
-          echo "✅ Archive created successfully"
+          # 检查archive是否成功
+          if [ -d "build/ios/Runner.xcarchive" ]; then
+            echo ""
+            echo "✅ Archive created successfully"
 
-          # 显示archive内容和签名信息
-          echo "Archive structure:"
-          ls -lh build/ios/Runner.xcarchive/Products/Applications/ || true
+            # 显示archive内容和签名信息
+            echo ""
+            echo "Archive structure:"
+            ls -lh build/ios/Runner.xcarchive/Products/Applications/ || true
 
-          echo ""
-          echo "Archive info:"
-          cat build/ios/Runner.xcarchive/Info.plist | grep -A 2 "Name\|SchemeName" || true
+            echo ""
+            echo "Archive info:"
+            cat build/ios/Runner.xcarchive/Info.plist | grep -A 2 "Name\|SchemeName" || true
+          else
+            echo ""
+            echo "❌ Archive failed!"
+            echo "Last 100 lines of archive log:"
+            tail -100 xcodebuild-archive.log
+            exit 1
+          fi
 
       - name: Export IPA from archive
         if: env.IOS_SIGNING_ENABLED == 'true'
