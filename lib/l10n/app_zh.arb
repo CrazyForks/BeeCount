@@ -140,6 +140,7 @@
   "categoryIncome": "收入分类",
   "categoryEmpty": "暂无分类",
   "categoryDefault": "默认分类",
+  "categoryCustomTag": "自定义",
   "categoryReorderTip": "长按分类可拖拽调整顺序",
   "categoryLoadFailed": "加载失败: {error}",
 
@@ -183,6 +184,10 @@
   "mineUpdate": "检查更新",
   "mineLanguageSettings": "语言设置",
   "mineLanguageSettingsSubtitle": "切换应用语言",
+  "mineRefreshStats": "刷新统计(调试)",
+  "mineRefreshStatsSubtitle": "触发全局统计数据重新计算",
+  "mineRefreshSync": "刷新同步状态(调试)",
+  "mineRefreshSyncSubtitle": "触发同步状态刷新",
 
   "languageTitle": "语言设置",
   "languageChinese": "中文",
