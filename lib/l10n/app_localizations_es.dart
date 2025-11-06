@@ -952,6 +952,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineFeedbackSubtitle => 'Reportar problema o sugerencia';
 
   @override
+  String get mineHelp => 'Ayuda';
+
+  @override
+  String get mineHelpSubtitle => 'Ver documentación y preguntas frecuentes';
+
+  @override
   String get mineRefreshStats => 'Refresh Stats (Debug)';
 
   @override

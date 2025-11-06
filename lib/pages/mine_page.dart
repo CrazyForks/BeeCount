@@ -837,6 +837,17 @@ class MinePage extends ConsumerWidget {
         ],
         AppDivider.thin(),
         AppListTile(
+          leading: Icons.help_outline,
+          title: AppLocalizations.of(context).mineHelp,
+          subtitle: AppLocalizations.of(context).mineHelpSubtitle,
+          onTap: () async {
+            final url =
+                Uri.parse('https://github.com/TNT-Likely/BeeCount/wiki');
+            await _tryOpenUrl(url);
+          },
+        ),
+        AppDivider.thin(),
+        AppListTile(
           leading: Icons.feedback_outlined,
           title: AppLocalizations.of(context).mineFeedback,
           subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,

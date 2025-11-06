@@ -382,6 +382,8 @@
   "mineUpdateDownload": "Download Update",
   "mineFeedback": "Feedback",
   "mineFeedbackSubtitle": "Report issues or suggestions",
+  "mineHelp": "Help",
+  "mineHelpSubtitle": "View documentation and FAQ",
   "mineRefreshStats": "Refresh Stats (Debug)",
   "mineRefreshStatsSubtitle": "Trigger global stats provider recalculation",
   "mineRefreshSync": "Refresh Sync Status (Debug)",

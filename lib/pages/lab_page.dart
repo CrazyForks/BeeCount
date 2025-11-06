@@ -23,6 +23,7 @@ class LabPage extends ConsumerWidget {
             title: l10n.lab,
             showBack: true,
             leadingIcon: Icons.science_outlined,
+            leadingPlain: true,
           ),
           Expanded(
             child: ListView(

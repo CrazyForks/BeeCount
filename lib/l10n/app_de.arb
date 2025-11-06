@@ -197,6 +197,8 @@
   "mineTerms": "Bedingungen",
   "mineFeedback": "Feedback",
   "mineFeedbackSubtitle": "Problem oder Vorschlag melden",
+  "mineHelp": "Hilfe",
+  "mineHelpSubtitle": "Dokumentation und FAQ anzeigen",
   "mineVersion": "Version",
   "mineUpdate": "Update",
   "mineCheckUpdate": "Nach Updates suchen",

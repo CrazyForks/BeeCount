@@ -952,6 +952,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineFeedbackSubtitle => '提交问题或建议';
 
   @override
+  String get mineHelp => '使用帮助';
+
+  @override
+  String get mineHelpSubtitle => '查看使用文档和常见问题';
+
+  @override
   String get mineRefreshStats => '刷新统计(调试)';
 
   @override
@@ -4070,6 +4076,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineFeedbackSubtitle => '提交問題或建議';
+
+  @override
+  String get mineHelp => '使用說明';
+
+  @override
+  String get mineHelpSubtitle => '查看使用文件和常見問題';
 
   @override
   String get mineRefreshStats => '重新整理統計資訊（臨時）';

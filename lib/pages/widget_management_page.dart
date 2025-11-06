@@ -24,6 +24,7 @@ class WidgetManagementPage extends ConsumerWidget {
             title: l10n.widgetManagement,
             showBack: true,
             leadingIcon: Icons.widgets_outlined,
+            leadingPlain: true,
           ),
           Expanded(
             child: ListView(

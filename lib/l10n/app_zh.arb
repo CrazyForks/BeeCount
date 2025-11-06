@@ -283,6 +283,8 @@
   "mineUpdateDownload": "下载更新",
   "mineFeedback": "问题反馈",
   "mineFeedbackSubtitle": "提交问题或建议",
+  "mineHelp": "使用帮助",
+  "mineHelpSubtitle": "查看使用文档和常见问题",
 
   "categoryEditTitle": "编辑分类",
   "categoryNewTitle": "新建分类",

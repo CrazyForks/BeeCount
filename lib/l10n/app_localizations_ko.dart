@@ -952,6 +952,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mineFeedbackSubtitle => '문제 또는 제안 보고';
 
   @override
+  String get mineHelp => '도움말';
+
+  @override
+  String get mineHelpSubtitle => '문서 및 FAQ 보기';
+
+  @override
   String get mineRefreshStats => '통계 새로고침 (디버그)';
 
   @override

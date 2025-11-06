@@ -952,6 +952,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mineFeedbackSubtitle => '問題や提案を報告';
 
   @override
+  String get mineHelp => 'ヘルプ';
+
+  @override
+  String get mineHelpSubtitle => 'ドキュメントとFAQを表示';
+
+  @override
   String get mineRefreshStats => '統計を更新（デバッグ）';
 
   @override

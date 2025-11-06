@@ -1876,6 +1876,18 @@ abstract class AppLocalizations {
   /// **'Report issues or suggestions'**
   String get mineFeedbackSubtitle;
 
+  /// No description provided for @mineHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get mineHelp;
+
+  /// No description provided for @mineHelpSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View documentation and FAQ'**
+  String get mineHelpSubtitle;
+
   /// No description provided for @mineRefreshStats.
   ///
   /// In en, this message translates to:

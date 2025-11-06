@@ -264,6 +264,8 @@
   "mineUpdateDownload": "下載更新",
   "mineFeedback": "問題回饋",
   "mineFeedbackSubtitle": "提交問題或建議",
+  "mineHelp": "使用說明",
+  "mineHelpSubtitle": "查看使用文件和常見問題",
   "mineRefreshStats": "重新整理統計資訊（臨時）",
   "mineRefreshStatsSubtitle": "觸發全域統計 Provider 重新計算",
   "mineRefreshSync": "重新整理同步狀態（臨時）",

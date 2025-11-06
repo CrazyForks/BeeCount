@@ -367,6 +367,8 @@
   "mineUpdateDownload": "アップデートをダウンロード",
   "mineFeedback": "フィードバック",
   "mineFeedbackSubtitle": "問題や提案を報告",
+  "mineHelp": "ヘルプ",
+  "mineHelpSubtitle": "ドキュメントとFAQを表示",
   "mineRefreshStats": "統計を更新（デバッグ）",
   "mineRefreshStatsSubtitle": "グローバル統計プロバイダーの再計算をトリガー",
   "mineRefreshSync": "同期ステータスを更新（デバッグ）",
