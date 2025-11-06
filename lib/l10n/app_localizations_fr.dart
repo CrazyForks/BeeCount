@@ -2573,10 +2573,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get currencySGD => 'Dollar de Singapour';
 
   @override
+  String get currencyMYR => 'Malaysian Ringgit';
+
+  @override
   String get currencyTHB => 'Baht thaïlandais';
 
   @override
   String get currencyIDR => 'Roupie indonésienne';
+
+  @override
+  String get currencyPHP => 'Philippine Peso';
+
+  @override
+  String get currencyVND => 'Vietnamese Dong';
 
   @override
   String get currencyINR => 'Roupie indienne';
@@ -2586,6 +2595,27 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get currencyBYN => 'Rouble biélorusse';
+
+  @override
+  String get currencyNZD => 'New Zealand Dollar';
+
+  @override
+  String get currencyCHF => 'Swiss Franc';
+
+  @override
+  String get currencySEK => 'Swedish Krona';
+
+  @override
+  String get currencyNOK => 'Norwegian Krone';
+
+  @override
+  String get currencyDKK => 'Danish Krone';
+
+  @override
+  String get currencyBRL => 'Brazilian Real';
+
+  @override
+  String get currencyMXN => 'Mexican Peso';
 
   @override
   String get webdavConfiguredTitle => 'Service cloud WebDAV configuré';

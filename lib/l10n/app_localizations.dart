@@ -4930,6 +4930,12 @@ abstract class AppLocalizations {
   /// **'Singapore Dollar'**
   String get currencySGD;
 
+  /// No description provided for @currencyMYR.
+  ///
+  /// In en, this message translates to:
+  /// **'Malaysian Ringgit'**
+  String get currencyMYR;
+
   /// No description provided for @currencyTHB.
   ///
   /// In en, this message translates to:
@@ -4941,6 +4947,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Indonesian Rupiah'**
   String get currencyIDR;
+
+  /// No description provided for @currencyPHP.
+  ///
+  /// In en, this message translates to:
+  /// **'Philippine Peso'**
+  String get currencyPHP;
+
+  /// No description provided for @currencyVND.
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnamese Dong'**
+  String get currencyVND;
 
   /// No description provided for @currencyINR.
   ///
@@ -4959,6 +4977,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Belarusian Ruble'**
   String get currencyBYN;
+
+  /// No description provided for @currencyNZD.
+  ///
+  /// In en, this message translates to:
+  /// **'New Zealand Dollar'**
+  String get currencyNZD;
+
+  /// No description provided for @currencyCHF.
+  ///
+  /// In en, this message translates to:
+  /// **'Swiss Franc'**
+  String get currencyCHF;
+
+  /// No description provided for @currencySEK.
+  ///
+  /// In en, this message translates to:
+  /// **'Swedish Krona'**
+  String get currencySEK;
+
+  /// No description provided for @currencyNOK.
+  ///
+  /// In en, this message translates to:
+  /// **'Norwegian Krone'**
+  String get currencyNOK;
+
+  /// No description provided for @currencyDKK.
+  ///
+  /// In en, this message translates to:
+  /// **'Danish Krone'**
+  String get currencyDKK;
+
+  /// No description provided for @currencyBRL.
+  ///
+  /// In en, this message translates to:
+  /// **'Brazilian Real'**
+  String get currencyBRL;
+
+  /// No description provided for @currencyMXN.
+  ///
+  /// In en, this message translates to:
+  /// **'Mexican Peso'**
+  String get currencyMXN;
 
   /// No description provided for @webdavConfiguredTitle.
   ///

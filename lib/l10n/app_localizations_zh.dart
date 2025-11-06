@@ -2573,19 +2573,49 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currencySGD => '新加坡元';
 
   @override
+  String get currencyMYR => '马来西亚林吉特';
+
+  @override
   String get currencyTHB => '泰铢';
 
   @override
   String get currencyIDR => '印尼卢比';
 
   @override
+  String get currencyPHP => '菲律宾比索';
+
+  @override
+  String get currencyVND => '越南盾';
+
+  @override
   String get currencyINR => '印度卢比';
 
   @override
-  String get currencyRUB => '卢布';
+  String get currencyRUB => '俄罗斯卢布';
 
   @override
   String get currencyBYN => '白俄罗斯卢布';
+
+  @override
+  String get currencyNZD => '新西兰元';
+
+  @override
+  String get currencyCHF => '瑞士法郎';
+
+  @override
+  String get currencySEK => '瑞典克朗';
+
+  @override
+  String get currencyNOK => '挪威克朗';
+
+  @override
+  String get currencyDKK => '丹麦克朗';
+
+  @override
+  String get currencyBRL => '巴西雷亚尔';
+
+  @override
+  String get currencyMXN => '墨西哥比索';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV 云服务已配置';
@@ -5663,19 +5693,49 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get currencySGD => '新加坡元';
 
   @override
+  String get currencyMYR => '馬來西亞令吉';
+
+  @override
   String get currencyTHB => '泰銖';
 
   @override
   String get currencyIDR => '印尼盾';
 
   @override
+  String get currencyPHP => '菲律賓披索';
+
+  @override
+  String get currencyVND => '越南盾';
+
+  @override
   String get currencyINR => '印度盧比';
 
   @override
-  String get currencyRUB => '盧布';
+  String get currencyRUB => '俄羅斯盧布';
 
   @override
   String get currencyBYN => '白俄羅斯盧布';
+
+  @override
+  String get currencyNZD => '紐西蘭元';
+
+  @override
+  String get currencyCHF => '瑞士法郎';
+
+  @override
+  String get currencySEK => '瑞典克朗';
+
+  @override
+  String get currencyNOK => '挪威克朗';
+
+  @override
+  String get currencyDKK => '丹麥克朗';
+
+  @override
+  String get currencyBRL => '巴西雷亞爾';
+
+  @override
+  String get currencyMXN => '墨西哥披索';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV 雲服務已設定';
