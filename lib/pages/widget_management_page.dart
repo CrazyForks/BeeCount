@@ -74,8 +74,11 @@ class WidgetManagementPage extends ConsumerWidget {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   // 计算合适的显示尺寸，确保不溢出
+                  // iOS: 364x169 (2.15:1), Android: 364x182 (2:1)
                   final maxWidth = constraints.maxWidth - 32;
-                  final targetRatio = Platform.isIOS ? 364 / 169 : 2.0;
+                  final widgetWidth = 364.0;
+                  final widgetHeight = Platform.isIOS ? 169.0 : 182.0;
+                  final targetRatio = widgetWidth / widgetHeight;
                   final displayWidth = maxWidth.clamp(0.0, 400.0);
                   final displayHeight = displayWidth / targetRatio;
 
@@ -95,10 +98,10 @@ class WidgetManagementPage extends ConsumerWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: FittedBox(
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         child: SizedBox(
-                          width: Platform.isIOS ? 364 : 500,
-                          height: Platform.isIOS ? 169 : 250,
+                          width: widgetWidth,
+                          height: widgetHeight,
                           child: HomeWidgetView(
                             todayExpense: '¥827.55',
                             todayIncome: '¥1,255.44',
@@ -111,8 +114,8 @@ class WidgetManagementPage extends ConsumerWidget {
                             todayIncomeLabel: l10n.todayIncome,
                             monthExpenseLabel: l10n.monthExpense,
                             monthIncomeLabel: l10n.monthIncome,
-                            width: Platform.isIOS ? 364 : 500,
-                            height: Platform.isIOS ? 169 : 250,
+                            width: widgetWidth,
+                            height: widgetHeight,
                           ),
                         ),
                       ),

@@ -82,13 +82,15 @@ class WidgetManager {
       );
 
       // Render Flutter widget as image for home screen widget
-      // iOS systemMedium widget ratio is ~2.15:1, Android is 2:1 (4:2)
+      // iOS uses 364x169 (2.15:1), Android needs 2:1 ratio
+      // For Android, we'll render at 364x169 then add padding to make it 364x182 (2:1)
       final widgetSize = Platform.isIOS
-          ? const Size(364, 169)  // iOS systemMedium standard size (iPhone)
-          : const Size(500, 250); // Android 4:2 aspect ratio
+          ? const Size(364, 169)  // iOS systemMedium
+          : const Size(364, 182); // Android 2:1 ratio (364/2=182)
 
       print('📱 Widget rendering - Platform: ${Platform.isIOS ? "iOS" : "Android"}, Size: ${widgetSize.width}x${widgetSize.height}, Ratio: ${(widgetSize.width / widgetSize.height).toStringAsFixed(2)}:1');
 
+      print('🎨 开始渲染小组件...');
       await HomeWidget.renderFlutterWidget(
         HomeWidgetView(
           todayExpense: _currencyFormat.format(todayExpenseTotal),
@@ -109,12 +111,19 @@ class WidgetManager {
         logicalSize: widgetSize,
         pixelRatio: 4.0, // @4x for high resolution
       );
+      print('✅ 小组件渲染完成');
+
+      // 获取保存的图片路径用于调试
+      final savedPath = await HomeWidget.getWidgetData<String>('widgetImage');
+      print('📁 图片保存路径: $savedPath');
 
       // Update the widget
+      print('📲 触发小组件更新...');
       await HomeWidget.updateWidget(
         qualifiedAndroidName: 'com.example.beecount.BeeCountWidgetProvider',
         iOSName: 'BeeCountWidget',
       );
+      print('✅ 小组件更新命令已发送');
     } catch (e) {
       print('[Widget] 更新失败: $e');
     }
