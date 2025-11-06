@@ -857,6 +857,17 @@ class MinePage extends ConsumerWidget {
             await _tryOpenUrl(url);
           },
         ),
+        AppDivider.thin(),
+        AppListTile(
+          leading: Icons.star_outline,
+          title: AppLocalizations.of(context).mineSupportAuthor,
+          subtitle: AppLocalizations.of(context).mineSupportAuthorSubtitle,
+          onTap: () async {
+            final url =
+                Uri.parse('https://github.com/TNT-Likely/BeeCount');
+            await _tryOpenUrl(url);
+          },
+        ),
       ]),
     );
   }

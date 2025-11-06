@@ -10,6 +10,52 @@ class UpdateChecker {
 
   static final Dio _dio = Dio();
 
+  /// 清理 release notes，移除 commit hash 和链接
+  static String _cleanReleaseNotes(String body) {
+    if (body.isEmpty) return body;
+
+    logI('UpdateChecker', '====== 原始 release notes ======');
+    logI('UpdateChecker', body);
+    logI('UpdateChecker', '====== 开始清理 ======');
+
+    final lines = body.split('\n');
+    final cleanedLines = <String>[];
+
+    for (var line in lines) {
+      logI('UpdateChecker', '处理行: "$line"');
+
+      // 跳过包含 "Full Changelog" 的行
+      if (line.contains('Full Changelog')) {
+        logI('UpdateChecker', '  -> 跳过: 包含 Full Changelog');
+        continue;
+      }
+
+      // 移除 commit hash 和链接部分：匹配 ([hash](url)) 格式
+      // 使用正则表达式匹配 ([任意字符](任意字符)) 的模式
+      final regex = RegExp(r'\s*\(\[[a-f0-9]{7}\]\(https://github\.com/[^\)]+\)\)');
+      if (regex.hasMatch(line)) {
+        line = line.replaceAll(regex, '');
+        logI('UpdateChecker', '  -> 移除 commit 链接后: "$line"');
+      }
+
+      // 跳过空行
+      if (line.trim().isEmpty) {
+        logI('UpdateChecker', '  -> 跳过: 空行');
+        continue;
+      }
+
+      logI('UpdateChecker', '  -> 保留');
+      cleanedLines.add(line);
+    }
+
+    final result = cleanedLines.join('\n').trim();
+    logI('UpdateChecker', '====== 清理后的 release notes ======');
+    logI('UpdateChecker', result);
+    logI('UpdateChecker', '====== 清理完成 ======');
+
+    return result;
+  }
+
   /// 生成随机User-Agent，避免被GitHub限制
   static String _generateRandomUserAgent() {
     final userAgents = [
@@ -110,7 +156,7 @@ class UpdateChecker {
               hasUpdate: true,
               version: latestVersion,
               downloadUrl: apkUrl,
-              releaseNotes: data['body'] ?? '',
+              releaseNotes: _cleanReleaseNotes(data['body'] ?? ''),
             );
           } else {
             return UpdateResult(

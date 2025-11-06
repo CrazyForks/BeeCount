@@ -958,6 +958,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mineHelpSubtitle => 'Voir la documentation et FAQ';
 
   @override
+  String get mineSupportAuthor => 'Soutenir l\'auteur';
+
+  @override
+  String get mineSupportAuthorSubtitle => 'Ajouter une étoile au projet sur GitHub';
+
+  @override
   String get mineRefreshStats => 'Refresh Stats (Debug)';
 
   @override

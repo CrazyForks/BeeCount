@@ -199,6 +199,8 @@
   "mineFeedbackSubtitle": "Reportar problema o sugerencia",
   "mineHelp": "Ayuda",
   "mineHelpSubtitle": "Ver documentación y preguntas frecuentes",
+  "mineSupportAuthor": "Apoyar al autor",
+  "mineSupportAuthorSubtitle": "Dale estrella al proyecto en GitHub",
   "mineVersion": "Versión",
   "mineUpdate": "Actualizar",
   "mineCheckUpdate": "Verificar actualizaciones",

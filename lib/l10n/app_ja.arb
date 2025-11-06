@@ -369,6 +369,8 @@
   "mineFeedbackSubtitle": "問題や提案を報告",
   "mineHelp": "ヘルプ",
   "mineHelpSubtitle": "ドキュメントとFAQを表示",
+  "mineSupportAuthor": "作者を応援",
+  "mineSupportAuthorSubtitle": "GitHubでプロジェクトにスターを付ける",
   "mineRefreshStats": "統計を更新（デバッグ）",
   "mineRefreshStatsSubtitle": "グローバル統計プロバイダーの再計算をトリガー",
   "mineRefreshSync": "同期ステータスを更新（デバッグ）",

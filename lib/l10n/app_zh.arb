@@ -285,6 +285,8 @@
   "mineFeedbackSubtitle": "提交问题或建议",
   "mineHelp": "使用帮助",
   "mineHelpSubtitle": "查看使用文档和常见问题",
+  "mineSupportAuthor": "支持作者",
+  "mineSupportAuthorSubtitle": "在GitHub上为项目点赞",
 
   "categoryEditTitle": "编辑分类",
   "categoryNewTitle": "新建分类",

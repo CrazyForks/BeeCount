@@ -958,6 +958,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineHelpSubtitle => '查看使用文档和常见问题';
 
   @override
+  String get mineSupportAuthor => '支持作者';
+
+  @override
+  String get mineSupportAuthorSubtitle => '在GitHub上为项目点赞';
+
+  @override
   String get mineRefreshStats => '刷新统计(调试)';
 
   @override
@@ -4082,6 +4088,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineHelpSubtitle => '查看使用文件和常見問題';
+
+  @override
+  String get mineSupportAuthor => '支持作者';
+
+  @override
+  String get mineSupportAuthorSubtitle => '在GitHub上為專案點讚';
 
   @override
   String get mineRefreshStats => '重新整理統計資訊（臨時）';

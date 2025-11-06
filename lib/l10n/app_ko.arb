@@ -369,6 +369,8 @@
   "mineFeedbackSubtitle": "문제 또는 제안 보고",
   "mineHelp": "도움말",
   "mineHelpSubtitle": "문서 및 FAQ 보기",
+  "mineSupportAuthor": "작성자 지원",
+  "mineSupportAuthorSubtitle": "GitHub에서 프로젝트에 스타 주기",
   "mineRefreshStats": "통계 새로고침 (디버그)",
   "mineRefreshStatsSubtitle": "글로벌 통계 프로바이더 재계산 트리거",
   "mineRefreshSync": "동기화 상태 새로고침 (디버그)",

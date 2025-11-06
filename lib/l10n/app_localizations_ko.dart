@@ -958,6 +958,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mineHelpSubtitle => '문서 및 FAQ 보기';
 
   @override
+  String get mineSupportAuthor => '작성자 지원';
+
+  @override
+  String get mineSupportAuthorSubtitle => 'GitHub에서 프로젝트에 스타 주기';
+
+  @override
   String get mineRefreshStats => '통계 새로고침 (디버그)';
 
   @override

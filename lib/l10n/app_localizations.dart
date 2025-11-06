@@ -1888,6 +1888,18 @@ abstract class AppLocalizations {
   /// **'View documentation and FAQ'**
   String get mineHelpSubtitle;
 
+  /// No description provided for @mineSupportAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Author'**
+  String get mineSupportAuthor;
+
+  /// No description provided for @mineSupportAuthorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Star the project on GitHub'**
+  String get mineSupportAuthorSubtitle;
+
   /// No description provided for @mineRefreshStats.
   ///
   /// In en, this message translates to:
