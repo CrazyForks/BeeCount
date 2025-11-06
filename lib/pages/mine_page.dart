@@ -190,6 +190,7 @@ class MinePage extends ConsumerWidget {
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
+              physics: const AlwaysScrollableScrollPhysics(),
               children: [
                 const Divider(height: 1),
                 SizedBox(height: 8.0.scaled(context, ref)),

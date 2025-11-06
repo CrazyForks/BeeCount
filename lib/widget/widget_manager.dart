@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
@@ -81,6 +82,13 @@ class WidgetManager {
       );
 
       // Render Flutter widget as image for home screen widget
+      // iOS systemMedium widget ratio is ~2.15:1, Android is 2:1 (4:2)
+      final widgetSize = Platform.isIOS
+          ? const Size(364, 169)  // iOS systemMedium standard size (iPhone)
+          : const Size(500, 250); // Android 4:2 aspect ratio
+
+      print('📱 Widget rendering - Platform: ${Platform.isIOS ? "iOS" : "Android"}, Size: ${widgetSize.width}x${widgetSize.height}, Ratio: ${(widgetSize.width / widgetSize.height).toStringAsFixed(2)}:1');
+
       await HomeWidget.renderFlutterWidget(
         HomeWidgetView(
           todayExpense: _currencyFormat.format(todayExpenseTotal),
@@ -94,9 +102,11 @@ class WidgetManager {
           todayIncomeLabel: todayIncomeLabel,
           monthExpenseLabel: monthExpenseLabel,
           monthIncomeLabel: monthIncomeLabel,
+          width: widgetSize.width,
+          height: widgetSize.height,
         ),
         key: 'widgetImage',
-        logicalSize: const Size(500, 250), // 4:2 aspect ratio widget size
+        logicalSize: widgetSize,
         pixelRatio: 4.0, // @4x for high resolution
       );
 

@@ -46,26 +46,32 @@ struct BeeCountWidgetEntryView : View {
 
     var body: some View {
         if let uiImage = UIImage(contentsOfFile: entry.widgetImagePath) {
-            GeometryReader { geometry in
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .cornerRadius(16)
-            }
-        } else {
-            // Placeholder view when image is not available
-            ZStack {
-                Color(red: 1.0, green: 0.76, blue: 0.03)
-                VStack {
-                    Image(systemName: "chart.bar.fill")
-                        .font(.system(size: 32))
-                        .foregroundColor(.white)
-                    Text("蜜蜂记账")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.white)
+            print("📱 iOS Widget - Image size: \(uiImage.size.width)x\(uiImage.size.height), Scale: \(uiImage.scale)")
+            return AnyView(
+                GeometryReader { geometry in
+                    let _ = print("📱 iOS Widget - Container size: \(geometry.size.width)x\(geometry.size.height)")
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .clipped()
                 }
-            }
+            )
+        } else {
+            return AnyView(
+                // Placeholder view when image is not available
+                ZStack {
+                    Color(red: 1.0, green: 0.76, blue: 0.03)
+                    VStack {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.system(size: 32))
+                            .foregroundColor(.white)
+                        Text("蜜蜂记账")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.white)
+                    }
+                }
+            )
         }
     }
 }
@@ -87,5 +93,6 @@ struct BeeCountWidget: Widget {
         .configurationDisplayName("蜜蜂记账")
         .description("显示今日和本月的收支情况")
         .supportedFamilies([.systemMedium])
+        .contentMarginsDisabled()  // Remove default padding/margins in iOS 17+
     }
 }
