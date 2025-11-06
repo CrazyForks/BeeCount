@@ -2838,46 +2838,46 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cloudWebdavRemotePathHelperText => '데이터 저장을 위한 원격 디렉토리 경로';
 
   @override
-  String get accountsTitle => 'Account Management';
+  String get accountsTitle => '계정관리';
 
   @override
-  String get accountsEmptyMessage => 'No accounts yet, tap the top right to add';
+  String get accountsEmptyMessage => '还없음계정，탭右上角추가';
 
   @override
-  String get accountAddTooltip => 'Add Account';
+  String get accountAddTooltip => '추가계정';
 
   @override
-  String get accountAddButton => 'Add Account';
+  String get accountAddButton => '추가계정';
 
   @override
-  String get accountBalance => 'Balance';
+  String get accountBalance => '잔액';
 
   @override
-  String get accountEditTitle => 'Edit Account';
+  String get accountEditTitle => '편집계정';
 
   @override
-  String get accountNewTitle => 'New Account';
+  String get accountNewTitle => '新建계정';
 
   @override
-  String get accountNameLabel => 'Account Name';
+  String get accountNameLabel => '계정名称';
 
   @override
-  String get accountNameHint => 'e.g.: ICBC, Alipay, etc.';
+  String get accountNameHint => '例如：工商银行、Alipay等';
 
   @override
-  String get accountNameRequired => 'Please enter account name';
+  String get accountNameRequired => '입력계정名称';
 
   @override
-  String get accountTypeLabel => 'Account Type';
+  String get accountTypeLabel => '계정类型';
 
   @override
-  String get accountTypeCash => 'Cash';
+  String get accountTypeCash => '현금';
 
   @override
-  String get accountTypeBankCard => 'Bank Card';
+  String get accountTypeBankCard => '은행 카드';
 
   @override
-  String get accountTypeCreditCard => 'Credit Card';
+  String get accountTypeCreditCard => '신용 카드';
 
   @override
   String get accountTypeAlipay => 'Alipay';
@@ -2886,36 +2886,36 @@ class AppLocalizationsKo extends AppLocalizations {
   String get accountTypeWechat => 'WeChat';
 
   @override
-  String get accountTypeOther => 'Other';
+  String get accountTypeOther => '기타';
 
   @override
-  String get accountInitialBalance => 'Initial Balance';
+  String get accountInitialBalance => '초기자금';
 
   @override
-  String get accountInitialBalanceHint => 'Enter initial balance (optional)';
+  String get accountInitialBalanceHint => '입력초기자금（선택 사항）';
 
   @override
-  String get accountDeleteWarningTitle => 'Confirm Delete';
+  String get accountDeleteWarningTitle => '확인삭제';
 
   @override
   String accountDeleteWarningMessage(int count) {
-    return 'This account has $count related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?';
+    return '该계정有 $count 笔관련거래，삭제후거래기록中的계정정보将被지우기。확인삭제吗？';
   }
 
   @override
-  String get accountDeleteConfirm => 'Confirm to delete this account?';
+  String get accountDeleteConfirm => '확인삭제该계정吗？';
 
   @override
-  String get accountSelectTitle => 'Select Account';
+  String get accountSelectTitle => '선택계정';
 
   @override
-  String get accountNone => 'No Account';
+  String get accountNone => '不선택계정';
 
   @override
-  String get accountsEnableFeature => 'Enable Account Feature';
+  String get accountsEnableFeature => '활성화계정기능';
 
   @override
-  String get accountsFeatureDescription => 'Manage multiple payment accounts and track balance changes for each account';
+  String get accountsFeatureDescription => '활성화후可以관리多个支付계정，추적매个계정的잔액변화';
 
   @override
   String get updateCorruptedFileTitle => '설치 패키지가 손상되었습니다';
@@ -2924,200 +2924,200 @@ class AppLocalizationsKo extends AppLocalizations {
   String get updateCorruptedFileMessage => '이전에 다운로드한 설치 패키지가 불완전하거나 손상된 것으로 감지되었습니다. 삭제하고 다시 다운로드하시겠습니까？';
 
   @override
-  String get privacyDashboardTitle => 'Privacy Report';
+  String get privacyDashboardTitle => '개인정보보고서';
 
   @override
-  String get privacyScoreExcellent => 'Privacy Protection: Excellent';
+  String get privacyScoreExcellent => '개인정보보호：우수';
 
   @override
-  String get privacyScoreDescription => 'Your data is completely secure with no privacy risks';
+  String get privacyScoreDescription => '您的데이터완전히안전，없음어떤개인정보유출위험';
 
   @override
-  String get privacyDataStorageTitle => 'Data Storage Location';
+  String get privacyDataStorageTitle => '데이터저장위치';
 
   @override
-  String get privacyDataStorageLocal => 'All financial data is stored locally on your device';
+  String get privacyDataStorageLocal => '모든재무데이터저장在您的기기로컬';
 
   @override
-  String get privacyDataStorageNoUpload => 'Never uploaded to any third-party servers';
+  String get privacyDataStorageNoUpload => '不업로드에어떤제3자서버';
 
   @override
-  String get privacyDataStorageOptionalSync => 'Optional cloud sync is fully controlled by you';
+  String get privacyDataStorageOptionalSync => '선택 사항的클라우드동기화완전히由您自己제어';
 
   @override
-  String get privacyNetworkMonitorTitle => 'Network Request Monitoring';
+  String get privacyNetworkMonitorTitle => '네트워크求모니터링';
 
   @override
-  String get privacyNetworkMonitorSince => 'Since app installation:';
+  String get privacyNetworkMonitorSince => '自앱설치以来：';
 
   @override
-  String get privacyNetworkDataRequests => 'Data requests sent';
+  String get privacyNetworkDataRequests => '전송的데이터求';
 
   @override
-  String get privacyNetworkTrackers => 'Third-party trackers';
+  String get privacyNetworkTrackers => '제3자추적器';
 
   @override
-  String get privacyNetworkAdRequests => 'Ad network requests';
+  String get privacyNetworkAdRequests => '광고네트워크求';
 
   @override
-  String get privacyNetworkAnalytics => 'Analytics service calls';
+  String get privacyNetworkAnalytics => '분석服务호출';
 
   @override
-  String get privacyPermissionsTitle => 'Permission Usage';
+  String get privacyPermissionsTitle => '권한사용설명';
 
   @override
-  String get privacyPermissionsOnlyRequest => 'This app only requests the following permissions:';
+  String get privacyPermissionsOnlyRequest => '本앱만求다음권한：';
 
   @override
-  String get privacyPermissionsStorage => 'Storage permission (save transaction data)';
+  String get privacyPermissionsStorage => '저장권한（저장账单데이터）';
 
   @override
-  String get privacyPermissionsNotifications => 'Notification permission (recording reminders)';
+  String get privacyPermissionsNotifications => '알림권한（记账리마인더）';
 
   @override
-  String get privacyPermissionsNoLocation => 'No location permission needed';
+  String get privacyPermissionsNoLocation => '불필요위치권한';
 
   @override
-  String get privacyPermissionsNoContacts => 'No contacts permission needed';
+  String get privacyPermissionsNoContacts => '불필요연락처권한';
 
   @override
-  String get privacyPermissionsNoCamera => 'No camera permission needed';
+  String get privacyPermissionsNoCamera => '불필요카메라권한';
 
   @override
-  String get privacyOpenSourceTitle => 'Open Source Verification';
+  String get privacyOpenSourceTitle => '오픈소스검증';
 
   @override
-  String get privacyOpenSourcePublic => 'All code is publicly auditable';
+  String get privacyOpenSourcePublic => '모든코드공개可감사';
 
   @override
-  String get privacyOpenSourceCommunity => 'Community supervision, no hidden code';
+  String get privacyOpenSourceCommunity => '커뮤니티감독，无숨김코드';
 
   @override
-  String get privacyOpenSourceMIT => 'Free for Personal Use';
+  String get privacyOpenSourceMIT => '개인사용자무료';
 
   @override
-  String get privacyOpenSourceViewCode => 'View Source Code on GitHub';
+  String get privacyOpenSourceViewCode => '在GitHub보기源코드';
 
   @override
-  String get privacyOpenSourceUrlError => 'Cannot open link';
+  String get privacyOpenSourceUrlError => '할 수 없음열기링크';
 
   @override
-  String get welcomeTitle => 'Welcome to BeeCount';
+  String get welcomeTitle => '환영합니다사용 BeeCount';
 
   @override
-  String get welcomeDescription => 'An accounting app that truly respects your privacy';
+  String get welcomeDescription => '一个진정으로존중您개인정보的记账앱';
 
   @override
-  String get welcomePrivacyTitle => 'Your Data, Your Control';
+  String get welcomePrivacyTitle => '您的데이터，您제어';
 
   @override
-  String get welcomePrivacyFeature1 => 'Data stored locally on your device';
+  String get welcomePrivacyFeature1 => '데이터저장在您的기기로컬';
 
   @override
-  String get welcomePrivacyFeature2 => 'Never uploaded to any third-party servers';
+  String get welcomePrivacyFeature2 => '不업로드에어떤제3자서버';
 
   @override
-  String get welcomePrivacyFeature3 => 'No ads, no data collection';
+  String get welcomePrivacyFeature3 => '无광고，无데이터收集';
 
   @override
-  String get welcomePrivacyFeature4 => 'No account registration required';
+  String get welcomePrivacyFeature4 => '无需등록계정';
 
   @override
-  String get welcomeOpenSourceTitle => 'Open Source & Transparent';
+  String get welcomeOpenSourceTitle => '오픈소스 & 투명';
 
   @override
-  String get welcomeOpenSourceFeature1 => '100% open source code';
+  String get welcomeOpenSourceFeature1 => '100%오픈소스코드';
 
   @override
-  String get welcomeOpenSourceFeature2 => 'Community supervision, no backdoors';
+  String get welcomeOpenSourceFeature2 => '커뮤니티감독，无백도어';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'Free for Personal Use';
+  String get welcomeOpenSourceFeature3 => '개인사용자무료사용';
 
   @override
-  String get welcomeViewGitHub => 'View Source Code on GitHub';
+  String get welcomeViewGitHub => '在GitHub보기源코드';
 
   @override
-  String get welcomeCloudSyncTitle => 'Optional Cloud Sync';
+  String get welcomeCloudSyncTitle => '선택 사항的클라우드동기화';
 
   @override
-  String get welcomeCloudSyncDescription => 'Don\'t want to use commercial cloud services? BeeCount supports multiple sync methods';
+  String get welcomeCloudSyncDescription => '不想사용상업클라우드服务？BeeCount지원다양한동기화방법';
 
   @override
-  String get welcomeCloudSyncFeature1 => 'Completely offline usage';
+  String get welcomeCloudSyncFeature1 => '완전히오프라인사용';
 
   @override
-  String get welcomeCloudSyncFeature2 => 'Self-hosted WebDAV sync';
+  String get welcomeCloudSyncFeature2 => '셀프 호스팅WebDAV동기화';
 
   @override
-  String get welcomeCloudSyncFeature3 => 'Self-hosted Supabase service';
+  String get welcomeCloudSyncFeature3 => '셀프 호스팅Supabase服务';
 
   @override
-  String get lab => 'Lab';
+  String get lab => '실험실';
 
   @override
-  String get labDesc => 'Try experimental features';
+  String get labDesc => '체험실험적기능';
 
   @override
-  String get widgetManagement => 'Home Screen Widget';
+  String get widgetManagement => '데스크톱위젯';
 
   @override
-  String get widgetManagementDesc => 'Quick view of income and expenses on home screen';
+  String get widgetManagementDesc => '在홈 화면빠르게보기수입지출상황';
 
   @override
-  String get widgetPreview => 'Widget Preview';
+  String get widgetPreview => '위젯미리보기';
 
   @override
-  String get widgetPreviewDesc => 'Widget automatically displays actual data from current ledger, theme color follows app settings';
+  String get widgetPreviewDesc => '위젯자동표시현재账本的실제데이터，테마色따라앱설정';
 
   @override
-  String get howToAddWidget => 'How to Add Widget';
+  String get howToAddWidget => '방법추가위젯';
 
   @override
-  String get iosWidgetStep1 => 'Long press on home screen blank area to enter edit mode';
+  String get iosWidgetStep1 => '길게 누르기홈 화면빈영역，진입편집모드';
 
   @override
-  String get iosWidgetStep2 => 'Tap the \"+\" button in upper left corner';
+  String get iosWidgetStep2 => '탭왼쪽 상단的\"+\"버튼';
 
   @override
-  String get iosWidgetStep3 => 'Search and select \"BeeCount\"';
+  String get iosWidgetStep3 => '검색및선택\"蜜蜂记账\"';
 
   @override
-  String get iosWidgetStep4 => 'Select medium widget and add to home screen';
+  String get iosWidgetStep4 => '선택중형위젯，추가에홈 화면';
 
   @override
-  String get androidWidgetStep1 => 'Long press on home screen blank area';
+  String get androidWidgetStep1 => '길게 누르기홈 화면빈영역';
 
   @override
-  String get androidWidgetStep2 => 'Select \"Widgets\"';
+  String get androidWidgetStep2 => '선택\"위젯\"또는\"Widgets\"';
 
   @override
-  String get androidWidgetStep3 => 'Find and long press \"BeeCount\" widget';
+  String get androidWidgetStep3 => '找에및길게 누르기\"蜜蜂记账\"위젯';
 
   @override
-  String get androidWidgetStep4 => 'Drag to suitable position on home screen';
+  String get androidWidgetStep4 => '드래그에홈 화면적절한위치';
 
   @override
-  String get aboutWidget => 'About Widget';
+  String get aboutWidget => '정보위젯';
 
   @override
-  String get widgetDescription => 'Widget automatically syncs to display today\'s and this month\'s income and expense data, refreshing every 30 minutes. Data updates immediately when app is opened.';
+  String get widgetDescription => '위젯자동동기화표시오늘和이번 달的수입지출데이터，매30분자동새로고침한 번。열기앱후즉시업데이트데이터。';
 
   @override
-  String get appName => 'BeeCount';
+  String get appName => '蜜蜂记账';
 
   @override
-  String get monthSuffix => '';
+  String get monthSuffix => '월';
 
   @override
-  String get todayExpense => 'Today\'s Expense';
+  String get todayExpense => '오늘지출';
 
   @override
-  String get todayIncome => 'Today\'s Income';
+  String get todayIncome => '오늘수입';
 
   @override
-  String get monthExpense => 'Month\'s Expense';
+  String get monthExpense => '이번 달지출';
 
   @override
-  String get monthIncome => 'Month\'s Income';
+  String get monthIncome => '이번 달수입';
 }
