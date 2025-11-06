@@ -373,22 +373,6 @@ jobs:
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
             --dart-define=BUILD_TIME="$BUILD_TIME"
 
-      - name: Debug - Show signing configuration before modification
-        if: env.IOS_SIGNING_ENABLED == 'true'
-        run: |
-          echo "📋 ===== BEFORE modification ====="
-          echo "Signing settings in Xcode project:"
-          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" \
-            ios/Runner.xcodeproj/project.pbxproj | head -60 || true
-
-          echo ""
-          echo "Installed provisioning profiles:"
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ 2>/dev/null || echo "Directory not found"
-
-          echo ""
-          echo "Available signing identities:"
-          security find-identity -v -p codesigning
-
       - name: Configure Xcode project for signing
         if: env.IOS_SIGNING_ENABLED == 'true'
         env:
@@ -427,72 +411,45 @@ jobs:
 
           echo "✅ Configured manual signing for Xcode project"
 
-      - name: Debug - Show signing configuration after modification
-        if: env.IOS_SIGNING_ENABLED == 'true'
-        run: |
-          echo "📋 ===== AFTER modification ====="
-          echo "Signing settings in Xcode project:"
-          grep -E "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" \
-            ios/Runner.xcodeproj/project.pbxproj | head -60
-
-          echo ""
-          echo "ExportOptions.plist content:"
-          cat ios/ExportOptions.plist
-
       - name: Build iOS archive with xcodebuild
         if: env.IOS_SIGNING_ENABLED == 'true'
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          echo "📦 Building iOS archive with xcodebuild..."
+          echo "📦 Building iOS archive..."
 
-          # Archive the app
+          # Archive the app (只显示错误和警告,减少日志噪音)
           # 完全依赖project.pbxproj中的配置
-          # 不使用-allowProvisioningUpdates,因为会让Xcode自动选择profile(可能选错)
-          # 不传递任何命令行签名参数,完全使用project.pbxproj中为每个target配置的设置
-          xcodebuild archive \
+          if xcodebuild archive \
             -workspace ios/Runner.xcworkspace \
             -scheme Runner \
             -configuration Release \
             -archivePath build/ios/Runner.xcarchive \
-            | tee xcodebuild-archive.log
+            -quiet \
+            2>&1 | grep -E "error:|warning:|note:|failed|succeeded" | tee xcodebuild-archive.log; then
 
-          # 检查archive是否成功
-          if [ -d "build/ios/Runner.xcarchive" ]; then
-            echo ""
             echo "✅ Archive created successfully"
-
-            # 显示archive内容和签名信息
-            echo ""
-            echo "Archive structure:"
-            ls -lh build/ios/Runner.xcarchive/Products/Applications/ || true
-
-            echo ""
-            echo "Archive info:"
-            cat build/ios/Runner.xcarchive/Info.plist | grep -A 2 "Name\|SchemeName" || true
+            ls -lh build/ios/Runner.xcarchive/Products/Applications/ 2>/dev/null || true
           else
-            echo ""
-            echo "❌ Archive failed!"
-            echo "Last 100 lines of archive log:"
-            tail -100 xcodebuild-archive.log
+            echo "❌ Archive failed! Full log:"
+            cat xcodebuild-archive.log
             exit 1
           fi
 
       - name: Export IPA from archive
         if: env.IOS_SIGNING_ENABLED == 'true'
         run: |
-          echo "📤 Exporting IPA from archive..."
+          echo "📤 Exporting IPA..."
 
-          # Export IPA
+          # Export IPA (只显示关键信息)
           if xcodebuild -exportArchive \
             -archivePath build/ios/Runner.xcarchive \
             -exportPath build/ios/ipa \
             -exportOptionsPlist ios/ExportOptions.plist \
-            2>&1 | tee xcodebuild-export.log; then
+            -quiet \
+            2>&1 | grep -E "error:|warning:|Exported|succeeded" | tee xcodebuild-export.log; then
 
-            echo ""
             echo "✅ IPA exported successfully"
-            echo "Export directory contents:"
             ls -lh build/ios/ipa/
 
             # 验证IPA文件

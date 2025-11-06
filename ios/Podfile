@@ -40,5 +40,19 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+    # 禁用第三方库的编译警告,减少构建日志噪音
+    target.build_configurations.each do |config|
+      # 针对sqlite3等C库禁用常见警告
+      if target.name == 'sqlite3'
+        config.build_settings['GCC_WARN_64_TO_32_BIT_CONVERSION'] = 'NO'
+        config.build_settings['CLANG_WARN_COMMA'] = 'NO'
+        config.build_settings['CLANG_WARN_UNREACHABLE_CODE'] = 'NO'
+        config.build_settings['GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS'] = 'NO'
+      end
+
+      # 为所有第三方库禁用某些不重要的警告
+      config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
+    end
   end
 end
