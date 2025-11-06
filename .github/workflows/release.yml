@@ -386,31 +386,26 @@ jobs:
           # 2. 修改签名身份为发布证书
           sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";/g' "$PROJECT_FILE"
 
-          # 3. 使用perl在每个buildSettings块后添加配置（更可靠）
-          perl -i -pe "s/(buildSettings = \\{)/\$1\n\t\t\t\tDEVELOPMENT_TEAM = ${APPLE_TEAM_ID};\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \\\"BeeCount_AppStore\\\";/g" "$PROJECT_FILE"
+          # 3. 为主应用和Widget Extension配置Team ID和Provisioning Profile
+          # 先清除所有现有的DEVELOPMENT_TEAM和PROVISIONING_PROFILE_SPECIFIER配置
+          sed -i '' '/DEVELOPMENT_TEAM = /d' "$PROJECT_FILE"
+          sed -i '' '/PROVISIONING_PROFILE_SPECIFIER = /d' "$PROJECT_FILE"
 
-          # 4. 为Widget Extension配置签名（需要更精确的匹配）
-          # 先备份project.pbxproj
-          cp "$PROJECT_FILE" "$PROJECT_FILE.backup"
+          # 4. 使用perl为所有buildSettings添加Team ID（包括主应用和Widget Extension）
+          perl -i -pe "s/(buildSettings = \\{)/\$1\n\t\t\t\tDEVELOPMENT_TEAM = ${APPLE_TEAM_ID};/g" "$PROJECT_FILE"
 
-          # 使用awk为Widget Extension的buildSettings添加签名配置
-          awk '
-            /\/\* BeeCountWidgetExtension \*\/ = {/,/};/ {
-              if (/buildSettings = {/) {
-                print
-                if (!added) {
-                  print "\t\t\t\tDEVELOPMENT_TEAM = '${APPLE_TEAM_ID}';"
-                  print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount_Widget_AppStore\";"
-                  added = 1
-                }
-                next
-              }
-              if (/};/) {
-                added = 0
-              }
+          # 5. 为Widget Extension和主应用添加Provisioning Profile配置
+          # 使用perl进行精确匹配和插入
+          perl -i -pe '
+            # Widget Extension: 在其Bundle ID行前插入Profile配置
+            if (/^\s+PRODUCT_BUNDLE_IDENTIFIER = com\.tntlikely\.beecount\.BeeCountWidgetExtension;/) {
+              print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount_Widget_AppStore\";\n";
             }
-            { print }
-          ' "$PROJECT_FILE.backup" > "$PROJECT_FILE"
+            # 主应用: 在其Bundle ID行前插入Profile配置（使用负向前瞻确保不匹配Widget）
+            elsif (/^\s+PRODUCT_BUNDLE_IDENTIFIER = com\.tntlikely\.beecount;$/) {
+              print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount_AppStore\";\n";
+            }
+          ' "$PROJECT_FILE"
 
           echo "✅ Configured manual signing for Xcode project (main app + widget extension)"
           echo "Signing configuration:"
