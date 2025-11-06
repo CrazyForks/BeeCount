@@ -12,8 +12,8 @@ import '../styles/colors.dart';
 import '../l10n/app_localizations.dart';
 
 // GitHub配置教程链接
-const _kSupabaseGuideUrl = 'https://github.com/TNT-Likely/BeeCount#%E8%87%AA%E5%BB%BAsupabase%E6%9C%8D%E5%8A%A1';
-const _kWebdavGuideUrl = 'https://github.com/TNT-Likely/BeeCount#webdav%E9%85%8D%E7%BD%AE';
+const _kSupabaseGuideUrl = 'https://github.com/TNT-Likely/BeeCount/wiki/Supabase-%E4%BA%91%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE';
+const _kWebdavGuideUrl = 'https://github.com/TNT-Likely/BeeCount/wiki/WebDAV-%E4%BA%91%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE';
 
 class CloudServicePage extends ConsumerStatefulWidget {
   const CloudServicePage({super.key});
@@ -344,7 +344,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                 ),
 
                 // 底部按钮行
-                if (isConfigured && (onConfigure != null || showGuide))
+                if ((isConfigured && onConfigure != null) || (showGuide && guideUrl != null))
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
                     child: Row(
@@ -361,13 +361,13 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                           ),
-                        if (onConfigure != null) ...[
+                        if (isConfigured && onConfigure != null) ...[
                           if (showGuide) const SizedBox(width: 8),
-                          OutlinedButton.icon(
+                          TextButton.icon(
                             onPressed: onConfigure,
                             icon: const Icon(Icons.settings, size: 16),
                             label: Text(AppLocalizations.of(context).commonConfigure, style: const TextStyle(fontSize: 12)),
-                            style: OutlinedButton.styleFrom(
+                            style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               minimumSize: Size.zero,
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,

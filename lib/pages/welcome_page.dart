@@ -474,7 +474,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   /// 完成欢迎页面
   Future<void> _finishWelcome(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('welcome_shown4', true);
+    await prefs.setBool('welcome_shown', true);
 
     if (context.mounted) {
       // 首次启动的情况，标记欢迎页面已完成，触发重新构建

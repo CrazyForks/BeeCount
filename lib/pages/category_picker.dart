@@ -11,7 +11,6 @@ import '../widgets/ui/ui.dart';
 import '../styles/colors.dart';
 import 'package:flutter/services.dart';
 import '../utils/sync_helpers.dart';
-import '../services/category_service.dart';
 import '../utils/category_utils.dart';
 
 
@@ -189,6 +188,9 @@ class _CategoryPickerPageState extends ConsumerState<CategoryPickerPage>
           // 刷新：账本笔数与全局统计
           ref.invalidate(countsForLedgerProvider(ledgerId));
           ref.read(statsRefreshProvider.notifier).state++;
+          // 更新小组件数据
+          if (!mounted) return;
+          await updateAppWidget(ref, context);
           if (!mounted) return;
           if (ctx.mounted && Navigator.of(ctx).canPop()) Navigator.of(ctx).pop();
           if (context.mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();

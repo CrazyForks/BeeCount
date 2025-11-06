@@ -10,6 +10,7 @@ import 'pages/personalize_page.dart' show headerStyleProvider;
 import 'providers.dart';
 import 'utils/ui_scale_extensions.dart';
 import 'l10n/app_localizations.dart';
+import 'widget/widget_manager.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -18,7 +19,7 @@ class BeeApp extends ConsumerStatefulWidget {
   ConsumerState<BeeApp> createState() => _BeeAppState();
 }
 
-class _BeeAppState extends ConsumerState<BeeApp> {
+class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   final _pages = const [
     HomePage(),
     AnalyticsPage(),
@@ -29,6 +30,41 @@ class _BeeAppState extends ConsumerState<BeeApp> {
   // 双击检测：记录最后一次点击的时间和索引
   DateTime? _lastTapTime;
   int? _lastTappedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // 当app从后台恢复到前台时，更新小组件数据
+    if (state == AppLifecycleState.resumed) {
+      _updateWidget();
+    }
+  }
+
+  Future<void> _updateWidget() async {
+    try {
+      final repository = ref.read(repositoryProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+      final primaryColor = ref.read(primaryColorProvider);
+
+      final widgetManager = WidgetManager();
+      await widgetManager.updateWidget(repository, ledgerId, primaryColor);
+      print('✅ App恢复前台，小组件数据已更新');
+    } catch (e) {
+      print('❌ 更新小组件失败: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

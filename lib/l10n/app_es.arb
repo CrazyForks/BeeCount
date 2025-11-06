@@ -197,6 +197,10 @@
   "mineTerms": "Términos",
   "mineFeedback": "Comentarios",
   "mineFeedbackSubtitle": "Reportar problema o sugerencia",
+  "mineHelp": "Ayuda",
+  "mineHelpSubtitle": "Ver documentación y preguntas frecuentes",
+  "mineSupportAuthor": "Apoyar al autor",
+  "mineSupportAuthorSubtitle": "Dale estrella al proyecto en GitHub",
   "mineVersion": "Versión",
   "mineUpdate": "Actualizar",
   "mineCheckUpdate": "Verificar actualizaciones",
@@ -1300,5 +1304,11 @@
   "cloudConfigureWebdavTitle": "Configurar WebDAV",
   "cloudSupabaseAnonKeyHintLong": "Pegue la clave anon completa",
   "cloudWebdavRemotePathLabel": "Ruta remota",
-  "cloudWebdavRemotePathHelperText": "Ruta del directorio remoto para almacenamiento de datos"
+  "cloudWebdavRemotePathHelperText": "Ruta del directorio remoto para almacenamiento de datos",
+
+  "widgetTodayExpense": "Gasto de Hoy",
+  "widgetTodayIncome": "Ingreso de Hoy",
+  "widgetMonthExpense": "Gasto del Mes",
+  "widgetMonthIncome": "Ingreso del Mes",
+  "widgetMonthSuffix": ""
 }

@@ -1,12 +1,10 @@
 {
   "@@locale": "zh_TW",
   "appTitle": "蜜蜂記帳",
-
   "tabHome": "明細",
   "tabAnalytics": "圖表",
   "tabLedgers": "帳本",
   "tabMine": "我的",
-
   "commonCancel": "取消",
   "commonConfirm": "確認",
   "commonSave": "儲存",
@@ -47,7 +45,6 @@
   "commonWeekdayFriday": "星期五",
   "commonWeekdaySaturday": "星期六",
   "commonWeekdaySunday": "星期日",
-
   "homeTitle": "蜜蜂記帳",
   "homeIncome": "收入",
   "homeExpense": "支出",
@@ -68,7 +65,11 @@
   "homeYear": "{year}年",
   "homeMonth": "{month}月",
   "homeNoRecordsSubtext": "點擊底部加號，馬上記一筆",
-
+  "widgetTodayExpense": "今日支出",
+  "widgetTodayIncome": "今日收入",
+  "widgetMonthExpense": "本月支出",
+  "widgetMonthIncome": "本月收入",
+  "widgetMonthSuffix": "月",
   "searchTitle": "搜尋",
   "searchHint": "搜尋備註、分類或金額...",
   "searchAmountRange": "金額範圍篩選",
@@ -79,7 +80,6 @@
   "searchNoResults": "未找到符合的結果",
   "searchResultsEmpty": "未找到符合的結果",
   "searchResultsEmptyHint": "請嘗試其他關鍵詞或調整篩選條件",
-
   "analyticsTitle": "分析",
   "analyticsMonth": "月",
   "analyticsYear": "年",
@@ -95,7 +95,6 @@
   "analyticsSwipeToSwitch": "橫滑切換",
   "analyticsAllYears": "全部年份",
   "analyticsToday": "今天",
-
   "splashAppName": "蜜蜂記帳",
   "splashSlogan": "一筆一蜜",
   "splashSecurityTitle": "開源資料安全",
@@ -103,7 +102,6 @@
   "splashSecurityFeature2": "• 開源程式碼透明，安全值得信賴",
   "splashSecurityFeature3": "• 可選雲端同步，多裝置資料一致",
   "splashInitializing": "正在初始化資料...",
-
   "ledgersTitle": "帳本管理",
   "ledgersNew": "新建帳本",
   "ledgersClear": "清空當前帳本",
@@ -127,7 +125,6 @@
   "ledgersActions": "操作",
   "ledgersRecords": "筆數：{count}",
   "ledgersBalance": "餘額：{balance}",
-
   "categoryTitle": "分類管理",
   "categoryNew": "新建分類",
   "categoryExpense": "支出分類",
@@ -137,7 +134,6 @@
   "categoryCustomTag": "自訂",
   "categoryReorderTip": "長按分類可拖曳調整順序",
   "categoryLoadFailed": "載入失敗: {error}",
-
   "iconPickerTitle": "選擇圖示",
   "iconCategoryFood": "餐飲",
   "iconCategoryTransport": "交通",
@@ -150,7 +146,6 @@
   "iconCategoryFinance": "理財",
   "iconCategoryReward": "獎勵",
   "iconCategoryOther": "其他",
-
   "importTitle": "匯入帳單",
   "importSelectFile": "請選擇檔案進行匯入（支援 CSV/TSV/XLSX 格式）",
   "importBillType": "帳單類型",
@@ -163,7 +158,6 @@
   "importReading": "讀取檔案中…",
   "importPreparing": "準備中…",
   "importFileOpenError": "無法開啟檔案選擇器：{error}",
-
   "mineTitle": "我的",
   "mineSettings": "設定",
   "mineTheme": "主題設定",
@@ -178,12 +172,10 @@
   "mineUpdate": "檢查更新",
   "mineLanguageSettings": "語言設定",
   "mineLanguageSettingsSubtitle": "切換應用程式語言",
-
   "languageTitle": "語言設定",
   "languageChinese": "中文",
   "languageEnglish": "English",
   "languageSystemDefault": "跟隨系統",
-
   "deleteConfirmTitle": "刪除確認",
   "deleteConfirmMessage": "確定要刪除這條記帳嗎？",
   "logCopied": "日誌已複製",
@@ -193,7 +185,6 @@
   "restoreProgress": "恢復中 ({current}/{total})",
   "restorePreparing": "準備中…",
   "restoreLedgerProgress": "帳本：{ledger}  記錄：{done}/{total}",
-
   "mineSlogan": "蜜蜂記帳，一筆一蜜",
   "mineDaysCount": "記帳天數",
   "mineTotalRecords": "總筆數",
@@ -273,11 +264,14 @@
   "mineUpdateDownload": "下載更新",
   "mineFeedback": "問題回饋",
   "mineFeedbackSubtitle": "提交問題或建議",
+  "mineHelp": "使用說明",
+  "mineHelpSubtitle": "查看使用文件和常見問題",
+  "mineSupportAuthor": "支持作者",
+  "mineSupportAuthorSubtitle": "在GitHub上為專案點讚",
   "mineRefreshStats": "重新整理統計資訊（臨時）",
   "mineRefreshStatsSubtitle": "觸發全域統計 Provider 重新計算",
   "mineRefreshSync": "重新整理同步狀態（臨時）",
   "mineRefreshSyncSubtitle": "觸發同步狀態 Provider 重新取得",
-
   "categoryEditTitle": "編輯分類",
   "categoryNewTitle": "新建分類",
   "categoryDetailTooltip": "分類詳情",
@@ -298,7 +292,6 @@
   "categoryIncomeType": "收入分類",
   "categoryDefaultTitle": "預設分類",
   "categoryDefaultMessage": "預設分類不可修改名稱和圖示，但可以檢視詳情和遷移資料",
-
   "categoryNameDining": "餐飲",
   "categoryNameTransport": "交通",
   "categoryNameShopping": "購物",
@@ -344,7 +337,6 @@
   "categoryNameSocialSecurity": "社保",
   "categoryNameExpress": "快遞",
   "categoryNameWork": "工作",
-
   "categoryNameSalary": "工資",
   "categoryNameInvestment": "理財",
   "categoryNameBonus": "獎金",
@@ -376,7 +368,6 @@
   "categoryDeleteConfirmMessage": "確定要刪除分類\"{name}\"嗎？此操作無法撤銷。",
   "categoryDeleteError": "刪除失敗",
   "categoryDeleted": "分類\"{name}\"已刪除",
-
   "personalizeTitle": "個性裝扮",
   "personalizeCustomColor": "選擇自訂顏色",
   "personalizeCustomTitle": "自訂",
@@ -384,7 +375,6 @@
   "personalizeSaturation": "飽和度 ({value}%)",
   "personalizeBrightness": "亮度 ({value}%)",
   "personalizeSelectColor": "選擇此顏色",
-
   "fontSettingsTitle": "顯示縮放",
   "fontSettingsCurrentScale": "當前縮放：x{scale}",
   "fontSettingsPreview": "即時預覽",
@@ -423,7 +413,6 @@
   "fontSettingsPreciseAdjust": "精確調整",
   "fontSettingsResetTo1x": "重設到1.0x",
   "fontSettingsAdaptBase": "適配基準",
-
   "reminderTitle": "記帳提醒",
   "reminderSubtitle": "設定每日記帳提醒時間",
   "reminderDailyTitle": "每日記帳提醒",
@@ -480,7 +469,6 @@
   "reminderDescription": "提示：開啟記帳提醒後，系統會在每天指定時間發送通知提醒您記錄收支。",
   "reminderIOSInstructions": "🍎 iOS通知設定：\n• 設定 > 通知 > 蜜蜂記帳\n• 開啟\"允許通知\"\n• 設定通知樣式：橫幅或提醒\n• 開啟聲音和震動\n\n⚠️ 重要提示：\n• iOS本地通知依賴應用程序進程\n• 請勿在任務管理器中划掉應用\n• 應用在後台或前台時通知正常\n• 完全關閉應用會導致通知失效\n\n💡 使用建議：\n• 日常使用後直接按Home鍵退出\n• iOS會自動管理後台應用\n• 保持應用在後台即可收到提醒",
   "reminderAndroidInstructions": "如果通知無法正常工作，請檢查：\n• 已允許應用程式發送通知\n• 關閉應用程式的電池最佳化/省電模式\n• 允許應用程式在背景執行和自啟動\n• Android 12+需要精確鬧鐘權限\n\n📱 小米手機特殊設定：\n• 設定 > 應用程式管理 > 蜜蜂記帳 > 通知管理\n• 點擊\"記帳提醒\"頻道\n• 設定重要性為\"緊急\"或\"高\"\n• 開啟\"橫幅通知\"、\"聲音\"、\"震動\"\n• 安全中心 > 應用程式管理 > 權限 > 自啟動\n\n🔒 鎖定背景方法：\n• 最近任務中找到蜜蜂記帳\n• 向下拉動應用程式卡片顯示鎖定圖示\n• 點擊鎖定圖示防止被清理",
-
   "categoryDetailLoadFailed": "載入失敗",
   "categoryDetailSummaryTitle": "分類匯總",
   "categoryDetailTotalCount": "總筆數",
@@ -494,7 +482,6 @@
   "categoryDetailNoTransactions": "暫無交易記錄",
   "categoryDetailNoTransactionsSubtext": "該分類下還沒有任何交易記錄",
   "categoryDetailDeleteFailed": "刪除失敗",
-
   "categoryMigrationConfirmTitle": "確認遷移",
   "categoryMigrationConfirmMessage": "確定要將「{fromName}」的 {count} 筆交易遷移到「{toName}」嗎？\n\n此操作不可撤銷！",
   "categoryMigrationConfirmOk": "確認遷移",
@@ -503,12 +490,10 @@
   "categoryMigrationFailedTitle": "遷移失敗",
   "categoryMigrationFailedMessage": "遷移過程中發生錯誤：{error}",
   "categoryMigrationTransactionLabel": "{count}筆",
-
   "categoryPickerExpenseTab": "支出",
   "categoryPickerIncomeTab": "收入",
   "categoryPickerCancel": "取消",
   "categoryPickerEmpty": "暫無分類",
-
   "importColumnNumber": "第{number}列",
   "importConfirmMapping": "確認對應",
   "importCategoryMapping": "分類對應",
@@ -519,27 +504,26 @@
   "importFieldCategory": "分類",
   "importFieldNote": "備註",
   "importPreview": "資料預覽",
-  "importPreviewLimit": "僅顯示前{limit}條記錄，總計{total}條",
-  "importCategoryNotSelected": "未選擇分類",
-  "importCategoryMappingDescription": "請為每個分類名稱選擇對應的本地分類：",
-  "importKeepOriginalName": "保持原名稱",
-  "importProgress": "正在匯入，成功：{ok}，失敗：{fail}",
+  "importPreviewLimit": "僅預覽前 {shown} 行，共 {total} 行",
+  "importCategoryNotSelected": "未選擇\"分類\"列，請點擊\"上一步\"返回並設定\"分類\"的列，再繼續。",
+  "importCategoryMappingDescription": "請將左側\"源分類名\"對應到系統內已有分類（或保持原名自動建立/合併）",
+  "importKeepOriginalName": "保持原名（自動建立/合併）",
+  "importProgress": "匯入中… 成功 {ok}，失敗 {fail}",
   "importCancelImport": "取消匯入",
   "importCompleteTitle": "匯入完成",
   "importCompletedCount": "成功匯入 {count} 條記錄",
   "importFailed": "匯入失敗",
   "importFailedMessage": "匯入失敗：{error}",
-  "importSelectCategoryFirst": "請先為分類選擇對應的對應",
+  "importSelectCategoryFirst": "請先選擇\"分類\"列再繼續",
   "importNextStep": "下一步",
   "importPreviousStep": "上一步",
   "importStartImport": "開始匯入",
   "importAutoDetect": "自動檢測",
-  "importInProgress": "匯入進行中",
-  "importProgressDetail": "已匯入 {done} / {total} 條記錄，成功 {ok} 條，失敗 {fail} 條",
+  "importInProgress": "正在匯入…",
+  "importProgressDetail": "已完成：{done}/{total}，成功 {ok}，失敗 {fail}",
   "importBackgroundImport": "背景匯入",
-  "importCancelled": "匯入已取消",
-  "importCompleted": "匯入已完成{cancelled}，成功 {ok} 條，失敗 {fail} 條",
-
+  "importCancelled": "（已取消）",
+  "importCompleted": "匯入完成{cancelled}：成功 {ok} 條，失敗 {fail} 條",
   "cloudBackupFound": "發現雲端備份",
   "cloudBackupRestoreMessage": "檢測到雲端與本地帳本不一致，是否恢復到本地？\n(將進入恢復進度頁)",
   "cloudBackupRestoreFailed": "恢復失敗",
@@ -559,7 +543,6 @@
   "mineDebugRefreshStatsSubtitle": "觸發全域統計 Provider 重新計算",
   "mineDebugRefreshSync": "重新整理同步狀態（臨時）",
   "mineDebugRefreshSyncSubtitle": "觸發同步狀態 Provider 重新取得",
-
   "cloudCurrentService": "當前雲服務",
   "cloudConnected": "已連接",
   "cloudOfflineMode": "離線模式",
@@ -598,7 +581,7 @@
   "cloudValidationKeyTooShort": "Key 長度過短，可能無效",
   "cloudValidationServiceRoleKey": "禁止使用 service_role Key",
   "cloudValidationHttpRequired": "URL 需以 http:// 或 https:// 開頭",
-  "cloudSelectServiceType": "選擇服務類型",
+  "cloudSelectServiceType": "選擇雲端服務類型",
   "cloudWebdavUrlLabel": "WebDAV 伺服器地址",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "使用者名稱",
@@ -626,7 +609,6 @@
       }
     }
   },
-
   "authLogin": "登入",
   "authSignup": "註冊",
   "authRegister": "註冊",
@@ -643,18 +625,15 @@
   "authBackToMinePage": "返回我的頁面",
   "authVerificationEmailResent": "驗證電子郵件已重新發送。",
   "authResendAction": "重發驗證",
-
   "authErrorInvalidCredentials": "電子郵件或密碼不正確。",
   "authErrorEmailNotConfirmed": "電子郵件未驗證，請先到電子郵件完成驗證再登入。",
   "authErrorRateLimit": "操作過於頻繁，請稍後再試。",
   "authErrorNetworkIssue": "網路異常，請檢查網路後重試。",
   "authErrorLoginFailed": "登入失敗，請稍後再試。",
-
   "authErrorEmailInvalid": "電子郵件地址無效，請檢查是否拼寫有誤。",
   "authErrorEmailExists": "該電子郵件已註冊，請直接登入或重設密碼。",
   "authErrorWeakPassword": "密碼過於簡單，請包含字母和數字，長度至少 6 位。",
   "authErrorSignupFailed": "註冊失敗，請稍後再試。",
-
   "authErrorUserNotFound": "電子郵件未註冊，無法{action}。",
   "authErrorEmailNotVerified": "電子郵件未驗證，無法{action}。",
   "authErrorActionFailed": "{action}失敗，請稍後再試。",
@@ -679,12 +658,7 @@
       }
     }
   },
-
   "importSelectCsvFile": "請選擇檔案進行匯入（支援 CSV/TSV/XLSX 格式）",
-  "importBillType": "帳單類型",
-  "importBillTypeGeneric": "通用CSV",
-  "importBillTypeAlipay": "支付寶",
-  "importBillTypeWechat": "微信",
   "@importFileOpenError": {
     "placeholders": {
       "error": {
@@ -692,7 +666,6 @@
       }
     }
   },
-
   "exportTitle": "匯出",
   "exportDescription": "點擊下方按鈕選擇儲存位置，開始匯出當前帳本為 CSV 檔案。",
   "exportButtonIOS": "匯出並分享 (iOS)",
@@ -733,7 +706,6 @@
       }
     }
   },
-
   "personalizeThemeHoney": "蜜蜂黃",
   "personalizeThemeOrange": "火焰橙",
   "personalizeThemeGreen": "琉璃綠",
@@ -761,7 +733,6 @@
   "personalizeThemeSunset": "日落橙",
   "personalizeThemePeacock": "孔雀藍",
   "personalizeThemeLime": "檸檬綠",
-
   "analyticsMonthlyAvg": "月均",
   "analyticsDailyAvg": "日均",
   "analyticsOverallAvg": "平均值",
@@ -774,7 +745,6 @@
   "analyticsIncome": "收入",
   "analyticsTotal": "總{type}： ",
   "analyticsAverage": "{avgLabel}： ",
-
   "updateCheckTitle": "檢查更新",
   "updateNewVersionFound": "發現新版本",
   "updateNewVersionTitle": "發現新版本 {version}",
@@ -836,7 +806,6 @@
   "updateInstallFailedMessage": "無法啟動APK安裝程式，請檢查檔案權限。",
   "updateErrorTitle": "錯誤",
   "updateReadCacheFailedMessage": "讀取快取更新包失敗：{error}",
-
   "updateCheckingPermissions": "檢查權限...",
   "updateCheckingCache": "檢查本地快取...",
   "updatePreparingDownload": "準備下載...",
@@ -868,27 +837,12 @@
   "updateSearchLocalApkError": "查找本地更新包時發生錯誤：{error}",
   "updateCachedPackageFoundMessage": "檢測到之前下載的更新包：\n\n檔案名：{fileName}\n大小：{fileSize}MB\n\n是否立即安裝？",
   "updateReadCachedPackageError": "讀取快取更新包失敗：{error}",
-
   "reminderQuickTestSent": "已設定15秒後的快速測試，請保持應用程式在背景",
   "reminderFlutterTestSent": "已發送Flutter測試通知，點擊檢視是否能開啟應用程式",
   "reminderAlarmTestSent": "已設定AlarmManager測試通知（1秒後），點擊檢視是否能開啟應用程式",
-
   "iconCategoryDining": "餐飲",
-
   "importParsing": "解析中…",
-  "importPreviewLimit": "僅預覽前 {shown} 行，共 {total} 行",
-  "importCategoryNotSelected": "未選擇\"分類\"列，請點擊\"上一步\"返回並設定\"分類\"的列，再繼續。",
-  "importCategoryMappingDescription": "請將左側\"源分類名\"對應到系統內已有分類（或保持原名自動建立/合併）",
-  "importKeepOriginalName": "保持原名（自動建立/合併）",
-  "importProgress": "匯入中… 成功 {ok}，失敗 {fail}",
-  "importSelectCategoryFirst": "請先選擇\"分類\"列再繼續",
-  "importInProgress": "正在匯入…",
-  "importProgressDetail": "已完成：{done}/{total}，成功 {ok}，失敗 {fail}",
-  "importCancelled": "（已取消）",
-  "importCompleted": "匯入完成{cancelled}：成功 {ok} 條，失敗 {fail} 條",
-
   "fontSettingsRealTimePreview": "即時預覽",
-  "fontSettingsCurrentLevel": "當前檔位：{level}  (倍率 x{scale})",
   "fontSettingsPageTitleExample": "月度統計與分析",
   "fontSettingsBlockTitleExample": "最近記帳",
   "fontSettingsBodyExampleText": "今天早餐：豆漿 + 包子 6.50 元",
@@ -899,7 +853,6 @@
   "fontSettingsScreenAdaptInfo": "螢幕適配資訊",
   "fontSettingsAutoScaleDemo": "此方框和間距會根據裝置自動縮放",
   "fontSettingsAdaptBaseline": "適配基準",
-
   "restoreProgressTitle": "恢復中 ({current}/{total})",
   "restorePreparingTitle": "準備中…",
   "restoreProgressSubtitle": "帳本：{ledger}  記錄：{done}/{total}",
@@ -914,7 +867,6 @@
   "updateNotificationGuideStep2": "找到\\\"蜜蜂記帳\\\"應用程式",
   "updateNotificationGuideStep3": "開啟通知權限",
   "updateNotificationGuideInfo": "即使不開啟通知，下載也會在背景正常進行",
-
   "updateNotificationChannelDescription": "APK更新檔案下載進度",
   "updateNotificationAppName": "蜜蜂記帳更新下載",
   "updateCachedVersionTitle": "發現已下載版本",
@@ -922,7 +874,6 @@
   "updateConfirmDownload": "立即下載並安裝",
   "updateDownloadCompleteTitle": "下載完成",
   "updateInstallConfirmMessage": "新版本已下載完成，是否立即安裝？",
-
   "currencyCNY": "人民幣",
   "currencyUSD": "美元",
   "currencyEUR": "歐元",
@@ -934,16 +885,23 @@
   "currencyCAD": "加元",
   "currencyKRW": "韓元",
   "currencySGD": "新加坡元",
+  "currencyMYR": "馬來西亞令吉",
   "currencyTHB": "泰銖",
   "currencyIDR": "印尼盾",
+  "currencyPHP": "菲律賓披索",
+  "currencyVND": "越南盾",
   "currencyINR": "印度盧比",
-  "currencyRUB": "盧布",
+  "currencyRUB": "俄羅斯盧布",
   "currencyBYN": "白俄羅斯盧布",
-
-
+  "currencyNZD": "紐西蘭元",
+  "currencyCHF": "瑞士法郎",
+  "currencySEK": "瑞典克朗",
+  "currencyNOK": "挪威克朗",
+  "currencyDKK": "丹麥克朗",
+  "currencyBRL": "巴西雷亞爾",
+  "currencyMXN": "墨西哥披索",
   "webdavConfiguredTitle": "WebDAV 雲服務已設定",
   "webdavConfiguredMessage": "WebDAV 雲服務使用設定時提供的憑證，無需額外登入。",
-
   "recurringTransactionTitle": "週期帳單",
   "recurringTransactionAdd": "新增週期帳單",
   "recurringTransactionEdit": "編輯週期帳單",
@@ -966,39 +924,43 @@
   "recurringTransactionEveryNDays": "每 {n} 天",
   "@recurringTransactionEveryNDays": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNWeeks": "每 {n} 週",
   "@recurringTransactionEveryNWeeks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNMonths": "每 {n} 個月",
   "@recurringTransactionEveryNMonths": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNYears": "每 {n} 年",
   "@recurringTransactionEveryNYears": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
-
   "cloudDefaultServiceDisplayName": "預設雲服務",
   "cloudNotConfiguredDisplay": "未設定",
-
   "syncNotConfiguredMessage": "未設定雲端",
   "syncNotLoggedInMessage": "未登入",
   "syncCloudBackupCorruptedMessage": "雲端備份內容無法解析，可能是早期版本編碼問題造成的損壞。請點擊\\\"上傳當前帳本到雲端\\\"覆蓋修復。",
   "syncNoCloudBackupMessage": "雲端暫無備份",
   "syncAccessDeniedMessage": "403 拒絕存取（檢查 storage RLS 策略與路徑）",
-
   "cloudTestConnection": "測試連線",
-  "cloudSelectServiceType": "選擇雲端服務類型",
   "cloudLocalStorageTitle": "本機儲存",
   "cloudLocalStorageSubtitle": "資料僅儲存在本機裝置",
   "cloudCustomSupabaseTitle": "自訂 Supabase",
@@ -1060,11 +1022,103 @@
   "cloudConfigureSupabaseTitle": "設定 Supabase",
   "cloudConfigureWebdavTitle": "設定 WebDAV",
   "cloudSupabaseAnonKeyHintLong": "貼上完整的 anon key",
-  "cloudWebdavUsernameLabel": "使用者名稱",
-  "cloudWebdavPasswordLabel": "密碼",
   "cloudWebdavRemotePathLabel": "遠端路徑",
   "cloudWebdavRemotePathHelperText": "資料儲存的遠端目錄路徑",
-
   "updateCorruptedFileTitle": "安裝包已損壞",
-  "updateCorruptedFileMessage": "檢測到之前下載的安裝包不完整或已損壞，是否刪除並重新下載？"
+  "updateCorruptedFileMessage": "檢測到之前下載的安裝包不完整或已損壞，是否刪除並重新下載？",
+  "cloudSupabaseAnonKeyHintShort": "粘贴完整的 anon key",
+  "cloudWebdavRemotePathHelp": "數據存储的远程目錄路径",
+  "cloudHelperTextRemotePath": "數據存储的远程目錄路径",
+  "accountsTitle": "帳戶管理",
+  "accountsEmptyMessage": "還没有帳戶，点击右上角添加",
+  "accountAddTooltip": "添加帳戶",
+  "accountAddButton": "添加帳戶",
+  "accountBalance": "余額",
+  "accountEditTitle": "編輯帳戶",
+  "accountNewTitle": "新建帳戶",
+  "accountNameLabel": "帳戶名称",
+  "accountNameHint": "例如：工商银行、支付宝等",
+  "accountNameRequired": "請輸入帳戶名称",
+  "accountTypeLabel": "帳戶類型",
+  "accountTypeCash": "現金",
+  "accountTypeBankCard": "银行卡",
+  "accountTypeCreditCard": "信用卡",
+  "accountTypeAlipay": "支付宝",
+  "accountTypeWechat": "微信",
+  "accountTypeOther": "其他",
+  "accountInitialBalance": "初始資金",
+  "accountInitialBalanceHint": "請輸入初始資金（可選）",
+  "accountDeleteWarningTitle": "確認刪除",
+  "accountDeleteWarningMessage": "該帳戶有 {count} 筆關聯交易，刪除后交易记錄中的帳戶信息將被清空。確認刪除吗？",
+  "accountDeleteConfirm": "確認刪除該帳戶吗？",
+  "accountSelectTitle": "選擇帳戶",
+  "accountNone": "不選擇帳戶",
+  "accountsEnableFeature": "啟用帳戶功能",
+  "accountsFeatureDescription": "啟用后可以管理多个支付帳戶，追踪每个帳戶的余額變化",
+  "privacyDashboardTitle": "隐私報告",
+  "privacyScoreExcellent": "隐私保护：优秀",
+  "privacyScoreDescription": "您的數據完全安全，没有任何隐私泄露風險",
+  "privacyDataStorageTitle": "數據存储位置",
+  "privacyDataStorageLocal": "所有财務數據存储在您的設備本地",
+  "privacyDataStorageNoUpload": "不会上傳到任何第三方服務器",
+  "privacyDataStorageOptionalSync": "可選的云同步完全由您自己控制",
+  "privacyNetworkMonitorTitle": "網絡請求监控",
+  "privacyNetworkMonitorSince": "自應用安装以来：",
+  "privacyNetworkDataRequests": "發送的數據請求",
+  "privacyNetworkTrackers": "第三方追踪器",
+  "privacyNetworkAdRequests": "广告網絡請求",
+  "privacyNetworkAnalytics": "分析服務調用",
+  "privacyPermissionsTitle": "权限使用說明",
+  "privacyPermissionsOnlyRequest": "本應用仅請求以下权限：",
+  "privacyPermissionsStorage": "存储权限（保存帳單數據）",
+  "privacyPermissionsNotifications": "通知权限（记帳提醒）",
+  "privacyPermissionsNoLocation": "不需要位置权限",
+  "privacyPermissionsNoContacts": "不需要通讯錄权限",
+  "privacyPermissionsNoCamera": "不需要相机权限",
+  "privacyOpenSourceTitle": "開源驗證",
+  "privacyOpenSourcePublic": "所有代碼公開可审計",
+  "privacyOpenSourceCommunity": "社區监督，無隐藏代碼",
+  "privacyOpenSourceMIT": "个人用戶免費",
+  "privacyOpenSourceViewCode": "在GitHub查看源代碼",
+  "privacyOpenSourceUrlError": "無法打開鏈接",
+  "welcomeTitle": "欢迎使用 BeeCount",
+  "welcomeDescription": "一个真正尊重您隐私的记帳應用",
+  "welcomePrivacyTitle": "您的數據，您做主",
+  "welcomePrivacyFeature1": "數據存储在您的設備本地",
+  "welcomePrivacyFeature2": "不会上傳到任何第三方服務器",
+  "welcomePrivacyFeature3": "無广告，無數據收集",
+  "welcomePrivacyFeature4": "無需注冊帳號",
+  "welcomeOpenSourceTitle": "開源 & 透明",
+  "welcomeOpenSourceFeature1": "100%開源代碼",
+  "welcomeOpenSourceFeature2": "社區监督，無后门",
+  "welcomeOpenSourceFeature3": "个人用戶免費使用",
+  "welcomeViewGitHub": "在GitHub查看源代碼",
+  "welcomeCloudSyncTitle": "可選的云同步",
+  "welcomeCloudSyncDescription": "不想使用商業云服務？BeeCount支持多种同步方式",
+  "welcomeCloudSyncFeature1": "完全离線使用",
+  "welcomeCloudSyncFeature2": "自建WebDAV同步",
+  "welcomeCloudSyncFeature3": "自建Supabase服務",
+  "lab": "實驗室",
+  "labDesc": "體驗實驗性功能",
+  "widgetManagement": "桌面小組件",
+  "widgetManagementDesc": "在主屏幕快速查看收支情况",
+  "widgetPreview": "小組件預覽",
+  "widgetPreviewDesc": "小組件会自動顯示當前帳本的實際數據，主題色跟隨應用設置",
+  "howToAddWidget": "如何添加小組件",
+  "iosWidgetStep1": "长按主屏幕空白區域，進入編輯模式",
+  "iosWidgetStep2": "点击左上角的\"+\"按钮",
+  "iosWidgetStep3": "搜索并選擇\"蜜蜂记帳\"",
+  "iosWidgetStep4": "選擇中型小組件，添加到主屏幕",
+  "androidWidgetStep1": "长按主屏幕空白區域",
+  "androidWidgetStep2": "選擇\"小組件\"或\"Widgets\"",
+  "androidWidgetStep3": "找到并长按\"蜜蜂记帳\"小組件",
+  "androidWidgetStep4": "拖動到主屏幕合适位置",
+  "aboutWidget": "關于小組件",
+  "widgetDescription": "小組件会自動同步顯示今日和本月的收支數據，每30分钟自動刷新一次。打開應用后会立即更新數據。",
+  "appName": "蜜蜂记帳",
+  "monthSuffix": "月",
+  "todayExpense": "今日支出",
+  "todayIncome": "今日收入",
+  "monthExpense": "本月支出",
+  "monthIncome": "本月收入"
 }

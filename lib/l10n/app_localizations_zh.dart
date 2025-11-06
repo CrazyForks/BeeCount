@@ -206,6 +206,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeNoRecordsSubtext => '点击底部加号，马上记一笔';
 
   @override
+  String get widgetTodayExpense => '今日支出';
+
+  @override
+  String get widgetTodayIncome => '今日收入';
+
+  @override
+  String get widgetMonthExpense => '本月支出';
+
+  @override
+  String get widgetMonthIncome => '本月收入';
+
+  @override
+  String get widgetMonthSuffix => '月';
+
+  @override
   String get searchTitle => '搜索';
 
   @override
@@ -397,7 +412,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryDefault => '默认分类';
 
   @override
-  String get categoryCustomTag => 'Custom';
+  String get categoryCustomTag => '自定义';
 
   @override
   String get categoryReorderTip => '长按分类可拖拽调整顺序';
@@ -937,16 +952,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineFeedbackSubtitle => '提交问题或建议';
 
   @override
-  String get mineRefreshStats => 'Refresh Stats (Debug)';
+  String get mineHelp => '使用帮助';
 
   @override
-  String get mineRefreshStatsSubtitle => 'Trigger global stats provider recalculation';
+  String get mineHelpSubtitle => '查看使用文档和常见问题';
 
   @override
-  String get mineRefreshSync => 'Refresh Sync Status (Debug)';
+  String get mineSupportAuthor => '支持作者';
 
   @override
-  String get mineRefreshSyncSubtitle => 'Trigger sync status provider refresh';
+  String get mineSupportAuthorSubtitle => '在GitHub上为项目点赞';
+
+  @override
+  String get mineRefreshStats => '刷新统计(调试)';
+
+  @override
+  String get mineRefreshStatsSubtitle => '触发全局统计数据重新计算';
+
+  @override
+  String get mineRefreshSync => '刷新同步状态(调试)';
+
+  @override
+  String get mineRefreshSyncSubtitle => '触发同步状态刷新';
 
   @override
   String get categoryEditTitle => '编辑分类';
@@ -2558,19 +2585,49 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currencySGD => '新加坡元';
 
   @override
+  String get currencyMYR => '马来西亚林吉特';
+
+  @override
   String get currencyTHB => '泰铢';
 
   @override
   String get currencyIDR => '印尼卢比';
 
   @override
+  String get currencyPHP => '菲律宾比索';
+
+  @override
+  String get currencyVND => '越南盾';
+
+  @override
   String get currencyINR => '印度卢比';
 
   @override
-  String get currencyRUB => '卢布';
+  String get currencyRUB => '俄罗斯卢布';
 
   @override
   String get currencyBYN => '白俄罗斯卢布';
+
+  @override
+  String get currencyNZD => '新西兰元';
+
+  @override
+  String get currencyCHF => '瑞士法郎';
+
+  @override
+  String get currencySEK => '瑞典克朗';
+
+  @override
+  String get currencyNOK => '挪威克朗';
+
+  @override
+  String get currencyDKK => '丹麦克朗';
+
+  @override
+  String get currencyBRL => '巴西雷亚尔';
+
+  @override
+  String get currencyMXN => '墨西哥比索';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV 云服务已配置';
@@ -2948,7 +3005,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get privacyOpenSourceCommunity => '社区监督，无隐藏代码';
 
   @override
-  String get privacyOpenSourceMIT => 'MIT开源协议';
+  String get privacyOpenSourceMIT => '个人用户免费';
 
   @override
   String get privacyOpenSourceViewCode => '在GitHub查看源代码';
@@ -2987,7 +3044,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeOpenSourceFeature2 => '社区监督，无后门';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'MIT开源协议';
+  String get welcomeOpenSourceFeature3 => '个人用户免费使用';
 
   @override
   String get welcomeViewGitHub => '在GitHub查看源代码';
@@ -3006,6 +3063,75 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeCloudSyncFeature3 => '自建Supabase服务';
+
+  @override
+  String get lab => '实验室';
+
+  @override
+  String get labDesc => '体验实验性功能';
+
+  @override
+  String get widgetManagement => '桌面小组件';
+
+  @override
+  String get widgetManagementDesc => '在主屏幕快速查看收支情况';
+
+  @override
+  String get widgetPreview => '小组件预览';
+
+  @override
+  String get widgetPreviewDesc => '小组件会自动显示当前账本的实际数据，主题色跟随应用设置';
+
+  @override
+  String get howToAddWidget => '如何添加小组件';
+
+  @override
+  String get iosWidgetStep1 => '长按主屏幕空白区域，进入编辑模式';
+
+  @override
+  String get iosWidgetStep2 => '点击左上角的\"+\"按钮';
+
+  @override
+  String get iosWidgetStep3 => '搜索并选择\"蜜蜂记账\"';
+
+  @override
+  String get iosWidgetStep4 => '选择中型小组件，添加到主屏幕';
+
+  @override
+  String get androidWidgetStep1 => '长按主屏幕空白区域';
+
+  @override
+  String get androidWidgetStep2 => '选择\"小组件\"或\"Widgets\"';
+
+  @override
+  String get androidWidgetStep3 => '找到并长按\"蜜蜂记账\"小组件';
+
+  @override
+  String get androidWidgetStep4 => '拖动到主屏幕合适位置';
+
+  @override
+  String get aboutWidget => '关于小组件';
+
+  @override
+  String get widgetDescription => '小组件会自动同步显示今日和本月的收支数据，每30分钟自动刷新一次。打开应用后会立即更新数据。';
+
+  @override
+  String get appName => '蜜蜂记账';
+
+  @override
+  String get monthSuffix => '月';
+
+  @override
+  String get todayExpense => '今日支出';
+
+  @override
+  String get todayIncome => '今日收入';
+
+  @override
+  String get monthExpense => '本月支出';
+
+  @override
+  String get monthIncome => '本月收入';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -3210,6 +3336,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get homeNoRecordsSubtext => '點擊底部加號，馬上記一筆';
+
+  @override
+  String get widgetTodayExpense => '今日支出';
+
+  @override
+  String get widgetTodayIncome => '今日收入';
+
+  @override
+  String get widgetMonthExpense => '本月支出';
+
+  @override
+  String get widgetMonthIncome => '本月收入';
+
+  @override
+  String get widgetMonthSuffix => '月';
 
   @override
   String get searchTitle => '搜尋';
@@ -3941,6 +4082,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineFeedbackSubtitle => '提交問題或建議';
+
+  @override
+  String get mineHelp => '使用說明';
+
+  @override
+  String get mineHelpSubtitle => '查看使用文件和常見問題';
+
+  @override
+  String get mineSupportAuthor => '支持作者';
+
+  @override
+  String get mineSupportAuthorSubtitle => '在GitHub上為專案點讚';
 
   @override
   String get mineRefreshStats => '重新整理統計資訊（臨時）';
@@ -5564,19 +5717,49 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get currencySGD => '新加坡元';
 
   @override
+  String get currencyMYR => '馬來西亞令吉';
+
+  @override
   String get currencyTHB => '泰銖';
 
   @override
   String get currencyIDR => '印尼盾';
 
   @override
+  String get currencyPHP => '菲律賓披索';
+
+  @override
+  String get currencyVND => '越南盾';
+
+  @override
   String get currencyINR => '印度盧比';
 
   @override
-  String get currencyRUB => '盧布';
+  String get currencyRUB => '俄羅斯盧布';
 
   @override
   String get currencyBYN => '白俄羅斯盧布';
+
+  @override
+  String get currencyNZD => '紐西蘭元';
+
+  @override
+  String get currencyCHF => '瑞士法郎';
+
+  @override
+  String get currencySEK => '瑞典克朗';
+
+  @override
+  String get currencyNOK => '挪威克朗';
+
+  @override
+  String get currencyDKK => '丹麥克朗';
+
+  @override
+  String get currencyBRL => '巴西雷亞爾';
+
+  @override
+  String get currencyMXN => '墨西哥披索';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV 雲服務已設定';
@@ -5799,8 +5982,286 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudWebdavRemotePathHelperText => '資料儲存的遠端目錄路徑';
 
   @override
+  String get accountsTitle => '帳戶管理';
+
+  @override
+  String get accountsEmptyMessage => '還没有帳戶，点击右上角添加';
+
+  @override
+  String get accountAddTooltip => '添加帳戶';
+
+  @override
+  String get accountAddButton => '添加帳戶';
+
+  @override
+  String get accountBalance => '余額';
+
+  @override
+  String get accountEditTitle => '編輯帳戶';
+
+  @override
+  String get accountNewTitle => '新建帳戶';
+
+  @override
+  String get accountNameLabel => '帳戶名称';
+
+  @override
+  String get accountNameHint => '例如：工商银行、支付宝等';
+
+  @override
+  String get accountNameRequired => '請輸入帳戶名称';
+
+  @override
+  String get accountTypeLabel => '帳戶類型';
+
+  @override
+  String get accountTypeCash => '現金';
+
+  @override
+  String get accountTypeBankCard => '银行卡';
+
+  @override
+  String get accountTypeCreditCard => '信用卡';
+
+  @override
+  String get accountTypeAlipay => '支付宝';
+
+  @override
+  String get accountTypeWechat => '微信';
+
+  @override
+  String get accountTypeOther => '其他';
+
+  @override
+  String get accountInitialBalance => '初始資金';
+
+  @override
+  String get accountInitialBalanceHint => '請輸入初始資金（可選）';
+
+  @override
+  String get accountDeleteWarningTitle => '確認刪除';
+
+  @override
+  String accountDeleteWarningMessage(int count) {
+    return '該帳戶有 $count 筆關聯交易，刪除后交易记錄中的帳戶信息將被清空。確認刪除吗？';
+  }
+
+  @override
+  String get accountDeleteConfirm => '確認刪除該帳戶吗？';
+
+  @override
+  String get accountSelectTitle => '選擇帳戶';
+
+  @override
+  String get accountNone => '不選擇帳戶';
+
+  @override
+  String get accountsEnableFeature => '啟用帳戶功能';
+
+  @override
+  String get accountsFeatureDescription => '啟用后可以管理多个支付帳戶，追踪每个帳戶的余額變化';
+
+  @override
   String get updateCorruptedFileTitle => '安裝包已損壞';
 
   @override
   String get updateCorruptedFileMessage => '檢測到之前下載的安裝包不完整或已損壞，是否刪除並重新下載？';
+
+  @override
+  String get privacyDashboardTitle => '隐私報告';
+
+  @override
+  String get privacyScoreExcellent => '隐私保护：优秀';
+
+  @override
+  String get privacyScoreDescription => '您的數據完全安全，没有任何隐私泄露風險';
+
+  @override
+  String get privacyDataStorageTitle => '數據存储位置';
+
+  @override
+  String get privacyDataStorageLocal => '所有财務數據存储在您的設備本地';
+
+  @override
+  String get privacyDataStorageNoUpload => '不会上傳到任何第三方服務器';
+
+  @override
+  String get privacyDataStorageOptionalSync => '可選的云同步完全由您自己控制';
+
+  @override
+  String get privacyNetworkMonitorTitle => '網絡請求监控';
+
+  @override
+  String get privacyNetworkMonitorSince => '自應用安装以来：';
+
+  @override
+  String get privacyNetworkDataRequests => '發送的數據請求';
+
+  @override
+  String get privacyNetworkTrackers => '第三方追踪器';
+
+  @override
+  String get privacyNetworkAdRequests => '广告網絡請求';
+
+  @override
+  String get privacyNetworkAnalytics => '分析服務調用';
+
+  @override
+  String get privacyPermissionsTitle => '权限使用說明';
+
+  @override
+  String get privacyPermissionsOnlyRequest => '本應用仅請求以下权限：';
+
+  @override
+  String get privacyPermissionsStorage => '存储权限（保存帳單數據）';
+
+  @override
+  String get privacyPermissionsNotifications => '通知权限（记帳提醒）';
+
+  @override
+  String get privacyPermissionsNoLocation => '不需要位置权限';
+
+  @override
+  String get privacyPermissionsNoContacts => '不需要通讯錄权限';
+
+  @override
+  String get privacyPermissionsNoCamera => '不需要相机权限';
+
+  @override
+  String get privacyOpenSourceTitle => '開源驗證';
+
+  @override
+  String get privacyOpenSourcePublic => '所有代碼公開可审計';
+
+  @override
+  String get privacyOpenSourceCommunity => '社區监督，無隐藏代碼';
+
+  @override
+  String get privacyOpenSourceMIT => '个人用戶免費';
+
+  @override
+  String get privacyOpenSourceViewCode => '在GitHub查看源代碼';
+
+  @override
+  String get privacyOpenSourceUrlError => '無法打開鏈接';
+
+  @override
+  String get welcomeTitle => '欢迎使用 BeeCount';
+
+  @override
+  String get welcomeDescription => '一个真正尊重您隐私的记帳應用';
+
+  @override
+  String get welcomePrivacyTitle => '您的數據，您做主';
+
+  @override
+  String get welcomePrivacyFeature1 => '數據存储在您的設備本地';
+
+  @override
+  String get welcomePrivacyFeature2 => '不会上傳到任何第三方服務器';
+
+  @override
+  String get welcomePrivacyFeature3 => '無广告，無數據收集';
+
+  @override
+  String get welcomePrivacyFeature4 => '無需注冊帳號';
+
+  @override
+  String get welcomeOpenSourceTitle => '開源 & 透明';
+
+  @override
+  String get welcomeOpenSourceFeature1 => '100%開源代碼';
+
+  @override
+  String get welcomeOpenSourceFeature2 => '社區监督，無后门';
+
+  @override
+  String get welcomeOpenSourceFeature3 => '个人用戶免費使用';
+
+  @override
+  String get welcomeViewGitHub => '在GitHub查看源代碼';
+
+  @override
+  String get welcomeCloudSyncTitle => '可選的云同步';
+
+  @override
+  String get welcomeCloudSyncDescription => '不想使用商業云服務？BeeCount支持多种同步方式';
+
+  @override
+  String get welcomeCloudSyncFeature1 => '完全离線使用';
+
+  @override
+  String get welcomeCloudSyncFeature2 => '自建WebDAV同步';
+
+  @override
+  String get welcomeCloudSyncFeature3 => '自建Supabase服務';
+
+  @override
+  String get lab => '實驗室';
+
+  @override
+  String get labDesc => '體驗實驗性功能';
+
+  @override
+  String get widgetManagement => '桌面小組件';
+
+  @override
+  String get widgetManagementDesc => '在主屏幕快速查看收支情况';
+
+  @override
+  String get widgetPreview => '小組件預覽';
+
+  @override
+  String get widgetPreviewDesc => '小組件会自動顯示當前帳本的實際數據，主題色跟隨應用設置';
+
+  @override
+  String get howToAddWidget => '如何添加小組件';
+
+  @override
+  String get iosWidgetStep1 => '长按主屏幕空白區域，進入編輯模式';
+
+  @override
+  String get iosWidgetStep2 => '点击左上角的\"+\"按钮';
+
+  @override
+  String get iosWidgetStep3 => '搜索并選擇\"蜜蜂记帳\"';
+
+  @override
+  String get iosWidgetStep4 => '選擇中型小組件，添加到主屏幕';
+
+  @override
+  String get androidWidgetStep1 => '长按主屏幕空白區域';
+
+  @override
+  String get androidWidgetStep2 => '選擇\"小組件\"或\"Widgets\"';
+
+  @override
+  String get androidWidgetStep3 => '找到并长按\"蜜蜂记帳\"小組件';
+
+  @override
+  String get androidWidgetStep4 => '拖動到主屏幕合适位置';
+
+  @override
+  String get aboutWidget => '關于小組件';
+
+  @override
+  String get widgetDescription => '小組件会自動同步顯示今日和本月的收支數據，每30分钟自動刷新一次。打開應用后会立即更新數據。';
+
+  @override
+  String get appName => '蜜蜂记帳';
+
+  @override
+  String get monthSuffix => '月';
+
+  @override
+  String get todayExpense => '今日支出';
+
+  @override
+  String get todayIncome => '今日收入';
+
+  @override
+  String get monthExpense => '本月支出';
+
+  @override
+  String get monthIncome => '本月收入';
 }

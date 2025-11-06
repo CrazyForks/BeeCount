@@ -17,13 +17,10 @@ String formatBalance(double balance, String currencyCode,
   final sign = balance >= 0 ? currencySymbol : '-$currencySymbol';
 
   if (isChineseLocale) {
-    // 中文环境：使用万作为单位
+    // 中文环境：使用万作为单位，小于10000显示具体数字
     if (absBalance >= 10000) {
       final wan = absBalance / 10000;
       return '$sign${wan.toStringAsFixed(1)}万';
-    } else if (absBalance >= 1000) {
-      final qian = absBalance / 1000;
-      return '$sign${qian.toStringAsFixed(1)}千';
     } else {
       return '$sign${absBalance.toStringAsFixed(2)}';
     }

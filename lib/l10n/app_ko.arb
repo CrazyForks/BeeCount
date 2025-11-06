@@ -4,12 +4,10 @@
   "@appTitle": {
     "description": "The application title"
   },
-
   "tabHome": "홈",
   "tabAnalytics": "차트",
   "tabLedgers": "가계부",
   "tabMine": "마이페이지",
-
   "commonCancel": "취소",
   "commonConfirm": "확인",
   "commonSave": "저장",
@@ -50,7 +48,6 @@
   "commonWeekdayFriday": "금요일",
   "commonWeekdaySaturday": "토요일",
   "commonWeekdaySunday": "일요일",
-
   "homeTitle": "꿀벌 가계부",
   "homeIncome": "수입",
   "homeExpense": "지출",
@@ -85,7 +82,11 @@
     }
   },
   "homeNoRecordsSubtext": "아래 플러스 버튼을 눌러 기록을 추가하세요",
-
+  "widgetTodayExpense": "오늘 지출",
+  "widgetTodayIncome": "오늘 수입",
+  "widgetMonthExpense": "이번 달 지출",
+  "widgetMonthIncome": "이번 달 수입",
+  "widgetMonthSuffix": "월",
   "searchTitle": "검색",
   "searchHint": "메모, 카테고리, 금액을 검색...",
   "searchAmountRange": "금액 범위 필터",
@@ -96,7 +97,6 @@
   "searchNoResults": "일치하는 결과를 찾을 수 없습니다",
   "searchResultsEmpty": "일치하는 결과를 찾을 수 없습니다",
   "searchResultsEmptyHint": "다른 키워드를 시도하거나 필터 조건을 조정하세요",
-
   "analyticsTitle": "분석",
   "analyticsMonth": "월",
   "analyticsYear": "년",
@@ -119,7 +119,6 @@
   "analyticsSwipeToSwitch": "스와이프하여 전환",
   "analyticsAllYears": "모든 년도",
   "analyticsToday": "오늘",
-
   "splashAppName": "꿀벌 가계부",
   "splashSlogan": "한 방울 한 방울을 기록",
   "splashSecurityTitle": "오픈소스 데이터 보안",
@@ -127,7 +126,6 @@
   "splashSecurityFeature2": "• 오픈소스 코드 투명성, 신뢰할 수 있는 보안",
   "splashSecurityFeature3": "• 선택적 클라우드 동기화, 기기 간 데이터 일관성",
   "splashInitializing": "데이터 초기화 중...",
-
   "ledgersTitle": "가계부 관리",
   "ledgersNew": "새 가계부",
   "ledgersClear": "현재 가계부 비우기",
@@ -172,7 +170,6 @@
       }
     }
   },
-
   "categoryTitle": "카테고리 관리",
   "categoryNew": "새 카테고리",
   "categoryExpense": "지출 카테고리",
@@ -189,7 +186,6 @@
       }
     }
   },
-
   "iconPickerTitle": "아이콘 선택",
   "iconCategoryFood": "음식",
   "iconCategoryTransport": "교통",
@@ -203,7 +199,6 @@
   "iconCategoryReward": "보상",
   "iconCategoryOther": "기타",
   "iconCategoryDining": "외식",
-
   "importTitle": "계산서 가져오기",
   "importSelectFile": "가져올 파일을 선택하세요 (CSV/TSV/XLSX 지원)",
   "importBillType": "계산서 유형",
@@ -213,8 +208,8 @@
   "importChooseFile": "파일 선택",
   "importNoFileSelected": "파일이 선택되지 않았습니다",
   "importHint": "팁: 파일을 선택하여 가져오기를 시작하세요 (CSV/TSV/XLSX)",
-  "importReading": "파일 읽는 중...",
-  "importPreparing": "준비 중...",
+  "importReading": "파일 읽는 중…",
+  "importPreparing": "준비 중…",
   "importColumnNumber": "열 {number}",
   "importConfirmMapping": "매핑 확인",
   "importCategoryMapping": "카테고리 매핑",
@@ -253,7 +248,6 @@
       }
     }
   },
-
   "mineTitle": "마이페이지",
   "mineSettings": "설정",
   "mineTheme": "테마 설정",
@@ -268,12 +262,10 @@
   "mineUpdate": "업데이트 확인",
   "mineLanguageSettings": "언어 설정",
   "mineLanguageSettingsSubtitle": "애플리케이션 언어 전환",
-
   "languageTitle": "언어 설정",
   "languageChinese": "中文",
   "languageEnglish": "English",
   "languageSystemDefault": "시스템 따라가기",
-
   "deleteConfirmTitle": "삭제 확인",
   "deleteConfirmMessage": "이 기록을 삭제하시겠습니까?",
   "logCopied": "로그가 복사되었습니다",
@@ -296,7 +288,6 @@
       }
     }
   },
-
   "mineSlogan": "꿀벌 가계부, 한 푼도 놓치지 않기",
   "mineDaysCount": "일",
   "mineTotalRecords": "기록",
@@ -376,11 +367,14 @@
   "mineUpdateDownload": "업데이트 다운로드",
   "mineFeedback": "피드백",
   "mineFeedbackSubtitle": "문제 또는 제안 보고",
+  "mineHelp": "도움말",
+  "mineHelpSubtitle": "문서 및 FAQ 보기",
+  "mineSupportAuthor": "작성자 지원",
+  "mineSupportAuthorSubtitle": "GitHub에서 프로젝트에 스타 주기",
   "mineRefreshStats": "통계 새로고침 (디버그)",
   "mineRefreshStatsSubtitle": "글로벌 통계 프로바이더 재계산 트리거",
   "mineRefreshSync": "동기화 상태 새로고침 (디버그)",
   "mineRefreshSyncSubtitle": "동기화 상태 프로바이더 새로고침 트리거",
-
   "categoryEditTitle": "카테고리 편집",
   "categoryNewTitle": "새 카테고리",
   "categoryDetailTooltip": "카테고리 세부정보",
@@ -408,7 +402,6 @@
   "categoryIncomeType": "수입 카테고리",
   "categoryDefaultTitle": "기본 카테고리",
   "categoryDefaultMessage": "기본 카테고리는 수정할 수 없지만 세부정보를 보고 데이터를 이전할 수 있습니다",
-
   "categoryNameDining": "외식",
   "categoryNameTransport": "교통",
   "categoryNameShopping": "쇼핑",
@@ -454,7 +447,6 @@
   "categoryNameSocialSecurity": "사회보장",
   "categoryNameExpress": "택배",
   "categoryNameWork": "업무",
-
   "categoryNameSalary": "급여",
   "categoryNameInvestment": "투자",
   "categoryNameBonus": "보너스",
@@ -486,7 +478,6 @@
   "categoryDeleteConfirmMessage": "카테고리 \"{name}\"을(를) 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
   "categoryDeleteError": "삭제 실패",
   "categoryDeleted": "카테고리 \"{name}\"이(가) 삭제되었습니다",
-
   "personalizeTitle": "개인화",
   "personalizeCustomColor": "사용자 정의 색상 선택",
   "personalizeCustomTitle": "사용자 정의",
@@ -494,7 +485,6 @@
   "personalizeSaturation": "채도 ({value}%)",
   "personalizeBrightness": "밝기 ({value}%)",
   "personalizeSelectColor": "이 색상 선택",
-
   "fontSettingsTitle": "표시 배율",
   "fontSettingsCurrentScale": "현재 배율: x{scale}",
   "fontSettingsPreview": "실시간 미리보기",
@@ -533,7 +523,6 @@
   "fontSettingsPreciseAdjust": "정밀 조정",
   "fontSettingsResetTo1x": "1.0x로 재설정",
   "fontSettingsAdaptBase": "기준에 적응",
-
   "reminderTitle": "기록 알림",
   "reminderSubtitle": "일일 기록 알림 시간 설정",
   "reminderDailyTitle": "일일 기록 알림",
@@ -590,7 +579,6 @@
   "reminderDescription": "팁: 기록 알림이 활성화되면 시스템이 매일 지정된 시간에 알림을 전송하여 수입과 지출 기록을 알려줍니다.",
   "reminderIOSInstructions": "🍎 iOS 알림 설정:\\n• 설정 > 알림 > 꿀벌 가계부\\n• \"알림 허용\" 활성화\\n• 알림 스타일 설정: 배너 또는 알림\\n• 소리와 진동 활성화\\n\\n⚠️ iOS 시뮬레이터 제한사항:\\n• 시뮬레이터 알림 기능이 제한됩니다\\n• 실제 기기 사용을 권장합니다\\n• 알림 상태는 Xcode 콘솔에서 확인\\n\\n시뮬레이터에서 테스트할 때 관찰하세요:\\n• Xcode 콘솔 로그 출력\\n• Flutter 디버그 콘솔 정보\\n• 앱 내 알림 전송 확인 팝업",
   "reminderAndroidInstructions": "알림이 제대로 작동하지 않는 경우 확인하세요:\\n• 앱이 알림 전송을 허용하는지\\n• 앱의 배터리 최적화/절전 모드 비활성화\\n• 앱의 백그라운드 실행 및 자동 시작 허용\\n• Android 12+에서는 정확한 알람 권한이 필요\\n\\n📱 Xiaomi 폰 특별 설정:\\n• 설정 > 앱 관리 > 꿀벌 가계부 > 알림 관리\\n• \"기록 알림\" 채널 탭\\n• 중요도를 \"긴급\" 또는 \"높음\"으로 설정\\n• \"배너 알림\", \"소리\", \"진동\" 활성화\\n• 보안 센터 > 앱 관리 > 권한 > 자동 시작\\n\\n🔒 백그라운드 잠금 방법:\\n• 최근 작업에서 꿀벌 가계부 찾기\\n• 앱 카드를 아래로 스와이프하여 잠금 아이콘 표시\\n• 잠금 아이콘을 탭하여 정리 방지",
-
   "categoryDetailLoadFailed": "로딩 실패",
   "categoryDetailSummaryTitle": "카테고리 요약",
   "categoryDetailTotalCount": "총 개수",
@@ -604,7 +592,6 @@
   "categoryDetailNoTransactions": "거래 없음",
   "categoryDetailNoTransactionsSubtext": "이 카테고리에는 아직 거래가 없습니다",
   "categoryDetailDeleteFailed": "삭제 실패",
-
   "categoryMigrationConfirmTitle": "이전 확인",
   "categoryMigrationConfirmMessage": "\"{fromName}\"에서 \"{toName}\"으로 {count}개의 거래를 이전하시겠습니까?\\n\\n이 작업은 취소할 수 없습니다!",
   "categoryMigrationConfirmOk": "이전 확인",
@@ -620,12 +607,10 @@
       }
     }
   },
-
   "categoryPickerExpenseTab": "지출",
   "categoryPickerIncomeTab": "수입",
   "categoryPickerCancel": "취소",
   "categoryPickerEmpty": "카테고리 없음",
-
   "cloudBackupFound": "클라우드 백업을 찾았습니다",
   "cloudBackupRestoreMessage": "클라우드와 로컬 가계부가 일치하지 않습니다. 클라우드에서 복원하시겠습니까?\\n(복원 진행 페이지로 이동합니다)",
   "cloudBackupRestoreFailed": "복원 실패",
@@ -645,7 +630,6 @@
   "mineDebugRefreshStatsSubtitle": "글로벌 통계 프로바이더 재계산 트리거",
   "mineDebugRefreshSync": "동기화 상태 새로고침 (디버그)",
   "mineDebugRefreshSyncSubtitle": "동기화 상태 프로바이더 새로고침 트리거",
-
   "cloudCurrentService": "현재 클라우드 서비스",
   "cloudConnected": "연결됨",
   "cloudOfflineMode": "오프라인 모드",
@@ -684,7 +668,7 @@
   "cloudValidationKeyTooShort": "Key 길이가 너무 짧습니다. 유효하지 않을 수 있습니다",
   "cloudValidationServiceRoleKey": "service_role Key는 허용되지 않습니다",
   "cloudValidationHttpRequired": "URL은 http:// 또는 https://로 시작해야 합니다",
-  "cloudSelectServiceType": "서비스 유형 선택",
+  "cloudSelectServiceType": "클라우드 서비스 유형 선택",
   "cloudWebdavUrlLabel": "WebDAV 서버 URL",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "사용자 이름",
@@ -712,7 +696,6 @@
       }
     }
   },
-
   "authLogin": "로그인",
   "authSignup": "가입",
   "authRegister": "등록",
@@ -729,18 +712,15 @@
   "authBackToMinePage": "마이페이지로 돌아가기",
   "authVerificationEmailResent": "인증 이메일을 재전송했습니다.",
   "authResendAction": "인증 재전송",
-
   "authErrorInvalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
   "authErrorEmailNotConfirmed": "이메일이 인증되지 않았습니다. 로그인 전에 이메일에서 인증을 완료하세요.",
   "authErrorRateLimit": "시도 횟수가 너무 많습니다. 나중에 다시 시도하세요.",
   "authErrorNetworkIssue": "네트워크 오류입니다. 연결을 확인하고 다시 시도하세요.",
   "authErrorLoginFailed": "로그인에 실패했습니다. 나중에 다시 시도하세요.",
-
   "authErrorEmailInvalid": "이메일 주소가 유효하지 않습니다. 철자 오류가 없는지 확인하세요.",
   "authErrorEmailExists": "이 이메일은 이미 등록되어 있습니다. 직접 로그인하거나 비밀번호를 재설정하세요.",
   "authErrorWeakPassword": "비밀번호가 너무 단순합니다. 문자와 숫자를 포함하여 6자 이상으로 설정하세요.",
   "authErrorSignupFailed": "등록에 실패했습니다. 나중에 다시 시도하세요.",
-
   "authErrorUserNotFound": "이메일이 등록되지 않았습니다. {action}할 수 없습니다.",
   "authErrorEmailNotVerified": "이메일이 인증되지 않았습니다. {action}할 수 없습니다.",
   "authErrorActionFailed": "{action}에 실패했습니다. 나중에 다시 시도하세요.",
@@ -765,27 +745,7 @@
       }
     }
   },
-
-  "importTitle": "계산서 가져오기",
   "importSelectCsvFile": "가져올 파일을 선택하세요 (CSV/TSV/XLSX 지원)",
-  "importBillType": "계산서 유형",
-  "importBillTypeGeneric": "일반 CSV",
-  "importBillTypeAlipay": "알리페이",
-  "importBillTypeWechat": "위챗",
-  "importChooseFile": "파일 선택",
-  "importNoFileSelected": "파일이 선택되지 않았습니다",
-  "importHint": "팁: 파일을 선택하여 가져오기를 시작하세요 (CSV/TSV/XLSX)",
-  "importReading": "파일 읽는 중…",
-  "importPreparing": "준비 중…",
-  "importFileOpenError": "파일 선택기를 열 수 없습니다: {error}",
-  "@importFileOpenError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-
   "exportTitle": "내보내기",
   "exportDescription": "아래 버튼을 클릭하여 저장 위치를 선택하고 현재 가계부를 CSV 파일로 내보내세요.",
   "exportButtonIOS": "내보내기 및 공유 (iOS)",
@@ -826,8 +786,6 @@
       }
     }
   },
-
-  "personalizeTitle": "개인화",
   "personalizeThemeHoney": "꿀벌 노랑",
   "personalizeThemeOrange": "화염 오렌지",
   "personalizeThemeGreen": "에메랄드 그린",
@@ -855,7 +813,6 @@
   "personalizeThemeSunset": "석양 오렌지",
   "personalizeThemePeacock": "공작 파랑",
   "personalizeThemeLime": "라임 그린",
-
   "analyticsMonthlyAvg": "월평균",
   "analyticsDailyAvg": "일평균",
   "analyticsOverallAvg": "전체 평균",
@@ -896,7 +853,6 @@
       }
     }
   },
-
   "updateCheckTitle": "업데이트 확인",
   "updateNewVersionFound": "새 버전을 찾았습니다",
   "updateNewVersionTitle": "새 버전 {version}을(를) 찾았습니다",
@@ -1013,11 +969,9 @@
       }
     }
   },
-
   "updateCheckingPermissions": "권한 확인 중...",
   "updateCheckingCache": "로컬 캐시 확인 중...",
   "updatePreparingDownload": "다운로드 준비 중...",
-  "updateInstallingCachedApk": "캐시된 APK 설치 중",
   "updateUserCancelledDownload": "사용자가 다운로드를 취소했습니다",
   "updateStartingInstaller": "설치 프로그램 시작 중...",
   "updateInstallerStarted": "설치 프로그램을 시작했습니다",
@@ -1114,18 +1068,8 @@
       }
     }
   },
-
-  "reminderTitle": "기록 알림",
-  "reminderSubtitle": "일일 기록 알림 시간 설정",
-  "reminderDailyTitle": "일일 기록 알림",
-  "reminderDailySubtitle": "활성화하면 지정된 시간에 기록을 알리는 알림이 전송됩니다",
-  "reminderTimeTitle": "알림 시간",
-  "reminderTestSent": "테스트 알림을 전송했습니다",
-  "reminderTestNotification": "테스트 알림 전송",
   "reminderQuickTestSent": "15초 후 빠른 테스트를 설정했습니다. 앱을 백그라운드에 유지하세요",
-  "reminderQuickTest": "빠른 테스트 (15초 후)",
   "reminderFlutterTestSent": "Flutter 테스트 알림을 전송했습니다. 탭하여 앱이 열리는지 확인하세요",
-  "reminderFlutterTest": "🔧 Flutter 알림 클릭 테스트 (개발)",
   "reminderAlarmTestSent": "AlarmManager 테스트 알림을 설정했습니다 (1초 후). 탭하여 앱이 열리는지 확인하세요",
   "updateOk": "확인",
   "updateCannotOpenLinkTitle": "링크를 열 수 없습니다",
@@ -1139,7 +1083,6 @@
   "updateNotificationGuideStep2": "\"BeeCount\" 앱 찾기",
   "updateNotificationGuideStep3": "알림 권한 활성화",
   "updateNotificationGuideInfo": "알림이 없어도 다운로드는 백그라운드에서 정상적으로 계속됩니다",
-
   "currencyCNY": "중국 위안",
   "currencyUSD": "미국 달러",
   "currencyEUR": "유로",
@@ -1151,16 +1094,23 @@
   "currencyCAD": "캐나다 달러",
   "currencyKRW": "한국 원",
   "currencySGD": "싱가포르 달러",
+  "currencyMYR": "말레이시아 링깃",
   "currencyTHB": "태국 바트",
   "currencyIDR": "인도네시아 루피아",
+  "currencyPHP": "필리핀 페소",
+  "currencyVND": "베트남 동",
   "currencyINR": "인도 루피",
   "currencyRUB": "러시아 루블",
   "currencyBYN": "벨라루스 루블",
-
-
+  "currencyNZD": "뉴질랜드 달러",
+  "currencyCHF": "스위스 프랑",
+  "currencySEK": "스웨덴 크로나",
+  "currencyNOK": "노르웨이 크로네",
+  "currencyDKK": "덴마크 크로네",
+  "currencyBRL": "브라질 헤알",
+  "currencyMXN": "멕시코 페소",
   "webdavConfiguredTitle": "WebDAV 클라우드 서비스 설정 완료",
   "webdavConfiguredMessage": "WebDAV 클라우드 서비스는 설정 시 제공된 자격 증명을 사용하므로 추가 로그인이 필요하지 않습니다.",
-
   "recurringTransactionTitle": "반복 거래",
   "recurringTransactionAdd": "반복 거래 추가",
   "recurringTransactionEdit": "반복 거래 편집",
@@ -1183,39 +1133,43 @@
   "recurringTransactionEveryNDays": "{n}일마다",
   "@recurringTransactionEveryNDays": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNWeeks": "{n}주마다",
   "@recurringTransactionEveryNWeeks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNMonths": "{n}개월마다",
   "@recurringTransactionEveryNMonths": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNYears": "{n}년마다",
   "@recurringTransactionEveryNYears": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
-
   "cloudDefaultServiceDisplayName": "기본 클라우드 서비스",
   "cloudNotConfiguredDisplay": "설정되지 않음",
-
   "syncNotConfiguredMessage": "클라우드가 설정되지 않았습니다",
   "syncNotLoggedInMessage": "로그인되지 않았습니다",
   "syncCloudBackupCorruptedMessage": "클라우드 백업 내용이 손상되었습니다. 이전 버전의 인코딩 문제로 인한 것일 수 있습니다. '현재 가계부를 클라우드에 업로드'를 클릭하여 덮어쓰고 수정하세요.",
   "syncNoCloudBackupMessage": "클라우드 백업 없음",
   "syncAccessDeniedMessage": "403 액세스 거부 (스토리지 RLS 정책 및 경로 확인)",
-
   "cloudTestConnection": "연결 테스트",
-  "cloudSelectServiceType": "클라우드 서비스 유형 선택",
   "cloudLocalStorageTitle": "로컬 저장소",
   "cloudLocalStorageSubtitle": "데이터는 로컬 기기에만 저장됩니다",
   "cloudCustomSupabaseTitle": "사용자 정의 Supabase",
@@ -1277,11 +1231,124 @@
   "cloudConfigureSupabaseTitle": "Supabase 구성",
   "cloudConfigureWebdavTitle": "WebDAV 구성",
   "cloudSupabaseAnonKeyHintLong": "완전한 anon key를 붙여넣으세요",
-  "cloudWebdavUsernameLabel": "사용자 이름",
-  "cloudWebdavPasswordLabel": "비밀번호",
   "cloudWebdavRemotePathLabel": "원격 경로",
   "cloudWebdavRemotePathHelperText": "데이터 저장을 위한 원격 디렉토리 경로",
-
   "updateCorruptedFileTitle": "설치 패키지가 손상되었습니다",
-  "updateCorruptedFileMessage": "이전에 다운로드한 설치 패키지가 불완전하거나 손상된 것으로 감지되었습니다. 삭제하고 다시 다운로드하시겠습니까？"
+  "updateCorruptedFileMessage": "이전에 다운로드한 설치 패키지가 불완전하거나 손상된 것으로 감지되었습니다. 삭제하고 다시 다운로드하시겠습니까？",
+  "cloudSupabaseAnonKeyHintShort": "붙여넣기완전한的 anon key",
+  "cloudWebdavRemotePathHelp": "데이터저장的원격디렉토리경로",
+  "cloudHelperTextRemotePath": "데이터저장的원격디렉토리경로",
+  "importParsing": "解析中…",
+  "fontSettingsRealTimePreview": "实时미리보기",
+  "fontSettingsPageTitleExample": "월度통계与분석",
+  "fontSettingsBlockTitleExample": "最近记账",
+  "fontSettingsBodyExampleText": "今天早餐：豆浆 + 包子 6.50 元",
+  "fontSettingsLabelExampleText": "숨김金额已开启",
+  "fontSettingsNumberExample": "强调数字",
+  "fontSettingsListItemTitle": "列表项제목",
+  "fontSettingsListItemSubtitle": "辅助설명文本",
+  "fontSettingsScreenAdaptInfo": "屏幕适配정보",
+  "fontSettingsAutoScaleDemo": "此方框和间距根据기기자동缩放",
+  "fontSettingsAdaptBaseline": "适配基准",
+  "restoreProgressTitle": "恢复中 ({current}/{total})",
+  "restorePreparingTitle": "准备中…",
+  "restoreProgressSubtitle": "账本：{ledger}  기록：{done}/{total}",
+  "restoreCloudRestore": "클라우드端恢复",
+  "restoreCopyLogs": "复制日志",
+  "restoreLogsCopied": "日志已复制",
+  "restoreWaitingForStart": "等待恢复任务启动…",
+  "updateNotificationChannelDescription": "APK업데이트文件下载进度",
+  "updateNotificationAppName": "蜜蜂记账업데이트下载",
+  "accountsTitle": "계정관리",
+  "accountsEmptyMessage": "还없음계정，탭右上角추가",
+  "accountAddTooltip": "추가계정",
+  "accountAddButton": "추가계정",
+  "accountBalance": "잔액",
+  "accountEditTitle": "편집계정",
+  "accountNewTitle": "新建계정",
+  "accountNameLabel": "계정名称",
+  "accountNameHint": "例如：工商银行、Alipay等",
+  "accountNameRequired": "입력계정名称",
+  "accountTypeLabel": "계정类型",
+  "accountTypeCash": "현금",
+  "accountTypeBankCard": "은행 카드",
+  "accountTypeCreditCard": "신용 카드",
+  "accountTypeAlipay": "Alipay",
+  "accountTypeWechat": "WeChat",
+  "accountTypeOther": "기타",
+  "accountInitialBalance": "초기자금",
+  "accountInitialBalanceHint": "입력초기자금（선택 사항）",
+  "accountDeleteWarningTitle": "확인삭제",
+  "accountDeleteWarningMessage": "该계정有 {count} 笔관련거래，삭제후거래기록中的계정정보将被지우기。확인삭제吗？",
+  "accountDeleteConfirm": "확인삭제该계정吗？",
+  "accountSelectTitle": "선택계정",
+  "accountNone": "不선택계정",
+  "accountsEnableFeature": "활성화계정기능",
+  "accountsFeatureDescription": "활성화후可以관리多个支付계정，추적매个계정的잔액변화",
+  "privacyDashboardTitle": "개인정보보고서",
+  "privacyScoreExcellent": "개인정보보호：우수",
+  "privacyScoreDescription": "您的데이터완전히안전，없음어떤개인정보유출위험",
+  "privacyDataStorageTitle": "데이터저장위치",
+  "privacyDataStorageLocal": "모든재무데이터저장在您的기기로컬",
+  "privacyDataStorageNoUpload": "不업로드에어떤제3자서버",
+  "privacyDataStorageOptionalSync": "선택 사항的클라우드동기화완전히由您自己제어",
+  "privacyNetworkMonitorTitle": "네트워크求모니터링",
+  "privacyNetworkMonitorSince": "自앱설치以来：",
+  "privacyNetworkDataRequests": "전송的데이터求",
+  "privacyNetworkTrackers": "제3자추적器",
+  "privacyNetworkAdRequests": "광고네트워크求",
+  "privacyNetworkAnalytics": "분석服务호출",
+  "privacyPermissionsTitle": "권한사용설명",
+  "privacyPermissionsOnlyRequest": "本앱만求다음권한：",
+  "privacyPermissionsStorage": "저장권한（저장账单데이터）",
+  "privacyPermissionsNotifications": "알림권한（记账리마인더）",
+  "privacyPermissionsNoLocation": "불필요위치권한",
+  "privacyPermissionsNoContacts": "불필요연락처권한",
+  "privacyPermissionsNoCamera": "불필요카메라권한",
+  "privacyOpenSourceTitle": "오픈소스검증",
+  "privacyOpenSourcePublic": "모든코드공개可감사",
+  "privacyOpenSourceCommunity": "커뮤니티감독，无숨김코드",
+  "privacyOpenSourceMIT": "개인사용자무료",
+  "privacyOpenSourceViewCode": "在GitHub보기源코드",
+  "privacyOpenSourceUrlError": "할 수 없음열기링크",
+  "welcomeTitle": "환영합니다사용 BeeCount",
+  "welcomeDescription": "一个진정으로존중您개인정보的记账앱",
+  "welcomePrivacyTitle": "您的데이터，您제어",
+  "welcomePrivacyFeature1": "데이터저장在您的기기로컬",
+  "welcomePrivacyFeature2": "不업로드에어떤제3자서버",
+  "welcomePrivacyFeature3": "无광고，无데이터收集",
+  "welcomePrivacyFeature4": "无需등록계정",
+  "welcomeOpenSourceTitle": "오픈소스 & 투명",
+  "welcomeOpenSourceFeature1": "100%오픈소스코드",
+  "welcomeOpenSourceFeature2": "커뮤니티감독，无백도어",
+  "welcomeOpenSourceFeature3": "개인사용자무료사용",
+  "welcomeViewGitHub": "在GitHub보기源코드",
+  "welcomeCloudSyncTitle": "선택 사항的클라우드동기화",
+  "welcomeCloudSyncDescription": "不想사용상업클라우드服务？BeeCount지원다양한동기화방법",
+  "welcomeCloudSyncFeature1": "완전히오프라인사용",
+  "welcomeCloudSyncFeature2": "셀프 호스팅WebDAV동기화",
+  "welcomeCloudSyncFeature3": "셀프 호스팅Supabase服务",
+  "lab": "실험실",
+  "labDesc": "체험실험적기능",
+  "widgetManagement": "데스크톱위젯",
+  "widgetManagementDesc": "在홈 화면빠르게보기수입지출상황",
+  "widgetPreview": "위젯미리보기",
+  "widgetPreviewDesc": "위젯자동표시현재账本的실제데이터，테마色따라앱설정",
+  "howToAddWidget": "방법추가위젯",
+  "iosWidgetStep1": "길게 누르기홈 화면빈영역，진입편집모드",
+  "iosWidgetStep2": "탭왼쪽 상단的\"+\"버튼",
+  "iosWidgetStep3": "검색및선택\"蜜蜂记账\"",
+  "iosWidgetStep4": "선택중형위젯，추가에홈 화면",
+  "androidWidgetStep1": "길게 누르기홈 화면빈영역",
+  "androidWidgetStep2": "선택\"위젯\"또는\"Widgets\"",
+  "androidWidgetStep3": "找에및길게 누르기\"蜜蜂记账\"위젯",
+  "androidWidgetStep4": "드래그에홈 화면적절한위치",
+  "aboutWidget": "정보위젯",
+  "widgetDescription": "위젯자동동기화표시오늘和이번 달的수입지출데이터，매30분자동새로고침한 번。열기앱후즉시업데이트데이터。",
+  "appName": "蜜蜂记账",
+  "monthSuffix": "월",
+  "todayExpense": "오늘지출",
+  "todayIncome": "오늘수입",
+  "monthExpense": "이번 달지출",
+  "monthIncome": "이번 달수입"
 }

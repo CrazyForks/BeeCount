@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">蜜蜂记账</string>
+    <string name="widget_description">查看今日和本月的收支情况</string>
 </resources>

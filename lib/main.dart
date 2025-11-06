@@ -18,30 +18,96 @@ import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 import 'cloud/cloud_service_store.dart';
 import 'cloud/supabase_initializer.dart';
+import 'widget/widget_manager.dart';
+import 'package:home_widget/home_widget.dart';
+import 'dart:io';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 初始化时区（必须在通知服务之前，修复iOS通知问题）
-  NotificationFactory.initializeTimeZone();
+  try {
+    NotificationFactory.initializeTimeZone();
+  } catch (e) {
+    print('⚠️  时区初始化失败（可能在不支持的平台上运行）: $e');
+  }
+
+  // 配置iOS App Group（widget和主app共享数据必需）
+  try {
+    if (Platform.isIOS) {
+      await HomeWidget.setAppGroupId('group.com.tntlikely.beecount');
+    }
+  } catch (e) {
+    print('⚠️  HomeWidget 插件初始化失败（可能在不支持的平台上运行）: $e');
+  }
 
   // 全局初始化Supabase（如果配置了自定义Supabase服务）
   await _initializeSupabase();
 
   // 初始化通知服务
-  final notificationUtil = NotificationFactory.getInstance();
-  await notificationUtil.initialize();
+  try {
+    final notificationUtil = NotificationFactory.getInstance();
+    await notificationUtil.initialize();
+  } catch (e) {
+    print('⚠️  通知服务初始化失败（可能在不支持的平台上运行）: $e');
+  }
 
   // 恢复用户的记账提醒设置（关键修复：应用重启后自动恢复提醒）
   await _restoreUserReminder();
 
   // 启动提醒监控服务（监听应用生命周期，自动恢复丢失的提醒）
-  ReminderMonitorService().startMonitoring();
+  try {
+    ReminderMonitorService().startMonitoring();
+  } catch (e) {
+    print('⚠️  提醒监控服务启动失败（可能在不支持的平台上运行）: $e');
+  }
 
   // 生成待处理的重复交易
   await _generatePendingRecurringTransactions();
 
-  runApp(const ProviderScope(child: MainApp()));
+  // 注册小组件交互回调
+  try {
+    await WidgetManager.registerCallback();
+  } catch (e) {
+    print('⚠️  小组件回调注册失败（可能在不支持的平台上运行）: $e');
+  }
+
+  runApp(ProviderScope(
+    observers: const [_WidgetUpdateObserver()],
+    child: const MainApp(),
+  ));
+}
+
+/// Provider observer to update widget on app start
+class _WidgetUpdateObserver extends ProviderObserver {
+  const _WidgetUpdateObserver();
+  @override
+  void didUpdateProvider(
+    ProviderBase provider,
+    Object? previousValue,
+    Object? newValue,
+    ProviderContainer container,
+  ) {
+    // Update widget when current ledger is loaded
+    if (provider == currentLedgerIdProvider && newValue != null) {
+      _updateWidgetOnStart(container);
+    }
+  }
+
+  void _updateWidgetOnStart(ProviderContainer container) async {
+    try {
+      final repository = container.read(repositoryProvider);
+      final ledgerId = container.read(currentLedgerIdProvider);
+      final primaryColor = container.read(primaryColorProvider);
+
+      final widgetManager = WidgetManager();
+      await widgetManager.updateWidget(repository, ledgerId, primaryColor);
+
+      print('✅ 小组件数据已更新');
+    } catch (e) {
+      print('❌ 更新小组件失败（可能在不支持的平台上运行）: $e');
+    }
+  }
 }
 
 /// 全局初始化Supabase
@@ -83,16 +149,19 @@ Future<void> _restoreUserReminder() async {
       print('✅ 发现用户已启用记账提醒: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}');
       print('🔔 正在重新设置提醒任务...');
 
-      final notificationUtil = NotificationFactory.getInstance();
-      await notificationUtil.scheduleDailyReminder(
-        id: 1001,
-        title: '记账提醒',
-        body: '别忘了记录今天的收支哦 💰',
-        hour: hour,
-        minute: minute,
-      );
-
-      print('✅ 记账提醒已成功恢复');
+      try {
+        final notificationUtil = NotificationFactory.getInstance();
+        await notificationUtil.scheduleDailyReminder(
+          id: 1001,
+          title: '记账提醒',
+          body: '别忘了记录今天的收支哦 💰',
+          hour: hour,
+          minute: minute,
+        );
+        print('✅ 记账提醒已成功恢复');
+      } catch (e) {
+        print('❌ 记账提醒设置失败（可能在不支持的平台上运行）: $e');
+      }
     } else {
       print('ℹ️  用户未启用记账提醒，跳过恢复');
     }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme.dart';
+import '../widget/widget_manager.dart';
+import '../providers.dart';
 
 // 主题模式Provider
 final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
@@ -26,6 +28,15 @@ final primaryColorInitProvider = FutureProvider<void>((ref) async {
   ref.listen<Color>(primaryColorProvider, (prev, next) async {
     final colorValue = (next.a * 255).toInt() << 24 | (next.r * 255).toInt() << 16 | (next.g * 255).toInt() << 8 | (next.b * 255).toInt();
     await prefs.setInt('primaryColor', colorValue);
+    // Update widget with new theme color
+    try {
+      final repository = ref.read(repositoryProvider);
+      final currentLedgerId = ref.read(currentLedgerIdProvider);
+      final widgetManager = WidgetManager();
+      await widgetManager.updateWidget(repository, currentLedgerId, next);
+    } catch (e) {
+      // Silently fail
+    }
   });
 });
 

@@ -4,12 +4,10 @@
   "@appTitle": {
     "description": "The application title"
   },
-
   "tabHome": "ホーム",
   "tabAnalytics": "チャート",
   "tabLedgers": "家計簿",
   "tabMine": "マイページ",
-
   "commonCancel": "キャンセル",
   "commonConfirm": "確認",
   "commonSave": "保存",
@@ -50,7 +48,6 @@
   "commonWeekdayFriday": "金曜日",
   "commonWeekdaySaturday": "土曜日",
   "commonWeekdaySunday": "日曜日",
-
   "homeTitle": "蜜蜂家計簿",
   "homeIncome": "収入",
   "homeExpense": "支出",
@@ -85,7 +82,11 @@
     }
   },
   "homeNoRecordsSubtext": "下のプラスボタンをタップして記録を追加してください",
-
+  "widgetTodayExpense": "本日の支出",
+  "widgetTodayIncome": "本日の収入",
+  "widgetMonthExpense": "今月の支出",
+  "widgetMonthIncome": "今月の収入",
+  "widgetMonthSuffix": "月",
   "searchTitle": "検索",
   "searchHint": "メモ、カテゴリ、金額を検索...",
   "searchAmountRange": "金額範囲フィルター",
@@ -96,7 +97,6 @@
   "searchNoResults": "一致する結果が見つかりません",
   "searchResultsEmpty": "一致する結果が見つかりません",
   "searchResultsEmptyHint": "他のキーワードを試すか、フィルター条件を調整してください",
-
   "analyticsTitle": "分析",
   "analyticsMonth": "月",
   "analyticsYear": "年",
@@ -119,7 +119,6 @@
   "analyticsSwipeToSwitch": "スワイプして切り替え",
   "analyticsAllYears": "すべての年",
   "analyticsToday": "今日",
-
   "splashAppName": "蜜蜂家計簿",
   "splashSlogan": "一滴一滴を記録",
   "splashSecurityTitle": "オープンソースデータセキュリティ",
@@ -127,7 +126,6 @@
   "splashSecurityFeature2": "• オープンソースコードの透明性、信頼できるセキュリティ",
   "splashSecurityFeature3": "• オプションのクラウド同期、デバイス間でのデータ一貫性",
   "splashInitializing": "データを初期化中...",
-
   "ledgersTitle": "家計簿管理",
   "ledgersNew": "新しい家計簿",
   "ledgersClear": "現在の家計簿をクリア",
@@ -172,7 +170,6 @@
       }
     }
   },
-
   "categoryTitle": "カテゴリ管理",
   "categoryNew": "新しいカテゴリ",
   "categoryExpense": "支出カテゴリ",
@@ -189,7 +186,6 @@
       }
     }
   },
-
   "iconPickerTitle": "アイコンを選択",
   "iconCategoryFood": "食事",
   "iconCategoryTransport": "交通",
@@ -203,7 +199,6 @@
   "iconCategoryReward": "報酬",
   "iconCategoryOther": "その他",
   "iconCategoryDining": "外食",
-
   "importTitle": "請求書のインポート",
   "importSelectFile": "インポートするファイルを選択してください（CSV/TSV/XLSX対応）",
   "importBillType": "請求書タイプ",
@@ -213,8 +208,8 @@
   "importChooseFile": "ファイルを選択",
   "importNoFileSelected": "ファイルが選択されていません",
   "importHint": "ヒント：ファイルを選択してインポートを開始してください（CSV/TSV/XLSX）",
-  "importReading": "ファイルを読み込み中...",
-  "importPreparing": "準備中...",
+  "importReading": "ファイルを読み込み中…",
+  "importPreparing": "準備中…",
   "importColumnNumber": "列 {number}",
   "importConfirmMapping": "マッピングを確認",
   "importCategoryMapping": "カテゴリマッピング",
@@ -253,7 +248,6 @@
       }
     }
   },
-
   "mineTitle": "マイページ",
   "mineSettings": "設定",
   "mineTheme": "テーマ設定",
@@ -268,12 +262,10 @@
   "mineUpdate": "アップデートを確認",
   "mineLanguageSettings": "言語設定",
   "mineLanguageSettingsSubtitle": "アプリケーション言語を切り替え",
-
   "languageTitle": "言語設定",
   "languageChinese": "中文",
   "languageEnglish": "English",
   "languageSystemDefault": "システムに従う",
-
   "deleteConfirmTitle": "削除確認",
   "deleteConfirmMessage": "この記録を削除してもよろしいですか？",
   "logCopied": "ログをコピーしました",
@@ -296,7 +288,6 @@
       }
     }
   },
-
   "mineSlogan": "蜜蜂家計簿、一円も逃さない",
   "mineDaysCount": "日",
   "mineTotalRecords": "記録",
@@ -376,11 +367,14 @@
   "mineUpdateDownload": "アップデートをダウンロード",
   "mineFeedback": "フィードバック",
   "mineFeedbackSubtitle": "問題や提案を報告",
+  "mineHelp": "ヘルプ",
+  "mineHelpSubtitle": "ドキュメントとFAQを表示",
+  "mineSupportAuthor": "作者を応援",
+  "mineSupportAuthorSubtitle": "GitHubでプロジェクトにスターを付ける",
   "mineRefreshStats": "統計を更新（デバッグ）",
   "mineRefreshStatsSubtitle": "グローバル統計プロバイダーの再計算をトリガー",
   "mineRefreshSync": "同期ステータスを更新（デバッグ）",
   "mineRefreshSyncSubtitle": "同期ステータスプロバイダーの更新をトリガー",
-
   "categoryEditTitle": "カテゴリを編集",
   "categoryNewTitle": "新しいカテゴリ",
   "categoryDetailTooltip": "カテゴリ詳細",
@@ -408,7 +402,6 @@
   "categoryIncomeType": "収入カテゴリ",
   "categoryDefaultTitle": "デフォルトカテゴリ",
   "categoryDefaultMessage": "デフォルトカテゴリは変更できませんが、詳細を表示してデータを移行できます",
-
   "categoryNameDining": "外食",
   "categoryNameTransport": "交通",
   "categoryNameShopping": "ショッピング",
@@ -454,7 +447,6 @@
   "categoryNameSocialSecurity": "社会保障",
   "categoryNameExpress": "宅配便",
   "categoryNameWork": "仕事",
-
   "categoryNameSalary": "給料",
   "categoryNameInvestment": "投資",
   "categoryNameBonus": "ボーナス",
@@ -486,15 +478,13 @@
   "categoryDeleteConfirmMessage": "カテゴリ「{name}」を削除してもよろしいですか？この操作は取り消せません。",
   "categoryDeleteError": "削除に失敗しました",
   "categoryDeleted": "カテゴリ「{name}」を削除しました",
-
-  "personalizeTitle": "パーソナライゼーション",
+  "personalizeTitle": "パーソナライズ",
   "personalizeCustomColor": "カスタム色を選択",
   "personalizeCustomTitle": "カスタム",
   "personalizeHue": "色相（{value}°）",
   "personalizeSaturation": "彩度（{value}%）",
   "personalizeBrightness": "明度（{value}%）",
   "personalizeSelectColor": "この色を選択",
-
   "fontSettingsTitle": "表示スケール",
   "fontSettingsCurrentScale": "現在のスケール：x{scale}",
   "fontSettingsPreview": "ライブプレビュー",
@@ -533,7 +523,6 @@
   "fontSettingsPreciseAdjust": "精密調整",
   "fontSettingsResetTo1x": "1.0xにリセット",
   "fontSettingsAdaptBase": "ベースに適応",
-
   "reminderTitle": "記録リマインダー",
   "reminderSubtitle": "日次記録リマインダー時刻を設定",
   "reminderDailyTitle": "日次記録リマインダー",
@@ -590,7 +579,6 @@
   "reminderDescription": "ヒント：記録リマインダーが有効な場合、システムは毎日指定した時刻に通知を送信し、収入と支出の記録を促します。",
   "reminderIOSInstructions": "🍎 iOS通知設定：\\n• 設定 > 通知 > 蜜蜂家計簿\\n• 「通知を許可」を有効化\\n• 通知スタイルを設定：バナーまたはアラート\\n• 音とバイブレーションを有効化\\n\\n⚠️ iOSシミュレータの制限：\\n• シミュレータの通知機能は制限されています\\n• 実機の使用をお勧めします\\n• 通知ステータスはXcodeコンソールで確認\\n\\nシミュレータでテストする場合は観察してください：\\n• Xcodeコンソールログ出力\\n• Flutterデバッグコンソール情報\\n• アプリ内の通知送信確認ポップアップ",
   "reminderAndroidInstructions": "通知が正常に機能しない場合は確認してください：\\n• アプリが通知の送信を許可されている\\n• アプリのバッテリー最適化/省電力モードを無効化\\n• アプリのバックグラウンド実行と自動開始を許可\\n• Android 12+では正確なアラーム権限が必要\\n\\n📱 Xiaomiスマホの特別設定：\\n• 設定 > アプリ管理 > 蜜蜂家計簿 > 通知管理\\n• 「記録リマインダー」チャンネルをタップ\\n• 重要度を「緊急」または「高」に設定\\n• 「バナー通知」、「音」、「バイブレーション」を有効化\\n• セキュリティセンター > アプリ管理 > 権限 > 自動開始\\n\\n🔒 バックグラウンドロック方法：\\n• 最近のタスクで蜜蜂家計簿を見つける\\n• アプリカードを下にスワイプしてロックアイコンを表示\\n• ロックアイコンをタップしてクリーンアップを防ぐ",
-
   "categoryDetailLoadFailed": "読み込み失敗",
   "categoryDetailSummaryTitle": "カテゴリ概要",
   "categoryDetailTotalCount": "総件数",
@@ -604,7 +592,6 @@
   "categoryDetailNoTransactions": "取引なし",
   "categoryDetailNoTransactionsSubtext": "このカテゴリにはまだ取引がありません",
   "categoryDetailDeleteFailed": "削除失敗",
-
   "categoryMigrationConfirmTitle": "移行確認",
   "categoryMigrationConfirmMessage": "「{fromName}」から「{toName}」に{count}件の取引を移行しますか？\\n\\nこの操作は取り消せません！",
   "categoryMigrationConfirmOk": "移行確認",
@@ -620,12 +607,10 @@
       }
     }
   },
-
   "categoryPickerExpenseTab": "支出",
   "categoryPickerIncomeTab": "収入",
   "categoryPickerCancel": "キャンセル",
   "categoryPickerEmpty": "カテゴリなし",
-
   "cloudBackupFound": "クラウドバックアップが見つかりました",
   "cloudBackupRestoreMessage": "クラウドとローカルの家計簿が一致しません。クラウドから復元しますか？\\n（復元進行ページに移動します）",
   "cloudBackupRestoreFailed": "復元失敗",
@@ -645,7 +630,6 @@
   "mineDebugRefreshStatsSubtitle": "グローバル統計プロバイダーの再計算をトリガー",
   "mineDebugRefreshSync": "同期ステータスを更新（デバッグ）",
   "mineDebugRefreshSyncSubtitle": "同期ステータスプロバイダーの更新をトリガー",
-
   "cloudCurrentService": "現在のクラウドサービス",
   "cloudConnected": "接続済み",
   "cloudOfflineMode": "オフラインモード",
@@ -684,7 +668,7 @@
   "cloudValidationKeyTooShort": "Keyの長さが短すぎます、無効な可能性があります",
   "cloudValidationServiceRoleKey": "service_role Keyは許可されていません",
   "cloudValidationHttpRequired": "URLはhttp://またはhttps://で始まる必要があります",
-  "cloudSelectServiceType": "サービスタイプを選択",
+  "cloudSelectServiceType": "クラウドサービスタイプを選択",
   "cloudWebdavUrlLabel": "WebDAVサーバーURL",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "ユーザー名",
@@ -712,7 +696,6 @@
       }
     }
   },
-
   "authLogin": "ログイン",
   "authSignup": "サインアップ",
   "authRegister": "登録",
@@ -729,18 +712,15 @@
   "authBackToMinePage": "マイページに戻る",
   "authVerificationEmailResent": "確認メールを再送信しました。",
   "authResendAction": "確認を再送信",
-
   "authErrorInvalidCredentials": "メールまたはパスワードが正しくありません。",
   "authErrorEmailNotConfirmed": "メールが確認されていません、ログイン前にメールで確認を完了してください。",
   "authErrorRateLimit": "試行回数が多すぎます、しばらくしてから再試行してください。",
   "authErrorNetworkIssue": "ネットワークエラー、接続を確認して再試行してください。",
   "authErrorLoginFailed": "ログインに失敗しました、しばらくしてから再試行してください。",
-
   "authErrorEmailInvalid": "メールアドレスが無効です、スペルミスがないか確認してください。",
   "authErrorEmailExists": "このメールは既に登録されています、直接ログインするかパスワードをリセットしてください。",
   "authErrorWeakPassword": "パスワードが単純すぎます、文字と数字を含み6文字以上にしてください。",
   "authErrorSignupFailed": "登録に失敗しました、しばらくしてから再試行してください。",
-
   "authErrorUserNotFound": "メールが登録されていません、{action}できません。",
   "authErrorEmailNotVerified": "メールが確認されていません、{action}できません。",
   "authErrorActionFailed": "{action}に失敗しました、しばらくしてから再試行してください。",
@@ -765,27 +745,7 @@
       }
     }
   },
-
-  "importTitle": "請求書のインポート",
   "importSelectCsvFile": "インポートするファイルを選択してください（CSV/TSV/XLSX対応）",
-  "importBillType": "請求書タイプ",
-  "importBillTypeGeneric": "汎用CSV",
-  "importBillTypeAlipay": "アリペイ",
-  "importBillTypeWechat": "WeChat",
-  "importChooseFile": "ファイルを選択",
-  "importNoFileSelected": "ファイルが選択されていません",
-  "importHint": "ヒント：ファイルを選択してインポートを開始してください（CSV/TSV/XLSX）",
-  "importReading": "ファイルを読み込み中…",
-  "importPreparing": "準備中…",
-  "importFileOpenError": "ファイルピッカーを開けません：{error}",
-  "@importFileOpenError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-
   "exportTitle": "エクスポート",
   "exportDescription": "下のボタンをクリックして保存場所を選択し、現在の家計簿をCSVファイルにエクスポートします。",
   "exportButtonIOS": "エクスポートして共有（iOS）",
@@ -826,8 +786,6 @@
       }
     }
   },
-
-  "personalizeTitle": "パーソナライズ",
   "personalizeThemeHoney": "蜜蜂イエロー",
   "personalizeThemeOrange": "フレームオレンジ",
   "personalizeThemeGreen": "エメラルドグリーン",
@@ -855,7 +813,6 @@
   "personalizeThemeSunset": "サンセットオレンジ",
   "personalizeThemePeacock": "ピーコックブルー",
   "personalizeThemeLime": "ライムグリーン",
-
   "analyticsMonthlyAvg": "月平均",
   "analyticsDailyAvg": "日平均",
   "analyticsOverallAvg": "全体平均",
@@ -896,7 +853,6 @@
       }
     }
   },
-
   "updateCheckTitle": "アップデートを確認",
   "updateNewVersionFound": "新しいバージョンが見つかりました",
   "updateNewVersionTitle": "新しいバージョン{version}が見つかりました",
@@ -1013,11 +969,9 @@
       }
     }
   },
-
   "updateCheckingPermissions": "権限を確認中...",
   "updateCheckingCache": "ローカルキャッシュを確認中...",
   "updatePreparingDownload": "ダウンロードを準備中...",
-  "updateInstallingCachedApk": "キャッシュされたAPKをインストール中",
   "updateUserCancelledDownload": "ユーザーがダウンロードをキャンセルしました",
   "updateStartingInstaller": "インストーラーを開始中...",
   "updateInstallerStarted": "インストーラーを開始しました",
@@ -1114,18 +1068,8 @@
       }
     }
   },
-
-  "reminderTitle": "記録リマインダー",
-  "reminderSubtitle": "日次記録リマインダー時刻を設定",
-  "reminderDailyTitle": "日次記録リマインダー",
-  "reminderDailySubtitle": "有効にすると、指定した時刻に記録を促すリマインダーが送信されます",
-  "reminderTimeTitle": "リマインダー時刻",
-  "reminderTestSent": "テスト通知を送信しました",
-  "reminderTestNotification": "テスト通知を送信",
   "reminderQuickTestSent": "15秒後のクイックテストを設定しました、アプリをバックグラウンドに保持してください",
-  "reminderQuickTest": "クイックテスト（15秒後）",
   "reminderFlutterTestSent": "Flutterテスト通知を送信しました、タップしてアプリが開くか確認してください",
-  "reminderFlutterTest": "🔧 Flutter通知クリックテスト（開発）",
   "reminderAlarmTestSent": "AlarmManagerテスト通知を設定しました（1秒後）、タップしてアプリが開くか確認してください",
   "updateOk": "OK",
   "updateCannotOpenLinkTitle": "リンクを開けません",
@@ -1139,7 +1083,6 @@
   "updateNotificationGuideStep2": "「BeeCount」アプリを見つける",
   "updateNotificationGuideStep3": "通知権限を有効化",
   "updateNotificationGuideInfo": "通知なしでもダウンロードは正常にバックグラウンドで継続されます",
-
   "currencyCNY": "中国人民元",
   "currencyUSD": "米ドル",
   "currencyEUR": "ユーロ",
@@ -1151,16 +1094,23 @@
   "currencyCAD": "カナダドル",
   "currencyKRW": "韓国ウォン",
   "currencySGD": "シンガポールドル",
+  "currencyMYR": "マレーシアリンギット",
   "currencyTHB": "タイバーツ",
   "currencyIDR": "インドネシアルピア",
+  "currencyPHP": "フィリピンペソ",
+  "currencyVND": "ベトナムドン",
   "currencyINR": "インドルピー",
   "currencyRUB": "ロシアルーブル",
   "currencyBYN": "ベラルーシルーブル",
-
-
+  "currencyNZD": "ニュージーランドドル",
+  "currencyCHF": "スイスフラン",
+  "currencySEK": "スウェーデンクローナ",
+  "currencyNOK": "ノルウェークローネ",
+  "currencyDKK": "デンマーククローネ",
+  "currencyBRL": "ブラジルレアル",
+  "currencyMXN": "メキシコペソ",
   "webdavConfiguredTitle": "WebDAV クラウドサービスが設定されました",
   "webdavConfiguredMessage": "WebDAV クラウドサービスは設定時に提供された資格情報を使用するため、追加のログインは不要です。",
-
   "recurringTransactionTitle": "定期取引",
   "recurringTransactionAdd": "定期取引を追加",
   "recurringTransactionEdit": "定期取引を編集",
@@ -1183,39 +1133,43 @@
   "recurringTransactionEveryNDays": "{n} 日ごと",
   "@recurringTransactionEveryNDays": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNWeeks": "{n} 週ごと",
   "@recurringTransactionEveryNWeeks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNMonths": "{n} か月ごと",
   "@recurringTransactionEveryNMonths": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNYears": "{n} 年ごと",
   "@recurringTransactionEveryNYears": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
-
   "cloudDefaultServiceDisplayName": "デフォルトクラウドサービス",
   "cloudNotConfiguredDisplay": "設定されていません",
-
   "syncNotConfiguredMessage": "クラウドが設定されていません",
   "syncNotLoggedInMessage": "ログインしていません",
   "syncCloudBackupCorruptedMessage": "クラウドバックアップの内容が破損しています、以前のバージョンのエンコーディング問題が原因の可能性があります。「現在の家計簿をクラウドにアップロード」をクリックして上書きして修正してください。",
   "syncNoCloudBackupMessage": "クラウドバックアップなし",
   "syncAccessDeniedMessage": "403 アクセス拒否（ストレージRLSポリシーとパスを確認）",
-
   "cloudTestConnection": "接続テスト",
-  "cloudSelectServiceType": "クラウドサービスタイプを選択",
   "cloudLocalStorageTitle": "ローカルストレージ",
   "cloudLocalStorageSubtitle": "データはローカルデバイスにのみ保存されます",
   "cloudCustomSupabaseTitle": "カスタム Supabase",
@@ -1277,11 +1231,124 @@
   "cloudConfigureSupabaseTitle": "Supabase設定",
   "cloudConfigureWebdavTitle": "WebDAV設定",
   "cloudSupabaseAnonKeyHintLong": "完全な anon key を貼り付けてください",
-  "cloudWebdavUsernameLabel": "ユーザー名",
-  "cloudWebdavPasswordLabel": "パスワード",
   "cloudWebdavRemotePathLabel": "リモートパス",
   "cloudWebdavRemotePathHelperText": "データ保存用のリモートディレクトリパス",
-
   "updateCorruptedFileTitle": "インストールパッケージが破損しています",
-  "updateCorruptedFileMessage": "以前ダウンロードしたインストールパッケージが不完全または破損していることが検出されました。削除して再ダウンロードしますか？"
+  "updateCorruptedFileMessage": "以前ダウンロードしたインストールパッケージが不完全または破損していることが検出されました。削除して再ダウンロードしますか？",
+  "cloudSupabaseAnonKeyHintShort": "貼り付け完全な的 anon key",
+  "cloudWebdavRemotePathHelp": "データストレージ的リモートディレクトリパス",
+  "cloudHelperTextRemotePath": "データストレージ的リモートディレクトリパス",
+  "importParsing": "解析中…",
+  "fontSettingsRealTimePreview": "实时プレビュー",
+  "fontSettingsPageTitleExample": "月度統計与分析",
+  "fontSettingsBlockTitleExample": "最近记账",
+  "fontSettingsBodyExampleText": "今天早餐：豆浆 + 包子 6.50 元",
+  "fontSettingsLabelExampleText": "隠し金额已开启",
+  "fontSettingsNumberExample": "强调数字",
+  "fontSettingsListItemTitle": "列表项タイトル",
+  "fontSettingsListItemSubtitle": "辅助説明文本",
+  "fontSettingsScreenAdaptInfo": "屏幕适配情報",
+  "fontSettingsAutoScaleDemo": "此方框和间距は根据デバイス自動缩放",
+  "fontSettingsAdaptBaseline": "适配基准",
+  "restoreProgressTitle": "恢复中 ({current}/{total})",
+  "restorePreparingTitle": "准备中…",
+  "restoreProgressSubtitle": "账本：{ledger}  記録：{done}/{total}",
+  "restoreCloudRestore": "クラウド端恢复",
+  "restoreCopyLogs": "复制日志",
+  "restoreLogsCopied": "日志已复制",
+  "restoreWaitingForStart": "等待恢复任务启动…",
+  "updateNotificationChannelDescription": "APK更新文件下载进度",
+  "updateNotificationAppName": "蜜蜂记账更新下载",
+  "accountsTitle": "アカウント管理",
+  "accountsEmptyMessage": "还なしアカウント，タップ右上角追加",
+  "accountAddTooltip": "追加アカウント",
+  "accountAddButton": "追加アカウント",
+  "accountBalance": "残高",
+  "accountEditTitle": "編集アカウント",
+  "accountNewTitle": "新建アカウント",
+  "accountNameLabel": "アカウント名称",
+  "accountNameHint": "例如：工商银行、Alipay等",
+  "accountNameRequired": "入力アカウント名称",
+  "accountTypeLabel": "アカウント类型",
+  "accountTypeCash": "現金",
+  "accountTypeBankCard": "銀行カード",
+  "accountTypeCreditCard": "クレジットカード",
+  "accountTypeAlipay": "Alipay",
+  "accountTypeWechat": "WeChat",
+  "accountTypeOther": "その他",
+  "accountInitialBalance": "初期資金",
+  "accountInitialBalanceHint": "入力初期資金（オプション）",
+  "accountDeleteWarningTitle": "確認削除",
+  "accountDeleteWarningMessage": "该アカウント有 {count} 笔関連取引，削除後取引記録中的アカウント情報将被クリア。確認削除吗？",
+  "accountDeleteConfirm": "確認削除该アカウント吗？",
+  "accountSelectTitle": "選択アカウント",
+  "accountNone": "不選択アカウント",
+  "accountsEnableFeature": "有効化アカウント機能",
+  "accountsFeatureDescription": "有効化後可以管理多个支付アカウント，追跡毎个アカウント的残高変化",
+  "privacyDashboardTitle": "プライバシーレポート",
+  "privacyScoreExcellent": "プライバシー保護：優秀",
+  "privacyScoreDescription": "您的データ完全に安全，なし任何プライバシー漏洩リスク",
+  "privacyDataStorageTitle": "データストレージ位置",
+  "privacyDataStorageLocal": "すべて財務データストレージ在您的デバイスローカル",
+  "privacyDataStorageNoUpload": "不はアップロードに任何サードパーティサーバー",
+  "privacyDataStorageOptionalSync": "オプション的クラウド同期完全に由您自己コントロール",
+  "privacyNetworkMonitorTitle": "ネットワーク求モニタリング",
+  "privacyNetworkMonitorSince": "自アプリインストール以来：",
+  "privacyNetworkDataRequests": "送信的データ求",
+  "privacyNetworkTrackers": "サードパーティ追跡器",
+  "privacyNetworkAdRequests": "広告ネットワーク求",
+  "privacyNetworkAnalytics": "分析服务呼び出し",
+  "privacyPermissionsTitle": "権限使用説明",
+  "privacyPermissionsOnlyRequest": "本アプリのみ求以下権限：",
+  "privacyPermissionsStorage": "ストレージ権限（保存账单データ）",
+  "privacyPermissionsNotifications": "通知権限（记账リマインダー）",
+  "privacyPermissionsNoLocation": "不要位置権限",
+  "privacyPermissionsNoContacts": "不要連絡先権限",
+  "privacyPermissionsNoCamera": "不要カメラ権限",
+  "privacyOpenSourceTitle": "オープンソース検証",
+  "privacyOpenSourcePublic": "すべてコード公開可監査",
+  "privacyOpenSourceCommunity": "コミュニティ監督，无隠しコード",
+  "privacyOpenSourceMIT": "個人ユーザー無料",
+  "privacyOpenSourceViewCode": "在GitHub表示源コード",
+  "privacyOpenSourceUrlError": "できません開くリンク",
+  "welcomeTitle": "ようこそ使用 BeeCount",
+  "welcomeDescription": "一个本当に尊重您プライバシー的记账アプリ",
+  "welcomePrivacyTitle": "您的データ，您コントロール",
+  "welcomePrivacyFeature1": "データストレージ在您的デバイスローカル",
+  "welcomePrivacyFeature2": "不はアップロードに任何サードパーティサーバー",
+  "welcomePrivacyFeature3": "无広告，无データ收集",
+  "welcomePrivacyFeature4": "无需登録アカウント",
+  "welcomeOpenSourceTitle": "オープンソース & 透明",
+  "welcomeOpenSourceFeature1": "100%オープンソースコード",
+  "welcomeOpenSourceFeature2": "コミュニティ監督，无バックドア",
+  "welcomeOpenSourceFeature3": "個人ユーザー無料使用",
+  "welcomeViewGitHub": "在GitHub表示源コード",
+  "welcomeCloudSyncTitle": "オプション的クラウド同期",
+  "welcomeCloudSyncDescription": "不想使用ビジネスクラウド服务？BeeCountサポート複数同期方法",
+  "welcomeCloudSyncFeature1": "完全にオフライン使用",
+  "welcomeCloudSyncFeature2": "セルフホストWebDAV同期",
+  "welcomeCloudSyncFeature3": "セルフホストSupabase服务",
+  "lab": "ラボ",
+  "labDesc": "体験実験的機能",
+  "widgetManagement": "デスクトップウィジェット",
+  "widgetManagementDesc": "在ホーム画面素早く表示収支状況",
+  "widgetPreview": "ウィジェットプレビュー",
+  "widgetPreviewDesc": "ウィジェットは自動表示現在账本的実際データ，テーマ色追従アプリ設定",
+  "howToAddWidget": "方法追加ウィジェット",
+  "iosWidgetStep1": "長押しホーム画面空白エリア，入る編集モード",
+  "iosWidgetStep2": "タップ左上的\"+\"ボタン",
+  "iosWidgetStep3": "検索と選択\"蜜蜂记账\"",
+  "iosWidgetStep4": "選択ミディアムウィジェット，追加にホーム画面",
+  "androidWidgetStep1": "長押しホーム画面空白エリア",
+  "androidWidgetStep2": "選択\"ウィジェット\"または\"Widgets\"",
+  "androidWidgetStep3": "找にと長押し\"蜜蜂记账\"ウィジェット",
+  "androidWidgetStep4": "ドラッグにホーム画面適切な位置",
+  "aboutWidget": "についてウィジェット",
+  "widgetDescription": "ウィジェットは自動同期表示今日和今月的収支データ，毎30分自動更新1回。開くアプリ後は即座に更新データ。",
+  "appName": "蜜蜂记账",
+  "monthSuffix": "月",
+  "todayExpense": "今日支出",
+  "todayIncome": "今日収入",
+  "monthExpense": "今月支出",
+  "monthIncome": "今月収入"
 }

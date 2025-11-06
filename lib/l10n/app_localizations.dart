@@ -496,6 +496,36 @@ abstract class AppLocalizations {
   /// **'Tap the plus button at the bottom to add a record'**
   String get homeNoRecordsSubtext;
 
+  /// No description provided for @widgetTodayExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Expense'**
+  String get widgetTodayExpense;
+
+  /// No description provided for @widgetTodayIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Income'**
+  String get widgetTodayIncome;
+
+  /// No description provided for @widgetMonthExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Month\'s Expense'**
+  String get widgetMonthExpense;
+
+  /// No description provided for @widgetMonthIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Month\'s Income'**
+  String get widgetMonthIncome;
+
+  /// No description provided for @widgetMonthSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get widgetMonthSuffix;
+
   /// No description provided for @searchTitle.
   ///
   /// In en, this message translates to:
@@ -1845,6 +1875,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Report issues or suggestions'**
   String get mineFeedbackSubtitle;
+
+  /// No description provided for @mineHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get mineHelp;
+
+  /// No description provided for @mineHelpSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View documentation and FAQ'**
+  String get mineHelpSubtitle;
+
+  /// No description provided for @mineSupportAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Author'**
+  String get mineSupportAuthor;
+
+  /// No description provided for @mineSupportAuthorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Star the project on GitHub'**
+  String get mineSupportAuthorSubtitle;
 
   /// No description provided for @mineRefreshStats.
   ///
@@ -4900,6 +4954,12 @@ abstract class AppLocalizations {
   /// **'Singapore Dollar'**
   String get currencySGD;
 
+  /// No description provided for @currencyMYR.
+  ///
+  /// In en, this message translates to:
+  /// **'Malaysian Ringgit'**
+  String get currencyMYR;
+
   /// No description provided for @currencyTHB.
   ///
   /// In en, this message translates to:
@@ -4911,6 +4971,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Indonesian Rupiah'**
   String get currencyIDR;
+
+  /// No description provided for @currencyPHP.
+  ///
+  /// In en, this message translates to:
+  /// **'Philippine Peso'**
+  String get currencyPHP;
+
+  /// No description provided for @currencyVND.
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnamese Dong'**
+  String get currencyVND;
 
   /// No description provided for @currencyINR.
   ///
@@ -4929,6 +5001,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Belarusian Ruble'**
   String get currencyBYN;
+
+  /// No description provided for @currencyNZD.
+  ///
+  /// In en, this message translates to:
+  /// **'New Zealand Dollar'**
+  String get currencyNZD;
+
+  /// No description provided for @currencyCHF.
+  ///
+  /// In en, this message translates to:
+  /// **'Swiss Franc'**
+  String get currencyCHF;
+
+  /// No description provided for @currencySEK.
+  ///
+  /// In en, this message translates to:
+  /// **'Swedish Krona'**
+  String get currencySEK;
+
+  /// No description provided for @currencyNOK.
+  ///
+  /// In en, this message translates to:
+  /// **'Norwegian Krone'**
+  String get currencyNOK;
+
+  /// No description provided for @currencyDKK.
+  ///
+  /// In en, this message translates to:
+  /// **'Danish Krone'**
+  String get currencyDKK;
+
+  /// No description provided for @currencyBRL.
+  ///
+  /// In en, this message translates to:
+  /// **'Brazilian Real'**
+  String get currencyBRL;
+
+  /// No description provided for @currencyMXN.
+  ///
+  /// In en, this message translates to:
+  /// **'Mexican Peso'**
+  String get currencyMXN;
 
   /// No description provided for @webdavConfiguredTitle.
   ///
@@ -5647,7 +5761,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyOpenSourceMIT.
   ///
   /// In en, this message translates to:
-  /// **'MIT Open Source License'**
+  /// **'Free for Personal Use'**
   String get privacyOpenSourceMIT;
 
   /// No description provided for @privacyOpenSourceViewCode.
@@ -5725,7 +5839,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeOpenSourceFeature3.
   ///
   /// In en, this message translates to:
-  /// **'MIT Open Source License'**
+  /// **'Free for Personal Use'**
   String get welcomeOpenSourceFeature3;
 
   /// No description provided for @welcomeViewGitHub.
@@ -5763,6 +5877,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Self-hosted Supabase service'**
   String get welcomeCloudSyncFeature3;
+
+  /// No description provided for @lab.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab'**
+  String get lab;
+
+  /// No description provided for @labDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Try experimental features'**
+  String get labDesc;
+
+  /// No description provided for @widgetManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Screen Widget'**
+  String get widgetManagement;
+
+  /// No description provided for @widgetManagementDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick view of income and expenses on home screen'**
+  String get widgetManagementDesc;
+
+  /// No description provided for @widgetPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget Preview'**
+  String get widgetPreview;
+
+  /// No description provided for @widgetPreviewDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget automatically displays actual data from current ledger, theme color follows app settings'**
+  String get widgetPreviewDesc;
+
+  /// No description provided for @howToAddWidget.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Add Widget'**
+  String get howToAddWidget;
+
+  /// No description provided for @iosWidgetStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press on home screen blank area to enter edit mode'**
+  String get iosWidgetStep1;
+
+  /// No description provided for @iosWidgetStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the \"+\" button in upper left corner'**
+  String get iosWidgetStep2;
+
+  /// No description provided for @iosWidgetStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Search and select \"BeeCount\"'**
+  String get iosWidgetStep3;
+
+  /// No description provided for @iosWidgetStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Select medium widget and add to home screen'**
+  String get iosWidgetStep4;
+
+  /// No description provided for @androidWidgetStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press on home screen blank area'**
+  String get androidWidgetStep1;
+
+  /// No description provided for @androidWidgetStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Select \"Widgets\"'**
+  String get androidWidgetStep2;
+
+  /// No description provided for @androidWidgetStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Find and long press \"BeeCount\" widget'**
+  String get androidWidgetStep3;
+
+  /// No description provided for @androidWidgetStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to suitable position on home screen'**
+  String get androidWidgetStep4;
+
+  /// No description provided for @aboutWidget.
+  ///
+  /// In en, this message translates to:
+  /// **'About Widget'**
+  String get aboutWidget;
+
+  /// No description provided for @widgetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget automatically syncs to display today\'s and this month\'s income and expense data, refreshing every 30 minutes. Data updates immediately when app is opened.'**
+  String get widgetDescription;
+
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount'**
+  String get appName;
+
+  /// No description provided for @monthSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get monthSuffix;
+
+  /// No description provided for @todayExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Expense'**
+  String get todayExpense;
+
+  /// No description provided for @todayIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Income'**
+  String get todayIncome;
+
+  /// No description provided for @monthExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Month\'s Expense'**
+  String get monthExpense;
+
+  /// No description provided for @monthIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Month\'s Income'**
+  String get monthIncome;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

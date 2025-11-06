@@ -194,7 +194,7 @@ final shouldShowWelcomeProvider = StateProvider<bool>((ref) => false);
 // 初始化检查是否需要显示欢迎页面
 final welcomeCheckProvider = FutureProvider<bool>((ref) async {
   final prefs = await SharedPreferences.getInstance();
-  final welcomeShown = prefs.getBool('welcome_shown5') ?? false;
+  final welcomeShown = prefs.getBool('welcome_shown') ?? false;
   if (!welcomeShown) {
     print('👋 首次启动，需要展示欢迎页面');
     ref.read(shouldShowWelcomeProvider.notifier).state = true;

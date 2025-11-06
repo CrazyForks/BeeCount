@@ -26,3 +26,6 @@ export 'reminder_providers.dart';
 
 // 语言相关
 export 'language_provider.dart';
+
+// 小组件相关
+export 'widget_provider.dart';

@@ -206,6 +206,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeNoRecordsSubtext => 'Tippen Sie auf das Plus-Symbol unten, um einen Eintrag hinzuzufügen';
 
   @override
+  String get widgetTodayExpense => 'Heutige Ausgabe';
+
+  @override
+  String get widgetTodayIncome => 'Heutiges Einkommen';
+
+  @override
+  String get widgetMonthExpense => 'Monatsausgabe';
+
+  @override
+  String get widgetMonthIncome => 'Monatseinkommen';
+
+  @override
+  String get widgetMonthSuffix => '';
+
+  @override
   String get searchTitle => 'Suchen';
 
   @override
@@ -935,6 +950,18 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get mineFeedbackSubtitle => 'Problem oder Vorschlag melden';
+
+  @override
+  String get mineHelp => 'Hilfe';
+
+  @override
+  String get mineHelpSubtitle => 'Dokumentation und FAQ anzeigen';
+
+  @override
+  String get mineSupportAuthor => 'Autor unterstützen';
+
+  @override
+  String get mineSupportAuthorSubtitle => 'Projekt auf GitHub mit Stern bewerten';
 
   @override
   String get mineRefreshStats => 'Refresh Stats (Debug)';
@@ -2558,10 +2585,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get currencySGD => 'Singapur-Dollar';
 
   @override
+  String get currencyMYR => 'Malaysian Ringgit';
+
+  @override
   String get currencyTHB => 'Thailändischer Baht';
 
   @override
   String get currencyIDR => 'Indonesische Rupiah';
+
+  @override
+  String get currencyPHP => 'Philippine Peso';
+
+  @override
+  String get currencyVND => 'Vietnamese Dong';
 
   @override
   String get currencyINR => 'Indische Rupie';
@@ -2571,6 +2607,27 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get currencyBYN => 'Weißrussischer Rubel';
+
+  @override
+  String get currencyNZD => 'New Zealand Dollar';
+
+  @override
+  String get currencyCHF => 'Swiss Franc';
+
+  @override
+  String get currencySEK => 'Swedish Krona';
+
+  @override
+  String get currencyNOK => 'Norwegian Krone';
+
+  @override
+  String get currencyDKK => 'Danish Krone';
+
+  @override
+  String get currencyBRL => 'Brazilian Real';
+
+  @override
+  String get currencyMXN => 'Mexican Peso';
 
   @override
   String get webdavConfiguredTitle => 'WebDAV Cloud-Dienst konfiguriert';
@@ -2948,7 +3005,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get privacyOpenSourceCommunity => 'Community supervision, no hidden code';
 
   @override
-  String get privacyOpenSourceMIT => 'MIT Open Source License';
+  String get privacyOpenSourceMIT => 'Free for Personal Use';
 
   @override
   String get privacyOpenSourceViewCode => 'View Source Code on GitHub';
@@ -2987,7 +3044,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get welcomeOpenSourceFeature2 => 'Community supervision, no backdoors';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'MIT Open Source License';
+  String get welcomeOpenSourceFeature3 => 'Free for Personal Use';
 
   @override
   String get welcomeViewGitHub => 'View Source Code on GitHub';
@@ -3006,4 +3063,73 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get welcomeCloudSyncFeature3 => 'Self-hosted Supabase service';
+
+  @override
+  String get lab => 'Lab';
+
+  @override
+  String get labDesc => 'Try experimental features';
+
+  @override
+  String get widgetManagement => 'Home Screen Widget';
+
+  @override
+  String get widgetManagementDesc => 'Quick view of income and expenses on home screen';
+
+  @override
+  String get widgetPreview => 'Widget Preview';
+
+  @override
+  String get widgetPreviewDesc => 'Widget automatically displays actual data from current ledger, theme color follows app settings';
+
+  @override
+  String get howToAddWidget => 'How to Add Widget';
+
+  @override
+  String get iosWidgetStep1 => 'Long press on home screen blank area to enter edit mode';
+
+  @override
+  String get iosWidgetStep2 => 'Tap the \"+\" button in upper left corner';
+
+  @override
+  String get iosWidgetStep3 => 'Search and select \"BeeCount\"';
+
+  @override
+  String get iosWidgetStep4 => 'Select medium widget and add to home screen';
+
+  @override
+  String get androidWidgetStep1 => 'Long press on home screen blank area';
+
+  @override
+  String get androidWidgetStep2 => 'Select \"Widgets\"';
+
+  @override
+  String get androidWidgetStep3 => 'Find and long press \"BeeCount\" widget';
+
+  @override
+  String get androidWidgetStep4 => 'Drag to suitable position on home screen';
+
+  @override
+  String get aboutWidget => 'About Widget';
+
+  @override
+  String get widgetDescription => 'Widget automatically syncs to display today\'s and this month\'s income and expense data, refreshing every 30 minutes. Data updates immediately when app is opened.';
+
+  @override
+  String get appName => 'BeeCount';
+
+  @override
+  String get monthSuffix => '';
+
+  @override
+  String get todayExpense => 'Today\'s Expense';
+
+  @override
+  String get todayIncome => 'Today\'s Income';
+
+  @override
+  String get monthExpense => 'Month\'s Expense';
+
+  @override
+  String get monthIncome => 'Month\'s Income';
 }

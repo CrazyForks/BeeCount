@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/language_provider.dart';
+import '../providers/widget_provider.dart';
 import '../widgets/ui/ui.dart';
 import '../l10n/app_localizations.dart';
 
@@ -28,7 +29,13 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: l10n.languageSystemDefault,
                   locale: null,
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(null),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(null);
+                    // 延迟更新widget,等待locale变化生效
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -37,7 +44,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: l10n.languageChinese,
                   locale: const Locale('zh'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('zh')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('zh'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -46,7 +58,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: '繁體中文',
                   locale: const Locale('zh', 'TW'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('zh', 'TW')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('zh', 'TW'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -55,7 +72,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: l10n.languageEnglish,
                   locale: const Locale('en'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('en')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('en'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -64,7 +86,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: '日本語',
                   locale: const Locale('ja'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('ja')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('ja'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -73,7 +100,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: '한국어',
                   locale: const Locale('ko'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('ko')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('ko'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -82,7 +114,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: 'Español',
                   locale: const Locale('es'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('es')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('es'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -91,7 +128,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: 'Français',
                   locale: const Locale('fr'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('fr')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('fr'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -100,7 +142,12 @@ class LanguageSettingsPage extends ConsumerWidget {
                   title: 'Deutsch',
                   locale: const Locale('de'),
                   currentLanguage: currentLanguage,
-                  onTap: () => ref.read(languageProvider.notifier).setLanguage(const Locale('de')),
+                  onTap: () {
+                    ref.read(languageProvider.notifier).setLanguage(const Locale('de'));
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      updateAppWidget(ref, context);
+                    });
+                  },
                 ),
               ],
             ),

@@ -19,11 +19,21 @@ const List<String> kCurrencyCodes = [
   'CAD',
   'KRW',
   'SGD',
+  'MYR',
   'THB',
   'IDR',
+  'PHP',
+  'VND',
   'INR',
   'RUB',
   'BYN',
+  'NZD',
+  'CHF',
+  'SEK',
+  'NOK',
+  'DKK',
+  'BRL',
+  'MXN',
 ];
 
 /// 获取本地化的货币信息列表
@@ -41,11 +51,21 @@ List<CurrencyInfo> getCurrencies(BuildContext context) {
     CurrencyInfo('CAD', l10n.currencyCAD),
     CurrencyInfo('KRW', l10n.currencyKRW),
     CurrencyInfo('SGD', l10n.currencySGD),
+    CurrencyInfo('MYR', l10n.currencyMYR),
     CurrencyInfo('THB', l10n.currencyTHB),
     CurrencyInfo('IDR', l10n.currencyIDR),
+    CurrencyInfo('PHP', l10n.currencyPHP),
+    CurrencyInfo('VND', l10n.currencyVND),
     CurrencyInfo('INR', l10n.currencyINR),
     CurrencyInfo('RUB', l10n.currencyRUB),
     CurrencyInfo('BYN', l10n.currencyBYN),
+    CurrencyInfo('NZD', l10n.currencyNZD),
+    CurrencyInfo('CHF', l10n.currencyCHF),
+    CurrencyInfo('SEK', l10n.currencySEK),
+    CurrencyInfo('NOK', l10n.currencyNOK),
+    CurrencyInfo('DKK', l10n.currencyDKK),
+    CurrencyInfo('BRL', l10n.currencyBRL),
+    CurrencyInfo('MXN', l10n.currencyMXN),
   ];
 }
 
@@ -89,16 +109,36 @@ String getCurrencySymbol(String code) {
       return '₩';
     case 'SGD':
       return 'S\$';
+    case 'MYR':
+      return 'RM';
     case 'THB':
       return '฿';
     case 'IDR':
       return 'Rp';
+    case 'PHP':
+      return '₱';
+    case 'VND':
+      return '₫';
     case 'INR':
       return '₹';
     case 'RUB':
       return '₽';
     case 'BYN':
       return 'Br';
+    case 'NZD':
+      return 'NZ\$';
+    case 'CHF':
+      return 'CHF';
+    case 'SEK':
+      return 'kr';
+    case 'NOK':
+      return 'kr';
+    case 'DKK':
+      return 'kr';
+    case 'BRL':
+      return 'R\$';
+    case 'MXN':
+      return 'MX\$';
     default:
       return code;
   }
