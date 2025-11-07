@@ -2930,88 +2930,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountsFeatureDescription => '启用后可以管理多个支付账户，追踪每个账户的余额变化';
 
   @override
+  String get privacyOpenSourceUrlError => '无法打开链接';
+
+  @override
   String get updateCorruptedFileTitle => '安装包已损坏';
 
   @override
   String get updateCorruptedFileMessage => '检测到之前下载的安装包不完整或已损坏，是否删除并重新下载？';
-
-  @override
-  String get privacyDashboardTitle => '隐私报告';
-
-  @override
-  String get privacyScoreExcellent => '隐私保护：优秀';
-
-  @override
-  String get privacyScoreDescription => '您的数据完全安全，没有任何隐私泄露风险';
-
-  @override
-  String get privacyDataStorageTitle => '数据存储位置';
-
-  @override
-  String get privacyDataStorageLocal => '所有财务数据存储在您的设备本地';
-
-  @override
-  String get privacyDataStorageNoUpload => '不会上传到任何第三方服务器';
-
-  @override
-  String get privacyDataStorageOptionalSync => '可选的云同步完全由您自己控制';
-
-  @override
-  String get privacyNetworkMonitorTitle => '网络请求监控';
-
-  @override
-  String get privacyNetworkMonitorSince => '自应用安装以来：';
-
-  @override
-  String get privacyNetworkDataRequests => '发送的数据请求';
-
-  @override
-  String get privacyNetworkTrackers => '第三方追踪器';
-
-  @override
-  String get privacyNetworkAdRequests => '广告网络请求';
-
-  @override
-  String get privacyNetworkAnalytics => '分析服务调用';
-
-  @override
-  String get privacyPermissionsTitle => '权限使用说明';
-
-  @override
-  String get privacyPermissionsOnlyRequest => '本应用仅请求以下权限：';
-
-  @override
-  String get privacyPermissionsStorage => '存储权限（保存账单数据）';
-
-  @override
-  String get privacyPermissionsNotifications => '通知权限（记账提醒）';
-
-  @override
-  String get privacyPermissionsNoLocation => '不需要位置权限';
-
-  @override
-  String get privacyPermissionsNoContacts => '不需要通讯录权限';
-
-  @override
-  String get privacyPermissionsNoCamera => '不需要相机权限';
-
-  @override
-  String get privacyOpenSourceTitle => '开源验证';
-
-  @override
-  String get privacyOpenSourcePublic => '所有代码公开可审计';
-
-  @override
-  String get privacyOpenSourceCommunity => '社区监督，无隐藏代码';
-
-  @override
-  String get privacyOpenSourceMIT => '个人用户免费';
-
-  @override
-  String get privacyOpenSourceViewCode => '在GitHub查看源代码';
-
-  @override
-  String get privacyOpenSourceUrlError => '无法打开链接';
 
   @override
   String get welcomeTitle => '欢迎使用 BeeCount';
@@ -3132,6 +3057,190 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get monthIncome => '本月收入';
+
+  @override
+  String get autoScreenshotBilling => '截图自动记账';
+
+  @override
+  String get autoScreenshotBillingDesc => '截图后自动识别支付信息';
+
+  @override
+  String get autoScreenshotBillingTitle => '截图自动记账';
+
+  @override
+  String get featureDescription => '功能说明';
+
+  @override
+  String get featureDescriptionContent => '截图支付页面后，系统会自动识别金额和商家信息，并创建支出记录。\n\n⚡ 识别速度约 1-2 秒\n🤖 智能匹配分类\n📝 自动填写备注\n\n注意：\n• 未开启无障碍服务时，识别速度会稍慢（3-5秒）\n• 开启无障碍服务后，可实现秒级识别';
+
+  @override
+  String get autoBilling => '自动记账';
+
+  @override
+  String get enabled => '已启用';
+
+  @override
+  String get disabled => '已禁用';
+
+  @override
+  String get accessibilityService => '无障碍服务';
+
+  @override
+  String get accessibilityServiceEnabled => '已启用 - 秒级识别';
+
+  @override
+  String get accessibilityServiceDisabled => '未启用 - 识别稍慢';
+
+  @override
+  String get improveRecognitionSpeed => '提升识别速度';
+
+  @override
+  String get accessibilityGuideContent => '开启无障碍服务后，可以实现截图瞬间识别，无需等待文件写入。';
+
+  @override
+  String get setupSteps => '设置步骤：';
+
+  @override
+  String get accessibilityStep1 => '点击下方\"打开无障碍设置\"按钮';
+
+  @override
+  String get accessibilityStep2 => '在列表中找到\"蜜蜂记账-截图识别\"';
+
+  @override
+  String get accessibilityStep3 => '开启服务开关';
+
+  @override
+  String get accessibilityStep4 => '返回应用即可使用';
+
+  @override
+  String get openAccessibilitySettings => '打开无障碍设置';
+
+  @override
+  String get accessibilityServiceNote => '💡 说明：无障碍服务仅用于检测截图动作，不会读取或修改您的其他数据。';
+
+  @override
+  String get supportedPayments => '支持的支付方式';
+
+  @override
+  String get supportedAlipay => '✅ 支付宝';
+
+  @override
+  String get supportedWechat => '✅ 微信支付';
+
+  @override
+  String get supportedUnionpay => '✅ 云闪付';
+
+  @override
+  String get supportedOthers => '⚠️ 其他支付方式识别准确率可能较低';
+
+  @override
+  String get photosPermissionRequired => '需要照片权限才能监听截图';
+
+  @override
+  String get enableSuccess => '自动记账已启用';
+
+  @override
+  String get disableSuccess => '自动记账已禁用';
+
+  @override
+  String get enableFailed => '启用失败';
+
+  @override
+  String get disableFailed => '禁用失败';
+
+  @override
+  String get openSettingsFailed => '打开设置失败';
+
+  @override
+  String get reselectImage => '重新选择';
+
+  @override
+  String get viewOriginalText => '查看原始文本';
+
+  @override
+  String get createBill => '创建账单';
+
+  @override
+  String get ocrBilling => 'OCR扫描记账';
+
+  @override
+  String get ocrBillingDesc => '扫描支付截图自动识别金额';
+
+  @override
+  String get quickActions => '快捷功能';
+
+  @override
+  String get iosAutoFeatureDesc => '通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。';
+
+  @override
+  String get iosAutoShortcutQuickAdd => '快速添加快捷指令';
+
+  @override
+  String get iosAutoShortcutQuickAddDesc => '点击下方按钮可以直接导入配置好的快捷指令，或手动打开快捷指令App配置。';
+
+  @override
+  String get iosAutoShortcutImport => '一键导入快捷指令';
+
+  @override
+  String get iosAutoShortcutOpenApp => '或手动打开快捷指令App配置';
+
+  @override
+  String get iosAutoShortcutConfigTitle => '配置步骤（推荐方式 - URL参数传递）：';
+
+  @override
+  String get iosAutoShortcutStep1 => '打开\"快捷指令\"应用';
+
+  @override
+  String get iosAutoShortcutStep2 => '点击右上角\"+\"创建新快捷指令';
+
+  @override
+  String get iosAutoShortcutStep3 => '添加\"截屏\"操作（获取最新截图）';
+
+  @override
+  String get iosAutoShortcutStep4 => '添加\"从截屏中提取文本\"操作';
+
+  @override
+  String get iosAutoShortcutStep5 => '添加\"替换文本\"操作：将\"提取的文本\"中的\"\\n\"替换为\",\"（逗号）';
+
+  @override
+  String get iosAutoShortcutStep6 => '添加\"URL编码\"操作：对\"替换后的文本\"进行URL编码';
+
+  @override
+  String get iosAutoShortcutStep7 => '添加\"打开URL\"操作，URL填写：\nbeecount://auto-billing?text=[URL编码后的文本]';
+
+  @override
+  String get iosAutoShortcutStep8 => '点击快捷指令设置（右上角三点）';
+
+  @override
+  String get iosAutoShortcutStep9 => '在\"当...时运行\"中添加\"截屏时\"触发器';
+
+  @override
+  String get iosAutoShortcutStep10 => '保存并测试：截图后会自动识别';
+
+  @override
+  String get iosAutoShortcutRecommendedTip => '✅ 推荐：URL参数传递，无需权限，体验最佳。关键步骤：\n• 替换文本时将换行符\\n替换为逗号,（避免URL截断）\n• 使用URL编码操作（避免中文乱码）\n• 一般截图文本不会超过2048字符限制';
+
+  @override
+  String get iosAutoBackTapTitle => '💡 双击背部快速触发（推荐）';
+
+  @override
+  String get iosAutoBackTapDesc => '设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图';
+
+  @override
+  String iosAutoImportFailed(Object error) {
+    return '导入失败: $error';
+  }
+
+  @override
+  String iosAutoOpenAppFailed(Object error) {
+    return '打开失败: $error';
+  }
+
+  @override
+  String get iosAutoCannotOpenLink => '无法打开链接，请检查网络连接';
+
+  @override
+  String get iosAutoCannotOpenShortcuts => '无法打开快捷指令App';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -6062,88 +6171,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountsFeatureDescription => '啟用后可以管理多个支付帳戶，追踪每个帳戶的余額變化';
 
   @override
+  String get privacyOpenSourceUrlError => '無法打開鏈接';
+
+  @override
   String get updateCorruptedFileTitle => '安裝包已損壞';
 
   @override
   String get updateCorruptedFileMessage => '檢測到之前下載的安裝包不完整或已損壞，是否刪除並重新下載？';
-
-  @override
-  String get privacyDashboardTitle => '隐私報告';
-
-  @override
-  String get privacyScoreExcellent => '隐私保护：优秀';
-
-  @override
-  String get privacyScoreDescription => '您的數據完全安全，没有任何隐私泄露風險';
-
-  @override
-  String get privacyDataStorageTitle => '數據存储位置';
-
-  @override
-  String get privacyDataStorageLocal => '所有财務數據存储在您的設備本地';
-
-  @override
-  String get privacyDataStorageNoUpload => '不会上傳到任何第三方服務器';
-
-  @override
-  String get privacyDataStorageOptionalSync => '可選的云同步完全由您自己控制';
-
-  @override
-  String get privacyNetworkMonitorTitle => '網絡請求监控';
-
-  @override
-  String get privacyNetworkMonitorSince => '自應用安装以来：';
-
-  @override
-  String get privacyNetworkDataRequests => '發送的數據請求';
-
-  @override
-  String get privacyNetworkTrackers => '第三方追踪器';
-
-  @override
-  String get privacyNetworkAdRequests => '广告網絡請求';
-
-  @override
-  String get privacyNetworkAnalytics => '分析服務調用';
-
-  @override
-  String get privacyPermissionsTitle => '权限使用說明';
-
-  @override
-  String get privacyPermissionsOnlyRequest => '本應用仅請求以下权限：';
-
-  @override
-  String get privacyPermissionsStorage => '存储权限（保存帳單數據）';
-
-  @override
-  String get privacyPermissionsNotifications => '通知权限（记帳提醒）';
-
-  @override
-  String get privacyPermissionsNoLocation => '不需要位置权限';
-
-  @override
-  String get privacyPermissionsNoContacts => '不需要通讯錄权限';
-
-  @override
-  String get privacyPermissionsNoCamera => '不需要相机权限';
-
-  @override
-  String get privacyOpenSourceTitle => '開源驗證';
-
-  @override
-  String get privacyOpenSourcePublic => '所有代碼公開可审計';
-
-  @override
-  String get privacyOpenSourceCommunity => '社區监督，無隐藏代碼';
-
-  @override
-  String get privacyOpenSourceMIT => '个人用戶免費';
-
-  @override
-  String get privacyOpenSourceViewCode => '在GitHub查看源代碼';
-
-  @override
-  String get privacyOpenSourceUrlError => '無法打開鏈接';
 
   @override
   String get welcomeTitle => '欢迎使用 BeeCount';

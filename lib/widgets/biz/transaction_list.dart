@@ -12,7 +12,7 @@ import '../../utils/sync_helpers.dart';
 import '../../utils/transaction_edit_utils.dart';
 import '../../utils/category_utils.dart';
 import '../category_icon.dart';
-import '../../pages/category_detail_page.dart';
+import '../../pages/transaction/category_detail_page.dart';
 import '../../l10n/app_localizations.dart';
 
 /// 可复用的交易列表组件

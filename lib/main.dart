@@ -10,16 +10,19 @@ import 'styles/colors.dart';
 import 'providers/font_scale_provider.dart';
 import 'utils/route_logger.dart';
 import 'utils/notification_factory.dart';
-import 'pages/splash_page.dart';
-import 'pages/welcome_page.dart';
+import 'pages/auth/splash_page.dart';
+import 'pages/auth/welcome_page.dart';
 import 'services/reminder_monitor_service.dart';
 import 'services/recurring_transaction_service.dart';
+import 'services/screenshot_monitor_service.dart';
+import 'services/shortcuts_handler_service.dart';
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 import 'cloud/cloud_service_store.dart';
 import 'cloud/supabase_initializer.dart';
 import 'widget/widget_manager.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:app_links/app_links.dart';
 import 'dart:io';
 
 Future<void> main() async {
@@ -72,7 +75,19 @@ Future<void> main() async {
     print('⚠️  小组件回调注册失败（可能在不支持的平台上运行）: $e');
   }
 
+  // 创建全局ProviderContainer
+  final container = ProviderContainer();
+
+  // 恢复截图自动识别设置（Android专属），传入container
+  await _restoreScreenshotMonitor(container);
+
+  // 启动iOS URL监听（用于快捷指令自动记账）
+  if (Platform.isIOS) {
+    _setupUrlListener(container);
+  }
+
   runApp(ProviderScope(
+    parent: container,
     observers: const [_WidgetUpdateObserver()],
     child: const MainApp(),
   ));
@@ -171,6 +186,37 @@ Future<void> _restoreUserReminder() async {
   }
 }
 
+/// 恢复截图自动识别设置（仅Android）
+///
+/// 问题场景：
+/// - 应用重启后，截图监听服务会丢失
+/// - 需要自动恢复用户之前的设置
+///
+/// 解决方案：
+/// - 在应用启动时检查用户是否开启了截图监听
+/// - 如果开启了，重新启动监听服务
+Future<void> _restoreScreenshotMonitor(ProviderContainer container) async {
+  if (!Platform.isAndroid) return;
+
+  try {
+    print('📸 检查并恢复截图自动识别...');
+    final screenshotMonitor = ScreenshotMonitorService(container);
+    final isEnabled = await screenshotMonitor.isEnabled();
+
+    if (isEnabled) {
+      print('✅ 发现用户已启用截图自动识别');
+      print('🔄 正在重新启动监听服务...');
+      await screenshotMonitor.enable();
+      print('✅ 截图监听服务已成功恢复');
+    } else {
+      print('ℹ️  用户未启用截图自动识别，跳过恢复');
+    }
+  } catch (e) {
+    print('❌ 恢复截图监听失败: $e');
+    // 不抛出异常，避免影响应用启动
+  }
+}
+
 /// 生成待处理的重复交易
 ///
 /// 在应用启动时检查所有重复交易模板，生成到期的交易记录
@@ -191,6 +237,44 @@ Future<void> _generatePendingRecurringTransactions() async {
     await db.close();
   } catch (e) {
     print('❌ 生成重复交易失败: $e');
+    // 不抛出异常，避免影响应用启动
+  }
+}
+
+/// 设置iOS URL监听（用于快捷指令自动记账）
+///
+/// 监听从快捷指令发来的 beecount:// URL Scheme调用
+/// 支持的URL格式:
+/// - beecount://auto-billing (自动处理最新截图)
+/// - beecount://quick-billing (打开相册选择)
+void _setupUrlListener(ProviderContainer container) {
+  try {
+    print('🔗 [iOS] 初始化URL监听...');
+
+    final appLinks = AppLinks();
+    final shortcutsHandler = ShortcutsHandlerService(container);
+
+    // 监听URL（应用在后台时）
+    appLinks.uriLinkStream.listen((uri) {
+      print('🔗 [iOS] 收到URL: $uri');
+      shortcutsHandler.handleUrl(uri);
+    }, onError: (err) {
+      print('❌ [iOS] URL监听错误: $err');
+    });
+
+    // 检查应用启动时的URL（应用未运行时）
+    appLinks.getInitialLink().then((uri) {
+      if (uri != null) {
+        print('🔗 [iOS] 启动时收到URL: $uri');
+        shortcutsHandler.handleUrl(uri);
+      }
+    }).catchError((err) {
+      print('❌ [iOS] 获取初始URL失败: $err');
+    });
+
+    print('✅ [iOS] URL监听已启动');
+  } catch (e) {
+    print('❌ [iOS] URL监听初始化失败: $e');
     // 不抛出异常，避免影响应用启动
   }
 }

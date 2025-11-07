@@ -21,6 +21,9 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "notification_channel"
     private val INSTALL_CHANNEL = "com.example.beecount/install"
+    private val SCREENSHOT_CHANNEL = "com.example.beecount/screenshot"
+
+    private var screenshotObserver: ScreenshotObserver? = null
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +59,28 @@ class MainActivity: FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+
+        // 截图监听的MethodChannel
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "startScreenshotObserver" -> {
+                    startScreenshotObserver(flutterEngine)
+                    result.success(true)
+                }
+                "stopScreenshotObserver" -> {
+                    stopScreenshotObserver()
+                    result.success(true)
+                }
+                "openAccessibilitySettings" -> {
+                    openAccessibilitySettings()
+                    result.success(true)
+                }
+                "isAccessibilityServiceEnabled" -> {
+                    result.success(isAccessibilityServiceEnabled())
+                }
+                else -> result.notImplemented()
+            }
+        }
 
         // 安装APK的MethodChannel
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, INSTALL_CHANNEL).setMethodCallHandler { call, result ->
@@ -367,6 +392,100 @@ class MainActivity: FlutterActivity() {
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "❌ 直接测试NotificationReceiver失败: $e")
         }
+    }
+
+    private fun startScreenshotObserver(flutterEngine: FlutterEngine) {
+        try {
+            val isAccessibilityEnabled = isAccessibilityServiceEnabled()
+
+            // 双保险模式: ContentObserver作为主要方案(已验证快速可靠)
+            android.util.Log.d("MainActivity", "📸 启动截图监听 (ContentObserver模式 - 主方案)")
+
+            // 创建ContentObserver
+            screenshotObserver = ScreenshotObserver(this) { screenshotPath ->
+                android.util.Log.d("MainActivity", "✅ ContentObserver检测到截图: $screenshotPath")
+
+                // 通知 Flutter 端
+                MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
+                    .invokeMethod("onScreenshotDetected", screenshotPath)
+            }
+
+            // 注册ContentObserver
+            val uri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                android.provider.MediaStore.Images.Media.getContentUri(android.provider.MediaStore.VOLUME_EXTERNAL)
+            } else {
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            }
+
+            contentResolver.registerContentObserver(uri, true, screenshotObserver!!)
+            android.util.Log.d("MainActivity", "✅ ContentObserver已注册")
+
+            // 如果启用了无障碍服务,作为备用方案
+            if (isAccessibilityEnabled) {
+                android.util.Log.d("MainActivity", "📸 同时启用无障碍服务 (备用方案)")
+
+                ScreenshotAccessibilityService.onScreenshotDetected = { screenshotPath ->
+                    android.util.Log.d("MainActivity", "✅ 无障碍服务检测到截图: $screenshotPath (备用)")
+
+                    // 通知 Flutter 端 (Flutter端会做防重复处理)
+                    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
+                        .invokeMethod("onScreenshotDetected", screenshotPath)
+                }
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "❌ 启动截图监听失败", e)
+        }
+    }
+
+    private fun stopScreenshotObserver() {
+        try {
+            // 停止无障碍服务回调
+            ScreenshotAccessibilityService.onScreenshotDetected = null
+
+            // 停止ContentObserver
+            screenshotObserver?.let {
+                contentResolver.unregisterContentObserver(it)
+                screenshotObserver = null
+                android.util.Log.d("MainActivity", "✅ ContentObserver已注销")
+            }
+
+            android.util.Log.d("MainActivity", "✅ 截图监听已停止")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "❌ 停止截图监听失败", e)
+        }
+    }
+
+    private fun isAccessibilityServiceEnabled(): Boolean {
+        // 使用完整类名而不是简写格式
+        val service = "${packageName}/com.example.beecount.ScreenshotAccessibilityService"
+        val enabledServices = android.provider.Settings.Secure.getString(
+            contentResolver,
+            android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+        android.util.Log.d("MainActivity", "检查无障碍服务状态:")
+        android.util.Log.d("MainActivity", "  查找服务: $service")
+        android.util.Log.d("MainActivity", "  已启用服务列表: $enabledServices")
+        val isEnabled = enabledServices?.contains(service) == true
+        android.util.Log.d("MainActivity", "  检测结果: $isEnabled")
+        return isEnabled
+    }
+
+    private fun openAccessibilitySettings() {
+        try {
+            android.util.Log.w("MainActivity", "🚨 openAccessibilitySettings 被调用!")
+            android.util.Log.w("MainActivity", "调用堆栈: ${Exception().stackTraceToString()}")
+
+            val intent = Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "打开无障碍设置失败", e)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopScreenshotObserver()
     }
 
     private fun installApkWithIntent(filePath: String): Boolean {
