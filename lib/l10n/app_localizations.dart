@@ -5608,6 +5608,12 @@ abstract class AppLocalizations {
   /// **'Manage multiple payment accounts and track balance changes for each account'**
   String get accountsFeatureDescription;
 
+  /// No description provided for @privacyOpenSourceUrlError.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open link'**
+  String get privacyOpenSourceUrlError;
+
   /// No description provided for @updateCorruptedFileTitle.
   ///
   /// In en, this message translates to:
@@ -5619,162 +5625,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?'**
   String get updateCorruptedFileMessage;
-
-  /// No description provided for @privacyDashboardTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Privacy Report'**
-  String get privacyDashboardTitle;
-
-  /// No description provided for @privacyScoreExcellent.
-  ///
-  /// In en, this message translates to:
-  /// **'Privacy Protection: Excellent'**
-  String get privacyScoreExcellent;
-
-  /// No description provided for @privacyScoreDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your data is completely secure with no privacy risks'**
-  String get privacyScoreDescription;
-
-  /// No description provided for @privacyDataStorageTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Data Storage Location'**
-  String get privacyDataStorageTitle;
-
-  /// No description provided for @privacyDataStorageLocal.
-  ///
-  /// In en, this message translates to:
-  /// **'All financial data is stored locally on your device'**
-  String get privacyDataStorageLocal;
-
-  /// No description provided for @privacyDataStorageNoUpload.
-  ///
-  /// In en, this message translates to:
-  /// **'Never uploaded to any third-party servers'**
-  String get privacyDataStorageNoUpload;
-
-  /// No description provided for @privacyDataStorageOptionalSync.
-  ///
-  /// In en, this message translates to:
-  /// **'Optional cloud sync is fully controlled by you'**
-  String get privacyDataStorageOptionalSync;
-
-  /// No description provided for @privacyNetworkMonitorTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Network Request Monitoring'**
-  String get privacyNetworkMonitorTitle;
-
-  /// No description provided for @privacyNetworkMonitorSince.
-  ///
-  /// In en, this message translates to:
-  /// **'Since app installation:'**
-  String get privacyNetworkMonitorSince;
-
-  /// No description provided for @privacyNetworkDataRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Data requests sent'**
-  String get privacyNetworkDataRequests;
-
-  /// No description provided for @privacyNetworkTrackers.
-  ///
-  /// In en, this message translates to:
-  /// **'Third-party trackers'**
-  String get privacyNetworkTrackers;
-
-  /// No description provided for @privacyNetworkAdRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Ad network requests'**
-  String get privacyNetworkAdRequests;
-
-  /// No description provided for @privacyNetworkAnalytics.
-  ///
-  /// In en, this message translates to:
-  /// **'Analytics service calls'**
-  String get privacyNetworkAnalytics;
-
-  /// No description provided for @privacyPermissionsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Permission Usage'**
-  String get privacyPermissionsTitle;
-
-  /// No description provided for @privacyPermissionsOnlyRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'This app only requests the following permissions:'**
-  String get privacyPermissionsOnlyRequest;
-
-  /// No description provided for @privacyPermissionsStorage.
-  ///
-  /// In en, this message translates to:
-  /// **'Storage permission (save transaction data)'**
-  String get privacyPermissionsStorage;
-
-  /// No description provided for @privacyPermissionsNotifications.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification permission (recording reminders)'**
-  String get privacyPermissionsNotifications;
-
-  /// No description provided for @privacyPermissionsNoLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'No location permission needed'**
-  String get privacyPermissionsNoLocation;
-
-  /// No description provided for @privacyPermissionsNoContacts.
-  ///
-  /// In en, this message translates to:
-  /// **'No contacts permission needed'**
-  String get privacyPermissionsNoContacts;
-
-  /// No description provided for @privacyPermissionsNoCamera.
-  ///
-  /// In en, this message translates to:
-  /// **'No camera permission needed'**
-  String get privacyPermissionsNoCamera;
-
-  /// No description provided for @privacyOpenSourceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Open Source Verification'**
-  String get privacyOpenSourceTitle;
-
-  /// No description provided for @privacyOpenSourcePublic.
-  ///
-  /// In en, this message translates to:
-  /// **'All code is publicly auditable'**
-  String get privacyOpenSourcePublic;
-
-  /// No description provided for @privacyOpenSourceCommunity.
-  ///
-  /// In en, this message translates to:
-  /// **'Community supervision, no hidden code'**
-  String get privacyOpenSourceCommunity;
-
-  /// No description provided for @privacyOpenSourceMIT.
-  ///
-  /// In en, this message translates to:
-  /// **'Free for Personal Use'**
-  String get privacyOpenSourceMIT;
-
-  /// No description provided for @privacyOpenSourceViewCode.
-  ///
-  /// In en, this message translates to:
-  /// **'View Source Code on GitHub'**
-  String get privacyOpenSourceViewCode;
-
-  /// No description provided for @privacyOpenSourceUrlError.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot open link'**
-  String get privacyOpenSourceUrlError;
 
   /// No description provided for @welcomeTitle.
   ///
@@ -6015,6 +5865,366 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Month\'s Income'**
   String get monthIncome;
+
+  /// No description provided for @autoScreenshotBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Screenshot Billing'**
+  String get autoScreenshotBilling;
+
+  /// No description provided for @autoScreenshotBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-recognize payment info from screenshots'**
+  String get autoScreenshotBillingDesc;
+
+  /// No description provided for @autoScreenshotBillingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Screenshot Billing'**
+  String get autoScreenshotBillingTitle;
+
+  /// No description provided for @featureDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature Description'**
+  String get featureDescription;
+
+  /// No description provided for @featureDescriptionContent.
+  ///
+  /// In en, this message translates to:
+  /// **'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 1-2 seconds\n🤖 Smart category matching\n📝 Auto-fill notes\n\nNote:\n• Without accessibility service: slightly slower (3-5s)\n• With accessibility service enabled: instant recognition'**
+  String get featureDescriptionContent;
+
+  /// No description provided for @autoBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Billing'**
+  String get autoBilling;
+
+  /// No description provided for @enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get enabled;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// No description provided for @accessibilityService.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility Service'**
+  String get accessibilityService;
+
+  /// No description provided for @accessibilityServiceEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled - Instant Recognition'**
+  String get accessibilityServiceEnabled;
+
+  /// No description provided for @accessibilityServiceDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled - Slower Recognition'**
+  String get accessibilityServiceDisabled;
+
+  /// No description provided for @improveRecognitionSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Improve Recognition Speed'**
+  String get improveRecognitionSpeed;
+
+  /// No description provided for @accessibilityGuideContent.
+  ///
+  /// In en, this message translates to:
+  /// **'With accessibility service enabled, screenshots can be recognized instantly without waiting for file write.'**
+  String get accessibilityGuideContent;
+
+  /// No description provided for @setupSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Steps:'**
+  String get setupSteps;
+
+  /// No description provided for @accessibilityStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \"Open Accessibility Settings\" button below'**
+  String get accessibilityStep1;
+
+  /// No description provided for @accessibilityStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Find \"BeeCount-Screenshot Recognition\" in the list'**
+  String get accessibilityStep2;
+
+  /// No description provided for @accessibilityStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable the service switch'**
+  String get accessibilityStep3;
+
+  /// No description provided for @accessibilityStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to app to use'**
+  String get accessibilityStep4;
+
+  /// No description provided for @openAccessibilitySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Accessibility Settings'**
+  String get openAccessibilitySettings;
+
+  /// No description provided for @accessibilityServiceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Note: Accessibility service is only used to detect screenshot actions, and will not read or modify your other data.'**
+  String get accessibilityServiceNote;
+
+  /// No description provided for @supportedPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported Payment Methods'**
+  String get supportedPayments;
+
+  /// No description provided for @supportedAlipay.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Alipay'**
+  String get supportedAlipay;
+
+  /// No description provided for @supportedWechat.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ WeChat Pay'**
+  String get supportedWechat;
+
+  /// No description provided for @supportedUnionpay.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ UnionPay'**
+  String get supportedUnionpay;
+
+  /// No description provided for @supportedOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Other payment methods may have lower recognition accuracy'**
+  String get supportedOthers;
+
+  /// No description provided for @photosPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos permission required for screenshot monitoring'**
+  String get photosPermissionRequired;
+
+  /// No description provided for @enableSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto billing enabled'**
+  String get enableSuccess;
+
+  /// No description provided for @disableSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto billing disabled'**
+  String get disableSuccess;
+
+  /// No description provided for @enableFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable failed'**
+  String get enableFailed;
+
+  /// No description provided for @disableFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable failed'**
+  String get disableFailed;
+
+  /// No description provided for @openSettingsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to open settings'**
+  String get openSettingsFailed;
+
+  /// No description provided for @reselectImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Reselect'**
+  String get reselectImage;
+
+  /// No description provided for @viewOriginalText.
+  ///
+  /// In en, this message translates to:
+  /// **'View Original Text'**
+  String get viewOriginalText;
+
+  /// No description provided for @createBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Bill'**
+  String get createBill;
+
+  /// No description provided for @ocrBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'OCR Scan Billing'**
+  String get ocrBilling;
+
+  /// No description provided for @ocrBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-recognize payment screenshots'**
+  String get ocrBillingDesc;
+
+  /// No description provided for @quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// No description provided for @iosAutoFeatureDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.'**
+  String get iosAutoFeatureDesc;
+
+  /// No description provided for @iosAutoShortcutQuickAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Add Shortcut'**
+  String get iosAutoShortcutQuickAdd;
+
+  /// No description provided for @iosAutoShortcutQuickAddDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.'**
+  String get iosAutoShortcutQuickAddDesc;
+
+  /// No description provided for @iosAutoShortcutImport.
+  ///
+  /// In en, this message translates to:
+  /// **'One-Click Import Shortcut'**
+  String get iosAutoShortcutImport;
+
+  /// No description provided for @iosAutoShortcutOpenApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Or Manually Open Shortcuts App'**
+  String get iosAutoShortcutOpenApp;
+
+  /// No description provided for @iosAutoShortcutConfigTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration Steps (Recommended - URL Parameter):'**
+  String get iosAutoShortcutConfigTitle;
+
+  /// No description provided for @iosAutoShortcutStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Open \"Shortcuts\" app'**
+  String get iosAutoShortcutStep1;
+
+  /// No description provided for @iosAutoShortcutStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \"+\" in top right to create new shortcut'**
+  String get iosAutoShortcutStep2;
+
+  /// No description provided for @iosAutoShortcutStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Add \"Take Screenshot\" action (get latest screenshot)'**
+  String get iosAutoShortcutStep3;
+
+  /// No description provided for @iosAutoShortcutStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Add \"Extract Text from Screenshot\" action'**
+  String get iosAutoShortcutStep4;
+
+  /// No description provided for @iosAutoShortcutStep5.
+  ///
+  /// In en, this message translates to:
+  /// **'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)'**
+  String get iosAutoShortcutStep5;
+
+  /// No description provided for @iosAutoShortcutStep6.
+  ///
+  /// In en, this message translates to:
+  /// **'Add \"URL Encode\" action: encode the replaced text'**
+  String get iosAutoShortcutStep6;
+
+  /// No description provided for @iosAutoShortcutStep7.
+  ///
+  /// In en, this message translates to:
+  /// **'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]'**
+  String get iosAutoShortcutStep7;
+
+  /// No description provided for @iosAutoShortcutStep8.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap shortcut settings (three dots in top right)'**
+  String get iosAutoShortcutStep8;
+
+  /// No description provided for @iosAutoShortcutStep9.
+  ///
+  /// In en, this message translates to:
+  /// **'In \"When...\" add \"When Screenshot is taken\" trigger'**
+  String get iosAutoShortcutStep9;
+
+  /// No description provided for @iosAutoShortcutStep10.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and test: auto-identify after screenshot'**
+  String get iosAutoShortcutStep10;
+
+  /// No description provided for @iosAutoShortcutRecommendedTip.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit'**
+  String get iosAutoShortcutRecommendedTip;
+
+  /// No description provided for @iosAutoBackTapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Double Tap Back to Trigger (Recommended)'**
+  String get iosAutoBackTapTitle;
+
+  /// No description provided for @iosAutoBackTapDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed'**
+  String get iosAutoBackTapDesc;
+
+  /// No description provided for @iosAutoImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: {error}'**
+  String iosAutoImportFailed(Object error);
+
+  /// No description provided for @iosAutoOpenAppFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Open failed: {error}'**
+  String iosAutoOpenAppFailed(Object error);
+
+  /// No description provided for @iosAutoCannotOpenLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open link, please check network connection'**
+  String get iosAutoCannotOpenLink;
+
+  /// No description provided for @iosAutoCannotOpenShortcuts.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open Shortcuts app'**
+  String get iosAutoCannotOpenShortcuts;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

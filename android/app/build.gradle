@@ -156,3 +156,8 @@ android.applicationVariants.all { variant ->
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Google ML Kit 中文文本识别
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0'
+}

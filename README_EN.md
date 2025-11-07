@@ -51,7 +51,7 @@
 - ✅ **Self-hosted**, complete data control
 - ✅ **Open source**, auditable code
 - ✅ **Offline-first**, works without network
-- ✅ **Free for personal use**, no ads or paywalls
+- ✅ **Free for personal use**, no ads or paywalls (including core features like auto-billing)
 - ✅ **Privacy-first**, developers cannot access your data
 - ✅ **Open source code**, auditable codebase
 
@@ -59,7 +59,7 @@
 </tr>
 </table>
 
-A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, category statistics, **chart analysis**, data import/export, and self-hosted Supabase/WebDAV cloud sync. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
+A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **screenshot auto-billing**, category statistics, **chart analysis**, data import/export, and self-hosted Supabase/WebDAV cloud sync. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
 
 ## 📱 Core Features Showcase
 
@@ -117,9 +117,43 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - **Optional Sync**: Works completely without cloud configuration
 - **Zero Tracking**: No analytics, no ads, no data collection
 
+### 🤖 Smart Auto-Billing - One-Tap Payment Recording
+
+> **🌟 Core Feature Highlight: Screenshot and bill automatically, payment info auto-recognized!**
+
+**Android Auto-Billing**:
+- 📸 **Accessibility Service Auto-Billing**: Once enabled, automatically recognizes payment info and creates bills with each screenshot
+- 🎯 **Smart Recognition**: Auto-recognizes Alipay, WeChat Pay, UnionPay and other mainstream payment methods
+- ⚡ **Real-time Recording**: Screenshot after payment, transaction info recorded immediately
+
+**iOS Auto-Billing**:
+- 🔗 **Shortcuts Integration**: Automate through iOS "Shortcuts" app
+- 👆 **Double Tap Back Trigger**: After setup, double tap phone back during payment for auto-billing
+- 🎨 **Flexible Configuration**: Supports auto-trigger on screenshot or manual trigger, adapts to different usage scenarios
+
+<table>
+<tr>
+<td width="50%">
+
+**Android Demo**
+
+https://github.com/TNT-Likely/BeeCount/assets/demo/preview/android_auto_billing.mp4
+
+</td>
+<td width="50%">
+
+**iOS Demo**
+
+https://github.com/TNT-Likely/BeeCount/assets/demo/preview/ios_auto_billing.mp4
+
+</td>
+</tr>
+</table>
+
 ### 📊 Complete Accounting Features
 
 - **Smart Accounting**: Income/expense categories, amounts, dates, notes
+- **OCR Scan Billing**: Take photos or select payment screenshots, auto-recognize amounts and merchant info
 - **Multi-Ledger Management**: Separate management for personal, work, investment
 - **Chart Analysis**: Monthly reports, category rankings, trend analysis
 - **Data Import/Export**: CSV format, compatible with mainstream apps
@@ -479,6 +513,7 @@ Format: Nickname - Amount - Date
 
 - **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
 - **\*Rui** - ¥720 - 2025-10-27 (WeChat) 🎉
+- **\*Hong** - ¥50 - 2025-11-07 (Alipay)
 
 ---
 

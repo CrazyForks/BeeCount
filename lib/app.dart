@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'pages/home_page.dart';
-import 'pages/analytics_page.dart';
-import 'pages/ledgers_page.dart';
-import 'pages/mine_page.dart';
-import 'pages/category_picker.dart';
-import 'pages/personalize_page.dart' show headerStyleProvider;
+import 'pages/main/home_page.dart';
+import 'pages/main/analytics_page.dart';
+import 'pages/main/ledgers_page.dart';
+import 'pages/main/mine_page.dart';
+import 'pages/category/category_picker.dart';
+import 'pages/settings/personalize_page.dart' show headerStyleProvider;
 import 'providers.dart';
 import 'utils/ui_scale_extensions.dart';
 import 'l10n/app_localizations.dart';

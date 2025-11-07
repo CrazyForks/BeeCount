@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/db.dart';
-import '../pages/category_picker.dart';
+import '../pages/category/category_picker.dart';
 
 class TransactionEditUtils {
   static Future<void> editTransaction(

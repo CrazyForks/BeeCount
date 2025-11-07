@@ -57,11 +57,28 @@
 	<!-- Privacy - Photo Library Additions Usage Description -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>蜜蜂记账需要保存文件到您的照片库</string>
+	<!-- Privacy - Camera Usage Description -->
+	<key>NSCameraUsageDescription</key>
+	<string>蜜蜂记账需要使用相机拍摄支付凭证进行OCR识别</string>
 	<!-- Background Modes for Notifications -->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
+	</array>
+	<!-- URL Scheme for Shortcuts Integration -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.example.beecount</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>beecount</string>
+			</array>
+		</dict>
 	</array>
 </dict>
 </plist>

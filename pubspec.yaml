@@ -38,6 +38,10 @@ dependencies:
   reorderable_grid_view: ^2.2.8
   excel: ^4.0.6
   home_widget: ^0.7.0
+  google_mlkit_text_recognition: ^0.15.0
+  image_picker: ^1.1.2
+  gbk_codec: ^0.4.0
+  app_links: ^6.4.1
 
 dev_dependencies:
   flutter_test:

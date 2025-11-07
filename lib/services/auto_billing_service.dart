@@ -1,0 +1,490 @@
+import 'dart:io';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'ocr_service.dart';
+import 'category_matcher.dart';
+import '../providers.dart';
+
+/// 自动记账服务 - 通用核心逻辑
+/// Android和iOS共用的OCR识别和自动记账逻辑
+class AutoBillingService {
+  static const _ledgerIdKey = 'current_ledger_id';
+  static const _processedScreenshotsKey = 'processed_screenshots';
+
+  final ProviderContainer _container;
+  final OcrService _ocrService = OcrService();
+  final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  // 防重复处理
+  final Set<String> _processedPaths = {};
+  String? _lastProcessedPath;
+  int _lastProcessedTime = 0;
+
+  AutoBillingService(this._container) {
+    _initNotifications();
+    _loadProcessedScreenshots();
+  }
+
+  /// 初始化通知
+  Future<void> _initNotifications() async {
+    const androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iosSettings = DarwinInitializationSettings();
+
+    const initSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: iosSettings,
+    );
+
+    await _notificationsPlugin.initialize(initSettings);
+  }
+
+  /// 加载已处理的截图列表
+  Future<void> _loadProcessedScreenshots() async {
+    final prefs = await SharedPreferences.getInstance();
+    final list = prefs.getStringList(_processedScreenshotsKey) ?? [];
+    _processedPaths.addAll(list);
+
+    // 只保留最近100个，避免内存占用过大
+    if (_processedPaths.length > 100) {
+      final toRemove = _processedPaths.length - 100;
+      _processedPaths.removeAll(_processedPaths.take(toRemove));
+      await _saveProcessedScreenshots();
+    }
+  }
+
+  /// 保存已处理的截图列表
+  Future<void> _saveProcessedScreenshots() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(
+        _processedScreenshotsKey, _processedPaths.toList());
+  }
+
+  /// 标记截图已处理
+  Future<void> _markAsProcessed(String path) async {
+    _processedPaths.add(path);
+    await _saveProcessedScreenshots();
+  }
+
+  /// 检查截图是否已处理
+  bool _isProcessed(String path) {
+    return _processedPaths.contains(path);
+  }
+
+  /// 核心：处理截图并自动记账
+  /// [imagePath] 截图文件路径
+  /// [showNotification] 是否显示通知（默认true）
+  /// 返回：交易记录ID，失败返回null
+  Future<int?> processScreenshot(
+    String imagePath, {
+    bool showNotification = true,
+  }) async {
+    final totalStartTime = DateTime.now().millisecondsSinceEpoch;
+    print('📸 [AutoBilling] 开始处理截图: $imagePath');
+
+    // 防重复处理: 已处理过的跳过
+    if (_isProcessed(imagePath)) {
+      print('⚠️ [AutoBilling] 截图已处理过，跳过');
+      return null;
+    }
+
+    // 防重复处理: 5秒内相同路径只处理一次
+    final now = DateTime.now().millisecondsSinceEpoch;
+    if (_lastProcessedPath == imagePath && (now - _lastProcessedTime) < 5000) {
+      print('⚠️ [AutoBilling] 重复截图，跳过处理 (${now - _lastProcessedTime}ms前已处理)');
+      return null;
+    }
+
+    _lastProcessedPath = imagePath;
+    _lastProcessedTime = now;
+
+    try {
+      const notificationId = 1001;
+
+      // 立即显示"检测到截图"通知
+      if (showNotification) {
+        await _showNotification(
+          id: notificationId,
+          title: '✅ 检测到截图',
+          body: '正在等待文件写入完成...',
+        );
+      }
+
+      // 等待文件写入完成（最多5秒）
+      final file = File(imagePath);
+      final waitStartTime = DateTime.now().millisecondsSinceEpoch;
+      var waitTime = 0;
+      const maxWait = 5000; // 5秒超时
+
+      while (waitTime < maxWait) {
+        if (await file.exists() && await file.length() > 0) {
+          print('✅ 文件已就绪，等待时间=${waitTime}ms');
+          break;
+        }
+        await Future.delayed(const Duration(milliseconds: 50));
+        waitTime = DateTime.now().millisecondsSinceEpoch - waitStartTime;
+      }
+
+      if (!await file.exists() || await file.length() == 0) {
+        print('❌ 截图文件等待超时或不存在 (等待${waitTime}ms)');
+        if (showNotification) {
+          await _showNotification(
+            id: notificationId,
+            title: '识别失败',
+            body: '截图文件不可用',
+          );
+        }
+        return null;
+      }
+
+      // 更新通知：开始识别
+      if (showNotification) {
+        await _showNotification(
+          id: notificationId,
+          title: '正在识别截图...',
+          body: '正在分析支付信息,请稍候',
+        );
+      }
+
+      // OCR 识别
+      final ocrStartTime = DateTime.now().millisecondsSinceEpoch;
+      print('⏱️ [性能] 开始OCR识别');
+      final result = await _ocrService.recognizePaymentImage(file);
+      final ocrElapsed = DateTime.now().millisecondsSinceEpoch - ocrStartTime;
+      print('⏱️ [性能] OCR识别完成, 耗时=${ocrElapsed}ms');
+
+      // 打印识别结果用于调试
+      print('📋 OCR识别原始文本: ${result.rawText}');
+      print('💰 识别到的金额: ${result.amount}');
+      print('🏪 识别到的商家: ${result.merchant}');
+      print('⏰ 识别到的时间: ${result.time}');
+      print('🔢 所有数字: ${result.allNumbers}');
+
+      // 标记为已处理
+      await _markAsProcessed(imagePath);
+
+      // 根据识别结果处理
+      if (result.amount != null && result.amount! > 0) {
+        // 识别成功，自动创建记账记录
+        print('✅ OCR识别成功: 金额=${result.amount}, 商家=${result.merchant}');
+
+        try {
+          final dbStartTime = DateTime.now().millisecondsSinceEpoch;
+          print('⏱️ [性能] 开始创建交易记录');
+          final transactionId = await _createTransaction(result);
+          final dbElapsed = DateTime.now().millisecondsSinceEpoch - dbStartTime;
+          print('⏱️ [性能] 交易记录创建完成, 耗时=${dbElapsed}ms');
+
+          if (transactionId != null) {
+            // 记账成功
+            if (showNotification) {
+              await _showNotification(
+                id: notificationId,
+                title: '✅ 自动记账成功 ¥${result.amount!.toStringAsFixed(2)}',
+                body: result.merchant != null
+                    ? '商家: ${result.merchant}'
+                    : '已自动创建支出记录',
+              );
+            }
+            print('✅ 自动记账成功: ID=$transactionId');
+            return transactionId;
+          } else {
+            // 记账失败
+            if (showNotification) {
+              await _showNotification(
+                id: notificationId,
+                title: '❌ 自动记账失败',
+                body: '识别成功但创建记录失败，请手动记账',
+              );
+            }
+            print('❌ 自动记账失败: 创建交易记录返回null');
+            return null;
+          }
+        } catch (e) {
+          print('❌ 自动记账失败: $e');
+          if (showNotification) {
+            await _showNotification(
+              id: notificationId,
+              title: '❌ 自动记账失败',
+              body: '识别成功但创建记录失败: $e',
+            );
+          }
+          return null;
+        }
+      } else if (result.allNumbers.isNotEmpty) {
+        // 识别到数字但未确定金额
+        if (showNotification) {
+          await _showNotification(
+            id: notificationId,
+            title: '⚠️ 识别到金额候选',
+            body: '可能的金额: ${result.allNumbers.join(", ")} | 请手动确认',
+          );
+        }
+        print('⚠️ 识别到数字但未确定金额: ${result.allNumbers}');
+        return null;
+      } else {
+        // 完全未识别到
+        if (showNotification) {
+          await _showNotification(
+            id: notificationId,
+            title: '❌ 未识别到支付信息',
+            body: '可能不是支付截图,或图片质量较差',
+          );
+        }
+        print('⚠️ 未识别到任何有效金额');
+        return null;
+      }
+    } catch (e) {
+      print('❌ 处理截图失败: $e');
+      return null;
+    } finally {
+      final totalElapsed =
+          DateTime.now().millisecondsSinceEpoch - totalStartTime;
+      print('⏱️ [性能] 整个流程完成, 总耗时=${totalElapsed}ms');
+    }
+  }
+
+  /// 核心：直接处理文本并自动记账(快捷指令推荐方式)
+  /// [text] 快捷指令传递的识别文本
+  /// [showNotification] 是否显示通知（默认true）
+  /// 返回：交易记录ID，失败返回null
+  Future<int?> processText(
+    String text, {
+    bool showNotification = true,
+  }) async {
+    final totalStartTime = DateTime.now().millisecondsSinceEpoch;
+    print('📝 [AutoBilling] 开始处理文本: $text');
+
+    try {
+      const notificationId = 1002;
+
+      // 显示"正在识别"通知
+      if (showNotification) {
+        await _showNotification(
+          id: notificationId,
+          title: '⏳ 正在识别',
+          body: '正在解析支付信息...',
+        );
+      }
+
+      // 直接解析文本(无需OCR)
+      final ocrResult = _ocrService.parsePaymentText(text);
+
+      if (ocrResult.amount == null) {
+        print('❌ 未能识别出金额');
+        if (showNotification) {
+          await _showNotification(
+            id: notificationId,
+            title: '❌ 识别失败',
+            body: '未能识别出金额信息',
+          );
+        }
+        return null;
+      }
+
+      print('✅ 识别成功: 金额=${ocrResult.amount}, 商家=${ocrResult.merchant}');
+
+      // 更新通知状态
+      if (showNotification) {
+        await _showNotification(
+          id: notificationId,
+          title: '✅ 识别成功',
+          body: '正在创建交易记录...',
+        );
+      }
+
+      // 获取分类并创建交易
+      final db = _container.read(databaseProvider);
+      final categories = await (db.select(db.categories)
+            ..where((t) => t.kind.equals('expense')))
+          .get();
+
+      final suggestedCategoryId = CategoryMatcher.smartMatch(
+        merchant: ocrResult.merchant,
+        fullText: ocrResult.rawText,
+        categories: categories,
+      );
+
+      final resultWithCategory = OcrResult(
+        amount: ocrResult.amount,
+        merchant: ocrResult.merchant,
+        time: ocrResult.time,
+        rawText: ocrResult.rawText,
+        allNumbers: ocrResult.allNumbers,
+        suggestedCategoryId: suggestedCategoryId,
+      );
+
+      // 创建交易记录
+      final txId = await _createTransaction(resultWithCategory);
+
+      if (txId != null) {
+        print('✅ 交易创建成功: id=$txId');
+        if (showNotification) {
+          await _showNotification(
+            id: notificationId,
+            title: '✅ 记账成功',
+            body: '已自动创建支出记录: ¥${ocrResult.amount}',
+          );
+        }
+        return txId;
+      } else {
+        print('❌ 交易创建失败');
+        if (showNotification) {
+          await _showNotification(
+            id: notificationId,
+            title: '❌ 创建失败',
+            body: '无法创建交易记录',
+          );
+        }
+        return null;
+      }
+    } catch (e) {
+      print('❌ [AutoBilling] 文本处理失败: $e');
+      if (showNotification) {
+        await _showNotification(
+          id: 1002,
+          title: '❌ 处理失败',
+          body: '错误: $e',
+        );
+      }
+      return null;
+    } finally {
+      final totalElapsed =
+          DateTime.now().millisecondsSinceEpoch - totalStartTime;
+      print('⏱️ [性能] 文本处理完成, 总耗时=${totalElapsed}ms');
+    }
+  }
+
+  /// 创建交易记录
+  Future<int?> _createTransaction(OcrResult result) async {
+    try {
+      // 获取当前账本ID（优先从Provider读取，失败则从SharedPreferences读取，最后从数据库获取默认账本）
+      int? ledgerId;
+
+      // 方案1: 尝试从Provider读取
+      try {
+        ledgerId = _container.read(currentLedgerIdProvider);
+        print('✅ 从Provider获取账本ID: $ledgerId');
+      } catch (e) {
+        print('⚠️ 从Provider获取账本ID失败: $e');
+      }
+
+      // 方案2: 如果Provider失败，从SharedPreferences读取
+      if (ledgerId == null) {
+        final prefs = await SharedPreferences.getInstance();
+        ledgerId = prefs.getInt(_ledgerIdKey);
+        if (ledgerId != null) {
+          print('✅ 从SharedPreferences获取账本ID: $ledgerId');
+        }
+      }
+
+      // 方案3: 如果都失败，从数据库获取第一个账本
+      if (ledgerId == null) {
+        print('⚠️ 无法从缓存获取账本ID，尝试从数据库获取默认账本');
+        final db = _container.read(databaseProvider);
+        final ledgers = await db.select(db.ledgers).get();
+        if (ledgers.isNotEmpty) {
+          ledgerId = ledgers.first.id;
+          print('✅ 从数据库获取默认账本ID: $ledgerId');
+          // 保存到SharedPreferences供下次使用
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt(_ledgerIdKey, ledgerId);
+        }
+      }
+
+      if (ledgerId == null) {
+        print('❌ 无法获取任何账本ID，请先创建账本');
+        return null;
+      }
+
+      print('📝 准备创建交易: ledgerId=$ledgerId');
+
+      // 使用Provider的数据库和Repository实例
+      final db = _container.read(databaseProvider);
+      final repository = _container.read(repositoryProvider);
+
+      // 获取所有支出分类用于智能匹配
+      final categories = await (db.select(db.categories)
+            ..where((t) => t.kind.equals('expense')))
+          .get();
+
+      print('📝 查询到 ${categories.length} 个支出分类');
+
+      // 智能匹配分类
+      final suggestedCategoryId = CategoryMatcher.smartMatch(
+        merchant: result.merchant,
+        fullText: result.rawText,
+        categories: categories,
+      );
+
+      // 如果没有匹配到分类，使用第一个支出分类
+      int? categoryId = suggestedCategoryId;
+      if (categoryId == null && categories.isNotEmpty) {
+        categoryId = categories.first.id;
+      }
+
+      if (categoryId == null) {
+        print('❌ 无法获取分类');
+        return null;
+      }
+
+      print('📝 使用分类ID: $categoryId');
+
+      // 准备备注
+      String note = '';
+      if (result.merchant != null) {
+        note = result.merchant!;
+      }
+
+      // 使用Repository创建交易记录(账户设为null)
+      final transactionId = await repository.addTransaction(
+        ledgerId: ledgerId,
+        type: 'expense',
+        amount: result.amount!,
+        categoryId: categoryId,
+        accountId: null, // 账户留空
+        happenedAt: result.time ?? DateTime.now(),
+        note: note,
+      );
+
+      print('✅ 交易记录已创建: ID=$transactionId');
+
+      return transactionId;
+    } catch (e) {
+      print('❌ 创建交易记录失败: $e');
+      print('❌ 错误堆栈: ${StackTrace.current}');
+      rethrow;
+    }
+  }
+
+  /// 显示通知
+  Future<void> _showNotification({
+    required int id,
+    required String title,
+    required String body,
+  }) async {
+    const androidDetails = AndroidNotificationDetails(
+      'screenshot_ocr',
+      '截图识别',
+      channelDescription: '截图自动识别通知',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const iosDetails = DarwinNotificationDetails();
+
+    const details = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    await _notificationsPlugin.show(id, title, body, details);
+  }
+
+  /// 释放资源
+  void dispose() {
+    _ocrService.dispose();
+  }
+}

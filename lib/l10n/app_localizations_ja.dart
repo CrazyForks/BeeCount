@@ -2930,88 +2930,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get accountsFeatureDescription => '有効化後可以管理多个支付アカウント，追跡毎个アカウント的残高変化';
 
   @override
+  String get privacyOpenSourceUrlError => 'できません開くリンク';
+
+  @override
   String get updateCorruptedFileTitle => 'インストールパッケージが破損しています';
 
   @override
   String get updateCorruptedFileMessage => '以前ダウンロードしたインストールパッケージが不完全または破損していることが検出されました。削除して再ダウンロードしますか？';
-
-  @override
-  String get privacyDashboardTitle => 'プライバシーレポート';
-
-  @override
-  String get privacyScoreExcellent => 'プライバシー保護：優秀';
-
-  @override
-  String get privacyScoreDescription => '您的データ完全に安全，なし任何プライバシー漏洩リスク';
-
-  @override
-  String get privacyDataStorageTitle => 'データストレージ位置';
-
-  @override
-  String get privacyDataStorageLocal => 'すべて財務データストレージ在您的デバイスローカル';
-
-  @override
-  String get privacyDataStorageNoUpload => '不はアップロードに任何サードパーティサーバー';
-
-  @override
-  String get privacyDataStorageOptionalSync => 'オプション的クラウド同期完全に由您自己コントロール';
-
-  @override
-  String get privacyNetworkMonitorTitle => 'ネットワーク求モニタリング';
-
-  @override
-  String get privacyNetworkMonitorSince => '自アプリインストール以来：';
-
-  @override
-  String get privacyNetworkDataRequests => '送信的データ求';
-
-  @override
-  String get privacyNetworkTrackers => 'サードパーティ追跡器';
-
-  @override
-  String get privacyNetworkAdRequests => '広告ネットワーク求';
-
-  @override
-  String get privacyNetworkAnalytics => '分析服务呼び出し';
-
-  @override
-  String get privacyPermissionsTitle => '権限使用説明';
-
-  @override
-  String get privacyPermissionsOnlyRequest => '本アプリのみ求以下権限：';
-
-  @override
-  String get privacyPermissionsStorage => 'ストレージ権限（保存账单データ）';
-
-  @override
-  String get privacyPermissionsNotifications => '通知権限（记账リマインダー）';
-
-  @override
-  String get privacyPermissionsNoLocation => '不要位置権限';
-
-  @override
-  String get privacyPermissionsNoContacts => '不要連絡先権限';
-
-  @override
-  String get privacyPermissionsNoCamera => '不要カメラ権限';
-
-  @override
-  String get privacyOpenSourceTitle => 'オープンソース検証';
-
-  @override
-  String get privacyOpenSourcePublic => 'すべてコード公開可監査';
-
-  @override
-  String get privacyOpenSourceCommunity => 'コミュニティ監督，无隠しコード';
-
-  @override
-  String get privacyOpenSourceMIT => '個人ユーザー無料';
-
-  @override
-  String get privacyOpenSourceViewCode => '在GitHub表示源コード';
-
-  @override
-  String get privacyOpenSourceUrlError => 'できません開くリンク';
 
   @override
   String get welcomeTitle => 'ようこそ使用 BeeCount';
@@ -3132,4 +3057,188 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get monthIncome => '今月収入';
+
+  @override
+  String get autoScreenshotBilling => 'Auto Screenshot Billing';
+
+  @override
+  String get autoScreenshotBillingDesc => 'Auto-recognize payment info from screenshots';
+
+  @override
+  String get autoScreenshotBillingTitle => 'Auto Screenshot Billing';
+
+  @override
+  String get featureDescription => 'Feature Description';
+
+  @override
+  String get featureDescriptionContent => 'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 1-2 seconds\n🤖 Smart category matching\n📝 Auto-fill notes\n\nNote:\n• Without accessibility service: slightly slower (3-5s)\n• With accessibility service enabled: instant recognition';
+
+  @override
+  String get autoBilling => 'Auto Billing';
+
+  @override
+  String get enabled => 'Enabled';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get accessibilityService => 'Accessibility Service';
+
+  @override
+  String get accessibilityServiceEnabled => 'Enabled - Instant Recognition';
+
+  @override
+  String get accessibilityServiceDisabled => 'Disabled - Slower Recognition';
+
+  @override
+  String get improveRecognitionSpeed => 'Improve Recognition Speed';
+
+  @override
+  String get accessibilityGuideContent => 'With accessibility service enabled, screenshots can be recognized instantly without waiting for file write.';
+
+  @override
+  String get setupSteps => 'Setup Steps:';
+
+  @override
+  String get accessibilityStep1 => 'Tap \"Open Accessibility Settings\" button below';
+
+  @override
+  String get accessibilityStep2 => 'Find \"BeeCount-Screenshot Recognition\" in the list';
+
+  @override
+  String get accessibilityStep3 => 'Enable the service switch';
+
+  @override
+  String get accessibilityStep4 => 'Return to app to use';
+
+  @override
+  String get openAccessibilitySettings => 'Open Accessibility Settings';
+
+  @override
+  String get accessibilityServiceNote => '💡 Note: Accessibility service is only used to detect screenshot actions, and will not read or modify your other data.';
+
+  @override
+  String get supportedPayments => 'Supported Payment Methods';
+
+  @override
+  String get supportedAlipay => '✅ Alipay';
+
+  @override
+  String get supportedWechat => '✅ WeChat Pay';
+
+  @override
+  String get supportedUnionpay => '✅ UnionPay';
+
+  @override
+  String get supportedOthers => '⚠️ Other payment methods may have lower recognition accuracy';
+
+  @override
+  String get photosPermissionRequired => 'Photos permission required for screenshot monitoring';
+
+  @override
+  String get enableSuccess => 'Auto billing enabled';
+
+  @override
+  String get disableSuccess => 'Auto billing disabled';
+
+  @override
+  String get enableFailed => 'Enable failed';
+
+  @override
+  String get disableFailed => 'Disable failed';
+
+  @override
+  String get openSettingsFailed => 'Failed to open settings';
+
+  @override
+  String get reselectImage => 'Reselect';
+
+  @override
+  String get viewOriginalText => 'View Original Text';
+
+  @override
+  String get createBill => 'Create Bill';
+
+  @override
+  String get ocrBilling => 'OCR Scan Billing';
+
+  @override
+  String get ocrBillingDesc => 'Auto-recognize payment screenshots';
+
+  @override
+  String get quickActions => 'Quick Actions';
+
+  @override
+  String get iosAutoFeatureDesc => 'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.';
+
+  @override
+  String get iosAutoShortcutQuickAdd => 'Quick Add Shortcut';
+
+  @override
+  String get iosAutoShortcutQuickAddDesc => 'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.';
+
+  @override
+  String get iosAutoShortcutImport => 'One-Click Import Shortcut';
+
+  @override
+  String get iosAutoShortcutOpenApp => 'Or Manually Open Shortcuts App';
+
+  @override
+  String get iosAutoShortcutConfigTitle => 'Configuration Steps (Recommended - URL Parameter):';
+
+  @override
+  String get iosAutoShortcutStep1 => 'Open \"Shortcuts\" app';
+
+  @override
+  String get iosAutoShortcutStep2 => 'Tap \"+\" in top right to create new shortcut';
+
+  @override
+  String get iosAutoShortcutStep3 => 'Add \"Take Screenshot\" action (get latest screenshot)';
+
+  @override
+  String get iosAutoShortcutStep4 => 'Add \"Extract Text from Screenshot\" action';
+
+  @override
+  String get iosAutoShortcutStep5 => 'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)';
+
+  @override
+  String get iosAutoShortcutStep6 => 'Add \"URL Encode\" action: encode the replaced text';
+
+  @override
+  String get iosAutoShortcutStep7 => 'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]';
+
+  @override
+  String get iosAutoShortcutStep8 => 'Tap shortcut settings (three dots in top right)';
+
+  @override
+  String get iosAutoShortcutStep9 => 'In \"When...\" add \"When Screenshot is taken\" trigger';
+
+  @override
+  String get iosAutoShortcutStep10 => 'Save and test: auto-identify after screenshot';
+
+  @override
+  String get iosAutoShortcutRecommendedTip => '✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit';
+
+  @override
+  String get iosAutoBackTapTitle => '💡 Double Tap Back to Trigger (Recommended)';
+
+  @override
+  String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
+
+  @override
+  String iosAutoImportFailed(Object error) {
+    return 'Import failed: $error';
+  }
+
+  @override
+  String iosAutoOpenAppFailed(Object error) {
+    return 'Open failed: $error';
+  }
+
+  @override
+  String get iosAutoCannotOpenLink => 'Cannot open link, please check network connection';
+
+  @override
+  String get iosAutoCannotOpenShortcuts => 'Cannot open Shortcuts app';
 }
