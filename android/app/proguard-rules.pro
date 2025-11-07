@@ -114,3 +114,13 @@
 # Ignore Flutter Play Store related classes
 -dontwarn io.flutter.app.FlutterPlayStoreSplitApplication
 -dontwarn io.flutter.embedding.engine.deferredcomponents.PlayStoreDeferredComponentManager**
+
+# Keep Google ML Kit Text Recognition classes
+-keep class com.google.mlkit.vision.text.** { *; }
+-dontwarn com.google.mlkit.vision.text.devanagari.**
+-dontwarn com.google.mlkit.vision.text.japanese.**
+-dontwarn com.google.mlkit.vision.text.korean.**
+
+# Keep ML Kit common classes
+-keep class com.google.mlkit.common.** { *; }
+-keep class com.google.android.gms.internal.mlkit_vision_text_common.** { *; }
