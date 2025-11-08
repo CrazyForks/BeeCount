@@ -6255,6 +6255,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cannot open Shortcuts app'**
   String get iosAutoCannotOpenShortcuts;
+
+  /// No description provided for @aiSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Recognition'**
+  String get aiSettingsTitle;
+
+  /// No description provided for @aiSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure AI models and recognition strategy'**
+  String get aiSettingsSubtitle;
+
+  /// No description provided for @aiEnableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable AI Recognition'**
+  String get aiEnableTitle;
+
+  /// No description provided for @aiEnableSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use AI to enhance OCR accuracy and extract amount, merchant, time, etc.'**
+  String get aiEnableSubtitle;
+
+  /// No description provided for @aiEnableToastOn.
+  ///
+  /// In en, this message translates to:
+  /// **'AI enhancement enabled'**
+  String get aiEnableToastOn;
+
+  /// No description provided for @aiEnableToastOff.
+  ///
+  /// In en, this message translates to:
+  /// **'AI enhancement disabled'**
+  String get aiEnableToastOff;
+
+  /// No description provided for @aiStrategyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Execution Strategy'**
+  String get aiStrategyTitle;
+
+  /// No description provided for @aiStrategyLocalFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Local First (Recommended)'**
+  String get aiStrategyLocalFirst;
+
+  /// No description provided for @aiStrategyLocalFirstDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use local model first, fallback to cloud if failed'**
+  String get aiStrategyLocalFirstDesc;
+
+  /// No description provided for @aiStrategyCloudFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud First'**
+  String get aiStrategyCloudFirst;
+
+  /// No description provided for @aiStrategyCloudFirstDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use cloud API first, downgrade to local if failed'**
+  String get aiStrategyCloudFirstDesc;
+
+  /// No description provided for @aiStrategyLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Only'**
+  String get aiStrategyLocalOnly;
+
+  /// No description provided for @aiStrategyLocalOnlyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use local model only, completely offline'**
+  String get aiStrategyLocalOnlyDesc;
+
+  /// No description provided for @aiStrategyCloudOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Only'**
+  String get aiStrategyCloudOnly;
+
+  /// No description provided for @aiStrategyCloudOnlyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use cloud API only, no model download'**
+  String get aiStrategyCloudOnlyDesc;
+
+  /// No description provided for @aiStrategyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Local model in training, coming soon'**
+  String get aiStrategyUnavailable;
+
+  /// No description provided for @aiStrategySwitched.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to: {strategy}'**
+  String aiStrategySwitched(String strategy);
+
+  /// No description provided for @aiCloudApiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zhipu GLM API'**
+  String get aiCloudApiTitle;
+
+  /// No description provided for @aiCloudApiKeyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'API Key'**
+  String get aiCloudApiKeyLabel;
+
+  /// No description provided for @aiCloudApiKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your Zhipu AI API Key'**
+  String get aiCloudApiKeyHint;
+
+  /// No description provided for @aiCloudApiKeyHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'GLM-4-Flash model is completely free'**
+  String get aiCloudApiKeyHelper;
+
+  /// No description provided for @aiCloudApiKeySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'API Key saved'**
+  String get aiCloudApiKeySaved;
+
+  /// No description provided for @aiCloudApiGetKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Get API Key'**
+  String get aiCloudApiGetKey;
+
+  /// No description provided for @aiLocalModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Model'**
+  String get aiLocalModelTitle;
+
+  /// No description provided for @aiLocalModelTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Training'**
+  String get aiLocalModelTraining;
+
+  /// No description provided for @aiLocalModelManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Model Management'**
+  String get aiLocalModelManagement;
+
+  /// No description provided for @aiLocalModelUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Local model in training, not available yet'**
+  String get aiLocalModelUnavailable;
+
+  /// No description provided for @aiFabSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Add Button Prioritize Camera'**
+  String get aiFabSettingTitle;
+
+  /// No description provided for @aiFabSettingDescCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap for camera, long press for manual'**
+  String get aiFabSettingDescCamera;
+
+  /// No description provided for @aiFabSettingDescManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap for manual, long press for camera'**
+  String get aiFabSettingDescManual;
+
+  /// No description provided for @aiOcrRecognizing.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognizing bill...'**
+  String get aiOcrRecognizing;
+
+  /// No description provided for @aiOcrNoAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'No valid amount recognized, please add manually'**
+  String get aiOcrNoAmount;
+
+  /// No description provided for @aiOcrNoLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger not found'**
+  String get aiOcrNoLedger;
+
+  /// No description provided for @aiOcrSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ {type} bill created ¥{amount}'**
+  String aiOcrSuccess(String type, String amount);
+
+  /// No description provided for @aiOcrFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognition failed: {error}'**
+  String aiOcrFailed(String error);
+
+  /// No description provided for @aiOcrCreateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create bill'**
+  String get aiOcrCreateFailed;
+
+  /// No description provided for @aiTypeIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get aiTypeIncome;
+
+  /// No description provided for @aiTypeExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get aiTypeExpense;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

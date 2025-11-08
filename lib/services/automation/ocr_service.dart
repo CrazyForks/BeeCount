@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'ai_bill_service.dart';
+import '../category_service.dart';
 
 /// OCR识别结果
 class OcrResult {
@@ -9,6 +12,10 @@ class OcrResult {
   final String rawText;
   final List<String> allNumbers;
   final int? suggestedCategoryId; // 推荐的分类ID
+  final String? aiCategoryName; // AI识别的分类名称
+  final String? aiType; // AI识别的类型 (income/expense)
+  final String? aiProvider; // AI提供商（用于日志）
+  final bool aiEnhanced; // 是否经过AI增强
 
   OcrResult({
     this.amount,
@@ -17,7 +24,35 @@ class OcrResult {
     required this.rawText,
     required this.allNumbers,
     this.suggestedCategoryId,
+    this.aiCategoryName,
+    this.aiType,
+    this.aiProvider,
+    this.aiEnhanced = false,
   });
+
+  /// 创建副本并合并AI结果
+  OcrResult copyWithAI({
+    double? amount,
+    String? merchant,
+    DateTime? time,
+    int? suggestedCategoryId,
+    String? aiCategoryName,
+    String? aiType,
+    String? aiProvider,
+  }) {
+    return OcrResult(
+      amount: amount ?? this.amount,
+      merchant: merchant ?? this.merchant,
+      time: time ?? this.time,
+      rawText: rawText,
+      allNumbers: allNumbers,
+      suggestedCategoryId: suggestedCategoryId ?? this.suggestedCategoryId,
+      aiCategoryName: aiCategoryName ?? this.aiCategoryName,
+      aiType: aiType ?? this.aiType,
+      aiProvider: aiProvider,
+      aiEnhanced: true,
+    );
+  }
 }
 
 /// OCR服务 - 识别支付截图中的金额等信息
@@ -31,33 +66,114 @@ class OcrService {
 
   /// 识别图片中的文本并提取支付信息
   Future<OcrResult> recognizePaymentImage(File imageFile) async {
+    final startTime = DateTime.now();
+    print('\n🔍 ========== OCR识别开始 ==========');
+
     try {
+      // 1. OCR文本识别
+      print('⏱️ [OCR] 开始文本识别...');
+      final ocrStartTime = DateTime.now();
       final inputImage = InputImage.fromFile(imageFile);
       final recognizedText = await _textRecognizer.processImage(inputImage);
-
       final rawText = recognizedText.text;
+      final ocrDuration = DateTime.now().difference(ocrStartTime);
+      print('✅ [OCR] 文本识别完成，耗时: ${ocrDuration.inMilliseconds}ms');
+      print('📄 [OCR] 识别文本:\n$rawText\n');
 
-      // 提取所有可能的金额数字
+      // 2. 规则提取
+      print('⏱️ [规则] 开始规则提取...');
+      final ruleStartTime = DateTime.now();
       final allNumbers = _extractAllNumbers(rawText);
-
-      // 提取金额
       final amount = _extractAmount(rawText);
-
-      // 提取商家名称
       final merchant = _extractMerchant(rawText);
-
-      // 提取时间
       final time = _extractTime(rawText);
+      final ruleDuration = DateTime.now().difference(ruleStartTime);
 
-      return OcrResult(
+      print('✅ [规则] 提取完成，耗时: ${ruleDuration.inMilliseconds}ms');
+      print('💰 [规则] 金额: ${amount ?? "未识别"}');
+      print('🏪 [规则] 商家: ${merchant ?? "未识别"}');
+      print('⏰ [规则] 时间: ${time ?? "未识别"}');
+      print('🔢 [规则] 候选金额: $allNumbers');
+
+      final baseResult = OcrResult(
         amount: amount,
         merchant: merchant,
         time: time,
         rawText: rawText,
         allNumbers: allNumbers,
       );
+
+      // 3. AI增强（如果启用）
+      final enhancedResult = await _enhanceWithAI(baseResult);
+
+      final totalDuration = DateTime.now().difference(startTime);
+      print('🏁 [总计] 识别完成，总耗时: ${totalDuration.inMilliseconds}ms');
+      print('========== OCR识别结束 ==========\n');
+
+      return enhancedResult;
     } catch (e) {
+      print('❌ [OCR] 识别失败: $e');
       rethrow;
+    }
+  }
+
+  /// AI增强识别结果
+  Future<OcrResult> _enhanceWithAI(OcrResult baseResult) async {
+    try {
+      // 检查是否启用AI
+      final prefs = await SharedPreferences.getInstance();
+      final aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
+
+      if (!aiEnabled) {
+        return baseResult;
+      }
+
+      print('🤖 [AI增强] 开始...');
+      final aiStartTime = DateTime.now();
+
+      // 获取用户分类列表
+      final expenseCategories = CategoryService.defaultExpenseCategories;
+      final incomeCategories = CategoryService.defaultIncomeCategories;
+
+      // 初始化AI服务
+      final aiService = AIBillService();
+      await aiService.initialize(
+        expenseCategories: expenseCategories,
+        incomeCategories: incomeCategories,
+      );
+
+      final billInfo = await aiService.extractBillInfo(
+        baseResult.rawText,
+        expenseCategories: expenseCategories,
+        incomeCategories: incomeCategories,
+      );
+      final aiDuration = DateTime.now().difference(aiStartTime);
+
+      if (billInfo != null) {
+        // 智能合并策略：AI优先，规则兜底
+        final mergedAmount = billInfo.amount ?? baseResult.amount;
+        final mergedMerchant = billInfo.merchant ?? baseResult.merchant;
+        final mergedTime = billInfo.time ?? baseResult.time;
+
+        final typeText = billInfo.type?.toString().split('.').last ?? '未知';
+        final typeEmoji = typeText == 'expense' ? '💸' : (typeText == 'income' ? '💰' : '❓');
+        print('✅ [AI增强] 成功 ${aiDuration.inMilliseconds}ms | $typeEmoji$typeText 金额:$mergedAmount 商家:$mergedMerchant 分类:${billInfo.category}');
+
+        return baseResult.copyWithAI(
+          amount: mergedAmount,
+          merchant: mergedMerchant,
+          time: mergedTime,
+          aiCategoryName: billInfo.category,
+          aiType: typeText,
+          aiProvider: 'AI',
+        );
+      } else {
+        print('⚠️ [AI增强] 失败或超时，使用规则识别结果');
+        return baseResult;
+      }
+    } catch (e) {
+      print('❌ [AI增强] 失败: $e');
+      return baseResult;
     }
   }
 
