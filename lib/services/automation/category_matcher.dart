@@ -1,4 +1,4 @@
-import '../data/db.dart';
+import '../../data/db.dart';
 
 /// 智能分类匹配服务 - 根据商家名称或文本内容匹配分类
 class CategoryMatcher {

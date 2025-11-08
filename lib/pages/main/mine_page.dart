@@ -31,6 +31,7 @@ import '../account/accounts_page.dart';
 import '../settings/widget_management_page.dart';
 import '../automation/ocr_billing_page.dart';
 import '../automation/auto_billing_settings_page.dart';
+import '../ai_settings_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/update_service.dart';
@@ -279,10 +280,13 @@ class MinePage extends ConsumerWidget {
                     ),
                   );
                 }),
+                // 智能记账（合并AI和OCR自动化）
+                SizedBox(height: 8.0.scaled(context, ref)),
+                _buildSmartBillingSection(context, ref),
                 // 数据管理
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildDataManagementSection(context, ref),
-                // 自动化功能
+                // 自动化功能（周期和提醒）
                 SizedBox(height: 8.0.scaled(context, ref)),
                 _buildAutomationSection(context, ref),
                 // 外观与显示
@@ -1038,15 +1042,43 @@ Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
   );
 }
 
-// 自动化功能分组
-Widget _buildAutomationSection(BuildContext context, WidgetRef ref) {
+// 智能记账分组（合并AI和OCR功能）
+Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
   final l10n = AppLocalizations.of(context);
+  final cameraFirst = ref.watch(fabCameraFirstProvider).value ?? false;
 
   return SectionCard(
     margin: EdgeInsets.fromLTRB(
         12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
     child: Column(
       children: [
+        // AI智能识别
+        AppListTile(
+          leading: Icons.psychology_outlined,
+          title: l10n.aiSettingsTitle,
+          subtitle: l10n.aiSettingsSubtitle,
+          trailing: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: const Text(
+              'AI',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const AISettingsPage()),
+            );
+          },
+        ),
+        AppDivider.thin(),
         // OCR扫描记账
         AppListTile(
           leading: Icons.document_scanner_outlined,
@@ -1102,7 +1134,77 @@ Widget _buildAutomationSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        Divider(height: 1, thickness: 0.5, color: Colors.grey[300]),
+        // FAB行为切换
+        InkWell(
+          onTap: () async {
+            final newValue = !cameraFirst;
+            await ref.read(fabBehaviorSetterProvider).setCameraFirst(newValue);
+            ref.invalidate(fabCameraFirstProvider);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    cameraFirst ? Icons.camera_alt : Icons.edit,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.aiFabSettingTitle,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF333333),
+                        ),
+                      ),
+                      Text(
+                        cameraFirst ? l10n.aiFabSettingDescCamera : l10n.aiFabSettingDescManual,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  value: cameraFirst,
+                  onChanged: (value) async {
+                    await ref.read(fabBehaviorSetterProvider).setCameraFirst(value);
+                    ref.invalidate(fabCameraFirstProvider);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// 自动化功能分组（仅保留周期和提醒）
+Widget _buildAutomationSection(BuildContext context, WidgetRef ref) {
+  return SectionCard(
+    margin: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
+    child: Column(
+      children: [
         // 周期记账
         AppListTile(
           leading: Icons.repeat,

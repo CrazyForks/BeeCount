@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ocr_service.dart';
 import 'category_matcher.dart';
-import '../providers.dart';
+import 'bill_creation_service.dart';
+import '../../providers.dart';
 
 /// 自动记账服务 - 通用核心逻辑
 /// Android和iOS共用的OCR识别和自动记账逻辑
@@ -166,8 +167,8 @@ class AutoBillingService {
       await _markAsProcessed(imagePath);
 
       // 根据识别结果处理
-      if (result.amount != null && result.amount! > 0) {
-        // 识别成功，自动创建记账记录
+      if (result.amount != null && result.amount!.abs() > 0) {
+        // 识别成功，自动创建记账记录（支持负数金额）
         print('✅ OCR识别成功: 金额=${result.amount}, 商家=${result.merchant}');
 
         try {
@@ -401,55 +402,27 @@ class AutoBillingService {
 
       print('📝 准备创建交易: ledgerId=$ledgerId');
 
-      // 使用Provider的数据库和Repository实例
+      // 使用共享的BillCreationService创建交易
       final db = _container.read(databaseProvider);
-      final repository = _container.read(repositoryProvider);
-
-      // 获取所有支出分类用于智能匹配
-      final categories = await (db.select(db.categories)
-            ..where((t) => t.kind.equals('expense')))
-          .get();
-
-      print('📝 查询到 ${categories.length} 个支出分类');
-
-      // 智能匹配分类
-      final suggestedCategoryId = CategoryMatcher.smartMatch(
-        merchant: result.merchant,
-        fullText: result.rawText,
-        categories: categories,
-      );
-
-      // 如果没有匹配到分类，使用第一个支出分类
-      int? categoryId = suggestedCategoryId;
-      if (categoryId == null && categories.isNotEmpty) {
-        categoryId = categories.first.id;
-      }
-
-      if (categoryId == null) {
-        print('❌ 无法获取分类');
-        return null;
-      }
-
-      print('📝 使用分类ID: $categoryId');
+      final billCreationService = BillCreationService(db);
 
       // 准备备注
-      String note = '';
+      String? note;
       if (result.merchant != null) {
         note = result.merchant!;
       }
 
-      // 使用Repository创建交易记录(账户设为null)
-      final transactionId = await repository.addTransaction(
+      final transactionId = await billCreationService.createBillTransaction(
+        result: result,
         ledgerId: ledgerId,
-        type: 'expense',
-        amount: result.amount!,
-        categoryId: categoryId,
-        accountId: null, // 账户留空
-        happenedAt: result.time ?? DateTime.now(),
         note: note,
       );
 
-      print('✅ 交易记录已创建: ID=$transactionId');
+      if (transactionId != null) {
+        print('✅ 交易记录已创建: ID=$transactionId');
+      } else {
+        print('❌ 创建交易记录失败');
+      }
 
       return transactionId;
     } catch (e) {

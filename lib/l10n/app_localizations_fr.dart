@@ -3256,4 +3256,124 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get iosAutoCannotOpenShortcuts => 'Cannot open Shortcuts app';
+
+  @override
+  String get aiSettingsTitle => 'AI Recognition';
+
+  @override
+  String get aiSettingsSubtitle => 'Configure AI models and recognition strategy';
+
+  @override
+  String get aiEnableTitle => 'Enable AI Recognition';
+
+  @override
+  String get aiEnableSubtitle => 'Use AI to enhance OCR accuracy and extract amount, merchant, time, etc.';
+
+  @override
+  String get aiEnableToastOn => 'AI enhancement enabled';
+
+  @override
+  String get aiEnableToastOff => 'AI enhancement disabled';
+
+  @override
+  String get aiStrategyTitle => 'Execution Strategy';
+
+  @override
+  String get aiStrategyLocalFirst => 'Local First (Recommended)';
+
+  @override
+  String get aiStrategyLocalFirstDesc => 'Use local model first, fallback to cloud if failed';
+
+  @override
+  String get aiStrategyCloudFirst => 'Cloud First';
+
+  @override
+  String get aiStrategyCloudFirstDesc => 'Use cloud API first, downgrade to local if failed';
+
+  @override
+  String get aiStrategyLocalOnly => 'Local Only';
+
+  @override
+  String get aiStrategyLocalOnlyDesc => 'Use local model only, completely offline';
+
+  @override
+  String get aiStrategyCloudOnly => 'Cloud Only';
+
+  @override
+  String get aiStrategyCloudOnlyDesc => 'Use cloud API only, no model download';
+
+  @override
+  String get aiStrategyUnavailable => 'Local model in training, coming soon';
+
+  @override
+  String aiStrategySwitched(String strategy) {
+    return 'Switched to: $strategy';
+  }
+
+  @override
+  String get aiCloudApiTitle => 'Zhipu GLM API';
+
+  @override
+  String get aiCloudApiKeyLabel => 'API Key';
+
+  @override
+  String get aiCloudApiKeyHint => 'Enter your Zhipu AI API Key';
+
+  @override
+  String get aiCloudApiKeyHelper => 'GLM-4-Flash model is completely free';
+
+  @override
+  String get aiCloudApiKeySaved => 'API Key saved';
+
+  @override
+  String get aiCloudApiGetKey => 'Get API Key';
+
+  @override
+  String get aiLocalModelTitle => 'Local Model';
+
+  @override
+  String get aiLocalModelTraining => 'Training';
+
+  @override
+  String get aiLocalModelManagement => 'Model Management';
+
+  @override
+  String get aiLocalModelUnavailable => 'Local model in training, not available yet';
+
+  @override
+  String get aiFabSettingTitle => 'Quick Add Button Prioritize Camera';
+
+  @override
+  String get aiFabSettingDescCamera => 'Tap for camera, long press for manual';
+
+  @override
+  String get aiFabSettingDescManual => 'Tap for manual, long press for camera';
+
+  @override
+  String get aiOcrRecognizing => 'Recognizing bill...';
+
+  @override
+  String get aiOcrNoAmount => 'No valid amount recognized, please add manually';
+
+  @override
+  String get aiOcrNoLedger => 'Ledger not found';
+
+  @override
+  String aiOcrSuccess(String type, String amount) {
+    return '✅ $type bill created ¥$amount';
+  }
+
+  @override
+  String aiOcrFailed(String error) {
+    return 'Recognition failed: $error';
+  }
+
+  @override
+  String get aiOcrCreateFailed => 'Failed to create bill';
+
+  @override
+  String get aiTypeIncome => 'Income';
+
+  @override
+  String get aiTypeExpense => 'Expense';
 }

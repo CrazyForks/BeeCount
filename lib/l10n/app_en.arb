@@ -1440,5 +1440,68 @@
   "iosAutoImportFailed": "Import failed: {error}",
   "iosAutoOpenAppFailed": "Open failed: {error}",
   "iosAutoCannotOpenLink": "Cannot open link, please check network connection",
-  "iosAutoCannotOpenShortcuts": "Cannot open Shortcuts app"
+  "iosAutoCannotOpenShortcuts": "Cannot open Shortcuts app",
+
+  "aiSettingsTitle": "AI Recognition",
+  "aiSettingsSubtitle": "Configure AI models and recognition strategy",
+  "aiEnableTitle": "Enable AI Recognition",
+  "aiEnableSubtitle": "Use AI to enhance OCR accuracy and extract amount, merchant, time, etc.",
+  "aiEnableToastOn": "AI enhancement enabled",
+  "aiEnableToastOff": "AI enhancement disabled",
+  "aiStrategyTitle": "Execution Strategy",
+  "aiStrategyLocalFirst": "Local First (Recommended)",
+  "aiStrategyLocalFirstDesc": "Use local model first, fallback to cloud if failed",
+  "aiStrategyCloudFirst": "Cloud First",
+  "aiStrategyCloudFirstDesc": "Use cloud API first, downgrade to local if failed",
+  "aiStrategyLocalOnly": "Local Only",
+  "aiStrategyLocalOnlyDesc": "Use local model only, completely offline",
+  "aiStrategyCloudOnly": "Cloud Only",
+  "aiStrategyCloudOnlyDesc": "Use cloud API only, no model download",
+  "aiStrategyUnavailable": "Local model in training, coming soon",
+  "aiStrategySwitched": "Switched to: {strategy}",
+  "@aiStrategySwitched": {
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      }
+    }
+  },
+  "aiCloudApiTitle": "Zhipu GLM API",
+  "aiCloudApiKeyLabel": "API Key",
+  "aiCloudApiKeyHint": "Enter your Zhipu AI API Key",
+  "aiCloudApiKeyHelper": "GLM-4-Flash model is completely free",
+  "aiCloudApiKeySaved": "API Key saved",
+  "aiCloudApiGetKey": "Get API Key",
+  "aiLocalModelTitle": "Local Model",
+  "aiLocalModelTraining": "Training",
+  "aiLocalModelManagement": "Model Management",
+  "aiLocalModelUnavailable": "Local model in training, not available yet",
+  "aiFabSettingTitle": "Quick Add Button Prioritize Camera",
+  "aiFabSettingDescCamera": "Tap for camera, long press for manual",
+  "aiFabSettingDescManual": "Tap for manual, long press for camera",
+  "aiOcrRecognizing": "Recognizing bill...",
+  "aiOcrNoAmount": "No valid amount recognized, please add manually",
+  "aiOcrNoLedger": "Ledger not found",
+  "aiOcrSuccess": "✅ {type} bill created ¥{amount}",
+  "@aiOcrSuccess": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOcrFailed": "Recognition failed: {error}",
+  "@aiOcrFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOcrCreateFailed": "Failed to create bill",
+  "aiTypeIncome": "Income",
+  "aiTypeExpense": "Expense"
 }

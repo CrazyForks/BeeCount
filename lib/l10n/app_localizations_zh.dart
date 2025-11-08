@@ -3256,6 +3256,126 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get iosAutoCannotOpenShortcuts => '无法打开快捷指令App';
+
+  @override
+  String get aiSettingsTitle => 'AI智能识别';
+
+  @override
+  String get aiSettingsSubtitle => '配置AI模型和识别策略';
+
+  @override
+  String get aiEnableTitle => '启用AI智能识别';
+
+  @override
+  String get aiEnableSubtitle => '使用AI增强OCR识别准确度，提取金额、商家、时间等信息';
+
+  @override
+  String get aiEnableToastOn => 'AI增强已启用';
+
+  @override
+  String get aiEnableToastOff => 'AI增强已禁用';
+
+  @override
+  String get aiStrategyTitle => '执行策略';
+
+  @override
+  String get aiStrategyLocalFirst => '本地优先（推荐）';
+
+  @override
+  String get aiStrategyLocalFirstDesc => '优先使用本地模型，失败后自动切换云端';
+
+  @override
+  String get aiStrategyCloudFirst => '云端优先';
+
+  @override
+  String get aiStrategyCloudFirstDesc => '优先使用云端API，失败后降级到本地';
+
+  @override
+  String get aiStrategyLocalOnly => '仅本地';
+
+  @override
+  String get aiStrategyLocalOnlyDesc => '只使用本地模型，完全离线';
+
+  @override
+  String get aiStrategyCloudOnly => '仅云端';
+
+  @override
+  String get aiStrategyCloudOnlyDesc => '只使用云端API，不下载模型';
+
+  @override
+  String get aiStrategyUnavailable => '本地模型训练中，敬请期待';
+
+  @override
+  String aiStrategySwitched(String strategy) {
+    return '已切换: $strategy';
+  }
+
+  @override
+  String get aiCloudApiTitle => '智谱GLM API';
+
+  @override
+  String get aiCloudApiKeyLabel => 'API Key';
+
+  @override
+  String get aiCloudApiKeyHint => '输入智谱AI的API Key';
+
+  @override
+  String get aiCloudApiKeyHelper => 'GLM-4-Flash模型完全免费';
+
+  @override
+  String get aiCloudApiKeySaved => 'API Key 已保存';
+
+  @override
+  String get aiCloudApiGetKey => '获取API Key';
+
+  @override
+  String get aiLocalModelTitle => '本地模型';
+
+  @override
+  String get aiLocalModelTraining => '训练中';
+
+  @override
+  String get aiLocalModelManagement => '模型管理';
+
+  @override
+  String get aiLocalModelUnavailable => '本地模型训练中，暂不可用';
+
+  @override
+  String get aiFabSettingTitle => '快捷记账按钮优先拍照';
+
+  @override
+  String get aiFabSettingDescCamera => '短按拍照，长按手动记账';
+
+  @override
+  String get aiFabSettingDescManual => '短按手动记账，长按拍照';
+
+  @override
+  String get aiOcrRecognizing => '正在识别账单...';
+
+  @override
+  String get aiOcrNoAmount => '未识别到有效金额，请手动记账';
+
+  @override
+  String get aiOcrNoLedger => '未找到账本';
+
+  @override
+  String aiOcrSuccess(String type, String amount) {
+    return '✅ $type账单创建成功 ¥$amount';
+  }
+
+  @override
+  String aiOcrFailed(String error) {
+    return '识别失败: $error';
+  }
+
+  @override
+  String get aiOcrCreateFailed => '创建账单失败';
+
+  @override
+  String get aiTypeIncome => '收入';
+
+  @override
+  String get aiTypeExpense => '支出';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
