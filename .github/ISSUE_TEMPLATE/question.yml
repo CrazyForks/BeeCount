@@ -1,0 +1,48 @@
+name: ❓ 问题咨询
+description: 使用过程中的疑问或需要帮助
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        有任何疑问都可以在这里提出！
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 您的问题
+      description: 详细描述您的疑问
+      placeholder: 我想了解...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 问题分类
+      description: 这个问题属于哪个类别？
+      options:
+        - 账本管理
+        - 账单记录
+        - 数据统计
+        - 数据导入导出
+        - 云同步
+        - 自动记账
+        - 其他功能
+        - 使用建议
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: 已尝试的方法
+      description: 您已经尝试过哪些方法？
+      placeholder: 我试过...但是...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 补充信息
+      description: 还有其他需要补充的信息吗？
