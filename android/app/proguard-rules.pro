@@ -125,3 +125,7 @@
 # Keep ML Kit common classes
 -keep class com.google.mlkit.common.** { *; }
 -keep class com.google.android.gms.internal.mlkit_vision_text_common.** { *; }
+
+# TensorFlow Lite - 暂时注释掉本地模型依赖，只使用云端API
+-dontwarn org.tensorflow.lite.**
+-dontwarn org.tensorflow.lite.gpu.**
