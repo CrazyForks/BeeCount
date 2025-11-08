@@ -388,7 +388,7 @@ class MainApp extends ConsumerWidget {
     return MediaQuery(
       data: media.copyWith(textScaler: newScaler),
       child: MaterialApp(
-        title: 'Bee Accounting',
+        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         scrollBehavior: const NoGlowScrollBehavior(),
         debugShowCheckedModeBanner: false,
         theme: theme,
