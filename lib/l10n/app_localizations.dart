@@ -6034,6 +6034,36 @@ abstract class AppLocalizations {
   /// **'Auto billing disabled'**
   String get disableSuccess;
 
+  /// No description provided for @autoBillingBatteryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Running in Background'**
+  String get autoBillingBatteryTitle;
+
+  /// No description provided for @autoBillingBatteryGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery Optimization Settings'**
+  String get autoBillingBatteryGuideTitle;
+
+  /// No description provided for @autoBillingBatteryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto billing requires the app to keep running in the background. Some phones automatically clean background apps when locked, which may cause auto billing to fail. It is recommended to disable battery optimization to ensure proper functionality.'**
+  String get autoBillingBatteryDesc;
+
+  /// No description provided for @autoBillingCheckBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Battery Optimization'**
+  String get autoBillingCheckBattery;
+
+  /// No description provided for @autoBillingBatteryWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Battery optimization is not disabled. The app may be automatically cleaned by the system, causing auto billing to fail. Please tap the \"Settings\" button above to disable battery optimization.'**
+  String get autoBillingBatteryWarning;
+
   /// No description provided for @enableFailed.
   ///
   /// In en, this message translates to:

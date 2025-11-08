@@ -3143,6 +3143,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get disableSuccess => '自动记账已禁用';
 
   @override
+  String get autoBillingBatteryTitle => '保持后台运行';
+
+  @override
+  String get autoBillingBatteryGuideTitle => '电池优化设置';
+
+  @override
+  String get autoBillingBatteryDesc => '自动记账需要应用在后台保持运行。部分手机会在锁屏后自动清理后台应用，导致自动记账功能失效。建议关闭电池优化以确保功能正常工作。';
+
+  @override
+  String get autoBillingCheckBattery => '检查电池优化状态';
+
+  @override
+  String get autoBillingBatteryWarning => '⚠️ 未关闭电池优化，应用可能会被系统自动清理，导致自动记账失效。建议点击上方\"去设置\"按钮关闭电池优化。';
+
+  @override
   String get enableFailed => '启用失败';
 
   @override
