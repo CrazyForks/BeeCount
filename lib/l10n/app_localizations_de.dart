@@ -3143,6 +3143,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get disableSuccess => 'Auto billing disabled';
 
   @override
+  String get autoBillingBatteryTitle => 'Keep Running in Background';
+
+  @override
+  String get autoBillingBatteryGuideTitle => 'Battery Optimization Settings';
+
+  @override
+  String get autoBillingBatteryDesc => 'Auto billing requires the app to keep running in the background. Some phones automatically clean background apps when locked, which may cause auto billing to fail. It is recommended to disable battery optimization to ensure proper functionality.';
+
+  @override
+  String get autoBillingCheckBattery => 'Check Battery Optimization';
+
+  @override
+  String get autoBillingBatteryWarning => '⚠️ Battery optimization is not disabled. The app may be automatically cleaned by the system, causing auto billing to fail. Please tap the \"Settings\" button above to disable battery optimization.';
+
+  @override
   String get enableFailed => 'Enable failed';
 
   @override
