@@ -1,0 +1,106 @@
+name: 🐛 Bug 报告
+description: 报告应用中的问题或错误
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您花时间填写此错误报告！
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 清晰简洁地描述遇到的问题
+      placeholder: 告诉我们发生了什么...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 如何复现此问题？
+      placeholder: |
+        1. 打开 '...'
+        2. 点击 '...'
+        3. 滚动到 '...'
+        4. 看到错误
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+      description: 您期望发生什么？
+      placeholder: 应该...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+      description: 实际发生了什么？
+      placeholder: 但实际上...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图
+      description: 如果适用，请添加截图以帮助解释您的问题
+      placeholder: 拖拽图片到此处...
+
+  - type: input
+    id: version
+    attributes:
+      label: 应用版本
+      description: 您使用的 BeeCount 版本？
+      placeholder: 例如 0.1.9
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 平台
+      description: 您在哪个平台上遇到此问题？
+      options:
+        - iOS
+        - Android
+        - 两者都有
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: 系统版本
+      description: 您的设备系统版本？
+      placeholder: 例如 iOS 17.5 或 Android 14
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: 设备型号
+      description: 您使用的设备型号？
+      placeholder: 例如 iPhone 15 Pro 或 Samsung Galaxy S24
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 错误日志
+      description: 如果有崩溃日志或错误信息，请粘贴在此处
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 补充信息
+      description: 还有其他需要补充的信息吗？
