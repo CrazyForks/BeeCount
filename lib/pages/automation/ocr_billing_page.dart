@@ -2,14 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:drift/drift.dart' as drift;
-import '../../services/ocr_service.dart';
-import '../../services/category_matcher.dart';
+import '../../services/automation/ocr_service.dart';
+import '../../services/automation/bill_creation_service.dart';
 import '../../widgets/ui/primary_header.dart';
+import '../../widgets/ui/ui.dart';
 import '../../providers.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
-import '../category/category_picker.dart';
 
 /// OCR扫描记账页面
 class OcrBillingPage extends ConsumerStatefulWidget {
@@ -66,31 +65,18 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
     });
 
     try {
-      // OCR识别
+      // OCR识别（包含AI增强）
       final ocrResult = await _ocrService.recognizePaymentImage(_selectedImage!);
 
-      // 获取所有分类用于匹配
+      // 使用BillCreationService匹配分类
       final db = ref.read(databaseProvider);
-      final categories = await (db.select(db.categories)
-            ..where((t) => t.kind.equals('expense')))
-          .get();
+      final billCreationService = BillCreationService(db);
 
-      // 智能匹配分类
-      final suggestedCategoryId = CategoryMatcher.smartMatch(
-        merchant: ocrResult.merchant,
-        fullText: ocrResult.rawText,
-        categories: categories,
-      );
+      final categoryKind = (ocrResult.aiType == 'income') ? 'income' : 'expense';
+      final categories = await billCreationService.getCategoriesByType(categoryKind);
+      final suggestedCategoryId = await billCreationService.matchCategory(ocrResult, categories);
 
-      // 打印识别结果用于调试
-      print('📋 OCR识别原始文本:\n${ocrResult.rawText}');
-      print('💰 识别到的金额: ${ocrResult.amount}');
-      print('🏪 识别到的商家: ${ocrResult.merchant}');
-      print('⏰ 识别到的时间: ${ocrResult.time}');
-      print('🔢 所有数字: ${ocrResult.allNumbers}');
-      print('🏷️ 推荐分类ID: $suggestedCategoryId');
-
-      // 创建带有推荐分类的结果
+      // 使用AI增强的结果，只补充分类ID
       final result = OcrResult(
         amount: ocrResult.amount,
         merchant: ocrResult.merchant,
@@ -98,11 +84,25 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
         rawText: ocrResult.rawText,
         allNumbers: ocrResult.allNumbers,
         suggestedCategoryId: suggestedCategoryId,
+        aiCategoryName: ocrResult.aiCategoryName,
+        aiType: ocrResult.aiType,
+        aiProvider: ocrResult.aiProvider,
+        aiEnhanced: ocrResult.aiEnhanced,
       );
 
       setState(() {
         _ocrResult = result;
-        _selectedAmount = result.amount?.toString();
+        // 在 allNumbers 中查找匹配的金额字符串
+        if (result.amount != null) {
+          final targetAmount = result.amount!.abs();
+          _selectedAmount = result.allNumbers.firstWhere(
+            (numStr) {
+              final num = double.tryParse(numStr);
+              return num != null && (num - targetAmount).abs() < 0.01;
+            },
+            orElse: () => targetAmount.toString(),
+          );
+        }
         _isProcessing = false;
       });
     } catch (e) {
@@ -110,7 +110,8 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
         _isProcessing = false;
       });
       if (!mounted) return;
-      _showError('识别失败: $e');
+      final l10n = AppLocalizations.of(context);
+      _showError(l10n.aiOcrFailed(e.toString()));
     }
   }
 
@@ -142,39 +143,60 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
       return;
     }
 
-    // 优先使用推荐的分类，如果没有则使用第一个支出分类
-    int? categoryId = _ocrResult?.suggestedCategoryId;
+    try {
+      // 获取当前账本
+      final currentLedger = await ref.read(currentLedgerProvider.future);
+      if (currentLedger == null) {
+        if (!mounted) return;
+        showToast(context, '未找到账本');
+        return;
+      }
 
-    if (categoryId == null) {
+      // 构造OcrResult用于创建交易
+      final ocrResultForCreation = OcrResult(
+        amount: (_ocrResult?.aiType == 'income') ? amount : -amount,
+        merchant: _ocrResult?.merchant,
+        time: _ocrResult?.time,
+        rawText: _ocrResult?.rawText ?? '',
+        allNumbers: _ocrResult?.allNumbers ?? [],
+        suggestedCategoryId: _ocrResult?.suggestedCategoryId,
+        aiCategoryName: _ocrResult?.aiCategoryName,
+        aiType: _ocrResult?.aiType,
+        aiProvider: _ocrResult?.aiProvider,
+        aiEnhanced: _ocrResult?.aiEnhanced ?? false,
+      );
+
+      // 使用BillCreationService创建交易
       final db = ref.read(databaseProvider);
-      final defaultCategory = await (db.select(db.categories)
-            ..where((t) => t.kind.equals('expense'))
-            ..orderBy([(t) => drift.OrderingTerm(expression: t.sortOrder)])
-            ..limit(1))
-          .getSingleOrNull();
-      categoryId = defaultCategory?.id;
-    }
+      final billCreationService = BillCreationService(db);
 
-    // 跳转到分类选择页面，并传递金额和备注
-    final note = _ocrResult?.merchant != null ? '${_ocrResult!.merchant}' : '';
+      final note = _ocrResult?.merchant ?? '';
+      final transactionId = await billCreationService.createBillTransaction(
+        result: ocrResultForCreation,
+        ledgerId: currentLedger.id,
+        note: note.isNotEmpty ? note : null,
+      );
 
-    if (!mounted) return;
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => CategoryPickerPage(
-          initialKind: 'expense', // 默认支出
-          quickAdd: true,
-          initialAmount: amount,
-          initialDate: _ocrResult?.time ?? DateTime.now(),
-          initialNote: note,
-          initialCategoryId: categoryId,
-        ),
-      ),
-    );
+      if (!mounted) return;
 
-    // 记账成功后返回
-    if (mounted) {
-      Navigator.of(context).pop();
+      if (transactionId != null) {
+        // 显示成功提示
+        final l10n = AppLocalizations.of(context);
+        final transactionKind = (_ocrResult?.aiType == 'income') ? 'income' : 'expense';
+        final typeText = transactionKind == 'income' ? l10n.aiTypeIncome : l10n.aiTypeExpense;
+        final amount = _ocrResult?.amount?.abs().toStringAsFixed(2) ?? '0.00';
+        showToast(context, l10n.aiOcrSuccess(typeText, amount));
+
+        // 返回上一页
+        Navigator.of(context).pop();
+      } else {
+        final l10n = AppLocalizations.of(context);
+        showToast(context, l10n.aiOcrCreateFailed);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      showToast(context, l10n.aiOcrFailed(e.toString()));
     }
   }
 

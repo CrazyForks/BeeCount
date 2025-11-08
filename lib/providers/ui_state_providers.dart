@@ -202,3 +202,22 @@ final welcomeCheckProvider = FutureProvider<bool>((ref) async {
   }
   return false;
 });
+
+// FAB行为模式：true=拍照优先（长按手动），false=手动优先（长按拍照，默认）
+final fabCameraFirstProvider = FutureProvider.autoDispose<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return prefs.getBool('fab_camera_first') ?? false;
+});
+
+class FabBehaviorSetter {
+  Future<void> setCameraFirst(bool cameraFirst) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('fab_camera_first', cameraFirst);
+  }
+}
+
+final fabBehaviorSetterProvider = Provider<FabBehaviorSetter>((ref) {
+  return FabBehaviorSetter();
+});

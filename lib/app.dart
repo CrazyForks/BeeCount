@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 import 'pages/main/home_page.dart';
 import 'pages/main/analytics_page.dart';
@@ -11,6 +13,9 @@ import 'providers.dart';
 import 'utils/ui_scale_extensions.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
+import 'services/automation/ocr_service.dart';
+import 'services/automation/bill_creation_service.dart';
+import 'widgets/ui/ui.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -63,6 +68,101 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
       print('✅ App恢复前台，小组件数据已更新');
     } catch (e) {
       print('❌ 更新小组件失败: $e');
+    }
+  }
+
+  /// 打开相机拍照并自动记账
+  Future<void> _openCameraForBilling(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+
+    try {
+      // 打开相机拍照
+      final imagePicker = ImagePicker();
+      final pickedFile = await imagePicker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
+
+      if (pickedFile == null) {
+        // 用户取消拍照
+        return;
+      }
+
+      if (!context.mounted) return;
+
+      // 显示加载提示
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  Text(l10n.aiOcrRecognizing),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // OCR识别
+      final ocrService = OcrService();
+      final imageFile = File(pickedFile.path);
+      final ocrResult = await ocrService.recognizePaymentImage(imageFile);
+
+      if (!context.mounted) return;
+
+      // 关闭加载提示
+      Navigator.of(context).pop();
+
+      // 验证识别结果
+      if (ocrResult.amount == null || ocrResult.amount!.abs() <= 0) {
+        showToast(context, l10n.aiOcrNoAmount);
+        return;
+      }
+
+      // 获取当前账本
+      final currentLedger = await ref.read(currentLedgerProvider.future);
+      if (currentLedger == null) {
+        if (!context.mounted) return;
+        showToast(context, l10n.aiOcrNoLedger);
+        return;
+      }
+
+      // 使用BillCreationService创建交易
+      final db = ref.read(databaseProvider);
+      final billCreationService = BillCreationService(db);
+
+      final note = ocrResult.merchant ?? '';
+      final transactionId = await billCreationService.createBillTransaction(
+        result: ocrResult,
+        ledgerId: currentLedger.id,
+        note: note.isNotEmpty ? note : null,
+      );
+
+      if (!context.mounted) return;
+
+      if (transactionId != null) {
+        final transactionType = (ocrResult.aiType == 'income') ? 'income' : 'expense';
+        final typeText = transactionType == 'income' ? l10n.aiTypeIncome : l10n.aiTypeExpense;
+        final amount = ocrResult.amount!.abs().toStringAsFixed(2);
+        showToast(context, l10n.aiOcrSuccess(typeText, amount));
+      } else {
+        showToast(context, l10n.aiOcrCreateFailed);
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      // 尝试关闭可能还在显示的加载对话框
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      showToast(context, l10n.aiOcrFailed(e.toString()));
     }
   }
 
@@ -172,25 +272,56 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
         floatingActionButton: Consumer(builder: (context, ref, _) {
           final style = ref.watch(headerStyleProvider);
           final color = Theme.of(context).colorScheme.primary;
+          final cameraFirst = ref.watch(fabCameraFirstProvider).value ?? false;
+
+          // 根据设置决定图标：拍照优先显示相机，手动优先显示+号
+          final icon = cameraFirst ? Icons.camera_alt : Icons.add;
+
           return SizedBox(
             width: 80.0.scaled(context, ref),
             height: 80.0.scaled(context, ref),
-            child: FloatingActionButton(
-              heroTag: 'addFab',
-              elevation: 8,
-              shape: const CircleBorder(),
-              backgroundColor: style == 'primary' ? color : color,
-              onPressed: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const CategoryPickerPage(
-                      initialKind: 'expense',
-                      quickAdd: true,
+            child: GestureDetector(
+              onLongPress: () async {
+                // 长按行为：与短按相反
+                if (cameraFirst) {
+                  // 拍照优先模式：长按打开手动记账
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const CategoryPickerPage(
+                        initialKind: 'expense',
+                        quickAdd: true,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  // 手动优先模式：长按打开拍照记账
+                  await _openCameraForBilling(context, ref);
+                }
               },
-              child: Icon(Icons.add, color: Colors.white, size: 34.0.scaled(context, ref)),
+              child: FloatingActionButton(
+                heroTag: 'addFab',
+                elevation: 8,
+                shape: const CircleBorder(),
+                backgroundColor: style == 'primary' ? color : color,
+                onPressed: () async {
+                  // 短按行为：根据设置决定
+                  if (cameraFirst) {
+                    // 拍照优先模式：短按打开拍照记账
+                    await _openCameraForBilling(context, ref);
+                  } else {
+                    // 手动优先模式：短按打开手动记账
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const CategoryPickerPage(
+                          initialKind: 'expense',
+                          quickAdd: true,
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: Icon(icon, color: Colors.white, size: 34.0.scaled(context, ref)),
+              ),
             ),
           );
         }),

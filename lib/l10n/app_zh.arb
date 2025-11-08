@@ -1288,5 +1288,68 @@
     }
   },
   "iosAutoCannotOpenLink": "无法打开链接，请检查网络连接",
-  "iosAutoCannotOpenShortcuts": "无法打开快捷指令App"
+  "iosAutoCannotOpenShortcuts": "无法打开快捷指令App",
+
+  "aiSettingsTitle": "AI智能识别",
+  "aiSettingsSubtitle": "配置AI模型和识别策略",
+  "aiEnableTitle": "启用AI智能识别",
+  "aiEnableSubtitle": "使用AI增强OCR识别准确度，提取金额、商家、时间等信息",
+  "aiEnableToastOn": "AI增强已启用",
+  "aiEnableToastOff": "AI增强已禁用",
+  "aiStrategyTitle": "执行策略",
+  "aiStrategyLocalFirst": "本地优先（推荐）",
+  "aiStrategyLocalFirstDesc": "优先使用本地模型，失败后自动切换云端",
+  "aiStrategyCloudFirst": "云端优先",
+  "aiStrategyCloudFirstDesc": "优先使用云端API，失败后降级到本地",
+  "aiStrategyLocalOnly": "仅本地",
+  "aiStrategyLocalOnlyDesc": "只使用本地模型，完全离线",
+  "aiStrategyCloudOnly": "仅云端",
+  "aiStrategyCloudOnlyDesc": "只使用云端API，不下载模型",
+  "aiStrategyUnavailable": "本地模型训练中，敬请期待",
+  "aiStrategySwitched": "已切换: {strategy}",
+  "@aiStrategySwitched": {
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      }
+    }
+  },
+  "aiCloudApiTitle": "智谱GLM API",
+  "aiCloudApiKeyLabel": "API Key",
+  "aiCloudApiKeyHint": "输入智谱AI的API Key",
+  "aiCloudApiKeyHelper": "GLM-4-Flash模型完全免费",
+  "aiCloudApiKeySaved": "API Key 已保存",
+  "aiCloudApiGetKey": "获取API Key",
+  "aiLocalModelTitle": "本地模型",
+  "aiLocalModelTraining": "训练中",
+  "aiLocalModelManagement": "模型管理",
+  "aiLocalModelUnavailable": "本地模型训练中，暂不可用",
+  "aiFabSettingTitle": "快捷记账按钮优先拍照",
+  "aiFabSettingDescCamera": "短按拍照，长按手动记账",
+  "aiFabSettingDescManual": "短按手动记账，长按拍照",
+  "aiOcrRecognizing": "正在识别账单...",
+  "aiOcrNoAmount": "未识别到有效金额，请手动记账",
+  "aiOcrNoLedger": "未找到账本",
+  "aiOcrSuccess": "✅ {type}账单创建成功 ¥{amount}",
+  "@aiOcrSuccess": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOcrFailed": "识别失败: {error}",
+  "@aiOcrFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOcrCreateFailed": "创建账单失败",
+  "aiTypeIncome": "收入",
+  "aiTypeExpense": "支出"
 }

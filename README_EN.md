@@ -20,13 +20,23 @@
 
 > ## 🎉 Great News
 >
-> **iOS Version Submitting to App Store!**
+> **🚀 Alipay/WeChat Auto-Billing - Zero Manual Input!**
 >
-> 🍎 Beta version available via **[TestFlight](https://testflight.apple.com/join/Eaw2rWxa)**
+> 📸 **Snap & Record** - Point camera at payment receipt, AI auto-extracts amount, merchant, and category
 >
-> **HarmonyOS Version Coming Soon!**
+> 🤖 **AI-Powered Recognition** - Supports Zhipu GLM-4-Flash (completely free) + Local Model (in training)
 >
-> 📱 **Supports HarmonyOS 5.0+** - [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
+> ⚡ **Screenshot Auto-Billing** - Android screenshot monitoring + iOS Shortcuts, auto-create bills after payment
+>
+> 💡 **Revolutionary Experience** - Say goodbye to tedious manual entry, make bookkeeping as natural as breathing
+
+---
+
+> ## 📱 Platform Support
+>
+> 🍎 **iOS Version Submitting to App Store** - Beta version available via **[TestFlight](https://testflight.apple.com/join/Eaw2rWxa)**
+>
+> 📱 **HarmonyOS Version Coming Soon** - Supports HarmonyOS 5.0+ - [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 
 ---
 
