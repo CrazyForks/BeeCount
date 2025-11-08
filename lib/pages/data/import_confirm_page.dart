@@ -7,6 +7,11 @@ import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as schema;
 import '../../l10n/app_localizations.dart';
 import '../../services/category_service.dart';
+import '../../services/import/csv_parser.dart';
+import '../../services/import/bill_parser.dart';
+import '../../services/import/parsers/generic_parser.dart';
+import '../../services/import/parsers/alipay_parser.dart';
+import '../../services/import/parsers/wechat_parser.dart';
 import '../../utils/date_parser.dart';
 import 'import_page.dart';
 
@@ -44,10 +49,14 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
   List<String> distinctCategories = [];
   Map<String, int?> categoryMapping = {}; // 源分类名 -> 目标分类ID（null表示保持原名）
   Future<List<schema.Category>>? allCategoriesFuture;
+  late final BillParser _billParser;
 
   @override
   void initState() {
     super.initState();
+    // 根据账单类型选择解析器
+    _billParser = _getParser(widget.billType);
+
     // 解析在后台 isolate 完成，避免主线程卡顿
     () async {
       final parsed = await compute(_parseRowsIsolate, widget.csvText);
@@ -57,9 +66,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         parsing = false;
       });
       // 解析完成
-      // 根据用户选择的账单类型查找表头
+      // 使用解析器查找表头
       if (widget.hasHeader && rows.isNotEmpty) {
-        headerRow = _findHeaderRowByType(rows, widget.billType);
+        headerRow = _billParser.findHeaderRow(rows);
+        if (headerRow < 0) headerRow = 0; // 兜底
       }
       _autoDetectMapping();
       // 预取分类列表供第二步选择
@@ -67,119 +77,31 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     }();
   }
 
-  /// 根据账单类型查找表头行号
-  int _findHeaderRowByType(List<List<String>> rows, BillSourceType type) {
+  /// 根据账单类型获取解析器
+  BillParser _getParser(BillSourceType type) {
     switch (type) {
       case BillSourceType.generic:
-        // 通用CSV：使用第0行作为表头
-        return 0;
-
+        return GenericBillParser();
       case BillSourceType.alipay:
-        // 支付宝：在前30行查找包含"交易时间"、"商品说明"的行
-        return _findHeaderRow(rows, ['交易时间', '商品说明']) ?? 0;
-
+        return AlipayBillParser();
       case BillSourceType.wechat:
-        // 微信：在前30行查找包含"交易时间"、"交易类型"的行
-        return _findHeaderRow(rows, ['交易时间', '交易类型']) ?? 0;
+        return WechatBillParser();
     }
-  }
-
-  /// 在前30行中查找包含指定关键词的行
-  int? _findHeaderRow(List<List<String>> rows, List<String> keywords) {
-    final maxRows = rows.length < 30 ? rows.length : 30;
-    for (int i = 0; i < maxRows; i++) {
-      final row = rows[i];
-      if (row.isEmpty) continue;
-
-      final rowStr = row.map((e) => e.toString().trim()).toList();
-
-      // 检查是否包含所有关键词
-      bool containsAll = true;
-      for (final keyword in keywords) {
-        bool found = false;
-        for (final cell in rowStr) {
-          if (cell.contains(keyword)) {
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
-          containsAll = false;
-          break;
-        }
-      }
-
-      if (containsAll) {
-        return i;
-      }
-    }
-    return null;
   }
 
   void _autoDetectMapping() {
     if (rows.isEmpty || !widget.hasHeader) return;
     final headers = rows[headerRow].map((e) => e.toString().trim()).toList();
-    String? normalizeToKey(String raw) {
-      final s = raw.trim();
-      if (s.isEmpty) return null;
-      final lower = s.toLowerCase();
-      final noSpace = lower.replaceAll(RegExp(r'\s+'), '');
-      if (noSpace == 'date' || noSpace == 'time' || noSpace == 'datetime') {
-        return 'date';
-      }
-      if (noSpace == 'type' || noSpace == 'inout' || noSpace == 'direction') {
-        return 'type';
-      }
-      if (noSpace == 'amount' ||
-          noSpace == 'money' ||
-          noSpace == 'price' ||
-          noSpace == 'value') {
-        return 'amount';
-      }
-      if (noSpace == 'category' ||
-          noSpace == 'cate' ||
-          noSpace == 'subject' ||
-          noSpace == 'tag') {
-        return 'category';
-      }
-      if (noSpace == 'note' ||
-          noSpace == 'memo' ||
-          noSpace == 'desc' ||
-          noSpace == 'description' ||
-          noSpace == 'remark' ||
-          noSpace == 'title') {
-        return 'note';
-      }
-      containsAny(String t, List<String> ks) => ks.any((k) => t.contains(k));
-      if (containsAny(s, ['日期', '时间', '交易时间', '账单时间', '创建时间'])) {
-        return 'date';
-      }
-      if (containsAny(s, ['金额', '金额(元)', '交易金额', '变动金额', '收支金额'])) {
-        return 'amount';
-      }
-      // 先匹配"交易类型"等更具体的分类字段（避免被"类型"匹配为type）
-      if (containsAny(s, ['分类', '类别', '账目名称', '科目', '标签', '交易分类', '交易类型'])) {
-        return 'category';
-      }
-      // 再匹配收支类型字段
-      if (containsAny(s, ['类型', '收支', '收/支', '方向'])) {
-        return 'type';
-      }
-      if (containsAny(s, ['备注', '说明', '标题', '摘要', '附言', '商品名称', '商品说明', '交易对方', '商家'])) {
-        return 'note';
-      }
-      // 明确忽略
-      if (containsAny(s, ['账目编号', '编号', '单号', '流水号', '交易号', '相关图片', '图片', '附件', '交易单号', '订单号'])) {
-        return null;
-      }
-      return null;
-    }
 
-    for (int i = 0; i < headers.length; i++) {
-      final k = normalizeToKey(headers[i]);
-      if (k != null && !mapping.containsKey(k)) continue; // skip unknown keys
-      if (k != null && mapping[k] == null) mapping[k] = i;
-    }
+    // 使用解析器的列映射功能
+    final detectedMapping = _billParser.mapColumns(headers);
+
+    // 更新 mapping
+    detectedMapping.forEach((key, index) {
+      if (mapping.containsKey(key)) {
+        mapping[key] = index;
+      }
+    });
   }
 
   @override
@@ -188,7 +110,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       return Scaffold(
         body: Column(
           children: [
-            PrimaryHeader(title: AppLocalizations.of(context)!.importPreparing, showBack: true),
+            PrimaryHeader(
+                title: AppLocalizations.of(context)!.importPreparing,
+                showBack: true),
             Expanded(
               child: Center(
                 child: CircularProgressIndicator(),
@@ -217,27 +141,38 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PrimaryHeader(title: step == 0 ? AppLocalizations.of(context)!.importConfirmMapping : AppLocalizations.of(context)!.importCategoryMapping, showBack: true),
+          PrimaryHeader(
+              title: step == 0
+                  ? AppLocalizations.of(context)!.importConfirmMapping
+                  : AppLocalizations.of(context)!.importCategoryMapping,
+              showBack: true),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               children: [
                 if (step == 0) ...[
-                  if (rows.isEmpty) Text(AppLocalizations.of(context)!.importNoDataParsed),
+                  if (rows.isEmpty)
+                    Text(AppLocalizations.of(context)!.importNoDataParsed),
                   Wrap(
                     spacing: 12,
                     runSpacing: 8,
                     children: [
-                      _mapRow(AppLocalizations.of(context)!.importFieldDate, 'date', items()),
-                      _mapRow(AppLocalizations.of(context)!.importFieldType, 'type', items()),
-                      _mapRow(AppLocalizations.of(context)!.importFieldAmount, 'amount', items()),
-                      _mapRow(AppLocalizations.of(context)!.importFieldCategory, 'category', items()),
-                      _mapRow(AppLocalizations.of(context)!.importFieldNote, 'note', items()),
+                      _mapRow(AppLocalizations.of(context)!.importFieldDate,
+                          'date', items()),
+                      _mapRow(AppLocalizations.of(context)!.importFieldType,
+                          'type', items()),
+                      _mapRow(AppLocalizations.of(context)!.importFieldAmount,
+                          'amount', items()),
+                      _mapRow(AppLocalizations.of(context)!.importFieldCategory,
+                          'category', items()),
+                      _mapRow(AppLocalizations.of(context)!.importFieldNote,
+                          'note', items()),
                     ],
                   ),
                   const SizedBox(height: 12),
                   // 预览仅展示前 N 行，避免大文件一次性渲染导致卡顿
-                  Text(AppLocalizations.of(context)!.importPreview, style: Theme.of(context).textTheme.labelLarge),
+                  Text(AppLocalizations.of(context)!.importPreview,
+                      style: Theme.of(context).textTheme.labelLarge),
                   const SizedBox(height: 6),
                   SizedBox(
                     child: SingleChildScrollView(
@@ -269,7 +204,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 6.0),
                                 child: Text(
-                                  AppLocalizations.of(context)!.importPreviewLimit(limited.length, totalRows),
+                                  AppLocalizations.of(context)!
+                                      .importPreviewLimit(
+                                          limited.length, totalRows),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
@@ -283,8 +220,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                   ),
                 ] else ...[
                   if (mapping['category'] == null)
-                    Text(AppLocalizations.of(context)!.importCategoryNotSelected),
-                  Text(AppLocalizations.of(context)!.importCategoryMappingDescription),
+                    Text(AppLocalizations.of(context)!
+                        .importCategoryNotSelected),
+                  Text(AppLocalizations.of(context)!
+                      .importCategoryMappingDescription),
                   const SizedBox(height: 8),
                   FutureBuilder<List<schema.Category>>(
                     future: allCategoriesFuture,
@@ -293,7 +232,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                       final l10n = AppLocalizations.of(context)!;
                       final items = <DropdownMenuItem<int?>>[
                         DropdownMenuItem(
-                            value: null, child: Text(l10n.importKeepOriginalName)),
+                            value: null,
+                            child: Text(l10n.importKeepOriginalName)),
                         ...cats.map((c) => DropdownMenuItem<int?>(
                               value: c.id,
                               child: Text(
@@ -301,10 +241,12 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                             )),
                       ];
                       // 为每个源分类预设自动匹配（仅在首次加载时执行）
-                      if (categoryMapping.values.every((v) => v == null) && cats.isNotEmpty) {
+                      if (categoryMapping.values.every((v) => v == null) &&
+                          cats.isNotEmpty) {
                         bool hasMatch = false;
                         for (final sourceName in distinctCategories) {
-                          final mappedChineseName = CategoryService.mapEnglishToChinese(sourceName);
+                          final mappedChineseName =
+                              CategoryService.mapEnglishToChinese(sourceName);
                           if (mappedChineseName != sourceName) {
                             // 查找匹配的分类ID
                             try {
@@ -361,13 +303,18 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  if (importing) Text(AppLocalizations.of(context)!.importProgress(ok, fail)),
+                  if (importing)
+                    Text(
+                        AppLocalizations.of(context)!.importProgress(ok, fail)),
                   const Spacer(),
                   if (step == 0)
                     FilledButton(
                       onPressed: () {
                         if (mapping['category'] == null) {
-                          showToast(context, AppLocalizations.of(context)!.importSelectCategoryFirst);
+                          showToast(
+                              context,
+                              AppLocalizations.of(context)!
+                                  .importSelectCategoryFirst);
                           return;
                         }
                         _buildDistinctCategories();
@@ -379,12 +326,14 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                     OutlinedButton(
                       onPressed:
                           importing ? null : () => setState(() => step = 0),
-                      child: Text(AppLocalizations.of(context)!.importPreviousStep),
+                      child: Text(
+                          AppLocalizations.of(context)!.importPreviousStep),
                     ),
                     const SizedBox(width: 12),
                     FilledButton(
                       onPressed: importing ? null : _startImport,
-                      child: Text(AppLocalizations.of(context)!.importStartImport),
+                      child:
+                          Text(AppLocalizations.of(context)!.importStartImport),
                     ),
                   ],
                 ],
@@ -461,7 +410,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                     value: percent > 0 && percent < 1 ? percent : null),
                 const SizedBox(height: 8),
                 // 实时进度文案（每50条更新一次，足够流畅）
-                Text(AppLocalizations.of(context)!.importProgressDetail(p.done, p.fail, p.ok, p.total),
+                Text(
+                    AppLocalizations.of(context)!
+                        .importProgressDetail(p.done, p.fail, p.ok, p.total),
                     style: Theme.of(dctx)
                         .textTheme
                         .bodySmall
@@ -478,7 +429,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                     Navigator.of(currentContext).popUntil((r) => r.isFirst);
                   }
                 },
-                child: Text(AppLocalizations.of(context)!.importBackgroundImport),
+                child:
+                    Text(AppLocalizations.of(context)!.importBackgroundImport),
               ),
               TextButton(
                 onPressed: () {
@@ -567,7 +519,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
             categoryId = chosen;
           } else {
             // 尝试将英文分类映射为中文存储名称
-            final mappedName = CategoryService.mapEnglishToChinese(originalName);
+            final mappedName =
+                CategoryService.mapEnglishToChinese(originalName);
             final name = mappedName != originalName ? mappedName : originalName;
 
             if (type == 'income') {
@@ -664,8 +617,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     }
 
     // 显示导入完成提示
-    final cancelledText = _cancelled ? AppLocalizations.of(context)!.importCancelled : '';
-    showToast(context, AppLocalizations.of(context)!.importCompleted(cancelledText, fail, ok));
+    final cancelledText =
+        _cancelled ? AppLocalizations.of(context)!.importCancelled : '';
+    showToast(context,
+        AppLocalizations.of(context)!.importCompleted(cancelledText, fail, ok));
 
     // Handle UI operations before cloud upload
     if (dialogOpen) {
@@ -711,180 +666,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
   }
 }
 
-List<List<String>> _parseRows(String input) {
-  // 规范化换行并移除 UTF-8 BOM
-  var text = input.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
-  if (text.isNotEmpty && text.codeUnitAt(0) == 0xFEFF) {
-    text = text.substring(1);
-  }
-
-  // 预处理：移除制表符（支付宝旧版CSV在字段中混入tab，会干扰分隔符检测）
-  text = text.replaceAll('\t', '');
-
-  final lines = text
-      .split('\n')
-      .where((l) => l.trim().isNotEmpty)
-      .toList(growable: false);
-  if (lines.isEmpty) return const [];
-
-  // 1. 先尝试自动检测常规分隔符（逗号/制表符/分号/竖线）
-  final delimiter = _detectDelimiter(lines);
-
-  List<List<String>> parsed;
-  if (delimiter == 'space') {
-    parsed = lines.map((l) => _splitSpaceSeparatedLine(l)).toList();
-  } else {
-    parsed = lines.map((l) => _splitDelimitedLine(l, delimiter)).toList();
-  }
-
-  // 2. 如果仍然全部只有 1 列（说明可能不是上述分隔符），且文本出现了连续双空格/制表符，再次尝试空白分隔
-  final multiColumn = parsed.any((r) => r.length > 1);
-  if (!multiColumn) {
-    final hasMultiSpaces = RegExp(r' {2,}').hasMatch(text);
-    final hasTab = text.contains('\t');
-    if (hasTab) {
-      final tabParsed = lines.map((l) => _splitDelimitedLine(l, '\t')).toList();
-      if (tabParsed.any((r) => r.length > 1)) return tabParsed;
-    }
-    if (hasMultiSpaces) {
-      final spaceParsed = lines.map(_splitSpaceSeparatedLine).toList();
-      if (spaceParsed.any((r) => r.length > 1)) return spaceParsed;
-    }
-  }
-
-  return parsed;
-}
-
 // isolate 入口函数：在后台解析 CSV 文本
 List<List<String>> _parseRowsIsolate(String input) {
-  return _parseRows(input);
+  return CsvParser.parse(input);
 }
-
-// 自动检测首若干行的分隔符（不进入引号内部）：优先级：逗号 > 制表符 > 分号 > 竖线；都没有再考虑空格
-String _detectDelimiter(List<String> lines) {
-  // 扩大到前50行，以覆盖支付宝CSV前面的描述行（表头在第25行左右）
-  final maxLines = lines.length < 50 ? lines.length : 50;
-  final counts = <String, int>{',': 0, '\t': 0, ';': 0, '|': 0};
-  for (int i = 0; i < maxLines; i++) {
-    final l = lines[i];
-    bool inQuotes = false;
-    for (int j = 0; j < l.length; j++) {
-      final ch = l[j];
-      if (ch == '"') {
-        if (inQuotes && j + 1 < l.length && l[j + 1] == '"') {
-          j++; // 跳过转义
-          continue;
-        }
-        inQuotes = !inQuotes;
-        continue;
-      }
-      if (!inQuotes) {
-        if (counts.containsKey(ch)) counts[ch] = counts[ch]! + 1;
-      }
-    }
-  }
-  // 选择出现次数最多的分隔符（>0）
-  String? best;
-  int bestCount = 0;
-  counts.forEach((k, v) {
-    if (v > bestCount) {
-      best = k;
-      bestCount = v;
-    }
-  });
-  if (best != null && bestCount > 0) return best!;
-  // 检查是否存在连续多空格用于分隔
-  final hasMultiSpaces =
-      lines.take(maxLines).any((l) => RegExp(r' {2,}').hasMatch(l));
-  if (hasMultiSpaces) return 'space';
-  // 默认回退逗号（保持与以前行为兼容）
-  return ',';
-}
-
-// 拆分一行：适用于明确单字符分隔符（逗号/制表符/分号/竖线），支持双引号转义
-List<String> _splitDelimitedLine(String line, String delimiter) {
-  final out = <String>[];
-  final buf = StringBuffer();
-  bool inQuotes = false;
-
-  for (int i = 0; i < line.length; i++) {
-    final ch = line[i];
-    if (ch == '"') {
-      if (inQuotes && i + 1 < line.length && line[i + 1] == '"') {
-        buf.write('"');
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-      continue;
-    }
-    if (!inQuotes && ch == delimiter) {
-      out.add(_cleanCsvField(buf.toString()));
-      buf.clear();
-      continue;
-    }
-    buf.write(ch);
-  }
-  out.add(_cleanCsvField(buf.toString()));
-  return out;
-}
-
-// 空格（或多个空格）分隔的行拆分：忽略引号内空格；多个连续空格视为一个分隔
-List<String> _splitSpaceSeparatedLine(String line) {
-  final out = <String>[];
-  final buf = StringBuffer();
-  bool inQuotes = false;
-  int spaceRun = 0;
-  void pushBuf() {
-    out.add(_cleanCsvField(buf.toString()));
-    buf.clear();
-  }
-
-  for (int i = 0; i < line.length; i++) {
-    final ch = line[i];
-    if (ch == '"') {
-      if (inQuotes && i + 1 < line.length && line[i + 1] == '"') {
-        buf.write('"');
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-      spaceRun = 0;
-      continue;
-    }
-    if (!inQuotes && ch == ' ') {
-      spaceRun++;
-      if (spaceRun == 1) {
-        // 先标记一次空格，等待看是否为分隔符（需要 >=1 且前面已有内容）
-      }
-      continue;
-    }
-    // 碰到非空格字符
-    if (!inQuotes && spaceRun > 0) {
-      // 之前累积的空格作为分隔符（忽略行首空格）
-      if (buf.isNotEmpty) {
-        pushBuf();
-      }
-      spaceRun = 0;
-    }
-    buf.write(ch);
-  }
-  // 行尾 push
-  if (buf.isNotEmpty) {
-    pushBuf();
-  }
-  return out;
-}
-
-String _cleanCsvField(String raw) {
-  var s = raw.trim();
-  if (s.length >= 2 && s.startsWith('"') && s.endsWith('"')) {
-    s = s.substring(1, s.length - 1).replaceAll('""', '"').trim();
-  }
-  return s;
-}
-
-//（保留占位注释：以前这里有自动表头行识别，现固定第一行作为表头）
 
 Future<List<schema.Category>> _loadAllCategories(WidgetRef ref) async {
   final db = ref.read(databaseProvider);
