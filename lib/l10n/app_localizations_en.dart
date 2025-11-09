@@ -251,6 +251,99 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchResultsEmptyHint => 'Try other keywords or adjust filter conditions';
 
   @override
+  String get searchBatchMode => 'Batch Operations';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return 'Batch Operations ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => 'Exit Batch Mode';
+
+  @override
+  String get searchSelectAll => 'Select All';
+
+  @override
+  String get searchDeselectAll => 'Deselect All';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '$count selected';
+  }
+
+  @override
+  String get searchBatchSetNote => 'Set Note';
+
+  @override
+  String get searchBatchChangeCategory => 'Change Category';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => 'Confirm Delete';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return 'Are you sure you want to delete the selected $count transactions?\nThis action cannot be undone.';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => 'Batch Set Note';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return 'Set the same note for the selected $count transactions';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => 'Enter note content (leave empty to clear notes)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => 'Batch Change Category';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return 'Set a new category for the selected $count transactions';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => 'Select Category';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return 'Successfully deleted $count transactions';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return 'Delete failed: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return 'Successfully set note for $count transactions';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return 'Set note failed: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return 'Successfully changed category for $count transactions';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return 'Change category failed: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '$count results';
+  }
+
+  @override
   String get analyticsTitle => 'Analytics';
 
   @override
@@ -2842,6 +2935,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudSupabaseAnonKeyHintLong => 'Paste complete anon key';
+
+  @override
+  String get cloudWebdavRemotePathHelp => 'Remote directory path for data storage';
 
   @override
   String get cloudWebdavRemotePathLabel => 'Remote Path';

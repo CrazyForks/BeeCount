@@ -251,6 +251,99 @@ class AppLocalizationsZh extends AppLocalizations {
   String get searchResultsEmptyHint => '请尝试其他关键词或调整筛选条件';
 
   @override
+  String get searchBatchMode => '批量操作';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return '批量操作 ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => '退出批量操作';
+
+  @override
+  String get searchSelectAll => '全选';
+
+  @override
+  String get searchDeselectAll => '取消全选';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '已选择 $count 项';
+  }
+
+  @override
+  String get searchBatchSetNote => '设置备注';
+
+  @override
+  String get searchBatchChangeCategory => '调整分类';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => '确认删除';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '确定要删除选中的 $count 笔记账吗?\n此操作无法撤销。';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => '批量设置备注';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return '将为选中的 $count 笔记账设置相同的备注';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => '输入备注内容 (留空则清空备注)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => '批量调整分类';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return '将为选中的 $count 笔记账设置新的分类';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => '选择分类';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '成功删除 $count 笔记账';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return '删除失败: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return '成功为 $count 笔记账设置备注';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return '设置备注失败: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return '成功为 $count 笔记账调整分类';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return '调整分类失败: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '共 $count 条结果';
+  }
+
+  @override
   String get analyticsTitle => '分析';
 
   @override
@@ -2844,6 +2937,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudSupabaseAnonKeyHintLong => '粘贴完整的 anon key';
 
   @override
+  String get cloudWebdavRemotePathHelp => '数据存储的远程目录路径';
+
+  @override
   String get cloudWebdavRemotePathLabel => '远程路径';
 
   @override
@@ -3625,6 +3721,99 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchResultsEmptyHint => '請嘗試其他關鍵詞或調整篩選條件';
+
+  @override
+  String get searchBatchMode => '批次操作';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return '批次操作 ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => '退出批次操作';
+
+  @override
+  String get searchSelectAll => '全選';
+
+  @override
+  String get searchDeselectAll => '取消全選';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '已選擇 $count 項';
+  }
+
+  @override
+  String get searchBatchSetNote => '設定備註';
+
+  @override
+  String get searchBatchChangeCategory => '調整分類';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => '確認刪除';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '確定要刪除選中的 $count 筆記帳嗎?\n此操作無法復原。';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => '批次設定備註';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return '將為選中的 $count 筆記帳設定相同的備註';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => '輸入備註內容 (留空則清空備註)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => '批次調整分類';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return '將為選中的 $count 筆記帳設定新的分類';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => '選擇分類';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '成功刪除 $count 筆記帳';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return '刪除失敗: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return '成功為 $count 筆記帳設定備註';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return '設定備註失敗: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return '成功為 $count 筆記帳調整分類';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return '調整分類失敗: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '共 $count 條結果';
+  }
 
   @override
   String get analyticsTitle => '分析';
@@ -6220,6 +6409,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudSupabaseAnonKeyHintLong => '貼上完整的 anon key';
 
   @override
+  String get cloudWebdavRemotePathHelp => '數據存储的远程目錄路径';
+
+  @override
   String get cloudWebdavRemotePathLabel => '遠端路徑';
 
   @override
@@ -6433,4 +6625,323 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get monthIncome => '本月收入';
+
+  @override
+  String get autoScreenshotBilling => '截圖自動記帳';
+
+  @override
+  String get autoScreenshotBillingDesc => '截圖後自動識別支付資訊';
+
+  @override
+  String get autoScreenshotBillingTitle => '截圖自動記帳';
+
+  @override
+  String get featureDescription => '功能說明';
+
+  @override
+  String get featureDescriptionContent => '截圖支付頁面後，系統會自動識別金額和商家資訊，並建立支出記錄。\n\n⚡ 識別速度約 1-2 秒\n🤖 智慧配對分類\n📝 自動填寫備註\n\n注意：\n• 未開啟無障礙服務時，識別速度會稍慢（3-5秒）\n• 開啟無障礙服務後，可實現秒級識別';
+
+  @override
+  String get autoBilling => '自動記帳';
+
+  @override
+  String get enabled => '已啟用';
+
+  @override
+  String get disabled => '已停用';
+
+  @override
+  String get accessibilityService => '無障礙服務';
+
+  @override
+  String get accessibilityServiceEnabled => '已啟用 - 秒級識別';
+
+  @override
+  String get accessibilityServiceDisabled => '未啟用 - 識別稍慢';
+
+  @override
+  String get improveRecognitionSpeed => '提升識別速度';
+
+  @override
+  String get accessibilityGuideContent => '開啟無障礙服務後，可以實現截圖瞬間識別，無需等待文件寫入。';
+
+  @override
+  String get setupSteps => '設定步驟：';
+
+  @override
+  String get accessibilityStep1 => '點擊下方「開啟無障礙設定」按鈕';
+
+  @override
+  String get accessibilityStep2 => '在清單中找到「蜜蜂記帳-截圖識別」';
+
+  @override
+  String get accessibilityStep3 => '開啟服務開關';
+
+  @override
+  String get accessibilityStep4 => '返回應用程式即可使用';
+
+  @override
+  String get openAccessibilitySettings => '開啟無障礙設定';
+
+  @override
+  String get accessibilityServiceNote => '💡 說明：無障礙服務僅用於檢測截圖動作，不會讀取或修改您的其他資料。';
+
+  @override
+  String get supportedPayments => '支援的支付方式';
+
+  @override
+  String get supportedAlipay => '✅ 支付寶';
+
+  @override
+  String get supportedWechat => '✅ 微信支付';
+
+  @override
+  String get supportedUnionpay => '✅ 雲閃付';
+
+  @override
+  String get supportedOthers => '⚠️ 其他支付方式識別準確率可能較低';
+
+  @override
+  String get photosPermissionRequired => '需要相片權限才能監聽截圖';
+
+  @override
+  String get enableSuccess => '自動記帳已啟用';
+
+  @override
+  String get disableSuccess => '自動記帳已停用';
+
+  @override
+  String get autoBillingBatteryTitle => '保持背景執行';
+
+  @override
+  String get autoBillingBatteryGuideTitle => '電池最佳化設定';
+
+  @override
+  String get autoBillingBatteryDesc => '自動記帳需要應用程式在背景保持執行。部分手機會在鎖屏後自動清理背景應用程式，導致自動記帳功能失效。建議關閉電池最佳化以確保功能正常工作。';
+
+  @override
+  String get autoBillingCheckBattery => '檢查電池最佳化狀態';
+
+  @override
+  String get autoBillingBatteryWarning => '⚠️ 未關閉電池最佳化，應用程式可能會被系統自動清理，導致自動記帳失效。建議點擊上方「前往設定」按鈕關閉電池最佳化。';
+
+  @override
+  String get enableFailed => '啟用失敗';
+
+  @override
+  String get disableFailed => '停用失敗';
+
+  @override
+  String get openSettingsFailed => '開啟設定失敗';
+
+  @override
+  String get reselectImage => '重新選擇';
+
+  @override
+  String get viewOriginalText => '檢視原始文字';
+
+  @override
+  String get createBill => '建立帳單';
+
+  @override
+  String get ocrBilling => 'OCR 掃描記帳';
+
+  @override
+  String get ocrBillingDesc => '掃描支付截圖自動識別金額';
+
+  @override
+  String get quickActions => '快捷功能';
+
+  @override
+  String get iosAutoFeatureDesc => '透過 iOS「捷徑」應用程式，實現截圖後自動識別支付資訊並記帳。設定後，每次截圖都會自動觸發識別。';
+
+  @override
+  String get iosAutoShortcutQuickAdd => '快速新增捷徑';
+
+  @override
+  String get iosAutoShortcutQuickAddDesc => '點擊下方按鈕可以直接匯入設定好的捷徑，或手動開啟捷徑 App 設定。';
+
+  @override
+  String get iosAutoShortcutImport => '一鍵匯入捷徑';
+
+  @override
+  String get iosAutoShortcutOpenApp => '或手動開啟捷徑 App 設定';
+
+  @override
+  String get iosAutoShortcutConfigTitle => '設定步驟（推薦方式 - URL 參數傳遞）：';
+
+  @override
+  String get iosAutoShortcutStep1 => '開啟「捷徑」應用程式';
+
+  @override
+  String get iosAutoShortcutStep2 => '點擊右上角「+」建立新捷徑';
+
+  @override
+  String get iosAutoShortcutStep3 => '新增「截圖」操作（取得最新截圖）';
+
+  @override
+  String get iosAutoShortcutStep4 => '新增「從截圖中擷取文字」操作';
+
+  @override
+  String get iosAutoShortcutStep5 => '新增「取代文字」操作：將「擷取的文字」中的「\\n」取代為「,」（逗號）';
+
+  @override
+  String get iosAutoShortcutStep6 => '新增「URL 編碼」操作：對「取代後的文字」進行 URL 編碼';
+
+  @override
+  String get iosAutoShortcutStep7 => '新增「開啟 URL」操作，URL 填寫：\nbeecount://auto-billing?text=[URL 編碼後的文字]';
+
+  @override
+  String get iosAutoShortcutStep8 => '點擊捷徑設定（右上角三點）';
+
+  @override
+  String get iosAutoShortcutStep9 => '在「當...時執行」中新增「截圖時」觸發程序';
+
+  @override
+  String get iosAutoShortcutStep10 => '儲存並測試：截圖後會自動識別';
+
+  @override
+  String get iosAutoShortcutRecommendedTip => '✅ 推薦：URL 參數傳遞，無需權限，體驗最佳。關鍵步驟：\n• 取代文字時將換行符號\\n取代為逗號,（避免 URL 截斷）\n• 使用 URL 編碼操作（避免中文亂碼）\n• 一般截圖文字不會超過 2048 字元限制';
+
+  @override
+  String get iosAutoBackTapTitle => '💡 雙擊背面快速觸發（推薦）';
+
+  @override
+  String get iosAutoBackTapDesc => '設定 > 輔助使用 > 觸控 > 背面輕點\n• 選擇「點兩下」或「點三下」\n• 選擇剛建立的捷徑\n• 完成後，支付時雙擊手機背面即可自動記帳，無需截圖';
+
+  @override
+  String iosAutoImportFailed(Object error) {
+    return '匯入失敗: $error';
+  }
+
+  @override
+  String iosAutoOpenAppFailed(Object error) {
+    return '開啟失敗: $error';
+  }
+
+  @override
+  String get iosAutoCannotOpenLink => '無法開啟連結，請檢查網路連線';
+
+  @override
+  String get iosAutoCannotOpenShortcuts => '無法開啟捷徑 App';
+
+  @override
+  String get aiSettingsTitle => 'AI 智慧識別';
+
+  @override
+  String get aiSettingsSubtitle => '設定 AI 模型和識別策略';
+
+  @override
+  String get aiEnableTitle => '啟用 AI 智慧識別';
+
+  @override
+  String get aiEnableSubtitle => '使用 AI 增強 OCR 識別準確度，提取金額、商家、時間等資訊';
+
+  @override
+  String get aiEnableToastOn => 'AI 增強已啟用';
+
+  @override
+  String get aiEnableToastOff => 'AI 增強已停用';
+
+  @override
+  String get aiStrategyTitle => '執行策略';
+
+  @override
+  String get aiStrategyLocalFirst => '本機優先（推薦）';
+
+  @override
+  String get aiStrategyLocalFirstDesc => '優先使用本機模型，失敗後自動切換雲端';
+
+  @override
+  String get aiStrategyCloudFirst => '雲端優先';
+
+  @override
+  String get aiStrategyCloudFirstDesc => '優先使用雲端 API，失敗後降級到本機';
+
+  @override
+  String get aiStrategyLocalOnly => '僅本機';
+
+  @override
+  String get aiStrategyLocalOnlyDesc => '只使用本機模型，完全離線';
+
+  @override
+  String get aiStrategyCloudOnly => '僅雲端';
+
+  @override
+  String get aiStrategyCloudOnlyDesc => '只使用雲端 API，不下載模型';
+
+  @override
+  String get aiStrategyUnavailable => '本機模型訓練中，敬請期待';
+
+  @override
+  String aiStrategySwitched(String strategy) {
+    return '已切換: $strategy';
+  }
+
+  @override
+  String get aiCloudApiTitle => '智譜 GLM API';
+
+  @override
+  String get aiCloudApiKeyLabel => 'API Key';
+
+  @override
+  String get aiCloudApiKeyHint => '輸入智譜 AI 的 API Key';
+
+  @override
+  String get aiCloudApiKeyHelper => 'GLM-4-Flash 模型完全免費';
+
+  @override
+  String get aiCloudApiKeySaved => 'API Key 已儲存';
+
+  @override
+  String get aiCloudApiGetKey => '取得 API Key';
+
+  @override
+  String get aiLocalModelTitle => '本機模型';
+
+  @override
+  String get aiLocalModelTraining => '訓練中';
+
+  @override
+  String get aiLocalModelManagement => '模型管理';
+
+  @override
+  String get aiLocalModelUnavailable => '本機模型訓練中，暫不可用';
+
+  @override
+  String get aiFabSettingTitle => '快捷記帳按鈕優先拍照';
+
+  @override
+  String get aiFabSettingDescCamera => '短按拍照，長按手動記帳';
+
+  @override
+  String get aiFabSettingDescManual => '短按手動記帳，長按拍照';
+
+  @override
+  String get aiOcrRecognizing => '正在識別帳單...';
+
+  @override
+  String get aiOcrNoAmount => '未識別到有效金額，請手動記帳';
+
+  @override
+  String get aiOcrNoLedger => '未找到帳本';
+
+  @override
+  String aiOcrSuccess(String type, String amount) {
+    return '✅ $type帳單建立成功 ¥$amount';
+  }
+
+  @override
+  String aiOcrFailed(String error) {
+    return '識別失敗: $error';
+  }
+
+  @override
+  String get aiOcrCreateFailed => '建立帳單失敗';
+
+  @override
+  String get aiTypeIncome => '收入';
+
+  @override
+  String get aiTypeExpense => '支出';
 }

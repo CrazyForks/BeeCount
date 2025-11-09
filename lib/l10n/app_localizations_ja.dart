@@ -251,6 +251,99 @@ class AppLocalizationsJa extends AppLocalizations {
   String get searchResultsEmptyHint => '他のキーワードを試すか、フィルター条件を調整してください';
 
   @override
+  String get searchBatchMode => '一括操作';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return '一括操作 ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => '一括操作を終了';
+
+  @override
+  String get searchSelectAll => 'すべて選択';
+
+  @override
+  String get searchDeselectAll => '選択解除';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '$count件選択中';
+  }
+
+  @override
+  String get searchBatchSetNote => 'メモを設定';
+
+  @override
+  String get searchBatchChangeCategory => 'カテゴリを変更';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => '削除の確認';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '選択した$count件の取引を削除しますか?\nこの操作は元に戻せません。';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => '一括メモ設定';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return '選択した$count件の取引に同じメモを設定します';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => 'メモの内容を入力 (空欄の場合はメモを削除)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => '一括カテゴリ変更';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return '選択した$count件の取引に新しいカテゴリを設定します';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => 'カテゴリを選択';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '$count件の取引を削除しました';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return '削除に失敗しました: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return '$count件の取引にメモを設定しました';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return 'メモの設定に失敗しました: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return '$count件の取引のカテゴリを変更しました';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return 'カテゴリの変更に失敗しました: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '$count件の結果';
+  }
+
+  @override
   String get analyticsTitle => '分析';
 
   @override
@@ -2844,6 +2937,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cloudSupabaseAnonKeyHintLong => '完全な anon key を貼り付けてください';
 
   @override
+  String get cloudWebdavRemotePathHelp => 'データストレージ的リモートディレクトリパス';
+
+  @override
   String get cloudWebdavRemotePathLabel => 'リモートパス';
 
   @override
@@ -3059,67 +3155,67 @@ class AppLocalizationsJa extends AppLocalizations {
   String get monthIncome => '今月収入';
 
   @override
-  String get autoScreenshotBilling => 'Auto Screenshot Billing';
+  String get autoScreenshotBilling => 'スクリーンショット自動記帳';
 
   @override
-  String get autoScreenshotBillingDesc => 'Auto-recognize payment info from screenshots';
+  String get autoScreenshotBillingDesc => 'スクリーンショット後に支払い情報を自動認識';
 
   @override
-  String get autoScreenshotBillingTitle => 'Auto Screenshot Billing';
+  String get autoScreenshotBillingTitle => 'スクリーンショット自動記帳';
 
   @override
-  String get featureDescription => 'Feature Description';
+  String get featureDescription => '機能説明';
 
   @override
-  String get featureDescriptionContent => 'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 1-2 seconds\n🤖 Smart category matching\n📝 Auto-fill notes\n\nNote:\n• Without accessibility service: slightly slower (3-5s)\n• With accessibility service enabled: instant recognition';
+  String get featureDescriptionContent => '支払いページのスクリーンショットを撮ると、システムは金額と店舗情報を自動的に認識し、支出記録を作成します。\n\n⚡ 認識速度約1〜2秒\n🤖 自動でカテゴリにマッチング\n📝 自動でメモを入力\n\n注意：\n• アクセシビリティサービスが有効になっていない場合、認識速度はわずかに遅くなります（3〜5秒）\n• アクセシビリティサービスを有効にすると、瞬時に認識できます';
 
   @override
-  String get autoBilling => 'Auto Billing';
+  String get autoBilling => '自動記帳';
 
   @override
-  String get enabled => 'Enabled';
+  String get enabled => '有効';
 
   @override
-  String get disabled => 'Disabled';
+  String get disabled => '無効';
 
   @override
-  String get accessibilityService => 'Accessibility Service';
+  String get accessibilityService => 'アクセシビリティサービス';
 
   @override
-  String get accessibilityServiceEnabled => 'Enabled - Instant Recognition';
+  String get accessibilityServiceEnabled => '有効 - 瞬時に認識';
 
   @override
-  String get accessibilityServiceDisabled => 'Disabled - Slower Recognition';
+  String get accessibilityServiceDisabled => '無効 - 認識が遅い';
 
   @override
-  String get improveRecognitionSpeed => 'Improve Recognition Speed';
+  String get improveRecognitionSpeed => '認識速度を向上';
 
   @override
-  String get accessibilityGuideContent => 'With accessibility service enabled, screenshots can be recognized instantly without waiting for file write.';
+  String get accessibilityGuideContent => 'アクセシビリティサービスを有効にすると、スクリーンショットを撮影した瞬間に認識でき、ファイルの書き込みを待つ必要がありません。';
 
   @override
-  String get setupSteps => 'Setup Steps:';
+  String get setupSteps => '設定手順：';
 
   @override
-  String get accessibilityStep1 => 'Tap \"Open Accessibility Settings\" button below';
+  String get accessibilityStep1 => '下の「アクセシビリティ設定を開く」ボタンをタップ';
 
   @override
-  String get accessibilityStep2 => 'Find \"BeeCount-Screenshot Recognition\" in the list';
+  String get accessibilityStep2 => 'リストから「蜜蜂家計簿-スクリーンショット認識」を見つける';
 
   @override
-  String get accessibilityStep3 => 'Enable the service switch';
+  String get accessibilityStep3 => 'サービススイッチを有効にする';
 
   @override
-  String get accessibilityStep4 => 'Return to app to use';
+  String get accessibilityStep4 => 'アプリに戻って使用';
 
   @override
-  String get openAccessibilitySettings => 'Open Accessibility Settings';
+  String get openAccessibilitySettings => 'アクセシビリティ設定を開く';
 
   @override
-  String get accessibilityServiceNote => '💡 Note: Accessibility service is only used to detect screenshot actions, and will not read or modify your other data.';
+  String get accessibilityServiceNote => '💡 注意：アクセシビリティサービスはスクリーンショット動作の検出にのみ使用され、他のデータを読み取ったり変更したりすることはありません。';
 
   @override
-  String get supportedPayments => 'Supported Payment Methods';
+  String get supportedPayments => 'サポートされている支払い方法';
 
   @override
   String get supportedAlipay => '✅ Alipay';
@@ -3131,183 +3227,183 @@ class AppLocalizationsJa extends AppLocalizations {
   String get supportedUnionpay => '✅ UnionPay';
 
   @override
-  String get supportedOthers => '⚠️ Other payment methods may have lower recognition accuracy';
+  String get supportedOthers => '⚠️ 他の支払い方法の認識精度は低い場合があります';
 
   @override
-  String get photosPermissionRequired => 'Photos permission required for screenshot monitoring';
+  String get photosPermissionRequired => 'スクリーンショットを監視するには、写真の権限が必要です';
 
   @override
-  String get enableSuccess => 'Auto billing enabled';
+  String get enableSuccess => '自動記帳が有効になりました';
 
   @override
-  String get disableSuccess => 'Auto billing disabled';
+  String get disableSuccess => '自動記帳が無効になりました';
 
   @override
-  String get autoBillingBatteryTitle => 'Keep Running in Background';
+  String get autoBillingBatteryTitle => 'バックグラウンドで実行を維持';
 
   @override
-  String get autoBillingBatteryGuideTitle => 'Battery Optimization Settings';
+  String get autoBillingBatteryGuideTitle => 'バッテリー最適化設定';
 
   @override
-  String get autoBillingBatteryDesc => 'Auto billing requires the app to keep running in the background. Some phones automatically clean background apps when locked, which may cause auto billing to fail. It is recommended to disable battery optimization to ensure proper functionality.';
+  String get autoBillingBatteryDesc => '自動記帳には、アプリがバックグラウンドで実行を継続する必要があります。一部の端末では、画面ロック後にバックグラウンドアプリが自動的にクリアされ、自動記帳機能が無効になる場合があります。バッテリー最適化をオフにして、機能が正常に動作することを確認することをお勧めします。';
 
   @override
-  String get autoBillingCheckBattery => 'Check Battery Optimization';
+  String get autoBillingCheckBattery => 'バッテリー最適化の状態を確認';
 
   @override
-  String get autoBillingBatteryWarning => '⚠️ Battery optimization is not disabled. The app may be automatically cleaned by the system, causing auto billing to fail. Please tap the \"Settings\" button above to disable battery optimization.';
+  String get autoBillingBatteryWarning => '⚠️ バッテリー最適化がオフになっていません。アプリがシステムによって自動的にクリアされ、自動記帳が無効になる可能性があります。上の「設定に移動」ボタンをタップして、バッテリー最適化をオフにすることをお勧めします。';
 
   @override
-  String get enableFailed => 'Enable failed';
+  String get enableFailed => '有効化に失敗しました';
 
   @override
-  String get disableFailed => 'Disable failed';
+  String get disableFailed => '無効化に失敗しました';
 
   @override
-  String get openSettingsFailed => 'Failed to open settings';
+  String get openSettingsFailed => '設定を開くのに失敗しました';
 
   @override
-  String get reselectImage => 'Reselect';
+  String get reselectImage => '再選択';
 
   @override
-  String get viewOriginalText => 'View Original Text';
+  String get viewOriginalText => '元のテキストを表示';
 
   @override
-  String get createBill => 'Create Bill';
+  String get createBill => '請求書を作成';
 
   @override
-  String get ocrBilling => 'OCR Scan Billing';
+  String get ocrBilling => 'OCRスキャン記帳';
 
   @override
-  String get ocrBillingDesc => 'Auto-recognize payment screenshots';
+  String get ocrBillingDesc => '支払いスクリーンショットをスキャンして金額を自動認識';
 
   @override
-  String get quickActions => 'Quick Actions';
+  String get quickActions => 'クイック機能';
 
   @override
-  String get iosAutoFeatureDesc => 'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.';
+  String get iosAutoFeatureDesc => 'iOS「ショートカット」アプリを使用して、スクリーンショット後に支払い情報を自動的に認識し、記帳します。設定後、スクリーンショットを撮るたびに自動的に認識がトリガーされます。';
 
   @override
-  String get iosAutoShortcutQuickAdd => 'Quick Add Shortcut';
+  String get iosAutoShortcutQuickAdd => 'ショートカットをすばやく追加';
 
   @override
-  String get iosAutoShortcutQuickAddDesc => 'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.';
+  String get iosAutoShortcutQuickAddDesc => '下のボタンをタップすると、設定済みのショートカットを直接インポートするか、ショートカットアプリを手動で開いて設定できます。';
 
   @override
-  String get iosAutoShortcutImport => 'One-Click Import Shortcut';
+  String get iosAutoShortcutImport => 'ワンクリックでショートカットをインポート';
 
   @override
-  String get iosAutoShortcutOpenApp => 'Or Manually Open Shortcuts App';
+  String get iosAutoShortcutOpenApp => 'または手動でショートカットアプリを開いて設定';
 
   @override
-  String get iosAutoShortcutConfigTitle => 'Configuration Steps (Recommended - URL Parameter):';
+  String get iosAutoShortcutConfigTitle => '設定手順（推奨方法 - URLパラメータ渡し）：';
 
   @override
-  String get iosAutoShortcutStep1 => 'Open \"Shortcuts\" app';
+  String get iosAutoShortcutStep1 => '「ショートカット」アプリを開く';
 
   @override
-  String get iosAutoShortcutStep2 => 'Tap \"+\" in top right to create new shortcut';
+  String get iosAutoShortcutStep2 => '右上隅の「+」をタップして新しいショートカットを作成';
 
   @override
-  String get iosAutoShortcutStep3 => 'Add \"Take Screenshot\" action (get latest screenshot)';
+  String get iosAutoShortcutStep3 => '「スクリーンショット」アクションを追加（最新のスクリーンショットを取得）';
 
   @override
-  String get iosAutoShortcutStep4 => 'Add \"Extract Text from Screenshot\" action';
+  String get iosAutoShortcutStep4 => '「スクリーンショットからテキストを抽出」アクションを追加';
 
   @override
-  String get iosAutoShortcutStep5 => 'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)';
+  String get iosAutoShortcutStep5 => '「テキストを置換」アクションを追加：「抽出されたテキスト」の「\\n」を「,」（カンマ）に置き換えます';
 
   @override
-  String get iosAutoShortcutStep6 => 'Add \"URL Encode\" action: encode the replaced text';
+  String get iosAutoShortcutStep6 => '「URLエンコード」アクションを追加：「置換されたテキスト」をURLエンコードします';
 
   @override
-  String get iosAutoShortcutStep7 => 'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]';
+  String get iosAutoShortcutStep7 => '「URLを開く」アクションを追加、URLに入力：\nbeecount://auto-billing?text=[URLエンコードされたテキスト]';
 
   @override
-  String get iosAutoShortcutStep8 => 'Tap shortcut settings (three dots in top right)';
+  String get iosAutoShortcutStep8 => 'ショートカット設定（右上隅の3つのドット）をタップ';
 
   @override
-  String get iosAutoShortcutStep9 => 'In \"When...\" add \"When Screenshot is taken\" trigger';
+  String get iosAutoShortcutStep9 => '「...のときに実行」で「スクリーンショット時」トリガーを追加';
 
   @override
-  String get iosAutoShortcutStep10 => 'Save and test: auto-identify after screenshot';
+  String get iosAutoShortcutStep10 => '保存してテスト：スクリーンショット後に自動的に認識されます';
 
   @override
-  String get iosAutoShortcutRecommendedTip => '✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit';
+  String get iosAutoShortcutRecommendedTip => '✅ 推奨：URLパラメータ渡し、権限不要、最高の体験。重要な手順：\n• テキストを置換する際に、改行文字\\nをカンマ,に置き換えます（URL切断を回避）\n• URL エンコード操作を使用します（文字化けを回避）\n• 通常、スクリーンショットテキストは2048文字の制限を超えません';
 
   @override
-  String get iosAutoBackTapTitle => '💡 Double Tap Back to Trigger (Recommended)';
+  String get iosAutoBackTapTitle => '💡 背面をダブルタップしてすばやくトリガー（推奨）';
 
   @override
-  String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
+  String get iosAutoBackTapDesc => '設定 > アクセシビリティ > タッチ > 背面タップ\n• 「ダブルタップ」または「トリプルタップ」を選択\n• 作成したショートカットを選択\n• 完了後、支払い時に電話の背面をダブルタップすると、スクリーンショットなしで自動的に記帳されます';
 
   @override
   String iosAutoImportFailed(Object error) {
-    return 'Import failed: $error';
+    return 'インポートに失敗しました: $error';
   }
 
   @override
   String iosAutoOpenAppFailed(Object error) {
-    return 'Open failed: $error';
+    return '開くのに失敗しました: $error';
   }
 
   @override
-  String get iosAutoCannotOpenLink => 'Cannot open link, please check network connection';
+  String get iosAutoCannotOpenLink => 'リンクを開けません。ネットワーク接続を確認してください';
 
   @override
-  String get iosAutoCannotOpenShortcuts => 'Cannot open Shortcuts app';
+  String get iosAutoCannotOpenShortcuts => 'ショートカットアプリを開けません';
 
   @override
-  String get aiSettingsTitle => 'AI Recognition';
+  String get aiSettingsTitle => 'AI認識';
 
   @override
-  String get aiSettingsSubtitle => 'Configure AI models and recognition strategy';
+  String get aiSettingsSubtitle => 'AIモデルと認識戦略を設定';
 
   @override
-  String get aiEnableTitle => 'Enable AI Recognition';
+  String get aiEnableTitle => 'AI認識を有効にする';
 
   @override
-  String get aiEnableSubtitle => 'Use AI to enhance OCR accuracy and extract amount, merchant, time, etc.';
+  String get aiEnableSubtitle => 'AIを使用してOCR認識精度を向上させ、金額、店舗、時間などの情報を抽出';
 
   @override
-  String get aiEnableToastOn => 'AI enhancement enabled';
+  String get aiEnableToastOn => 'AI拡張が有効になりました';
 
   @override
-  String get aiEnableToastOff => 'AI enhancement disabled';
+  String get aiEnableToastOff => 'AI拡張が無効になりました';
 
   @override
-  String get aiStrategyTitle => 'Execution Strategy';
+  String get aiStrategyTitle => '実行戦略';
 
   @override
-  String get aiStrategyLocalFirst => 'Local First (Recommended)';
+  String get aiStrategyLocalFirst => 'ローカル優先（推奨）';
 
   @override
-  String get aiStrategyLocalFirstDesc => 'Use local model first, fallback to cloud if failed';
+  String get aiStrategyLocalFirstDesc => 'ローカルモデルを優先し、失敗時は自動的にクラウドに切り替え';
 
   @override
-  String get aiStrategyCloudFirst => 'Cloud First';
+  String get aiStrategyCloudFirst => 'クラウド優先';
 
   @override
-  String get aiStrategyCloudFirstDesc => 'Use cloud API first, downgrade to local if failed';
+  String get aiStrategyCloudFirstDesc => 'クラウドAPIを優先し、失敗時はローカルにダウングレード';
 
   @override
-  String get aiStrategyLocalOnly => 'Local Only';
+  String get aiStrategyLocalOnly => 'ローカルのみ';
 
   @override
-  String get aiStrategyLocalOnlyDesc => 'Use local model only, completely offline';
+  String get aiStrategyLocalOnlyDesc => 'ローカルモデルのみを使用、完全オフライン';
 
   @override
-  String get aiStrategyCloudOnly => 'Cloud Only';
+  String get aiStrategyCloudOnly => 'クラウドのみ';
 
   @override
-  String get aiStrategyCloudOnlyDesc => 'Use cloud API only, no model download';
+  String get aiStrategyCloudOnlyDesc => 'クラウドAPIのみを使用、モデルをダウンロードしない';
 
   @override
-  String get aiStrategyUnavailable => 'Local model in training, coming soon';
+  String get aiStrategyUnavailable => 'ローカルモデルはトレーニング中です、お楽しみに';
 
   @override
   String aiStrategySwitched(String strategy) {
-    return 'Switched to: $strategy';
+    return '切り替えました: $strategy';
   }
 
   @override
@@ -3317,63 +3413,63 @@ class AppLocalizationsJa extends AppLocalizations {
   String get aiCloudApiKeyLabel => 'API Key';
 
   @override
-  String get aiCloudApiKeyHint => 'Enter your Zhipu AI API Key';
+  String get aiCloudApiKeyHint => 'Zhipu AI APIキーを入力';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash model is completely free';
+  String get aiCloudApiKeyHelper => 'GLM-4-Flashモデルは完全無料';
 
   @override
-  String get aiCloudApiKeySaved => 'API Key saved';
+  String get aiCloudApiKeySaved => 'API Key を保存しました';
 
   @override
-  String get aiCloudApiGetKey => 'Get API Key';
+  String get aiCloudApiGetKey => 'API Keyを取得';
 
   @override
-  String get aiLocalModelTitle => 'Local Model';
+  String get aiLocalModelTitle => 'ローカルモデル';
 
   @override
-  String get aiLocalModelTraining => 'Training';
+  String get aiLocalModelTraining => 'トレーニング中';
 
   @override
-  String get aiLocalModelManagement => 'Model Management';
+  String get aiLocalModelManagement => 'モデル管理';
 
   @override
-  String get aiLocalModelUnavailable => 'Local model in training, not available yet';
+  String get aiLocalModelUnavailable => 'ローカルモデルはトレーニング中のため、まだ利用できません';
 
   @override
-  String get aiFabSettingTitle => 'Quick Add Button Prioritize Camera';
+  String get aiFabSettingTitle => 'クイック追加ボタンで写真を優先';
 
   @override
-  String get aiFabSettingDescCamera => 'Tap for camera, long press for manual';
+  String get aiFabSettingDescCamera => 'タップで写真撮影、長押しで手動記帳';
 
   @override
-  String get aiFabSettingDescManual => 'Tap for manual, long press for camera';
+  String get aiFabSettingDescManual => 'タップで手動記帳、長押しで写真撮影';
 
   @override
-  String get aiOcrRecognizing => 'Recognizing bill...';
+  String get aiOcrRecognizing => '請求書を認識中...';
 
   @override
-  String get aiOcrNoAmount => 'No valid amount recognized, please add manually';
+  String get aiOcrNoAmount => '有効な金額が認識されませんでした。手動で記帳してください';
 
   @override
-  String get aiOcrNoLedger => 'Ledger not found';
+  String get aiOcrNoLedger => '家計簿が見つかりません';
 
   @override
   String aiOcrSuccess(String type, String amount) {
-    return '✅ $type bill created ¥$amount';
+    return '✅ $type請求書が作成されました ¥$amount';
   }
 
   @override
   String aiOcrFailed(String error) {
-    return 'Recognition failed: $error';
+    return '認識失敗: $error';
   }
 
   @override
-  String get aiOcrCreateFailed => 'Failed to create bill';
+  String get aiOcrCreateFailed => '請求書の作成に失敗しました';
 
   @override
-  String get aiTypeIncome => 'Income';
+  String get aiTypeIncome => '収入';
 
   @override
-  String get aiTypeExpense => 'Expense';
+  String get aiTypeExpense => '支出';
 }

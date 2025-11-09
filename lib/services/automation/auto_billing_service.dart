@@ -104,40 +104,48 @@ class AutoBillingService {
     try {
       const notificationId = 1001;
 
-      // 立即显示"检测到截图"通知
-      if (showNotification) {
-        await _showNotification(
-          id: notificationId,
-          title: '✅ 检测到截图',
-          body: '正在等待文件写入完成...',
-        );
-      }
-
-      // 等待文件写入完成（最多5秒）
+      // 检查文件是否存在
       final file = File(imagePath);
-      final waitStartTime = DateTime.now().millisecondsSinceEpoch;
-      var waitTime = 0;
-      const maxWait = 5000; // 5秒超时
 
-      while (waitTime < maxWait) {
-        if (await file.exists() && await file.length() > 0) {
-          print('✅ 文件已就绪，等待时间=${waitTime}ms');
-          break;
-        }
-        await Future.delayed(const Duration(milliseconds: 50));
-        waitTime = DateTime.now().millisecondsSinceEpoch - waitStartTime;
-      }
+      // 如果文件不存在,可能需要短暂等待
+      // (无障碍服务直接截图时文件已就绪,ContentObserver 可能需要等待)
+      if (!await file.exists()) {
+        print('⏳ 文件尚未就绪,等待最多2秒...');
 
-      if (!await file.exists() || await file.length() == 0) {
-        print('❌ 截图文件等待超时或不存在 (等待${waitTime}ms)');
         if (showNotification) {
           await _showNotification(
             id: notificationId,
-            title: '识别失败',
-            body: '截图文件不可用',
+            title: '✅ 检测到截图',
+            body: '正在等待文件写入...',
           );
         }
-        return null;
+
+        final waitStartTime = DateTime.now().millisecondsSinceEpoch;
+        var waitTime = 0;
+        const maxWait = 2000; // 2秒超时
+
+        while (waitTime < maxWait) {
+          if (await file.exists() && await file.length() > 0) {
+            print('✅ 文件已就绪，等待时间=${waitTime}ms');
+            break;
+          }
+          await Future.delayed(const Duration(milliseconds: 100));
+          waitTime = DateTime.now().millisecondsSinceEpoch - waitStartTime;
+        }
+
+        if (!await file.exists() || await file.length() == 0) {
+          print('❌ 截图文件等待超时 (${waitTime}ms)');
+          if (showNotification) {
+            await _showNotification(
+              id: notificationId,
+              title: '识别失败',
+              body: '截图文件不可用',
+            );
+          }
+          return null;
+        }
+      } else {
+        print('✅ 文件已就绪,无需等待');
       }
 
       // 更新通知：开始识别

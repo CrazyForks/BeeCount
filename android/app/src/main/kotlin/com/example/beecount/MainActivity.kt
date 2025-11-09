@@ -396,45 +396,69 @@ class MainActivity: FlutterActivity() {
 
     private fun startScreenshotObserver(flutterEngine: FlutterEngine) {
         try {
+            // 先停止旧的监听(如果有)
+            stopScreenshotObserver()
+
+            // 根据当前无障碍状态选择监听模式
             val isAccessibilityEnabled = isAccessibilityServiceEnabled()
 
-            // 双保险模式: ContentObserver作为主要方案(已验证快速可靠)
-            android.util.Log.d("MainActivity", "📸 启动截图监听 (ContentObserver模式 - 主方案)")
-
-            // 创建ContentObserver
-            screenshotObserver = ScreenshotObserver(this) { screenshotPath ->
-                android.util.Log.d("MainActivity", "✅ ContentObserver检测到截图: $screenshotPath")
-
-                // 通知 Flutter 端
-                MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
-                    .invokeMethod("onScreenshotDetected", screenshotPath)
-            }
-
-            // 注册ContentObserver
-            val uri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                android.provider.MediaStore.Images.Media.getContentUri(android.provider.MediaStore.VOLUME_EXTERNAL)
-            } else {
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            }
-
-            contentResolver.registerContentObserver(uri, true, screenshotObserver!!)
-            android.util.Log.d("MainActivity", "✅ ContentObserver已注册")
-
-            // 如果启用了无障碍服务,作为备用方案
             if (isAccessibilityEnabled) {
-                android.util.Log.d("MainActivity", "📸 同时启用无障碍服务 (备用方案)")
-
-                ScreenshotAccessibilityService.onScreenshotDetected = { screenshotPath ->
-                    android.util.Log.d("MainActivity", "✅ 无障碍服务检测到截图: $screenshotPath (备用)")
-
-                    // 通知 Flutter 端 (Flutter端会做防重复处理)
-                    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
-                        .invokeMethod("onScreenshotDetected", screenshotPath)
-                }
+                // 优先使用无障碍服务 - 可以直接截取屏幕内容,更快更准确
+                startAccessibilityScreenshotMonitor(flutterEngine)
+            } else {
+                // 降级使用 ContentObserver - 监听媒体库变化
+                startContentObserverMonitor(flutterEngine)
             }
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "❌ 启动截图监听失败", e)
         }
+    }
+
+    /**
+     * 启动无障碍服务截图监听
+     * 优点: 可以直接调用 takeScreenshot API 获取屏幕内容,无需等待文件写入
+     * 缺点: 需要用户授予无障碍权限
+     */
+    private fun startAccessibilityScreenshotMonitor(flutterEngine: FlutterEngine) {
+        android.util.Log.d("MainActivity", "📸 使用无障碍服务模式 (主方案)")
+
+        ScreenshotAccessibilityService.onScreenshotDetected = { screenshotPath ->
+            android.util.Log.d("MainActivity", "✅ 无障碍服务检测到截图: $screenshotPath")
+
+            // 通知 Flutter 端
+            MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
+                .invokeMethod("onScreenshotDetected", screenshotPath)
+        }
+
+        android.util.Log.d("MainActivity", "✅ 无障碍服务监听已启动")
+    }
+
+    /**
+     * 启动 ContentObserver 截图监听
+     * 优点: 不需要特殊权限,兼容性好
+     * 缺点: 需要等待文件写入完成,有一定延迟
+     */
+    private fun startContentObserverMonitor(flutterEngine: FlutterEngine) {
+        android.util.Log.d("MainActivity", "📸 使用 ContentObserver 模式 (降级方案)")
+
+        // 创建ContentObserver
+        screenshotObserver = ScreenshotObserver(this) { screenshotPath ->
+            android.util.Log.d("MainActivity", "✅ ContentObserver 检测到截图: $screenshotPath")
+
+            // 通知 Flutter 端
+            MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
+                .invokeMethod("onScreenshotDetected", screenshotPath)
+        }
+
+        // 注册ContentObserver
+        val uri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            android.provider.MediaStore.Images.Media.getContentUri(android.provider.MediaStore.VOLUME_EXTERNAL)
+        } else {
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        contentResolver.registerContentObserver(uri, true, screenshotObserver!!)
+        android.util.Log.d("MainActivity", "✅ ContentObserver 已注册")
     }
 
     private fun stopScreenshotObserver() {

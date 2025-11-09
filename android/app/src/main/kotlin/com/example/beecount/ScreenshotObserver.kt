@@ -207,6 +207,12 @@ class ScreenshotObserver(
         val lowerPath = path.lowercase()
         val lowerName = name.lowercase()
 
+        // 过滤掉临时文件 (.pending- 前缀是小米系统写入中的临时文件)
+        if (lowerName.startsWith(".pending-") || lowerPath.contains("/.pending-")) {
+            Log.d(TAG, "⏭️ 跳过临时文件: $name")
+            return false
+        }
+
         return SCREENSHOT_KEYWORDS.any { keyword ->
             lowerPath.contains(keyword) || lowerName.contains(keyword)
         }

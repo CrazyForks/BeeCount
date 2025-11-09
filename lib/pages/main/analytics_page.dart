@@ -804,55 +804,40 @@ String _currentPeriodLabel(String scope, DateTime selMonth, BuildContext context
 }
 
 double _computeAverage(dynamic seriesRaw, String scope) {
-  final now = DateTime.now();
-
   if (seriesRaw is List<({DateTime day, double total})>) {
     if (seriesRaw.isEmpty) return 0;
+
+    // 过滤出有数据的天数(金额>0)
+    final nonZeroDays = seriesRaw.where((e) => e.total > 0).toList();
+    if (nonZeroDays.isEmpty) return 0;
+
     final sum = seriesRaw.fold<double>(0, (a, b) => a + b.total);
-
-    // 月度视角：计算已经过去的天数
-    if (seriesRaw.isNotEmpty) {
-      final firstDay = seriesRaw.first.day;
-      final isCurrentMonth =
-          firstDay.year == now.year && firstDay.month == now.month;
-
-      if (isCurrentMonth) {
-        // 当前月份：使用今天的日期作为分母
-        return sum / now.day;
-      } else {
-        // 历史月份：使用该月的总天数
-        final lastDay = DateTime(firstDay.year, firstDay.month + 1, 0).day;
-        return sum / lastDay;
-      }
-    }
-    return sum / seriesRaw.length;
+    // 月度视角：按实际有记账的天数计算平均值
+    return sum / nonZeroDays.length;
   }
 
   if (seriesRaw is List<({DateTime month, double total})>) {
     if (seriesRaw.isEmpty) return 0;
+
+    // 过滤出有数据的月份(金额>0)
+    final nonZeroMonths = seriesRaw.where((e) => e.total > 0).toList();
+    if (nonZeroMonths.isEmpty) return 0;
+
     final sum = seriesRaw.fold<double>(0, (a, b) => a + b.total);
-
-    // 年度视角：计算已经过去的月份
-    if (seriesRaw.isNotEmpty) {
-      final firstMonth = seriesRaw.first.month;
-      final isCurrentYear = firstMonth.year == now.year;
-
-      if (isCurrentYear) {
-        // 当前年份：使用当前月份作为分母
-        return sum / now.month;
-      } else {
-        // 历史年份：使用12个月
-        return sum / 12;
-      }
-    }
-    return sum / seriesRaw.length;
+    // 年度视角：按实际有记账的月份计算平均值
+    return sum / nonZeroMonths.length;
   }
 
   if (seriesRaw is List<({int year, double total})>) {
     if (seriesRaw.isEmpty) return 0;
+
+    // 过滤出有数据的年份(金额>0)
+    final nonZeroYears = seriesRaw.where((e) => e.total > 0).toList();
+    if (nonZeroYears.isEmpty) return 0;
+
     final sum = seriesRaw.fold<double>(0, (a, b) => a + b.total);
-    // 全部视角：按实际年份数量计算
-    return sum / seriesRaw.length;
+    // 全部视角：按实际有记账的年份计算平均值
+    return sum / nonZeroYears.length;
   }
 
   return 0;

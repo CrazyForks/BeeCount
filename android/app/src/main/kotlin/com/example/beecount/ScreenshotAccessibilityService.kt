@@ -23,8 +23,8 @@ import java.io.FileOutputStream
 class ScreenshotAccessibilityService : AccessibilityService() {
     companion object {
         private const val TAG = "ScreenshotAccessibility"
+        // 专用截图应用包名 (不包含 com.android.systemui,太宽泛)
         private val SCREENSHOT_PACKAGE_NAMES = listOf(
-            "com.android.systemui", // 系统截图
             "com.miui.screenshot", // 小米截图
             "com.huawei.screenshot", // 华为截图
             "com.samsung.screenshot", // 三星截图
@@ -59,30 +59,30 @@ class ScreenshotAccessibilityService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
+        if (onScreenshotDetected == null) return // 未启用截图监听
 
         try {
-            // 检测是否是截图相关事件
             val packageName = event.packageName?.toString() ?: return
             val className = event.className?.toString() ?: ""
 
-            // 检查是否是截图相关窗口
-            val isScreenshotEvent = SCREENSHOT_PACKAGE_NAMES.any { packageName.contains(it) } ||
-                                   className.contains("screenshot", ignoreCase = true) ||
+            // 精确匹配截图应用包名,或类名包含 screenshot/capture
+            val isScreenshotPackage = SCREENSHOT_PACKAGE_NAMES.any { packageName == it }
+            val isScreenshotClass = className.contains("screenshot", ignoreCase = true) ||
                                    className.contains("capture", ignoreCase = true)
 
-            if (isScreenshotEvent) {
+            if (isScreenshotPackage || isScreenshotClass) {
                 val currentTime = System.currentTimeMillis()
-                // 防止重复触发（500ms内只响应一次）
-                if (currentTime - lastScreenshotTime < 500) {
+                // 防止重复触发（3秒内只响应一次,避免截图动画/编辑界面重复触发）
+                if (currentTime - lastScreenshotTime < 3000) {
                     return
                 }
                 lastScreenshotTime = currentTime
 
-                Log.d(TAG, "🔔 检测到截图事件: package=$packageName, class=$className")
+                Log.d(TAG, "🔔 检测到截图: package=$packageName, class=$className")
                 handleScreenshotDetected()
             }
         } catch (e: Exception) {
-            Log.e(TAG, "处理事件失败", e)
+            Log.e(TAG, "❌ 处理事件失败", e)
         }
     }
 
@@ -104,10 +104,53 @@ class ScreenshotAccessibilityService : AccessibilityService() {
         }
     }
 
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.R)
     private fun takeScreenshotWithApi() {
-        // Android 11+ 的 takeScreenshot API 需要特殊权限，暂时使用等待文件方案
-        Log.d(TAG, "使用文件等待方案（Android ${Build.VERSION.SDK_INT}）")
-        waitForScreenshotFile()
+        Log.d(TAG, "📸 使用 takeScreenshot API 直接获取屏幕")
+
+        // 延迟200ms等待截图动画完成
+        handler.postDelayed({
+            takeScreenshot(
+                android.view.Display.DEFAULT_DISPLAY,
+                applicationContext.mainExecutor,
+                object : TakeScreenshotCallback {
+                    override fun onSuccess(screenshotResult: ScreenshotResult) {
+                        try {
+                            val bitmap = Bitmap.wrapHardwareBuffer(
+                                screenshotResult.hardwareBuffer,
+                                screenshotResult.colorSpace
+                            )
+
+                            if (bitmap != null) {
+                                // 保存到临时文件
+                                val tempFile = File(applicationContext.cacheDir, "screenshot_${System.currentTimeMillis()}.png")
+                                FileOutputStream(tempFile).use { out ->
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+                                }
+
+                                Log.d(TAG, "✅ 截图保存成功: ${tempFile.absolutePath}")
+                                onScreenshotDetected?.invoke(tempFile.absolutePath)
+
+                                bitmap.recycle()
+                            } else {
+                                Log.e(TAG, "❌ 无法创建 Bitmap,降级到文件等待")
+                                waitForScreenshotFile()
+                            }
+
+                            screenshotResult.hardwareBuffer.close()
+                        } catch (e: Exception) {
+                            Log.e(TAG, "❌ 处理截图失败: $e,降级到文件等待")
+                            waitForScreenshotFile()
+                        }
+                    }
+
+                    override fun onFailure(errorCode: Int) {
+                        Log.w(TAG, "⚠️ takeScreenshot 失败 (errorCode=$errorCode),降级到文件等待")
+                        waitForScreenshotFile()
+                    }
+                }
+            )
+        }, 200)
     }
 
     private fun waitForScreenshotFile() {
@@ -119,11 +162,13 @@ class ScreenshotAccessibilityService : AccessibilityService() {
                 Log.d(TAG, "✅ 找到最新截图: ${screenshotFile.absolutePath}")
                 onScreenshotDetected?.invoke(screenshotFile.absolutePath)
             } else {
-                Log.w(TAG, "⚠️ 未找到截图文件")
+                // 不通知,避免Flutter端弹出"截图文件不可用"
+                Log.w(TAG, "⚠️ 未找到截图文件,跳过")
             }
             pendingScreenshotCheck = null
         }
-        handler.postDelayed(pendingScreenshotCheck!!, 500) // 等待500ms（作为快速备用方案）
+        // 等待1.5秒让文件写入
+        handler.postDelayed(pendingScreenshotCheck!!, 1500)
     }
 
     private fun findLatestScreenshot(): File? {

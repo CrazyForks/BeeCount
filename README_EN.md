@@ -32,6 +32,28 @@
 
 ---
 
+> ## 🎨 Recruiting Designers
+>
+> **We're looking for talented UI/UX designers to join the BeeCount project!**
+>
+> 📐 **What You'll Work On:**
+> - Redesign app UI and interaction experience
+> - Create theme skins and illustration elements
+> - Optimize visual consistency across the interface
+> - Develop a modern, clean design language
+>
+> 🎁 **What You'll Get:**
+> - Portfolio pieces for open-source work
+> - Credit in README and app
+> - Close collaboration with dev team
+> - Satisfaction of creating great UX for thousands of users
+>
+> 💌 **Contact:**
+> - GitHub Issues: [Submit design proposals](https://github.com/TNT-Likely/BeeCount/issues)
+> - Telegram Group: [Join discussion](https://t.me/beecount)
+
+---
+
 > ## 📱 Platform Support
 >
 > 🍎 **iOS Version Submitting to App Store** - Beta version available via **[TestFlight](https://testflight.apple.com/join/Eaw2rWxa)**
@@ -141,24 +163,6 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - 👆 **Double Tap Back Trigger**: After setup, double tap phone back during payment for auto-billing
 - 🎨 **Flexible Configuration**: Supports auto-trigger on screenshot or manual trigger, adapts to different usage scenarios
 
-<table>
-<tr>
-<td width="50%">
-
-**Android Demo**
-
-https://github.com/TNT-Likely/BeeCount/assets/demo/preview/android_auto_billing.mp4
-
-</td>
-<td width="50%">
-
-**iOS Demo**
-
-https://github.com/TNT-Likely/BeeCount/assets/demo/preview/ios_auto_billing.mp4
-
-</td>
-</tr>
-</table>
 
 ### 📊 Complete Accounting Features
 
@@ -524,6 +528,7 @@ Format: Nickname - Amount - Date
 - **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
 - **\*Rui** - ¥720 - 2025-10-27 (WeChat) 🎉
 - **\*Hong** - ¥50 - 2025-11-07 (Alipay)
+- **\*Shao** - ¥15 - 2025-11-09 (Alipay)
 
 ---
 

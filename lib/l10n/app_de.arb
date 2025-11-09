@@ -4,12 +4,10 @@
   "@appTitle": {
     "description": "The application title"
   },
-
-  "tabHome": "Startseite",
+  "tabHome": "Details",
   "tabAnalytics": "Diagramme",
-  "tabLedgers": "Bücher",
+  "tabLedgers": "Kontenbücher",
   "tabMine": "Mein",
-
   "commonCancel": "Abbrechen",
   "commonConfirm": "Bestätigen",
   "commonSave": "Speichern",
@@ -40,9 +38,6 @@
   "commonHelp": "Hilfe",
   "commonAbout": "Über",
   "commonLanguage": "Sprache",
-  "commonCurrent": "Aktuell",
-  "commonTutorial": "Tutorial",
-  "commonConfigure": "Konfigurieren",
   "commonWeekdayMonday": "Montag",
   "commonWeekdayTuesday": "Dienstag",
   "commonWeekdayWednesday": "Mittwoch",
@@ -50,7 +45,9 @@
   "commonWeekdayFriday": "Freitag",
   "commonWeekdaySaturday": "Samstag",
   "commonWeekdaySunday": "Sonntag",
-
+  "commonCurrent": "Aktuell",
+  "commonTutorial": "Tutorial",
+  "commonConfigure": "Konfigurieren",
   "homeTitle": "Bienen-Buchhaltung",
   "homeIncome": "Einnahmen",
   "homeExpense": "Ausgaben",
@@ -60,7 +57,7 @@
   "homeDailyAvg": "Täglicher Durchschnitt",
   "homeMonthlyAvg": "Monatlicher Durchschnitt",
   "homeNoRecords": "Noch keine Einträge",
-  "homeAddRecord": "Eintrag hinzufügen durch Tippen auf das Plus-Symbol",
+  "homeAddRecord": "Tippen Sie auf das Plus-Symbol unten, um einen Eintrag hinzuzufügen",
   "homeHideAmounts": "Beträge ausblenden",
   "homeShowAmounts": "Beträge anzeigen",
   "homeSelectDate": "Datum auswählen",
@@ -76,7 +73,7 @@
       }
     }
   },
-  "homeMonth": "{month}M",
+  "homeMonth": "{month}. Monat",
   "@homeMonth": {
     "placeholders": {
       "month": {
@@ -85,685 +82,917 @@
     }
   },
   "homeNoRecordsSubtext": "Tippen Sie auf das Plus-Symbol unten, um einen Eintrag hinzuzufügen",
-
+  "widgetTodayExpense": "Heutige Ausgaben",
+  "widgetTodayIncome": "Heutige Einnahmen",
+  "widgetMonthExpense": "Monatsausgaben",
+  "widgetMonthIncome": "Monatseinnahmen",
+  "widgetMonthSuffix": ". Monat",
   "searchTitle": "Suchen",
   "searchHint": "Notizen, Kategorien oder Beträge suchen...",
   "searchAmountRange": "Betragsbereich-Filter",
   "searchMinAmount": "Mindestbetrag",
   "searchMaxAmount": "Höchstbetrag",
   "searchTo": "bis",
-  "searchNoInput": "Geben Sie Suchbegriffe ein, um mit der Suche zu beginnen",
+  "searchNoInput": "Suchbegriffe eingeben, um mit der Suche zu beginnen",
   "searchNoResults": "Keine passenden Ergebnisse gefunden",
   "searchResultsEmpty": "Keine passenden Ergebnisse gefunden",
   "searchResultsEmptyHint": "Versuchen Sie andere Suchbegriffe oder passen Sie die Filterbedingungen an",
-
-  "analyticsTitle": "Analysen",
+  "searchBatchMode": "Stapeloperationen",
+  "searchBatchModeWithCount": "Stapeloperationen ({selected}/{total})",
+  "searchExitBatchMode": "Stapeloperationen beenden",
+  "searchSelectAll": "Alle auswählen",
+  "searchDeselectAll": "Auswahl aufheben",
+  "searchSelectedCount": "{count} ausgewählt",
+  "searchBatchSetNote": "Notiz setzen",
+  "searchBatchChangeCategory": "Kategorie ändern",
+  "searchBatchDeleteConfirmTitle": "Löschen bestätigen",
+  "searchBatchDeleteConfirmMessage": "Möchten Sie wirklich die ausgewählten {count} Transaktionen löschen?\nDiese Aktion kann nicht rückgängig gemacht werden.",
+  "searchBatchSetNoteTitle": "Stapel-Notiz setzen",
+  "searchBatchSetNoteMessage": "Dieselbe Notiz für die ausgewählten {count} Transaktionen setzen",
+  "searchBatchSetNoteHint": "Notizinhalt eingeben (leer lassen, um Notizen zu löschen)",
+  "searchBatchChangeCategoryTitle": "Stapel-Kategorie ändern",
+  "searchBatchChangeCategoryMessage": "Eine neue Kategorie für die ausgewählten {count} Transaktionen festlegen",
+  "searchBatchChangeCategoryLabel": "Kategorie auswählen",
+  "searchBatchDeleteSuccess": "{count} Transaktionen erfolgreich gelöscht",
+  "searchBatchDeleteFailed": "Löschen fehlgeschlagen: {error}",
+  "searchBatchSetNoteSuccess": "Notiz erfolgreich für {count} Transaktionen gesetzt",
+  "searchBatchSetNoteFailed": "Notiz setzen fehlgeschlagen: {error}",
+  "searchBatchChangeCategorySuccess": "Kategorie erfolgreich für {count} Transaktionen geändert",
+  "searchBatchChangeCategoryFailed": "Kategorie ändern fehlgeschlagen: {error}",
+  "searchResultsCount": "{count} Ergebnis(se)",
+  "analyticsTitle": "Analyse",
   "analyticsMonth": "Monat",
   "analyticsYear": "Jahr",
   "analyticsAll": "Alle",
-  "analyticsWeek": "Woche",
-  "analyticsCustom": "Benutzerdefiniert",
-  "analyticsIncome": "Einnahmen",
-  "analyticsExpense": "Ausgaben",
-  "analyticsBalance": "Saldo",
-  "analyticsStatistics": "Statistiken",
-  "analyticsNoData": "Keine Daten zum Anzeigen",
-  "analyticsCategories": "Kategorien",
-  "analyticsTrend": "Trend",
-  "analyticsDaily": "Täglich",
-  "analyticsMonthly": "Monatlich",
-  "analyticsYearly": "Jährlich",
-  "analyticsAverage": "Durchschnitt",
-  "analyticsAmount": "Betrag",
-  "analyticsCount": "Anzahl",
-  "analyticsPercent": "Prozent",
-  "analyticsTop": "Top",
-  "analyticsNoDataHint": "Fügen Sie einige Einträge hinzu, um Analysen zu sehen",
-  "analyticsIncomeExpense": "Einnahmen und Ausgaben",
-  "analyticsSelectTimeRange": "Zeitbereich auswählen",
-  "analyticsSelectDate": "Datum auswählen",
-  "analyticsSelectStartDate": "Startdatum auswählen",
-  "analyticsSelectEndDate": "Enddatum auswählen",
-  "analyticsWeeklyTrend": "Wöchentlicher Trend",
-  "analyticsMonthlyTrend": "Monatlicher Trend",
-  "analyticsYearlyTrend": "Jährlicher Trend",
-  "analyticsStatDetail": "Statistikdetail",
-  "analyticsTotal": "Gesamt",
-  "analyticsShowDetail": "Detail anzeigen",
-  "analyticsHideDetail": "Detail ausblenden",
-  "analyticsDataRange": "Datenbereich",
-  "analyticsIncomeTotal": "Gesamteinnahmen",
-  "analyticsExpenseTotal": "Gesamtausgaben",
-  "analyticsNetIncome": "Nettoeinkommen",
-
-  "ledgersTitle": "Kontenbücher",
-  "ledgersAdd": "Buch hinzufügen",
-  "ledgersEdit": "Buch bearbeiten",
-  "ledgersDelete": "Buch löschen",
-  "ledgersName": "Buchname",
+  "analyticsSummary": "Zusammenfassung",
+  "analyticsCategoryRanking": "Kategorie-Ranking",
+  "analyticsCurrentPeriod": "Aktueller Zeitraum",
+  "analyticsNoDataSubtext": "Nach links/rechts wischen, um Zeiträume zu wechseln, oder Taste drücken, um Einnahmen/Ausgaben umzuschalten",
+  "analyticsSwipeHint": "Links/rechts wischen, um Zeitraum zu wechseln",
+  "analyticsTipContent": "1) Unten nach links/rechts wischen, um Ausgaben/Einnahmen/Saldo zu wechseln\n2) Im Diagrammbereich nach links/rechts wischen, um vorherigen/nächsten Zeitraum zu wechseln",
+  "analyticsSwitchTo": "Zu {type} wechseln",
+  "@analyticsSwitchTo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "analyticsTipHeader": "Tipp: Obere Kapsel kann Monat/Jahr/Alle wechseln",
+  "analyticsSwipeToSwitch": "Horizontal wischen",
+  "analyticsAllYears": "Alle Jahre",
+  "analyticsToday": "Heute",
+  "splashAppName": "Bienen-Buchhaltung",
+  "splashSlogan": "Jede Transaktion zählt",
+  "splashSecurityTitle": "Open-Source-Datensicherheit",
+  "splashSecurityFeature1": "• Datenspeicherung lokal, volle Kontrolle über Ihre Privatsphäre",
+  "splashSecurityFeature2": "• Open-Source-Code transparent, vertrauenswürdige Sicherheit",
+  "splashSecurityFeature3": "• Optionale Cloud-Synchronisation, einheitliche Daten auf allen Geräten",
+  "splashInitializing": "Daten werden initialisiert...",
+  "ledgersTitle": "Kontenbuch-Verwaltung",
+  "ledgersNew": "Neues Kontenbuch",
+  "ledgersClear": "Aktuelles Kontenbuch leeren",
+  "ledgersClearConfirm": "Aktuelles Kontenbuch leeren?",
+  "ledgersClearMessage": "Alle Transaktionsdatensätze in diesem Kontenbuch werden gelöscht und können nicht wiederhergestellt werden.",
+  "ledgersEdit": "Kontenbuch bearbeiten",
+  "ledgersDelete": "Kontenbuch löschen",
+  "ledgersDeleteConfirm": "Kontenbuch löschen",
+  "ledgersDeleteMessage": "Sind Sie sicher, dass Sie dieses Kontenbuch und alle seine Datensätze löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.\nWenn eine Cloud-Sicherung vorhanden ist, wird diese ebenfalls gelöscht.",
+  "ledgersDeleted": "Gelöscht",
+  "ledgersDeleteFailed": "Löschen fehlgeschlagen",
+  "ledgersRecordsDeleted": "{count} Datensätze gelöscht",
+  "@ledgersRecordsDeleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ledgersName": "Name",
+  "ledgersDefaultLedgerName": "Standard-Kontenbuch",
+  "ledgersDefaultAccountName": "Bargeld",
   "accountTitle": "Konto",
-  "ledgersNameHint": "Geben Sie den Buchnamen ein",
-  "ledgersNameRequired": "Buchname ist erforderlich",
-  "ledgersNameExists": "Buchname existiert bereits",
-  "ledgersDescription": "Beschreibung",
-  "ledgersDescriptionHint": "Geben Sie die Buchbeschreibung ein",
-  "ledgersDefaultLedger": "Standardbuch",
-  "ledgersSetAsDefault": "Als Standard festlegen",
-  "ledgersCannotDeleteDefault": "Standardbuch kann nicht gelöscht werden",
-  "ledgersDeleteConfirm": "Sind Sie sicher, dass Sie dieses Buch löschen möchten?",
-  "ledgersDeleteHint": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Einträge in diesem Buch werden gelöscht.",
-  "ledgersNoLedgers": "Noch keine Bücher",
-  "ledgersNoLedgersHint": "Tippen Sie auf das Plus-Symbol, um Ihr erstes Buch zu erstellen",
-  "ledgersRecordCount": "{count} Einträge",
-  "@ledgersRecordCount": {
+  "ledgersCurrency": "Währung",
+  "ledgersSelectCurrency": "Währung auswählen",
+  "ledgersSearchCurrency": "Suche: Chinesisch oder Code",
+  "ledgersCreate": "Erstellen",
+  "ledgersActions": "Aktionen",
+  "ledgersRecords": "Anzahl: {count}",
+  "@ledgersRecords": {
     "placeholders": {
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "ledgersCreatedAt": "Erstellt am {date}",
-  "@ledgersCreatedAt": {
-    "placeholders": {
-      "date": {
         "type": "String"
       }
     }
   },
-  "ledgersLastUpdated": "Zuletzt aktualisiert {date}",
-  "@ledgersLastUpdated": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-
-  "mineTitle": "Mein",
-  "mineLedgers": "Kontenbücher",
-  "mineCategories": "Kategorien",
-  "mineImport": "Importieren",
-  "mineExport": "Exportieren",
-  "mineTheme": "Design",
-  "mineLanguage": "Sprache",
-  "mineAbout": "Über",
-  "mineSettings": "Einstellungen",
-  "mineCloudSync": "Cloud-Synchronisation",
-  "mineCloudServiceWebDAV": "Benutzerdefinierter Cloud-Dienst (WebDAV)",
-  "mineDataManagement": "Datenverwaltung",
-  "minePreferences": "Einstellungen",
-  "mineSupport": "Support",
-  "minePrivacy": "Datenschutz",
-  "mineTerms": "Bedingungen",
-  "mineFeedback": "Feedback",
-  "mineFeedbackSubtitle": "Problem oder Vorschlag melden",
-  "mineHelp": "Hilfe",
-  "mineHelpSubtitle": "Dokumentation und FAQ anzeigen",
-  "mineSupportAuthor": "Autor unterstützen",
-  "mineSupportAuthorSubtitle": "Projekt auf GitHub mit Stern bewerten",
-  "mineVersion": "Version",
-  "mineUpdate": "Update",
-  "mineCheckUpdate": "Nach Updates suchen",
-  "mineNoUpdate": "Sie haben bereits die neueste Version",
-  "mineUpdateAvailable": "Update verfügbar",
-  "mineUpdateNow": "Jetzt aktualisieren",
-  "mineUpdateLater": "Später aktualisieren",
-
-  "categoriesTitle": "Kategorien",
-  "categoriesIncome": "Einnahmen",
-  "categoriesExpense": "Ausgaben",
-  "categoriesAdd": "Kategorie hinzufügen",
-  "categoriesEdit": "Kategorie bearbeiten",
-  "categoriesDelete": "Kategorie löschen",
-  "categoriesName": "Kategoriename",
-  "categoriesNameHint": "Geben Sie den Kategorienamen ein",
-  "categoriesNameRequired": "Kategoriename ist erforderlich",
-  "categoriesNameExists": "Kategoriename existiert bereits",
-  "categoriesIcon": "Symbol",
-  "categoriesColor": "Farbe",
-  "categoriesSelectIcon": "Symbol auswählen",
-  "categoriesSelectColor": "Farbe auswählen",
-  "categoriesDeleteConfirm": "Sind Sie sicher, dass Sie diese Kategorie löschen möchten?",
-  "categoriesDeleteHint": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Einträge dieser Kategorie werden gelöscht.",
-  "categoriesCannotDeleteSystem": "Systemkategorien können nicht gelöscht werden",
-  "categoriesSystemCategory": "Systemkategorie",
-  "categoriesUserCategory": "Benutzerkategorie",
-  "categoriesUsedCount": "{count} Mal verwendet",
-  "@categoriesUsedCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "categoriesNoCategories": "Noch keine Kategorien",
-  "categoriesNoCategoriesHint": "Tippen Sie auf das Plus-Symbol, um Ihre erste Kategorie zu erstellen",
-  "categoriesPreset": "Vorgegeben",
-  "categoriesCustom": "Benutzerdefiniert",
-
-  "recordTitle": "Eintrag hinzufügen",
-  "recordEditTitle": "Eintrag bearbeiten",
-  "recordAmount": "Betrag",
-  "recordAmountHint": "0,00",
-  "recordAmountRequired": "Betrag ist erforderlich",
-  "recordAmountInvalid": "Ungültiger Betrag",
-  "recordCategory": "Kategorie",
-  "recordSelectCategory": "Kategorie auswählen",
-  "recordCategoryRequired": "Kategorie ist erforderlich",
-  "recordAccount": "Konto",
-  "recordSelectAccount": "Konto auswählen",
-  "recordAccountRequired": "Konto ist erforderlich",
-  "recordNote": "Notiz",
-  "recordNoteHint": "Optional Notiz...",
-  "recordDate": "Datum",
-  "recordTime": "Uhrzeit",
-  "recordSelectDate": "Datum auswählen",
-  "recordSelectTime": "Uhrzeit auswählen",
-  "recordSave": "Speichern",
-  "recordSaveSuccess": "Eintrag erfolgreich gespeichert",
-  "recordSaveFailed": "Fehler beim Speichern des Eintrags",
-  "recordDelete": "Eintrag löschen",
-  "recordDeleteConfirm": "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?",
-  "recordDeleteSuccess": "Eintrag erfolgreich gelöscht",
-  "recordDeleteFailed": "Fehler beim Löschen des Eintrags",
-  "recordIncome": "Einnahme",
-  "recordExpense": "Ausgabe",
-  "recordType": "Typ",
-  "recordLedger": "Buch",
-  "recordSelectLedger": "Buch auswählen",
-  "recordLedgerRequired": "Buch ist erforderlich",
-
-  "accountsTitle": "Konten",
-  "accountsAdd": "Konto hinzufügen",
-  "accountsEdit": "Konto bearbeiten",
-  "accountsDelete": "Konto löschen",
-  "accountsName": "Kontoname",
-  "accountsNameHint": "Geben Sie den Kontonamen ein",
-  "accountsNameRequired": "Kontoname ist erforderlich",
-  "accountsNameExists": "Kontoname existiert bereits",
-  "accountsType": "Kontotyp",
-  "accountsTypeCash": "Bargeld",
-  "accountsTypeCard": "Karte",
-  "accountsTypeBank": "Bank",
-  "accountsTypeAlipay": "Alipay",
-  "accountsTypeWechat": "WeChat Pay",
-  "accountsTypeOther": "Andere",
-  "accountsBalance": "Saldo",
-  "accountsBalanceHint": "Anfangssaldo",
-  "accountsDeleteConfirm": "Sind Sie sicher, dass Sie dieses Konto löschen möchten?",
-  "accountsDeleteHint": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Einträge dieses Kontos werden gelöscht.",
-  "accountsCannotDeleteSystem": "Systemkonten können nicht gelöscht werden",
-  "accountsSystemAccount": "Systemkonto",
-  "accountsUserAccount": "Benutzerkonto",
-  "accountsUsedCount": "{count} Mal verwendet",
-  "@accountsUsedCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "accountsNoAccounts": "Noch keine Konten",
-  "accountsNoAccountsHint": "Tippen Sie auf das Plus-Symbol, um Ihr erstes Konto zu erstellen",
-  "accountsCurrentBalance": "Aktueller Saldo: {balance}",
-  "@accountsCurrentBalance": {
+  "ledgersBalance": "Saldo: {balance}",
+  "@ledgersBalance": {
     "placeholders": {
       "balance": {
         "type": "String"
       }
     }
   },
-
-  "themeTitle": "Design",
-  "themeSystem": "System folgen",
-  "themeLight": "Hell",
-  "themeDark": "Dunkel",
-  "themeColor": "Designfarbe",
-  "themeColorBlue": "Blau",
-  "themeColorGreen": "Grün",
-  "themeColorRed": "Rot",
-  "themeColorOrange": "Orange",
-  "themeColorPurple": "Lila",
-  "themeColorPink": "Rosa",
-  "themeColorTeal": "Türkis",
-  "themeColorIndigo": "Indigo",
-
-  "languageTitle": "Sprache",
-  "languageSystemDefault": "System folgen",
-  "languageChinese": "简体中文",
-  "languageTraditionalChinese": "繁體中文",
-  "languageEnglish": "English",
-  "languageJapanese": "日本語",
-  "languageKorean": "한국어",
-  "languageSpanish": "Español",
-  "languageFrench": "Français",
-  "languageGerman": "Deutsch",
-
-  "importTitle": "Importieren",
-  "importFromFile": "Aus Datei importieren",
-  "importFromCloud": "Aus Cloud importieren",
-  "importSelectFile": "Datei auswählen",
-  "importFileFormat": "Dateiformat",
-  "importCSV": "CSV",
-  "importJSON": "JSON",
-  "importPreview": "Vorschau",
-  "importMapping": "Feldzuordnung",
+  "categoryTitle": "Kategorienverwaltung",
+  "categoryNew": "Neue Kategorie",
+  "categoryExpense": "Ausgabenkategorien",
+  "categoryIncome": "Einnahmenkategorien",
+  "categoryEmpty": "Keine Kategorien",
+  "categoryDefault": "Standardkategorie",
+  "categoryCustomTag": "Benutzerdefiniert",
+  "categoryReorderTip": "Lange drücken und ziehen, um die Reihenfolge anzupassen",
+  "categoryLoadFailed": "Laden fehlgeschlagen: {error}",
+  "@categoryLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "iconPickerTitle": "Symbol auswählen",
+  "iconCategoryFood": "Lebensmittel",
+  "iconCategoryTransport": "Transport",
+  "iconCategoryShopping": "Einkaufen",
+  "iconCategoryEntertainment": "Unterhaltung",
+  "iconCategoryLife": "Leben",
+  "iconCategoryHealth": "Gesundheit",
+  "iconCategoryEducation": "Bildung",
+  "iconCategoryWork": "Arbeit",
+  "iconCategoryFinance": "Finanzen",
+  "iconCategoryReward": "Belohnung",
+  "iconCategoryOther": "Sonstiges",
+  "iconCategoryDining": "Essen gehen",
+  "importTitle": "Rechnungen importieren",
+  "importSelectFile": "Bitte wählen Sie eine Datei zum Importieren (CSV/TSV/XLSX unterstützt)",
+  "importBillType": "Rechnungstyp",
+  "importBillTypeGeneric": "Generisches CSV",
+  "importBillTypeAlipay": "Alipay",
+  "importBillTypeWechat": "WeChat",
+  "importChooseFile": "Datei auswählen",
+  "importNoFileSelected": "Keine Datei ausgewählt",
+  "importHint": "Hinweis: Bitte wählen Sie eine Datei aus, um den Import zu starten (CSV/TSV/XLSX)",
+  "importReading": "Datei wird gelesen…",
+  "importPreparing": "Vorbereiten…",
+  "importFileOpenError": "Dateiauswahl kann nicht geöffnet werden: {error}",
+  "@importFileOpenError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importColumnNumber": "Spalte {number}",
+  "@importColumnNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "importConfirmMapping": "Zuordnung bestätigen",
+  "importCategoryMapping": "Kategorienzuordnung",
+  "importNoDataParsed": "Keine Daten analysiert. Bitte kehren Sie zur vorherigen Seite zurück, um den CSV-Inhalt oder das Trennzeichen zu überprüfen.",
   "importFieldDate": "Datum",
+  "importFieldType": "Typ",
   "importFieldAmount": "Betrag",
   "importFieldCategory": "Kategorie",
-  "importFieldAccount": "Konto",
   "importFieldNote": "Notiz",
-  "importFieldType": "Typ",
-  "importStart": "Import starten",
-  "importSuccess": "Import erfolgreich",
+  "importPreview": "Vorschau:",
+  "importPreviewLimit": "Nur erste {shown} von {total} Zeilen anzeigen",
+  "@importPreviewLimit": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "importCategoryNotSelected": "\"Kategorie\"-Spalte nicht ausgewählt. Bitte klicken Sie auf \"Zurück\" und wählen Sie die \"Kategorie\"-Spalte aus.",
+  "importCategoryMappingDescription": "Bitte ordnen Sie die \"Quellkategorie\" den vorhandenen Systemkategorien zu (oder behalten Sie den Originalnamen bei, um automatisch zu erstellen/zusammenzuführen)",
+  "importKeepOriginalName": "Originalnamen beibehalten (automatisch erstellen/zusammenführen)",
+  "importProgress": "Importiere… Erfolg {ok}, Fehler {fail}",
+  "@importProgress": {
+    "placeholders": {
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "importCancelImport": "Import abbrechen",
+  "importCompleteTitle": "Import abgeschlossen",
+  "importCompletedCount": "{count} Datensätze erfolgreich importiert",
+  "@importCompletedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "importFailed": "Import fehlgeschlagen",
-  "importProgress": "Import-Fortschritt",
-  "importComplete": "Import abgeschlossen",
-  "importRecordsCount": "{count} Einträge importiert",
-  "@importRecordsCount": {
+  "importFailedMessage": "Import fehlgeschlagen: {error}",
+  "@importFailedMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importSelectCategoryFirst": "Bitte wählen Sie zuerst die \"Kategorie\"-Spalte aus",
+  "importNextStep": "Nächster Schritt",
+  "importPreviousStep": "Vorheriger Schritt",
+  "importStartImport": "Import starten",
+  "importAutoDetect": "Automatisch",
+  "importInProgress": "Importiere...",
+  "importProgressDetail": "Abgeschlossen: {done}/{total}, Erfolg {ok}, Fehler {fail}",
+  "@importProgressDetail": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "importBackgroundImport": "Hintergrund-Import",
+  "importCancelled": "(abgebrochen)",
+  "importCompleted": "Import abgeschlossen{cancelled}: Erfolg {ok}, Fehler {fail}",
+  "@importCompleted": {
+    "placeholders": {
+      "cancelled": {
+        "type": "String"
+      },
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "importSelectCsvFile": "Bitte wählen Sie eine Datei zum Importieren (CSV/TSV/XLSX unterstützt)",
+  "mineTitle": "Mein",
+  "mineSettings": "Einstellungen",
+  "mineTheme": "Designeinstellungen",
+  "mineFont": "Schrifteinstellungen",
+  "mineReminder": "Erinnerungseinstellungen",
+  "mineData": "Datenverwaltung",
+  "mineImport": "Daten importieren",
+  "mineExport": "Daten exportieren",
+  "mineCloud": "Cloud-Dienst",
+  "mineAbout": "Über",
+  "mineVersion": "Version",
+  "mineUpdate": "Nach Updates suchen",
+  "mineLanguageSettings": "Spracheinstellungen",
+  "mineLanguageSettingsSubtitle": "Anwendungssprache wechseln",
+  "mineRefreshStats": "Statistiken aktualisieren (Debug)",
+  "mineRefreshStatsSubtitle": "Globale Statistikdaten-Neuberechnung auslösen",
+  "mineRefreshSync": "Synchronisationsstatus aktualisieren (Debug)",
+  "mineRefreshSyncSubtitle": "Synchronisationsstatus-Aktualisierung auslösen",
+  "languageTitle": "Spracheinstellungen",
+  "languageChinese": "中文",
+  "languageEnglish": "English",
+  "languageSystemDefault": "System folgen",
+  "deleteConfirmTitle": "Löschen bestätigen",
+  "deleteConfirmMessage": "Sind Sie sicher, dass Sie diesen Datensatz löschen möchten?",
+  "logCopied": "Protokoll kopiert",
+  "waitingRestore": "Warten auf Start der Wiederherstellung...",
+  "restoreTitle": "Cloud-Wiederherstellung",
+  "copyLog": "Protokoll kopieren",
+  "restoreProgress": "Wiederherstellung ({current}/{total})",
+  "@restoreProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "restorePreparing": "Vorbereiten...",
+  "restoreLedgerProgress": "Kontenbuch: {ledger}  Datensätze: {done}/{total}",
+  "@restoreLedgerProgress": {
+    "placeholders": {
+      "ledger": {
+        "type": "String"
+      },
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSlogan": "Bienen-Buchhaltung, jede Transaktion zählt",
+  "mineDaysCount": "Buchführungstage",
+  "mineTotalRecords": "Gesamtanzahl",
+  "mineCurrentBalance": "Aktueller Saldo",
+  "mineCloudService": "Cloud-Dienst",
+  "mineCloudServiceLoading": "Lädt...",
+  "mineCloudServiceError": "Fehler: {error}",
+  "@mineCloudServiceError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "mineCloudServiceDefault": "Standard-Cloud-Dienst (aktiviert)",
+  "mineCloudServiceOffline": "Standardmodus (offline)",
+  "mineCloudServiceCustom": "Benutzerdefiniertes Supabase",
+  "mineCloudServiceWebDAV": "Benutzerdefinierter Cloud-Dienst (WebDAV)",
+  "mineFirstFullUpload": "Erster vollständiger Upload",
+  "mineFirstFullUploadSubtitle": "Alle lokalen Kontenbücher in die Cloud hochladen",
+  "mineFirstFullUploadComplete": "Abgeschlossen",
+  "mineFirstFullUploadMessage": "Aktuelles Kontenbuch hochgeladen. Wechseln Sie zu anderen Kontenbüchern, um sie hochzuladen.",
+  "mineFirstFullUploadFailed": "Fehlgeschlagen",
+  "mineSyncTitle": "Synchronisierung",
+  "mineSyncNotLoggedIn": "Nicht angemeldet",
+  "mineSyncNotConfigured": "Cloud nicht konfiguriert",
+  "mineSyncNoRemote": "Kein Cloud-Backup vorhanden",
+  "mineSyncInSync": "Synchronisiert (lokal {count} Einträge)",
+  "@mineSyncInSync": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "importConfirm": "Import bestätigen",
-  "importConfirmHint": "Sind Sie sicher, dass Sie diese Einträge importieren möchten?",
-  "importOverwriteData": "Vorhandene Daten überschreiben",
-  "importMergeData": "Mit vorhandenen Daten zusammenführen",
-  "importDataConflict": "Datenkonflikt",
-  "importResolveConflict": "Konflikt lösen",
-  "importSkipConflict": "Konflikt überspringen",
-  "importDuplicateHandling": "Duplikatbehandlung",
-  "importSkipDuplicate": "Duplikate überspringen",
-  "importUpdateDuplicate": "Duplikate aktualisieren",
-
+  "mineSyncLocalNewer": "Lokal aktueller (lokal {count} Einträge, Upload empfohlen)",
+  "@mineSyncLocalNewer": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSyncCloudNewer": "Cloud aktueller (Download und Zusammenführen empfohlen)",
+  "mineSyncDifferent": "Lokal und Cloud nicht synchronisiert",
+  "mineSyncError": "Statusabruf fehlgeschlagen",
+  "mineSyncDetailTitle": "Synchronisationsstatus-Details",
+  "mineSyncLocalRecords": "Lokale Datensätze: {count}",
+  "@mineSyncLocalRecords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSyncCloudRecords": "Cloud-Datensätze: {count}",
+  "@mineSyncCloudRecords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSyncCloudLatest": "Neueste Cloud-Buchungszeit: {time}",
+  "@mineSyncCloudLatest": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "mineSyncLocalFingerprint": "Lokaler Fingerabdruck: {fingerprint}",
+  "@mineSyncLocalFingerprint": {
+    "placeholders": {
+      "fingerprint": {
+        "type": "String"
+      }
+    }
+  },
+  "mineSyncCloudFingerprint": "Cloud-Fingerabdruck: {fingerprint}",
+  "@mineSyncCloudFingerprint": {
+    "placeholders": {
+      "fingerprint": {
+        "type": "String"
+      }
+    }
+  },
+  "mineSyncMessage": "Beschreibung: {message}",
+  "@mineSyncMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "mineUploadTitle": "Hochladen",
+  "mineUploadNeedLogin": "Anmeldung erforderlich",
+  "mineUploadNeedCloudService": "Nur im Cloud-Dienst-Modus verfügbar",
+  "mineUploadInProgress": "Lädt hoch...",
+  "mineUploadRefreshing": "Aktualisieren...",
+  "mineUploadSynced": "Synchronisiert",
+  "mineUploadSuccess": "Hochgeladen",
+  "mineUploadSuccessMessage": "Aktuelles Kontenbuch wurde mit der Cloud synchronisiert",
+  "mineDownloadTitle": "Herunterladen",
+  "mineDownloadNeedCloudService": "Nur im Cloud-Dienst-Modus verfügbar",
+  "mineDownloadComplete": "Abgeschlossen",
+  "mineDownloadResult": "Neu importiert: {inserted}\nBereits vorhanden übersprungen: {skipped}\nHistorische Duplikate bereinigt: {deleted}",
+  "@mineDownloadResult": {
+    "placeholders": {
+      "inserted": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "deleted": {
+        "type": "int"
+      }
+    }
+  },
+  "mineLoginTitle": "Anmelden / Registrieren",
+  "mineLoginSubtitle": "Nur zur Synchronisierung erforderlich",
+  "mineLoggedInEmail": "Angemeldet",
+  "mineLogoutSubtitle": "Tippen, um sich abzumelden",
+  "mineLogoutConfirmTitle": "Abmelden",
+  "mineLogoutConfirmMessage": "Sind Sie sicher, dass Sie sich abmelden möchten?\nNach dem Abmelden können Sie die Cloud-Synchronisation nicht mehr verwenden.",
+  "mineLogoutButton": "Abmelden",
+  "mineAutoSyncTitle": "Kontenbuch automatisch synchronisieren",
+  "mineAutoSyncSubtitle": "Nach Buchung automatisch in die Cloud hochladen",
+  "mineAutoSyncNeedLogin": "Anmeldung erforderlich, um zu aktivieren",
+  "mineAutoSyncNeedCloudService": "Nur im Cloud-Dienst-Modus verfügbar",
+  "mineImportProgressTitle": "Import läuft im Hintergrund...",
+  "mineImportProgressSubtitle": "Fortschritt: {done}/{total}, Erfolg {ok}, Fehler {fail}",
+  "@mineImportProgressSubtitle": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "mineImportCompleteTitle": "Import abgeschlossen",
+  "mineImportCompleteSubtitle": "Erfolg {ok}, Fehler {fail}",
+  "@mineImportCompleteSubtitle": {
+    "placeholders": {
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "mineCategoryManagement": "Kategorienverwaltung",
+  "mineCategoryManagementSubtitle": "Benutzerdefinierte Kategorien bearbeiten",
+  "mineCategoryMigration": "Kategorienmigration",
+  "mineCategoryMigrationSubtitle": "Kategoriedaten zu anderen Kategorien migrieren",
+  "mineRecurringTransactions": "Wiederkehrende Rechnungen",
+  "mineRecurringTransactionsSubtitle": "Wiederkehrende Rechnungen verwalten",
+  "mineReminderSettings": "Buchungserinnerung",
+  "mineReminderSettingsSubtitle": "Tägliche Buchungserinnerung einstellen",
+  "minePersonalize": "Personalisierung",
+  "mineDisplayScale": "Anzeigeskalierung",
+  "mineDisplayScaleSubtitle": "Größe von Text und UI-Elementen anpassen",
+  "mineAboutTitle": "Über",
+  "mineAboutMessage": "App: Bienen-Buchhaltung\nVersion: {version}\nOpen Source: https://github.com/TNT-Likely/BeeCount\nLizenz: Siehe LICENSE im Repository",
+  "@mineAboutMessage": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "mineAboutOpenGitHub": "GitHub öffnen",
+  "mineCheckUpdate": "Nach Updates suchen",
+  "mineCheckUpdateInProgress": "Update wird geprüft...",
+  "mineCheckUpdateSubtitle": "Neueste Version wird geprüft",
+  "mineUpdateDownload": "Update herunterladen",
+  "mineFeedback": "Feedback",
+  "mineFeedbackSubtitle": "Problem oder Vorschlag melden",
+  "mineHelp": "Hilfe",
+  "mineHelpSubtitle": "Dokumentation und häufig gestellte Fragen anzeigen",
+  "mineSupportAuthor": "Autor unterstützen",
+  "mineSupportAuthorSubtitle": "Projekt auf GitHub mit Stern bewerten",
+  "mineCloudBackupRestoreTitle": "Cloud-Backup gefunden",
+  "mineAutoSyncRemoteDesc": "Nach Buchung automatisch in die Cloud hochladen",
+  "mineAutoSyncLoginRequired": "Anmeldung erforderlich, um zu aktivieren",
+  "mineImportCompleteAllSuccess": "Alle erfolgreich",
+  "mineImportCompleteTitleShort": "Import abgeschlossen",
+  "mineAboutAppName": "App: Bienen-Buchhaltung",
+  "mineAboutVersion": "Version: {version}",
+  "@mineAboutVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "mineAboutRepo": "Open Source: https://github.com/TNT-Likely/BeeCount",
+  "mineAboutLicense": "Lizenz: Siehe LICENSE im Repository",
+  "mineCheckUpdateDetecting": "Update wird geprüft...",
+  "mineCheckUpdateSubtitleDetecting": "Neueste Version wird geprüft",
+  "mineUpdateDownloadTitle": "Update herunterladen",
+  "mineDebugRefreshStats": "Statistiken aktualisieren (temporär)",
+  "mineDebugRefreshStatsSubtitle": "Globale Statistik-Provider-Neuberechnung auslösen",
+  "mineDebugRefreshSync": "Synchronisationsstatus aktualisieren (temporär)",
+  "mineDebugRefreshSyncSubtitle": "Synchronisationsstatus-Provider-Aktualisierung auslösen",
+  "categoryEditTitle": "Kategorie bearbeiten",
+  "categoryNewTitle": "Neue Kategorie",
+  "categoryDetailTooltip": "Kategoriedetails",
+  "categoryMigrationTooltip": "Kategorienmigration",
+  "categoryMigrationTitle": "Kategorienmigration",
+  "categoryMigrationDescription": "Erläuterung zur Kategorienmigration",
+  "categoryMigrationDescriptionContent": "• Alle Transaktionsdatensätze einer bestimmten Kategorie zu einer anderen Kategorie migrieren\n• Nach der Migration werden alle Transaktionsdaten der ursprünglichen Kategorie vollständig in die Zielkategorie übertragen\n• Dieser Vorgang kann nicht rückgängig gemacht werden, bitte wählen Sie sorgfältig",
+  "categoryMigrationFromLabel": "Quellkategorie",
+  "categoryMigrationFromHint": "Kategorie zum Migrieren auswählen",
+  "categoryMigrationToLabel": "Zielkategorie",
+  "categoryMigrationToHint": "Zielkategorie auswählen",
+  "categoryMigrationToHintFirst": "Bitte wählen Sie zuerst die Quellkategorie",
+  "categoryMigrationStartButton": "Migration starten",
+  "categoryMigrationTransactionCount": "{count} Einträge",
+  "@categoryMigrationTransactionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryMigrationCannotTitle": "Kann nicht migrieren",
+  "categoryMigrationCannotMessage": "Ausgewählte Kategorien können nicht migriert werden, bitte überprüfen Sie den Kategorienstatus.",
+  "categoryExpenseType": "Ausgabenkategorie",
+  "categoryIncomeType": "Einnahmenkategorie",
+  "categoryDefaultTitle": "Standardkategorie",
+  "categoryDefaultMessage": "Standardkategorien können nicht geändert werden, aber Sie können Details anzeigen und Daten migrieren",
+  "categoryNameDining": "Essen gehen",
+  "categoryNameTransport": "Transport",
+  "categoryNameShopping": "Einkaufen",
+  "categoryNameEntertainment": "Unterhaltung",
+  "categoryNameHome": "Haushalt",
+  "categoryNameFamily": "Familie",
+  "categoryNameCommunication": "Kommunikation",
+  "categoryNameUtilities": "Versorgung",
+  "categoryNameHousing": "Wohnen",
+  "categoryNameMedical": "Medizin",
+  "categoryNameEducation": "Bildung",
+  "categoryNamePets": "Haustiere",
+  "categoryNameSports": "Sport",
+  "categoryNameDigital": "Digital",
+  "categoryNameTravel": "Reisen",
+  "categoryNameAlcoholTobacco": "Alkohol & Tabak",
+  "categoryNameBabyCare": "Baby-Pflege",
+  "categoryNameBeauty": "Schönheit",
+  "categoryNameRepair": "Reparatur",
+  "categoryNameSocial": "Soziales",
+  "categoryNameLearning": "Lernen",
+  "categoryNameCar": "Auto",
+  "categoryNameTaxi": "Taxi",
+  "categoryNameSubway": "U-Bahn",
+  "categoryNameDelivery": "Lieferung",
+  "categoryNameProperty": "Hausverwaltung",
+  "categoryNameParking": "Parken",
+  "categoryNameDonation": "Spende",
+  "categoryNameGift": "Geschenk",
+  "categoryNameTax": "Steuern",
+  "categoryNameBeverage": "Getränke",
+  "categoryNameClothing": "Kleidung",
+  "categoryNameSnacks": "Snacks",
+  "categoryNameRedPacket": "Rotes Paket",
+  "categoryNameFruit": "Obst",
+  "categoryNameGame": "Spiel",
+  "categoryNameBook": "Buch",
+  "categoryNameLover": "Partner",
+  "categoryNameDecoration": "Dekoration",
+  "categoryNameDailyGoods": "Haushaltswaren",
+  "categoryNameLottery": "Lotterie",
+  "categoryNameStock": "Aktien",
+  "categoryNameSocialSecurity": "Sozialversicherung",
+  "categoryNameExpress": "Express",
+  "categoryNameWork": "Arbeit",
+  "categoryNameSalary": "Gehalt",
+  "categoryNameInvestment": "Investition",
+  "categoryNameBonus": "Bonus",
+  "categoryNameReimbursement": "Erstattung",
+  "categoryNamePartTime": "Teilzeit",
+  "categoryNameInterest": "Zinsen",
+  "categoryNameRefund": "Rückerstattung",
+  "categoryNameSecondHand": "Gebrauchtwaren-Verkauf",
+  "categoryNameSocialBenefit": "Sozialleistung",
+  "categoryNameTaxRefund": "Steuerrückerstattung",
+  "categoryNameProvidentFund": "Vorsorge-Fonds",
+  "categoryNameLabel": "Kategoriename",
+  "categoryNameHint": "Kategoriename eingeben",
+  "categoryNameHintDefault": "Standard-Kategoriename kann nicht geändert werden",
+  "categoryNameRequired": "Bitte Kategoriename eingeben",
+  "categoryNameTooLong": "Kategoriename darf nicht länger als 4 Zeichen sein",
+  "categoryIconLabel": "Kategoriesymbol",
+  "categoryIconDefaultMessage": "Standard-Kategoriesymbol kann nicht geändert werden",
+  "categoryDangerousOperations": "Gefährliche Operationen",
+  "categoryDeleteTitle": "Kategorie löschen",
+  "categoryDeleteSubtitle": "Kann nach Löschen nicht wiederhergestellt werden",
+  "categoryDefaultCannotSave": "Standardkategorie kann nicht gespeichert werden",
+  "categorySaveError": "Speichern fehlgeschlagen",
+  "categoryUpdated": "Kategorie \"{name}\" aktualisiert",
+  "@categoryUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryCreated": "Kategorie \"{name}\" erstellt",
+  "@categoryCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryCannotDelete": "Kann nicht gelöscht werden",
+  "categoryCannotDeleteMessage": "Diese Kategorie enthält noch {count} Transaktionsdatensätze, bitte behandeln Sie diese zuerst.",
+  "@categoryCannotDeleteMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryDeleteConfirmTitle": "Kategorie löschen",
+  "categoryDeleteConfirmMessage": "Sind Sie sicher, dass Sie die Kategorie \"{name}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "@categoryDeleteConfirmMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryDeleteError": "Löschen fehlgeschlagen",
+  "categoryDeleted": "Kategorie \"{name}\" gelöscht",
+  "@categoryDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryDetailLoadFailed": "Laden fehlgeschlagen",
+  "categoryDetailSummaryTitle": "Kategorienzusammenfassung",
+  "categoryDetailTotalCount": "Gesamtzahl",
+  "categoryDetailTotalAmount": "Gesamtbetrag",
+  "categoryDetailAverageAmount": "Durchschnittsbetrag",
+  "categoryDetailSortTitle": "Sortieren",
+  "categoryDetailSortTimeDesc": "Zeit ↓",
+  "categoryDetailSortTimeAsc": "Zeit ↑",
+  "categoryDetailSortAmountDesc": "Betrag ↓",
+  "categoryDetailSortAmountAsc": "Betrag ↑",
+  "categoryDetailNoTransactions": "Keine Transaktionsdatensätze",
+  "categoryDetailNoTransactionsSubtext": "Diese Kategorie enthält noch keine Transaktionsdatensätze",
+  "categoryDetailDeleteFailed": "Löschen fehlgeschlagen",
+  "categoryMigrationConfirmTitle": "Migration bestätigen",
+  "categoryMigrationConfirmMessage": "Möchten Sie wirklich {count} Transaktionen von \"{fromName}\" zu \"{toName}\" migrieren?\n\nDieser Vorgang kann nicht rückgängig gemacht werden!",
+  "@categoryMigrationConfirmMessage": {
+    "placeholders": {
+      "fromName": {
+        "type": "String"
+      },
+      "toName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryMigrationConfirmOk": "Migration bestätigen",
+  "categoryMigrationCompleteTitle": "Migration abgeschlossen",
+  "categoryMigrationCompleteMessage": "Erfolgreich {count} Transaktionen von \"{fromName}\" zu \"{toName}\" migriert.",
+  "@categoryMigrationCompleteMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fromName": {
+        "type": "String"
+      },
+      "toName": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryMigrationFailedTitle": "Migration fehlgeschlagen",
+  "categoryMigrationFailedMessage": "Fehler während der Migration: {error}",
+  "@categoryMigrationFailedMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryMigrationTransactionLabel": "{count} Einträge",
+  "@categoryMigrationTransactionLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryPickerExpenseTab": "Ausgaben",
+  "categoryPickerIncomeTab": "Einnahmen",
+  "categoryPickerCancel": "Abbrechen",
+  "categoryPickerEmpty": "Keine Kategorien",
+  "personalizeTitle": "Personalisierung",
+  "personalizeCustomColor": "Benutzerdefinierte Farbe auswählen",
+  "personalizeCustomTitle": "Benutzerdefiniert",
+  "personalizeHue": "Farbton ({value}°)",
+  "@personalizeHue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "personalizeSaturation": "Sättigung ({value}%)",
+  "@personalizeSaturation": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "personalizeBrightness": "Helligkeit ({value}%)",
+  "@personalizeBrightness": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "personalizeSelectColor": "Diese Farbe auswählen",
+  "fontSettingsTitle": "Anzeigeskalierung",
+  "fontSettingsCurrentScale": "Aktuelle Skalierung: x{scale}",
+  "@fontSettingsCurrentScale": {
+    "placeholders": {
+      "scale": {
+        "type": "String"
+      }
+    }
+  },
+  "fontSettingsPreview": "Echtzeit-Vorschau",
+  "fontSettingsPreviewText": "Heute 23,50 Euro für Essen ausgegeben, eintragen;\nDiesen Monat 45 Tage aufgezeichnet, insgesamt 320 Einträge;\nAusdauer führt zum Sieg!",
+  "fontSettingsCurrentLevel": "Aktuelle Stufe: {level}  (Faktor x{scale})",
+  "@fontSettingsCurrentLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "scale": {
+        "type": "String"
+      }
+    }
+  },
+  "fontSettingsQuickLevel": "Schnellstufen",
+  "fontSettingsCustomAdjust": "Benutzerdefinierte Anpassung",
+  "fontSettingsDescription": "Hinweis: Diese Einstellung sorgt dafür, dass alle Geräte bei 1,0x eine einheitliche Anzeige haben, Geräteunterschiede werden automatisch ausgeglichen; durch Anpassung der Werte können Sie auf dieser einheitlichen Basis eine personalisierte Skalierung vornehmen.",
+  "fontSettingsExtraSmall": "Sehr klein",
+  "fontSettingsVerySmall": "Klein",
+  "fontSettingsSmall": "Etwas klein",
+  "fontSettingsStandard": "Standard",
+  "fontSettingsLarge": "Etwas groß",
+  "fontSettingsBig": "Groß",
+  "fontSettingsVeryBig": "Sehr groß",
+  "fontSettingsExtraBig": "Extrem groß",
+  "fontSettingsMoreStyles": "Weitere Stile",
+  "fontSettingsPageTitle": "Seitentitel",
+  "fontSettingsBlockTitle": "Blocktitel",
+  "fontSettingsBodyExample": "Textbeispiel",
+  "fontSettingsLabelExample": "Beschriftungstext",
+  "fontSettingsStrongNumber": "Hervorgehobene Zahl",
+  "fontSettingsListTitle": "Listeneintragstitel",
+  "fontSettingsListSubtitle": "Hilfstext",
+  "fontSettingsScreenInfo": "Bildschirm-Anpassungsinfo",
+  "fontSettingsScreenDensity": "Bildschirmdichte",
+  "fontSettingsScreenWidth": "Bildschirmbreite",
+  "fontSettingsDeviceScale": "Geräteskalierung",
+  "fontSettingsUserScale": "Benutzerskalierung",
+  "fontSettingsFinalScale": "Finale Skalierung",
+  "fontSettingsBaseDevice": "Referenzgerät",
+  "fontSettingsRecommendedScale": "Empfohlene Skalierung",
+  "fontSettingsYes": "Ja",
+  "fontSettingsNo": "Nein",
+  "fontSettingsScaleExample": "Dieses Feld und der Abstand skalieren automatisch basierend auf dem Gerät",
+  "fontSettingsPreciseAdjust": "Präzise Anpassung",
+  "fontSettingsResetTo1x": "Auf 1,0x zurücksetzen",
+  "fontSettingsAdaptBase": "Anpassungsbasis",
+  "reminderTitle": "Buchungserinnerung",
+  "reminderSubtitle": "Tägliche Buchungserinnerungszeit einstellen",
+  "reminderDailyTitle": "Tägliche Buchungserinnerung",
+  "reminderDailySubtitle": "Wenn aktiviert, erinnert Sie zur angegebenen Zeit an die Buchung",
+  "reminderTimeTitle": "Erinnerungszeit",
+  "reminderTestNotification": "Test-Benachrichtigung senden",
+  "reminderTestSent": "Test-Benachrichtigung gesendet",
+  "reminderTestTitle": "Test-Benachrichtigung",
+  "reminderTestBody": "Dies ist eine Test-Benachrichtigung, tippen Sie, um die Wirkung zu sehen",
+  "reminderTestDelayBody": "Dies ist eine Test-Benachrichtigung mit 15 Sekunden Verzögerung",
+  "reminderQuickTest": "Schnelltest (15 Sekunden später)",
+  "reminderQuickTestMessage": "Schnelltest für 15 Sekunden später eingestellt, bitte behalten Sie die App im Hintergrund",
+  "reminderFlutterTest": "🔧 Flutter-Benachrichtigungs-Klick testen (Entwicklung)",
+  "reminderFlutterTestMessage": "Flutter-Test-Benachrichtigung gesendet, tippen Sie, um zu sehen, ob die App geöffnet wird",
+  "reminderAlarmTest": "🔧 AlarmManager-Benachrichtigungs-Klick testen (Entwicklung)",
+  "reminderAlarmTestMessage": "AlarmManager-Test-Benachrichtigung eingestellt (1 Sekunde später), tippen Sie, um zu sehen, ob die App geöffnet wird",
+  "reminderDirectTest": "🔧 NotificationReceiver direkt testen (Entwicklung)",
+  "reminderDirectTestMessage": "NotificationReceiver direkt aufgerufen, um Benachrichtigung zu erstellen, überprüfen Sie, ob Tippen funktioniert",
+  "reminderCheckStatus": "🔧 Benachrichtigungsstatus prüfen (Entwicklung)",
+  "reminderNotificationStatus": "Benachrichtigungsstatus",
+  "reminderPendingCount": "Ausstehende Benachrichtigungen: {count}",
+  "@reminderPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderNoPending": "Keine ausstehenden Benachrichtigungen",
+  "reminderCheckBattery": "Batterieoptimierung prüfen",
+  "reminderBatteryStatus": "Batterieoptimierungsstatus",
+  "reminderManufacturer": "Gerätehersteller: {value}",
+  "@reminderManufacturer": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderModel": "Gerätemodell: {value}",
+  "@reminderModel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderAndroidVersion": "Android-Version: {value}",
+  "@reminderAndroidVersion": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderBatteryIgnored": "Batterieoptimierung: Ignoriert ✅",
+  "reminderBatteryNotIgnored": "Batterieoptimierung: Nicht ignoriert ⚠️",
+  "reminderBatteryAdvice": "Es wird empfohlen, die Batterieoptimierung zu deaktivieren, um Benachrichtigungen sicherzustellen",
+  "reminderGoToSettings": "Zu Einstellungen",
+  "reminderCheckChannel": "Benachrichtigungskanal-Einstellungen prüfen",
+  "reminderChannelStatus": "Benachrichtigungskanal-Status",
+  "reminderChannelEnabled": "Kanal aktiviert: Ja ✅",
+  "reminderChannelDisabled": "Kanal aktiviert: Nein ❌",
+  "reminderChannelImportance": "Wichtigkeit: {value}",
+  "@reminderChannelImportance": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderChannelSoundOn": "Ton: Ein 🔊",
+  "reminderChannelSoundOff": "Ton: Aus 🔇",
+  "reminderChannelVibrationOn": "Vibration: Ein 📳",
+  "reminderChannelVibrationOff": "Vibration: Aus",
+  "reminderChannelDndBypass": "Nicht stören: Kann umgangen werden",
+  "reminderChannelDndNoBypass": "Nicht stören: Kann nicht umgangen werden",
+  "reminderChannelAdvice": "⚠️ Empfohlene Einstellungen:",
+  "reminderChannelAdviceImportance": "• Wichtigkeit: Dringend oder Hoch",
+  "reminderChannelAdviceSound": "• Ton und Vibration aktivieren",
+  "reminderChannelAdviceBanner": "• Banner-Benachrichtigungen zulassen",
+  "reminderChannelAdviceXiaomi": "• Xiaomi-Telefone benötigen separate Kanal-Einstellungen",
+  "reminderChannelGood": "✅ Benachrichtigungskanal gut konfiguriert",
+  "reminderOpenAppSettings": "App-Einstellungen öffnen",
+  "reminderAppSettingsMessage": "Bitte erlauben Sie Benachrichtigungen in den Einstellungen und deaktivieren Sie die Batterieoptimierung",
+  "reminderIOSTest": "🍎 iOS-Benachrichtigungs-Debug-Test",
+  "reminderIOSTestTitle": "iOS-Benachrichtigungstest",
+  "reminderIOSTestMessage": "Test-Benachrichtigung gesendet.\n\n🍎 iOS-Simulator-Einschränkungen:\n• Benachrichtigungen werden möglicherweise nicht im Benachrichtigungscenter angezeigt\n• Banner-Warnungen funktionieren möglicherweise nicht\n• Aber Xcode-Konsole zeigt Protokolle\n\n💡 Debug-Methoden:\n• Xcode-Konsolenausgabe überprüfen\n• Flutter-Protokollinformationen prüfen\n• Echtes Gerät für volle Erfahrung verwenden",
+  "reminderDescription": "Hinweis: Wenn die Buchungserinnerung aktiviert ist, sendet das System täglich zur angegebenen Zeit eine Benachrichtigung, um Sie an die Aufzeichnung von Einnahmen und Ausgaben zu erinnern.",
+  "reminderIOSInstructions": "🍎 iOS-Benachrichtigungseinstellungen:\n• Einstellungen > Mitteilungen > Bienen-Buchhaltung\n• \"Mitteilungen erlauben\" aktivieren\n• Benachrichtigungsstil einstellen: Banner oder Hinweis\n• Ton und Vibration aktivieren\n\n⚠️ Wichtiger Hinweis:\n• iOS-lokale Benachrichtigungen hängen vom App-Prozess ab\n• Schließen Sie die App nicht im Task-Manager\n• Benachrichtigungen funktionieren, wenn die App im Hintergrund oder Vordergrund ist\n• Vollständiges Beenden deaktiviert Benachrichtigungen\n\n💡 Verwendungstipps:\n• Drücken Sie einfach die Home-Taste zum Beenden\n• iOS verwaltet Hintergrund-Apps automatisch\n• Behalten Sie die App im Hintergrund, um Erinnerungen zu erhalten",
+  "reminderAndroidInstructions": "Wenn Benachrichtigungen nicht richtig funktionieren, überprüfen Sie:\n• App darf Benachrichtigungen senden\n• Batterieoptimierung/Stromsparmodus für App deaktivieren\n• App im Hintergrund ausführen und automatisch starten lassen\n• Android 12+ benötigt exakte Alarm-Berechtigung\n\n📱 Xiaomi-Telefon Spezialeinstellungen:\n• Einstellungen > App-Verwaltung > Bienen-Buchhaltung > Benachrichtigungsverwaltung\n• \"Buchungserinnerung\"-Kanal antippen\n• Wichtigkeit auf \"Dringend\" oder \"Hoch\" setzen\n• \"Banner-Benachrichtigungen\", \"Ton\", \"Vibration\" aktivieren\n• Sicherheitscenter > App-Verwaltung > Berechtigungen > Autostart\n\n🔒 Hintergrund sperren Methoden:\n• Bienen-Buchhaltung in aktuellen Aufgaben finden\n• App-Karte nach unten ziehen, um Sperr-Symbol anzuzeigen\n• Sperr-Symbol antippen, um Bereinigung zu verhindern",
+  "reminderQuickTestSent": "Schnelltest für 15 Sekunden später eingestellt, bitte behalten Sie die App im Hintergrund",
+  "reminderFlutterTestSent": "Flutter-Test-Benachrichtigung gesendet, tippen Sie, um zu sehen, ob die App geöffnet wird",
+  "reminderAlarmTestSent": "AlarmManager-Test-Benachrichtigung eingestellt (1 Sekunde später), tippen Sie, um zu sehen, ob die App geöffnet wird",
   "exportTitle": "Exportieren",
-  "exportToFile": "In Datei exportieren",
-  "exportToCloud": "In Cloud exportieren",
-  "exportSelectFormat": "Format auswählen",
-  "exportCSV": "CSV",
-  "exportJSON": "JSON",
-  "exportPDF": "PDF",
-  "exportExcel": "Excel",
-  "exportDateRange": "Datumsbereich",
-  "exportSelectDateRange": "Datumsbereich auswählen",
-  "exportAllData": "Alle Daten",
-  "exportCustomRange": "Benutzerdefinierter Bereich",
-  "exportCategories": "Kategorien",
-  "exportAccounts": "Konten",
-  "exportLedgers": "Bücher",
-  "exportSelectCategories": "Kategorien auswählen",
-  "exportSelectAccounts": "Konten auswählen",
-  "exportSelectLedgers": "Bücher auswählen",
-  "exportStart": "Export starten",
-  "exportSuccess": "Export erfolgreich",
-  "exportFailed": "Export fehlgeschlagen",
-  "exportProgress": "Export-Fortschritt",
-  "exportComplete": "Export abgeschlossen",
-  "exportRecordsCount": "{count} Einträge exportiert",
-  "@exportRecordsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "exportFileName": "Dateiname",
-  "exportFileNameHint": "Geben Sie den Dateinamen ein",
-  "exportSaveToDownloads": "In Downloads speichern",
-  "exportShareFile": "Datei teilen",
-  "exportFileSaved": "Datei gespeichert in: {path}",
-  "@exportFileSaved": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-
-  "cloudTitle": "Cloud-Synchronisation",
-  "cloudSignIn": "Anmelden",
-  "cloudSignOut": "Abmelden",
-  "cloudSignUp": "Registrieren",
-  "cloudEmail": "E-Mail",
-  "cloudPassword": "Passwort",
-  "cloudConfirmPassword": "Passwort bestätigen",
-  "cloudEmailHint": "Geben Sie Ihre E-Mail ein",
-  "cloudPasswordHint": "Geben Sie Ihr Passwort ein",
-  "cloudConfirmPasswordHint": "Bestätigen Sie Ihr Passwort",
-  "cloudEmailRequired": "E-Mail ist erforderlich",
-  "cloudEmailInvalid": "Ungültiges E-Mail-Format",
-  "cloudPasswordRequired": "Passwort ist erforderlich",
-  "cloudPasswordTooShort": "Passwort muss mindestens 6 Zeichen haben",
-  "cloudPasswordMismatch": "Passwörter stimmen nicht überein",
-  "cloudSignInSuccess": "Anmeldung erfolgreich",
-  "cloudSignInFailed": "Anmeldefehler",
-  "cloudSignUpSuccess": "Registrierung erfolgreich",
-  "cloudSignUpFailed": "Registrierungsfehler",
-  "cloudSignOutSuccess": "Abmeldung erfolgreich",
-  "cloudSignOutFailed": "Abmeldefehler",
-  "cloudSyncNow": "Jetzt synchronisieren",
-  "cloudSyncAuto": "Automatische Synchronisation",
-  "cloudSyncSuccess": "Synchronisation erfolgreich",
-  "cloudSyncFailed": "Synchronisationsfehler",
-  "cloudSyncProgress": "Synchronisierung läuft...",
-  "cloudLastSync": "Letzte Synchronisation: {time}",
-  "@cloudLastSync": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "cloudNeverSynced": "Nie synchronisiert",
-  "cloudSyncConflict": "Synchronisationskonflikt",
-  "cloudSyncConflictHint": "Konflikte wurden während der Synchronisation erkannt. Bitte wählen Sie, wie sie gelöst werden sollen.",
-  "cloudUseLocal": "Lokale Daten verwenden",
-  "cloudUseRemote": "Remote-Daten verwenden",
-  "cloudMerge": "Daten zusammenführen",
-  "cloudDataSize": "Datengröße: {size}",
-  "@cloudDataSize": {
-    "placeholders": {
-      "size": {
-        "type": "String"
-      }
-    }
-  },
-  "cloudRecordsCount": "{count} Einträge in der Cloud",
-  "@cloudRecordsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-
-  "aboutTitle": "Über",
-  "aboutAppName": "Bienen-Buchhaltung",
-  "aboutVersion": "Version",
-  "aboutDescription": "Eine einfache und effiziente persönliche Buchhaltungsanwendung",
-  "aboutDeveloper": "Entwickler",
-  "aboutContact": "Kontakt",
-  "aboutPrivacy": "Datenschutzrichtlinie",
-  "aboutTerms": "Nutzungsbedingungen",
-  "aboutLicense": "Lizenz",
-  "aboutOpenSource": "Open Source",
-  "aboutThirdParty": "Drittanbieter-Bibliotheken",
-  "aboutFeedback": "Feedback",
-  "aboutRate": "App bewerten",
-  "aboutShare": "App teilen",
-  "aboutUpdate": "Nach Updates suchen",
-
-  "errorTitle": "Fehler",
-  "errorUnknown": "Unbekannter Fehler",
-  "errorNetwork": "Netzwerkfehler",
-  "errorNetworkHint": "Bitte überprüfen Sie Ihre Internetverbindung",
-  "errorServer": "Serverfehler",
-  "errorServerHint": "Server ist vorübergehend nicht verfügbar",
-  "errorPermission": "Berechtigungsfehler",
-  "errorPermissionHint": "Bitte erteilen Sie die erforderlichen Berechtigungen",
-  "errorFile": "Dateifehler",
-  "errorFileHint": "Fehler beim Zugriff auf die Datei",
-  "errorDatabase": "Datenbankfehler",
-  "errorDatabaseHint": "Fehler beim Zugriff auf die Datenbank",
-  "errorAuth": "Authentifizierungsfehler",
-  "errorAuthHint": "Bitte melden Sie sich erneut an",
-  "errorTimeout": "Zeitüberschreitung",
-  "errorTimeoutHint": "Der Vorgang hat zu lange gedauert",
-
-  "permissionTitle": "Berechtigungen",
-  "permissionStorage": "Speicher",
-  "permissionStorageHint": "Erforderlich für Import/Export von Dateien",
-  "permissionCamera": "Kamera",
-  "permissionCameraHint": "Erforderlich zum Scannen von QR-Codes",
-  "permissionLocation": "Standort",
-  "permissionLocationHint": "Erforderlich für standortbasierte Funktionen",
-  "permissionGrant": "Berechtigungen erteilen",
-  "permissionDenied": "Berechtigungen verweigert",
-  "permissionDeniedHint": "Bitte erteilen Sie die Berechtigungen in den Einstellungen",
-  "permissionSettings": "Einstellungen",
-
-  "validationRequired": "Dieses Feld ist erforderlich",
-  "validationEmail": "Bitte geben Sie eine gültige E-Mail ein",
-  "validationPassword": "Passwort muss mindestens 6 Zeichen haben",
-  "validationPasswordMismatch": "Passwörter stimmen nicht überein",
-  "validationNumber": "Bitte geben Sie eine gültige Zahl ein",
-  "validationPositiveNumber": "Bitte geben Sie eine positive Zahl ein",
-  "validationLength": "Länge muss zwischen {min} und {max} Zeichen sein",
-  "@validationLength": {
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-
-  "currencySymbol": "€",
-  "currencyCode": "EUR",
-  "currencyName": "Euro",
-
-  "formatCurrency": "{amount} {symbol}",
-  "@formatCurrency": {
-    "placeholders": {
-      "symbol": {
-        "type": "String"
-      },
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-
-  "formatDate": "{day}.{month}.{year}",
-  "@formatDate": {
-    "placeholders": {
-      "year": {
-        "type": "String"
-      },
-      "month": {
-        "type": "String"
-      },
-      "day": {
-        "type": "String"
-      }
-    }
-  },
-
-  "formatTime": "{hour}:{minute}",
-  "@formatTime": {
-    "placeholders": {
-      "hour": {
-        "type": "String"
-      },
-      "minute": {
-        "type": "String"
-      }
-    }
-  },
-
-  "formatDateTime": "{date} {time}",
-  "@formatDateTime": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-
-  "reminderTitle": "Erinnerung",
-  "reminderContent": "Erinnerungsinhalt",
-  "reminderTime": "Erinnerungszeit",
-  "reminderRepeat": "Wiederholen",
-  "reminderRepeatNone": "Nicht wiederholen",
-  "reminderRepeatDaily": "Täglich",
-  "reminderRepeatWeekly": "Wöchentlich",
-  "reminderRepeatMonthly": "Monatlich",
-  "reminderRepeatYearly": "Jährlich",
-  "reminderAdd": "Erinnerung hinzufügen",
-  "reminderEdit": "Erinnerung bearbeiten",
-  "reminderDelete": "Erinnerung löschen",
-  "reminderDeleteConfirm": "Sind Sie sicher, dass Sie diese Erinnerung löschen möchten?",
-  "reminderSaveSuccess": "Erinnerung erfolgreich gespeichert",
-  "reminderSaveFailed": "Fehler beim Speichern der Erinnerung",
-  "reminderDeleteSuccess": "Erinnerung erfolgreich gelöscht",
-  "reminderDeleteFailed": "Fehler beim Löschen der Erinnerung",
-
-  "budgetTitle": "Budget",
-  "budgetAdd": "Budget hinzufügen",
-  "budgetEdit": "Budget bearbeiten",
-  "budgetDelete": "Budget löschen",
-  "budgetName": "Budgetname",
-  "budgetAmount": "Budgetbetrag",
-  "budgetPeriod": "Zeitraum",
-  "budgetPeriodDaily": "Täglich",
-  "budgetPeriodWeekly": "Wöchentlich",
-  "budgetPeriodMonthly": "Monatlich",
-  "budgetPeriodYearly": "Jährlich",
-  "budgetCategory": "Kategorie",
-  "budgetProgress": "Fortschritt",
-  "budgetRemaining": "Verbleibend",
-  "budgetExceeded": "Überschritten",
-  "budgetAlert": "Budget-Warnung",
-  "budgetAlertHint": "Sie haben Ihr Budget für {category} überschritten",
-  "@budgetAlertHint": {
-    "placeholders": {
-      "category": {
-        "type": "String"
-      }
-    }
-  },
-  "budgetSaveSuccess": "Budget erfolgreich gespeichert",
-  "budgetSaveFailed": "Fehler beim Speichern des Budgets",
-  "budgetDeleteSuccess": "Budget erfolgreich gelöscht",
-  "budgetDeleteFailed": "Fehler beim Löschen des Budgets",
-
-  "goalTitle": "Ziel",
-  "goalAdd": "Ziel hinzufügen",
-  "goalEdit": "Ziel bearbeiten",
-  "goalDelete": "Ziel löschen",
-  "goalName": "Zielname",
-  "goalAmount": "Zielbetrag",
-  "goalTargetDate": "Zieldatum",
-  "goalCurrentAmount": "Aktueller Betrag",
-  "goalProgress": "Fortschritt",
-  "goalRemaining": "Verbleibend",
-  "goalDaysLeft": "{days} Tage verbleibend",
-  "@goalDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "goalAchieved": "Ziel erreicht",
-  "goalAchievedHint": "Glückwunsch! Sie haben Ihr Ziel erreicht: {goal}",
-  "@goalAchievedHint": {
-    "placeholders": {
-      "goal": {
-        "type": "String"
-      }
-    }
-  },
-  "goalSaveSuccess": "Ziel erfolgreich gespeichert",
-  "goalSaveFailed": "Fehler beim Speichern des Ziels",
-  "goalDeleteSuccess": "Ziel erfolgreich gelöscht",
-  "goalDeleteFailed": "Fehler beim Löschen des Ziels",
-
-  "reportTitle": "Bericht",
-  "reportGenerate": "Bericht erstellen",
-  "reportPeriod": "Berichtszeitraum",
-  "reportType": "Berichtstyp",
-  "reportTypeIncome": "Einnahmenbericht",
-  "reportTypeExpense": "Ausgabenbericht",
-  "reportTypeBalance": "Saldobericht",
-  "reportTypeCategory": "Kategorienbericht",
-  "reportTypeAccount": "Kontenbericht",
-  "reportTypeTrend": "Trendbericht",
-  "reportFormat": "Berichtsformat",
-  "reportFormatPDF": "PDF",
-  "reportFormatExcel": "Excel",
-  "reportFormatCSV": "CSV",
-  "reportGenerateSuccess": "Bericht erfolgreich erstellt",
-  "reportGenerateFailed": "Fehler beim Erstellen des Berichts",
-  "reportShare": "Bericht teilen",
-  "reportSave": "Bericht speichern",
-
-  "backupTitle": "Sicherung",
-  "backupCreate": "Sicherung erstellen",
-  "backupRestore": "Sicherung wiederherstellen",
-  "backupAuto": "Automatische Sicherung",
-  "backupAutoHint": "Sicherungen automatisch erstellen",
-  "backupFrequency": "Sicherungshäufigkeit",
-  "backupFrequencyDaily": "Täglich",
-  "backupFrequencyWeekly": "Wöchentlich",
-  "backupFrequencyMonthly": "Monatlich",
-  "backupLocation": "Sicherungsort",
-  "backupLocationLocal": "Lokal",
-  "backupLocationCloud": "Cloud",
-  "backupCreateSuccess": "Sicherung erfolgreich erstellt",
-  "backupCreateFailed": "Fehler beim Erstellen der Sicherung",
-  "backupRestoreSuccess": "Sicherung erfolgreich wiederhergestellt",
-  "backupRestoreFailed": "Fehler beim Wiederherstellen der Sicherung",
-  "backupDeleteConfirm": "Sind Sie sicher, dass Sie diese Sicherung löschen möchten?",
-
-  "securityTitle": "Sicherheit",
-  "securityPinCode": "PIN-Code",
-  "securityBiometric": "Biometrisch",
-  "securityFaceID": "Face ID",
-  "securityTouchID": "Touch ID",
-  "securityFingerprint": "Fingerabdruck",
-  "securitySetPinCode": "PIN-Code festlegen",
-  "securityChangePinCode": "PIN-Code ändern",
-  "securityRemovePinCode": "PIN-Code entfernen",
-  "securityEnterPinCode": "PIN-Code eingeben",
-  "securityConfirmPinCode": "PIN-Code bestätigen",
-  "securityPinCodeMismatch": "PIN-Codes stimmen nicht überein",
-  "securityPinCodeSet": "PIN-Code festgelegt",
-  "securityPinCodeChanged": "PIN-Code geändert",
-  "securityPinCodeRemoved": "PIN-Code entfernt",
-  "securityBiometricEnable": "Biometrische Authentifizierung aktivieren",
-  "securityBiometricDisable": "Biometrische Authentifizierung deaktivieren",
-  "securityBiometricSuccess": "Biometrische Authentifizierung erfolgreich",
-  "securityBiometricFailed": "Biometrische Authentifizierung fehlgeschlagen",
-  "securityBiometricNotAvailable": "Biometrische Authentifizierung nicht verfügbar",
-  "securityUnlock": "Entsperren",
-  "securityLocked": "Gesperrt",
-
-  "notificationTitle": "Benachrichtigung",
-  "notificationEnable": "Benachrichtigungen aktivieren",
-  "notificationDisable": "Benachrichtigungen deaktivieren",
-  "notificationSound": "Benachrichtigungston",
-  "notificationVibration": "Vibration",
-  "notificationBudgetAlert": "Budget-Warnung",
-  "notificationGoalReminder": "Zielerinnerung",
-  "notificationBackupReminder": "Sicherungserinnerung",
-  "notificationSyncResult": "Synchronisationsergebnis",
-
-  "widgetTitle": "Widget",
-  "widgetBalance": "Saldo",
-  "widgetIncome": "Einnahmen",
-  "widgetExpense": "Ausgaben",
-  "widgetRecentTransactions": "Letzte Transaktionen",
-  "widgetMonthlyStats": "Monatsstatistiken",
-  "widgetAddToHomeScreen": "Zum Startbildschirm hinzufügen",
-
-  "developerTitle": "Entwickler",
-  "developerMode": "Entwicklermodus",
-  "developerDebugInfo": "Debug-Informationen",
-  "developerTestData": "Testdaten",
-  "developerClearCache": "Cache leeren",
-  "developerResetApp": "App zurücksetzen",
-  "developerResetConfirm": "Sind Sie sicher, dass Sie die App zurücksetzen möchten?",
-  "developerResetHint": "Diese Aktion löscht alle Daten und Einstellungen.",
-
-  "exportDescription": "Klicken Sie auf die Schaltfläche unten, um den Speicherort auszuwählen und das aktuelle Buch in eine CSV-Datei zu exportieren.",
+  "exportDescription": "Klicken Sie auf die Schaltfläche unten, um den Speicherort auszuwählen und das aktuelle Kontenbuch in eine CSV-Datei zu exportieren.",
   "exportButtonIOS": "Exportieren und teilen (iOS)",
   "exportButtonAndroid": "Ordner auswählen und exportieren",
   "exportSavedTo": "Gespeichert in: {path}",
@@ -802,16 +1031,14 @@
   "exportTypeIncome": "Einnahme",
   "exportTypeExpense": "Ausgabe",
   "exportTypeTransfer": "Übertragung",
-
-  "personalizeTitle": "Personalisieren",
   "personalizeThemeHoney": "Bienengelb",
   "personalizeThemeOrange": "Flammeorange",
   "personalizeThemeGreen": "Smaragdgrün",
   "personalizeThemePurple": "Lotuslila",
-  "personalizeThemePink": "Kirschrosa",
+  "personalizeThemePink": "Kirschrot",
   "personalizeThemeBlue": "Himmelblau",
   "personalizeThemeMint": "Waldmond",
-  "personalizeThemeSand": "Sonnenuntergangsdüne",
+  "personalizeThemeSand": "Abenddämmerungs-Düne",
   "personalizeThemeLavender": "Schnee und Kiefer",
   "personalizeThemeSky": "Nebel-Wunderland",
   "personalizeThemeWarmOrange": "Warmorange",
@@ -822,7 +1049,7 @@
   "personalizeThemeEmerald": "Smaragd",
   "personalizeThemeLavenderPurple": "Lavendel",
   "personalizeThemeAmber": "Bernstein",
-  "personalizeThemeRouge": "Zinnober",
+  "personalizeThemeRouge": "Karmesinrot",
   "personalizeThemeIndigo": "Indigoblau",
   "personalizeThemeOlive": "Olivgrün",
   "personalizeThemeCoral": "Korallenrosa",
@@ -831,7 +1058,6 @@
   "personalizeThemeSunset": "Sonnenuntergangsorange",
   "personalizeThemePeacock": "Pfaublau",
   "personalizeThemeLime": "Limonengrün",
-
   "analyticsMonthlyAvg": "Monatlicher Durchschnitt",
   "analyticsDailyAvg": "Täglicher Durchschnitt",
   "analyticsOverallAvg": "Gesamtdurchschnitt",
@@ -856,7 +1082,7 @@
   },
   "analyticsExpense": "Ausgaben",
   "analyticsIncome": "Einnahmen",
-  "analyticsTotal": "Gesamt {type}: ",
+  "analyticsTotal": "Gesamt{type}: ",
   "@analyticsTotal": {
     "placeholders": {
       "type": {
@@ -872,7 +1098,6 @@
       }
     }
   },
-
   "updateCheckTitle": "Nach Updates suchen",
   "updateNewVersionFound": "Neue Version gefunden",
   "updateNewVersionTitle": "Neue Version {version} gefunden",
@@ -903,7 +1128,7 @@
   "updateLaterButton": "Später",
   "updateDownloadButton": "Herunterladen",
   "updateFoundCachedTitle": "Heruntergeladene Version gefunden",
-  "updateFoundCachedMessage": "Ein zuvor heruntergeladener Installer wurde gefunden, direkt installieren?\\n\\nKlicken Sie auf \"OK\" um sofort zu installieren, klicken Sie auf \"Abbrechen\" um diesen Dialog zu schließen.\\n\\nDateipfad: {path}",
+  "updateFoundCachedMessage": "Ein zuvor heruntergeladener Installer wurde gefunden. Direkt installieren?\n\nKlicken Sie auf \"OK\" um sofort zu installieren, klicken Sie auf \"Abbrechen\" um diesen Dialog zu schließen.\n\nDateipfad: {path}",
   "@updateFoundCachedMessage": {
     "placeholders": {
       "path": {
@@ -911,7 +1136,7 @@
       }
     }
   },
-  "updateInstallingCachedApk": "Installiere gecachte APK",
+  "updateInstallingCachedApk": "Gecachte APK wird installiert",
   "updateDownloadComplete": "Download abgeschlossen",
   "updateInstallStarted": "Download abgeschlossen, Installer gestartet",
   "updateInstallFailed": "Installation fehlgeschlagen",
@@ -920,7 +1145,7 @@
   "updateDownloadCompleteManualContext": "Download abgeschlossen, bitte manuell installieren",
   "updateDownloadFailed": "Download fehlgeschlagen",
   "updateInstallTitle": "Download abgeschlossen",
-  "updateInstallMessage": "APK-Datei-Download abgeschlossen, sofort installieren?\\n\\nHinweis: Die App wird während der Installation vorübergehend in den Hintergrund gehen, das ist normal.",
+  "updateInstallMessage": "APK-Datei-Download abgeschlossen. Sofort installieren?\n\nHinweis: Die App wird während der Installation vorübergehend in den Hintergrund gehen, das ist normal.",
   "updateInstallNow": "Jetzt installieren",
   "updateInstallLater": "Später installieren",
   "updateNotificationTitle": "BeeCount Update-Download",
@@ -931,21 +1156,21 @@
   "updateNotificationGuideTitle": "Wenn Sie Benachrichtigungen aktivieren müssen, folgen Sie diesen Schritten:",
   "updateNotificationStep1": "Systemeinstellungen öffnen",
   "updateNotificationStep2": "\"App-Verwaltung\" oder \"App-Einstellungen\" finden",
-  "updateNotificationStep3": "\"BeeCount\" App finden",
-  "updateNotificationStep4": "\"Berechtigungsverwaltung\" oder \"Benachrichtigungsverwaltung\" klicken",
+  "updateNotificationStep3": "\"Bienen-Buchhaltung\" App finden",
+  "updateNotificationStep4": "\"Berechtigungsverwaltung\" oder \"Benachrichtigungsverwaltung\" antippen",
   "updateNotificationStep5": "\"Benachrichtigungsberechtigung\" aktivieren",
-  "updateNotificationMiuiHint": "MIUI-Benutzer: Xiaomi-System hat strenge Benachrichtigungsberechtigungskontrolle, könnte zusätzliche Einstellungen im Sicherheitszentrum benötigen",
+  "updateNotificationMiuiHint": "MIUI-Benutzer: Xiaomi-System hat strenge Benachrichtigungsberechtigungskontrolle, könnte zusätzliche Einstellungen im Sicherheitscenter benötigen",
   "updateNotificationGotIt": "Verstanden",
   "updateCheckFailedTitle": "Update-Prüfung fehlgeschlagen",
   "updateDownloadFailedTitle": "Download fehlgeschlagen",
   "updateGoToGitHub": "Zu GitHub gehen",
   "updateCannotOpenLink": "Link kann nicht geöffnet werden",
-  "updateManualVisit": "Bitte besuchen Sie manuell im Browser:\\nhttps://github.com/TNT-Likely/BeeCount/releases",
+  "updateManualVisit": "Bitte besuchen Sie manuell im Browser:\nhttps://github.com/TNT-Likely/BeeCount/releases",
   "updateNoLocalApkTitle": "Kein Update-Paket gefunden",
-  "updateNoLocalApkMessage": "Keine heruntergeladene Update-Paket-Datei gefunden.\\n\\nBitte laden Sie zuerst die neue Version über \"Nach Updates suchen\" herunter.",
+  "updateNoLocalApkMessage": "Keine heruntergeladene Update-Paket-Datei gefunden.\n\nBitte laden Sie zuerst die neue Version über \"Nach Updates suchen\" herunter.",
   "updateInstallPackageTitle": "Update-Paket installieren",
   "updateMultiplePackagesTitle": "Mehrere Update-Pakete gefunden",
-  "updateMultiplePackagesMessage": "{count} Update-Paket-Dateien gefunden.\\n\\nEs wird empfohlen, die zuletzt heruntergeladene Version zu verwenden oder manuell im Dateimanager zu installieren.\\n\\nDateiort: {path}",
+  "updateMultiplePackagesMessage": "{count} Update-Paket-Dateien gefunden.\n\nEs wird empfohlen, die zuletzt heruntergeladene Version zu verwenden oder manuell im Dateimanager zu installieren.\n\nDateiort: {path}",
   "@updateMultiplePackagesMessage": {
     "placeholders": {
       "count": {
@@ -966,7 +1191,7 @@
     }
   },
   "updateFoundCachedPackageTitle": "Heruntergeladenes Update-Paket gefunden",
-  "updateFoundCachedPackageMessage": "Zuvor heruntergeladenes Update-Paket erkannt:\\n\\nDateiname: {fileName}\\nGröße: {fileSize}MB\\n\\nSofort installieren?",
+  "updateFoundCachedPackageMessage": "Zuvor heruntergeladenes Update-Paket erkannt:\n\nDateiname: {fileName}\nGröße: {fileSize}MB\n\nSofort installieren?",
   "@updateFoundCachedPackageMessage": {
     "placeholders": {
       "fileName": {
@@ -989,7 +1214,6 @@
       }
     }
   },
-
   "updateCheckingPermissions": "Berechtigungen prüfen...",
   "updateCheckingCache": "Lokalen Cache prüfen...",
   "updatePreparingDownload": "Download vorbereiten...",
@@ -1036,8 +1260,8 @@
   "updateNotificationDownloadCompleteMessage": "Neue Version heruntergeladen, tippen zum Installieren",
   "updateUserCancelledDownloadDialog": "Benutzer hat Download abgebrochen",
   "updateCannotOpenLinkError": "Link kann nicht geöffnet werden",
-  "updateNoLocalApkFoundMessage": "Keine heruntergeladene Update-Paket-Datei gefunden.\\n\\nBitte laden Sie zuerst die neue Version über \"Nach Updates suchen\" herunter.",
-  "updateInstallPackageFoundMessage": "Update-Paket gefunden:\\n\\nDateiname: {fileName}\\nGröße: {fileSize}MB\\nDownload-Zeit: {time}\\n\\nSofort installieren?",
+  "updateNoLocalApkFoundMessage": "Keine heruntergeladene Update-Paket-Datei gefunden.\n\nBitte laden Sie zuerst die neue Version über \"Nach Updates suchen\" herunter.",
+  "updateInstallPackageFoundMessage": "Update-Paket gefunden:\n\nDateiname: {fileName}\nGröße: {fileSize}MB\nDownload-Zeit: {time}\n\nSofort installieren?",
   "@updateInstallPackageFoundMessage": {
     "placeholders": {
       "fileName": {
@@ -1051,7 +1275,7 @@
       }
     }
   },
-  "updateMultiplePackagesFoundMessage": "{count} Update-Paket-Dateien gefunden.\\n\\nEs wird empfohlen, die zuletzt heruntergeladene Version zu verwenden oder manuell im Dateimanager zu installieren.\\n\\nDateiort: {path}",
+  "updateMultiplePackagesFoundMessage": "{count} Update-Paket-Dateien gefunden.\n\nEs wird empfohlen, die zuletzt heruntergeladene Version zu verwenden oder manuell im Dateimanager zu installieren.\n\nDateiort: {path}",
   "@updateMultiplePackagesFoundMessage": {
     "placeholders": {
       "count": {
@@ -1070,7 +1294,7 @@
       }
     }
   },
-  "updateCachedPackageFoundMessage": "Zuvor heruntergeladenes Update-Paket erkannt:\\n\\nDateiname: {fileName}\\nGröße: {fileSize}MB\\n\\nSofort installieren?",
+  "updateCachedPackageFoundMessage": "Zuvor heruntergeladenes Update-Paket erkannt:\n\nDateiname: {fileName}\nGröße: {fileSize}MB\n\nSofort installieren?",
   "@updateCachedPackageFoundMessage": {
     "placeholders": {
       "fileName": {
@@ -1089,35 +1313,20 @@
       }
     }
   },
-
-  "reminderTitle": "Aufzeichnungserinnerung",
-  "reminderSubtitle": "Tägliche Aufzeichnungserinnerungszeit einstellen",
-  "reminderDailyTitle": "Tägliche Aufzeichnungserinnerung",
-  "reminderDailySubtitle": "Wenn aktiviert, erinnert Sie zur angegebenen Zeit an die Aufzeichnung",
-  "reminderTimeTitle": "Erinnerungszeit",
-  "reminderTestSent": "Test-Benachrichtigung gesendet",
-  "reminderTestNotification": "Test-Benachrichtigung senden",
-  "reminderTestTitle": "Test-Benachrichtigung",
-  "reminderTestBody": "Dies ist eine Test-Benachrichtigung, tippen Sie, um die Wirkung zu sehen",
-  "reminderTestDelayBody": "Dies ist eine Test-Benachrichtigung mit 15 Sekunden Verzögerung",
-  "reminderQuickTestSent": "Schnelltest für 15 Sekunden später eingestellt, bitte behalten Sie die App im Hintergrund",
-  "reminderQuickTest": "Schnelltest (15s später)",
-  "reminderFlutterTestSent": "Flutter-Test-Benachrichtigung gesendet, klicken Sie um zu sehen, ob sie die App öffnet",
-  "reminderFlutterTest": "🔧 Flutter-Benachrichtigung-Klick testen (Dev)",
-  "reminderAlarmTestSent": "AlarmManager-Test-Benachrichtigung eingestellt (1 Sekunde später), klicken Sie um zu sehen, ob sie die App öffnet",
   "updateOk": "OK",
   "updateCannotOpenLinkTitle": "Link kann nicht geöffnet werden",
+  "updateNotificationPermissionGuideText": "Download-Fortschritt-Benachrichtigungen sind deaktiviert, aber das beeinträchtigt die Download-Funktionalität nicht. Um den Fortschritt zu sehen:",
+  "updateNotificationGuideStep1": "Zu Systemeinstellungen > App-Verwaltung gehen",
+  "updateNotificationGuideStep2": "\"Bienen-Buchhaltung\" App finden",
+  "updateNotificationGuideStep3": "Benachrichtigungsberechtigungen aktivieren",
+  "updateNotificationGuideInfo": "Downloads werden normal im Hintergrund fortgesetzt, auch ohne Benachrichtigungen",
   "updateCachedVersionTitle": "Heruntergeladene Version gefunden",
-  "updateCachedVersionMessage": "Ein zuvor heruntergeladenes Installationspaket wurde gefunden... Klicken Sie auf \\\"OK\\\" um sofort zu installieren, klicken Sie auf \\\"Abbrechen\\\" um zu schließen...",
+  "updateCachedVersionMessage": "Ein zuvor heruntergeladenes Installationspaket wurde gefunden... Klicken Sie auf \"OK\" um sofort zu installieren, klicken Sie auf \"Abbrechen\" um zu schließen...",
+  "updateCorruptedFileTitle": "Beschädigtes Installationspaket",
+  "updateCorruptedFileMessage": "Das zuvor heruntergeladene Installationspaket ist unvollständig oder beschädigt. Löschen und neu herunterladen?",
   "updateConfirmDownload": "Jetzt herunterladen und installieren",
   "updateDownloadCompleteTitle": "Download abgeschlossen",
   "updateInstallConfirmMessage": "Neue Version heruntergeladen. Jetzt installieren?",
-  "updateNotificationPermissionGuideText": "Download-Fortschritt-Benachrichtigungen sind deaktiviert, aber das beeinträchtigt die Download-Funktionalität nicht. Um den Fortschritt zu sehen:",
-  "updateNotificationGuideStep1": "Gehen Sie zu Systemeinstellungen > App-Verwaltung",
-  "updateNotificationGuideStep2": "Finden Sie die \\\"BeeCount\\\" App",
-  "updateNotificationGuideStep3": "Benachrichtigungsberechtigungen aktivieren",
-  "updateNotificationGuideInfo": "Downloads werden normal im Hintergrund fortgesetzt, auch ohne Benachrichtigungen",
-
   "currencyCNY": "Chinesischer Yuan",
   "currencyUSD": "US-Dollar",
   "currencyEUR": "Euro",
@@ -1129,125 +1338,84 @@
   "currencyCAD": "Kanadischer Dollar",
   "currencyKRW": "Südkoreanischer Won",
   "currencySGD": "Singapur-Dollar",
+  "currencyMYR": "Malaysischer Ringgit",
   "currencyTHB": "Thailändischer Baht",
   "currencyIDR": "Indonesische Rupiah",
+  "currencyPHP": "Philippinischer Peso",
+  "currencyVND": "Vietnamesischer Dong",
   "currencyINR": "Indische Rupie",
   "currencyRUB": "Russischer Rubel",
   "currencyBYN": "Weißrussischer Rubel",
-
-  "supportProjectTitle": "Projekt unterstützen",
-  "supportProjectWhyTitle": "Warum brauchen wir Ihre Unterstützung?",
-  "supportProjectWhyDescription": "BeeCount ist ein völlig kostenloses Open-Source-Projekt ohne Werbung oder kostenpflichtige Funktionen. Um es jedoch für iOS-Benutzer verfügbar zu machen, benötigen wir ein Apple Developer Account ($99/Jahr) zum Signieren der App.",
-  "supportProjectGoalTitle": "Finanzierungsziel",
-  "supportProjectCurrentAmount": "Gesammelt: {amount}",
-  "@supportProjectCurrentAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectTargetAmount": "Ziel: {amount}",
-  "@supportProjectTargetAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectProgress": "Fortschritt: {progress}",
-  "@supportProjectProgress": {
-    "placeholders": {
-      "progress": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectUsageTitle": "Verwendung der Spenden",
-  "supportProjectUsage1": "Apple Developer Account Jahresgebühr ($99/Jahr)",
-  "supportProjectUsage2": "iOS-Version über TestFlight verteilen",
-  "supportProjectUsage3": "Kontinuierliche Projektentwicklung und -wartung",
-  "supportProjectViewDonationMethods": "Spendenmethoden anzeigen",
-  "supportProjectNote": "Durch Klicken auf die Schaltfläche werden Sie zu GitHub weitergeleitet, um detaillierte Spendenmethoden anzuzeigen",
-
+  "currencyNZD": "Neuseeland-Dollar",
+  "currencyCHF": "Schweizer Franken",
+  "currencySEK": "Schwedische Krone",
+  "currencyNOK": "Norwegische Krone",
+  "currencyDKK": "Dänische Krone",
+  "currencyBRL": "Brasilianischer Real",
+  "currencyMXN": "Mexikanischer Peso",
   "webdavConfiguredTitle": "WebDAV Cloud-Dienst konfiguriert",
   "webdavConfiguredMessage": "Der WebDAV Cloud-Dienst verwendet die bei der Konfiguration bereitgestellten Anmeldedaten, es ist keine zusätzliche Anmeldung erforderlich.",
-
-  "recurringTransactionTitle": "Wiederkehrende Transaktionen",
-  "recurringTransactionAdd": "Wiederkehrende Transaktion hinzufügen",
-  "recurringTransactionEdit": "Wiederkehrende Transaktion bearbeiten",
-  "recurringTransactionFrequency": "Häufigkeit",
+  "recurringTransactionTitle": "Wiederkehrende Rechnungen",
+  "recurringTransactionAdd": "Wiederkehrende Rechnung hinzufügen",
+  "recurringTransactionEdit": "Wiederkehrende Rechnung bearbeiten",
+  "recurringTransactionFrequency": "Zyklusfrequenz",
   "recurringTransactionDaily": "Täglich",
   "recurringTransactionWeekly": "Wöchentlich",
   "recurringTransactionMonthly": "Monatlich",
   "recurringTransactionYearly": "Jährlich",
   "recurringTransactionInterval": "Intervall",
-  "recurringTransactionDayOfMonth": "Tag des Monats",
+  "recurringTransactionDayOfMonth": "Welcher Tag des Monats",
   "recurringTransactionStartDate": "Startdatum",
   "recurringTransactionEndDate": "Enddatum",
-  "recurringTransactionNoEndDate": "Kein Enddatum",
+  "recurringTransactionNoEndDate": "Dauerhafter Zyklus",
   "recurringTransactionEnabled": "Aktiviert",
   "recurringTransactionDisabled": "Deaktiviert",
   "recurringTransactionNextGeneration": "Nächste Generierung",
-  "recurringTransactionDeleteConfirm": "Sind Sie sicher, dass Sie diese wiederkehrende Transaktion löschen möchten?",
-  "recurringTransactionEmpty": "Keine wiederkehrenden Transaktionen",
-  "recurringTransactionEmptyHint": "Tippen Sie auf die +-Schaltfläche oben rechts, um hinzuzufügen",
+  "recurringTransactionDeleteConfirm": "Sind Sie sicher, dass Sie diese wiederkehrende Rechnung löschen möchten?",
+  "recurringTransactionEmpty": "Keine wiederkehrenden Rechnungen",
+  "recurringTransactionEmptyHint": "Tippen Sie auf die +-Schaltfläche oben rechts zum Hinzufügen",
   "recurringTransactionEveryNDays": "Alle {n} Tag(e)",
   "@recurringTransactionEveryNDays": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNWeeks": "Alle {n} Woche(n)",
   "@recurringTransactionEveryNWeeks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNMonths": "Alle {n} Monat(e)",
   "@recurringTransactionEveryNMonths": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNYears": "Alle {n} Jahr(e)",
   "@recurringTransactionEveryNYears": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
-
-  "cloudCustomServiceName": "Benutzerdefinierter Cloud-Service",
-  "cloudDefaultServiceDisplayName": "Standard-Cloud-Service",
+  "cloudDefaultServiceDisplayName": "Standard-Cloud-Dienst",
   "cloudNotConfiguredDisplay": "Nicht konfiguriert",
-
-  "cloudValidationEmptyFields": "URL und Schlüssel dürfen nicht leer sein",
-  "cloudValidationHttpsRequired": "URL muss mit https:// beginnen",
-  "cloudValidationKeyTooShort": "Schlüssellänge ist zu kurz, möglicherweise ungültig",
-  "cloudValidationServiceRoleKey": "service_role-Schlüssel ist nicht erlaubt",
-  "cloudValidationHttpRequired": "URL muss mit http:// oder https:// beginnen",
-  "cloudSelectServiceType": "Diensttyp auswählen",
-  "cloudWebdavUrlLabel": "WebDAV-Server-URL",
-  "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
-  "cloudWebdavUsernameLabel": "Benutzername",
-  "cloudWebdavPasswordLabel": "Passwort",
-  "cloudWebdavPathLabel": "Remote-Pfad",
-  "cloudWebdavPathHint": "/BeeCount",
-  "cloudWebdavHint": "Unterstützt Nutstore, Nextcloud, Synology usw.",
-
   "syncNotConfiguredMessage": "Cloud nicht konfiguriert",
   "syncNotLoggedInMessage": "Nicht angemeldet",
-  "syncCloudBackupCorruptedMessage": "Cloud-Backup-Inhalt ist beschädigt, möglicherweise aufgrund von Kodierungsproblemen früherer Versionen. Bitte klicken Sie auf 'Aktuelles Buch in Cloud hochladen' um zu überschreiben und zu reparieren.",
-  "syncNoCloudBackupMessage": "Kein Cloud-Backup",
+  "syncCloudBackupCorruptedMessage": "Cloud-Backup-Inhalt kann nicht analysiert werden, möglicherweise aufgrund von Kodierungsproblemen früherer Versionen beschädigt. Bitte klicken Sie auf \"Aktuelles Kontenbuch in Cloud hochladen\", um zu überschreiben und zu reparieren.",
+  "syncNoCloudBackupMessage": "Kein Cloud-Backup vorhanden",
   "syncAccessDeniedMessage": "403 Zugriff verweigert (Speicher-RLS-Richtlinie und Pfad überprüfen)",
-
   "cloudTestConnection": "Verbindung testen",
-  "cloudLocalStorageTitle": "Lokaler Speicher",
-  "cloudLocalStorageSubtitle": "Daten werden nur auf dem lokalen Gerät gespeichert",
-  "cloudCustomSupabaseTitle": "Benutzerdefiniertes Supabase",
-  "cloudCustomSupabaseSubtitle": "Klicken Sie, um selbst gehostetes Supabase zu konfigurieren",
-  "cloudCustomWebdavTitle": "Benutzerdefiniertes WebDAV",
-  "cloudCustomWebdavSubtitle": "Klicken Sie, um Nutstore/Nextcloud usw. zu konfigurieren",
+  "cloudCustomSupabaseSubtitle": "Klicken, um selbst gehosteten Supabase-Dienst zu konfigurieren",
+  "cloudCustomWebdavSubtitle": "Klicken, um Jianguoyun/Nextcloud usw. zu konfigurieren",
   "cloudStatusNotTested": "Nicht getestet",
   "cloudStatusNormal": "Verbindung normal",
   "cloudStatusFailed": "Verbindung fehlgeschlagen",
@@ -1285,8 +1453,81 @@
   "cloudTestFailedTitle": "Test fehlgeschlagen",
   "cloudTestFailedMessage": "Verbindung fehlgeschlagen",
   "cloudTestErrorTitle": "Testfehler",
+  "cloudSupabaseAnonKeyHintLong": "Vollständigen anon key einfügen",
+  "cloudWebdavRemotePathLabel": "Remote-Pfad",
+  "cloudWebdavRemotePathHelperText": "Remote-Verzeichnispfad für Datenspeicherung",
+  "cloudCurrentService": "Aktueller Cloud-Dienst",
+  "cloudConnected": "Verbunden",
+  "cloudOfflineMode": "Offline-Modus",
+  "cloudAvailableServices": "Verfügbare Cloud-Dienste",
+  "cloudReadCustomConfigFailed": "Lesen der benutzerdefinierten Konfiguration fehlgeschlagen",
+  "cloudFirstUploadNotComplete": "Erster vollständiger Upload noch nicht abgeschlossen",
+  "cloudFirstUploadInstruction": "Nach der Anmeldung in \"Mein/Synchronisierung\" manuell \"Hochladen\" ausführen, um die Initialisierung abzuschließen",
+  "cloudNotConfigured": "Nicht konfiguriert",
+  "cloudNotTested": "Nicht getestet",
+  "cloudConnectionNormal": "Verbindung normal",
+  "cloudConnectionFailed": "Verbindung fehlgeschlagen",
+  "cloudAddCustomService": "Benutzerdefinierten Cloud-Dienst hinzufügen",
+  "cloudCustomServiceName": "Benutzerdefinierter Cloud-Dienst",
+  "cloudDefaultServiceName": "Standard-Cloud-Dienst",
+  "cloudUseYourSupabase": "Verwenden Sie Ihr eigenes Supabase",
+  "cloudTest": "Testen",
+  "cloudSwitchService": "Cloud-Dienst wechseln",
+  "cloudSwitchToBuiltinConfirm": "Sind Sie sicher, dass Sie zum Standard-Cloud-Dienst wechseln möchten? Dies meldet die aktuelle Sitzung ab.",
+  "cloudSwitchToCustomConfirm": "Sind Sie sicher, dass Sie zum benutzerdefinierten Cloud-Dienst wechseln möchten? Dies meldet die aktuelle Sitzung ab.",
+  "cloudSwitched": "Gewechselt",
+  "cloudSwitchedToBuiltin": "Zu Standard-Cloud-Dienst gewechselt und abgemeldet",
+  "cloudSwitchFailed": "Wechsel fehlgeschlagen",
+  "cloudActivateFailed": "Aktivierung fehlgeschlagen",
+  "cloudActivateFailedMessage": "Gespeicherte Konfiguration ist ungültig",
+  "cloudActivated": "Aktiviert",
+  "cloudActivatedMessage": "Zu benutzerdefiniertem Cloud-Dienst gewechselt und abgemeldet, bitte melden Sie sich erneut an",
+  "cloudEditCustomService": "Benutzerdefinierten Cloud-Dienst bearbeiten",
+  "cloudAddCustomServiceTitle": "Benutzerdefinierten Cloud-Dienst hinzufügen",
+  "cloudSupabaseUrlLabel": "Supabase-URL",
+  "cloudSupabaseUrlHint": "https://xxx.supabase.co",
+  "cloudAnonKeyLabel": "Anon Key",
+  "cloudAnonKeyHint": "Hinweis: Füllen Sie nicht den service_role Key aus; Anon Key ist öffentlich verfügbar.",
+  "cloudInvalidInput": "Ungültige Eingabe",
+  "cloudValidationEmptyFields": "URL und Key dürfen nicht leer sein",
+  "cloudValidationHttpsRequired": "URL muss mit https:// beginnen",
+  "cloudValidationKeyTooShort": "Schlüssellänge ist zu kurz, möglicherweise ungültig",
+  "cloudValidationServiceRoleKey": "Verwendung von service_role Key ist nicht erlaubt",
+  "cloudValidationHttpRequired": "URL muss mit http:// oder https:// beginnen",
+  "cloudSelectServiceType": "Cloud-Dienst-Typ auswählen",
+  "cloudWebdavUrlLabel": "WebDAV-Server-Adresse",
+  "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
+  "cloudWebdavUsernameLabel": "Benutzername",
+  "cloudWebdavPasswordLabel": "Passwort",
+  "cloudWebdavPathLabel": "Remote-Pfad",
+  "cloudWebdavPathHint": "/BeeCount",
+  "cloudWebdavHint": "Unterstützt Jianguoyun, Nextcloud, Synology usw.",
+  "cloudConfigUpdated": "Konfiguration aktualisiert",
+  "cloudConfigSaved": "Konfiguration gespeichert",
+  "cloudTestComplete": "Test abgeschlossen",
+  "cloudTestSuccess": "Verbindungstest erfolgreich!",
+  "cloudTestFailed": "Verbindungstest fehlgeschlagen, bitte überprüfen Sie, ob die Konfiguration korrekt ist.",
+  "cloudTestError": "Test fehlgeschlagen",
+  "cloudClearConfig": "Konfiguration löschen",
+  "cloudClearConfigConfirm": "Sind Sie sicher, dass Sie die benutzerdefinierte Cloud-Dienst-Konfiguration löschen möchten? (Nur Entwicklungsumgebung verfügbar)",
+  "cloudConfigCleared": "Benutzerdefinierte Cloud-Dienst-Konfiguration gelöscht",
+  "cloudClearFailed": "Löschen fehlgeschlagen",
+  "cloudServiceDescription": "In App integrierter Cloud-Dienst (kostenlos, aber möglicherweise instabil, empfohlen, eigenen zu verwenden oder regelmäßig zu sichern)",
+  "cloudServiceDescriptionNotConfigured": "Aktueller Build hat keine integrierte Cloud-Dienst-Konfiguration",
+  "cloudServiceDescriptionCustom": "Server: {url}",
+  "@cloudServiceDescriptionCustom": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudLocalStorageTitle": "Lokaler Speicher",
+  "cloudLocalStorageSubtitle": "Daten werden nur lokal auf dem Gerät gespeichert",
+  "cloudCustomSupabaseTitle": "Benutzerdefiniertes Supabase",
+  "cloudCustomWebdavTitle": "Benutzerdefiniertes WebDAV",
   "cloudSwitchConfirmTitle": "Cloud-Dienst wechseln",
-  "cloudSwitchConfirmMessage": "Wechsel des Cloud-Dienstes meldet aktuelles Konto ab. Bestätigen?",
+  "cloudSwitchConfirmMessage": "Wechsel des Cloud-Dienstes meldet das aktuelle Konto ab. Wechsel bestätigen?",
   "cloudSwitchFailedTitle": "Wechsel fehlgeschlagen",
   "cloudSwitchFailedConfigMissing": "Bitte konfigurieren Sie zuerst diesen Cloud-Dienst",
   "cloudConfigInvalidTitle": "Ungültige Konfiguration",
@@ -1302,13 +1543,272 @@
   },
   "cloudConfigureSupabaseTitle": "Supabase konfigurieren",
   "cloudConfigureWebdavTitle": "WebDAV konfigurieren",
-  "cloudSupabaseAnonKeyHintLong": "Vollständigen anon key einfügen",
-  "cloudWebdavRemotePathLabel": "Remote-Pfad",
-  "cloudWebdavRemotePathHelperText": "Remote-Verzeichnispfad für Datenspeicherung",
-
-  "widgetTodayExpense": "Heutige Ausgabe",
-  "widgetTodayIncome": "Heutiges Einkommen",
-  "widgetMonthExpense": "Monatsausgabe",
-  "widgetMonthIncome": "Monatseinkommen",
-  "widgetMonthSuffix": ""
+  "cloudWebdavRemotePathHelp": "Remote-Verzeichnispfad für Datenspeicherung",
+  "cloudBackupFound": "Cloud-Backup gefunden",
+  "cloudBackupRestoreMessage": "Erkannt, dass Cloud- und lokale Kontenbücher nicht übereinstimmen. Aus Cloud wiederherstellen?\n(Geht zur Wiederherstellungs-Fortschrittsseite)",
+  "cloudBackupRestoreFailed": "Wiederherstellung fehlgeschlagen",
+  "authLogin": "Anmelden",
+  "authSignup": "Registrieren",
+  "authRegister": "Registrieren",
+  "authEmail": "E-Mail",
+  "authPassword": "Passwort",
+  "authPasswordRequirement": "Passwort (mindestens 6 Zeichen, muss Buchstaben und Zahlen enthalten)",
+  "authConfirmPassword": "Passwort bestätigen",
+  "authInvalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+  "authPasswordRequirementShort": "Passwort muss Buchstaben und Zahlen enthalten, mindestens 6 Zeichen lang",
+  "authPasswordMismatch": "Die eingegebenen Passwörter stimmen nicht überein",
+  "authResendVerification": "Verifizierungs-E-Mail erneut senden",
+  "authSignupSuccess": "Registrierung erfolgreich",
+  "authVerificationEmailSent": "Verifizierungs-E-Mail gesendet, bitte gehen Sie zu Ihrer E-Mail, um die Verifizierung abzuschließen, bevor Sie sich anmelden.",
+  "authBackToMinePage": "Zurück zur Mein-Seite",
+  "authVerificationEmailResent": "Verifizierungs-E-Mail erneut gesendet.",
+  "authResendAction": "Verifizierung erneut senden",
+  "authErrorInvalidCredentials": "E-Mail oder Passwort falsch.",
+  "authErrorEmailNotConfirmed": "E-Mail nicht verifiziert, bitte schließen Sie die Verifizierung in Ihrer E-Mail ab, bevor Sie sich anmelden.",
+  "authErrorRateLimit": "Zu häufige Vorgänge, bitte versuchen Sie es später erneut.",
+  "authErrorNetworkIssue": "Netzwerkanomalie, bitte überprüfen Sie das Netzwerk und versuchen Sie es erneut.",
+  "authErrorLoginFailed": "Anmeldung fehlgeschlagen, bitte versuchen Sie es später erneut.",
+  "authErrorEmailInvalid": "E-Mail-Adresse ungültig, bitte überprüfen Sie auf Rechtschreibfehler.",
+  "authErrorEmailExists": "Diese E-Mail ist bereits registriert, bitte melden Sie sich direkt an oder setzen Sie das Passwort zurück.",
+  "authErrorWeakPassword": "Passwort ist zu einfach, bitte Buchstaben und Zahlen einbeziehen, mindestens 6 Zeichen lang.",
+  "authErrorSignupFailed": "Registrierung fehlgeschlagen, bitte versuchen Sie es später erneut.",
+  "authErrorUserNotFound": "E-Mail nicht registriert, kann nicht {action}.",
+  "@authErrorUserNotFound": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "authErrorEmailNotVerified": "E-Mail nicht verifiziert, kann nicht {action}.",
+  "@authErrorEmailNotVerified": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "authErrorActionFailed": "{action} fehlgeschlagen, bitte versuchen Sie es später erneut.",
+  "@authErrorActionFailed": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "accountsTitle": "Kontoverwaltung",
+  "accountsEmptyMessage": "Noch keine Konten, tippen Sie oben rechts zum Hinzufügen",
+  "accountAddTooltip": "Konto hinzufügen",
+  "accountAddButton": "Konto hinzufügen",
+  "accountBalance": "Saldo",
+  "accountEditTitle": "Konto bearbeiten",
+  "accountNewTitle": "Neues Konto",
+  "accountNameLabel": "Kontoname",
+  "accountNameHint": "z.B.: ICBC, Alipay usw.",
+  "accountNameRequired": "Bitte Kontoname eingeben",
+  "accountTypeLabel": "Kontotyp",
+  "accountTypeCash": "Bargeld",
+  "accountTypeBankCard": "Bankkarte",
+  "accountTypeCreditCard": "Kreditkarte",
+  "accountTypeAlipay": "Alipay",
+  "accountTypeWechat": "WeChat",
+  "accountTypeOther": "Sonstiges",
+  "accountInitialBalance": "Anfangskapital",
+  "accountInitialBalanceHint": "Anfangskapital eingeben (optional)",
+  "accountDeleteWarningTitle": "Löschen bestätigen",
+  "accountDeleteWarningMessage": "Dieses Konto hat {count} zugehörige Transaktionen. Nach dem Löschen werden Kontoinformationen in den Transaktionsdatensätzen gelöscht. Löschen bestätigen?",
+  "@accountDeleteWarningMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountDeleteConfirm": "Dieses Konto wirklich löschen?",
+  "accountSelectTitle": "Konto auswählen",
+  "accountNone": "Kein Konto auswählen",
+  "accountsEnableFeature": "Kontofunktion aktivieren",
+  "accountsFeatureDescription": "Nach der Aktivierung können Sie mehrere Zahlungskonten verwalten und Saldoänderungen für jedes Konto verfolgen",
+  "privacyOpenSourceUrlError": "Link kann nicht geöffnet werden",
+  "welcomeTitle": "Willkommen bei BeeCount",
+  "welcomeDescription": "Eine Buchhaltungs-App, die Ihre Privatsphäre wirklich respektiert",
+  "welcomePrivacyTitle": "Ihre Daten, Sie entscheiden",
+  "welcomePrivacyFeature1": "Daten werden auf Ihrem Gerät lokal gespeichert",
+  "welcomePrivacyFeature2": "Niemals auf Drittanbieter-Server hochgeladen",
+  "welcomePrivacyFeature3": "Keine Werbung, keine Datenerfassung",
+  "welcomePrivacyFeature4": "Keine Kontoregistrierung erforderlich",
+  "welcomeOpenSourceTitle": "Open Source & Transparent",
+  "welcomeOpenSourceFeature1": "100% Open-Source-Code",
+  "welcomeOpenSourceFeature2": "Community-Überwachung, keine Hintertüren",
+  "welcomeOpenSourceFeature3": "Kostenlos für den persönlichen Gebrauch",
+  "welcomeViewGitHub": "Quellcode auf GitHub ansehen",
+  "welcomeCloudSyncTitle": "Optionale Cloud-Synchronisation",
+  "welcomeCloudSyncDescription": "Keine Lust auf kommerzielle Cloud-Dienste? BeeCount unterstützt mehrere Synchronisationsmethoden",
+  "welcomeCloudSyncFeature1": "Vollständig offline nutzbar",
+  "welcomeCloudSyncFeature2": "Selbst gehostete WebDAV-Synchronisation",
+  "welcomeCloudSyncFeature3": "Selbst gehosteter Supabase-Dienst",
+  "lab": "Labor",
+  "labDesc": "Experimentelle Funktionen ausprobieren",
+  "widgetManagement": "Startbildschirm-Widget",
+  "widgetManagementDesc": "Schnellansicht von Einnahmen und Ausgaben auf dem Startbildschirm",
+  "ocrBilling": "OCR-Scan-Abrechnung",
+  "ocrBillingDesc": "Zahlungs-Screenshots automatisch erkennen",
+  "widgetPreview": "Widget-Vorschau",
+  "widgetPreviewDesc": "Widget zeigt automatisch echte Daten aus dem aktuellen Kontenbuch an, Farbthema folgt App-Einstellungen",
+  "howToAddWidget": "Widget hinzufügen",
+  "iosWidgetStep1": "Lange auf leeren Bereich des Startbildschirms drücken, um Bearbeitungsmodus zu aktivieren",
+  "iosWidgetStep2": "\"+\"-Schaltfläche oben links antippen",
+  "iosWidgetStep3": "\"Bienen-Buchhaltung\" suchen und auswählen",
+  "iosWidgetStep4": "Mittleres Widget auswählen und zum Startbildschirm hinzufügen",
+  "androidWidgetStep1": "Lange auf leeren Bereich des Startbildschirms drücken",
+  "androidWidgetStep2": "\"Widgets\" auswählen",
+  "androidWidgetStep3": "\"Bienen-Buchhaltung\" Widget finden und lange drücken",
+  "androidWidgetStep4": "An geeignete Position auf dem Startbildschirm ziehen",
+  "aboutWidget": "Über Widget",
+  "widgetDescription": "Widget synchronisiert automatisch die heutigen und monatlichen Einnahmen- und Ausgabendaten und aktualisiert alle 30 Minuten. Daten werden sofort aktualisiert, wenn die App geöffnet wird.",
+  "appName": "Bienen-Buchhaltung",
+  "monthSuffix": ". Monat",
+  "todayExpense": "Heutige Ausgaben",
+  "todayIncome": "Heutige Einnahmen",
+  "monthExpense": "Monatsausgaben",
+  "monthIncome": "Monatseinnahmen",
+  "autoScreenshotBilling": "Screenshot-Automatische-Abrechnung",
+  "autoScreenshotBillingDesc": "Nach Screenshot automatisch Zahlungsinformationen erkennen",
+  "autoScreenshotBillingTitle": "Screenshot-Automatische-Abrechnung",
+  "featureDescription": "Funktionsbeschreibung",
+  "featureDescriptionContent": "Nach einem Screenshot einer Zahlungsseite erkennt das System automatisch Betrag und Händlerinformationen und erstellt einen Ausgabendatensatz.\n\n⚡ Erkennungsgeschwindigkeit: ca. 1-2 Sekunden\n🤖 Intelligente Kategorienzuordnung\n📝 Automatische Notizenausfüllung\n\nHinweis:\n• Ohne aktivierten Barrierefreiheitsdienst: etwas langsamer (3-5s)\n• Mit aktiviertem Barrierefreiheitsdienst: Sekundenschnelle Erkennung",
+  "autoBilling": "Automatische Abrechnung",
+  "enabled": "Aktiviert",
+  "disabled": "Deaktiviert",
+  "accessibilityService": "Barrierefreiheitsdienst",
+  "accessibilityServiceEnabled": "Aktiviert - Sekundenschnelle Erkennung",
+  "accessibilityServiceDisabled": "Nicht aktiviert - Etwas langsamer",
+  "improveRecognitionSpeed": "Erkennungsgeschwindigkeit verbessern",
+  "accessibilityGuideContent": "Mit aktiviertem Barrierefreiheitsdienst können Screenshots sofort erkannt werden, ohne auf das Schreiben der Datei zu warten.",
+  "setupSteps": "Einrichtungsschritte:",
+  "accessibilityStep1": "Tippen Sie unten auf die Schaltfläche \"Barrierefreiheitseinstellungen öffnen\"",
+  "accessibilityStep2": "Finden Sie \"Bienen-Buchhaltung-Screenshot-Erkennung\" in der Liste",
+  "accessibilityStep3": "Dienstschalter aktivieren",
+  "accessibilityStep4": "Zur App zurückkehren, um zu verwenden",
+  "openAccessibilitySettings": "Barrierefreiheitseinstellungen öffnen",
+  "accessibilityServiceNote": "💡 Hinweis: Der Barrierefreiheitsdienst wird nur zur Erkennung von Screenshot-Aktionen verwendet und liest oder ändert keine anderen Daten.",
+  "supportedPayments": "Unterstützte Zahlungsmethoden",
+  "supportedAlipay": "✅ Alipay",
+  "supportedWechat": "✅ WeChat Pay",
+  "supportedUnionpay": "✅ UnionPay",
+  "supportedOthers": "⚠️ Andere Zahlungsmethoden können niedrigere Erkennungsgenauigkeit haben",
+  "photosPermissionRequired": "Fotoberechtigung für Screenshot-Überwachung erforderlich",
+  "enableSuccess": "Automatische Abrechnung aktiviert",
+  "disableSuccess": "Automatische Abrechnung deaktiviert",
+  "autoBillingBatteryTitle": "Im Hintergrund ausgeführt lassen",
+  "autoBillingBatteryGuideTitle": "Batterieoptimierungseinstellungen",
+  "autoBillingBatteryDesc": "Automatische Abrechnung erfordert, dass die App im Hintergrund ausgeführt wird. Einige Telefone bereinigen automatisch Hintergrund-Apps beim Sperren, was zu einem Fehlschlagen der automatischen Abrechnung führen kann. Es wird empfohlen, die Batterieoptimierung zu deaktivieren, um eine ordnungsgemäße Funktion zu gewährleisten.",
+  "autoBillingCheckBattery": "Batterieoptimierungsstatus überprüfen",
+  "autoBillingBatteryWarning": "⚠️ Batterieoptimierung ist nicht deaktiviert. Die App kann vom System automatisch bereinigt werden, was zu einem Fehlschlagen der automatischen Abrechnung führt. Bitte tippen Sie auf die Schaltfläche \"Einstellungen\" oben, um die Batterieoptimierung zu deaktivieren.",
+  "enableFailed": "Aktivierung fehlgeschlagen",
+  "disableFailed": "Deaktivierung fehlgeschlagen",
+  "openSettingsFailed": "Einstellungen konnten nicht geöffnet werden",
+  "reselectImage": "Neu auswählen",
+  "viewOriginalText": "Originaltext anzeigen",
+  "createBill": "Rechnung erstellen",
+  "quickActions": "Schnellaktionen",
+  "iosAutoFeatureDesc": "Verwenden Sie die iOS-App \"Kurzbefehle\", um automatisch Zahlungsinformationen aus Screenshots zu identifizieren und Buchungen zu erstellen. Nach der Einrichtung wird es bei jedem Screenshot automatisch ausgelöst.",
+  "iosAutoShortcutQuickAdd": "Kurzbefehl schnell hinzufügen",
+  "iosAutoShortcutQuickAddDesc": "Klicken Sie auf die Schaltfläche unten, um den konfigurierten Kurzbefehl direkt zu importieren, oder öffnen Sie die Kurzbefehle-App manuell zur Konfiguration.",
+  "iosAutoShortcutImport": "Kurzbefehl mit einem Klick importieren",
+  "iosAutoShortcutOpenApp": "Oder Kurzbefehle-App manuell öffnen",
+  "iosAutoShortcutConfigTitle": "Konfigurationsschritte (Empfohlene Methode - URL-Parameter-Übergabe):",
+  "iosAutoShortcutStep1": "\"Kurzbefehle\"-App öffnen",
+  "iosAutoShortcutStep2": "\"+\" oben rechts antippen, um neuen Kurzbefehl zu erstellen",
+  "iosAutoShortcutStep3": "\"Screenshot\"-Aktion hinzufügen (neuesten Screenshot abrufen)",
+  "iosAutoShortcutStep4": "\"Text aus Screenshot extrahieren\"-Aktion hinzufügen",
+  "iosAutoShortcutStep5": "\"Text ersetzen\"-Aktion hinzufügen: \"\\n\" im \"Extrahierten Text\" durch \",\" (Komma) ersetzen",
+  "iosAutoShortcutStep6": "\"URL kodieren\"-Aktion hinzufügen: \"Ersetzten Text\" URL-kodieren",
+  "iosAutoShortcutStep7": "\"URL öffnen\"-Aktion hinzufügen, URL:\nbeecount://auto-billing?text=[URL-kodierter Text]",
+  "iosAutoShortcutStep8": "Kurzbefehl-Einstellungen antippen (drei Punkte oben rechts)",
+  "iosAutoShortcutStep9": "In \"Wenn...\" \"Bei Screenshot\"-Auslöser hinzufügen",
+  "iosAutoShortcutStep10": "Speichern und testen: Nach Screenshot automatisch identifizieren",
+  "iosAutoShortcutRecommendedTip": "✅ Empfohlen: URL-Parameter-Übergabe, keine Berechtigung erforderlich, beste Erfahrung. Wichtige Schritte:\n• Beim Textersetzen Zeilenumbrüche \\n durch Komma , ersetzen (URL-Abschneiden vermeiden)\n• URL-Kodierungsvorgang verwenden (chinesische Zeichenkodierung vermeiden)\n• Screenshot-Text überschreitet normalerweise nicht die 2048-Zeichen-Grenze",
+  "iosAutoBackTapTitle": "💡 Doppeltippen auf Rückseite zum schnellen Auslösen (Empfohlen)",
+  "iosAutoBackTapDesc": "Einstellungen > Bedienungshilfen > Tippen > Auf Rückseite tippen\n• \"Zweimal tippen\" oder \"Dreimal tippen\" auswählen\n• Den gerade erstellten Kurzbefehl auswählen\n• Nach der Einrichtung während der Zahlung doppelt auf die Rückseite des Telefons tippen, um automatisch aufzuzeichnen, kein Screenshot erforderlich",
+  "iosAutoImportFailed": "Import fehlgeschlagen: {error}",
+  "@iosAutoImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "iosAutoOpenAppFailed": "Öffnen fehlgeschlagen: {error}",
+  "@iosAutoOpenAppFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "iosAutoCannotOpenLink": "Link kann nicht geöffnet werden, bitte Netzwerkverbindung überprüfen",
+  "iosAutoCannotOpenShortcuts": "Kurzbefehle-App kann nicht geöffnet werden",
+  "aiSettingsTitle": "KI-Intelligente-Erkennung",
+  "aiSettingsSubtitle": "KI-Modelle und Erkennungsstrategie konfigurieren",
+  "aiEnableTitle": "KI-Intelligente-Erkennung aktivieren",
+  "aiEnableSubtitle": "KI verwenden, um OCR-Erkennungsgenauigkeit zu verbessern und Betrag, Händler, Zeit usw. zu extrahieren",
+  "aiEnableToastOn": "KI-Verbesserung aktiviert",
+  "aiEnableToastOff": "KI-Verbesserung deaktiviert",
+  "aiStrategyTitle": "Ausführungsstrategie",
+  "aiStrategyLocalFirst": "Lokal zuerst (Empfohlen)",
+  "aiStrategyLocalFirstDesc": "Zuerst lokales Modell verwenden, bei Fehler automatisch auf Cloud wechseln",
+  "aiStrategyCloudFirst": "Cloud zuerst",
+  "aiStrategyCloudFirstDesc": "Zuerst Cloud-API verwenden, bei Fehler auf lokal herabstufen",
+  "aiStrategyLocalOnly": "Nur lokal",
+  "aiStrategyLocalOnlyDesc": "Nur lokales Modell verwenden, vollständig offline",
+  "aiStrategyCloudOnly": "Nur Cloud",
+  "aiStrategyCloudOnlyDesc": "Nur Cloud-API verwenden, kein Modell-Download",
+  "aiStrategyUnavailable": "Lokales Modell in Entwicklung, demnächst verfügbar",
+  "aiStrategySwitched": "Gewechselt: {strategy}",
+  "@aiStrategySwitched": {
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      }
+    }
+  },
+  "aiCloudApiTitle": "Zhipu GLM API",
+  "aiCloudApiKeyLabel": "API Key",
+  "aiCloudApiKeyHint": "Geben Sie Ihren Zhipu AI API Key ein",
+  "aiCloudApiKeyHelper": "GLM-4-Flash-Modell ist vollständig kostenlos",
+  "aiCloudApiKeySaved": "API Key gespeichert",
+  "aiCloudApiGetKey": "API Key abrufen",
+  "aiLocalModelTitle": "Lokales Modell",
+  "aiLocalModelTraining": "In Entwicklung",
+  "aiLocalModelManagement": "Modellverwaltung",
+  "aiLocalModelUnavailable": "Lokales Modell in Entwicklung, noch nicht verfügbar",
+  "aiFabSettingTitle": "Schnellerfassungs-Schaltfläche bevorzugt Fotografieren",
+  "aiFabSettingDescCamera": "Kurz drücken für Foto, lange drücken für manuelle Erfassung",
+  "aiFabSettingDescManual": "Kurz drücken für manuelle Erfassung, lange drücken für Foto",
+  "aiOcrRecognizing": "Rechnung wird erkannt...",
+  "aiOcrNoAmount": "Kein gültiger Betrag erkannt, bitte manuell erfassen",
+  "aiOcrNoLedger": "Kontenbuch nicht gefunden",
+  "aiOcrSuccess": "✅ {type}-Rechnung erfolgreich erstellt ¥{amount}",
+  "@aiOcrSuccess": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOcrFailed": "Erkennung fehlgeschlagen: {error}",
+  "@aiOcrFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOcrCreateFailed": "Rechnung konnte nicht erstellt werden",
+  "aiTypeIncome": "Einnahme",
+  "aiTypeExpense": "Ausgabe"
 }

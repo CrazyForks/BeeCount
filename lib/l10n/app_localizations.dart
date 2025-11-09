@@ -586,6 +586,144 @@ abstract class AppLocalizations {
   /// **'Try other keywords or adjust filter conditions'**
   String get searchResultsEmptyHint;
 
+  /// No description provided for @searchBatchMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Batch Operations'**
+  String get searchBatchMode;
+
+  /// No description provided for @searchBatchModeWithCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Batch Operations ({selected}/{total})'**
+  String searchBatchModeWithCount(Object selected, Object total);
+
+  /// No description provided for @searchExitBatchMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit Batch Mode'**
+  String get searchExitBatchMode;
+
+  /// No description provided for @searchSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select All'**
+  String get searchSelectAll;
+
+  /// No description provided for @searchDeselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect All'**
+  String get searchDeselectAll;
+
+  /// No description provided for @searchSelectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String searchSelectedCount(Object count);
+
+  /// No description provided for @searchBatchSetNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Note'**
+  String get searchBatchSetNote;
+
+  /// No description provided for @searchBatchChangeCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Category'**
+  String get searchBatchChangeCategory;
+
+  /// No description provided for @searchBatchDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get searchBatchDeleteConfirmTitle;
+
+  /// No description provided for @searchBatchDeleteConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the selected {count} transactions?\nThis action cannot be undone.'**
+  String searchBatchDeleteConfirmMessage(Object count);
+
+  /// No description provided for @searchBatchSetNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Batch Set Note'**
+  String get searchBatchSetNoteTitle;
+
+  /// No description provided for @searchBatchSetNoteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the same note for the selected {count} transactions'**
+  String searchBatchSetNoteMessage(Object count);
+
+  /// No description provided for @searchBatchSetNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter note content (leave empty to clear notes)'**
+  String get searchBatchSetNoteHint;
+
+  /// No description provided for @searchBatchChangeCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Batch Change Category'**
+  String get searchBatchChangeCategoryTitle;
+
+  /// No description provided for @searchBatchChangeCategoryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a new category for the selected {count} transactions'**
+  String searchBatchChangeCategoryMessage(Object count);
+
+  /// No description provided for @searchBatchChangeCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Category'**
+  String get searchBatchChangeCategoryLabel;
+
+  /// No description provided for @searchBatchDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully deleted {count} transactions'**
+  String searchBatchDeleteSuccess(Object count);
+
+  /// No description provided for @searchBatchDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete failed: {error}'**
+  String searchBatchDeleteFailed(Object error);
+
+  /// No description provided for @searchBatchSetNoteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully set note for {count} transactions'**
+  String searchBatchSetNoteSuccess(Object count);
+
+  /// No description provided for @searchBatchSetNoteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Set note failed: {error}'**
+  String searchBatchSetNoteFailed(Object error);
+
+  /// No description provided for @searchBatchChangeCategorySuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully changed category for {count} transactions'**
+  String searchBatchChangeCategorySuccess(Object count);
+
+  /// No description provided for @searchBatchChangeCategoryFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Change category failed: {error}'**
+  String searchBatchChangeCategoryFailed(Object error);
+
+  /// No description provided for @searchResultsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} results'**
+  String searchResultsCount(Object count);
+
   /// No description provided for @analyticsTitle.
   ///
   /// In en, this message translates to:
@@ -5439,6 +5577,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Paste complete anon key'**
   String get cloudSupabaseAnonKeyHintLong;
+
+  /// No description provided for @cloudWebdavRemotePathHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote directory path for data storage'**
+  String get cloudWebdavRemotePathHelp;
 
   /// No description provided for @cloudWebdavRemotePathLabel.
   ///

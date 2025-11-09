@@ -4,12 +4,10 @@
   "@appTitle": {
     "description": "The application title"
   },
-
   "tabHome": "Home",
   "tabAnalytics": "Charts",
   "tabLedgers": "Ledgers",
   "tabMine": "Mine",
-
   "commonCancel": "Cancel",
   "commonConfirm": "Confirm",
   "commonSave": "Save",
@@ -50,7 +48,6 @@
   "commonWeekdayFriday": "Friday",
   "commonWeekdaySaturday": "Saturday",
   "commonWeekdaySunday": "Sunday",
-
   "homeTitle": "Bee Accounting",
   "homeIncome": "Income",
   "homeExpense": "Expense",
@@ -85,13 +82,11 @@
     }
   },
   "homeNoRecordsSubtext": "Tap the plus button at the bottom to add a record",
-
   "widgetTodayExpense": "Today's Expense",
   "widgetTodayIncome": "Today's Income",
   "widgetMonthExpense": "Month's Expense",
   "widgetMonthIncome": "Month's Income",
   "widgetMonthSuffix": "",
-
   "searchTitle": "Search",
   "searchHint": "Search notes, categories or amounts...",
   "searchAmountRange": "Amount range filter",
@@ -102,7 +97,29 @@
   "searchNoResults": "No matching results found",
   "searchResultsEmpty": "No matching results found",
   "searchResultsEmptyHint": "Try other keywords or adjust filter conditions",
-
+  "searchBatchMode": "Batch Operations",
+  "searchBatchModeWithCount": "Batch Operations ({selected}/{total})",
+  "searchExitBatchMode": "Exit Batch Mode",
+  "searchSelectAll": "Select All",
+  "searchDeselectAll": "Deselect All",
+  "searchSelectedCount": "{count} selected",
+  "searchBatchSetNote": "Set Note",
+  "searchBatchChangeCategory": "Change Category",
+  "searchBatchDeleteConfirmTitle": "Confirm Delete",
+  "searchBatchDeleteConfirmMessage": "Are you sure you want to delete the selected {count} transactions?\nThis action cannot be undone.",
+  "searchBatchSetNoteTitle": "Batch Set Note",
+  "searchBatchSetNoteMessage": "Set the same note for the selected {count} transactions",
+  "searchBatchSetNoteHint": "Enter note content (leave empty to clear notes)",
+  "searchBatchChangeCategoryTitle": "Batch Change Category",
+  "searchBatchChangeCategoryMessage": "Set a new category for the selected {count} transactions",
+  "searchBatchChangeCategoryLabel": "Select Category",
+  "searchBatchDeleteSuccess": "Successfully deleted {count} transactions",
+  "searchBatchDeleteFailed": "Delete failed: {error}",
+  "searchBatchSetNoteSuccess": "Successfully set note for {count} transactions",
+  "searchBatchSetNoteFailed": "Set note failed: {error}",
+  "searchBatchChangeCategorySuccess": "Successfully changed category for {count} transactions",
+  "searchBatchChangeCategoryFailed": "Change category failed: {error}",
+  "searchResultsCount": "{count} results",
   "analyticsTitle": "Analytics",
   "analyticsMonth": "Month",
   "analyticsYear": "Year",
@@ -125,7 +142,6 @@
   "analyticsSwipeToSwitch": "Swipe to switch",
   "analyticsAllYears": "All Years",
   "analyticsToday": "Today",
-
   "splashAppName": "Bee Accounting",
   "splashSlogan": "Record Every Drop",
   "splashSecurityTitle": "Open Source Data Security",
@@ -133,7 +149,6 @@
   "splashSecurityFeature2": "• Open source code transparency, trustworthy security",
   "splashSecurityFeature3": "• Optional cloud sync, consistent data across devices",
   "splashInitializing": "Initializing data...",
-
   "ledgersTitle": "Ledger Management",
   "ledgersNew": "New Ledger",
   "ledgersClear": "Clear Current Ledger",
@@ -178,7 +193,6 @@
       }
     }
   },
-
   "categoryTitle": "Category Management",
   "categoryNew": "New Category",
   "categoryExpense": "Expense Categories",
@@ -195,7 +209,6 @@
       }
     }
   },
-
   "iconPickerTitle": "Select Icon",
   "iconCategoryFood": "Food",
   "iconCategoryTransport": "Transport",
@@ -209,7 +222,6 @@
   "iconCategoryReward": "Reward",
   "iconCategoryOther": "Other",
   "iconCategoryDining": "Dining",
-
   "importTitle": "Import Bills",
   "importSelectFile": "Please select a file to import (CSV/TSV/XLSX supported)",
   "importBillType": "Bill Type",
@@ -219,8 +231,8 @@
   "importChooseFile": "Choose File",
   "importNoFileSelected": "No file selected",
   "importHint": "Tip: Please select a file to start importing (CSV/TSV/XLSX)",
-  "importReading": "Reading file...",
-  "importPreparing": "Preparing...",
+  "importReading": "Reading file…",
+  "importPreparing": "Preparing…",
   "importColumnNumber": "Column {number}",
   "importConfirmMapping": "Confirm Mapping",
   "importCategoryMapping": "Category Mapping",
@@ -251,7 +263,7 @@
   "importBackgroundImport": "Background Import",
   "importCancelled": "Import Cancelled",
   "importCompleted": "Import Completed{cancelled}, success {ok}, failed {fail}",
-  "importFileOpenError": "Cannot open file picker: {error}",
+  "importFileOpenError": "Unable to open file picker: {error}",
   "@importFileOpenError": {
     "placeholders": {
       "error": {
@@ -259,7 +271,6 @@
       }
     }
   },
-
   "mineTitle": "Mine",
   "mineSettings": "Settings",
   "mineTheme": "Theme Settings",
@@ -274,12 +285,10 @@
   "mineUpdate": "Check for Updates",
   "mineLanguageSettings": "Language Settings",
   "mineLanguageSettingsSubtitle": "Switch application language",
-
   "languageTitle": "Language Settings",
   "languageChinese": "中文",
   "languageEnglish": "English",
   "languageSystemDefault": "Follow System",
-
   "deleteConfirmTitle": "Delete Confirmation",
   "deleteConfirmMessage": "Are you sure you want to delete this record?",
   "logCopied": "Log copied",
@@ -302,7 +311,6 @@
       }
     }
   },
-
   "mineSlogan": "Bee Accounting, Every Penny Counts",
   "mineDaysCount": "Days",
   "mineTotalRecords": "Records",
@@ -390,7 +398,6 @@
   "mineRefreshStatsSubtitle": "Trigger global stats provider recalculation",
   "mineRefreshSync": "Refresh Sync Status (Debug)",
   "mineRefreshSyncSubtitle": "Trigger sync status provider refresh",
-
   "categoryEditTitle": "Edit Category",
   "categoryNewTitle": "New Category",
   "categoryDetailTooltip": "Category Details",
@@ -418,7 +425,6 @@
   "categoryIncomeType": "Income Category",
   "categoryDefaultTitle": "Default Category",
   "categoryDefaultMessage": "Default categories cannot be modified, but you can view details and migrate data",
-
   "categoryNameDining": "Dining",
   "categoryNameTransport": "Transport",
   "categoryNameShopping": "Shopping",
@@ -464,7 +470,6 @@
   "categoryNameSocialSecurity": "Social Security",
   "categoryNameExpress": "Express",
   "categoryNameWork": "Work",
-
   "categoryNameSalary": "Salary",
   "categoryNameInvestment": "Investment",
   "categoryNameBonus": "Bonus",
@@ -496,15 +501,13 @@
   "categoryDeleteConfirmMessage": "Are you sure you want to delete category \"{name}\"? This action cannot be undone.",
   "categoryDeleteError": "Delete failed",
   "categoryDeleted": "Category \"{name}\" deleted",
-
-  "personalizeTitle": "Personalization",
+  "personalizeTitle": "Personalize",
   "personalizeCustomColor": "Choose custom color",
   "personalizeCustomTitle": "Custom",
   "personalizeHue": "Hue ({value}°)",
   "personalizeSaturation": "Saturation ({value}%)",
   "personalizeBrightness": "Brightness ({value}%)",
   "personalizeSelectColor": "Select this color",
-
   "fontSettingsTitle": "Display Scale",
   "fontSettingsCurrentScale": "Current scale: x{scale}",
   "fontSettingsPreview": "Live Preview",
@@ -543,11 +546,10 @@
   "fontSettingsPreciseAdjust": "Precise Adjustment",
   "fontSettingsResetTo1x": "Reset to 1.0x",
   "fontSettingsAdaptBase": "Adapt to Base",
-
   "reminderTitle": "Recording Reminder",
   "reminderSubtitle": "Set daily recording reminder time",
   "reminderDailyTitle": "Daily Recording Reminder",
-  "reminderDailySubtitle": "Will remind you to record at specified time when enabled",
+  "reminderDailySubtitle": "When enabled, will remind you to record at specified time",
   "reminderTimeTitle": "Reminder Time",
   "reminderTestNotification": "Send Test Notification",
   "reminderTestSent": "Test notification sent",
@@ -600,7 +602,6 @@
   "reminderDescription": "Tip: When recording reminder is enabled, the system will send notifications at the specified time daily to remind you to record income and expenses.",
   "reminderIOSInstructions": "🍎 iOS notification settings:\n• Settings > Notifications > Bee Accounting\n• Enable \"Allow Notifications\"\n• Set notification style: Banner or Alert\n• Enable sound and vibration\n\n⚠️ Important Note:\n• iOS local notifications depend on app process\n• Do not force quit app from task manager\n• Notifications work when app is in background or foreground\n• Force quitting will disable notifications\n\n💡 Usage Tips:\n• Simply press Home button to exit app\n• iOS will manage background apps automatically\n• Keep app in background to receive reminders",
   "reminderAndroidInstructions": "If notifications don't work properly, check:\n• App is allowed to send notifications\n• Disable battery optimization/power saving for app\n• Allow app to run in background and auto-start\n• Android 12+ needs exact alarm permission\n\n📱 Xiaomi phone special settings:\n• Settings > App Management > Bee Accounting > Notification Management\n• Tap \"Recording Reminder\" channel\n• Set importance to \"Urgent\" or \"High\"\n• Enable \"Banner notifications\", \"Sound\", \"Vibration\"\n• Security Center > App Management > Permissions > Auto-start\n\n🔒 Lock background methods:\n• Find Bee Accounting in recent tasks\n• Pull down app card to show lock icon\n• Tap lock icon to prevent cleanup",
-
   "categoryDetailLoadFailed": "Load failed",
   "categoryDetailSummaryTitle": "Category Summary",
   "categoryDetailTotalCount": "Total Count",
@@ -614,7 +615,6 @@
   "categoryDetailNoTransactions": "No transactions",
   "categoryDetailNoTransactionsSubtext": "No transactions in this category yet",
   "categoryDetailDeleteFailed": "Delete failed",
-
   "categoryMigrationConfirmTitle": "Confirm Migration",
   "categoryMigrationConfirmMessage": "Migrate {count} transactions from \"{fromName}\" to \"{toName}\"?\n\nThis operation cannot be undone!",
   "categoryMigrationConfirmOk": "Confirm Migration",
@@ -630,12 +630,10 @@
       }
     }
   },
-
   "categoryPickerExpenseTab": "Expense",
   "categoryPickerIncomeTab": "Income",
   "categoryPickerCancel": "Cancel",
   "categoryPickerEmpty": "No categories",
-
   "cloudBackupFound": "Cloud Backup Found",
   "cloudBackupRestoreMessage": "Cloud and local ledgers are inconsistent. Restore from cloud?\n(Will enter restore progress page)",
   "cloudBackupRestoreFailed": "Restore Failed",
@@ -655,7 +653,6 @@
   "mineDebugRefreshStatsSubtitle": "Trigger global stats provider recalculation",
   "mineDebugRefreshSync": "Refresh Sync Status (Debug)",
   "mineDebugRefreshSyncSubtitle": "Trigger sync status provider refresh",
-
   "cloudCurrentService": "Current Cloud Service",
   "cloudConnected": "Connected",
   "cloudOfflineMode": "Offline Mode",
@@ -694,7 +691,7 @@
   "cloudValidationKeyTooShort": "Key length is too short, may be invalid",
   "cloudValidationServiceRoleKey": "service_role Key is not allowed",
   "cloudValidationHttpRequired": "URL must start with http:// or https://",
-  "cloudSelectServiceType": "Select Service Type",
+  "cloudSelectServiceType": "Select Cloud Service Type",
   "cloudWebdavUrlLabel": "WebDAV Server URL",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "Username",
@@ -722,7 +719,6 @@
       }
     }
   },
-
   "authLogin": "Login",
   "authSignup": "Sign Up",
   "authRegister": "Register",
@@ -739,18 +735,15 @@
   "authBackToMinePage": "Back to My Page",
   "authVerificationEmailResent": "Verification email resent.",
   "authResendAction": "resend verification",
-
   "authErrorInvalidCredentials": "Email or password is incorrect.",
   "authErrorEmailNotConfirmed": "Email not verified, please complete verification in your email before logging in.",
   "authErrorRateLimit": "Too many attempts, please try again later.",
   "authErrorNetworkIssue": "Network error, please check your connection and try again.",
   "authErrorLoginFailed": "Login failed, please try again later.",
-
   "authErrorEmailInvalid": "Email address is invalid, please check for spelling errors.",
   "authErrorEmailExists": "This email is already registered, please login directly or reset password.",
   "authErrorWeakPassword": "Password is too simple, please include letters and numbers, at least 6 characters.",
   "authErrorSignupFailed": "Registration failed, please try again later.",
-
   "authErrorUserNotFound": "Email not registered, cannot {action}.",
   "authErrorEmailNotVerified": "Email not verified, cannot {action}.",
   "authErrorActionFailed": "{action} failed, please try again later.",
@@ -775,27 +768,7 @@
       }
     }
   },
-
-  "importTitle": "Import Bills",
   "importSelectCsvFile": "Please select a file to import (CSV/TSV/XLSX supported)",
-  "importBillType": "Bill Type",
-  "importBillTypeGeneric": "Generic CSV",
-  "importBillTypeAlipay": "Alipay",
-  "importBillTypeWechat": "WeChat",
-  "importChooseFile": "Choose File",
-  "importNoFileSelected": "No file selected",
-  "importHint": "Tip: Please select a file to start importing (CSV/TSV/XLSX)",
-  "importReading": "Reading file…",
-  "importPreparing": "Preparing…",
-  "importFileOpenError": "Unable to open file picker: {error}",
-  "@importFileOpenError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-
   "exportTitle": "Export",
   "exportDescription": "Click the button below to select save location and export current ledger to CSV file.",
   "exportButtonIOS": "Export and Share (iOS)",
@@ -836,8 +809,6 @@
       }
     }
   },
-
-  "personalizeTitle": "Personalize",
   "personalizeThemeHoney": "Bee Yellow",
   "personalizeThemeOrange": "Flame Orange",
   "personalizeThemeGreen": "Emerald Green",
@@ -865,7 +836,6 @@
   "personalizeThemeSunset": "Sunset Orange",
   "personalizeThemePeacock": "Peacock Blue",
   "personalizeThemeLime": "Lime Green",
-
   "analyticsMonthlyAvg": "Monthly Avg",
   "analyticsDailyAvg": "Daily Avg",
   "analyticsOverallAvg": "Overall Avg",
@@ -906,7 +876,6 @@
       }
     }
   },
-
   "updateCheckTitle": "Check Update",
   "updateNewVersionFound": "New Version Found",
   "updateNewVersionTitle": "New Version {version} Found",
@@ -1023,11 +992,9 @@
       }
     }
   },
-
   "updateCheckingPermissions": "Checking permissions...",
   "updateCheckingCache": "Checking local cache...",
   "updatePreparingDownload": "Preparing download...",
-  "updateInstallingCachedApk": "Installing cached APK",
   "updateUserCancelledDownload": "User cancelled download",
   "updateStartingInstaller": "Starting installer...",
   "updateInstallerStarted": "Installer started",
@@ -1124,18 +1091,8 @@
       }
     }
   },
-
-  "reminderTitle": "Recording Reminder",
-  "reminderSubtitle": "Set daily recording reminder time",
-  "reminderDailyTitle": "Daily Recording Reminder",
-  "reminderDailySubtitle": "When enabled, will remind you to record at specified time",
-  "reminderTimeTitle": "Reminder Time",
-  "reminderTestSent": "Test notification sent",
-  "reminderTestNotification": "Send Test Notification",
   "reminderQuickTestSent": "Quick test set for 15 seconds later, please keep app in background",
-  "reminderQuickTest": "Quick Test (15s later)",
   "reminderFlutterTestSent": "Flutter test notification sent, click to see if it opens the app",
-  "reminderFlutterTest": "🔧 Test Flutter Notification Click (Dev)",
   "reminderAlarmTestSent": "AlarmManager test notification set (1 second later), click to see if it opens the app",
   "updateOk": "OK",
   "updateCannotOpenLinkTitle": "Cannot Open Link",
@@ -1149,7 +1106,6 @@
   "updateNotificationGuideStep2": "Find \\\"BeeCount\\\" app",
   "updateNotificationGuideStep3": "Enable notification permissions",
   "updateNotificationGuideInfo": "Downloads will continue normally in the background even without notifications",
-
   "currencyCNY": "Chinese Yuan",
   "currencyUSD": "US Dollar",
   "currencyEUR": "Euro",
@@ -1176,11 +1132,8 @@
   "currencyDKK": "Danish Krone",
   "currencyBRL": "Brazilian Real",
   "currencyMXN": "Mexican Peso",
-
-
   "webdavConfiguredTitle": "WebDAV Cloud Service Configured",
   "webdavConfiguredMessage": "WebDAV cloud service uses the credentials provided during configuration, no additional login required.",
-
   "recurringTransactionTitle": "Recurring Bills",
   "recurringTransactionAdd": "Add Recurring Bill",
   "recurringTransactionEdit": "Edit Recurring Bill",
@@ -1203,39 +1156,43 @@
   "recurringTransactionEveryNDays": "Every {n} day(s)",
   "@recurringTransactionEveryNDays": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNWeeks": "Every {n} week(s)",
   "@recurringTransactionEveryNWeeks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNMonths": "Every {n} month(s)",
   "@recurringTransactionEveryNMonths": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNYears": "Every {n} year(s)",
   "@recurringTransactionEveryNYears": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
-
   "cloudDefaultServiceDisplayName": "Default Cloud Service",
   "cloudNotConfiguredDisplay": "Not Configured",
-
   "syncNotConfiguredMessage": "Cloud not configured",
   "syncNotLoggedInMessage": "Not logged in",
   "syncCloudBackupCorruptedMessage": "Cloud backup content is corrupted, possibly due to encoding issues from earlier versions. Please click 'Upload Current Ledger to Cloud' to overwrite and fix.",
   "syncNoCloudBackupMessage": "No cloud backup",
   "syncAccessDeniedMessage": "403 Access denied (check storage RLS policy and path)",
-
   "cloudTestConnection": "Test Connection",
-  "cloudSelectServiceType": "Select Cloud Service Type",
   "cloudLocalStorageTitle": "Local Storage",
   "cloudLocalStorageSubtitle": "Data is only saved on local device",
   "cloudCustomSupabaseTitle": "Custom Supabase",
@@ -1250,7 +1207,9 @@
   "cloudErrorServerStatus": "Server returned status code {code}",
   "@cloudErrorServerStatus": {
     "placeholders": {
-      "code": {"type": "String"}
+      "code": {
+        "type": "String"
+      }
     }
   },
   "cloudErrorWebdavNotSupported": "Server does not support WebDAV protocol",
@@ -1259,13 +1218,17 @@
   "cloudErrorPathNotFound": "Server path not found: {path}",
   "@cloudErrorPathNotFound": {
     "placeholders": {
-      "path": {"type": "String"}
+      "path": {
+        "type": "String"
+      }
     }
   },
   "cloudErrorNetwork": "Network error: {message}",
   "@cloudErrorNetwork": {
     "placeholders": {
-      "message": {"type": "String"}
+      "message": {
+        "type": "String"
+      }
     }
   },
   "cloudTestSuccessTitle": "Test Successful",
@@ -1283,14 +1246,15 @@
   "cloudSwitchedTo": "Switched to {type}",
   "@cloudSwitchedTo": {
     "placeholders": {
-      "type": {"type": "String"}
+      "type": {
+        "type": "String"
+      }
     }
   },
   "cloudConfigureSupabaseTitle": "Configure Supabase",
   "cloudConfigureWebdavTitle": "Configure WebDAV",
   "cloudSupabaseAnonKeyHintLong": "Paste complete anon key",
-  "cloudWebdavUsernameLabel": "Username",
-  "cloudWebdavPasswordLabel": "Password",
+  "cloudWebdavRemotePathHelp": "Remote directory path for data storage",
   "cloudWebdavRemotePathLabel": "Remote Path",
   "cloudWebdavRemotePathHelperText": "Remote directory path for data storage",
   "accountsTitle": "Account Management",
@@ -1326,13 +1290,9 @@
   "accountNone": "No Account",
   "accountsEnableFeature": "Enable Account Feature",
   "accountsFeatureDescription": "Manage multiple payment accounts and track balance changes for each account",
-
   "privacyOpenSourceUrlError": "Cannot open link",
-
   "updateCorruptedFileTitle": "Corrupted Installation Package",
   "updateCorruptedFileMessage": "The previously downloaded installation package is incomplete or corrupted. Delete and re-download?",
-
-
   "welcomeTitle": "Welcome to BeeCount",
   "welcomeDescription": "An accounting app that truly respects your privacy",
   "welcomePrivacyTitle": "Your Data, Your Control",
@@ -1350,7 +1310,6 @@
   "welcomeCloudSyncFeature1": "Completely offline usage",
   "welcomeCloudSyncFeature2": "Self-hosted WebDAV sync",
   "welcomeCloudSyncFeature3": "Self-hosted Supabase service",
-
   "lab": "Lab",
   "labDesc": "Try experimental features",
   "widgetManagement": "Home Screen Widget",
@@ -1374,7 +1333,6 @@
   "todayIncome": "Today's Income",
   "monthExpense": "Month's Expense",
   "monthIncome": "Month's Income",
-
   "autoScreenshotBilling": "Auto Screenshot Billing",
   "autoScreenshotBillingDesc": "Auto-recognize payment info from screenshots",
   "autoScreenshotBillingTitle": "Auto Screenshot Billing",
@@ -1417,7 +1375,6 @@
   "ocrBilling": "OCR Scan Billing",
   "ocrBillingDesc": "Auto-recognize payment screenshots",
   "quickActions": "Quick Actions",
-
   "iosAutoFeatureDesc": "Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.",
   "iosAutoShortcutQuickAdd": "Quick Add Shortcut",
   "iosAutoShortcutQuickAddDesc": "Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.",
@@ -1441,7 +1398,6 @@
   "iosAutoOpenAppFailed": "Open failed: {error}",
   "iosAutoCannotOpenLink": "Cannot open link, please check network connection",
   "iosAutoCannotOpenShortcuts": "Cannot open Shortcuts app",
-
   "aiSettingsTitle": "AI Recognition",
   "aiSettingsSubtitle": "Configure AI models and recognition strategy",
   "aiEnableTitle": "Enable AI Recognition",
