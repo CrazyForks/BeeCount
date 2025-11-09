@@ -251,6 +251,99 @@ class AppLocalizationsZh extends AppLocalizations {
   String get searchResultsEmptyHint => '请尝试其他关键词或调整筛选条件';
 
   @override
+  String get searchBatchMode => '批量操作';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return '批量操作 ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => '退出批量操作';
+
+  @override
+  String get searchSelectAll => '全选';
+
+  @override
+  String get searchDeselectAll => '取消全选';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '已选择 $count 项';
+  }
+
+  @override
+  String get searchBatchSetNote => '设置备注';
+
+  @override
+  String get searchBatchChangeCategory => '调整分类';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => '确认删除';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '确定要删除选中的 $count 笔记账吗?\n此操作无法撤销。';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => '批量设置备注';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return '将为选中的 $count 笔记账设置相同的备注';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => '输入备注内容 (留空则清空备注)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => '批量调整分类';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return '将为选中的 $count 笔记账设置新的分类';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => '选择分类';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '成功删除 $count 笔记账';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return '删除失败: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return '成功为 $count 笔记账设置备注';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return '设置备注失败: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return '成功为 $count 笔记账调整分类';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return '调整分类失败: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '共 $count 条结果';
+  }
+
+  @override
   String get analyticsTitle => '分析';
 
   @override
@@ -3628,6 +3721,99 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchResultsEmptyHint => '請嘗試其他關鍵詞或調整篩選條件';
+
+  @override
+  String get searchBatchMode => '批次操作';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return '批次操作 ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => '退出批次操作';
+
+  @override
+  String get searchSelectAll => '全選';
+
+  @override
+  String get searchDeselectAll => '取消全選';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '已選擇 $count 項';
+  }
+
+  @override
+  String get searchBatchSetNote => '設定備註';
+
+  @override
+  String get searchBatchChangeCategory => '調整分類';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => '確認刪除';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '確定要刪除選中的 $count 筆記帳嗎?\n此操作無法復原。';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => '批次設定備註';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return '將為選中的 $count 筆記帳設定相同的備註';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => '輸入備註內容 (留空則清空備註)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => '批次調整分類';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return '將為選中的 $count 筆記帳設定新的分類';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => '選擇分類';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '成功刪除 $count 筆記帳';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return '刪除失敗: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return '成功為 $count 筆記帳設定備註';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return '設定備註失敗: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return '成功為 $count 筆記帳調整分類';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return '調整分類失敗: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '共 $count 條結果';
+  }
 
   @override
   String get analyticsTitle => '分析';

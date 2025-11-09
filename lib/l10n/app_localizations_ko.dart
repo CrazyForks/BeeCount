@@ -251,6 +251,99 @@ class AppLocalizationsKo extends AppLocalizations {
   String get searchResultsEmptyHint => '다른 키워드를 시도하거나 필터 조건을 조정하세요';
 
   @override
+  String get searchBatchMode => '일괄 작업';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return '일괄 작업 ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => '일괄 작업 종료';
+
+  @override
+  String get searchSelectAll => '전체 선택';
+
+  @override
+  String get searchDeselectAll => '선택 해제';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '$count개 선택됨';
+  }
+
+  @override
+  String get searchBatchSetNote => '메모 설정';
+
+  @override
+  String get searchBatchChangeCategory => '카테고리 변경';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => '삭제 확인';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '선택한 $count개의 거래를 삭제하시겠습니까?\n이 작업은 취소할 수 없습니다.';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => '일괄 메모 설정';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return '선택한 $count개의 거래에 동일한 메모를 설정합니다';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => '메모 내용 입력 (비워두면 메모가 삭제됩니다)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => '일괄 카테고리 변경';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return '선택한 $count개의 거래에 새 카테고리를 설정합니다';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => '카테고리 선택';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '$count개의 거래를 성공적으로 삭제했습니다';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return '삭제 실패: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return '$count개의 거래에 메모를 성공적으로 설정했습니다';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return '메모 설정 실패: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return '$count개의 거래의 카테고리를 성공적으로 변경했습니다';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return '카테고리 변경 실패: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '$count개의 결과';
+  }
+
+  @override
   String get analyticsTitle => '분석';
 
   @override

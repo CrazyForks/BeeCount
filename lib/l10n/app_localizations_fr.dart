@@ -251,6 +251,99 @@ class AppLocalizationsFr extends AppLocalizations {
   String get searchResultsEmptyHint => 'Essayez d\'autres mots-clés ou ajustez les conditions de filtre';
 
   @override
+  String get searchBatchMode => 'Opérations groupées';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return 'Opérations groupées ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => 'Quitter les opérations groupées';
+
+  @override
+  String get searchSelectAll => 'Tout sélectionner';
+
+  @override
+  String get searchDeselectAll => 'Tout désélectionner';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '$count sélectionné(s)';
+  }
+
+  @override
+  String get searchBatchSetNote => 'Définir une note';
+
+  @override
+  String get searchBatchChangeCategory => 'Changer de catégorie';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => 'Confirmer la suppression';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return 'Voulez-vous vraiment supprimer les $count transactions sélectionnées?\nCette action ne peut pas être annulée.';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => 'Définir une note groupée';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return 'Définir la même note pour les $count transactions sélectionnées';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => 'Saisir le contenu de la note (laisser vide pour effacer les notes)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => 'Changer de catégorie groupée';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return 'Définir une nouvelle catégorie pour les $count transactions sélectionnées';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => 'Sélectionner une catégorie';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '$count transactions supprimées avec succès';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return 'Échec de la suppression: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return 'Note définie avec succès pour $count transactions';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return 'Échec de la définition de la note: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return 'Catégorie modifiée avec succès pour $count transactions';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return 'Échec du changement de catégorie: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '$count résultat(s)';
+  }
+
+  @override
   String get analyticsTitle => 'Analyses';
 
   @override

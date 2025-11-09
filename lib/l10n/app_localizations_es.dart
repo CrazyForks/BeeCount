@@ -251,6 +251,99 @@ class AppLocalizationsEs extends AppLocalizations {
   String get searchResultsEmptyHint => 'Prueba con otras palabras clave o ajusta las condiciones del filtro';
 
   @override
+  String get searchBatchMode => 'Operaciones por lotes';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return 'Operaciones por lotes ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => 'Salir de operaciones por lotes';
+
+  @override
+  String get searchSelectAll => 'Seleccionar todo';
+
+  @override
+  String get searchDeselectAll => 'Deseleccionar todo';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '$count seleccionado(s)';
+  }
+
+  @override
+  String get searchBatchSetNote => 'Establecer nota';
+
+  @override
+  String get searchBatchChangeCategory => 'Cambiar categoría';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => 'Confirmar eliminación';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '¿Estás seguro de que quieres eliminar las $count transacciones seleccionadas?\nEsta acción no se puede deshacer.';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => 'Establecer nota por lotes';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return 'Establecer la misma nota para las $count transacciones seleccionadas';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => 'Ingresa el contenido de la nota (deja en blanco para borrar las notas)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => 'Cambiar categoría por lotes';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return 'Establecer una nueva categoría para las $count transacciones seleccionadas';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => 'Seleccionar categoría';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '$count transacciones eliminadas exitosamente';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return 'Error al eliminar: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return 'Nota establecida exitosamente para $count transacciones';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return 'Error al establecer nota: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return 'Categoría cambiada exitosamente para $count transacciones';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return 'Error al cambiar categoría: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '$count resultado(s)';
+  }
+
+  @override
   String get analyticsTitle => 'Analíticas';
 
   @override

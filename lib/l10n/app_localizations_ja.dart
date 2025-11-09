@@ -251,6 +251,99 @@ class AppLocalizationsJa extends AppLocalizations {
   String get searchResultsEmptyHint => '他のキーワードを試すか、フィルター条件を調整してください';
 
   @override
+  String get searchBatchMode => '一括操作';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return '一括操作 ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => '一括操作を終了';
+
+  @override
+  String get searchSelectAll => 'すべて選択';
+
+  @override
+  String get searchDeselectAll => '選択解除';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '$count件選択中';
+  }
+
+  @override
+  String get searchBatchSetNote => 'メモを設定';
+
+  @override
+  String get searchBatchChangeCategory => 'カテゴリを変更';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => '削除の確認';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return '選択した$count件の取引を削除しますか?\nこの操作は元に戻せません。';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => '一括メモ設定';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return '選択した$count件の取引に同じメモを設定します';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => 'メモの内容を入力 (空欄の場合はメモを削除)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => '一括カテゴリ変更';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return '選択した$count件の取引に新しいカテゴリを設定します';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => 'カテゴリを選択';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '$count件の取引を削除しました';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return '削除に失敗しました: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return '$count件の取引にメモを設定しました';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return 'メモの設定に失敗しました: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return '$count件の取引のカテゴリを変更しました';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return 'カテゴリの変更に失敗しました: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '$count件の結果';
+  }
+
+  @override
   String get analyticsTitle => '分析';
 
   @override

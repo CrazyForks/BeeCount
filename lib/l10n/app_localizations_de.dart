@@ -251,6 +251,99 @@ class AppLocalizationsDe extends AppLocalizations {
   String get searchResultsEmptyHint => 'Versuchen Sie andere Suchbegriffe oder passen Sie die Filterbedingungen an';
 
   @override
+  String get searchBatchMode => 'Stapeloperationen';
+
+  @override
+  String searchBatchModeWithCount(Object selected, Object total) {
+    return 'Stapeloperationen ($selected/$total)';
+  }
+
+  @override
+  String get searchExitBatchMode => 'Stapeloperationen beenden';
+
+  @override
+  String get searchSelectAll => 'Alle auswählen';
+
+  @override
+  String get searchDeselectAll => 'Auswahl aufheben';
+
+  @override
+  String searchSelectedCount(Object count) {
+    return '$count ausgewählt';
+  }
+
+  @override
+  String get searchBatchSetNote => 'Notiz setzen';
+
+  @override
+  String get searchBatchChangeCategory => 'Kategorie ändern';
+
+  @override
+  String get searchBatchDeleteConfirmTitle => 'Löschen bestätigen';
+
+  @override
+  String searchBatchDeleteConfirmMessage(Object count) {
+    return 'Möchten Sie wirklich die ausgewählten $count Transaktionen löschen?\nDiese Aktion kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String get searchBatchSetNoteTitle => 'Stapel-Notiz setzen';
+
+  @override
+  String searchBatchSetNoteMessage(Object count) {
+    return 'Dieselbe Notiz für die ausgewählten $count Transaktionen setzen';
+  }
+
+  @override
+  String get searchBatchSetNoteHint => 'Notizinhalt eingeben (leer lassen, um Notizen zu löschen)';
+
+  @override
+  String get searchBatchChangeCategoryTitle => 'Stapel-Kategorie ändern';
+
+  @override
+  String searchBatchChangeCategoryMessage(Object count) {
+    return 'Eine neue Kategorie für die ausgewählten $count Transaktionen festlegen';
+  }
+
+  @override
+  String get searchBatchChangeCategoryLabel => 'Kategorie auswählen';
+
+  @override
+  String searchBatchDeleteSuccess(Object count) {
+    return '$count Transaktionen erfolgreich gelöscht';
+  }
+
+  @override
+  String searchBatchDeleteFailed(Object error) {
+    return 'Löschen fehlgeschlagen: $error';
+  }
+
+  @override
+  String searchBatchSetNoteSuccess(Object count) {
+    return 'Notiz erfolgreich für $count Transaktionen gesetzt';
+  }
+
+  @override
+  String searchBatchSetNoteFailed(Object error) {
+    return 'Notiz setzen fehlgeschlagen: $error';
+  }
+
+  @override
+  String searchBatchChangeCategorySuccess(Object count) {
+    return 'Kategorie erfolgreich für $count Transaktionen geändert';
+  }
+
+  @override
+  String searchBatchChangeCategoryFailed(Object error) {
+    return 'Kategorie ändern fehlgeschlagen: $error';
+  }
+
+  @override
+  String searchResultsCount(Object count) {
+    return '$count Ergebnis(se)';
+  }
+
+  @override
   String get analyticsTitle => 'Analyse';
 
   @override

@@ -15,8 +15,14 @@ class TransactionListItem extends ConsumerWidget {
   final String? categoryName; // 分类名称，用于显示
   final VoidCallback? onDelete; // 删除回调
   final String? accountName; // 账户名称，用于显示
-  const TransactionListItem(
-      {super.key,
+
+  // 批量选择模式相关
+  final bool isSelectionMode; // 是否处于选择模式
+  final bool isSelected; // 是否被选中
+  final VoidCallback? onSelectionChanged; // 选中状态改变回调
+
+  const TransactionListItem({
+      super.key,
       required this.icon,
       required this.title,
       required this.amount,
@@ -26,34 +32,46 @@ class TransactionListItem extends ConsumerWidget {
       this.onCategoryTap,
       this.categoryName,
       this.onDelete,
-      this.accountName});
+      this.accountName,
+      this.isSelectionMode = false,
+      this.isSelected = false,
+      this.onSelectionChanged,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Widget child = InkWell(
-      onTap: onTap,
+      onTap: isSelectionMode ? onSelectionChanged : onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: 12, vertical: AppDimens.listRowVertical),
         child: Row(
           children: [
-            // 分类图标，支持点击跳转
-            GestureDetector(
-              onTap: onCategoryTap,
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
+            // 选择模式下显示复选框，否则显示分类图标
+            if (isSelectionMode)
+              Checkbox(
+                value: isSelected,
+                onChanged: (_) => onSelectionChanged?.call(),
+                activeColor: Theme.of(context).colorScheme.primary,
+              )
+            else
+              // 分类图标，支持点击跳转
+              GestureDetector(
+                onTap: onCategoryTap,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon,
+                      color: Theme.of(context).colorScheme.primary, size: 18),
                 ),
-                child: Icon(icon,
-                    color: Theme.of(context).colorScheme.primary, size: 18),
               ),
-            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
