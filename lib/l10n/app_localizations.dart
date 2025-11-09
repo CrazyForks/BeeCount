@@ -5440,6 +5440,12 @@ abstract class AppLocalizations {
   /// **'Paste complete anon key'**
   String get cloudSupabaseAnonKeyHintLong;
 
+  /// No description provided for @cloudWebdavRemotePathHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote directory path for data storage'**
+  String get cloudWebdavRemotePathHelp;
+
   /// No description provided for @cloudWebdavRemotePathLabel.
   ///
   /// In en, this message translates to:

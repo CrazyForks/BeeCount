@@ -2844,6 +2844,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudSupabaseAnonKeyHintLong => 'Paste complete anon key';
 
   @override
+  String get cloudWebdavRemotePathHelp => 'Remote directory path for data storage';
+
+  @override
   String get cloudWebdavRemotePathLabel => 'Remote Path';
 
   @override

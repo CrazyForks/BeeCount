@@ -1,12 +1,10 @@
 {
   "@@locale": "zh",
   "appTitle": "蜜蜂记账",
-
   "tabHome": "明细",
   "tabAnalytics": "图表",
   "tabLedgers": "账本",
   "tabMine": "我的",
-
   "commonCancel": "取消",
   "commonConfirm": "确认",
   "commonSave": "保存",
@@ -47,7 +45,6 @@
   "commonCurrent": "当前",
   "commonTutorial": "教程",
   "commonConfigure": "配置",
-
   "homeTitle": "蜜蜂记账",
   "homeIncome": "收入",
   "homeExpense": "支出",
@@ -68,13 +65,11 @@
   "homeYear": "{year}年",
   "homeMonth": "{month}月",
   "homeNoRecordsSubtext": "点击底部加号，马上记一笔",
-
   "widgetTodayExpense": "今日支出",
   "widgetTodayIncome": "今日收入",
   "widgetMonthExpense": "本月支出",
   "widgetMonthIncome": "本月收入",
   "widgetMonthSuffix": "月",
-
   "searchTitle": "搜索",
   "searchHint": "搜索备注、分类或金额...",
   "searchAmountRange": "金额范围筛选",
@@ -85,7 +80,6 @@
   "searchNoResults": "未找到匹配的结果",
   "searchResultsEmpty": "未找到匹配的结果",
   "searchResultsEmptyHint": "请尝试其他关键词或调整筛选条件",
-
   "analyticsTitle": "分析",
   "analyticsMonth": "月",
   "analyticsYear": "年",
@@ -101,7 +95,6 @@
   "analyticsSwipeToSwitch": "横滑切换",
   "analyticsAllYears": "全部年份",
   "analyticsToday": "今天",
-
   "splashAppName": "蜜蜂记账",
   "splashSlogan": "一笔一蜜",
   "splashSecurityTitle": "开源数据安全",
@@ -109,7 +102,6 @@
   "splashSecurityFeature2": "• 开源代码透明，安全值得信赖",
   "splashSecurityFeature3": "• 可选云端同步，多设备数据一致",
   "splashInitializing": "正在初始化数据...",
-
   "ledgersTitle": "账本管理",
   "ledgersNew": "新建账本",
   "ledgersClear": "清空当前账本",
@@ -133,7 +125,6 @@
   "ledgersActions": "操作",
   "ledgersRecords": "笔数：{count}",
   "ledgersBalance": "余额：{balance}",
-
   "categoryTitle": "分类管理",
   "categoryNew": "新建分类",
   "categoryExpense": "支出分类",
@@ -143,7 +134,6 @@
   "categoryCustomTag": "自定义",
   "categoryReorderTip": "长按分类可拖拽调整顺序",
   "categoryLoadFailed": "加载失败: {error}",
-
   "iconPickerTitle": "选择图标",
   "iconCategoryFood": "餐饮",
   "iconCategoryTransport": "交通",
@@ -156,7 +146,6 @@
   "iconCategoryFinance": "理财",
   "iconCategoryReward": "奖励",
   "iconCategoryOther": "其他",
-
   "importTitle": "导入账单",
   "importSelectFile": "请选择文件进行导入（支持 CSV/TSV/XLSX 格式）",
   "importBillType": "账单类型",
@@ -169,7 +158,6 @@
   "importReading": "读取文件中…",
   "importPreparing": "准备中…",
   "importFileOpenError": "无法打开文件选择器：{error}",
-
   "mineTitle": "我的",
   "mineSettings": "设置",
   "mineTheme": "主题设置",
@@ -188,12 +176,10 @@
   "mineRefreshStatsSubtitle": "触发全局统计数据重新计算",
   "mineRefreshSync": "刷新同步状态(调试)",
   "mineRefreshSyncSubtitle": "触发同步状态刷新",
-
   "languageTitle": "语言设置",
   "languageChinese": "中文",
   "languageEnglish": "English",
   "languageSystemDefault": "跟随系统",
-
   "deleteConfirmTitle": "删除确认",
   "deleteConfirmMessage": "确定要删除这条记账吗？",
   "logCopied": "日志已复制",
@@ -203,7 +189,6 @@
   "restoreProgress": "恢复中 ({current}/{total})",
   "restorePreparing": "准备中…",
   "restoreLedgerProgress": "账本：{ledger}  记录：{done}/{total}",
-
   "mineSlogan": "蜜蜂记账，一笔一蜜",
   "mineDaysCount": "记账天数",
   "mineTotalRecords": "总笔数",
@@ -287,7 +272,6 @@
   "mineHelpSubtitle": "查看使用文档和常见问题",
   "mineSupportAuthor": "支持作者",
   "mineSupportAuthorSubtitle": "在GitHub上为项目点赞",
-
   "categoryEditTitle": "编辑分类",
   "categoryNewTitle": "新建分类",
   "categoryDetailTooltip": "分类详情",
@@ -308,7 +292,6 @@
   "categoryIncomeType": "收入分类",
   "categoryDefaultTitle": "默认分类",
   "categoryDefaultMessage": "默认分类不可修改名称和图标，但可以查看详情和迁移数据",
-
   "categoryNameDining": "餐饮",
   "categoryNameTransport": "交通",
   "categoryNameShopping": "购物",
@@ -354,7 +337,6 @@
   "categoryNameSocialSecurity": "社保",
   "categoryNameExpress": "快递",
   "categoryNameWork": "工作",
-
   "categoryNameSalary": "工资",
   "categoryNameInvestment": "理财",
   "categoryNameBonus": "奖金",
@@ -386,15 +368,13 @@
   "categoryDeleteConfirmMessage": "确定要删除分类\"{name}\"吗？此操作无法撤销。",
   "categoryDeleteError": "删除失败",
   "categoryDeleted": "分类\"{name}\"已删除",
-
-  "personalizeTitle": "个性装扮",
+  "personalizeTitle": "个性化",
   "personalizeCustomColor": "选择自定义颜色",
   "personalizeCustomTitle": "自定义",
   "personalizeHue": "色相 ({value}°)",
   "personalizeSaturation": "饱和度 ({value}%)",
   "personalizeBrightness": "亮度 ({value}%)",
   "personalizeSelectColor": "选择此颜色",
-
   "fontSettingsTitle": "显示缩放",
   "fontSettingsCurrentScale": "当前缩放：x{scale}",
   "fontSettingsPreview": "实时预览",
@@ -433,7 +413,6 @@
   "fontSettingsPreciseAdjust": "精确调整",
   "fontSettingsResetTo1x": "重置到1.0x",
   "fontSettingsAdaptBase": "适配基准",
-
   "reminderTitle": "记账提醒",
   "reminderSubtitle": "设置每日记账提醒时间",
   "reminderDailyTitle": "每日记账提醒",
@@ -490,7 +469,6 @@
   "reminderDescription": "提示：开启记账提醒后，系统会在每天指定时间发送通知提醒您记录收支。",
   "reminderIOSInstructions": "🍎 iOS通知设置：\n• 设置 > 通知 > 蜜蜂记账\n• 开启\"允许通知\"\n• 设置通知样式：横幅或提醒\n• 开启声音和震动\n\n⚠️ 重要提示：\n• iOS本地通知依赖应用进程\n• 请勿在任务管理器中划掉应用\n• 应用在后台或前台时通知正常\n• 完全关闭应用会导致通知失效\n\n💡 使用建议：\n• 日常使用后直接按Home键退出\n• iOS会自动管理后台应用\n• 保持应用在后台即可收到提醒",
   "reminderAndroidInstructions": "如果通知无法正常工作，请检查：\n• 已允许应用发送通知\n• 关闭应用的电池优化/省电模式\n• 允许应用在后台运行和自启动\n• Android 12+需要精确闹钟权限\n\n📱 小米手机特殊设置：\n• 设置 > 应用管理 > 蜜蜂记账 > 通知管理\n• 点击\"记账提醒\"渠道\n• 设置重要性为\"紧急\"或\"高\"\n• 开启\"横幅通知\"、\"声音\"、\"震动\"\n• 安全中心 > 应用管理 > 权限 > 自启动\n\n🔒 锁定后台方法：\n• 最近任务中找到蜜蜂记账\n• 向下拉动应用卡片显示锁定图标\n• 点击锁定图标防止被清理",
-
   "categoryDetailLoadFailed": "加载失败",
   "categoryDetailSummaryTitle": "分类汇总",
   "categoryDetailTotalCount": "总笔数",
@@ -504,7 +482,6 @@
   "categoryDetailNoTransactions": "暂无交易记录",
   "categoryDetailNoTransactionsSubtext": "该分类下还没有任何交易记录",
   "categoryDetailDeleteFailed": "删除失败",
-
   "categoryMigrationConfirmTitle": "确认迁移",
   "categoryMigrationConfirmMessage": "确定要将「{fromName}」的 {count} 笔交易迁移到「{toName}」吗？\n\n此操作不可撤销！",
   "categoryMigrationConfirmOk": "确认迁移",
@@ -513,13 +490,11 @@
   "categoryMigrationFailedTitle": "迁移失败",
   "categoryMigrationFailedMessage": "迁移过程中发生错误：{error}",
   "categoryMigrationTransactionLabel": "{count}笔",
-
   "categoryPickerExpenseTab": "支出",
   "categoryPickerIncomeTab": "收入",
   "categoryPickerCancel": "取消",
   "categoryPickerEmpty": "暂无分类",
-
-  "importColumnNumber": "第{number}列",
+  "importColumnNumber": "第 {number} 列",
   "importConfirmMapping": "确认映射",
   "importCategoryMapping": "分类映射",
   "importNoDataParsed": "未解析到任何数据，请返回上一页检查 CSV 内容或分隔符。",
@@ -528,28 +503,27 @@
   "importFieldAmount": "金额",
   "importFieldCategory": "分类",
   "importFieldNote": "备注",
-  "importPreview": "数据预览",
-  "importPreviewLimit": "仅显示前{limit}条记录，总计{total}条",
-  "importCategoryNotSelected": "未选择分类",
-  "importCategoryMappingDescription": "请为每个分类名称选择对应的本地分类：",
-  "importKeepOriginalName": "保持原名称",
-  "importProgress": "正在导入，成功：{ok}，失败：{fail}",
+  "importPreview": "预览：",
+  "importPreviewLimit": "仅预览前 {shown} 行，共 {total} 行",
+  "importCategoryNotSelected": "未选择\"分类\"列，请点击\"上一步\"返回并设置\"分类\"的列，再继续。",
+  "importCategoryMappingDescription": "请将左侧\"源分类名\"映射到系统内已有分类（或保持原名自动创建/合并）",
+  "importKeepOriginalName": "保持原名（自动创建/合并）",
+  "importProgress": "导入中… 成功 {ok}，失败 {fail}",
   "importCancelImport": "取消导入",
   "importCompleteTitle": "导入完成",
   "importCompletedCount": "成功导入 {count} 条记录",
   "importFailed": "导入失败",
   "importFailedMessage": "导入失败：{error}",
-  "importSelectCategoryFirst": "请先为分类选择对应的映射",
+  "importSelectCategoryFirst": "请先选择\"分类\"列再继续",
   "importNextStep": "下一步",
   "importPreviousStep": "上一步",
   "importStartImport": "开始导入",
-  "importAutoDetect": "自动检测",
-  "importInProgress": "导入进行中",
-  "importProgressDetail": "已导入 {done} / {total} 条记录，成功 {ok} 条，失败 {fail} 条",
+  "importAutoDetect": "自动",
+  "importInProgress": "正在导入…",
+  "importProgressDetail": "已完成：{done}/{total}，成功 {ok}，失败 {fail}",
   "importBackgroundImport": "后台导入",
-  "importCancelled": "导入已取消",
-  "importCompleted": "导入已完成{cancelled}，成功 {ok} 条，失败 {fail} 条",
-
+  "importCancelled": "（已取消）",
+  "importCompleted": "导入完成{cancelled}：成功 {ok} 条，失败 {fail} 条",
   "cloudBackupFound": "发现云端备份",
   "cloudBackupRestoreMessage": "检测到云端与本地账本不一致，是否恢复到本地？\n(将进入恢复进度页)",
   "cloudBackupRestoreFailed": "恢复失败",
@@ -569,8 +543,6 @@
   "mineDebugRefreshStatsSubtitle": "触发全局统计 Provider 重新计算",
   "mineDebugRefreshSync": "刷新同步状态（临时）",
   "mineDebugRefreshSyncSubtitle": "触发同步状态 Provider 重新获取",
-  "mineAutoSyncNeedCloudService": "仅限云服务模式可用",
-
   "cloudCurrentService": "当前云服务",
   "cloudConnected": "已连接",
   "cloudOfflineMode": "离线模式",
@@ -609,7 +581,7 @@
   "cloudValidationKeyTooShort": "Key 长度过短，可能无效",
   "cloudValidationServiceRoleKey": "禁止使用 service_role Key",
   "cloudValidationHttpRequired": "URL 需以 http:// 或 https:// 开头",
-  "cloudSelectServiceType": "选择服务类型",
+  "cloudSelectServiceType": "选择云服务类型",
   "cloudWebdavUrlLabel": "WebDAV 服务器地址",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "用户名",
@@ -651,9 +623,7 @@
   },
   "cloudConfigureSupabaseTitle": "配置 Supabase",
   "cloudConfigureWebdavTitle": "配置 WebDAV",
-  "cloudSupabaseAnonKeyHintShort": "粘贴完整的 anon key",
   "cloudWebdavRemotePathHelp": "数据存储的远程目录路径",
-  "cloudHelperTextRemotePath": "数据存储的远程目录路径",
   "@cloudServiceDescriptionCustom": {
     "placeholders": {
       "url": {
@@ -661,7 +631,6 @@
       }
     }
   },
-
   "authLogin": "登录",
   "authSignup": "注册",
   "authRegister": "注册",
@@ -678,18 +647,15 @@
   "authBackToMinePage": "返回我的页面",
   "authVerificationEmailResent": "验证邮件已重新发送。",
   "authResendAction": "重发验证",
-
   "authErrorInvalidCredentials": "邮箱或密码不正确。",
   "authErrorEmailNotConfirmed": "邮箱未验证，请先到邮箱完成验证再登录。",
   "authErrorRateLimit": "操作过于频繁，请稍后再试。",
   "authErrorNetworkIssue": "网络异常，请检查网络后重试。",
   "authErrorLoginFailed": "登录失败，请稍后再试。",
-
   "authErrorEmailInvalid": "邮箱地址无效，请检查是否拼写有误。",
   "authErrorEmailExists": "该邮箱已注册，请直接登录或重置密码。",
   "authErrorWeakPassword": "密码过于简单，请包含字母和数字，长度至少 6 位。",
   "authErrorSignupFailed": "注册失败，请稍后再试。",
-
   "authErrorUserNotFound": "邮箱未注册，无法{action}。",
   "authErrorEmailNotVerified": "邮箱未验证，无法{action}。",
   "authErrorActionFailed": "{action}失败，请稍后再试。",
@@ -714,19 +680,7 @@
       }
     }
   },
-
-  "importTitle": "导入账单",
   "importSelectCsvFile": "请选择文件进行导入（支持 CSV/TSV/XLSX 格式）",
-  "importBillType": "账单类型",
-  "importBillTypeGeneric": "通用CSV",
-  "importBillTypeAlipay": "支付宝",
-  "importBillTypeWechat": "微信",
-  "importChooseFile": "选择文件",
-  "importNoFileSelected": "未选择文件",
-  "importHint": "提示：请选择一个文件开始导入（支持 CSV/TSV/XLSX）",
-  "importReading": "读取文件中…",
-  "importPreparing": "准备中…",
-  "importFileOpenError": "无法打开文件选择器：{error}",
   "@importFileOpenError": {
     "placeholders": {
       "error": {
@@ -734,7 +688,6 @@
       }
     }
   },
-
   "exportTitle": "导出",
   "exportDescription": "点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。",
   "exportButtonIOS": "导出并分享 (iOS)",
@@ -775,8 +728,6 @@
       }
     }
   },
-
-  "personalizeTitle": "个性化",
   "personalizeThemeHoney": "蜜蜂黄",
   "personalizeThemeOrange": "火焰橙",
   "personalizeThemeGreen": "琉璃绿",
@@ -804,7 +755,6 @@
   "personalizeThemeSunset": "日落橙",
   "personalizeThemePeacock": "孔雀蓝",
   "personalizeThemeLime": "柠檬绿",
-
   "analyticsMonthlyAvg": "月均",
   "analyticsDailyAvg": "日均",
   "analyticsOverallAvg": "平均值",
@@ -817,7 +767,6 @@
   "analyticsIncome": "收入",
   "analyticsTotal": "总{type}： ",
   "analyticsAverage": "{avgLabel}： ",
-
   "updateCheckTitle": "检查更新",
   "updateNewVersionFound": "发现新版本",
   "updateNewVersionTitle": "发现新版本 {version}",
@@ -879,11 +828,9 @@
   "updateInstallFailedMessage": "无法启动APK安装程序，请检查文件权限。",
   "updateErrorTitle": "错误",
   "updateReadCacheFailedMessage": "读取缓存更新包失败：{error}",
-
   "updateCheckingPermissions": "检查权限...",
   "updateCheckingCache": "检查本地缓存...",
   "updatePreparingDownload": "准备下载...",
-  "updateInstallingCachedApk": "正在安装缓存的APK",
   "updateUserCancelledDownload": "用户取消下载",
   "updateStartingInstaller": "正在启动安装...",
   "updateInstallerStarted": "安装程序已启动",
@@ -912,70 +859,10 @@
   "updateSearchLocalApkError": "查找本地更新包时发生错误：{error}",
   "updateCachedPackageFoundMessage": "检测到之前下载的更新包：\n\n文件名：{fileName}\n大小：{fileSize}MB\n\n是否立即安装？",
   "updateReadCachedPackageError": "读取缓存更新包失败：{error}",
-
-  "reminderTitle": "记账提醒",
-  "reminderSubtitle": "设置每日记账提醒时间",
-  "reminderDailyTitle": "每日记账提醒",
-  "reminderDailySubtitle": "开启后将在指定时间提醒您记账",
-  "reminderTimeTitle": "提醒时间",
-  "reminderTestSent": "测试通知已发送",
-  "reminderTestNotification": "发送测试通知",
   "reminderQuickTestSent": "已设置15秒后的快速测试，请保持应用在后台",
-  "reminderQuickTest": "快速测试 (15秒后)",
   "reminderFlutterTestSent": "已发送Flutter测试通知，点击查看是否能打开应用",
-  "reminderFlutterTest": "🔧 测试Flutter通知点击（开发）",
   "reminderAlarmTestSent": "已设置AlarmManager测试通知（1秒后），点击查看是否能打开应用",
-
   "iconCategoryDining": "餐饮",
-
-  "importParsing": "解析中…",
-  "importConfirmMapping": "确认映射",
-  "importCategoryMapping": "分类映射",
-  "importNoDataParsed": "未解析到任何数据，请返回上一页检查 CSV 内容或分隔符。",
-  "importFieldDate": "日期",
-  "importFieldType": "类型",
-  "importFieldAmount": "金额",
-  "importFieldCategory": "分类",
-  "importFieldNote": "备注",
-  "importPreview": "预览：",
-  "importColumnNumber": "第 {number} 列",
-  "importPreviewLimit": "仅预览前 {shown} 行，共 {total} 行",
-  "importCategoryNotSelected": "未选择\"分类\"列，请点击\"上一步\"返回并设置\"分类\"的列，再继续。",
-  "importCategoryMappingDescription": "请将左侧\"源分类名\"映射到系统内已有分类（或保持原名自动创建/合并）",
-  "importKeepOriginalName": "保持原名（自动创建/合并）",
-  "importProgress": "导入中… 成功 {ok}，失败 {fail}",
-  "importSelectCategoryFirst": "请先选择\"分类\"列再继续",
-  "importNextStep": "下一步",
-  "importPreviousStep": "上一步",
-  "importStartImport": "开始导入",
-  "importAutoDetect": "自动",
-  "importInProgress": "正在导入…",
-  "importProgressDetail": "已完成：{done}/{total}，成功 {ok}，失败 {fail}",
-  "importBackgroundImport": "后台导入",
-  "importCancelImport": "取消导入",
-  "importCancelled": "（已取消）",
-  "importCompleted": "导入完成{cancelled}：成功 {ok} 条，失败 {fail} 条",
-
-  "fontSettingsRealTimePreview": "实时预览",
-  "fontSettingsCurrentLevel": "当前档位：{level}  (倍率 x{scale})",
-  "fontSettingsPageTitleExample": "月度统计与分析",
-  "fontSettingsBlockTitleExample": "最近记账",
-  "fontSettingsBodyExampleText": "今天早餐：豆浆 + 包子 6.50 元",
-  "fontSettingsLabelExampleText": "隐藏金额已开启",
-  "fontSettingsNumberExample": "强调数字",
-  "fontSettingsListItemTitle": "列表项标题",
-  "fontSettingsListItemSubtitle": "辅助说明文本",
-  "fontSettingsScreenAdaptInfo": "屏幕适配信息",
-  "fontSettingsAutoScaleDemo": "此方框和间距会根据设备自动缩放",
-  "fontSettingsAdaptBaseline": "适配基准",
-
-  "restoreProgressTitle": "恢复中 ({current}/{total})",
-  "restorePreparingTitle": "准备中…",
-  "restoreProgressSubtitle": "账本：{ledger}  记录：{done}/{total}",
-  "restoreCloudRestore": "云端恢复",
-  "restoreCopyLogs": "复制日志",
-  "restoreLogsCopied": "日志已复制",
-  "restoreWaitingForStart": "等待恢复任务启动…",
   "updateOk": "知道了",
   "updateCannotOpenLinkTitle": "无法打开链接",
   "updateNotificationPermissionGuideText": "下载进度通知被关闭，但不影响下载功能。如需查看进度：",
@@ -983,14 +870,6 @@
   "updateNotificationGuideStep2": "找到\\\"蜜蜂记账\\\"应用",
   "updateNotificationGuideStep3": "开启通知权限",
   "updateNotificationGuideInfo": "即使不开启通知，下载也会在后台正常进行",
-
-  "updateNotificationChannelName": "更新下载",
-  "updateNotificationChannelDescription": "APK更新文件下载进度",
-  "updateNotificationAppName": "蜜蜂记账更新下载",
-  "updateNotificationDownloadingIndeterminate": "正在下载新版本...",
-  "updateNotificationDownloadingProgress": "下载进度: {progress}%",
-  "updateNotificationDownloadCompleteTitle": "下载完成",
-  "updateNotificationDownloadCompleteMessage": "新版本已下载完成，点击安装",
   "updateCachedVersionTitle": "发现已下载版本",
   "updateCachedVersionMessage": "已找到之前下载的安装包...点击\\\"确定\\\"立即安装，点击\\\"取消\\\"关闭...",
   "updateCorruptedFileTitle": "安装包已损坏",
@@ -998,7 +877,6 @@
   "updateConfirmDownload": "立即下载并安装",
   "updateDownloadCompleteTitle": "下载完成",
   "updateInstallConfirmMessage": "新版本已下载完成，是否立即安装？",
-
   "currencyCNY": "人民币",
   "currencyUSD": "美元",
   "currencyEUR": "欧元",
@@ -1025,11 +903,8 @@
   "currencyDKK": "丹麦克朗",
   "currencyBRL": "巴西雷亚尔",
   "currencyMXN": "墨西哥比索",
-
-
   "webdavConfiguredTitle": "WebDAV 云服务已配置",
   "webdavConfiguredMessage": "WebDAV 云服务使用配置时提供的凭据，无需额外登录。",
-
   "recurringTransactionTitle": "周期账单",
   "recurringTransactionAdd": "添加周期账单",
   "recurringTransactionEdit": "编辑周期账单",
@@ -1052,39 +927,43 @@
   "recurringTransactionEveryNDays": "每 {n} 天",
   "@recurringTransactionEveryNDays": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNWeeks": "每 {n} 周",
   "@recurringTransactionEveryNWeeks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNMonths": "每 {n} 个月",
   "@recurringTransactionEveryNMonths": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNYears": "每 {n} 年",
   "@recurringTransactionEveryNYears": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
-
   "cloudDefaultServiceDisplayName": "默认云服务",
   "cloudNotConfiguredDisplay": "未配置",
-
   "syncNotConfiguredMessage": "未配置云端",
   "syncNotLoggedInMessage": "未登录",
   "syncCloudBackupCorruptedMessage": "云端备份内容无法解析，可能是早期版本编码问题造成的损坏。请点击\\\"上传当前账本到云端\\\"覆盖修复。",
   "syncNoCloudBackupMessage": "云端暂无备份",
   "syncAccessDeniedMessage": "403 拒绝访问（检查 storage RLS 策略与路径）",
-
   "cloudTestConnection": "测试连接",
-  "cloudSelectServiceType": "选择云服务类型",
   "cloudCustomSupabaseSubtitle": "点击配置自建Supabase服务",
   "cloudCustomWebdavSubtitle": "点击配置坚果云/Nextcloud等",
   "cloudStatusNotTested": "未测试",
@@ -1125,8 +1004,6 @@
   "cloudTestFailedMessage": "连接失败",
   "cloudTestErrorTitle": "测试错误",
   "cloudSupabaseAnonKeyHintLong": "粘贴完整的 anon key",
-  "cloudWebdavUsernameLabel": "用户名",
-  "cloudWebdavPasswordLabel": "密码",
   "cloudWebdavRemotePathLabel": "远程路径",
   "cloudWebdavRemotePathHelperText": "数据存储的远程目录路径",
   "accountsTitle": "账户管理",
@@ -1162,9 +1039,7 @@
   "accountNone": "不选择账户",
   "accountsEnableFeature": "启用账户功能",
   "accountsFeatureDescription": "启用后可以管理多个支付账户，追踪每个账户的余额变化",
-
   "privacyOpenSourceUrlError": "无法打开链接",
-
   "welcomeTitle": "欢迎使用 BeeCount",
   "welcomeDescription": "一个真正尊重您隐私的记账应用",
   "welcomePrivacyTitle": "您的数据，您做主",
@@ -1182,7 +1057,6 @@
   "welcomeCloudSyncFeature1": "完全离线使用",
   "welcomeCloudSyncFeature2": "自建WebDAV同步",
   "welcomeCloudSyncFeature3": "自建Supabase服务",
-
   "lab": "实验室",
   "labDesc": "体验实验性功能",
   "widgetManagement": "桌面小组件",
@@ -1208,7 +1082,6 @@
   "todayIncome": "今日收入",
   "monthExpense": "本月支出",
   "monthIncome": "本月收入",
-
   "autoScreenshotBilling": "截图自动记账",
   "autoScreenshotBillingDesc": "截图后自动识别支付信息",
   "autoScreenshotBillingTitle": "截图自动记账",
@@ -1248,10 +1121,7 @@
   "reselectImage": "重新选择",
   "viewOriginalText": "查看原始文本",
   "createBill": "创建账单",
-  "ocrBilling": "OCR扫描记账",
-  "ocrBillingDesc": "扫描支付截图自动识别金额",
   "quickActions": "快捷功能",
-
   "iosAutoFeatureDesc": "通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。",
   "iosAutoShortcutQuickAdd": "快速添加快捷指令",
   "iosAutoShortcutQuickAddDesc": "点击下方按钮可以直接导入配置好的快捷指令，或手动打开快捷指令App配置。",
@@ -1289,7 +1159,6 @@
   },
   "iosAutoCannotOpenLink": "无法打开链接，请检查网络连接",
   "iosAutoCannotOpenShortcuts": "无法打开快捷指令App",
-
   "aiSettingsTitle": "AI智能识别",
   "aiSettingsSubtitle": "配置AI模型和识别策略",
   "aiEnableTitle": "启用AI智能识别",

@@ -263,75 +263,75 @@ class AppLocalizationsEs extends AppLocalizations {
   String get analyticsAll => 'Todo';
 
   @override
-  String get analyticsSummary => 'Summary';
+  String get analyticsSummary => 'Resumen';
 
   @override
-  String get analyticsCategoryRanking => 'Category Ranking';
+  String get analyticsCategoryRanking => 'Clasificación de Categorías';
 
   @override
-  String get analyticsCurrentPeriod => 'Current Period';
+  String get analyticsCurrentPeriod => 'Período Actual';
 
   @override
-  String get analyticsNoDataSubtext => 'Swipe left/right to switch periods, or tap button to toggle income/expense';
+  String get analyticsNoDataSubtext => 'Desliza hacia izquierda/derecha para cambiar períodos, o toca el botón para alternar ingresos/gastos';
 
   @override
-  String get analyticsSwipeHint => 'Swipe left/right to change period';
+  String get analyticsSwipeHint => 'Desliza hacia izquierda/derecha para cambiar período';
 
   @override
-  String get analyticsTipContent => '1) Swipe left/right at bottom to switch Expense/Income/Balance\\n2) Swipe left/right in chart area to switch periods';
+  String get analyticsTipContent => '1) Desliza hacia izquierda/derecha en la parte inferior para cambiar Gastos/Ingresos/Balance\\n2) Desliza hacia izquierda/derecha en el área de gráficos para cambiar períodos';
 
   @override
   String analyticsSwitchTo(String type) {
-    return 'Switch to $type';
+    return 'Cambiar a $type';
   }
 
   @override
-  String get analyticsTipHeader => 'Tip: Top capsule can switch Month/Year/All';
+  String get analyticsTipHeader => 'Consejo: La cápsula superior puede cambiar Mes/Año/Todo';
 
   @override
-  String get analyticsSwipeToSwitch => 'Swipe to switch';
+  String get analyticsSwipeToSwitch => 'Desliza para cambiar';
 
   @override
-  String get analyticsAllYears => 'All Years';
+  String get analyticsAllYears => 'Todos los Años';
 
   @override
-  String get analyticsToday => 'Today';
+  String get analyticsToday => 'Hoy';
 
   @override
-  String get splashAppName => 'Bee Accounting';
+  String get splashAppName => 'Contabilidad Abeja';
 
   @override
-  String get splashSlogan => 'Record Every Drop';
+  String get splashSlogan => 'Cada Gota Cuenta';
 
   @override
-  String get splashSecurityTitle => 'Open Source Data Security';
+  String get splashSecurityTitle => 'Seguridad de Datos de Código Abierto';
 
   @override
-  String get splashSecurityFeature1 => '• Local data storage, complete privacy control';
+  String get splashSecurityFeature1 => '• Almacenamiento de datos local, control total de privacidad';
 
   @override
-  String get splashSecurityFeature2 => '• Open source code transparency, trustworthy security';
+  String get splashSecurityFeature2 => '• Código abierto transparente, seguridad confiable';
 
   @override
-  String get splashSecurityFeature3 => '• Optional cloud sync, consistent data across devices';
+  String get splashSecurityFeature3 => '• Sincronización en la nube opcional, datos consistentes en todos los dispositivos';
 
   @override
-  String get splashInitializing => 'Initializing data...';
+  String get splashInitializing => 'Inicializando datos...';
 
   @override
   String get ledgersTitle => 'Libros de cuentas';
 
   @override
-  String get ledgersNew => 'New Ledger';
+  String get ledgersNew => 'Nuevo Libro';
 
   @override
-  String get ledgersClear => 'Clear Current Ledger';
+  String get ledgersClear => 'Limpiar Libro Actual';
 
   @override
-  String get ledgersClearConfirm => 'Clear current ledger?';
+  String get ledgersClearConfirm => '¿Limpiar libro actual?';
 
   @override
-  String get ledgersClearMessage => 'All transaction records in this ledger will be deleted and cannot be recovered.';
+  String get ledgersClearMessage => 'Todos los registros de transacciones en este libro serán eliminados y no se podrán recuperar.';
 
   @override
   String get ledgersEdit => 'Editar libro';
@@ -343,49 +343,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ledgersDeleteConfirm => '¿Estás seguro de que quieres eliminar este libro?';
 
   @override
-  String get ledgersDeleteMessage => 'Are you sure you want to delete this ledger and all its records? This action cannot be undone.\\nIf there is a backup in the cloud, it will also be deleted.';
+  String get ledgersDeleteMessage => '¿Estás seguro de que quieres eliminar este libro y todos sus registros? Esta acción no se puede deshacer.\\nSi hay una copia de seguridad en la nube, también se eliminará.';
 
   @override
-  String get ledgersDeleted => 'Deleted';
+  String get ledgersDeleted => 'Eliminado';
 
   @override
-  String get ledgersDeleteFailed => 'Delete Failed';
+  String get ledgersDeleteFailed => 'Error al Eliminar';
 
   @override
   String ledgersRecordsDeleted(int count) {
-    return 'Deleted $count records';
+    return 'Eliminados $count registros';
   }
 
   @override
   String get ledgersName => 'Nombre del libro';
 
   @override
-  String get ledgersDefaultLedgerName => 'Default Ledger';
+  String get ledgersDefaultLedgerName => 'Libro Predeterminado';
 
   @override
-  String get ledgersDefaultAccountName => 'Cash';
+  String get ledgersDefaultAccountName => 'Efectivo';
 
   @override
   String get accountTitle => 'Cuenta';
 
   @override
-  String get ledgersCurrency => 'Currency';
+  String get ledgersCurrency => 'Moneda';
 
   @override
-  String get ledgersSelectCurrency => 'Select Currency';
+  String get ledgersSelectCurrency => 'Seleccionar Moneda';
 
   @override
-  String get ledgersSearchCurrency => 'Search: Chinese or code';
+  String get ledgersSearchCurrency => 'Buscar: Chino o código';
 
   @override
-  String get ledgersCreate => 'Create';
+  String get ledgersCreate => 'Crear';
 
   @override
-  String get ledgersActions => 'Actions';
+  String get ledgersActions => 'Acciones';
 
   @override
   String ledgersRecords(String count) {
-    return 'Records: $count';
+    return 'Registros: $count';
   }
 
   @override
@@ -394,72 +394,72 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get categoryTitle => 'Category Management';
+  String get categoryTitle => 'Administración de Categorías';
 
   @override
-  String get categoryNew => 'New Category';
+  String get categoryNew => 'Nueva Categoría';
 
   @override
-  String get categoryExpense => 'Expense Categories';
+  String get categoryExpense => 'Categorías de Gastos';
 
   @override
-  String get categoryIncome => 'Income Categories';
+  String get categoryIncome => 'Categorías de Ingresos';
 
   @override
-  String get categoryEmpty => 'No categories';
+  String get categoryEmpty => 'Sin categorías';
 
   @override
-  String get categoryDefault => 'Default Category';
+  String get categoryDefault => 'Categoría Predeterminada';
 
   @override
-  String get categoryCustomTag => 'Custom';
+  String get categoryCustomTag => 'Personalizado';
 
   @override
-  String get categoryReorderTip => 'Long press to drag and reorder categories';
+  String get categoryReorderTip => 'Mantén presionado para arrastrar y reordenar categorías';
 
   @override
   String categoryLoadFailed(String error) {
-    return 'Load failed: $error';
+    return 'Error al cargar: $error';
   }
 
   @override
-  String get iconPickerTitle => 'Select Icon';
+  String get iconPickerTitle => 'Seleccionar Icono';
 
   @override
-  String get iconCategoryFood => 'Food';
+  String get iconCategoryFood => 'Comida';
 
   @override
-  String get iconCategoryTransport => 'Transport';
+  String get iconCategoryTransport => 'Transporte';
 
   @override
-  String get iconCategoryShopping => 'Shopping';
+  String get iconCategoryShopping => 'Compras';
 
   @override
-  String get iconCategoryEntertainment => 'Entertainment';
+  String get iconCategoryEntertainment => 'Entretenimiento';
 
   @override
-  String get iconCategoryLife => 'Life';
+  String get iconCategoryLife => 'Vida';
 
   @override
-  String get iconCategoryHealth => 'Health';
+  String get iconCategoryHealth => 'Salud';
 
   @override
-  String get iconCategoryEducation => 'Education';
+  String get iconCategoryEducation => 'Educación';
 
   @override
-  String get iconCategoryWork => 'Work';
+  String get iconCategoryWork => 'Trabajo';
 
   @override
-  String get iconCategoryFinance => 'Finance';
+  String get iconCategoryFinance => 'Finanzas';
 
   @override
-  String get iconCategoryReward => 'Reward';
+  String get iconCategoryReward => 'Recompensa';
 
   @override
-  String get iconCategoryOther => 'Other';
+  String get iconCategoryOther => 'Otros';
 
   @override
-  String get iconCategoryDining => 'Dining';
+  String get iconCategoryDining => 'Comida';
 
   @override
   String get importTitle => 'Importar';
@@ -468,10 +468,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get importSelectFile => 'Seleccionar archivo';
 
   @override
-  String get importBillType => 'Bill Type';
+  String get importBillType => 'Tipo de Factura';
 
   @override
-  String get importBillTypeGeneric => 'Generic CSV';
+  String get importBillTypeGeneric => 'CSV Genérico';
 
   @override
   String get importBillTypeAlipay => 'Alipay';
@@ -480,33 +480,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get importBillTypeWechat => 'WeChat';
 
   @override
-  String get importChooseFile => 'Choose File';
+  String get importChooseFile => 'Elegir Archivo';
 
   @override
-  String get importNoFileSelected => 'No file selected';
+  String get importNoFileSelected => 'Ningún archivo seleccionado';
 
   @override
-  String get importHint => 'Tip: Please select a file to start importing (CSV/TSV/XLSX)';
+  String get importHint => 'Consejo: Por favor seleccione un archivo para comenzar a importar (CSV/TSV/XLSX)';
 
   @override
-  String get importReading => 'Reading file…';
+  String get importReading => 'Leyendo archivo…';
 
   @override
-  String get importPreparing => 'Preparing…';
+  String get importPreparing => 'Preparando…';
 
   @override
   String importColumnNumber(Object number) {
-    return 'Column $number';
+    return 'Columna $number';
   }
 
   @override
-  String get importConfirmMapping => 'Confirm Mapping';
+  String get importConfirmMapping => 'Confirmar Mapeo';
 
   @override
-  String get importCategoryMapping => 'Category Mapping';
+  String get importCategoryMapping => 'Mapeo de Categorías';
 
   @override
-  String get importNoDataParsed => 'No data parsed. Please return to previous page to check CSV content or separator.';
+  String get importNoDataParsed => 'No se analizaron datos. Por favor regrese a la página anterior para verificar el contenido CSV o el separador.';
 
   @override
   String get importFieldDate => 'Fecha';
@@ -528,32 +528,32 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String importPreviewLimit(Object shown, Object total) {
-    return 'Showing first $shown of $total records';
+    return 'Mostrando los primeros $shown de $total registros';
   }
 
   @override
-  String get importCategoryNotSelected => 'Category not selected';
+  String get importCategoryNotSelected => 'Categoría no seleccionada';
 
   @override
-  String get importCategoryMappingDescription => 'Please select corresponding local categories for each category name:';
+  String get importCategoryMappingDescription => 'Por favor seleccione las categorías locales correspondientes para cada nombre de categoría:';
 
   @override
-  String get importKeepOriginalName => 'Keep original name';
+  String get importKeepOriginalName => 'Mantener nombre original';
 
   @override
   String importProgress(Object fail, Object ok) {
-    return 'Progreso de importación';
+    return 'Importando, éxito: $ok, fallidos: $fail';
   }
 
   @override
-  String get importCancelImport => 'Cancel Import';
+  String get importCancelImport => 'Cancelar Importación';
 
   @override
-  String get importCompleteTitle => 'Import Complete';
+  String get importCompleteTitle => 'Importación Completa';
 
   @override
   String importCompletedCount(Object count) {
-    return 'Successfully imported $count records';
+    return 'Importados con éxito $count registros';
   }
 
   @override
@@ -561,46 +561,46 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String importFailedMessage(Object error) {
-    return 'Import failed: $error';
+    return 'Importación fallida: $error';
   }
 
   @override
-  String get importSelectCategoryFirst => 'Please select category mapping first';
+  String get importSelectCategoryFirst => 'Por favor seleccione el mapeo de categorías primero';
 
   @override
-  String get importNextStep => 'Next Step';
+  String get importNextStep => 'Siguiente Paso';
 
   @override
-  String get importPreviousStep => 'Previous Step';
+  String get importPreviousStep => 'Paso Anterior';
 
   @override
-  String get importStartImport => 'Start Import';
+  String get importStartImport => 'Iniciar Importación';
 
   @override
-  String get importAutoDetect => 'Auto Detect';
+  String get importAutoDetect => 'Detección Automática';
 
   @override
-  String get importInProgress => 'Import in Progress';
+  String get importInProgress => 'Importación en Progreso';
 
   @override
   String importProgressDetail(Object done, Object fail, Object ok, Object total) {
-    return 'Imported $done / $total records, success $ok, failed $fail';
+    return 'Importados $done / $total registros, éxito $ok, fallidos $fail';
   }
 
   @override
-  String get importBackgroundImport => 'Background Import';
+  String get importBackgroundImport => 'Importación en Segundo Plano';
 
   @override
-  String get importCancelled => 'Import Cancelled';
+  String get importCancelled => 'Importación Cancelada';
 
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
-    return 'Import Completed$cancelled, success $ok, failed $fail';
+    return 'Importación Completada$cancelled, éxito $ok, fallidos $fail';
   }
 
   @override
   String importFileOpenError(String error) {
-    return 'Unable to open file picker: $error';
+    return 'No se puede abrir el selector de archivos: $error';
   }
 
   @override
@@ -613,13 +613,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineTheme => 'Tema';
 
   @override
-  String get mineFont => 'Font Settings';
+  String get mineFont => 'Configuración de Fuente';
 
   @override
-  String get mineReminder => 'Reminder Settings';
+  String get mineReminder => 'Configuración de Recordatorio';
 
   @override
-  String get mineData => 'Data Management';
+  String get mineData => 'Administración de Datos';
 
   @override
   String get mineImport => 'Importar';
@@ -628,7 +628,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineExport => 'Exportar';
 
   @override
-  String get mineCloud => 'Cloud Service';
+  String get mineCloud => 'Servicio en la Nube';
 
   @override
   String get mineAbout => 'Acerca de';
@@ -640,10 +640,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineUpdate => 'Actualizar';
 
   @override
-  String get mineLanguageSettings => 'Language Settings';
+  String get mineLanguageSettings => 'Configuración de Idioma';
 
   @override
-  String get mineLanguageSettingsSubtitle => 'Switch application language';
+  String get mineLanguageSettingsSubtitle => 'Cambiar idioma de la aplicación';
 
   @override
   String get languageTitle => 'Idioma';
@@ -658,53 +658,53 @@ class AppLocalizationsEs extends AppLocalizations {
   String get languageSystemDefault => 'Seguir sistema';
 
   @override
-  String get deleteConfirmTitle => 'Delete Confirmation';
+  String get deleteConfirmTitle => 'Confirmación de Eliminación';
 
   @override
-  String get deleteConfirmMessage => 'Are you sure you want to delete this record?';
+  String get deleteConfirmMessage => '¿Estás seguro de que quieres eliminar este registro?';
 
   @override
-  String get logCopied => 'Log copied';
+  String get logCopied => 'Registro copiado';
 
   @override
-  String get waitingRestore => 'Waiting for restore task to start...';
+  String get waitingRestore => 'Esperando que se inicie la tarea de restauración...';
 
   @override
-  String get restoreTitle => 'Cloud Restore';
+  String get restoreTitle => 'Restauración de la Nube';
 
   @override
-  String get copyLog => 'Copy Log';
+  String get copyLog => 'Copiar Registro';
 
   @override
   String restoreProgress(Object current, Object total) {
-    return 'Restoring ($current/$total)';
+    return 'Restaurando ($current/$total)';
   }
 
   @override
-  String get restorePreparing => 'Preparing...';
+  String get restorePreparing => 'Preparando...';
 
   @override
   String restoreLedgerProgress(String ledger, int done, int total) {
-    return 'Ledger: $ledger  Records: $done/$total';
+    return 'Libro: $ledger  Registros: $done/$total';
   }
 
   @override
-  String get mineSlogan => 'Bee Accounting, Every Penny Counts';
+  String get mineSlogan => 'Contabilidad Abeja, Cada Centavo Cuenta';
 
   @override
-  String get mineDaysCount => 'Days';
+  String get mineDaysCount => 'Días';
 
   @override
-  String get mineTotalRecords => 'Records';
+  String get mineTotalRecords => 'Registros';
 
   @override
   String get mineCurrentBalance => 'Balance';
 
   @override
-  String get mineCloudService => 'Cloud Service';
+  String get mineCloudService => 'Servicio en la Nube';
 
   @override
-  String get mineCloudServiceLoading => 'Loading...';
+  String get mineCloudServiceLoading => 'Cargando...';
 
   @override
   String mineCloudServiceError(Object error) {
@@ -712,238 +712,238 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get mineCloudServiceDefault => 'Default Cloud (Enabled)';
+  String get mineCloudServiceDefault => 'Nube Predeterminada (Habilitada)';
 
   @override
-  String get mineCloudServiceOffline => 'Default Mode (Offline)';
+  String get mineCloudServiceOffline => 'Modo Predeterminado (Sin Conexión)';
 
   @override
-  String get mineCloudServiceCustom => 'Custom Supabase';
+  String get mineCloudServiceCustom => 'Supabase Personalizado';
 
   @override
   String get mineCloudServiceWebDAV => 'Servicio de nube personalizado (WebDAV)';
 
   @override
-  String get mineFirstFullUpload => 'First Full Upload';
+  String get mineFirstFullUpload => 'Primera Carga Completa';
 
   @override
-  String get mineFirstFullUploadSubtitle => 'Upload all local ledgers to cloud';
+  String get mineFirstFullUploadSubtitle => 'Cargar todos los libros locales a la nube';
 
   @override
-  String get mineFirstFullUploadComplete => 'Complete';
+  String get mineFirstFullUploadComplete => 'Completo';
 
   @override
-  String get mineFirstFullUploadMessage => 'Current ledger uploaded. Switch to other ledgers to upload them.';
+  String get mineFirstFullUploadMessage => 'Libro actual cargado. Cambie a otros libros para cargarlos.';
 
   @override
-  String get mineFirstFullUploadFailed => 'Failed';
+  String get mineFirstFullUploadFailed => 'Fallido';
 
   @override
-  String get mineSyncTitle => 'Sync';
+  String get mineSyncTitle => 'Sincronizar';
 
   @override
-  String get mineSyncNotLoggedIn => 'Not logged in';
+  String get mineSyncNotLoggedIn => 'No conectado';
 
   @override
-  String get mineSyncNotConfigured => 'Cloud not configured';
+  String get mineSyncNotConfigured => 'Nube no configurada';
 
   @override
-  String get mineSyncNoRemote => 'No cloud backup';
+  String get mineSyncNoRemote => 'Sin copia de seguridad en la nube';
 
   @override
   String mineSyncInSync(Object count) {
-    return 'Synced (local $count records)';
+    return 'Sincronizado (local $count registros)';
   }
 
   @override
   String mineSyncLocalNewer(Object count) {
-    return 'Local newer (local $count records, upload recommended)';
+    return 'Local más reciente (local $count registros, se recomienda cargar)';
   }
 
   @override
-  String get mineSyncCloudNewer => 'Cloud newer (download recommended)';
+  String get mineSyncCloudNewer => 'Nube más reciente (se recomienda descargar)';
 
   @override
-  String get mineSyncDifferent => 'Local and cloud differ';
+  String get mineSyncDifferent => 'Local y nube difieren';
 
   @override
-  String get mineSyncError => 'Failed to get status';
+  String get mineSyncError => 'Error al obtener estado';
 
   @override
-  String get mineSyncDetailTitle => 'Sync Status Details';
+  String get mineSyncDetailTitle => 'Detalles del Estado de Sincronización';
 
   @override
   String mineSyncLocalRecords(Object count) {
-    return 'Local records: $count';
+    return 'Registros locales: $count';
   }
 
   @override
   String mineSyncCloudRecords(Object count) {
-    return 'Cloud records: $count';
+    return 'Registros en la nube: $count';
   }
 
   @override
   String mineSyncCloudLatest(Object time) {
-    return 'Cloud latest record time: $time';
+    return 'Hora del registro más reciente en la nube: $time';
   }
 
   @override
   String mineSyncLocalFingerprint(Object fingerprint) {
-    return 'Local fingerprint: $fingerprint';
+    return 'Huella local: $fingerprint';
   }
 
   @override
   String mineSyncCloudFingerprint(Object fingerprint) {
-    return 'Cloud fingerprint: $fingerprint';
+    return 'Huella en la nube: $fingerprint';
   }
 
   @override
   String mineSyncMessage(Object message) {
-    return 'Message: $message';
+    return 'Mensaje: $message';
   }
 
   @override
-  String get mineUploadTitle => 'Upload';
+  String get mineUploadTitle => 'Cargar';
 
   @override
-  String get mineUploadNeedLogin => 'Login required';
+  String get mineUploadNeedLogin => 'Se requiere inicio de sesión';
 
   @override
-  String get mineUploadNeedCloudService => 'Available in cloud service mode only';
+  String get mineUploadNeedCloudService => 'Disponible solo en modo de servicio en la nube';
 
   @override
-  String get mineUploadInProgress => 'Uploading...';
+  String get mineUploadInProgress => 'Cargando...';
 
   @override
-  String get mineUploadRefreshing => 'Refreshing...';
+  String get mineUploadRefreshing => 'Actualizando...';
 
   @override
-  String get mineUploadSynced => 'Synced';
+  String get mineUploadSynced => 'Sincronizado';
 
   @override
-  String get mineUploadSuccess => 'Uploaded';
+  String get mineUploadSuccess => 'Cargado';
 
   @override
-  String get mineUploadSuccessMessage => 'Current ledger synced to cloud';
+  String get mineUploadSuccessMessage => 'Libro actual sincronizado a la nube';
 
   @override
-  String get mineDownloadTitle => 'Download';
+  String get mineDownloadTitle => 'Descargar';
 
   @override
-  String get mineDownloadNeedCloudService => 'Available in cloud service mode only';
+  String get mineDownloadNeedCloudService => 'Disponible solo en modo de servicio en la nube';
 
   @override
-  String get mineDownloadComplete => 'Complete';
+  String get mineDownloadComplete => 'Completo';
 
   @override
   String mineDownloadResult(Object deleted, Object inserted, Object skipped) {
-    return 'New imports: $inserted\nExisting skipped: $skipped\nDuplicates cleaned: $deleted';
+    return 'Nuevas importaciones: $inserted\nExistentes omitidos: $skipped\nDuplicados limpiados: $deleted';
   }
 
   @override
-  String get mineLoginTitle => 'Login / Register';
+  String get mineLoginTitle => 'Iniciar Sesión / Registrarse';
 
   @override
-  String get mineLoginSubtitle => 'Only needed for sync';
+  String get mineLoginSubtitle => 'Solo necesario para sincronización';
 
   @override
-  String get mineLoggedInEmail => 'Logged in';
+  String get mineLoggedInEmail => 'Conectado';
 
   @override
-  String get mineLogoutSubtitle => 'Tap to logout';
+  String get mineLogoutSubtitle => 'Toca para cerrar sesión';
 
   @override
-  String get mineLogoutConfirmTitle => 'Logout';
+  String get mineLogoutConfirmTitle => 'Cerrar Sesión';
 
   @override
-  String get mineLogoutConfirmMessage => 'Are you sure you want to logout?\nYou won\'t be able to use cloud sync after logout.';
+  String get mineLogoutConfirmMessage => '¿Estás seguro de que quieres cerrar sesión?\nNo podrás usar la sincronización en la nube después de cerrar sesión.';
 
   @override
-  String get mineLogoutButton => 'Logout';
+  String get mineLogoutButton => 'Cerrar Sesión';
 
   @override
-  String get mineAutoSyncTitle => 'Auto sync ledger';
+  String get mineAutoSyncTitle => 'Sincronizar libro automáticamente';
 
   @override
-  String get mineAutoSyncSubtitle => 'Auto upload to cloud after recording';
+  String get mineAutoSyncSubtitle => 'Cargar automáticamente a la nube después de registrar';
 
   @override
-  String get mineAutoSyncNeedLogin => 'Login required to enable';
+  String get mineAutoSyncNeedLogin => 'Se requiere inicio de sesión para habilitar';
 
   @override
-  String get mineAutoSyncNeedCloudService => 'Available in cloud service mode only';
+  String get mineAutoSyncNeedCloudService => 'Disponible solo en modo de servicio en la nube';
 
   @override
-  String get mineImportProgressTitle => 'Importing in background...';
+  String get mineImportProgressTitle => 'Importando en segundo plano...';
 
   @override
   String mineImportProgressSubtitle(Object done, Object fail, Object ok, Object total) {
-    return 'Progress: $done/$total, Success $ok, Failed $fail';
+    return 'Progreso: $done/$total, Éxito $ok, Fallidos $fail';
   }
 
   @override
-  String get mineImportCompleteTitle => 'Import complete';
+  String get mineImportCompleteTitle => 'Importación completa';
 
   @override
   String mineImportCompleteSubtitle(Object fail, Object ok) {
-    return 'Success $ok, Failed $fail';
+    return 'Éxito $ok, Fallidos $fail';
   }
 
   @override
-  String get mineCategoryManagement => 'Category Management';
+  String get mineCategoryManagement => 'Administración de Categorías';
 
   @override
-  String get mineCategoryManagementSubtitle => 'Edit custom categories';
+  String get mineCategoryManagementSubtitle => 'Editar categorías personalizadas';
 
   @override
-  String get mineCategoryMigration => 'Category Migration';
+  String get mineCategoryMigration => 'Migración de Categoría';
 
   @override
-  String get mineCategoryMigrationSubtitle => 'Migrate category data to other categories';
+  String get mineCategoryMigrationSubtitle => 'Migrar datos de categoría a otras categorías';
 
   @override
-  String get mineRecurringTransactions => 'Recurring Bills';
+  String get mineRecurringTransactions => 'Facturas Recurrentes';
 
   @override
-  String get mineRecurringTransactionsSubtitle => 'Manage recurring bills';
+  String get mineRecurringTransactionsSubtitle => 'Administrar facturas recurrentes';
 
   @override
-  String get mineReminderSettings => 'Reminder Settings';
+  String get mineReminderSettings => 'Configuración de Recordatorio';
 
   @override
-  String get mineReminderSettingsSubtitle => 'Set daily recording reminders';
+  String get mineReminderSettingsSubtitle => 'Establecer recordatorios de registro diario';
 
   @override
-  String get minePersonalize => 'Personalization';
+  String get minePersonalize => 'Personalización';
 
   @override
-  String get mineDisplayScale => 'Display Scale';
+  String get mineDisplayScale => 'Escala de Visualización';
 
   @override
-  String get mineDisplayScaleSubtitle => 'Adjust text and UI element sizes';
+  String get mineDisplayScaleSubtitle => 'Ajustar tamaños de texto y elementos de UI';
 
   @override
-  String get mineAboutTitle => 'About';
+  String get mineAboutTitle => 'Acerca de';
 
   @override
   String mineAboutMessage(Object version) {
-    return 'App: Bee Accounting\nVersion: $version\nSource: https://github.com/TNT-Likely/BeeCount\nLicense: See LICENSE in repository';
+    return 'Aplicación: Contabilidad Abeja\nVersión: $version\nFuente: https://github.com/TNT-Likely/BeeCount\nLicencia: Ver LICENSE en el repositorio';
   }
 
   @override
-  String get mineAboutOpenGitHub => 'Open GitHub';
+  String get mineAboutOpenGitHub => 'Abrir GitHub';
 
   @override
   String get mineCheckUpdate => 'Verificar actualizaciones';
 
   @override
-  String get mineCheckUpdateInProgress => 'Checking update...';
+  String get mineCheckUpdateInProgress => 'Verificando actualización...';
 
   @override
-  String get mineCheckUpdateSubtitle => 'Checking for latest version';
+  String get mineCheckUpdateSubtitle => 'Verificando la última versión';
 
   @override
-  String get mineUpdateDownload => 'Download Update';
+  String get mineUpdateDownload => 'Descargar Actualización';
 
   @override
   String get mineFeedback => 'Comentarios';
@@ -964,461 +964,461 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineSupportAuthorSubtitle => 'Dale estrella al proyecto en GitHub';
 
   @override
-  String get mineRefreshStats => 'Refresh Stats (Debug)';
+  String get mineRefreshStats => 'Actualizar Estadísticas (Debug)';
 
   @override
-  String get mineRefreshStatsSubtitle => 'Trigger global stats provider recalculation';
+  String get mineRefreshStatsSubtitle => 'Activar recálculo del proveedor de estadísticas globales';
 
   @override
-  String get mineRefreshSync => 'Refresh Sync Status (Debug)';
+  String get mineRefreshSync => 'Actualizar Estado de Sincronización (Debug)';
 
   @override
-  String get mineRefreshSyncSubtitle => 'Trigger sync status provider refresh';
+  String get mineRefreshSyncSubtitle => 'Activar actualización del proveedor de estado de sincronización';
 
   @override
-  String get categoryEditTitle => 'Edit Category';
+  String get categoryEditTitle => 'Editar Categoría';
 
   @override
-  String get categoryNewTitle => 'New Category';
+  String get categoryNewTitle => 'Nueva Categoría';
 
   @override
-  String get categoryDetailTooltip => 'Category Details';
+  String get categoryDetailTooltip => 'Detalles de Categoría';
 
   @override
-  String get categoryMigrationTooltip => 'Category Migration';
+  String get categoryMigrationTooltip => 'Migración de Categoría';
 
   @override
-  String get categoryMigrationTitle => 'Category Migration';
+  String get categoryMigrationTitle => 'Migración de Categoría';
 
   @override
-  String get categoryMigrationDescription => 'Category Migration Instructions';
+  String get categoryMigrationDescription => 'Instrucciones de Migración de Categoría';
 
   @override
-  String get categoryMigrationDescriptionContent => '• Migrate all transaction records from one category to another\n• After migration, all transaction data from the source category will be transferred to the target category\n• This operation cannot be undone, please choose carefully';
+  String get categoryMigrationDescriptionContent => '• Migrar todos los registros de transacciones de una categoría a otra\n• Después de la migración, todos los datos de transacciones de la categoría de origen se transferirán a la categoría de destino\n• Esta operación no se puede deshacer, por favor elija cuidadosamente';
 
   @override
-  String get categoryMigrationFromLabel => 'From Category';
+  String get categoryMigrationFromLabel => 'Desde Categoría';
 
   @override
-  String get categoryMigrationFromHint => 'Select category to migrate from';
+  String get categoryMigrationFromHint => 'Seleccionar categoría desde la que migrar';
 
   @override
-  String get categoryMigrationToLabel => 'To Category';
+  String get categoryMigrationToLabel => 'A Categoría';
 
   @override
-  String get categoryMigrationToHint => 'Select target category';
+  String get categoryMigrationToHint => 'Seleccionar categoría de destino';
 
   @override
-  String get categoryMigrationToHintFirst => 'Please select source category first';
+  String get categoryMigrationToHintFirst => 'Por favor seleccione primero la categoría de origen';
 
   @override
-  String get categoryMigrationStartButton => 'Start Migration';
+  String get categoryMigrationStartButton => 'Iniciar Migración';
 
   @override
   String categoryMigrationTransactionCount(int count) {
-    return '$count records';
+    return '$count registros';
   }
 
   @override
-  String get categoryMigrationCannotTitle => 'Cannot Migrate';
+  String get categoryMigrationCannotTitle => 'No se Puede Migrar';
 
   @override
-  String get categoryMigrationCannotMessage => 'Selected categories cannot be migrated, please check category status.';
+  String get categoryMigrationCannotMessage => 'Las categorías seleccionadas no se pueden migrar, por favor verifique el estado de la categoría.';
 
   @override
-  String get categoryExpenseType => 'Expense Category';
+  String get categoryExpenseType => 'Categoría de Gastos';
 
   @override
-  String get categoryIncomeType => 'Income Category';
+  String get categoryIncomeType => 'Categoría de Ingresos';
 
   @override
-  String get categoryDefaultTitle => 'Default Category';
+  String get categoryDefaultTitle => 'Categoría Predeterminada';
 
   @override
-  String get categoryDefaultMessage => 'Default categories cannot be modified, but you can view details and migrate data';
+  String get categoryDefaultMessage => 'Las categorías predeterminadas no se pueden modificar, pero puede ver detalles y migrar datos';
 
   @override
-  String get categoryNameDining => 'Dining';
+  String get categoryNameDining => 'Comida';
 
   @override
-  String get categoryNameTransport => 'Transport';
+  String get categoryNameTransport => 'Transporte';
 
   @override
-  String get categoryNameShopping => 'Shopping';
+  String get categoryNameShopping => 'Compras';
 
   @override
-  String get categoryNameEntertainment => 'Entertainment';
+  String get categoryNameEntertainment => 'Entretenimiento';
 
   @override
-  String get categoryNameHome => 'Home';
+  String get categoryNameHome => 'Hogar';
 
   @override
-  String get categoryNameFamily => 'Family';
+  String get categoryNameFamily => 'Familia';
 
   @override
-  String get categoryNameCommunication => 'Communication';
+  String get categoryNameCommunication => 'Comunicación';
 
   @override
-  String get categoryNameUtilities => 'Utilities';
+  String get categoryNameUtilities => 'Servicios';
 
   @override
-  String get categoryNameHousing => 'Housing';
+  String get categoryNameHousing => 'Vivienda';
 
   @override
-  String get categoryNameMedical => 'Medical';
+  String get categoryNameMedical => 'Médico';
 
   @override
-  String get categoryNameEducation => 'Education';
+  String get categoryNameEducation => 'Educación';
 
   @override
-  String get categoryNamePets => 'Pets';
+  String get categoryNamePets => 'Mascotas';
 
   @override
-  String get categoryNameSports => 'Sports';
+  String get categoryNameSports => 'Deportes';
 
   @override
   String get categoryNameDigital => 'Digital';
 
   @override
-  String get categoryNameTravel => 'Travel';
+  String get categoryNameTravel => 'Viaje';
 
   @override
-  String get categoryNameAlcoholTobacco => 'Alcohol & Tobacco';
+  String get categoryNameAlcoholTobacco => 'Alcohol y Tabaco';
 
   @override
-  String get categoryNameBabyCare => 'Baby Care';
+  String get categoryNameBabyCare => 'Cuidado del Bebé';
 
   @override
-  String get categoryNameBeauty => 'Beauty';
+  String get categoryNameBeauty => 'Belleza';
 
   @override
-  String get categoryNameRepair => 'Repair';
+  String get categoryNameRepair => 'Reparación';
 
   @override
   String get categoryNameSocial => 'Social';
 
   @override
-  String get categoryNameLearning => 'Learning';
+  String get categoryNameLearning => 'Aprendizaje';
 
   @override
-  String get categoryNameCar => 'Car';
+  String get categoryNameCar => 'Automóvil';
 
   @override
   String get categoryNameTaxi => 'Taxi';
 
   @override
-  String get categoryNameSubway => 'Subway';
+  String get categoryNameSubway => 'Metro';
 
   @override
-  String get categoryNameDelivery => 'Delivery';
+  String get categoryNameDelivery => 'Entrega';
 
   @override
-  String get categoryNameProperty => 'Property';
+  String get categoryNameProperty => 'Propiedad';
 
   @override
-  String get categoryNameParking => 'Parking';
+  String get categoryNameParking => 'Estacionamiento';
 
   @override
-  String get categoryNameDonation => 'Donation';
+  String get categoryNameDonation => 'Donación';
 
   @override
-  String get categoryNameGift => 'Gift';
+  String get categoryNameGift => 'Regalo';
 
   @override
-  String get categoryNameTax => 'Tax';
+  String get categoryNameTax => 'Impuesto';
 
   @override
-  String get categoryNameBeverage => 'Beverage';
+  String get categoryNameBeverage => 'Bebida';
 
   @override
-  String get categoryNameClothing => 'Clothing';
+  String get categoryNameClothing => 'Ropa';
 
   @override
-  String get categoryNameSnacks => 'Snacks';
+  String get categoryNameSnacks => 'Bocadillos';
 
   @override
-  String get categoryNameRedPacket => 'Red Packet';
+  String get categoryNameRedPacket => 'Sobre Rojo';
 
   @override
-  String get categoryNameFruit => 'Fruit';
+  String get categoryNameFruit => 'Fruta';
 
   @override
-  String get categoryNameGame => 'Game';
+  String get categoryNameGame => 'Juego';
 
   @override
-  String get categoryNameBook => 'Book';
+  String get categoryNameBook => 'Libro';
 
   @override
-  String get categoryNameLover => 'Lover';
+  String get categoryNameLover => 'Pareja';
 
   @override
-  String get categoryNameDecoration => 'Decoration';
+  String get categoryNameDecoration => 'Decoración';
 
   @override
-  String get categoryNameDailyGoods => 'Daily Goods';
+  String get categoryNameDailyGoods => 'Artículos Diarios';
 
   @override
-  String get categoryNameLottery => 'Lottery';
+  String get categoryNameLottery => 'Lotería';
 
   @override
-  String get categoryNameStock => 'Stock';
+  String get categoryNameStock => 'Acciones';
 
   @override
-  String get categoryNameSocialSecurity => 'Social Security';
+  String get categoryNameSocialSecurity => 'Seguridad Social';
 
   @override
-  String get categoryNameExpress => 'Express';
+  String get categoryNameExpress => 'Mensajería';
 
   @override
-  String get categoryNameWork => 'Work';
+  String get categoryNameWork => 'Trabajo';
 
   @override
-  String get categoryNameSalary => 'Salary';
+  String get categoryNameSalary => 'Salario';
 
   @override
-  String get categoryNameInvestment => 'Investment';
+  String get categoryNameInvestment => 'Inversión';
 
   @override
-  String get categoryNameBonus => 'Bonus';
+  String get categoryNameBonus => 'Bonificación';
 
   @override
-  String get categoryNameReimbursement => 'Reimbursement';
+  String get categoryNameReimbursement => 'Reembolso';
 
   @override
-  String get categoryNamePartTime => 'Part-time';
+  String get categoryNamePartTime => 'Tiempo Parcial';
 
   @override
-  String get categoryNameInterest => 'Interest';
+  String get categoryNameInterest => 'Interés';
 
   @override
-  String get categoryNameRefund => 'Refund';
+  String get categoryNameRefund => 'Devolución';
 
   @override
-  String get categoryNameSecondHand => 'Second-hand Sale';
+  String get categoryNameSecondHand => 'Venta de Segunda Mano';
 
   @override
-  String get categoryNameSocialBenefit => 'Social Benefit';
+  String get categoryNameSocialBenefit => 'Beneficio Social';
 
   @override
-  String get categoryNameTaxRefund => 'Tax Refund';
+  String get categoryNameTaxRefund => 'Devolución de Impuestos';
 
   @override
-  String get categoryNameProvidentFund => 'Provident Fund';
+  String get categoryNameProvidentFund => 'Fondo de Previsión';
 
   @override
-  String get categoryNameLabel => 'Category Name';
+  String get categoryNameLabel => 'Nombre de Categoría';
 
   @override
-  String get categoryNameHint => 'Enter category name';
+  String get categoryNameHint => 'Ingrese el nombre de la categoría';
 
   @override
-  String get categoryNameHintDefault => 'Default category name cannot be modified';
+  String get categoryNameHintDefault => 'El nombre de la categoría predeterminada no se puede modificar';
 
   @override
-  String get categoryNameRequired => 'Please enter category name';
+  String get categoryNameRequired => 'Por favor ingrese el nombre de la categoría';
 
   @override
-  String get categoryNameTooLong => 'Category name cannot exceed 4 characters';
+  String get categoryNameTooLong => 'El nombre de la categoría no puede exceder 4 caracteres';
 
   @override
-  String get categoryIconLabel => 'Category Icon';
+  String get categoryIconLabel => 'Icono de Categoría';
 
   @override
-  String get categoryIconDefaultMessage => 'Default category icon cannot be modified';
+  String get categoryIconDefaultMessage => 'El icono de categoría predeterminada no se puede modificar';
 
   @override
-  String get categoryDangerousOperations => 'Dangerous Operations';
+  String get categoryDangerousOperations => 'Operaciones Peligrosas';
 
   @override
-  String get categoryDeleteTitle => 'Delete Category';
+  String get categoryDeleteTitle => 'Eliminar Categoría';
 
   @override
-  String get categoryDeleteSubtitle => 'Cannot be recovered after deletion';
+  String get categoryDeleteSubtitle => 'No se puede recuperar después de la eliminación';
 
   @override
-  String get categoryDefaultCannotSave => 'Default category cannot be saved';
+  String get categoryDefaultCannotSave => 'La categoría predeterminada no se puede guardar';
 
   @override
-  String get categorySaveError => 'Save failed';
+  String get categorySaveError => 'Error al guardar';
 
   @override
   String categoryUpdated(Object name) {
-    return 'Category \"$name\" updated';
+    return 'Categoría \"$name\" actualizada';
   }
 
   @override
   String categoryCreated(Object name) {
-    return 'Category \"$name\" created';
+    return 'Categoría \"$name\" creada';
   }
 
   @override
-  String get categoryCannotDelete => 'Cannot delete';
+  String get categoryCannotDelete => 'No se Puede Eliminar';
 
   @override
   String categoryCannotDeleteMessage(Object count) {
-    return 'This category has $count transaction records. Please handle them first.';
+    return 'Esta categoría tiene $count registros de transacciones. Por favor manéjelos primero.';
   }
 
   @override
-  String get categoryDeleteConfirmTitle => 'Delete Category';
+  String get categoryDeleteConfirmTitle => 'Eliminar Categoría';
 
   @override
   String categoryDeleteConfirmMessage(Object name) {
-    return 'Are you sure you want to delete category \"$name\"? This action cannot be undone.';
+    return '¿Estás seguro de que quieres eliminar la categoría \"$name\"? Esta acción no se puede deshacer.';
   }
 
   @override
-  String get categoryDeleteError => 'Delete failed';
+  String get categoryDeleteError => 'Error al eliminar';
 
   @override
   String categoryDeleted(Object name) {
-    return 'Category \"$name\" deleted';
+    return 'Categoría \"$name\" eliminada';
   }
 
   @override
   String get personalizeTitle => 'Personalizar';
 
   @override
-  String get personalizeCustomColor => 'Choose custom color';
+  String get personalizeCustomColor => 'Elegir color personalizado';
 
   @override
-  String get personalizeCustomTitle => 'Custom';
+  String get personalizeCustomTitle => 'Personalizado';
 
   @override
   String personalizeHue(Object value) {
-    return 'Hue ($value°)';
+    return 'Matiz ($value°)';
   }
 
   @override
   String personalizeSaturation(Object value) {
-    return 'Saturation ($value%)';
+    return 'Saturación ($value%)';
   }
 
   @override
   String personalizeBrightness(Object value) {
-    return 'Brightness ($value%)';
+    return 'Brillo ($value%)';
   }
 
   @override
-  String get personalizeSelectColor => 'Select this color';
+  String get personalizeSelectColor => 'Seleccionar este color';
 
   @override
-  String get fontSettingsTitle => 'Display Scale';
+  String get fontSettingsTitle => 'Escala de Visualización';
 
   @override
   String fontSettingsCurrentScale(Object scale) {
-    return 'Current scale: x$scale';
+    return 'Escala actual: x$scale';
   }
 
   @override
-  String get fontSettingsPreview => 'Live Preview';
+  String get fontSettingsPreview => 'Vista Previa en Vivo';
 
   @override
-  String get fontSettingsPreviewText => 'Spent 23.50 on lunch today, record it;\nRecorded for 45 days this month, 320 entries;\nPersistence is victory!';
+  String get fontSettingsPreviewText => 'Gasté 23.50 en almuerzo hoy, regístralo;\nRegistrado durante 45 días este mes, 320 entradas;\n¡La persistencia es la victoria!';
 
   @override
   String fontSettingsCurrentLevel(Object level, Object scale) {
-    return 'Current level: $level (scale x$scale)';
+    return 'Nivel actual: $level (escala x$scale)';
   }
 
   @override
-  String get fontSettingsQuickLevel => 'Quick Levels';
+  String get fontSettingsQuickLevel => 'Niveles Rápidos';
 
   @override
-  String get fontSettingsCustomAdjust => 'Custom Adjustment';
+  String get fontSettingsCustomAdjust => 'Ajuste Personalizado';
 
   @override
-  String get fontSettingsDescription => 'Note: This setting ensures consistent display at 1.0x across all devices, with device differences auto-compensated; adjust values for personalized scaling on this consistent base.';
+  String get fontSettingsDescription => 'Nota: Esta configuración garantiza una visualización consistente a 1.0x en todos los dispositivos, con diferencias de dispositivo autocompensadas; ajuste los valores para un escalado personalizado sobre esta base consistente.';
 
   @override
-  String get fontSettingsExtraSmall => 'Extra Small';
+  String get fontSettingsExtraSmall => 'Extra Pequeño';
 
   @override
-  String get fontSettingsVerySmall => 'Very Small';
+  String get fontSettingsVerySmall => 'Muy Pequeño';
 
   @override
-  String get fontSettingsSmall => 'Small';
+  String get fontSettingsSmall => 'Pequeño';
 
   @override
-  String get fontSettingsStandard => 'Standard';
+  String get fontSettingsStandard => 'Estándar';
 
   @override
-  String get fontSettingsLarge => 'Large';
+  String get fontSettingsLarge => 'Grande';
 
   @override
-  String get fontSettingsBig => 'Big';
+  String get fontSettingsBig => 'Grande';
 
   @override
-  String get fontSettingsVeryBig => 'Very Big';
+  String get fontSettingsVeryBig => 'Muy Grande';
 
   @override
-  String get fontSettingsExtraBig => 'Extra Big';
+  String get fontSettingsExtraBig => 'Extra Grande';
 
   @override
-  String get fontSettingsMoreStyles => 'More Styles';
+  String get fontSettingsMoreStyles => 'Más Estilos';
 
   @override
-  String get fontSettingsPageTitle => 'Page Title';
+  String get fontSettingsPageTitle => 'Título de Página';
 
   @override
-  String get fontSettingsBlockTitle => 'Block Title';
+  String get fontSettingsBlockTitle => 'Título de Bloque';
 
   @override
-  String get fontSettingsBodyExample => 'Body Text';
+  String get fontSettingsBodyExample => 'Texto del Cuerpo';
 
   @override
-  String get fontSettingsLabelExample => 'Label Text';
+  String get fontSettingsLabelExample => 'Texto de Etiqueta';
 
   @override
-  String get fontSettingsStrongNumber => 'Strong Number';
+  String get fontSettingsStrongNumber => 'Número Fuerte';
 
   @override
-  String get fontSettingsListTitle => 'List Item Title';
+  String get fontSettingsListTitle => 'Título de Elemento de Lista';
 
   @override
-  String get fontSettingsListSubtitle => 'Helper Text';
+  String get fontSettingsListSubtitle => 'Texto de Ayuda';
 
   @override
-  String get fontSettingsScreenInfo => 'Screen Adaptation Info';
+  String get fontSettingsScreenInfo => 'Información de Adaptación de Pantalla';
 
   @override
-  String get fontSettingsScreenDensity => 'Screen Density';
+  String get fontSettingsScreenDensity => 'Densidad de Pantalla';
 
   @override
-  String get fontSettingsScreenWidth => 'Screen Width';
+  String get fontSettingsScreenWidth => 'Ancho de Pantalla';
 
   @override
-  String get fontSettingsDeviceScale => 'Device Scale';
+  String get fontSettingsDeviceScale => 'Escala del Dispositivo';
 
   @override
-  String get fontSettingsUserScale => 'User Scale';
+  String get fontSettingsUserScale => 'Escala del Usuario';
 
   @override
-  String get fontSettingsFinalScale => 'Final Scale';
+  String get fontSettingsFinalScale => 'Escala Final';
 
   @override
-  String get fontSettingsBaseDevice => 'Base Device';
+  String get fontSettingsBaseDevice => 'Dispositivo Base';
 
   @override
-  String get fontSettingsRecommendedScale => 'Recommended Scale';
+  String get fontSettingsRecommendedScale => 'Escala Recomendada';
 
   @override
-  String get fontSettingsYes => 'Yes';
+  String get fontSettingsYes => 'Sí';
 
   @override
   String get fontSettingsNo => 'No';
 
   @override
-  String get fontSettingsScaleExample => 'This box and spacing auto-scale based on device';
+  String get fontSettingsScaleExample => 'Esta caja y el espaciado se escalan automáticamente según el dispositivo';
 
   @override
-  String get fontSettingsPreciseAdjust => 'Precise Adjustment';
+  String get fontSettingsPreciseAdjust => 'Ajuste Preciso';
 
   @override
-  String get fontSettingsResetTo1x => 'Reset to 1.0x';
+  String get fontSettingsResetTo1x => 'Restablecer a 1.0x';
 
   @override
-  String get fontSettingsAdaptBase => 'Adapt to Base';
+  String get fontSettingsAdaptBase => 'Adaptar a Base';
 
   @override
   String get reminderTitle => 'Recordatorio de registro';
@@ -1454,390 +1454,390 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reminderQuickTest => 'Prueba rápida (15s después)';
 
   @override
-  String get reminderQuickTestMessage => 'Quick test set for 15 seconds later, keep app in background';
+  String get reminderQuickTestMessage => 'Prueba rápida configurada para 15 segundos después, mantenga la aplicación en segundo plano';
 
   @override
   String get reminderFlutterTest => '🔧 Probar notificación de clic de Flutter (Dev)';
 
   @override
-  String get reminderFlutterTestMessage => 'Flutter test notification sent, tap to see if app opens';
+  String get reminderFlutterTestMessage => 'Notificación de prueba de Flutter enviada, toque para ver si abre la aplicación';
 
   @override
-  String get reminderAlarmTest => '🔧 Test AlarmManager Notification Click (Dev)';
+  String get reminderAlarmTest => '🔧 Probar Notificación de Clic de AlarmManager (Dev)';
 
   @override
-  String get reminderAlarmTestMessage => 'AlarmManager test notification set (1s later), tap to see if app opens';
+  String get reminderAlarmTestMessage => 'Notificación de prueba de AlarmManager configurada (1 segundo después), toque para ver si abre la aplicación';
 
   @override
-  String get reminderDirectTest => '🔧 Direct Test NotificationReceiver (Dev)';
+  String get reminderDirectTest => '🔧 Prueba Directa de NotificationReceiver (Dev)';
 
   @override
-  String get reminderDirectTestMessage => 'Directly called NotificationReceiver to create notification, check if tap works';
+  String get reminderDirectTestMessage => 'Llamó directamente a NotificationReceiver para crear notificación, verifique si el toque funciona';
 
   @override
-  String get reminderCheckStatus => '🔧 Check Notification Status (Dev)';
+  String get reminderCheckStatus => '🔧 Verificar Estado de Notificación (Dev)';
 
   @override
-  String get reminderNotificationStatus => 'Notification Status';
+  String get reminderNotificationStatus => 'Estado de Notificación';
 
   @override
   String reminderPendingCount(Object count) {
-    return 'Pending notifications: $count';
+    return 'Notificaciones pendientes: $count';
   }
 
   @override
-  String get reminderNoPending => 'No pending notifications';
+  String get reminderNoPending => 'No hay notificaciones pendientes';
 
   @override
-  String get reminderCheckBattery => 'Check Battery Optimization Status';
+  String get reminderCheckBattery => 'Verificar Estado de Optimización de Batería';
 
   @override
-  String get reminderBatteryStatus => 'Battery Optimization Status';
+  String get reminderBatteryStatus => 'Estado de Optimización de Batería';
 
   @override
   String reminderManufacturer(Object value) {
-    return 'Manufacturer: $value';
+    return 'Fabricante: $value';
   }
 
   @override
   String reminderModel(Object value) {
-    return 'Model: $value';
+    return 'Modelo: $value';
   }
 
   @override
   String reminderAndroidVersion(Object value) {
-    return 'Android Version: $value';
+    return 'Versión de Android: $value';
   }
 
   @override
-  String get reminderBatteryIgnored => 'Battery optimization: Ignored ✅';
+  String get reminderBatteryIgnored => 'Optimización de batería: Ignorada ✅';
 
   @override
-  String get reminderBatteryNotIgnored => 'Battery optimization: Not ignored ⚠️';
+  String get reminderBatteryNotIgnored => 'Optimización de batería: No ignorada ⚠️';
 
   @override
-  String get reminderBatteryAdvice => 'Recommend disabling battery optimization for proper notifications';
+  String get reminderBatteryAdvice => 'Se recomienda deshabilitar la optimización de batería para notificaciones adecuadas';
 
   @override
-  String get reminderGoToSettings => 'Go to Settings';
+  String get reminderGoToSettings => 'Ir a Configuración';
 
   @override
-  String get reminderCheckChannel => 'Check Notification Channel Settings';
+  String get reminderCheckChannel => 'Verificar Configuración del Canal de Notificaciones';
 
   @override
-  String get reminderChannelStatus => 'Notification Channel Status';
+  String get reminderChannelStatus => 'Estado del Canal de Notificaciones';
 
   @override
-  String get reminderChannelEnabled => 'Channel enabled: Yes ✅';
+  String get reminderChannelEnabled => 'Canal habilitado: Sí ✅';
 
   @override
-  String get reminderChannelDisabled => 'Channel enabled: No ❌';
+  String get reminderChannelDisabled => 'Canal habilitado: No ❌';
 
   @override
   String reminderChannelImportance(Object value) {
-    return 'Importance: $value';
+    return 'Importancia: $value';
   }
 
   @override
-  String get reminderChannelSoundOn => 'Sound: On 🔊';
+  String get reminderChannelSoundOn => 'Sonido: Activado 🔊';
 
   @override
-  String get reminderChannelSoundOff => 'Sound: Off 🔇';
+  String get reminderChannelSoundOff => 'Sonido: Desactivado 🔇';
 
   @override
-  String get reminderChannelVibrationOn => 'Vibration: On 📳';
+  String get reminderChannelVibrationOn => 'Vibración: Activada 📳';
 
   @override
-  String get reminderChannelVibrationOff => 'Vibration: Off';
+  String get reminderChannelVibrationOff => 'Vibración: Desactivada';
 
   @override
-  String get reminderChannelDndBypass => 'Do Not Disturb: Can bypass';
+  String get reminderChannelDndBypass => 'No Molestar: Puede omitir';
 
   @override
-  String get reminderChannelDndNoBypass => 'Do Not Disturb: Cannot bypass';
+  String get reminderChannelDndNoBypass => 'No Molestar: No puede omitir';
 
   @override
-  String get reminderChannelAdvice => '⚠️ Recommended settings:';
+  String get reminderChannelAdvice => '⚠️ Configuraciones recomendadas:';
 
   @override
-  String get reminderChannelAdviceImportance => '• Importance: Urgent or High';
+  String get reminderChannelAdviceImportance => '• Importancia: Urgente o Alta';
 
   @override
-  String get reminderChannelAdviceSound => '• Enable sound and vibration';
+  String get reminderChannelAdviceSound => '• Habilitar sonido y vibración';
 
   @override
-  String get reminderChannelAdviceBanner => '• Allow banner notifications';
+  String get reminderChannelAdviceBanner => '• Permitir notificaciones de banner';
 
   @override
-  String get reminderChannelAdviceXiaomi => '• Xiaomi phones need individual channel setup';
+  String get reminderChannelAdviceXiaomi => '• Los teléfonos Xiaomi necesitan configuración individual del canal';
 
   @override
-  String get reminderChannelGood => '✅ Notification channel well configured';
+  String get reminderChannelGood => '✅ Canal de notificaciones bien configurado';
 
   @override
-  String get reminderOpenAppSettings => 'Open App Settings';
+  String get reminderOpenAppSettings => 'Abrir Configuración de la Aplicación';
 
   @override
-  String get reminderAppSettingsMessage => 'Please allow notifications and disable battery optimization in settings';
+  String get reminderAppSettingsMessage => 'Por favor permita las notificaciones y deshabilite la optimización de batería en la configuración';
 
   @override
-  String get reminderIOSTest => '🍎 iOS Notification Debug Test';
+  String get reminderIOSTest => '🍎 Prueba de Depuración de Notificación iOS';
 
   @override
-  String get reminderIOSTestTitle => 'iOS Notification Test';
+  String get reminderIOSTestTitle => 'Prueba de Notificación iOS';
 
   @override
-  String get reminderIOSTestMessage => 'Test notification sent.\n\n🍎 iOS Simulator limitations:\n• Notifications may not show in notification center\n• Banner alerts may not work\n• But Xcode console will show logs\n\n💡 Debug methods:\n• Check Xcode console output\n• Check Flutter log info\n• Use real device for full experience';
+  String get reminderIOSTestMessage => 'Notificación de prueba enviada.\n\n🍎 Limitaciones del Simulador iOS:\n• Las notificaciones pueden no mostrarse en el centro de notificaciones\n• Las alertas de banner pueden no funcionar\n• Pero la consola de Xcode mostrará registros\n\n💡 Métodos de depuración:\n• Verifique la salida de la consola de Xcode\n• Verifique la información del registro de Flutter\n• Use un dispositivo real para una experiencia completa';
 
   @override
-  String get reminderDescription => 'Tip: When recording reminder is enabled, the system will send notifications at the specified time daily to remind you to record income and expenses.';
+  String get reminderDescription => 'Consejo: Cuando el recordatorio de registro está habilitado, el sistema enviará notificaciones a la hora especificada diariamente para recordarle registrar ingresos y gastos.';
 
   @override
-  String get reminderIOSInstructions => '🍎 iOS notification settings:\n• Settings > Notifications > Bee Accounting\n• Enable \"Allow Notifications\"\n• Set notification style: Banner or Alert\n• Enable sound and vibration\n\n⚠️ Important Note:\n• iOS local notifications depend on app process\n• Do not force quit app from task manager\n• Notifications work when app is in background or foreground\n• Force quitting will disable notifications\n\n💡 Usage Tips:\n• Simply press Home button to exit app\n• iOS will manage background apps automatically\n• Keep app in background to receive reminders';
+  String get reminderIOSInstructions => '🍎 Configuración de notificaciones iOS:\n• Configuración > Notificaciones > Contabilidad Abeja\n• Habilitar \"Permitir Notificaciones\"\n• Establecer estilo de notificación: Banner o Alerta\n• Habilitar sonido y vibración\n\n⚠️ Nota Importante:\n• Las notificaciones locales de iOS dependen del proceso de la aplicación\n• No fuerce el cierre de la aplicación desde el administrador de tareas\n• Las notificaciones funcionan cuando la aplicación está en segundo plano o en primer plano\n• Forzar el cierre deshabilitará las notificaciones\n\n💡 Consejos de Uso:\n• Simplemente presione el botón Inicio para salir de la aplicación\n• iOS administrará automáticamente las aplicaciones en segundo plano\n• Mantenga la aplicación en segundo plano para recibir recordatorios';
 
   @override
-  String get reminderAndroidInstructions => 'If notifications don\'t work properly, check:\n• App is allowed to send notifications\n• Disable battery optimization/power saving for app\n• Allow app to run in background and auto-start\n• Android 12+ needs exact alarm permission\n\n📱 Xiaomi phone special settings:\n• Settings > App Management > Bee Accounting > Notification Management\n• Tap \"Recording Reminder\" channel\n• Set importance to \"Urgent\" or \"High\"\n• Enable \"Banner notifications\", \"Sound\", \"Vibration\"\n• Security Center > App Management > Permissions > Auto-start\n\n🔒 Lock background methods:\n• Find Bee Accounting in recent tasks\n• Pull down app card to show lock icon\n• Tap lock icon to prevent cleanup';
+  String get reminderAndroidInstructions => 'Si las notificaciones no funcionan correctamente, verifique:\n• La aplicación tiene permiso para enviar notificaciones\n• Deshabilite la optimización de batería/modo de ahorro de energía para la aplicación\n• Permita que la aplicación se ejecute en segundo plano y se inicie automáticamente\n• Android 12+ necesita permiso de alarma exacta\n\n📱 Configuraciones especiales del teléfono Xiaomi:\n• Configuración > Administración de Aplicaciones > Contabilidad Abeja > Administración de Notificaciones\n• Toque el canal \"Recordatorio de Registro\"\n• Establezca la importancia en \"Urgente\" o \"Alta\"\n• Habilite \"Notificaciones de banner\", \"Sonido\", \"Vibración\"\n• Centro de Seguridad > Administración de Aplicaciones > Permisos > Inicio Automático\n\n🔒 Métodos para bloquear el segundo plano:\n• Encuentre Contabilidad Abeja en tareas recientes\n• Deslice hacia abajo la tarjeta de la aplicación para mostrar el icono de bloqueo\n• Toque el icono de bloqueo para evitar la limpieza';
 
   @override
-  String get categoryDetailLoadFailed => 'Load failed';
+  String get categoryDetailLoadFailed => 'Error al cargar';
 
   @override
-  String get categoryDetailSummaryTitle => 'Category Summary';
+  String get categoryDetailSummaryTitle => 'Resumen de Categoría';
 
   @override
-  String get categoryDetailTotalCount => 'Total Count';
+  String get categoryDetailTotalCount => 'Conteo Total';
 
   @override
-  String get categoryDetailTotalAmount => 'Total Amount';
+  String get categoryDetailTotalAmount => 'Cantidad Total';
 
   @override
-  String get categoryDetailAverageAmount => 'Average Amount';
+  String get categoryDetailAverageAmount => 'Cantidad Promedio';
 
   @override
-  String get categoryDetailSortTitle => 'Sort';
+  String get categoryDetailSortTitle => 'Ordenar';
 
   @override
-  String get categoryDetailSortTimeDesc => 'Time ↓';
+  String get categoryDetailSortTimeDesc => 'Tiempo ↓';
 
   @override
-  String get categoryDetailSortTimeAsc => 'Time ↑';
+  String get categoryDetailSortTimeAsc => 'Tiempo ↑';
 
   @override
-  String get categoryDetailSortAmountDesc => 'Amount ↓';
+  String get categoryDetailSortAmountDesc => 'Cantidad ↓';
 
   @override
-  String get categoryDetailSortAmountAsc => 'Amount ↑';
+  String get categoryDetailSortAmountAsc => 'Cantidad ↑';
 
   @override
-  String get categoryDetailNoTransactions => 'No transactions';
+  String get categoryDetailNoTransactions => 'Sin transacciones';
 
   @override
-  String get categoryDetailNoTransactionsSubtext => 'No transactions in this category yet';
+  String get categoryDetailNoTransactionsSubtext => 'Aún no hay transacciones en esta categoría';
 
   @override
-  String get categoryDetailDeleteFailed => 'Delete failed';
+  String get categoryDetailDeleteFailed => 'Error al eliminar';
 
   @override
-  String get categoryMigrationConfirmTitle => 'Confirm Migration';
+  String get categoryMigrationConfirmTitle => 'Confirmar Migración';
 
   @override
   String categoryMigrationConfirmMessage(Object count, Object fromName, Object toName) {
-    return 'Migrate $count transactions from \"$fromName\" to \"$toName\"?\n\nThis operation cannot be undone!';
+    return '¿Migrar $count transacciones de \"$fromName\" a \"$toName\"?\n\n¡Esta operación no se puede deshacer!';
   }
 
   @override
-  String get categoryMigrationConfirmOk => 'Confirm Migration';
+  String get categoryMigrationConfirmOk => 'Confirmar Migración';
 
   @override
-  String get categoryMigrationCompleteTitle => 'Migration Complete';
+  String get categoryMigrationCompleteTitle => 'Migración Completa';
 
   @override
   String categoryMigrationCompleteMessage(Object count, Object fromName, Object toName) {
-    return 'Successfully migrated $count transactions from \"$fromName\" to \"$toName\".';
+    return 'Migradas con éxito $count transacciones de \"$fromName\" a \"$toName\".';
   }
 
   @override
-  String get categoryMigrationFailedTitle => 'Migration Failed';
+  String get categoryMigrationFailedTitle => 'Migración Fallida';
 
   @override
   String categoryMigrationFailedMessage(Object error) {
-    return 'Migration error: $error';
+    return 'Error de migración: $error';
   }
 
   @override
   String categoryMigrationTransactionLabel(int count) {
-    return '$count records';
+    return '$count registros';
   }
 
   @override
-  String get categoryPickerExpenseTab => 'Expense';
+  String get categoryPickerExpenseTab => 'Gasto';
 
   @override
-  String get categoryPickerIncomeTab => 'Income';
+  String get categoryPickerIncomeTab => 'Ingreso';
 
   @override
-  String get categoryPickerCancel => 'Cancel';
+  String get categoryPickerCancel => 'Cancelar';
 
   @override
-  String get categoryPickerEmpty => 'No categories';
+  String get categoryPickerEmpty => 'Sin categorías';
 
   @override
-  String get cloudBackupFound => 'Cloud Backup Found';
+  String get cloudBackupFound => 'Copia de Seguridad en la Nube Encontrada';
 
   @override
-  String get cloudBackupRestoreMessage => 'Cloud and local ledgers are inconsistent. Restore from cloud?\n(Will enter restore progress page)';
+  String get cloudBackupRestoreMessage => 'Los libros de la nube y locales son inconsistentes. ¿Restaurar desde la nube?\n(Entrará en la página de progreso de restauración)';
 
   @override
-  String get cloudBackupRestoreFailed => 'Restore Failed';
+  String get cloudBackupRestoreFailed => 'Restauración Fallida';
 
   @override
-  String get mineCloudBackupRestoreTitle => 'Cloud Backup Found';
+  String get mineCloudBackupRestoreTitle => 'Copia de Seguridad en la Nube Encontrada';
 
   @override
-  String get mineAutoSyncRemoteDesc => 'Auto upload to cloud after recording';
+  String get mineAutoSyncRemoteDesc => 'Cargar automáticamente a la nube después de registrar';
 
   @override
-  String get mineAutoSyncLoginRequired => 'Login required to enable';
+  String get mineAutoSyncLoginRequired => 'Se requiere inicio de sesión para habilitar';
 
   @override
-  String get mineImportCompleteAllSuccess => 'All Success';
+  String get mineImportCompleteAllSuccess => 'Todo Éxito';
 
   @override
-  String get mineImportCompleteTitleShort => 'Import Complete';
+  String get mineImportCompleteTitleShort => 'Importación Completa';
 
   @override
-  String get mineAboutAppName => 'App: Bee Accounting';
+  String get mineAboutAppName => 'Aplicación: Contabilidad Abeja';
 
   @override
   String mineAboutVersion(Object version) {
-    return 'Version: $version';
+    return 'Versión: $version';
   }
 
   @override
-  String get mineAboutRepo => 'Source: https://github.com/TNT-Likely/BeeCount';
+  String get mineAboutRepo => 'Fuente: https://github.com/TNT-Likely/BeeCount';
 
   @override
-  String get mineAboutLicense => 'License: See LICENSE in repository';
+  String get mineAboutLicense => 'Licencia: Ver LICENSE en el repositorio';
 
   @override
-  String get mineCheckUpdateDetecting => 'Checking update...';
+  String get mineCheckUpdateDetecting => 'Verificando actualización...';
 
   @override
-  String get mineCheckUpdateSubtitleDetecting => 'Checking for latest version';
+  String get mineCheckUpdateSubtitleDetecting => 'Verificando la última versión';
 
   @override
-  String get mineUpdateDownloadTitle => 'Download Update';
+  String get mineUpdateDownloadTitle => 'Descargar Actualización';
 
   @override
-  String get mineDebugRefreshStats => 'Refresh Stats (Debug)';
+  String get mineDebugRefreshStats => 'Actualizar Estadísticas (Debug)';
 
   @override
-  String get mineDebugRefreshStatsSubtitle => 'Trigger global stats provider recalculation';
+  String get mineDebugRefreshStatsSubtitle => 'Activar recálculo del proveedor de estadísticas globales';
 
   @override
-  String get mineDebugRefreshSync => 'Refresh Sync Status (Debug)';
+  String get mineDebugRefreshSync => 'Actualizar Estado de Sincronización (Debug)';
 
   @override
-  String get mineDebugRefreshSyncSubtitle => 'Trigger sync status provider refresh';
+  String get mineDebugRefreshSyncSubtitle => 'Activar actualización del proveedor de estado de sincronización';
 
   @override
-  String get cloudCurrentService => 'Current Cloud Service';
+  String get cloudCurrentService => 'Servicio de Nube Actual';
 
   @override
-  String get cloudConnected => 'Connected';
+  String get cloudConnected => 'Conectado';
 
   @override
-  String get cloudOfflineMode => 'Offline Mode';
+  String get cloudOfflineMode => 'Modo Sin Conexión';
 
   @override
-  String get cloudAvailableServices => 'Available Cloud Services';
+  String get cloudAvailableServices => 'Servicios de Nube Disponibles';
 
   @override
-  String get cloudReadCustomConfigFailed => 'Failed to read custom configuration';
+  String get cloudReadCustomConfigFailed => 'Error al leer la configuración personalizada';
 
   @override
-  String get cloudFirstUploadNotComplete => 'First full upload not completed';
+  String get cloudFirstUploadNotComplete => 'Primera carga completa no completada';
 
   @override
-  String get cloudFirstUploadInstruction => 'Login and manually execute \"Upload\" in \"Mine/Sync\" to complete initialization';
+  String get cloudFirstUploadInstruction => 'Inicie sesión y ejecute manualmente \"Cargar\" en \"Mío/Sincronizar\" para completar la inicialización';
 
   @override
-  String get cloudNotConfigured => 'Not configured';
+  String get cloudNotConfigured => 'No configurado';
 
   @override
-  String get cloudNotTested => 'Not tested';
+  String get cloudNotTested => 'No probado';
 
   @override
-  String get cloudConnectionNormal => 'Connection normal';
+  String get cloudConnectionNormal => 'Conexión normal';
 
   @override
-  String get cloudConnectionFailed => 'Connection failed';
+  String get cloudConnectionFailed => 'Conexión fallida';
 
   @override
-  String get cloudAddCustomService => 'Add custom cloud service';
+  String get cloudAddCustomService => 'Agregar servicio de nube personalizado';
 
   @override
   String get cloudCustomServiceName => 'Servicio de nube personalizado';
 
   @override
-  String get cloudDefaultServiceName => 'Default Cloud Service';
+  String get cloudDefaultServiceName => 'Servicio de Nube Predeterminado';
 
   @override
-  String get cloudUseYourSupabase => 'Use your own Supabase';
+  String get cloudUseYourSupabase => 'Usar tu propio Supabase';
 
   @override
-  String get cloudTest => 'Test';
+  String get cloudTest => 'Probar';
 
   @override
-  String get cloudSwitchService => 'Switch Cloud Service';
+  String get cloudSwitchService => 'Cambiar Servicio de Nube';
 
   @override
-  String get cloudSwitchToBuiltinConfirm => 'Are you sure you want to switch to the default cloud service? This will log out the current session.';
+  String get cloudSwitchToBuiltinConfirm => '¿Estás seguro de que quieres cambiar al servicio de nube predeterminado? Esto cerrará la sesión actual.';
 
   @override
-  String get cloudSwitchToCustomConfirm => 'Are you sure you want to switch to the custom cloud service? This will log out the current session.';
+  String get cloudSwitchToCustomConfirm => '¿Estás seguro de que quieres cambiar al servicio de nube personalizado? Esto cerrará la sesión actual.';
 
   @override
-  String get cloudSwitched => 'Switched';
+  String get cloudSwitched => 'Cambiado';
 
   @override
-  String get cloudSwitchedToBuiltin => 'Switched to default cloud service and logged out';
+  String get cloudSwitchedToBuiltin => 'Cambiado al servicio de nube predeterminado y sesión cerrada';
 
   @override
-  String get cloudSwitchFailed => 'Switch failed';
+  String get cloudSwitchFailed => 'Cambio fallido';
 
   @override
-  String get cloudActivateFailed => 'Activation failed';
+  String get cloudActivateFailed => 'Error de activación';
 
   @override
-  String get cloudActivateFailedMessage => 'Saved configuration is invalid';
+  String get cloudActivateFailedMessage => 'La configuración guardada no es válida';
 
   @override
-  String get cloudActivated => 'Activated';
+  String get cloudActivated => 'Activado';
 
   @override
-  String get cloudActivatedMessage => 'Switched to custom cloud service and logged out, please log in again';
+  String get cloudActivatedMessage => 'Cambiado al servicio de nube personalizado y sesión cerrada, por favor inicie sesión nuevamente';
 
   @override
-  String get cloudEditCustomService => 'Edit custom cloud service';
+  String get cloudEditCustomService => 'Editar servicio de nube personalizado';
 
   @override
-  String get cloudAddCustomServiceTitle => 'Add custom cloud service';
+  String get cloudAddCustomServiceTitle => 'Agregar servicio de nube personalizado';
 
   @override
-  String get cloudSupabaseUrlLabel => 'Supabase URL';
+  String get cloudSupabaseUrlLabel => 'URL de Supabase';
 
   @override
   String get cloudSupabaseUrlHint => 'https://xxx.supabase.co';
 
   @override
-  String get cloudAnonKeyLabel => 'Anon Key';
+  String get cloudAnonKeyLabel => 'Clave Anon';
 
   @override
-  String get cloudAnonKeyHint => 'Note: Do not fill in service_role Key; Anon Key is publicly available.';
+  String get cloudAnonKeyHint => 'Nota: No llene la Clave service_role; la Clave Anon está disponible públicamente.';
 
   @override
-  String get cloudInvalidInput => 'Invalid input';
+  String get cloudInvalidInput => 'Entrada no válida';
 
   @override
   String get cloudValidationEmptyFields => 'URL y clave no pueden estar vacíos';
@@ -1879,138 +1879,138 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cloudWebdavHint => 'Compatible con Nutstore, Nextcloud, Synology, etc.';
 
   @override
-  String get cloudConfigUpdated => 'Configuration updated';
+  String get cloudConfigUpdated => 'Configuración actualizada';
 
   @override
-  String get cloudConfigSaved => 'Configuration saved';
+  String get cloudConfigSaved => 'Configuración guardada';
 
   @override
-  String get cloudTestComplete => 'Test complete';
+  String get cloudTestComplete => 'Prueba completa';
 
   @override
-  String get cloudTestSuccess => 'Connection test successful!';
+  String get cloudTestSuccess => '¡Prueba de conexión exitosa!';
 
   @override
-  String get cloudTestFailed => 'Connection test failed, please check if the configuration is correct.';
+  String get cloudTestFailed => 'Prueba de conexión fallida, por favor verifique si la configuración es correcta.';
 
   @override
-  String get cloudTestError => 'Test failed';
+  String get cloudTestError => 'Prueba fallida';
 
   @override
-  String get cloudClearConfig => 'Clear configuration';
+  String get cloudClearConfig => 'Limpiar configuración';
 
   @override
-  String get cloudClearConfigConfirm => 'Are you sure you want to clear the custom cloud service configuration? (Development environment only)';
+  String get cloudClearConfigConfirm => '¿Estás seguro de que quieres limpiar la configuración del servicio de nube personalizado? (Solo entorno de desarrollo)';
 
   @override
-  String get cloudConfigCleared => 'Custom cloud service configuration cleared';
+  String get cloudConfigCleared => 'Configuración del servicio de nube personalizado limpiada';
 
   @override
-  String get cloudClearFailed => 'Clear failed';
+  String get cloudClearFailed => 'Error al limpiar';
 
   @override
-  String get cloudServiceDescription => 'Built-in cloud service (free but may be unstable, recommend using your own or regular backup)';
+  String get cloudServiceDescription => 'Servicio de nube integrado (gratis pero puede ser inestable, se recomienda usar el propio o hacer copias de seguridad regulares)';
 
   @override
-  String get cloudServiceDescriptionNotConfigured => 'Current build does not have built-in cloud service configuration';
+  String get cloudServiceDescriptionNotConfigured => 'La compilación actual no tiene configuración de servicio de nube integrada';
 
   @override
   String cloudServiceDescriptionCustom(String url) {
-    return 'Server: $url';
+    return 'Servidor: $url';
   }
 
   @override
-  String get authLogin => 'Login';
+  String get authLogin => 'Iniciar Sesión';
 
   @override
-  String get authSignup => 'Sign Up';
+  String get authSignup => 'Registrarse';
 
   @override
-  String get authRegister => 'Register';
+  String get authRegister => 'Registrarse';
 
   @override
-  String get authEmail => 'Email';
+  String get authEmail => 'Correo Electrónico';
 
   @override
-  String get authPassword => 'Password';
+  String get authPassword => 'Contraseña';
 
   @override
-  String get authPasswordRequirement => 'Password (at least 6 characters, include letters and numbers)';
+  String get authPasswordRequirement => 'Contraseña (al menos 6 caracteres, incluir letras y números)';
 
   @override
-  String get authConfirmPassword => 'Confirm Password';
+  String get authConfirmPassword => 'Confirmar Contraseña';
 
   @override
-  String get authInvalidEmail => 'Please enter a valid email address';
+  String get authInvalidEmail => 'Por favor ingrese una dirección de correo electrónico válida';
 
   @override
-  String get authPasswordRequirementShort => 'Password must contain letters and numbers, at least 6 characters';
+  String get authPasswordRequirementShort => 'La contraseña debe contener letras y números, al menos 6 caracteres';
 
   @override
-  String get authPasswordMismatch => 'Passwords do not match';
+  String get authPasswordMismatch => 'Las contraseñas no coinciden';
 
   @override
-  String get authResendVerification => 'Resend verification email';
+  String get authResendVerification => 'Reenviar correo de verificación';
 
   @override
-  String get authSignupSuccess => 'Registration successful';
+  String get authSignupSuccess => 'Registro exitoso';
 
   @override
-  String get authVerificationEmailSent => 'Verification email sent, please go to your email to complete verification before logging in.';
+  String get authVerificationEmailSent => 'Correo de verificación enviado, por favor vaya a su correo para completar la verificación antes de iniciar sesión.';
 
   @override
-  String get authBackToMinePage => 'Back to My Page';
+  String get authBackToMinePage => 'Volver a Mi Página';
 
   @override
-  String get authVerificationEmailResent => 'Verification email resent.';
+  String get authVerificationEmailResent => 'Correo de verificación reenviado.';
 
   @override
-  String get authResendAction => 'resend verification';
+  String get authResendAction => 'reenviar verificación';
 
   @override
-  String get authErrorInvalidCredentials => 'Email or password is incorrect.';
+  String get authErrorInvalidCredentials => 'El correo electrónico o la contraseña son incorrectos.';
 
   @override
-  String get authErrorEmailNotConfirmed => 'Email not verified, please complete verification in your email before logging in.';
+  String get authErrorEmailNotConfirmed => 'Correo electrónico no verificado, por favor complete la verificación en su correo antes de iniciar sesión.';
 
   @override
-  String get authErrorRateLimit => 'Too many attempts, please try again later.';
+  String get authErrorRateLimit => 'Demasiados intentos, por favor inténtelo de nuevo más tarde.';
 
   @override
-  String get authErrorNetworkIssue => 'Network error, please check your connection and try again.';
+  String get authErrorNetworkIssue => 'Error de red, por favor verifique su conexión e inténtelo de nuevo.';
 
   @override
-  String get authErrorLoginFailed => 'Login failed, please try again later.';
+  String get authErrorLoginFailed => 'Inicio de sesión fallido, por favor inténtelo de nuevo más tarde.';
 
   @override
-  String get authErrorEmailInvalid => 'Email address is invalid, please check for spelling errors.';
+  String get authErrorEmailInvalid => 'La dirección de correo electrónico no es válida, por favor verifique si hay errores de ortografía.';
 
   @override
-  String get authErrorEmailExists => 'This email is already registered, please login directly or reset password.';
+  String get authErrorEmailExists => 'Este correo electrónico ya está registrado, por favor inicie sesión directamente o restablezca la contraseña.';
 
   @override
-  String get authErrorWeakPassword => 'Password is too simple, please include letters and numbers, at least 6 characters.';
+  String get authErrorWeakPassword => 'La contraseña es demasiado simple, por favor incluya letras y números, al menos 6 caracteres.';
 
   @override
-  String get authErrorSignupFailed => 'Registration failed, please try again later.';
+  String get authErrorSignupFailed => 'Registro fallido, por favor inténtelo de nuevo más tarde.';
 
   @override
   String authErrorUserNotFound(String action) {
-    return 'Email not registered, cannot $action.';
+    return 'Correo electrónico no registrado, no se puede $action.';
   }
 
   @override
   String authErrorEmailNotVerified(String action) {
-    return 'Email not verified, cannot $action.';
+    return 'Correo electrónico no verificado, no se puede $action.';
   }
 
   @override
   String authErrorActionFailed(String action) {
-    return '$action failed, please try again later.';
+    return '$action fallido, por favor inténtelo de nuevo más tarde.';
   }
 
   @override
-  String get importSelectCsvFile => 'Please select a file to import (CSV/TSV/XLSX supported)';
+  String get importSelectCsvFile => 'Por favor seleccione un archivo para importar (CSV/TSV/XLSX compatible)';
 
   @override
   String get exportTitle => 'Exportar';
@@ -2585,7 +2585,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get currencySGD => 'Dólar de Singapur';
 
   @override
-  String get currencyMYR => 'Malaysian Ringgit';
+  String get currencyMYR => 'Ringgit malayo';
 
   @override
   String get currencyTHB => 'Baht tailandés';
@@ -2594,10 +2594,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get currencyIDR => 'Rupia indonesia';
 
   @override
-  String get currencyPHP => 'Philippine Peso';
+  String get currencyPHP => 'Peso filipino';
 
   @override
-  String get currencyVND => 'Vietnamese Dong';
+  String get currencyVND => 'Dong vietnamita';
 
   @override
   String get currencyINR => 'Rupia india';
@@ -2609,25 +2609,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get currencyBYN => 'Rublo bielorruso';
 
   @override
-  String get currencyNZD => 'New Zealand Dollar';
+  String get currencyNZD => 'Dólar neozelandés';
 
   @override
-  String get currencyCHF => 'Swiss Franc';
+  String get currencyCHF => 'Franco suizo';
 
   @override
-  String get currencySEK => 'Swedish Krona';
+  String get currencySEK => 'Corona sueca';
 
   @override
-  String get currencyNOK => 'Norwegian Krone';
+  String get currencyNOK => 'Corona noruega';
 
   @override
-  String get currencyDKK => 'Danish Krone';
+  String get currencyDKK => 'Corona danesa';
 
   @override
-  String get currencyBRL => 'Brazilian Real';
+  String get currencyBRL => 'Real brasileño';
 
   @override
-  String get currencyMXN => 'Mexican Peso';
+  String get currencyMXN => 'Peso mexicano';
 
   @override
   String get webdavConfiguredTitle => 'Servicio de nube WebDAV configurado';
@@ -2844,6 +2844,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cloudSupabaseAnonKeyHintLong => 'Pegue la clave anon completa';
 
   @override
+  String get cloudWebdavRemotePathHelp => 'Ruta del directorio remoto para almacenamiento de datos';
+
+  @override
   String get cloudWebdavRemotePathLabel => 'Ruta remota';
 
   @override
@@ -2853,43 +2856,43 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountsTitle => 'Cuentas';
 
   @override
-  String get accountsEmptyMessage => 'No accounts yet, tap the top right to add';
+  String get accountsEmptyMessage => 'Aún no hay cuentas, toque la parte superior derecha para agregar';
 
   @override
-  String get accountAddTooltip => 'Add Account';
+  String get accountAddTooltip => 'Agregar Cuenta';
 
   @override
-  String get accountAddButton => 'Add Account';
+  String get accountAddButton => 'Agregar Cuenta';
 
   @override
   String get accountBalance => 'Balance';
 
   @override
-  String get accountEditTitle => 'Edit Account';
+  String get accountEditTitle => 'Editar Cuenta';
 
   @override
-  String get accountNewTitle => 'New Account';
+  String get accountNewTitle => 'Nueva Cuenta';
 
   @override
-  String get accountNameLabel => 'Account Name';
+  String get accountNameLabel => 'Nombre de Cuenta';
 
   @override
-  String get accountNameHint => 'e.g.: ICBC, Alipay, etc.';
+  String get accountNameHint => 'por ejemplo: ICBC, Alipay, etc.';
 
   @override
-  String get accountNameRequired => 'Please enter account name';
+  String get accountNameRequired => 'Por favor ingrese el nombre de la cuenta';
 
   @override
-  String get accountTypeLabel => 'Account Type';
+  String get accountTypeLabel => 'Tipo de Cuenta';
 
   @override
-  String get accountTypeCash => 'Cash';
+  String get accountTypeCash => 'Efectivo';
 
   @override
-  String get accountTypeBankCard => 'Bank Card';
+  String get accountTypeBankCard => 'Tarjeta Bancaria';
 
   @override
-  String get accountTypeCreditCard => 'Credit Card';
+  String get accountTypeCreditCard => 'Tarjeta de Crédito';
 
   @override
   String get accountTypeAlipay => 'Alipay';
@@ -2898,228 +2901,228 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountTypeWechat => 'WeChat';
 
   @override
-  String get accountTypeOther => 'Other';
+  String get accountTypeOther => 'Otro';
 
   @override
-  String get accountInitialBalance => 'Initial Balance';
+  String get accountInitialBalance => 'Balance Inicial';
 
   @override
-  String get accountInitialBalanceHint => 'Enter initial balance (optional)';
+  String get accountInitialBalanceHint => 'Ingrese el balance inicial (opcional)';
 
   @override
-  String get accountDeleteWarningTitle => 'Confirm Delete';
+  String get accountDeleteWarningTitle => 'Confirmar Eliminación';
 
   @override
   String accountDeleteWarningMessage(int count) {
-    return 'This account has $count related transactions. After deletion, account information in transaction records will be cleared. Confirm deletion?';
+    return 'Esta cuenta tiene $count transacciones relacionadas. Después de la eliminación, la información de la cuenta en los registros de transacciones se borrará. ¿Confirmar eliminación?';
   }
 
   @override
-  String get accountDeleteConfirm => 'Confirm to delete this account?';
+  String get accountDeleteConfirm => '¿Confirmar la eliminación de esta cuenta?';
 
   @override
-  String get accountSelectTitle => 'Select Account';
+  String get accountSelectTitle => 'Seleccionar Cuenta';
 
   @override
-  String get accountNone => 'No Account';
+  String get accountNone => 'Sin Cuenta';
 
   @override
-  String get accountsEnableFeature => 'Enable Account Feature';
+  String get accountsEnableFeature => 'Habilitar Función de Cuenta';
 
   @override
-  String get accountsFeatureDescription => 'Manage multiple payment accounts and track balance changes for each account';
+  String get accountsFeatureDescription => 'Administre múltiples cuentas de pago y rastree los cambios de balance de cada cuenta';
 
   @override
-  String get privacyOpenSourceUrlError => 'Cannot open link';
+  String get privacyOpenSourceUrlError => 'No se puede abrir el enlace';
 
   @override
-  String get updateCorruptedFileTitle => 'Corrupted Installation Package';
+  String get updateCorruptedFileTitle => 'Paquete de Instalación Corrupto';
 
   @override
-  String get updateCorruptedFileMessage => 'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?';
+  String get updateCorruptedFileMessage => 'El paquete de instalación descargado previamente está incompleto o corrupto. ¿Eliminar y volver a descargar?';
 
   @override
-  String get welcomeTitle => 'Welcome to BeeCount';
+  String get welcomeTitle => 'Bienvenido a BeeCount';
 
   @override
-  String get welcomeDescription => 'An accounting app that truly respects your privacy';
+  String get welcomeDescription => 'Una aplicación de contabilidad que realmente respeta tu privacidad';
 
   @override
-  String get welcomePrivacyTitle => 'Your Data, Your Control';
+  String get welcomePrivacyTitle => 'Tus Datos, Tu Control';
 
   @override
-  String get welcomePrivacyFeature1 => 'Data stored locally on your device';
+  String get welcomePrivacyFeature1 => 'Datos almacenados localmente en tu dispositivo';
 
   @override
-  String get welcomePrivacyFeature2 => 'Never uploaded to any third-party servers';
+  String get welcomePrivacyFeature2 => 'Nunca se carga a servidores de terceros';
 
   @override
-  String get welcomePrivacyFeature3 => 'No ads, no data collection';
+  String get welcomePrivacyFeature3 => 'Sin anuncios, sin recopilación de datos';
 
   @override
-  String get welcomePrivacyFeature4 => 'No account registration required';
+  String get welcomePrivacyFeature4 => 'No se requiere registro de cuenta';
 
   @override
-  String get welcomeOpenSourceTitle => 'Open Source & Transparent';
+  String get welcomeOpenSourceTitle => 'Código Abierto y Transparente';
 
   @override
-  String get welcomeOpenSourceFeature1 => '100% open source code';
+  String get welcomeOpenSourceFeature1 => 'Código 100% de código abierto';
 
   @override
-  String get welcomeOpenSourceFeature2 => 'Community supervision, no backdoors';
+  String get welcomeOpenSourceFeature2 => 'Supervisión comunitaria, sin puertas traseras';
 
   @override
-  String get welcomeOpenSourceFeature3 => 'Free for Personal Use';
+  String get welcomeOpenSourceFeature3 => 'Gratis para Uso Personal';
 
   @override
-  String get welcomeViewGitHub => 'View Source Code on GitHub';
+  String get welcomeViewGitHub => 'Ver Código Fuente en GitHub';
 
   @override
-  String get welcomeCloudSyncTitle => 'Optional Cloud Sync';
+  String get welcomeCloudSyncTitle => 'Sincronización en la Nube Opcional';
 
   @override
-  String get welcomeCloudSyncDescription => 'Don\'t want to use commercial cloud services? BeeCount supports multiple sync methods';
+  String get welcomeCloudSyncDescription => '¿No quieres usar servicios comerciales en la nube? BeeCount admite múltiples métodos de sincronización';
 
   @override
-  String get welcomeCloudSyncFeature1 => 'Completely offline usage';
+  String get welcomeCloudSyncFeature1 => 'Uso completamente sin conexión';
 
   @override
-  String get welcomeCloudSyncFeature2 => 'Self-hosted WebDAV sync';
+  String get welcomeCloudSyncFeature2 => 'Sincronización WebDAV autohospedada';
 
   @override
-  String get welcomeCloudSyncFeature3 => 'Self-hosted Supabase service';
+  String get welcomeCloudSyncFeature3 => 'Servicio Supabase autohospedado';
 
   @override
-  String get lab => 'Lab';
+  String get lab => 'Laboratorio';
 
   @override
-  String get labDesc => 'Try experimental features';
+  String get labDesc => 'Probar funciones experimentales';
 
   @override
-  String get widgetManagement => 'Home Screen Widget';
+  String get widgetManagement => 'Widget de Pantalla de Inicio';
 
   @override
-  String get widgetManagementDesc => 'Quick view of income and expenses on home screen';
+  String get widgetManagementDesc => 'Vista rápida de ingresos y gastos en la pantalla de inicio';
 
   @override
-  String get widgetPreview => 'Widget Preview';
+  String get widgetPreview => 'Vista Previa del Widget';
 
   @override
-  String get widgetPreviewDesc => 'Widget automatically displays actual data from current ledger, theme color follows app settings';
+  String get widgetPreviewDesc => 'El widget muestra automáticamente los datos reales del libro actual, el color del tema sigue la configuración de la aplicación';
 
   @override
-  String get howToAddWidget => 'How to Add Widget';
+  String get howToAddWidget => 'Cómo Agregar Widget';
 
   @override
-  String get iosWidgetStep1 => 'Long press on home screen blank area to enter edit mode';
+  String get iosWidgetStep1 => 'Mantenga presionado el área en blanco de la pantalla de inicio para entrar en modo de edición';
 
   @override
-  String get iosWidgetStep2 => 'Tap the \"+\" button in upper left corner';
+  String get iosWidgetStep2 => 'Toque el botón \"+\" en la esquina superior izquierda';
 
   @override
-  String get iosWidgetStep3 => 'Search and select \"BeeCount\"';
+  String get iosWidgetStep3 => 'Busque y seleccione \"Contabilidad Abeja\"';
 
   @override
-  String get iosWidgetStep4 => 'Select medium widget and add to home screen';
+  String get iosWidgetStep4 => 'Seleccione el widget mediano y agregue a la pantalla de inicio';
 
   @override
-  String get androidWidgetStep1 => 'Long press on home screen blank area';
+  String get androidWidgetStep1 => 'Mantenga presionado el área en blanco de la pantalla de inicio';
 
   @override
-  String get androidWidgetStep2 => 'Select \"Widgets\"';
+  String get androidWidgetStep2 => 'Seleccione \"Widgets\"';
 
   @override
-  String get androidWidgetStep3 => 'Find and long press \"BeeCount\" widget';
+  String get androidWidgetStep3 => 'Encuentre y mantenga presionado el widget \"Contabilidad Abeja\"';
 
   @override
-  String get androidWidgetStep4 => 'Drag to suitable position on home screen';
+  String get androidWidgetStep4 => 'Arrastre a la posición adecuada en la pantalla de inicio';
 
   @override
-  String get aboutWidget => 'About Widget';
+  String get aboutWidget => 'Acerca del Widget';
 
   @override
-  String get widgetDescription => 'Widget automatically syncs to display today\'s and this month\'s income and expense data, refreshing every 30 minutes. Data updates immediately when app is opened.';
+  String get widgetDescription => 'El widget se sincroniza automáticamente para mostrar los datos de ingresos y gastos de hoy y este mes, actualizándose cada 30 minutos. Los datos se actualizan inmediatamente cuando se abre la aplicación.';
 
   @override
-  String get appName => 'BeeCount';
+  String get appName => 'Contabilidad Abeja';
 
   @override
   String get monthSuffix => '';
 
   @override
-  String get todayExpense => 'Today\'s Expense';
+  String get todayExpense => 'Gasto de Hoy';
 
   @override
-  String get todayIncome => 'Today\'s Income';
+  String get todayIncome => 'Ingreso de Hoy';
 
   @override
-  String get monthExpense => 'Month\'s Expense';
+  String get monthExpense => 'Gasto del Mes';
 
   @override
-  String get monthIncome => 'Month\'s Income';
+  String get monthIncome => 'Ingreso del Mes';
 
   @override
-  String get autoScreenshotBilling => 'Auto Screenshot Billing';
+  String get autoScreenshotBilling => 'Facturación Automática por Captura de Pantalla';
 
   @override
-  String get autoScreenshotBillingDesc => 'Auto-recognize payment info from screenshots';
+  String get autoScreenshotBillingDesc => 'Reconocer automáticamente la información de pago de las capturas de pantalla';
 
   @override
-  String get autoScreenshotBillingTitle => 'Auto Screenshot Billing';
+  String get autoScreenshotBillingTitle => 'Facturación Automática por Captura de Pantalla';
 
   @override
-  String get featureDescription => 'Feature Description';
+  String get featureDescription => 'Descripción de la Función';
 
   @override
-  String get featureDescriptionContent => 'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 1-2 seconds\n🤖 Smart category matching\n📝 Auto-fill notes\n\nNote:\n• Without accessibility service: slightly slower (3-5s)\n• With accessibility service enabled: instant recognition';
+  String get featureDescriptionContent => 'Después de tomar una captura de pantalla de la página de pago, el sistema reconocerá automáticamente el monto y la información del comerciante, y creará un registro de gastos.\n\n⚡ Velocidad de reconocimiento: 1-2 segundos\n🤖 Coincidencia inteligente de categorías\n📝 Autocompletar notas\n\nNota:\n• Sin servicio de accesibilidad: ligeramente más lento (3-5s)\n• Con servicio de accesibilidad habilitado: reconocimiento instantáneo';
 
   @override
-  String get autoBilling => 'Auto Billing';
+  String get autoBilling => 'Facturación Automática';
 
   @override
-  String get enabled => 'Enabled';
+  String get enabled => 'Habilitado';
 
   @override
-  String get disabled => 'Disabled';
+  String get disabled => 'Deshabilitado';
 
   @override
-  String get accessibilityService => 'Accessibility Service';
+  String get accessibilityService => 'Servicio de Accesibilidad';
 
   @override
-  String get accessibilityServiceEnabled => 'Enabled - Instant Recognition';
+  String get accessibilityServiceEnabled => 'Habilitado - Reconocimiento Instantáneo';
 
   @override
-  String get accessibilityServiceDisabled => 'Disabled - Slower Recognition';
+  String get accessibilityServiceDisabled => 'Deshabilitado - Reconocimiento Lento';
 
   @override
-  String get improveRecognitionSpeed => 'Improve Recognition Speed';
+  String get improveRecognitionSpeed => 'Mejorar Velocidad de Reconocimiento';
 
   @override
-  String get accessibilityGuideContent => 'With accessibility service enabled, screenshots can be recognized instantly without waiting for file write.';
+  String get accessibilityGuideContent => 'Con el servicio de accesibilidad habilitado, las capturas de pantalla se pueden reconocer instantáneamente sin esperar la escritura del archivo.';
 
   @override
-  String get setupSteps => 'Setup Steps:';
+  String get setupSteps => 'Pasos de Configuración:';
 
   @override
-  String get accessibilityStep1 => 'Tap \"Open Accessibility Settings\" button below';
+  String get accessibilityStep1 => 'Toque el botón \"Abrir Configuración de Accesibilidad\" a continuación';
 
   @override
-  String get accessibilityStep2 => 'Find \"BeeCount-Screenshot Recognition\" in the list';
+  String get accessibilityStep2 => 'Encuentre \"Contabilidad Abeja-Reconocimiento de Captura\" en la lista';
 
   @override
-  String get accessibilityStep3 => 'Enable the service switch';
+  String get accessibilityStep3 => 'Habilite el interruptor del servicio';
 
   @override
-  String get accessibilityStep4 => 'Return to app to use';
+  String get accessibilityStep4 => 'Regrese a la aplicación para usar';
 
   @override
-  String get openAccessibilitySettings => 'Open Accessibility Settings';
+  String get openAccessibilitySettings => 'Abrir Configuración de Accesibilidad';
 
   @override
-  String get accessibilityServiceNote => '💡 Note: Accessibility service is only used to detect screenshot actions, and will not read or modify your other data.';
+  String get accessibilityServiceNote => '💡 Nota: El servicio de accesibilidad solo se usa para detectar acciones de captura de pantalla y no leerá ni modificará sus otros datos.';
 
   @override
-  String get supportedPayments => 'Supported Payment Methods';
+  String get supportedPayments => 'Métodos de Pago Soportados';
 
   @override
   String get supportedAlipay => '✅ Alipay';
@@ -3131,249 +3134,249 @@ class AppLocalizationsEs extends AppLocalizations {
   String get supportedUnionpay => '✅ UnionPay';
 
   @override
-  String get supportedOthers => '⚠️ Other payment methods may have lower recognition accuracy';
+  String get supportedOthers => '⚠️ Otros métodos de pago pueden tener menor precisión de reconocimiento';
 
   @override
-  String get photosPermissionRequired => 'Photos permission required for screenshot monitoring';
+  String get photosPermissionRequired => 'Se requiere permiso de fotos para monitorear capturas de pantalla';
 
   @override
-  String get enableSuccess => 'Auto billing enabled';
+  String get enableSuccess => 'Facturación automática habilitada';
 
   @override
-  String get disableSuccess => 'Auto billing disabled';
+  String get disableSuccess => 'Facturación automática deshabilitada';
 
   @override
-  String get autoBillingBatteryTitle => 'Keep Running in Background';
+  String get autoBillingBatteryTitle => 'Mantener Ejecutándose en Segundo Plano';
 
   @override
-  String get autoBillingBatteryGuideTitle => 'Battery Optimization Settings';
+  String get autoBillingBatteryGuideTitle => 'Configuración de Optimización de Batería';
 
   @override
-  String get autoBillingBatteryDesc => 'Auto billing requires the app to keep running in the background. Some phones automatically clean background apps when locked, which may cause auto billing to fail. It is recommended to disable battery optimization to ensure proper functionality.';
+  String get autoBillingBatteryDesc => 'La facturación automática requiere que la aplicación se mantenga ejecutándose en segundo plano. Algunos teléfonos limpian automáticamente las aplicaciones en segundo plano cuando están bloqueados, lo que puede causar que falle la facturación automática. Se recomienda deshabilitar la optimización de batería para garantizar la funcionalidad adecuada.';
 
   @override
-  String get autoBillingCheckBattery => 'Check Battery Optimization';
+  String get autoBillingCheckBattery => 'Verificar Optimización de Batería';
 
   @override
-  String get autoBillingBatteryWarning => '⚠️ Battery optimization is not disabled. The app may be automatically cleaned by the system, causing auto billing to fail. Please tap the \"Settings\" button above to disable battery optimization.';
+  String get autoBillingBatteryWarning => '⚠️ La optimización de batería no está deshabilitada. La aplicación puede ser limpiada automáticamente por el sistema, causando que falle la facturación automática. Por favor toque el botón \"Configuración\" arriba para deshabilitar la optimización de batería.';
 
   @override
-  String get enableFailed => 'Enable failed';
+  String get enableFailed => 'Error al Habilitar';
 
   @override
-  String get disableFailed => 'Disable failed';
+  String get disableFailed => 'Error al Deshabilitar';
 
   @override
-  String get openSettingsFailed => 'Failed to open settings';
+  String get openSettingsFailed => 'Error al abrir configuración';
 
   @override
-  String get reselectImage => 'Reselect';
+  String get reselectImage => 'Reseleccionar';
 
   @override
-  String get viewOriginalText => 'View Original Text';
+  String get viewOriginalText => 'Ver Texto Original';
 
   @override
-  String get createBill => 'Create Bill';
+  String get createBill => 'Crear Factura';
 
   @override
-  String get ocrBilling => 'OCR Scan Billing';
+  String get ocrBilling => 'Facturación por Escaneo OCR';
 
   @override
-  String get ocrBillingDesc => 'Auto-recognize payment screenshots';
+  String get ocrBillingDesc => 'Reconocer automáticamente capturas de pantalla de pago';
 
   @override
-  String get quickActions => 'Quick Actions';
+  String get quickActions => 'Acciones Rápidas';
 
   @override
-  String get iosAutoFeatureDesc => 'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.';
+  String get iosAutoFeatureDesc => 'Use la aplicación \"Atajos\" de iOS para identificar automáticamente la información de pago de las capturas de pantalla y crear transacciones. Una vez configurado, se activará automáticamente en cada captura de pantalla.';
 
   @override
-  String get iosAutoShortcutQuickAdd => 'Quick Add Shortcut';
+  String get iosAutoShortcutQuickAdd => 'Agregar Atajo Rápido';
 
   @override
-  String get iosAutoShortcutQuickAddDesc => 'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.';
+  String get iosAutoShortcutQuickAddDesc => 'Haga clic en el botón a continuación para importar el atajo configurado directamente, o abra manualmente la aplicación Atajos para configurar.';
 
   @override
-  String get iosAutoShortcutImport => 'One-Click Import Shortcut';
+  String get iosAutoShortcutImport => 'Importar Atajo con Un Clic';
 
   @override
-  String get iosAutoShortcutOpenApp => 'Or Manually Open Shortcuts App';
+  String get iosAutoShortcutOpenApp => 'O Abrir Manualmente la Aplicación Atajos';
 
   @override
-  String get iosAutoShortcutConfigTitle => 'Configuration Steps (Recommended - URL Parameter):';
+  String get iosAutoShortcutConfigTitle => 'Pasos de Configuración (Recomendado - Parámetro URL):';
 
   @override
-  String get iosAutoShortcutStep1 => 'Open \"Shortcuts\" app';
+  String get iosAutoShortcutStep1 => 'Abra la aplicación \"Atajos\"';
 
   @override
-  String get iosAutoShortcutStep2 => 'Tap \"+\" in top right to create new shortcut';
+  String get iosAutoShortcutStep2 => 'Toque \"+\" en la parte superior derecha para crear un nuevo atajo';
 
   @override
-  String get iosAutoShortcutStep3 => 'Add \"Take Screenshot\" action (get latest screenshot)';
+  String get iosAutoShortcutStep3 => 'Agregue la acción \"Tomar Captura de Pantalla\" (obtener la última captura de pantalla)';
 
   @override
-  String get iosAutoShortcutStep4 => 'Add \"Extract Text from Screenshot\" action';
+  String get iosAutoShortcutStep4 => 'Agregue la acción \"Extraer Texto de Captura de Pantalla\"';
 
   @override
-  String get iosAutoShortcutStep5 => 'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)';
+  String get iosAutoShortcutStep5 => 'Agregue la acción \"Reemplazar Texto\": reemplace \"\\n\" en el texto extraído con \",\" (coma)';
 
   @override
-  String get iosAutoShortcutStep6 => 'Add \"URL Encode\" action: encode the replaced text';
+  String get iosAutoShortcutStep6 => 'Agregue la acción \"Codificación URL\": codifique el texto reemplazado';
 
   @override
-  String get iosAutoShortcutStep7 => 'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]';
+  String get iosAutoShortcutStep7 => 'Agregue la acción \"Abrir URL\", URL:\nbeecount://auto-billing?text=[texto codificado en URL]';
 
   @override
-  String get iosAutoShortcutStep8 => 'Tap shortcut settings (three dots in top right)';
+  String get iosAutoShortcutStep8 => 'Toque la configuración del atajo (tres puntos en la parte superior derecha)';
 
   @override
-  String get iosAutoShortcutStep9 => 'In \"When...\" add \"When Screenshot is taken\" trigger';
+  String get iosAutoShortcutStep9 => 'En \"Cuando...\" agregue el activador \"Cuando se toma una captura de pantalla\"';
 
   @override
-  String get iosAutoShortcutStep10 => 'Save and test: auto-identify after screenshot';
+  String get iosAutoShortcutStep10 => 'Guarde y pruebe: reconocimiento automático después de captura de pantalla';
 
   @override
-  String get iosAutoShortcutRecommendedTip => '✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit';
+  String get iosAutoShortcutRecommendedTip => '✅ Recomendado: Paso de parámetros URL, sin permiso necesario, mejor experiencia. Pasos clave:\n• Reemplace saltos de línea \\n con coma , (evite truncamiento de URL)\n• Use codificación URL (evite texto chino ilegible)\n• El texto de captura de pantalla generalmente no excede el límite de 2048 caracteres';
 
   @override
-  String get iosAutoBackTapTitle => '💡 Double Tap Back to Trigger (Recommended)';
+  String get iosAutoBackTapTitle => '💡 Tocar Dos Veces Atrás para Activar (Recomendado)';
 
   @override
-  String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
+  String get iosAutoBackTapDesc => 'Configuración > Accesibilidad > Toque > Tocar Atrás\n• Seleccione \"Tocar Dos Veces\" o \"Tocar Tres Veces\"\n• Elija el atajo que acaba de crear\n• Después de la configuración, toque dos veces la parte posterior del teléfono durante el pago para registrar automáticamente, sin necesidad de captura de pantalla';
 
   @override
   String iosAutoImportFailed(Object error) {
-    return 'Import failed: $error';
+    return 'Importación fallida: $error';
   }
 
   @override
   String iosAutoOpenAppFailed(Object error) {
-    return 'Open failed: $error';
+    return 'Error al abrir: $error';
   }
 
   @override
-  String get iosAutoCannotOpenLink => 'Cannot open link, please check network connection';
+  String get iosAutoCannotOpenLink => 'No se puede abrir el enlace, por favor verifique la conexión de red';
 
   @override
-  String get iosAutoCannotOpenShortcuts => 'Cannot open Shortcuts app';
+  String get iosAutoCannotOpenShortcuts => 'No se puede abrir la aplicación Atajos';
 
   @override
-  String get aiSettingsTitle => 'AI Recognition';
+  String get aiSettingsTitle => 'Reconocimiento IA';
 
   @override
-  String get aiSettingsSubtitle => 'Configure AI models and recognition strategy';
+  String get aiSettingsSubtitle => 'Configurar modelos IA y estrategia de reconocimiento';
 
   @override
-  String get aiEnableTitle => 'Enable AI Recognition';
+  String get aiEnableTitle => 'Habilitar Reconocimiento IA';
 
   @override
-  String get aiEnableSubtitle => 'Use AI to enhance OCR accuracy and extract amount, merchant, time, etc.';
+  String get aiEnableSubtitle => 'Use IA para mejorar la precisión del OCR y extraer monto, comerciante, tiempo, etc.';
 
   @override
-  String get aiEnableToastOn => 'AI enhancement enabled';
+  String get aiEnableToastOn => 'Mejora IA habilitada';
 
   @override
-  String get aiEnableToastOff => 'AI enhancement disabled';
+  String get aiEnableToastOff => 'Mejora IA deshabilitada';
 
   @override
-  String get aiStrategyTitle => 'Execution Strategy';
+  String get aiStrategyTitle => 'Estrategia de Ejecución';
 
   @override
-  String get aiStrategyLocalFirst => 'Local First (Recommended)';
+  String get aiStrategyLocalFirst => 'Local Primero (Recomendado)';
 
   @override
-  String get aiStrategyLocalFirstDesc => 'Use local model first, fallback to cloud if failed';
+  String get aiStrategyLocalFirstDesc => 'Use el modelo local primero, recurra a la nube si falla';
 
   @override
-  String get aiStrategyCloudFirst => 'Cloud First';
+  String get aiStrategyCloudFirst => 'Nube Primero';
 
   @override
-  String get aiStrategyCloudFirstDesc => 'Use cloud API first, downgrade to local if failed';
+  String get aiStrategyCloudFirstDesc => 'Use la API de la nube primero, degrade a local si falla';
 
   @override
-  String get aiStrategyLocalOnly => 'Local Only';
+  String get aiStrategyLocalOnly => 'Solo Local';
 
   @override
-  String get aiStrategyLocalOnlyDesc => 'Use local model only, completely offline';
+  String get aiStrategyLocalOnlyDesc => 'Use solo el modelo local, completamente sin conexión';
 
   @override
-  String get aiStrategyCloudOnly => 'Cloud Only';
+  String get aiStrategyCloudOnly => 'Solo Nube';
 
   @override
-  String get aiStrategyCloudOnlyDesc => 'Use cloud API only, no model download';
+  String get aiStrategyCloudOnlyDesc => 'Use solo la API de la nube, sin descarga de modelo';
 
   @override
-  String get aiStrategyUnavailable => 'Local model in training, coming soon';
+  String get aiStrategyUnavailable => 'Modelo local en entrenamiento, próximamente';
 
   @override
   String aiStrategySwitched(String strategy) {
-    return 'Switched to: $strategy';
+    return 'Cambiado a: $strategy';
   }
 
   @override
-  String get aiCloudApiTitle => 'Zhipu GLM API';
+  String get aiCloudApiTitle => 'API GLM de Zhipu';
 
   @override
-  String get aiCloudApiKeyLabel => 'API Key';
+  String get aiCloudApiKeyLabel => 'Clave API';
 
   @override
-  String get aiCloudApiKeyHint => 'Enter your Zhipu AI API Key';
+  String get aiCloudApiKeyHint => 'Ingrese su Clave API de Zhipu AI';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash model is completely free';
+  String get aiCloudApiKeyHelper => 'El modelo GLM-4-Flash es completamente gratuito';
 
   @override
-  String get aiCloudApiKeySaved => 'API Key saved';
+  String get aiCloudApiKeySaved => 'Clave API guardada';
 
   @override
-  String get aiCloudApiGetKey => 'Get API Key';
+  String get aiCloudApiGetKey => 'Obtener Clave API';
 
   @override
-  String get aiLocalModelTitle => 'Local Model';
+  String get aiLocalModelTitle => 'Modelo Local';
 
   @override
-  String get aiLocalModelTraining => 'Training';
+  String get aiLocalModelTraining => 'En Entrenamiento';
 
   @override
-  String get aiLocalModelManagement => 'Model Management';
+  String get aiLocalModelManagement => 'Administración de Modelos';
 
   @override
-  String get aiLocalModelUnavailable => 'Local model in training, not available yet';
+  String get aiLocalModelUnavailable => 'Modelo local en entrenamiento, aún no disponible';
 
   @override
-  String get aiFabSettingTitle => 'Quick Add Button Prioritize Camera';
+  String get aiFabSettingTitle => 'Botón de Agregar Rápido Priorizar Cámara';
 
   @override
-  String get aiFabSettingDescCamera => 'Tap for camera, long press for manual';
+  String get aiFabSettingDescCamera => 'Toque para cámara, mantenga presionado para manual';
 
   @override
-  String get aiFabSettingDescManual => 'Tap for manual, long press for camera';
+  String get aiFabSettingDescManual => 'Toque para manual, mantenga presionado para cámara';
 
   @override
-  String get aiOcrRecognizing => 'Recognizing bill...';
+  String get aiOcrRecognizing => 'Reconociendo factura...';
 
   @override
-  String get aiOcrNoAmount => 'No valid amount recognized, please add manually';
+  String get aiOcrNoAmount => 'No se reconoció un monto válido, por favor agregue manualmente';
 
   @override
-  String get aiOcrNoLedger => 'Ledger not found';
+  String get aiOcrNoLedger => 'Libro no encontrado';
 
   @override
   String aiOcrSuccess(String type, String amount) {
-    return '✅ $type bill created ¥$amount';
+    return '✅ Factura $type creada ¥$amount';
   }
 
   @override
   String aiOcrFailed(String error) {
-    return 'Recognition failed: $error';
+    return 'Reconocimiento fallido: $error';
   }
 
   @override
-  String get aiOcrCreateFailed => 'Failed to create bill';
+  String get aiOcrCreateFailed => 'Error al crear factura';
 
   @override
-  String get aiTypeIncome => 'Income';
+  String get aiTypeIncome => 'Ingreso';
 
   @override
-  String get aiTypeExpense => 'Expense';
+  String get aiTypeExpense => 'Gasto';
 }

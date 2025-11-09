@@ -4,12 +4,10 @@
   "@appTitle": {
     "description": "The application title"
   },
-
   "tabHome": "Inicio",
   "tabAnalytics": "Gráficos",
   "tabLedgers": "Libros",
   "tabMine": "Mío",
-
   "commonCancel": "Cancelar",
   "commonConfirm": "Confirmar",
   "commonSave": "Guardar",
@@ -50,7 +48,6 @@
   "commonWeekdayFriday": "Viernes",
   "commonWeekdaySaturday": "Sábado",
   "commonWeekdaySunday": "Domingo",
-
   "homeTitle": "Contabilidad Abeja",
   "homeIncome": "Ingresos",
   "homeExpense": "Gastos",
@@ -85,7 +82,6 @@
     }
   },
   "homeNoRecordsSubtext": "Toca el botón más en la parte inferior para agregar un registro",
-
   "searchTitle": "Buscar",
   "searchHint": "Buscar notas, categorías o montos...",
   "searchAmountRange": "Filtro de rango de monto",
@@ -96,105 +92,28 @@
   "searchNoResults": "No se encontraron resultados coincidentes",
   "searchResultsEmpty": "No se encontraron resultados coincidentes",
   "searchResultsEmptyHint": "Prueba con otras palabras clave o ajusta las condiciones del filtro",
-
   "analyticsTitle": "Analíticas",
   "analyticsMonth": "Mes",
   "analyticsYear": "Año",
   "analyticsAll": "Todo",
-  "analyticsWeek": "Semana",
-  "analyticsCustom": "Personalizado",
   "analyticsIncome": "Ingresos",
   "analyticsExpense": "Gastos",
-  "analyticsBalance": "Balance",
-  "analyticsStatistics": "Estadísticas",
-  "analyticsNoData": "Sin datos para mostrar",
-  "analyticsCategories": "Categorías",
-  "analyticsTrend": "Tendencia",
-  "analyticsDaily": "Diario",
-  "analyticsMonthly": "Mensual",
-  "analyticsYearly": "Anual",
-  "analyticsAverage": "Promedio",
-  "analyticsAmount": "Monto",
-  "analyticsCount": "Cantidad",
-  "analyticsPercent": "Porcentaje",
-  "analyticsTop": "Top",
-  "analyticsNoDataHint": "Agrega algunos registros para ver analíticas",
-  "analyticsIncomeExpense": "Ingresos y Gastos",
-  "analyticsSelectTimeRange": "Seleccionar rango de tiempo",
-  "analyticsSelectDate": "Seleccionar fecha",
-  "analyticsSelectStartDate": "Seleccionar fecha de inicio",
-  "analyticsSelectEndDate": "Seleccionar fecha de fin",
-  "analyticsWeeklyTrend": "Tendencia semanal",
-  "analyticsMonthlyTrend": "Tendencia mensual",
-  "analyticsYearlyTrend": "Tendencia anual",
-  "analyticsStatDetail": "Detalle estadístico",
-  "analyticsTotal": "Total",
-  "analyticsShowDetail": "Mostrar detalle",
-  "analyticsHideDetail": "Ocultar detalle",
-  "analyticsDataRange": "Rango de datos",
-  "analyticsIncomeTotal": "Total de ingresos",
-  "analyticsExpenseTotal": "Total de gastos",
-  "analyticsNetIncome": "Ingresos netos",
-
+  "analyticsBalance": "Balance: ",
+  "analyticsAverage": "{avgLabel}: ",
+  "analyticsTotal": "Total {type}: ",
   "ledgersTitle": "Libros de cuentas",
-  "ledgersAdd": "Agregar libro",
   "ledgersEdit": "Editar libro",
   "ledgersDelete": "Eliminar libro",
   "ledgersName": "Nombre del libro",
   "accountTitle": "Cuenta",
-  "ledgersNameHint": "Ingresa el nombre del libro",
-  "ledgersNameRequired": "El nombre del libro es requerido",
-  "ledgersNameExists": "El nombre del libro ya existe",
-  "ledgersDescription": "Descripción",
-  "ledgersDescriptionHint": "Ingresa la descripción del libro",
-  "ledgersDefaultLedger": "Libro predeterminado",
-  "ledgersSetAsDefault": "Establecer como predeterminado",
-  "ledgersCannotDeleteDefault": "No se puede eliminar el libro predeterminado",
   "ledgersDeleteConfirm": "¿Estás seguro de que quieres eliminar este libro?",
-  "ledgersDeleteHint": "Esta acción no se puede deshacer. Todos los registros en este libro serán eliminados.",
-  "ledgersNoLedgers": "No hay libros aún",
-  "ledgersNoLedgersHint": "Toca el botón más para crear tu primer libro",
-  "ledgersRecordCount": "{count} registros",
-  "@ledgersRecordCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "ledgersCreatedAt": "Creado el {date}",
-  "@ledgersCreatedAt": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "ledgersLastUpdated": "Última actualización {date}",
-  "@ledgersLastUpdated": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-
   "mineTitle": "Mío",
-  "mineLedgers": "Libros de cuentas",
-  "mineCategories": "Categorías",
   "mineImport": "Importar",
   "mineExport": "Exportar",
   "mineTheme": "Tema",
-  "mineLanguage": "Idioma",
   "mineAbout": "Acerca de",
   "mineSettings": "Configuración",
-  "mineCloudSync": "Sincronización en la nube",
   "mineCloudServiceWebDAV": "Servicio de nube personalizado (WebDAV)",
-  "mineDataManagement": "Gestión de datos",
-  "minePreferences": "Preferencias",
-  "mineSupport": "Soporte",
-  "minePrivacy": "Privacidad",
-  "mineTerms": "Términos",
   "mineFeedback": "Comentarios",
   "mineFeedbackSubtitle": "Reportar problema o sugerencia",
   "mineHelp": "Ayuda",
@@ -204,565 +123,23 @@
   "mineVersion": "Versión",
   "mineUpdate": "Actualizar",
   "mineCheckUpdate": "Verificar actualizaciones",
-  "mineNoUpdate": "Ya tienes la última versión",
-  "mineUpdateAvailable": "Actualización disponible",
-  "mineUpdateNow": "Actualizar ahora",
-  "mineUpdateLater": "Actualizar más tarde",
-
-  "categoriesTitle": "Categorías",
-  "categoriesIncome": "Ingresos",
-  "categoriesExpense": "Gastos",
-  "categoriesAdd": "Agregar categoría",
-  "categoriesEdit": "Editar categoría",
-  "categoriesDelete": "Eliminar categoría",
-  "categoriesName": "Nombre de la categoría",
-  "categoriesNameHint": "Ingresa el nombre de la categoría",
-  "categoriesNameRequired": "El nombre de la categoría es requerido",
-  "categoriesNameExists": "El nombre de la categoría ya existe",
-  "categoriesIcon": "Icono",
-  "categoriesColor": "Color",
-  "categoriesSelectIcon": "Seleccionar icono",
-  "categoriesSelectColor": "Seleccionar color",
-  "categoriesDeleteConfirm": "¿Estás seguro de que quieres eliminar esta categoría?",
-  "categoriesDeleteHint": "Esta acción no se puede deshacer. Todos los registros de esta categoría serán eliminados.",
-  "categoriesCannotDeleteSystem": "No se pueden eliminar las categorías del sistema",
-  "categoriesSystemCategory": "Categoría del sistema",
-  "categoriesUserCategory": "Categoría del usuario",
-  "categoriesUsedCount": "Usado {count} veces",
-  "@categoriesUsedCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "categoriesNoCategories": "No hay categorías aún",
-  "categoriesNoCategoriesHint": "Toca el botón más para crear tu primera categoría",
-  "categoriesPreset": "Preestablecida",
-  "categoriesCustom": "Personalizada",
-
-  "recordTitle": "Agregar registro",
-  "recordEditTitle": "Editar registro",
-  "recordAmount": "Monto",
-  "recordAmountHint": "0.00",
-  "recordAmountRequired": "El monto es requerido",
-  "recordAmountInvalid": "Monto inválido",
-  "recordCategory": "Categoría",
-  "recordSelectCategory": "Seleccionar categoría",
-  "recordCategoryRequired": "La categoría es requerida",
-  "recordAccount": "Cuenta",
-  "recordSelectAccount": "Seleccionar cuenta",
-  "recordAccountRequired": "La cuenta es requerida",
-  "recordNote": "Nota",
-  "recordNoteHint": "Nota opcional...",
-  "recordDate": "Fecha",
-  "recordTime": "Hora",
-  "recordSelectDate": "Seleccionar fecha",
-  "recordSelectTime": "Seleccionar hora",
-  "recordSave": "Guardar",
-  "recordSaveSuccess": "Registro guardado exitosamente",
-  "recordSaveFailed": "Error al guardar el registro",
-  "recordDelete": "Eliminar registro",
-  "recordDeleteConfirm": "¿Estás seguro de que quieres eliminar este registro?",
-  "recordDeleteSuccess": "Registro eliminado exitosamente",
-  "recordDeleteFailed": "Error al eliminar el registro",
-  "recordIncome": "Ingreso",
-  "recordExpense": "Gasto",
-  "recordType": "Tipo",
-  "recordLedger": "Libro",
-  "recordSelectLedger": "Seleccionar libro",
-  "recordLedgerRequired": "El libro es requerido",
-
   "accountsTitle": "Cuentas",
-  "accountsAdd": "Agregar cuenta",
-  "accountsEdit": "Editar cuenta",
-  "accountsDelete": "Eliminar cuenta",
-  "accountsName": "Nombre de la cuenta",
-  "accountsNameHint": "Ingresa el nombre de la cuenta",
-  "accountsNameRequired": "El nombre de la cuenta es requerido",
-  "accountsNameExists": "El nombre de la cuenta ya existe",
-  "accountsType": "Tipo de cuenta",
-  "accountsTypeCash": "Efectivo",
-  "accountsTypeCard": "Tarjeta",
-  "accountsTypeBank": "Banco",
-  "accountsTypeAlipay": "Alipay",
-  "accountsTypeWechat": "WeChat Pay",
-  "accountsTypeOther": "Otro",
-  "accountsBalance": "Balance",
-  "accountsBalanceHint": "Balance inicial",
-  "accountsDeleteConfirm": "¿Estás seguro de que quieres eliminar esta cuenta?",
-  "accountsDeleteHint": "Esta acción no se puede deshacer. Todos los registros de esta cuenta serán eliminados.",
-  "accountsCannotDeleteSystem": "No se pueden eliminar las cuentas del sistema",
-  "accountsSystemAccount": "Cuenta del sistema",
-  "accountsUserAccount": "Cuenta del usuario",
-  "accountsUsedCount": "Usado {count} veces",
-  "@accountsUsedCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "accountsNoAccounts": "No hay cuentas aún",
-  "accountsNoAccountsHint": "Toca el botón más para crear tu primera cuenta",
-  "accountsCurrentBalance": "Balance actual: {balance}",
-  "@accountsCurrentBalance": {
-    "placeholders": {
-      "balance": {
-        "type": "String"
-      }
-    }
-  },
-
-  "themeTitle": "Tema",
-  "themeSystem": "Seguir sistema",
-  "themeLight": "Claro",
-  "themeDark": "Oscuro",
-  "themeColor": "Color del tema",
-  "themeColorBlue": "Azul",
-  "themeColorGreen": "Verde",
-  "themeColorRed": "Rojo",
-  "themeColorOrange": "Naranja",
-  "themeColorPurple": "Morado",
-  "themeColorPink": "Rosa",
-  "themeColorTeal": "Verde azulado",
-  "themeColorIndigo": "Índigo",
-
   "languageTitle": "Idioma",
   "languageSystemDefault": "Seguir sistema",
   "languageChinese": "简体中文",
-  "languageTraditionalChinese": "繁體中文",
   "languageEnglish": "English",
-  "languageJapanese": "日本語",
-  "languageKorean": "한국어",
-  "languageSpanish": "Español",
-  "languageFrench": "Français",
-  "languageGerman": "Deutsch",
-
   "importTitle": "Importar",
-  "importFromFile": "Importar desde archivo",
-  "importFromCloud": "Importar desde la nube",
   "importSelectFile": "Seleccionar archivo",
-  "importFileFormat": "Formato de archivo",
-  "importCSV": "CSV",
-  "importJSON": "JSON",
   "importPreview": "Vista previa",
-  "importMapping": "Mapeo de campos",
   "importFieldDate": "Fecha",
   "importFieldAmount": "Monto",
   "importFieldCategory": "Categoría",
-  "importFieldAccount": "Cuenta",
   "importFieldNote": "Nota",
   "importFieldType": "Tipo",
-  "importStart": "Iniciar importación",
-  "importSuccess": "Importación exitosa",
   "importFailed": "Importación fallida",
-  "importProgress": "Progreso de importación",
-  "importComplete": "Importación completa",
-  "importRecordsCount": "{count} registros importados",
-  "@importRecordsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importConfirm": "Confirmar importación",
-  "importConfirmHint": "¿Estás seguro de que quieres importar estos registros?",
-  "importOverwriteData": "Sobrescribir datos existentes",
-  "importMergeData": "Fusionar con datos existentes",
-  "importDataConflict": "Conflicto de datos",
-  "importResolveConflict": "Resolver conflicto",
-  "importSkipConflict": "Omitir conflicto",
-  "importDuplicateHandling": "Manejo de duplicados",
-  "importSkipDuplicate": "Omitir duplicados",
-  "importUpdateDuplicate": "Actualizar duplicados",
-
+  "importProgress": "Importando, éxito: {ok}, fallidos: {fail}",
   "exportTitle": "Exportar",
-  "exportToFile": "Exportar a archivo",
-  "exportToCloud": "Exportar a la nube",
-  "exportSelectFormat": "Seleccionar formato",
-  "exportCSV": "CSV",
-  "exportJSON": "JSON",
-  "exportPDF": "PDF",
-  "exportExcel": "Excel",
-  "exportDateRange": "Rango de fechas",
-  "exportSelectDateRange": "Seleccionar rango de fechas",
-  "exportAllData": "Todos los datos",
-  "exportCustomRange": "Rango personalizado",
-  "exportCategories": "Categorías",
-  "exportAccounts": "Cuentas",
-  "exportLedgers": "Libros",
-  "exportSelectCategories": "Seleccionar categorías",
-  "exportSelectAccounts": "Seleccionar cuentas",
-  "exportSelectLedgers": "Seleccionar libros",
-  "exportStart": "Iniciar exportación",
-  "exportSuccess": "Exportación exitosa",
-  "exportFailed": "Exportación fallida",
-  "exportProgress": "Progreso de exportación",
-  "exportComplete": "Exportación completa",
-  "exportRecordsCount": "{count} registros exportados",
-  "@exportRecordsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "exportFileName": "Nombre del archivo",
-  "exportFileNameHint": "Ingresa el nombre del archivo",
-  "exportSaveToDownloads": "Guardar en Descargas",
-  "exportShareFile": "Compartir archivo",
-  "exportFileSaved": "Archivo guardado en: {path}",
-  "@exportFileSaved": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-
-  "cloudTitle": "Sincronización en la nube",
-  "cloudSignIn": "Iniciar sesión",
-  "cloudSignOut": "Cerrar sesión",
-  "cloudSignUp": "Registrarse",
-  "cloudEmail": "Correo electrónico",
-  "cloudPassword": "Contraseña",
-  "cloudConfirmPassword": "Confirmar contraseña",
-  "cloudEmailHint": "Ingresa tu correo electrónico",
-  "cloudPasswordHint": "Ingresa tu contraseña",
-  "cloudConfirmPasswordHint": "Confirma tu contraseña",
-  "cloudEmailRequired": "El correo electrónico es requerido",
-  "cloudEmailInvalid": "Formato de correo electrónico inválido",
-  "cloudPasswordRequired": "La contraseña es requerida",
-  "cloudPasswordTooShort": "La contraseña debe tener al menos 6 caracteres",
-  "cloudPasswordMismatch": "Las contraseñas no coinciden",
-  "cloudSignInSuccess": "Inicio de sesión exitoso",
-  "cloudSignInFailed": "Error al iniciar sesión",
-  "cloudSignUpSuccess": "Registro exitoso",
-  "cloudSignUpFailed": "Error al registrarse",
-  "cloudSignOutSuccess": "Cierre de sesión exitoso",
-  "cloudSignOutFailed": "Error al cerrar sesión",
-  "cloudSyncNow": "Sincronizar ahora",
-  "cloudSyncAuto": "Sincronización automática",
-  "cloudSyncSuccess": "Sincronización exitosa",
-  "cloudSyncFailed": "Error de sincronización",
-  "cloudSyncProgress": "Sincronizando...",
-  "cloudLastSync": "Última sincronización: {time}",
-  "@cloudLastSync": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "cloudNeverSynced": "Nunca sincronizado",
-  "cloudSyncConflict": "Conflicto de sincronización",
-  "cloudSyncConflictHint": "Se detectaron conflictos durante la sincronización. Por favor elige cómo resolverlos.",
-  "cloudUseLocal": "Usar datos locales",
-  "cloudUseRemote": "Usar datos remotos",
-  "cloudMerge": "Fusionar datos",
-  "cloudDataSize": "Tamaño de datos: {size}",
-  "@cloudDataSize": {
-    "placeholders": {
-      "size": {
-        "type": "String"
-      }
-    }
-  },
-  "cloudRecordsCount": "{count} registros en la nube",
-  "@cloudRecordsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-
-  "aboutTitle": "Acerca de",
-  "aboutAppName": "Contabilidad Abeja",
-  "aboutVersion": "Versión",
-  "aboutDescription": "Una aplicación simple y eficiente de contabilidad personal",
-  "aboutDeveloper": "Desarrollador",
-  "aboutContact": "Contacto",
-  "aboutPrivacy": "Política de privacidad",
-  "aboutTerms": "Términos de servicio",
-  "aboutLicense": "Licencia",
-  "aboutOpenSource": "Código abierto",
-  "aboutThirdParty": "Bibliotecas de terceros",
-  "aboutFeedback": "Comentarios",
-  "aboutRate": "Calificar aplicación",
-  "aboutShare": "Compartir aplicación",
-  "aboutUpdate": "Verificar actualizaciones",
-
-  "errorTitle": "Error",
-  "errorUnknown": "Error desconocido",
-  "errorNetwork": "Error de red",
-  "errorNetworkHint": "Por favor verifica tu conexión a internet",
-  "errorServer": "Error del servidor",
-  "errorServerHint": "El servidor no está disponible temporalmente",
-  "errorPermission": "Error de permisos",
-  "errorPermissionHint": "Por favor otorga los permisos necesarios",
-  "errorFile": "Error de archivo",
-  "errorFileHint": "Error al acceder al archivo",
-  "errorDatabase": "Error de base de datos",
-  "errorDatabaseHint": "Error al acceder a la base de datos",
-  "errorAuth": "Error de autenticación",
-  "errorAuthHint": "Por favor inicia sesión nuevamente",
-  "errorTimeout": "Tiempo de espera agotado",
-  "errorTimeoutHint": "La operación tardó demasiado tiempo",
-
-  "permissionTitle": "Permisos",
-  "permissionStorage": "Almacenamiento",
-  "permissionStorageHint": "Necesario para importar/exportar archivos",
-  "permissionCamera": "Cámara",
-  "permissionCameraHint": "Necesario para escanear códigos QR",
-  "permissionLocation": "Ubicación",
-  "permissionLocationHint": "Necesario para funciones basadas en ubicación",
-  "permissionGrant": "Otorgar permisos",
-  "permissionDenied": "Permisos denegados",
-  "permissionDeniedHint": "Por favor otorga los permisos en la configuración",
-  "permissionSettings": "Configuración",
-
-  "validationRequired": "Este campo es requerido",
-  "validationEmail": "Por favor ingresa un correo electrónico válido",
-  "validationPassword": "La contraseña debe tener al menos 6 caracteres",
-  "validationPasswordMismatch": "Las contraseñas no coinciden",
-  "validationNumber": "Por favor ingresa un número válido",
-  "validationPositiveNumber": "Por favor ingresa un número positivo",
-  "validationLength": "La longitud debe estar entre {min} y {max} caracteres",
-  "@validationLength": {
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-
-  "currencySymbol": "$",
-  "currencyCode": "USD",
-  "currencyName": "Dólar estadounidense",
-
-  "formatCurrency": "{symbol}{amount}",
-  "@formatCurrency": {
-    "placeholders": {
-      "symbol": {
-        "type": "String"
-      },
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-
-  "formatDate": "{year}-{month}-{day}",
-  "@formatDate": {
-    "placeholders": {
-      "year": {
-        "type": "String"
-      },
-      "month": {
-        "type": "String"
-      },
-      "day": {
-        "type": "String"
-      }
-    }
-  },
-
-  "formatTime": "{hour}:{minute}",
-  "@formatTime": {
-    "placeholders": {
-      "hour": {
-        "type": "String"
-      },
-      "minute": {
-        "type": "String"
-      }
-    }
-  },
-
-  "formatDateTime": "{date} {time}",
-  "@formatDateTime": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-
-  "reminderTitle": "Recordatorio",
-  "reminderContent": "Contenido del recordatorio",
-  "reminderTime": "Hora del recordatorio",
-  "reminderRepeat": "Repetir",
-  "reminderRepeatNone": "No repetir",
-  "reminderRepeatDaily": "Diariamente",
-  "reminderRepeatWeekly": "Semanalmente",
-  "reminderRepeatMonthly": "Mensualmente",
-  "reminderRepeatYearly": "Anualmente",
-  "reminderAdd": "Agregar recordatorio",
-  "reminderEdit": "Editar recordatorio",
-  "reminderDelete": "Eliminar recordatorio",
-  "reminderDeleteConfirm": "¿Estás seguro de que quieres eliminar este recordatorio?",
-  "reminderSaveSuccess": "Recordatorio guardado exitosamente",
-  "reminderSaveFailed": "Error al guardar el recordatorio",
-  "reminderDeleteSuccess": "Recordatorio eliminado exitosamente",
-  "reminderDeleteFailed": "Error al eliminar el recordatorio",
-
-  "budgetTitle": "Presupuesto",
-  "budgetAdd": "Agregar presupuesto",
-  "budgetEdit": "Editar presupuesto",
-  "budgetDelete": "Eliminar presupuesto",
-  "budgetName": "Nombre del presupuesto",
-  "budgetAmount": "Monto del presupuesto",
-  "budgetPeriod": "Período",
-  "budgetPeriodDaily": "Diario",
-  "budgetPeriodWeekly": "Semanal",
-  "budgetPeriodMonthly": "Mensual",
-  "budgetPeriodYearly": "Anual",
-  "budgetCategory": "Categoría",
-  "budgetProgress": "Progreso",
-  "budgetRemaining": "Restante",
-  "budgetExceeded": "Excedido",
-  "budgetAlert": "Alerta de presupuesto",
-  "budgetAlertHint": "Has excedido tu presupuesto para {category}",
-  "@budgetAlertHint": {
-    "placeholders": {
-      "category": {
-        "type": "String"
-      }
-    }
-  },
-  "budgetSaveSuccess": "Presupuesto guardado exitosamente",
-  "budgetSaveFailed": "Error al guardar el presupuesto",
-  "budgetDeleteSuccess": "Presupuesto eliminado exitosamente",
-  "budgetDeleteFailed": "Error al eliminar el presupuesto",
-
-  "goalTitle": "Meta",
-  "goalAdd": "Agregar meta",
-  "goalEdit": "Editar meta",
-  "goalDelete": "Eliminar meta",
-  "goalName": "Nombre de la meta",
-  "goalAmount": "Monto de la meta",
-  "goalTargetDate": "Fecha objetivo",
-  "goalCurrentAmount": "Monto actual",
-  "goalProgress": "Progreso",
-  "goalRemaining": "Restante",
-  "goalDaysLeft": "{days} días restantes",
-  "@goalDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "goalAchieved": "Meta alcanzada",
-  "goalAchievedHint": "¡Felicidades! Has alcanzado tu meta: {goal}",
-  "@goalAchievedHint": {
-    "placeholders": {
-      "goal": {
-        "type": "String"
-      }
-    }
-  },
-  "goalSaveSuccess": "Meta guardada exitosamente",
-  "goalSaveFailed": "Error al guardar la meta",
-  "goalDeleteSuccess": "Meta eliminada exitosamente",
-  "goalDeleteFailed": "Error al eliminar la meta",
-
-  "reportTitle": "Reporte",
-  "reportGenerate": "Generar reporte",
-  "reportPeriod": "Período del reporte",
-  "reportType": "Tipo de reporte",
-  "reportTypeIncome": "Reporte de ingresos",
-  "reportTypeExpense": "Reporte de gastos",
-  "reportTypeBalance": "Reporte de balance",
-  "reportTypeCategory": "Reporte por categorías",
-  "reportTypeAccount": "Reporte por cuentas",
-  "reportTypeTrend": "Reporte de tendencias",
-  "reportFormat": "Formato del reporte",
-  "reportFormatPDF": "PDF",
-  "reportFormatExcel": "Excel",
-  "reportFormatCSV": "CSV",
-  "reportGenerateSuccess": "Reporte generado exitosamente",
-  "reportGenerateFailed": "Error al generar el reporte",
-  "reportShare": "Compartir reporte",
-  "reportSave": "Guardar reporte",
-
-  "backupTitle": "Respaldo",
-  "backupCreate": "Crear respaldo",
-  "backupRestore": "Restaurar respaldo",
-  "backupAuto": "Respaldo automático",
-  "backupAutoHint": "Crear respaldos automáticamente",
-  "backupFrequency": "Frecuencia de respaldo",
-  "backupFrequencyDaily": "Diariamente",
-  "backupFrequencyWeekly": "Semanalmente",
-  "backupFrequencyMonthly": "Mensualmente",
-  "backupLocation": "Ubicación del respaldo",
-  "backupLocationLocal": "Local",
-  "backupLocationCloud": "Nube",
-  "backupCreateSuccess": "Respaldo creado exitosamente",
-  "backupCreateFailed": "Error al crear el respaldo",
-  "backupRestoreSuccess": "Respaldo restaurado exitosamente",
-  "backupRestoreFailed": "Error al restaurar el respaldo",
-  "backupDeleteConfirm": "¿Estás seguro de que quieres eliminar este respaldo?",
-
-  "securityTitle": "Seguridad",
-  "securityPinCode": "Código PIN",
-  "securityBiometric": "Biométrico",
-  "securityFaceID": "Face ID",
-  "securityTouchID": "Touch ID",
-  "securityFingerprint": "Huella dactilar",
-  "securitySetPinCode": "Establecer código PIN",
-  "securityChangePinCode": "Cambiar código PIN",
-  "securityRemovePinCode": "Eliminar código PIN",
-  "securityEnterPinCode": "Ingresar código PIN",
-  "securityConfirmPinCode": "Confirmar código PIN",
-  "securityPinCodeMismatch": "Los códigos PIN no coinciden",
-  "securityPinCodeSet": "Código PIN establecido",
-  "securityPinCodeChanged": "Código PIN cambiado",
-  "securityPinCodeRemoved": "Código PIN eliminado",
-  "securityBiometricEnable": "Habilitar autenticación biométrica",
-  "securityBiometricDisable": "Deshabilitar autenticación biométrica",
-  "securityBiometricSuccess": "Autenticación biométrica exitosa",
-  "securityBiometricFailed": "Error de autenticación biométrica",
-  "securityBiometricNotAvailable": "Autenticación biométrica no disponible",
-  "securityUnlock": "Desbloquear",
-  "securityLocked": "Bloqueado",
-
-  "notificationTitle": "Notificación",
-  "notificationEnable": "Habilitar notificaciones",
-  "notificationDisable": "Deshabilitar notificaciones",
-  "notificationSound": "Sonido de notificación",
-  "notificationVibration": "Vibración",
-  "notificationBudgetAlert": "Alerta de presupuesto",
-  "notificationGoalReminder": "Recordatorio de meta",
-  "notificationBackupReminder": "Recordatorio de respaldo",
-  "notificationSyncResult": "Resultado de sincronización",
-
-  "widgetTitle": "Widget",
-  "widgetBalance": "Balance",
-  "widgetIncome": "Ingresos",
-  "widgetExpense": "Gastos",
-  "widgetRecentTransactions": "Transacciones recientes",
-  "widgetMonthlyStats": "Estadísticas mensuales",
-  "widgetAddToHomeScreen": "Agregar a pantalla de inicio",
-
-  "developerTitle": "Desarrollador",
-  "developerMode": "Modo desarrollador",
-  "developerDebugInfo": "Información de depuración",
-  "developerTestData": "Datos de prueba",
-  "developerClearCache": "Limpiar caché",
-  "developerResetApp": "Restablecer aplicación",
-  "developerResetConfirm": "¿Estás seguro de que quieres restablecer la aplicación?",
-  "developerResetHint": "Esta acción eliminará todos los datos y configuraciones.",
-
+  "reminderTitle": "Recordatorio de registro",
   "exportDescription": "Haz clic en el botón de abajo para seleccionar la ubicación de guardado y exportar el libro actual a un archivo CSV.",
   "exportButtonIOS": "Exportar y compartir (iOS)",
   "exportButtonAndroid": "Seleccionar carpeta y exportar",
@@ -802,7 +179,6 @@
   "exportTypeIncome": "Ingreso",
   "exportTypeExpense": "Gasto",
   "exportTypeTransfer": "Transferencia",
-
   "personalizeTitle": "Personalizar",
   "personalizeThemeHoney": "Amarillo abeja",
   "personalizeThemeOrange": "Naranja llama",
@@ -831,13 +207,11 @@
   "personalizeThemeSunset": "Naranja atardecer",
   "personalizeThemePeacock": "Azul pavo real",
   "personalizeThemeLime": "Verde lima",
-
   "analyticsMonthlyAvg": "Promedio mensual",
   "analyticsDailyAvg": "Promedio diario",
   "analyticsOverallAvg": "Promedio general",
   "analyticsTotalIncome": "Total de ingresos: ",
   "analyticsTotalExpense": "Total de gastos: ",
-  "analyticsBalance": "Balance: ",
   "analyticsAvgIncome": "{avgLabel} ingresos: ",
   "@analyticsAvgIncome": {
     "placeholders": {
@@ -854,9 +228,6 @@
       }
     }
   },
-  "analyticsExpense": "Gastos",
-  "analyticsIncome": "Ingresos",
-  "analyticsTotal": "Total {type}: ",
   "@analyticsTotal": {
     "placeholders": {
       "type": {
@@ -864,7 +235,6 @@
       }
     }
   },
-  "analyticsAverage": "{avgLabel}: ",
   "@analyticsAverage": {
     "placeholders": {
       "avgLabel": {
@@ -872,7 +242,6 @@
       }
     }
   },
-
   "updateCheckTitle": "Verificar actualización",
   "updateNewVersionFound": "Nueva versión encontrada",
   "updateNewVersionTitle": "Nueva versión {version} encontrada",
@@ -989,7 +358,6 @@
       }
     }
   },
-
   "updateCheckingPermissions": "Verificando permisos...",
   "updateCheckingCache": "Verificando caché local...",
   "updatePreparingDownload": "Preparando descarga...",
@@ -1089,8 +457,6 @@
       }
     }
   },
-
-  "reminderTitle": "Recordatorio de registro",
   "reminderSubtitle": "Establecer hora de recordatorio de registro diario",
   "reminderDailyTitle": "Recordatorio de registro diario",
   "reminderDailySubtitle": "Cuando esté habilitado, te recordará registrar a la hora especificada",
@@ -1117,7 +483,6 @@
   "updateNotificationGuideStep2": "Buscar la aplicación \\\"BeeCount\\\"",
   "updateNotificationGuideStep3": "Habilitar permisos de notificación",
   "updateNotificationGuideInfo": "Las descargas continuarán normalmente en segundo plano incluso sin notificaciones",
-
   "currencyCNY": "Yuan chino",
   "currencyUSD": "Dólar estadounidense",
   "currencyEUR": "Euro",
@@ -1134,45 +499,8 @@
   "currencyINR": "Rupia india",
   "currencyRUB": "Rublo ruso",
   "currencyBYN": "Rublo bielorruso",
-
-  "supportProjectTitle": "Apoyar el proyecto",
-  "supportProjectWhyTitle": "¿Por qué necesitamos tu apoyo?",
-  "supportProjectWhyDescription": "BeeCount es un proyecto completamente gratuito y de código abierto sin anuncios ni funciones de pago. Sin embargo, para que esté disponible para los usuarios de iOS, necesitamos una cuenta de desarrollador de Apple ($99/año) para firmar la aplicación.",
-  "supportProjectGoalTitle": "Objetivo de financiación",
-  "supportProjectCurrentAmount": "Recaudado: {amount}",
-  "@supportProjectCurrentAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectTargetAmount": "Objetivo: {amount}",
-  "@supportProjectTargetAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectProgress": "Progreso: {progress}",
-  "@supportProjectProgress": {
-    "placeholders": {
-      "progress": {
-        "type": "String"
-      }
-    }
-  },
-  "supportProjectUsageTitle": "Cómo se usan las donaciones",
-  "supportProjectUsage1": "Tarifa anual de cuenta de desarrollador de Apple ($99/año)",
-  "supportProjectUsage2": "Distribuir versión iOS a través de TestFlight",
-  "supportProjectUsage3": "Desarrollo y mantenimiento continuo del proyecto",
-  "supportProjectViewDonationMethods": "Ver métodos de donación",
-  "supportProjectNote": "Al hacer clic en el botón, serás redirigido a GitHub para ver los métodos de donación detallados",
-
   "webdavConfiguredTitle": "Servicio de nube WebDAV configurado",
   "webdavConfiguredMessage": "El servicio de nube WebDAV utiliza las credenciales proporcionadas durante la configuración, no se requiere inicio de sesión adicional.",
-
   "recurringTransactionTitle": "Transacciones Recurrentes",
   "recurringTransactionAdd": "Añadir Transacción Recurrente",
   "recurringTransactionEdit": "Editar Transacción Recurrente",
@@ -1195,32 +523,38 @@
   "recurringTransactionEveryNDays": "Cada {n} día(s)",
   "@recurringTransactionEveryNDays": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNWeeks": "Cada {n} semana(s)",
   "@recurringTransactionEveryNWeeks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNMonths": "Cada {n} mes(es)",
   "@recurringTransactionEveryNMonths": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "recurringTransactionEveryNYears": "Cada {n} año(s)",
   "@recurringTransactionEveryNYears": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
-
   "cloudCustomServiceName": "Servicio de nube personalizado",
   "cloudDefaultServiceDisplayName": "Servicio de nube predeterminado",
   "cloudNotConfiguredDisplay": "No configurado",
-
   "cloudValidationEmptyFields": "URL y clave no pueden estar vacíos",
   "cloudValidationHttpsRequired": "URL debe comenzar con https://",
   "cloudValidationKeyTooShort": "La longitud de la clave es demasiado corta, puede ser inválida",
@@ -1234,13 +568,11 @@
   "cloudWebdavPathLabel": "Ruta remota",
   "cloudWebdavPathHint": "/BeeCount",
   "cloudWebdavHint": "Compatible con Nutstore, Nextcloud, Synology, etc.",
-
   "syncNotConfiguredMessage": "Nube no configurada",
   "syncNotLoggedInMessage": "No conectado",
   "syncCloudBackupCorruptedMessage": "El contenido de la copia de seguridad en la nube está corrupto, posiblemente debido a problemas de codificación de versiones anteriores. Por favor haz clic en 'Subir libro actual a la nube' para sobrescribir y corregir.",
   "syncNoCloudBackupMessage": "Sin copia de seguridad en la nube",
   "syncAccessDeniedMessage": "403 Acceso denegado (verificar política RLS de almacenamiento y ruta)",
-
   "cloudTestConnection": "Probar conexión",
   "cloudLocalStorageTitle": "Almacenamiento local",
   "cloudLocalStorageSubtitle": "Los datos solo se guardan en el dispositivo local",
@@ -1305,10 +637,1162 @@
   "cloudSupabaseAnonKeyHintLong": "Pegue la clave anon completa",
   "cloudWebdavRemotePathLabel": "Ruta remota",
   "cloudWebdavRemotePathHelperText": "Ruta del directorio remoto para almacenamiento de datos",
-
   "widgetTodayExpense": "Gasto de Hoy",
   "widgetTodayIncome": "Ingreso de Hoy",
   "widgetMonthExpense": "Gasto del Mes",
   "widgetMonthIncome": "Ingreso del Mes",
-  "widgetMonthSuffix": ""
+  "widgetMonthSuffix": "",
+  "analyticsSummary": "Resumen",
+  "analyticsCategoryRanking": "Clasificación de Categorías",
+  "analyticsCurrentPeriod": "Período Actual",
+  "analyticsNoDataSubtext": "Desliza hacia izquierda/derecha para cambiar períodos, o toca el botón para alternar ingresos/gastos",
+  "analyticsSwipeHint": "Desliza hacia izquierda/derecha para cambiar período",
+  "analyticsTipContent": "1) Desliza hacia izquierda/derecha en la parte inferior para cambiar Gastos/Ingresos/Balance\\n2) Desliza hacia izquierda/derecha en el área de gráficos para cambiar períodos",
+  "analyticsSwitchTo": "Cambiar a {type}",
+  "@analyticsSwitchTo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "analyticsTipHeader": "Consejo: La cápsula superior puede cambiar Mes/Año/Todo",
+  "analyticsSwipeToSwitch": "Desliza para cambiar",
+  "analyticsAllYears": "Todos los Años",
+  "analyticsToday": "Hoy",
+  "splashAppName": "Contabilidad Abeja",
+  "splashSlogan": "Cada Gota Cuenta",
+  "splashSecurityTitle": "Seguridad de Datos de Código Abierto",
+  "splashSecurityFeature1": "• Almacenamiento de datos local, control total de privacidad",
+  "splashSecurityFeature2": "• Código abierto transparente, seguridad confiable",
+  "splashSecurityFeature3": "• Sincronización en la nube opcional, datos consistentes en todos los dispositivos",
+  "splashInitializing": "Inicializando datos...",
+  "ledgersNew": "Nuevo Libro",
+  "ledgersClear": "Limpiar Libro Actual",
+  "ledgersClearConfirm": "¿Limpiar libro actual?",
+  "ledgersClearMessage": "Todos los registros de transacciones en este libro serán eliminados y no se podrán recuperar.",
+  "ledgersDeleted": "Eliminado",
+  "ledgersDeleteFailed": "Error al Eliminar",
+  "ledgersRecordsDeleted": "Eliminados {count} registros",
+  "@ledgersRecordsDeleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ledgersDefaultLedgerName": "Libro Predeterminado",
+  "ledgersDefaultAccountName": "Efectivo",
+  "ledgersCurrency": "Moneda",
+  "ledgersSelectCurrency": "Seleccionar Moneda",
+  "ledgersSearchCurrency": "Buscar: Chino o código",
+  "ledgersCreate": "Crear",
+  "ledgersActions": "Acciones",
+  "ledgersRecords": "Registros: {count}",
+  "@ledgersRecords": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersBalance": "Balance: {balance}",
+  "@ledgersBalance": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryEmpty": "Sin categorías",
+  "categoryDefault": "Categoría Predeterminada",
+  "categoryCustomTag": "Personalizado",
+  "categoryReorderTip": "Mantén presionado para arrastrar y reordenar categorías",
+  "categoryLoadFailed": "Error al cargar: {error}",
+  "@categoryLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "iconCategoryOther": "Otros",
+  "importBillType": "Tipo de Factura",
+  "importBillTypeGeneric": "CSV Genérico",
+  "importBillTypeAlipay": "Alipay",
+  "importBillTypeWechat": "WeChat",
+  "importChooseFile": "Elegir Archivo",
+  "importNoFileSelected": "Ningún archivo seleccionado",
+  "importHint": "Consejo: Por favor seleccione un archivo para comenzar a importar (CSV/TSV/XLSX)",
+  "importReading": "Leyendo archivo…",
+  "importPreparing": "Preparando…",
+  "importColumnNumber": "Columna {number}",
+  "@importColumnNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "importConfirmMapping": "Confirmar Mapeo",
+  "importCategoryMapping": "Mapeo de Categorías",
+  "importNoDataParsed": "No se analizaron datos. Por favor regrese a la página anterior para verificar el contenido CSV o el separador.",
+  "importPreviewLimit": "Mostrando los primeros {shown} de {total} registros",
+  "@importPreviewLimit": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "importCategoryNotSelected": "Categoría no seleccionada",
+  "importCategoryMappingDescription": "Por favor seleccione las categorías locales correspondientes para cada nombre de categoría:",
+  "importKeepOriginalName": "Mantener nombre original",
+  "@importProgress": {
+    "placeholders": {
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "importCancelImport": "Cancelar Importación",
+  "importCompletedCount": "Importados con éxito {count} registros",
+  "@importCompletedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importFailedMessage": "Importación fallida: {error}",
+  "@importFailedMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importSelectCategoryFirst": "Por favor seleccione el mapeo de categorías primero",
+  "importNextStep": "Siguiente Paso",
+  "importPreviousStep": "Paso Anterior",
+  "importStartImport": "Iniciar Importación",
+  "importAutoDetect": "Detección Automática",
+  "importInProgress": "Importación en Progreso",
+  "importProgressDetail": "Importados {done} / {total} registros, éxito {ok}, fallidos {fail}",
+  "@importProgressDetail": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "importBackgroundImport": "Importación en Segundo Plano",
+  "importCancelled": "Importación Cancelada",
+  "importCompleted": "Importación Completada{cancelled}, éxito {ok}, fallidos {fail}",
+  "@importCompleted": {
+    "placeholders": {
+      "cancelled": {
+        "type": "String"
+      },
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "importFileOpenError": "No se puede abrir el selector de archivos: {error}",
+  "@importFileOpenError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "mineFont": "Configuración de Fuente",
+  "mineReminder": "Configuración de Recordatorio",
+  "mineData": "Administración de Datos",
+  "mineCloud": "Servicio en la Nube",
+  "mineRefreshStats": "Actualizar Estadísticas (Debug)",
+  "mineRefreshStatsSubtitle": "Activar recálculo del proveedor de estadísticas globales",
+  "mineRefreshSync": "Actualizar Estado de Sincronización (Debug)",
+  "mineRefreshSyncSubtitle": "Activar actualización del proveedor de estado de sincronización",
+  "restoreProgress": "Restaurando ({current}/{total})",
+  "@restoreProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "restorePreparing": "Preparando...",
+  "restoreLedgerProgress": "Libro: {ledger}  Registros: {done}/{total}",
+  "@restoreLedgerProgress": {
+    "placeholders": {
+      "ledger": {
+        "type": "String"
+      },
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSlogan": "Contabilidad Abeja, Cada Centavo Cuenta",
+  "mineDaysCount": "Días",
+  "mineTotalRecords": "Registros",
+  "mineCurrentBalance": "Balance",
+  "mineCloudServiceLoading": "Cargando...",
+  "mineCloudServiceError": "Error: {error}",
+  "@mineCloudServiceError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "mineCloudServiceDefault": "Nube Predeterminada (Habilitada)",
+  "mineCloudServiceOffline": "Modo Predeterminado (Sin Conexión)",
+  "mineCloudServiceCustom": "Supabase Personalizado",
+  "mineFirstFullUpload": "Primera Carga Completa",
+  "mineFirstFullUploadSubtitle": "Cargar todos los libros locales a la nube",
+  "mineFirstFullUploadComplete": "Completo",
+  "mineFirstFullUploadMessage": "Libro actual cargado. Cambie a otros libros para cargarlos.",
+  "mineFirstFullUploadFailed": "Fallido",
+  "mineSyncNotLoggedIn": "No conectado",
+  "mineSyncNotConfigured": "Nube no configurada",
+  "mineSyncNoRemote": "Sin copia de seguridad en la nube",
+  "mineSyncInSync": "Sincronizado (local {count} registros)",
+  "@mineSyncInSync": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSyncLocalNewer": "Local más reciente (local {count} registros, se recomienda cargar)",
+  "@mineSyncLocalNewer": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSyncCloudNewer": "Nube más reciente (se recomienda descargar)",
+  "mineSyncDifferent": "Local y nube difieren",
+  "mineSyncError": "Error al obtener estado",
+  "mineSyncDetailTitle": "Detalles del Estado de Sincronización",
+  "mineSyncLocalRecords": "Registros locales: {count}",
+  "@mineSyncLocalRecords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSyncCloudRecords": "Registros en la nube: {count}",
+  "@mineSyncCloudRecords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mineSyncCloudLatest": "Hora del registro más reciente en la nube: {time}",
+  "@mineSyncCloudLatest": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "mineSyncLocalFingerprint": "Huella local: {fingerprint}",
+  "@mineSyncLocalFingerprint": {
+    "placeholders": {
+      "fingerprint": {
+        "type": "String"
+      }
+    }
+  },
+  "mineSyncCloudFingerprint": "Huella en la nube: {fingerprint}",
+  "@mineSyncCloudFingerprint": {
+    "placeholders": {
+      "fingerprint": {
+        "type": "String"
+      }
+    }
+  },
+  "mineSyncMessage": "Mensaje: {message}",
+  "@mineSyncMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "mineUploadNeedLogin": "Se requiere inicio de sesión",
+  "mineUploadNeedCloudService": "Disponible solo en modo de servicio en la nube",
+  "mineUploadInProgress": "Cargando...",
+  "mineUploadRefreshing": "Actualizando...",
+  "mineUploadSynced": "Sincronizado",
+  "mineUploadSuccess": "Cargado",
+  "mineUploadSuccessMessage": "Libro actual sincronizado a la nube",
+  "mineDownloadNeedCloudService": "Disponible solo en modo de servicio en la nube",
+  "mineDownloadComplete": "Completo",
+  "mineDownloadResult": "Nuevas importaciones: {inserted}\nExistentes omitidos: {skipped}\nDuplicados limpiados: {deleted}",
+  "@mineDownloadResult": {
+    "placeholders": {
+      "inserted": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "deleted": {
+        "type": "int"
+      }
+    }
+  },
+  "mineLoginSubtitle": "Solo necesario para sincronización",
+  "mineLoggedInEmail": "Conectado",
+  "mineLogoutSubtitle": "Toca para cerrar sesión",
+  "mineLogoutConfirmMessage": "¿Estás seguro de que quieres cerrar sesión?\nNo podrás usar la sincronización en la nube después de cerrar sesión.",
+  "mineLogoutButton": "Cerrar Sesión",
+  "mineAutoSyncNeedLogin": "Se requiere inicio de sesión para habilitar",
+  "mineAutoSyncNeedCloudService": "Disponible solo en modo de servicio en la nube",
+  "mineImportProgressSubtitle": "Progreso: {done}/{total}, Éxito {ok}, Fallidos {fail}",
+  "@mineImportProgressSubtitle": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "mineImportCompleteSubtitle": "Éxito {ok}, Fallidos {fail}",
+  "@mineImportCompleteSubtitle": {
+    "placeholders": {
+      "ok": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  },
+  "mineCategoryManagementSubtitle": "Editar categorías personalizadas",
+  "mineCategoryMigrationSubtitle": "Migrar datos de categoría a otras categorías",
+  "mineRecurringTransactionsSubtitle": "Administrar facturas recurrentes",
+  "mineReminderSettingsSubtitle": "Establecer recordatorios de registro diario",
+  "mineDisplayScaleSubtitle": "Ajustar tamaños de texto y elementos de UI",
+  "mineAboutMessage": "Aplicación: Contabilidad Abeja\nVersión: {version}\nFuente: https://github.com/TNT-Likely/BeeCount\nLicencia: Ver LICENSE en el repositorio",
+  "@mineAboutMessage": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "mineAboutOpenGitHub": "Abrir GitHub",
+  "mineCheckUpdateInProgress": "Verificando actualización...",
+  "mineCheckUpdateSubtitle": "Verificando la última versión",
+  "mineUpdateDownload": "Descargar Actualización",
+  "categoryEditTitle": "Editar Categoría",
+  "categoryNewTitle": "Nueva Categoría",
+  "categoryDetailTooltip": "Detalles de Categoría",
+  "categoryMigrationTooltip": "Migración de Categoría",
+  "categoryMigrationDescription": "Instrucciones de Migración de Categoría",
+  "categoryMigrationDescriptionContent": "• Migrar todos los registros de transacciones de una categoría a otra\n• Después de la migración, todos los datos de transacciones de la categoría de origen se transferirán a la categoría de destino\n• Esta operación no se puede deshacer, por favor elija cuidadosamente",
+  "categoryMigrationFromLabel": "Desde Categoría",
+  "categoryMigrationFromHint": "Seleccionar categoría desde la que migrar",
+  "categoryMigrationToLabel": "A Categoría",
+  "categoryMigrationToHint": "Seleccionar categoría de destino",
+  "categoryMigrationToHintFirst": "Por favor seleccione primero la categoría de origen",
+  "categoryMigrationStartButton": "Iniciar Migración",
+  "categoryMigrationTransactionCount": "{count} registros",
+  "@categoryMigrationTransactionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryMigrationCannotTitle": "No se Puede Migrar",
+  "categoryMigrationCannotMessage": "Las categorías seleccionadas no se pueden migrar, por favor verifique el estado de la categoría.",
+  "categoryExpenseType": "Categoría de Gastos",
+  "categoryIncomeType": "Categoría de Ingresos",
+  "categoryDefaultTitle": "Categoría Predeterminada",
+  "categoryDefaultMessage": "Las categorías predeterminadas no se pueden modificar, pero puede ver detalles y migrar datos",
+  "categoryNameDining": "Comida",
+  "categoryNameTransport": "Transporte",
+  "categoryNameShopping": "Compras",
+  "categoryNameEntertainment": "Entretenimiento",
+  "categoryNameHome": "Hogar",
+  "categoryNameFamily": "Familia",
+  "categoryNameCommunication": "Comunicación",
+  "categoryNameUtilities": "Servicios",
+  "categoryNameHousing": "Vivienda",
+  "categoryNameMedical": "Médico",
+  "categoryNameEducation": "Educación",
+  "categoryNamePets": "Mascotas",
+  "categoryNameSports": "Deportes",
+  "categoryNameDigital": "Digital",
+  "categoryNameTravel": "Viaje",
+  "categoryNameAlcoholTobacco": "Alcohol y Tabaco",
+  "categoryNameBabyCare": "Cuidado del Bebé",
+  "categoryNameBeauty": "Belleza",
+  "categoryNameRepair": "Reparación",
+  "categoryNameSocial": "Social",
+  "categoryNameLearning": "Aprendizaje",
+  "categoryNameCar": "Automóvil",
+  "categoryNameTaxi": "Taxi",
+  "categoryNameSubway": "Metro",
+  "categoryNameDelivery": "Entrega",
+  "categoryNameProperty": "Propiedad",
+  "categoryNameParking": "Estacionamiento",
+  "categoryNameDonation": "Donación",
+  "categoryNameGift": "Regalo",
+  "categoryNameTax": "Impuesto",
+  "categoryNameBeverage": "Bebida",
+  "categoryNameClothing": "Ropa",
+  "categoryNameSnacks": "Bocadillos",
+  "categoryNameRedPacket": "Sobre Rojo",
+  "categoryNameFruit": "Fruta",
+  "categoryNameGame": "Juego",
+  "categoryNameBook": "Libro",
+  "categoryNameLover": "Pareja",
+  "categoryNameDecoration": "Decoración",
+  "categoryNameDailyGoods": "Artículos Diarios",
+  "categoryNameLottery": "Lotería",
+  "categoryNameStock": "Acciones",
+  "categoryNameSocialSecurity": "Seguridad Social",
+  "categoryNameExpress": "Mensajería",
+  "categoryNameWork": "Trabajo",
+  "categoryNameSalary": "Salario",
+  "categoryNameInvestment": "Inversión",
+  "categoryNameBonus": "Bonificación",
+  "categoryNameReimbursement": "Reembolso",
+  "categoryNamePartTime": "Tiempo Parcial",
+  "categoryNameInterest": "Interés",
+  "categoryNameRefund": "Devolución",
+  "categoryNameSecondHand": "Venta de Segunda Mano",
+  "categoryNameSocialBenefit": "Beneficio Social",
+  "categoryNameTaxRefund": "Devolución de Impuestos",
+  "categoryNameProvidentFund": "Fondo de Previsión",
+  "categoryNameLabel": "Nombre de Categoría",
+  "categoryNameHint": "Ingrese el nombre de la categoría",
+  "categoryNameHintDefault": "El nombre de la categoría predeterminada no se puede modificar",
+  "categoryNameRequired": "Por favor ingrese el nombre de la categoría",
+  "categoryNameTooLong": "El nombre de la categoría no puede exceder 4 caracteres",
+  "categoryIconLabel": "Icono de Categoría",
+  "categoryIconDefaultMessage": "El icono de categoría predeterminada no se puede modificar",
+  "categoryDangerousOperations": "Operaciones Peligrosas",
+  "categoryDeleteSubtitle": "No se puede recuperar después de la eliminación",
+  "categoryDefaultCannotSave": "La categoría predeterminada no se puede guardar",
+  "categorySaveError": "Error al guardar",
+  "categoryUpdated": "Categoría \"{name}\" actualizada",
+  "@categoryUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryCreated": "Categoría \"{name}\" creada",
+  "@categoryCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryCannotDeleteMessage": "Esta categoría tiene {count} registros de transacciones. Por favor manéjelos primero.",
+  "@categoryCannotDeleteMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryDeleteConfirmMessage": "¿Estás seguro de que quieres eliminar la categoría \"{name}\"? Esta acción no se puede deshacer.",
+  "@categoryDeleteConfirmMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryDeleteError": "Error al eliminar",
+  "categoryDeleted": "Categoría \"{name}\" eliminada",
+  "@categoryDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "personalizeCustomColor": "Elegir color personalizado",
+  "personalizeCustomTitle": "Personalizado",
+  "personalizeHue": "Matiz ({value}°)",
+  "@personalizeHue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "personalizeSaturation": "Saturación ({value}%)",
+  "@personalizeSaturation": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "personalizeBrightness": "Brillo ({value}%)",
+  "@personalizeBrightness": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "personalizeSelectColor": "Seleccionar este color",
+  "fontSettingsTitle": "Escala de Visualización",
+  "fontSettingsCurrentScale": "Escala actual: x{scale}",
+  "@fontSettingsCurrentScale": {
+    "placeholders": {
+      "scale": {
+        "type": "String"
+      }
+    }
+  },
+  "fontSettingsPreview": "Vista Previa en Vivo",
+  "fontSettingsPreviewText": "Gasté 23.50 en almuerzo hoy, regístralo;\nRegistrado durante 45 días este mes, 320 entradas;\n¡La persistencia es la victoria!",
+  "fontSettingsCurrentLevel": "Nivel actual: {level} (escala x{scale})",
+  "@fontSettingsCurrentLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "scale": {
+        "type": "String"
+      }
+    }
+  },
+  "fontSettingsQuickLevel": "Niveles Rápidos",
+  "fontSettingsCustomAdjust": "Ajuste Personalizado",
+  "fontSettingsDescription": "Nota: Esta configuración garantiza una visualización consistente a 1.0x en todos los dispositivos, con diferencias de dispositivo autocompensadas; ajuste los valores para un escalado personalizado sobre esta base consistente.",
+  "fontSettingsExtraSmall": "Extra Pequeño",
+  "fontSettingsVerySmall": "Muy Pequeño",
+  "fontSettingsSmall": "Pequeño",
+  "fontSettingsStandard": "Estándar",
+  "fontSettingsLarge": "Grande",
+  "fontSettingsBig": "Grande",
+  "fontSettingsVeryBig": "Muy Grande",
+  "fontSettingsExtraBig": "Extra Grande",
+  "fontSettingsMoreStyles": "Más Estilos",
+  "fontSettingsPageTitle": "Título de Página",
+  "fontSettingsBlockTitle": "Título de Bloque",
+  "fontSettingsBodyExample": "Texto del Cuerpo",
+  "fontSettingsLabelExample": "Texto de Etiqueta",
+  "fontSettingsStrongNumber": "Número Fuerte",
+  "fontSettingsListTitle": "Título de Elemento de Lista",
+  "fontSettingsListSubtitle": "Texto de Ayuda",
+  "fontSettingsScreenInfo": "Información de Adaptación de Pantalla",
+  "fontSettingsScreenDensity": "Densidad de Pantalla",
+  "fontSettingsScreenWidth": "Ancho de Pantalla",
+  "fontSettingsDeviceScale": "Escala del Dispositivo",
+  "fontSettingsUserScale": "Escala del Usuario",
+  "fontSettingsFinalScale": "Escala Final",
+  "fontSettingsBaseDevice": "Dispositivo Base",
+  "fontSettingsRecommendedScale": "Escala Recomendada",
+  "fontSettingsYes": "Sí",
+  "fontSettingsNo": "No",
+  "fontSettingsScaleExample": "Esta caja y el espaciado se escalan automáticamente según el dispositivo",
+  "fontSettingsPreciseAdjust": "Ajuste Preciso",
+  "fontSettingsResetTo1x": "Restablecer a 1.0x",
+  "fontSettingsAdaptBase": "Adaptar a Base",
+  "reminderQuickTestMessage": "Prueba rápida configurada para 15 segundos después, mantenga la aplicación en segundo plano",
+  "reminderFlutterTestMessage": "Notificación de prueba de Flutter enviada, toque para ver si abre la aplicación",
+  "reminderAlarmTest": "🔧 Probar Notificación de Clic de AlarmManager (Dev)",
+  "reminderAlarmTestMessage": "Notificación de prueba de AlarmManager configurada (1 segundo después), toque para ver si abre la aplicación",
+  "reminderDirectTest": "🔧 Prueba Directa de NotificationReceiver (Dev)",
+  "reminderDirectTestMessage": "Llamó directamente a NotificationReceiver para crear notificación, verifique si el toque funciona",
+  "reminderCheckStatus": "🔧 Verificar Estado de Notificación (Dev)",
+  "reminderNotificationStatus": "Estado de Notificación",
+  "reminderPendingCount": "Notificaciones pendientes: {count}",
+  "@reminderPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderNoPending": "No hay notificaciones pendientes",
+  "reminderCheckBattery": "Verificar Estado de Optimización de Batería",
+  "reminderBatteryStatus": "Estado de Optimización de Batería",
+  "reminderManufacturer": "Fabricante: {value}",
+  "@reminderManufacturer": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderModel": "Modelo: {value}",
+  "@reminderModel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderAndroidVersion": "Versión de Android: {value}",
+  "@reminderAndroidVersion": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderBatteryIgnored": "Optimización de batería: Ignorada ✅",
+  "reminderBatteryNotIgnored": "Optimización de batería: No ignorada ⚠️",
+  "reminderBatteryAdvice": "Se recomienda deshabilitar la optimización de batería para notificaciones adecuadas",
+  "reminderGoToSettings": "Ir a Configuración",
+  "reminderCheckChannel": "Verificar Configuración del Canal de Notificaciones",
+  "reminderChannelStatus": "Estado del Canal de Notificaciones",
+  "reminderChannelEnabled": "Canal habilitado: Sí ✅",
+  "reminderChannelDisabled": "Canal habilitado: No ❌",
+  "reminderChannelImportance": "Importancia: {value}",
+  "@reminderChannelImportance": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderChannelSoundOn": "Sonido: Activado 🔊",
+  "reminderChannelSoundOff": "Sonido: Desactivado 🔇",
+  "reminderChannelVibrationOn": "Vibración: Activada 📳",
+  "reminderChannelVibrationOff": "Vibración: Desactivada",
+  "reminderChannelDndBypass": "No Molestar: Puede omitir",
+  "reminderChannelDndNoBypass": "No Molestar: No puede omitir",
+  "reminderChannelAdvice": "⚠️ Configuraciones recomendadas:",
+  "reminderChannelAdviceImportance": "• Importancia: Urgente o Alta",
+  "reminderChannelAdviceSound": "• Habilitar sonido y vibración",
+  "reminderChannelAdviceBanner": "• Permitir notificaciones de banner",
+  "reminderChannelAdviceXiaomi": "• Los teléfonos Xiaomi necesitan configuración individual del canal",
+  "reminderChannelGood": "✅ Canal de notificaciones bien configurado",
+  "reminderOpenAppSettings": "Abrir Configuración de la Aplicación",
+  "reminderAppSettingsMessage": "Por favor permita las notificaciones y deshabilite la optimización de batería en la configuración",
+  "reminderIOSTest": "🍎 Prueba de Depuración de Notificación iOS",
+  "reminderIOSTestTitle": "Prueba de Notificación iOS",
+  "reminderIOSTestMessage": "Notificación de prueba enviada.\n\n🍎 Limitaciones del Simulador iOS:\n• Las notificaciones pueden no mostrarse en el centro de notificaciones\n• Las alertas de banner pueden no funcionar\n• Pero la consola de Xcode mostrará registros\n\n💡 Métodos de depuración:\n• Verifique la salida de la consola de Xcode\n• Verifique la información del registro de Flutter\n• Use un dispositivo real para una experiencia completa",
+  "reminderDescription": "Consejo: Cuando el recordatorio de registro está habilitado, el sistema enviará notificaciones a la hora especificada diariamente para recordarle registrar ingresos y gastos.",
+  "reminderIOSInstructions": "🍎 Configuración de notificaciones iOS:\n• Configuración > Notificaciones > Contabilidad Abeja\n• Habilitar \"Permitir Notificaciones\"\n• Establecer estilo de notificación: Banner o Alerta\n• Habilitar sonido y vibración\n\n⚠️ Nota Importante:\n• Las notificaciones locales de iOS dependen del proceso de la aplicación\n• No fuerce el cierre de la aplicación desde el administrador de tareas\n• Las notificaciones funcionan cuando la aplicación está en segundo plano o en primer plano\n• Forzar el cierre deshabilitará las notificaciones\n\n💡 Consejos de Uso:\n• Simplemente presione el botón Inicio para salir de la aplicación\n• iOS administrará automáticamente las aplicaciones en segundo plano\n• Mantenga la aplicación en segundo plano para recibir recordatorios",
+  "reminderAndroidInstructions": "Si las notificaciones no funcionan correctamente, verifique:\n• La aplicación tiene permiso para enviar notificaciones\n• Deshabilite la optimización de batería/modo de ahorro de energía para la aplicación\n• Permita que la aplicación se ejecute en segundo plano y se inicie automáticamente\n• Android 12+ necesita permiso de alarma exacta\n\n📱 Configuraciones especiales del teléfono Xiaomi:\n• Configuración > Administración de Aplicaciones > Contabilidad Abeja > Administración de Notificaciones\n• Toque el canal \"Recordatorio de Registro\"\n• Establezca la importancia en \"Urgente\" o \"Alta\"\n• Habilite \"Notificaciones de banner\", \"Sonido\", \"Vibración\"\n• Centro de Seguridad > Administración de Aplicaciones > Permisos > Inicio Automático\n\n🔒 Métodos para bloquear el segundo plano:\n• Encuentre Contabilidad Abeja en tareas recientes\n• Deslice hacia abajo la tarjeta de la aplicación para mostrar el icono de bloqueo\n• Toque el icono de bloqueo para evitar la limpieza",
+  "categoryDetailLoadFailed": "Error al cargar",
+  "categoryDetailSummaryTitle": "Resumen de Categoría",
+  "categoryDetailTotalCount": "Conteo Total",
+  "categoryDetailTotalAmount": "Cantidad Total",
+  "categoryDetailAverageAmount": "Cantidad Promedio",
+  "categoryDetailSortTitle": "Ordenar",
+  "categoryDetailSortTimeDesc": "Tiempo ↓",
+  "categoryDetailSortTimeAsc": "Tiempo ↑",
+  "categoryDetailSortAmountDesc": "Cantidad ↓",
+  "categoryDetailSortAmountAsc": "Cantidad ↑",
+  "categoryDetailNoTransactions": "Sin transacciones",
+  "categoryDetailNoTransactionsSubtext": "Aún no hay transacciones en esta categoría",
+  "categoryDetailDeleteFailed": "Error al eliminar",
+  "categoryMigrationConfirmMessage": "¿Migrar {count} transacciones de \"{fromName}\" a \"{toName}\"?\n\n¡Esta operación no se puede deshacer!",
+  "@categoryMigrationConfirmMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fromName": {
+        "type": "String"
+      },
+      "toName": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryMigrationConfirmOk": "Confirmar Migración",
+  "categoryMigrationCompleteMessage": "Migradas con éxito {count} transacciones de \"{fromName}\" a \"{toName}\".",
+  "@categoryMigrationCompleteMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fromName": {
+        "type": "String"
+      },
+      "toName": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryMigrationFailedMessage": "Error de migración: {error}",
+  "@categoryMigrationFailedMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryMigrationTransactionLabel": "{count} registros",
+  "@categoryMigrationTransactionLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryPickerExpenseTab": "Gasto",
+  "categoryPickerIncomeTab": "Ingreso",
+  "categoryPickerCancel": "Cancelar",
+  "categoryPickerEmpty": "Sin categorías",
+  "cloudBackupRestoreMessage": "Los libros de la nube y locales son inconsistentes. ¿Restaurar desde la nube?\n(Entrará en la página de progreso de restauración)",
+  "mineAutoSyncRemoteDesc": "Cargar automáticamente a la nube después de registrar",
+  "mineImportCompleteAllSuccess": "Todo Éxito",
+  "mineAboutAppName": "Aplicación: Contabilidad Abeja",
+  "mineAboutVersion": "Versión: {version}",
+  "@mineAboutVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "mineAboutRepo": "Fuente: https://github.com/TNT-Likely/BeeCount",
+  "mineAboutLicense": "Licencia: Ver LICENSE en el repositorio",
+  "mineCheckUpdateDetecting": "Verificando actualización...",
+  "mineCheckUpdateSubtitleDetecting": "Verificando la última versión",
+  "mineDebugRefreshStats": "Actualizar Estadísticas (Debug)",
+  "mineDebugRefreshStatsSubtitle": "Activar recálculo del proveedor de estadísticas globales",
+  "mineDebugRefreshSync": "Actualizar Estado de Sincronización (Debug)",
+  "mineDebugRefreshSyncSubtitle": "Activar actualización del proveedor de estado de sincronización",
+  "cloudCurrentService": "Servicio de Nube Actual",
+  "cloudConnected": "Conectado",
+  "cloudOfflineMode": "Modo Sin Conexión",
+  "cloudAvailableServices": "Servicios de Nube Disponibles",
+  "cloudReadCustomConfigFailed": "Error al leer la configuración personalizada",
+  "cloudFirstUploadNotComplete": "Primera carga completa no completada",
+  "cloudFirstUploadInstruction": "Inicie sesión y ejecute manualmente \"Cargar\" en \"Mío/Sincronizar\" para completar la inicialización",
+  "cloudNotConfigured": "No configurado",
+  "cloudNotTested": "No probado",
+  "cloudConnectionNormal": "Conexión normal",
+  "cloudConnectionFailed": "Conexión fallida",
+  "cloudAddCustomService": "Agregar servicio de nube personalizado",
+  "cloudDefaultServiceName": "Servicio de Nube Predeterminado",
+  "cloudUseYourSupabase": "Usar tu propio Supabase",
+  "cloudTest": "Probar",
+  "cloudSwitchService": "Cambiar Servicio de Nube",
+  "cloudSwitchToBuiltinConfirm": "¿Estás seguro de que quieres cambiar al servicio de nube predeterminado? Esto cerrará la sesión actual.",
+  "cloudSwitchToCustomConfirm": "¿Estás seguro de que quieres cambiar al servicio de nube personalizado? Esto cerrará la sesión actual.",
+  "cloudSwitched": "Cambiado",
+  "cloudSwitchedToBuiltin": "Cambiado al servicio de nube predeterminado y sesión cerrada",
+  "cloudSwitchFailed": "Cambio fallido",
+  "cloudActivateFailed": "Error de activación",
+  "cloudActivateFailedMessage": "La configuración guardada no es válida",
+  "cloudActivated": "Activado",
+  "cloudActivatedMessage": "Cambiado al servicio de nube personalizado y sesión cerrada, por favor inicie sesión nuevamente",
+  "cloudEditCustomService": "Editar servicio de nube personalizado",
+  "cloudAddCustomServiceTitle": "Agregar servicio de nube personalizado",
+  "cloudSupabaseUrlLabel": "URL de Supabase",
+  "cloudSupabaseUrlHint": "https://xxx.supabase.co",
+  "cloudAnonKeyLabel": "Clave Anon",
+  "cloudAnonKeyHint": "Nota: No llene la Clave service_role; la Clave Anon está disponible públicamente.",
+  "cloudInvalidInput": "Entrada no válida",
+  "cloudConfigUpdated": "Configuración actualizada",
+  "cloudConfigSaved": "Configuración guardada",
+  "cloudTestComplete": "Prueba completa",
+  "cloudTestSuccess": "¡Prueba de conexión exitosa!",
+  "cloudTestFailed": "Prueba de conexión fallida, por favor verifique si la configuración es correcta.",
+  "cloudTestError": "Prueba fallida",
+  "cloudClearConfig": "Limpiar configuración",
+  "cloudClearConfigConfirm": "¿Estás seguro de que quieres limpiar la configuración del servicio de nube personalizado? (Solo entorno de desarrollo)",
+  "cloudConfigCleared": "Configuración del servicio de nube personalizado limpiada",
+  "cloudClearFailed": "Error al limpiar",
+  "cloudServiceDescription": "Servicio de nube integrado (gratis pero puede ser inestable, se recomienda usar el propio o hacer copias de seguridad regulares)",
+  "cloudServiceDescriptionNotConfigured": "La compilación actual no tiene configuración de servicio de nube integrada",
+  "cloudServiceDescriptionCustom": "Servidor: {url}",
+  "@cloudServiceDescriptionCustom": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudWebdavRemotePathHelp": "Ruta del directorio remoto para almacenamiento de datos",
+  "@cloudWebdavRemotePathHelp": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "authLogin": "Iniciar Sesión",
+  "authSignup": "Registrarse",
+  "authRegister": "Registrarse",
+  "authEmail": "Correo Electrónico",
+  "authPassword": "Contraseña",
+  "authPasswordRequirement": "Contraseña (al menos 6 caracteres, incluir letras y números)",
+  "authConfirmPassword": "Confirmar Contraseña",
+  "authInvalidEmail": "Por favor ingrese una dirección de correo electrónico válida",
+  "authPasswordRequirementShort": "La contraseña debe contener letras y números, al menos 6 caracteres",
+  "authPasswordMismatch": "Las contraseñas no coinciden",
+  "authResendVerification": "Reenviar correo de verificación",
+  "authSignupSuccess": "Registro exitoso",
+  "authVerificationEmailSent": "Correo de verificación enviado, por favor vaya a su correo para completar la verificación antes de iniciar sesión.",
+  "authBackToMinePage": "Volver a Mi Página",
+  "authVerificationEmailResent": "Correo de verificación reenviado.",
+  "authResendAction": "reenviar verificación",
+  "authErrorInvalidCredentials": "El correo electrónico o la contraseña son incorrectos.",
+  "authErrorEmailNotConfirmed": "Correo electrónico no verificado, por favor complete la verificación en su correo antes de iniciar sesión.",
+  "authErrorRateLimit": "Demasiados intentos, por favor inténtelo de nuevo más tarde.",
+  "authErrorNetworkIssue": "Error de red, por favor verifique su conexión e inténtelo de nuevo.",
+  "authErrorLoginFailed": "Inicio de sesión fallido, por favor inténtelo de nuevo más tarde.",
+  "authErrorEmailInvalid": "La dirección de correo electrónico no es válida, por favor verifique si hay errores de ortografía.",
+  "authErrorEmailExists": "Este correo electrónico ya está registrado, por favor inicie sesión directamente o restablezca la contraseña.",
+  "authErrorWeakPassword": "La contraseña es demasiado simple, por favor incluya letras y números, al menos 6 caracteres.",
+  "authErrorSignupFailed": "Registro fallido, por favor inténtelo de nuevo más tarde.",
+  "authErrorUserNotFound": "Correo electrónico no registrado, no se puede {action}.",
+  "@authErrorUserNotFound": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "authErrorEmailNotVerified": "Correo electrónico no verificado, no se puede {action}.",
+  "@authErrorEmailNotVerified": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "authErrorActionFailed": "{action} fallido, por favor inténtelo de nuevo más tarde.",
+  "@authErrorActionFailed": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "importSelectCsvFile": "Por favor seleccione un archivo para importar (CSV/TSV/XLSX compatible)",
+  "currencyMYR": "Ringgit malayo",
+  "currencyPHP": "Peso filipino",
+  "currencyVND": "Dong vietnamita",
+  "currencyNZD": "Dólar neozelandés",
+  "currencyCHF": "Franco suizo",
+  "currencySEK": "Corona sueca",
+  "currencyNOK": "Corona noruega",
+  "currencyDKK": "Corona danesa",
+  "currencyBRL": "Real brasileño",
+  "currencyMXN": "Peso mexicano",
+  "aboutWidget": "Acerca del Widget",
+  "accessibilityGuideContent": "Con el servicio de accesibilidad habilitado, las capturas de pantalla se pueden reconocer instantáneamente sin esperar la escritura del archivo.",
+  "accessibilityService": "Servicio de Accesibilidad",
+  "accessibilityServiceDisabled": "Deshabilitado - Reconocimiento Lento",
+  "accessibilityServiceEnabled": "Habilitado - Reconocimiento Instantáneo",
+  "accessibilityServiceNote": "💡 Nota: El servicio de accesibilidad solo se usa para detectar acciones de captura de pantalla y no leerá ni modificará sus otros datos.",
+  "accessibilityStep1": "Toque el botón \"Abrir Configuración de Accesibilidad\" a continuación",
+  "accessibilityStep2": "Encuentre \"Contabilidad Abeja-Reconocimiento de Captura\" en la lista",
+  "accessibilityStep3": "Habilite el interruptor del servicio",
+  "accessibilityStep4": "Regrese a la aplicación para usar",
+  "accountAddButton": "Agregar Cuenta",
+  "accountAddTooltip": "Agregar Cuenta",
+  "accountBalance": "Balance",
+  "accountDeleteConfirm": "¿Confirmar la eliminación de esta cuenta?",
+  "accountDeleteWarningMessage": "Esta cuenta tiene {count} transacciones relacionadas. Después de la eliminación, la información de la cuenta en los registros de transacciones se borrará. ¿Confirmar eliminación?",
+  "@accountDeleteWarningMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountDeleteWarningTitle": "Confirmar Eliminación",
+  "accountEditTitle": "Editar Cuenta",
+  "accountInitialBalance": "Balance Inicial",
+  "accountInitialBalanceHint": "Ingrese el balance inicial (opcional)",
+  "accountNameHint": "por ejemplo: ICBC, Alipay, etc.",
+  "accountNameLabel": "Nombre de Cuenta",
+  "accountNameRequired": "Por favor ingrese el nombre de la cuenta",
+  "accountNewTitle": "Nueva Cuenta",
+  "accountNone": "Sin Cuenta",
+  "accountSelectTitle": "Seleccionar Cuenta",
+  "accountTypeAlipay": "Alipay",
+  "accountTypeBankCard": "Tarjeta Bancaria",
+  "accountTypeCash": "Efectivo",
+  "accountTypeCreditCard": "Tarjeta de Crédito",
+  "accountTypeLabel": "Tipo de Cuenta",
+  "accountTypeOther": "Otro",
+  "accountTypeWechat": "WeChat",
+  "accountsEmptyMessage": "Aún no hay cuentas, toque la parte superior derecha para agregar",
+  "accountsEnableFeature": "Habilitar Función de Cuenta",
+  "accountsFeatureDescription": "Administre múltiples cuentas de pago y rastree los cambios de balance de cada cuenta",
+  "aiCloudApiGetKey": "Obtener Clave API",
+  "aiCloudApiKeyHelper": "El modelo GLM-4-Flash es completamente gratuito",
+  "aiCloudApiKeyHint": "Ingrese su Clave API de Zhipu AI",
+  "aiCloudApiKeyLabel": "Clave API",
+  "aiCloudApiKeySaved": "Clave API guardada",
+  "aiCloudApiTitle": "API GLM de Zhipu",
+  "aiEnableSubtitle": "Use IA para mejorar la precisión del OCR y extraer monto, comerciante, tiempo, etc.",
+  "aiEnableTitle": "Habilitar Reconocimiento IA",
+  "aiEnableToastOff": "Mejora IA deshabilitada",
+  "aiEnableToastOn": "Mejora IA habilitada",
+  "aiFabSettingDescCamera": "Toque para cámara, mantenga presionado para manual",
+  "aiFabSettingDescManual": "Toque para manual, mantenga presionado para cámara",
+  "aiFabSettingTitle": "Botón de Agregar Rápido Priorizar Cámara",
+  "aiLocalModelManagement": "Administración de Modelos",
+  "aiLocalModelTitle": "Modelo Local",
+  "aiLocalModelTraining": "En Entrenamiento",
+  "aiLocalModelUnavailable": "Modelo local en entrenamiento, aún no disponible",
+  "aiOcrCreateFailed": "Error al crear factura",
+  "aiOcrFailed": "Reconocimiento fallido: {error}",
+  "@aiOcrFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOcrNoAmount": "No se reconoció un monto válido, por favor agregue manualmente",
+  "aiOcrNoLedger": "Libro no encontrado",
+  "aiOcrRecognizing": "Reconociendo factura...",
+  "aiOcrSuccess": "✅ Factura {type} creada ¥{amount}",
+  "@aiOcrSuccess": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSettingsSubtitle": "Configurar modelos IA y estrategia de reconocimiento",
+  "aiSettingsTitle": "Reconocimiento IA",
+  "aiStrategyCloudFirst": "Nube Primero",
+  "aiStrategyCloudFirstDesc": "Use la API de la nube primero, degrade a local si falla",
+  "aiStrategyCloudOnly": "Solo Nube",
+  "aiStrategyCloudOnlyDesc": "Use solo la API de la nube, sin descarga de modelo",
+  "aiStrategyLocalFirst": "Local Primero (Recomendado)",
+  "aiStrategyLocalFirstDesc": "Use el modelo local primero, recurra a la nube si falla",
+  "aiStrategyLocalOnly": "Solo Local",
+  "aiStrategyLocalOnlyDesc": "Use solo el modelo local, completamente sin conexión",
+  "aiStrategySwitched": "Cambiado a: {strategy}",
+  "@aiStrategySwitched": {
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      }
+    }
+  },
+  "aiStrategyTitle": "Estrategia de Ejecución",
+  "aiStrategyUnavailable": "Modelo local en entrenamiento, próximamente",
+  "aiTypeExpense": "Gasto",
+  "aiTypeIncome": "Ingreso",
+  "androidWidgetStep1": "Mantenga presionado el área en blanco de la pantalla de inicio",
+  "androidWidgetStep2": "Seleccione \"Widgets\"",
+  "androidWidgetStep3": "Encuentre y mantenga presionado el widget \"Contabilidad Abeja\"",
+  "androidWidgetStep4": "Arrastre a la posición adecuada en la pantalla de inicio",
+  "appName": "Contabilidad Abeja",
+  "autoBilling": "Facturación Automática",
+  "autoBillingBatteryDesc": "La facturación automática requiere que la aplicación se mantenga ejecutándose en segundo plano. Algunos teléfonos limpian automáticamente las aplicaciones en segundo plano cuando están bloqueados, lo que puede causar que falle la facturación automática. Se recomienda deshabilitar la optimización de batería para garantizar la funcionalidad adecuada.",
+  "autoBillingBatteryGuideTitle": "Configuración de Optimización de Batería",
+  "autoBillingBatteryTitle": "Mantener Ejecutándose en Segundo Plano",
+  "autoBillingBatteryWarning": "⚠️ La optimización de batería no está deshabilitada. La aplicación puede ser limpiada automáticamente por el sistema, causando que falle la facturación automática. Por favor toque el botón \"Configuración\" arriba para deshabilitar la optimización de batería.",
+  "autoBillingCheckBattery": "Verificar Optimización de Batería",
+  "autoScreenshotBilling": "Facturación Automática por Captura de Pantalla",
+  "autoScreenshotBillingDesc": "Reconocer automáticamente la información de pago de las capturas de pantalla",
+  "autoScreenshotBillingTitle": "Facturación Automática por Captura de Pantalla",
+  "categoryCannotDelete": "No se Puede Eliminar",
+  "categoryDeleteConfirmTitle": "Eliminar Categoría",
+  "categoryDeleteTitle": "Eliminar Categoría",
+  "categoryExpense": "Categorías de Gastos",
+  "categoryIncome": "Categorías de Ingresos",
+  "categoryMigrationCompleteTitle": "Migración Completa",
+  "categoryMigrationConfirmTitle": "Confirmar Migración",
+  "categoryMigrationFailedTitle": "Migración Fallida",
+  "categoryMigrationTitle": "Migración de Categoría",
+  "categoryNew": "Nueva Categoría",
+  "categoryTitle": "Administración de Categorías",
+  "cloudBackupFound": "Copia de Seguridad en la Nube Encontrada",
+  "cloudBackupRestoreFailed": "Restauración Fallida",
+  "copyLog": "Copiar Registro",
+  "createBill": "Crear Factura",
+  "deleteConfirmMessage": "¿Estás seguro de que quieres eliminar este registro?",
+  "deleteConfirmTitle": "Confirmación de Eliminación",
+  "disableFailed": "Error al Deshabilitar",
+  "disableSuccess": "Facturación automática deshabilitada",
+  "disabled": "Deshabilitado",
+  "enableFailed": "Error al Habilitar",
+  "enableSuccess": "Facturación automática habilitada",
+  "enabled": "Habilitado",
+  "featureDescription": "Descripción de la Función",
+  "featureDescriptionContent": "Después de tomar una captura de pantalla de la página de pago, el sistema reconocerá automáticamente el monto y la información del comerciante, y creará un registro de gastos.\n\n⚡ Velocidad de reconocimiento: 1-2 segundos\n🤖 Coincidencia inteligente de categorías\n📝 Autocompletar notas\n\nNota:\n• Sin servicio de accesibilidad: ligeramente más lento (3-5s)\n• Con servicio de accesibilidad habilitado: reconocimiento instantáneo",
+  "howToAddWidget": "Cómo Agregar Widget",
+  "iconCategoryDining": "Comida",
+  "iconCategoryEducation": "Educación",
+  "iconCategoryEntertainment": "Entretenimiento",
+  "iconCategoryFinance": "Finanzas",
+  "iconCategoryFood": "Comida",
+  "iconCategoryHealth": "Salud",
+  "iconCategoryLife": "Vida",
+  "iconCategoryReward": "Recompensa",
+  "iconCategoryShopping": "Compras",
+  "iconCategoryTransport": "Transporte",
+  "iconCategoryWork": "Trabajo",
+  "iconPickerTitle": "Seleccionar Icono",
+  "importCompleteTitle": "Importación Completa",
+  "improveRecognitionSpeed": "Mejorar Velocidad de Reconocimiento",
+  "iosAutoBackTapDesc": "Configuración > Accesibilidad > Toque > Tocar Atrás\n• Seleccione \"Tocar Dos Veces\" o \"Tocar Tres Veces\"\n• Elija el atajo que acaba de crear\n• Después de la configuración, toque dos veces la parte posterior del teléfono durante el pago para registrar automáticamente, sin necesidad de captura de pantalla",
+  "iosAutoBackTapTitle": "💡 Tocar Dos Veces Atrás para Activar (Recomendado)",
+  "iosAutoCannotOpenLink": "No se puede abrir el enlace, por favor verifique la conexión de red",
+  "iosAutoCannotOpenShortcuts": "No se puede abrir la aplicación Atajos",
+  "iosAutoFeatureDesc": "Use la aplicación \"Atajos\" de iOS para identificar automáticamente la información de pago de las capturas de pantalla y crear transacciones. Una vez configurado, se activará automáticamente en cada captura de pantalla.",
+  "iosAutoImportFailed": "Importación fallida: {error}",
+  "@iosAutoImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "iosAutoOpenAppFailed": "Error al abrir: {error}",
+  "@iosAutoOpenAppFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "iosAutoShortcutConfigTitle": "Pasos de Configuración (Recomendado - Parámetro URL):",
+  "iosAutoShortcutImport": "Importar Atajo con Un Clic",
+  "iosAutoShortcutOpenApp": "O Abrir Manualmente la Aplicación Atajos",
+  "iosAutoShortcutQuickAdd": "Agregar Atajo Rápido",
+  "iosAutoShortcutQuickAddDesc": "Haga clic en el botón a continuación para importar el atajo configurado directamente, o abra manualmente la aplicación Atajos para configurar.",
+  "iosAutoShortcutRecommendedTip": "✅ Recomendado: Paso de parámetros URL, sin permiso necesario, mejor experiencia. Pasos clave:\n• Reemplace saltos de línea \\n con coma , (evite truncamiento de URL)\n• Use codificación URL (evite texto chino ilegible)\n• El texto de captura de pantalla generalmente no excede el límite de 2048 caracteres",
+  "iosAutoShortcutStep1": "Abra la aplicación \"Atajos\"",
+  "iosAutoShortcutStep10": "Guarde y pruebe: reconocimiento automático después de captura de pantalla",
+  "iosAutoShortcutStep2": "Toque \"+\" en la parte superior derecha para crear un nuevo atajo",
+  "iosAutoShortcutStep3": "Agregue la acción \"Tomar Captura de Pantalla\" (obtener la última captura de pantalla)",
+  "iosAutoShortcutStep4": "Agregue la acción \"Extraer Texto de Captura de Pantalla\"",
+  "iosAutoShortcutStep5": "Agregue la acción \"Reemplazar Texto\": reemplace \"\\n\" en el texto extraído con \",\" (coma)",
+  "iosAutoShortcutStep6": "Agregue la acción \"Codificación URL\": codifique el texto reemplazado",
+  "iosAutoShortcutStep7": "Agregue la acción \"Abrir URL\", URL:\nbeecount://auto-billing?text=[texto codificado en URL]",
+  "iosAutoShortcutStep8": "Toque la configuración del atajo (tres puntos en la parte superior derecha)",
+  "iosAutoShortcutStep9": "En \"Cuando...\" agregue el activador \"Cuando se toma una captura de pantalla\"",
+  "iosWidgetStep1": "Mantenga presionado el área en blanco de la pantalla de inicio para entrar en modo de edición",
+  "iosWidgetStep2": "Toque el botón \"+\" en la esquina superior izquierda",
+  "iosWidgetStep3": "Busque y seleccione \"Contabilidad Abeja\"",
+  "iosWidgetStep4": "Seleccione el widget mediano y agregue a la pantalla de inicio",
+  "lab": "Laboratorio",
+  "labDesc": "Probar funciones experimentales",
+  "ledgersDeleteMessage": "¿Estás seguro de que quieres eliminar este libro y todos sus registros? Esta acción no se puede deshacer.\\nSi hay una copia de seguridad en la nube, también se eliminará.",
+  "logCopied": "Registro copiado",
+  "mineAboutTitle": "Acerca de",
+  "mineAutoSyncLoginRequired": "Se requiere inicio de sesión para habilitar",
+  "mineAutoSyncSubtitle": "Cargar automáticamente a la nube después de registrar",
+  "mineAutoSyncTitle": "Sincronizar libro automáticamente",
+  "mineCategoryManagement": "Administración de Categorías",
+  "mineCategoryMigration": "Migración de Categoría",
+  "mineCloudBackupRestoreTitle": "Copia de Seguridad en la Nube Encontrada",
+  "mineCloudService": "Servicio en la Nube",
+  "mineDisplayScale": "Escala de Visualización",
+  "mineDownloadTitle": "Descargar",
+  "mineImportCompleteTitle": "Importación completa",
+  "mineImportCompleteTitleShort": "Importación Completa",
+  "mineImportProgressTitle": "Importando en segundo plano...",
+  "mineLanguageSettings": "Configuración de Idioma",
+  "mineLanguageSettingsSubtitle": "Cambiar idioma de la aplicación",
+  "mineLoginTitle": "Iniciar Sesión / Registrarse",
+  "mineLogoutConfirmTitle": "Cerrar Sesión",
+  "minePersonalize": "Personalización",
+  "mineRecurringTransactions": "Facturas Recurrentes",
+  "mineReminderSettings": "Configuración de Recordatorio",
+  "mineSyncTitle": "Sincronizar",
+  "mineUpdateDownloadTitle": "Descargar Actualización",
+  "mineUploadTitle": "Cargar",
+  "monthExpense": "Gasto del Mes",
+  "monthIncome": "Ingreso del Mes",
+  "monthSuffix": "",
+  "ocrBilling": "Facturación por Escaneo OCR",
+  "ocrBillingDesc": "Reconocer automáticamente capturas de pantalla de pago",
+  "openAccessibilitySettings": "Abrir Configuración de Accesibilidad",
+  "openSettingsFailed": "Error al abrir configuración",
+  "photosPermissionRequired": "Se requiere permiso de fotos para monitorear capturas de pantalla",
+  "privacyOpenSourceUrlError": "No se puede abrir el enlace",
+  "quickActions": "Acciones Rápidas",
+  "reselectImage": "Reseleccionar",
+  "restoreTitle": "Restauración de la Nube",
+  "setupSteps": "Pasos de Configuración:",
+  "supportedAlipay": "✅ Alipay",
+  "supportedOthers": "⚠️ Otros métodos de pago pueden tener menor precisión de reconocimiento",
+  "supportedPayments": "Métodos de Pago Soportados",
+  "supportedUnionpay": "✅ UnionPay",
+  "supportedWechat": "✅ WeChat Pay",
+  "todayExpense": "Gasto de Hoy",
+  "todayIncome": "Ingreso de Hoy",
+  "updateCorruptedFileMessage": "El paquete de instalación descargado previamente está incompleto o corrupto. ¿Eliminar y volver a descargar?",
+  "updateCorruptedFileTitle": "Paquete de Instalación Corrupto",
+  "viewOriginalText": "Ver Texto Original",
+  "waitingRestore": "Esperando que se inicie la tarea de restauración...",
+  "welcomeCloudSyncDescription": "¿No quieres usar servicios comerciales en la nube? BeeCount admite múltiples métodos de sincronización",
+  "welcomeCloudSyncFeature1": "Uso completamente sin conexión",
+  "welcomeCloudSyncFeature2": "Sincronización WebDAV autohospedada",
+  "welcomeCloudSyncFeature3": "Servicio Supabase autohospedado",
+  "welcomeCloudSyncTitle": "Sincronización en la Nube Opcional",
+  "welcomeDescription": "Una aplicación de contabilidad que realmente respeta tu privacidad",
+  "welcomeOpenSourceFeature1": "Código 100% de código abierto",
+  "welcomeOpenSourceFeature2": "Supervisión comunitaria, sin puertas traseras",
+  "welcomeOpenSourceFeature3": "Gratis para Uso Personal",
+  "welcomeOpenSourceTitle": "Código Abierto y Transparente",
+  "welcomePrivacyFeature1": "Datos almacenados localmente en tu dispositivo",
+  "welcomePrivacyFeature2": "Nunca se carga a servidores de terceros",
+  "welcomePrivacyFeature3": "Sin anuncios, sin recopilación de datos",
+  "welcomePrivacyFeature4": "No se requiere registro de cuenta",
+  "welcomePrivacyTitle": "Tus Datos, Tu Control",
+  "welcomeTitle": "Bienvenido a BeeCount",
+  "welcomeViewGitHub": "Ver Código Fuente en GitHub",
+  "widgetDescription": "El widget se sincroniza automáticamente para mostrar los datos de ingresos y gastos de hoy y este mes, actualizándose cada 30 minutos. Los datos se actualizan inmediatamente cuando se abre la aplicación.",
+  "widgetManagement": "Widget de Pantalla de Inicio",
+  "widgetManagementDesc": "Vista rápida de ingresos y gastos en la pantalla de inicio",
+  "widgetPreview": "Vista Previa del Widget",
+  "widgetPreviewDesc": "El widget muestra automáticamente los datos reales del libro actual, el color del tema sigue la configuración de la aplicación"
 }
