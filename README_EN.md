@@ -524,6 +524,7 @@ Format: Nickname - Amount - Date
 - **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
 - **\*Rui** - ¥720 - 2025-10-27 (WeChat) 🎉
 - **\*Hong** - ¥50 - 2025-11-07 (Alipay)
+- **\*Shao** - ¥15 - 2025-11-09 (Alipay)
 
 ---
 
