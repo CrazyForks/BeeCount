@@ -3472,4 +3472,25 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get aiTypeExpense => '支出';
+
+  @override
+  String get ocrRecognitionResult => '認識結果';
+
+  @override
+  String get ocrAmount => '金額';
+
+  @override
+  String get ocrNoAmountDetected => '金額が検出されませんでした';
+
+  @override
+  String get ocrManualAmountInput => 'または手動で金額を入力';
+
+  @override
+  String get ocrMerchant => '店舗';
+
+  @override
+  String get ocrSuggestedCategory => 'おすすめカテゴリー';
+
+  @override
+  String get ocrTime => '時間';
 }

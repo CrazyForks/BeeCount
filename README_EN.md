@@ -96,10 +96,10 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 ## 📱 Core Features Showcase
 
 <div align="center">
-  <img src="demo/preview/en/01-home.png" alt="Home Screen" width="200" />
-  <img src="demo/preview/en/04-chart-analysis.png" alt="Chart Analysis" width="200" />
-  <img src="demo/preview/en/11-cloud-service.png" alt="☁️ Cloud Service - Core Feature" width="200" />
-  <img src="demo/preview/en/05-ledger-management.png" alt="Ledger Management" width="200" />
+  <img src="demo/videos/en/01-add-transaction.gif" alt="Quick Accounting" width="200" />
+  <img src="demo/videos/en/02-ocr-recognition.gif" alt="🤖 AI OCR Recognition" width="200" />
+  <img src="demo/videos/en/03-import-ledger.gif" alt="Data Import" width="200" />
+  <img src="demo/videos/en/04-data-analysis.gif" alt="📊 Data Analysis" width="200" />
 </div>
 
 <details>
@@ -109,15 +109,20 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 <div align="center">
   <img src="demo/preview/en/02-search.png" alt="Smart Search" width="200" />
   <img src="demo/preview/en/03-edit-transaction.png" alt="Edit Transaction" width="200" />
+  <img src="demo/preview/en/05-ledger-management.png" alt="Ledger Management" width="200" />
   <img src="demo/preview/en/07-category-detail.png" alt="Category Details" width="200" />
-  <img src="demo/preview/en/08-category-migration.png" alt="Category Migration" width="200" />
 </div>
 
 ### Personalization & Management
 <div align="center">
   <img src="demo/preview/en/06-profile.png" alt="Profile" width="200" />
+  <img src="demo/preview/en/08-category-migration.png" alt="Category Migration" width="200" />
   <img src="demo/preview/en/09-category-management.png" alt="Category Management" width="200" />
   <img src="demo/preview/en/10-personalization.png" alt="Personalization" width="200" />
+</div>
+
+### Data Import & Export
+<div align="center">
   <img src="demo/preview/en/12-import-confirm.png" alt="Import Confirmation" width="200" />
 </div>
 

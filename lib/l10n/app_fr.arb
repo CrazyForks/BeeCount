@@ -1800,5 +1800,13 @@
   },
   "aiOcrCreateFailed": "Échec de création de la facture",
   "aiTypeIncome": "Revenu",
-  "aiTypeExpense": "Dépense"
+  "aiTypeExpense": "Dépense",
+  "viewOriginalText": "Afficher le texte original",
+  "ocrRecognitionResult": "Résultat de reconnaissance",
+  "ocrAmount": "Montant",
+  "ocrNoAmountDetected": "Aucun montant détecté",
+  "ocrManualAmountInput": "Ou saisir le montant manuellement",
+  "ocrMerchant": "Marchand",
+  "ocrSuggestedCategory": "Catégorie suggérée",
+  "ocrTime": "Heure"
 }

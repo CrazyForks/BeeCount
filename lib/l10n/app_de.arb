@@ -1810,5 +1810,13 @@
   },
   "aiOcrCreateFailed": "Rechnung konnte nicht erstellt werden",
   "aiTypeIncome": "Einnahme",
-  "aiTypeExpense": "Ausgabe"
+  "aiTypeExpense": "Ausgabe",
+  "viewOriginalText": "Originaltext anzeigen",
+  "ocrRecognitionResult": "Erkennungsergebnis",
+  "ocrAmount": "Betrag",
+  "ocrNoAmountDetected": "Kein Betrag erkannt",
+  "ocrManualAmountInput": "Oder Betrag manuell eingeben",
+  "ocrMerchant": "Händler",
+  "ocrSuggestedCategory": "Vorgeschlagene Kategorie",
+  "ocrTime": "Zeit"
 }

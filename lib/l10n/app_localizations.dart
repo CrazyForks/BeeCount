@@ -6627,6 +6627,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expense'**
   String get aiTypeExpense;
+
+  /// No description provided for @ocrRecognitionResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognition Result'**
+  String get ocrRecognitionResult;
+
+  /// No description provided for @ocrAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get ocrAmount;
+
+  /// No description provided for @ocrNoAmountDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'No amount detected'**
+  String get ocrNoAmountDetected;
+
+  /// No description provided for @ocrManualAmountInput.
+  ///
+  /// In en, this message translates to:
+  /// **'Or enter amount manually'**
+  String get ocrManualAmountInput;
+
+  /// No description provided for @ocrMerchant.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant'**
+  String get ocrMerchant;
+
+  /// No description provided for @ocrSuggestedCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested Category'**
+  String get ocrSuggestedCategory;
+
+  /// No description provided for @ocrTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get ocrTime;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

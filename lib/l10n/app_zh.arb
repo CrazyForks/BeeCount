@@ -1304,5 +1304,12 @@
   },
   "aiOcrCreateFailed": "创建账单失败",
   "aiTypeIncome": "收入",
-  "aiTypeExpense": "支出"
+  "aiTypeExpense": "支出",
+  "ocrRecognitionResult": "识别结果",
+  "ocrAmount": "金额",
+  "ocrNoAmountDetected": "未识别到金额",
+  "ocrManualAmountInput": "或手动输入金额",
+  "ocrMerchant": "商家",
+  "ocrSuggestedCategory": "推荐分类",
+  "ocrTime": "时间"
 }

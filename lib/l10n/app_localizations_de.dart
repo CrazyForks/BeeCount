@@ -3472,4 +3472,25 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aiTypeExpense => 'Ausgabe';
+
+  @override
+  String get ocrRecognitionResult => 'Erkennungsergebnis';
+
+  @override
+  String get ocrAmount => 'Betrag';
+
+  @override
+  String get ocrNoAmountDetected => 'Kein Betrag erkannt';
+
+  @override
+  String get ocrManualAmountInput => 'Oder Betrag manuell eingeben';
+
+  @override
+  String get ocrMerchant => 'Händler';
+
+  @override
+  String get ocrSuggestedCategory => 'Vorgeschlagene Kategorie';
+
+  @override
+  String get ocrTime => 'Zeit';
 }

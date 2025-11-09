@@ -1428,5 +1428,12 @@
   "supportedPayments": "지원되는 결제 방법",
   "supportedUnionpay": "✅ UnionPay",
   "supportedWechat": "✅ WeChat Pay",
-  "viewOriginalText": "원본 텍스트 보기"
+  "viewOriginalText": "원본 텍스트 보기",
+  "ocrRecognitionResult": "인식 결과",
+  "ocrAmount": "금액",
+  "ocrNoAmountDetected": "금액이 감지되지 않음",
+  "ocrManualAmountInput": "또는 수동으로 금액 입력",
+  "ocrMerchant": "판매자",
+  "ocrSuggestedCategory": "추천 카테고리",
+  "ocrTime": "시간"
 }

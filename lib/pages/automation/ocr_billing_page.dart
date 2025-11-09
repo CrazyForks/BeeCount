@@ -375,7 +375,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '识别结果',
+              l10n.ocrRecognitionResult,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -384,7 +384,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
 
             // 金额选择
             Text(
-              '金额',
+              l10n.ocrAmount,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
@@ -422,7 +422,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
               ),
             ] else ...[
               Text(
-                '未识别到金额',
+                l10n.ocrNoAmountDetected,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.orange,
                 ),
@@ -432,10 +432,10 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
             // 手动输入金额
             const SizedBox(height: 16),
             TextField(
-              decoration: const InputDecoration(
-                labelText: '或手动输入金额',
+              decoration: InputDecoration(
+                labelText: l10n.ocrManualAmountInput,
                 prefixText: '¥',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               onChanged: (value) {
@@ -449,7 +449,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
             if (_ocrResult!.merchant != null) ...[
               const SizedBox(height: 16),
               Text(
-                '商家',
+                l10n.ocrMerchant,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -473,7 +473,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '推荐分类',
+                          l10n.ocrSuggestedCategory,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
@@ -485,7 +485,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer,
+                            color: ref.watch(primaryColorProvider),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -494,13 +494,13 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
                               Icon(
                                 Icons.auto_awesome,
                                 size: 16,
-                                color: theme.colorScheme.primary,
+                                color: Colors.black,
                               ),
                               const SizedBox(width: 6),
                               Text(
                                 category.name,
                                 style: theme.textTheme.bodyLarge?.copyWith(
-                                  color: theme.colorScheme.primary,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -519,7 +519,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
             if (_ocrResult!.time != null) ...[
               const SizedBox(height: 16),
               Text(
-                '时间',
+                l10n.ocrTime,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),

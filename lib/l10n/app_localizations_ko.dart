@@ -3472,4 +3472,25 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get aiTypeExpense => '지출';
+
+  @override
+  String get ocrRecognitionResult => '인식 결과';
+
+  @override
+  String get ocrAmount => '금액';
+
+  @override
+  String get ocrNoAmountDetected => '금액이 감지되지 않음';
+
+  @override
+  String get ocrManualAmountInput => '또는 수동으로 금액 입력';
+
+  @override
+  String get ocrMerchant => '판매자';
+
+  @override
+  String get ocrSuggestedCategory => '추천 카테고리';
+
+  @override
+  String get ocrTime => '시간';
 }

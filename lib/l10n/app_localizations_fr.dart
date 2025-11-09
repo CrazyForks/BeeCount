@@ -3266,7 +3266,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reselectImage => 'Resélectionner';
 
   @override
-  String get viewOriginalText => 'Voir le Texte Original';
+  String get viewOriginalText => 'Afficher le texte original';
 
   @override
   String get createBill => 'Créer une Facture';
@@ -3472,4 +3472,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get aiTypeExpense => 'Dépense';
+
+  @override
+  String get ocrRecognitionResult => 'Résultat de reconnaissance';
+
+  @override
+  String get ocrAmount => 'Montant';
+
+  @override
+  String get ocrNoAmountDetected => 'Aucun montant détecté';
+
+  @override
+  String get ocrManualAmountInput => 'Ou saisir le montant manuellement';
+
+  @override
+  String get ocrMerchant => 'Marchand';
+
+  @override
+  String get ocrSuggestedCategory => 'Catégorie suggérée';
+
+  @override
+  String get ocrTime => 'Heure';
 }

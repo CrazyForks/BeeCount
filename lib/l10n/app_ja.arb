@@ -1428,5 +1428,12 @@
   "supportedPayments": "サポートされている支払い方法",
   "supportedUnionpay": "✅ UnionPay",
   "supportedWechat": "✅ WeChat Pay",
-  "viewOriginalText": "元のテキストを表示"
+  "viewOriginalText": "元のテキストを表示",
+  "ocrRecognitionResult": "認識結果",
+  "ocrAmount": "金額",
+  "ocrNoAmountDetected": "金額が検出されませんでした",
+  "ocrManualAmountInput": "または手動で金額を入力",
+  "ocrMerchant": "店舗",
+  "ocrSuggestedCategory": "おすすめカテゴリー",
+  "ocrTime": "時間"
 }

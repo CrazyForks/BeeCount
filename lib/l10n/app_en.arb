@@ -1459,5 +1459,12 @@
   },
   "aiOcrCreateFailed": "Failed to create bill",
   "aiTypeIncome": "Income",
-  "aiTypeExpense": "Expense"
+  "aiTypeExpense": "Expense",
+  "ocrRecognitionResult": "Recognition Result",
+  "ocrAmount": "Amount",
+  "ocrNoAmountDetected": "No amount detected",
+  "ocrManualAmountInput": "Or enter amount manually",
+  "ocrMerchant": "Merchant",
+  "ocrSuggestedCategory": "Suggested Category",
+  "ocrTime": "Time"
 }

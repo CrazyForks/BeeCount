@@ -107,10 +107,10 @@
 ## 📱 核心功能展示
 
 <div align="center">
-  <img src="demo/preview/zh/01-home.png" alt="首页主界面" width="200" />
-  <img src="demo/preview/zh/04-chart-analysis.png" alt="图表分析" width="200" />
-  <img src="demo/preview/zh/11-cloud-service.png" alt="☁️ 云服务配置 - 核心卖点" width="200" />
-  <img src="demo/preview/zh/05-ledger-management.png" alt="账本管理" width="200" />
+  <img src="demo/videos/zh/01-add-transaction.gif" alt="快速记账" width="200" />
+  <img src="demo/videos/zh/02-ocr-recognition.gif" alt="🤖 AI OCR 智能识别" width="200" />
+  <img src="demo/videos/zh/03-import-ledger.gif" alt="数据导入" width="200" />
+  <img src="demo/videos/zh/04-data-analysis.gif" alt="📊 数据分析" width="200" />
 </div>
 
 <details>
@@ -120,15 +120,20 @@
 <div align="center">
   <img src="demo/preview/zh/02-search.png" alt="智能搜索" width="200" />
   <img src="demo/preview/zh/03-edit-transaction.png" alt="编辑交易" width="200" />
+  <img src="demo/preview/zh/05-ledger-management.png" alt="账本管理" width="200" />
   <img src="demo/preview/zh/07-category-detail.png" alt="分类详情" width="200" />
-  <img src="demo/preview/zh/08-category-migration.png" alt="分类迁移" width="200" />
 </div>
 
 ### 个性化与管理
 <div align="center">
   <img src="demo/preview/zh/06-profile.png" alt="个人中心" width="200" />
+  <img src="demo/preview/zh/08-category-migration.png" alt="分类迁移" width="200" />
   <img src="demo/preview/zh/09-category-management.png" alt="分类管理" width="200" />
   <img src="demo/preview/zh/10-personalization.png" alt="个性装扮" width="200" />
+</div>
+
+### 数据导入导出
+<div align="center">
   <img src="demo/preview/zh/12-import-confirm.png" alt="导入确认" width="200" />
 </div>
 

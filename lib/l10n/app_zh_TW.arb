@@ -1198,5 +1198,12 @@
   "supportedPayments": "支援的支付方式",
   "supportedUnionpay": "✅ 雲閃付",
   "supportedWechat": "✅ 微信支付",
-  "viewOriginalText": "檢視原始文字"
+  "viewOriginalText": "檢視原始文字",
+  "ocrRecognitionResult": "識別結果",
+  "ocrAmount": "金額",
+  "ocrNoAmountDetected": "未識別到金額",
+  "ocrManualAmountInput": "或手動輸入金額",
+  "ocrMerchant": "商家",
+  "ocrSuggestedCategory": "推薦分類",
+  "ocrTime": "時間"
 }

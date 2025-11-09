@@ -1817,5 +1817,12 @@
   "widgetManagement": "Widget de Pantalla de Inicio",
   "widgetManagementDesc": "Vista rápida de ingresos y gastos en la pantalla de inicio",
   "widgetPreview": "Vista Previa del Widget",
-  "widgetPreviewDesc": "El widget muestra automáticamente los datos reales del libro actual, el color del tema sigue la configuración de la aplicación"
+  "widgetPreviewDesc": "El widget muestra automáticamente los datos reales del libro actual, el color del tema sigue la configuración de la aplicación",
+  "ocrRecognitionResult": "Resultado de reconocimiento",
+  "ocrAmount": "Monto",
+  "ocrNoAmountDetected": "No se detectó monto",
+  "ocrManualAmountInput": "O ingrese el monto manualmente",
+  "ocrMerchant": "Comerciante",
+  "ocrSuggestedCategory": "Categoría sugerida",
+  "ocrTime": "Hora"
 }

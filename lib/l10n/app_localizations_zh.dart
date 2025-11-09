@@ -3472,6 +3472,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiTypeExpense => '支出';
+
+  @override
+  String get ocrRecognitionResult => '识别结果';
+
+  @override
+  String get ocrAmount => '金额';
+
+  @override
+  String get ocrNoAmountDetected => '未识别到金额';
+
+  @override
+  String get ocrManualAmountInput => '或手动输入金额';
+
+  @override
+  String get ocrMerchant => '商家';
+
+  @override
+  String get ocrSuggestedCategory => '推荐分类';
+
+  @override
+  String get ocrTime => '时间';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -6944,4 +6965,25 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiTypeExpense => '支出';
+
+  @override
+  String get ocrRecognitionResult => '識別結果';
+
+  @override
+  String get ocrAmount => '金額';
+
+  @override
+  String get ocrNoAmountDetected => '未識別到金額';
+
+  @override
+  String get ocrManualAmountInput => '或手動輸入金額';
+
+  @override
+  String get ocrMerchant => '商家';
+
+  @override
+  String get ocrSuggestedCategory => '推薦分類';
+
+  @override
+  String get ocrTime => '時間';
 }
