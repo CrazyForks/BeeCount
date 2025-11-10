@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 通用资源 -->
     <string name="app_name">蜜蜂记账</string>
     <string name="widget_description">查看今日和本月的收支情况</string>
-    <string name="accessibility_service_label">蜜蜂记账-截图识别</string>
-    <string name="accessibility_service_description">用于检测截图动作并自动进行OCR识别记账。\n\n本服务仅监听截图事件，不会读取或修改您的其他数据。</string>
+
+    <!-- 无障碍服务相关字符串由 flavor 特定的 strings.xml 定义 -->
+    <!-- dev: android/app/src/dev/res/values/strings.xml -->
+    <!-- prod: android/app/src/prod/res/values/strings.xml -->
 </resources>

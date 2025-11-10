@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ai_bill_service.dart';
 import '../category_service.dart';
@@ -73,8 +74,39 @@ class OcrService {
       // 1. OCR文本识别
       print('⏱️ [OCR] 开始文本识别...');
       final ocrStartTime = DateTime.now();
-      final inputImage = InputImage.fromFile(imageFile);
-      final recognizedText = await _textRecognizer.processImage(inputImage);
+
+      // 尝试不同的InputImage创建方式,解决华为权限问题
+      RecognizedText recognizedText;
+
+      try {
+        // 方式1: 直接从文件路径读取(适用于大多数设备)
+        print('📁 [OCR] 尝试方式1: 从文件路径读取');
+        final inputImage = InputImage.fromFile(imageFile);
+        recognizedText = await _textRecognizer.processImage(inputImage);
+        print('✅ [OCR] 方式1成功');
+      } catch (e) {
+        print('⚠️ [OCR] 方式1失败: $e');
+        print('📁 [OCR] 尝试方式2: 从文件字节读取(解决华为权限问题)');
+
+        // 方式2: 先复制文件到App私有目录,再读取
+        // 华为系统对Screenshots目录有特殊权限保护
+        final appDir = await getTemporaryDirectory();
+        final tempFile = File('${appDir.path}/temp_screenshot_${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+        // 复制文件
+        await imageFile.copy(tempFile.path);
+        print('✅ [OCR] 文件已复制到: ${tempFile.path}');
+
+        // 从临时文件读取
+        final inputImage = InputImage.fromFile(tempFile);
+        recognizedText = await _textRecognizer.processImage(inputImage);
+        print('✅ [OCR] 方式2成功');
+
+        // 清理临时文件
+        try {
+          await tempFile.delete();
+        } catch (_) {}
+      }
       final rawText = recognizedText.text;
       final ocrDuration = DateTime.now().difference(ocrStartTime);
       print('✅ [OCR] 文本识别完成，耗时: ${ocrDuration.inMilliseconds}ms');
