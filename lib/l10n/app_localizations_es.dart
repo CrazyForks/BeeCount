@@ -785,6 +785,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineSlogan => 'Contabilidad Abeja, Cada Centavo Cuenta';
 
   @override
+  String get mineAvatarTitle => 'Avatar Settings';
+
+  @override
+  String get mineAvatarFromGallery => 'Choose from Gallery';
+
+  @override
+  String get mineAvatarFromCamera => 'Take Photo';
+
+  @override
+  String get mineAvatarDelete => 'Delete Avatar';
+
+  @override
   String get mineDaysCount => 'Días';
 
   @override

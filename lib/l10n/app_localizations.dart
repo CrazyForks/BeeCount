@@ -1546,6 +1546,30 @@ abstract class AppLocalizations {
   /// **'Bee Accounting, Every Penny Counts'**
   String get mineSlogan;
 
+  /// No description provided for @mineAvatarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar Settings'**
+  String get mineAvatarTitle;
+
+  /// No description provided for @mineAvatarFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get mineAvatarFromGallery;
+
+  /// No description provided for @mineAvatarFromCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get mineAvatarFromCamera;
+
+  /// No description provided for @mineAvatarDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Avatar'**
+  String get mineAvatarDelete;
+
   /// No description provided for @mineDaysCount.
   ///
   /// In en, this message translates to:

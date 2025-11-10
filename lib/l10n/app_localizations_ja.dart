@@ -785,6 +785,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mineSlogan => '蜜蜂家計簿、一円も逃さない';
 
   @override
+  String get mineAvatarTitle => 'Avatar Settings';
+
+  @override
+  String get mineAvatarFromGallery => 'Choose from Gallery';
+
+  @override
+  String get mineAvatarFromCamera => 'Take Photo';
+
+  @override
+  String get mineAvatarDelete => 'Delete Avatar';
+
+  @override
   String get mineDaysCount => '日';
 
   @override

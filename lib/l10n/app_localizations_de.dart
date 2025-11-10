@@ -785,6 +785,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mineSlogan => 'Bienen-Buchhaltung, jede Transaktion zählt';
 
   @override
+  String get mineAvatarTitle => 'Avatar Settings';
+
+  @override
+  String get mineAvatarFromGallery => 'Choose from Gallery';
+
+  @override
+  String get mineAvatarFromCamera => 'Take Photo';
+
+  @override
+  String get mineAvatarDelete => 'Delete Avatar';
+
+  @override
   String get mineDaysCount => 'Buchführungstage';
 
   @override

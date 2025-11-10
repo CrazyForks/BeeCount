@@ -785,6 +785,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mineSlogan => 'Comptabilité Abeille, Chaque Centime Compte';
 
   @override
+  String get mineAvatarTitle => 'Avatar Settings';
+
+  @override
+  String get mineAvatarFromGallery => 'Choose from Gallery';
+
+  @override
+  String get mineAvatarFromCamera => 'Take Photo';
+
+  @override
+  String get mineAvatarDelete => 'Delete Avatar';
+
+  @override
   String get mineDaysCount => 'Jours de Comptabilité';
 
   @override

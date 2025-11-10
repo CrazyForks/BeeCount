@@ -785,6 +785,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mineSlogan => '꿀벌 가계부, 한 푼도 놓치지 않기';
 
   @override
+  String get mineAvatarTitle => 'Avatar Settings';
+
+  @override
+  String get mineAvatarFromGallery => 'Choose from Gallery';
+
+  @override
+  String get mineAvatarFromCamera => 'Take Photo';
+
+  @override
+  String get mineAvatarDelete => 'Delete Avatar';
+
+  @override
   String get mineDaysCount => '일';
 
   @override

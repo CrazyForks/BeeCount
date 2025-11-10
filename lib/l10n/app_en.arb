@@ -312,6 +312,10 @@
     }
   },
   "mineSlogan": "Bee Accounting, Every Penny Counts",
+  "mineAvatarTitle": "Avatar Settings",
+  "mineAvatarFromGallery": "Choose from Gallery",
+  "mineAvatarFromCamera": "Take Photo",
+  "mineAvatarDelete": "Delete Avatar",
   "mineDaysCount": "Days",
   "mineTotalRecords": "Records",
   "mineCurrentBalance": "Balance",

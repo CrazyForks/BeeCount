@@ -785,6 +785,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineSlogan => '蜜蜂记账，一笔一蜜';
 
   @override
+  String get mineAvatarTitle => '头像设置';
+
+  @override
+  String get mineAvatarFromGallery => '从相册选择';
+
+  @override
+  String get mineAvatarFromCamera => '拍照';
+
+  @override
+  String get mineAvatarDelete => '删除头像';
+
+  @override
   String get mineDaysCount => '记账天数';
 
   @override

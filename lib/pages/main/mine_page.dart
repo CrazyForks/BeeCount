@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, File;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +19,7 @@ import '../../cloud/cloud_service_config.dart';
 import '../cloud/cloud_service_page.dart';
 import '../../utils/logger.dart';
 import '../../services/restore_service.dart';
+import '../../services/avatar_service.dart';
 import '../data/restore_progress_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../settings/font_settings_page.dart';
@@ -91,109 +92,7 @@ class MinePage extends ConsumerWidget {
             title: AppLocalizations.of(context).mineTitle,
             compact: true,
             showTitleSection: false,
-            content: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  12.0.scaled(context, ref),
-                  8.0.scaled(context, ref),
-                  12.0.scaled(context, ref),
-                  10.0.scaled(context, ref)),
-              child: IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        BeeIcon(
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 48.0.scaled(context, ref),
-                        ),
-                        Text(AppLocalizations.of(context).mineTitle,
-                            style: AppTextTokens.title(context)),
-                      ],
-                    ),
-                    SizedBox(width: 12.0.scaled(context, ref)),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).mineSlogan,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: BeeColors.primaryText,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(
-                              height: 5.0.scaled(context, ref)), // 标语与统计区间距增大
-                          Builder(builder: (ctx) {
-                            // 获取当前账本信息
-                            final currentLedgerId =
-                                ref.watch(currentLedgerIdProvider);
-                            final countsAsync = ref.watch(
-                                countsForLedgerProvider(currentLedgerId));
-                            final balanceAsync = ref
-                                .watch(currentBalanceProvider(currentLedgerId));
-                            final currentLedgerAsync = ref.watch(currentLedgerProvider);
-
-                            final day = countsAsync.asData?.value.dayCount ?? 0;
-                            final tx = countsAsync.asData?.value.txCount ?? 0;
-                            final balance = balanceAsync.asData?.value ?? 0.0;
-                            final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
-
-                            final labelStyle = Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(color: BeeColors.black54);
-                            // 需求：统计数字与左侧"我的"标题字号/字重保持一致，取消更粗/更大
-                            final numStyle = AppTextTokens.strongTitle(context)
-                                .copyWith(
-                                    fontSize: 20, color: BeeColors.primaryText);
-                            return IntrinsicHeight(
-                              child: Row(children: [
-                                Expanded(
-                                    child: _StatCell(
-                                        label: AppLocalizations.of(context)
-                                            .mineDaysCount,
-                                        value: day.toString(),
-                                        labelStyle: labelStyle,
-                                        numStyle: numStyle)),
-                                Expanded(
-                                    child: _StatCell(
-                                        label: AppLocalizations.of(context)
-                                            .mineTotalRecords,
-                                        value: tx.toString(),
-                                        labelStyle: labelStyle,
-                                        numStyle: numStyle)),
-                                Expanded(
-                                    child: _StatCell(
-                                        label: AppLocalizations.of(context)
-                                            .mineCurrentBalance,
-                                        value: balance,
-                                        isAmount: true,
-                                        currencyCode: currencyCode,
-                                        labelStyle: labelStyle,
-                                        numStyle: numStyle.copyWith(
-                                          color: balance >= 0
-                                              ? BeeColors.primaryText
-                                              : Colors.red,
-                                        ))),
-                              ]),
-                            );
-                          }),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            content: _MinePageHeader(),
           ),
           Expanded(
             child: ListView(
@@ -1036,6 +935,7 @@ class _StatCell extends ConsumerWidget {
   final TextStyle? numStyle;
   final bool isAmount; // 是否为金额类型
   final String? currencyCode; // 币种代码
+  final bool centered; // 是否居中对齐
 
   const _StatCell({
     required this.label,
@@ -1044,6 +944,7 @@ class _StatCell extends ConsumerWidget {
     this.numStyle,
     this.isAmount = false,
     this.currencyCode,
+    this.centered = false,
   });
 
   @override
@@ -1065,11 +966,11 @@ class _StatCell extends ConsumerWidget {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         valueWidget,
         SizedBox(height: 4.0.scaled(context, ref)), // 数字与标签间距增大
-        Text(label, style: labelStyle),
+        Text(label, style: labelStyle, textAlign: centered ? TextAlign.center : TextAlign.start),
       ],
     );
   }
@@ -1533,5 +1434,248 @@ Future<bool> _tryOpenUrl(Uri url) async {
   } catch (e) {
     logE('MinePage', '打开URL失败: $url', e);
     return false;
+  }
+}
+
+/// 我的页面头部
+class _MinePageHeader extends ConsumerStatefulWidget {
+  const _MinePageHeader();
+
+  @override
+  ConsumerState<_MinePageHeader> createState() => _MinePageHeaderState();
+}
+
+class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
+  String? _avatarPath;
+  bool _isLoadingAvatar = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAvatar();
+  }
+
+  Future<void> _loadAvatar() async {
+    final path = await AvatarService.getAvatarPath();
+    if (mounted) {
+      setState(() {
+        _avatarPath = path;
+        _isLoadingAvatar = false;
+      });
+    }
+  }
+
+  Future<void> _showAvatarOptions() async {
+    final l10n = AppLocalizations.of(context);
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.mineAvatarTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: Text(l10n.mineAvatarFromGallery),
+              onTap: () => Navigator.pop(context, 'gallery'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: Text(l10n.mineAvatarFromCamera),
+              onTap: () => Navigator.pop(context, 'camera'),
+            ),
+            if (_avatarPath != null)
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: Text(l10n.mineAvatarDelete, style: const TextStyle(color: Colors.red)),
+                onTap: () => Navigator.pop(context, 'delete'),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.commonCancel),
+          ),
+        ],
+      ),
+    );
+
+    if (result == null || !mounted) return;
+
+    try {
+      if (result == 'gallery') {
+        final path = await AvatarService.pickAndSaveAvatar();
+        if (mounted && path != null) {
+          setState(() => _avatarPath = path);
+        }
+      } else if (result == 'camera') {
+        final path = await AvatarService.takePhotoAndSaveAvatar();
+        if (mounted && path != null) {
+          setState(() => _avatarPath = path);
+        }
+      } else if (result == 'delete') {
+        await AvatarService.deleteAvatar();
+        if (mounted) {
+          setState(() => _avatarPath = null);
+        }
+      }
+    } catch (e) {
+      if (!mounted) return;
+      showToast(context, '${AppLocalizations.of(context).commonError}: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final activeCfg = ref.watch(activeCloudConfigProvider);
+    final isLocalMode = activeCfg.hasValue && activeCfg.value!.type == CloudBackendType.local;
+    final canEditAvatar = !isLocalMode;
+
+    // 获取当前账本信息
+    final currentLedgerId = ref.watch(currentLedgerIdProvider);
+    final countsAsync = ref.watch(countsForLedgerProvider(currentLedgerId));
+    final balanceAsync = ref.watch(currentBalanceProvider(currentLedgerId));
+    final currentLedgerAsync = ref.watch(currentLedgerProvider);
+
+    final day = countsAsync.asData?.value.dayCount ?? 0;
+    final tx = countsAsync.asData?.value.txCount ?? 0;
+    final balance = balanceAsync.asData?.value ?? 0.0;
+    final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
+
+    final labelStyle = Theme.of(context)
+        .textTheme
+        .labelMedium
+        ?.copyWith(color: BeeColors.black54);
+    final numStyle = AppTextTokens.strongTitle(context)
+        .copyWith(fontSize: 20, color: BeeColors.primaryText);
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref),
+        12.0.scaled(context, ref),
+        12.0.scaled(context, ref),
+        10.0.scaled(context, ref),
+      ),
+      child: Column(
+        children: [
+          // 头像/Logo
+          GestureDetector(
+            onTap: canEditAvatar ? _showAvatarOptions : null,
+            child: Stack(
+              children: [
+                Container(
+                  width: 80.0.scaled(context, ref),
+                  height: 80.0.scaled(context, ref),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: _isLoadingAvatar
+                        ? Center(
+                            child: SizedBox(
+                              width: 20.0.scaled(context, ref),
+                              height: 20.0.scaled(context, ref),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          )
+                        : (_avatarPath != null && canEditAvatar
+                            ? Image.file(
+                                File(_avatarPath!),
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return BeeIcon(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    size: 40.0.scaled(context, ref),
+                                  );
+                                },
+                              )
+                            : BeeIcon(
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 40.0.scaled(context, ref),
+                              )),
+                  ),
+                ),
+                if (canEditAvatar)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 24.0.scaled(context, ref),
+                      height: 24.0.scaled(context, ref),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: Icon(
+                        Icons.camera_alt,
+                        size: 12.0.scaled(context, ref),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: 12.0.scaled(context, ref)),
+          // Slogan
+          Text(
+            AppLocalizations.of(context).mineSlogan,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: BeeColors.primaryText,
+                  fontWeight: FontWeight.w600,
+                ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 16.0.scaled(context, ref)),
+          // 统计数据
+          Row(
+            children: [
+              Expanded(
+                child: _StatCell(
+                  label: AppLocalizations.of(context).mineDaysCount,
+                  value: day.toString(),
+                  labelStyle: labelStyle,
+                  numStyle: numStyle,
+                  centered: true,
+                ),
+              ),
+              Expanded(
+                child: _StatCell(
+                  label: AppLocalizations.of(context).mineTotalRecords,
+                  value: tx.toString(),
+                  labelStyle: labelStyle,
+                  numStyle: numStyle,
+                  centered: true,
+                ),
+              ),
+              Expanded(
+                child: _StatCell(
+                  label: AppLocalizations.of(context).mineCurrentBalance,
+                  value: balance,
+                  isAmount: true,
+                  currencyCode: currencyCode,
+                  labelStyle: labelStyle,
+                  numStyle: numStyle.copyWith(
+                    color: balance >= 0 ? BeeColors.primaryText : Colors.red,
+                  ),
+                  centered: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
