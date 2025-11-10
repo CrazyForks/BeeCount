@@ -1546,6 +1546,156 @@ abstract class AppLocalizations {
   /// **'Bee Accounting, Every Penny Counts'**
   String get mineSlogan;
 
+  /// No description provided for @mineAvatarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar Settings'**
+  String get mineAvatarTitle;
+
+  /// No description provided for @mineAvatarFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get mineAvatarFromGallery;
+
+  /// No description provided for @mineAvatarFromCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get mineAvatarFromCamera;
+
+  /// No description provided for @mineAvatarDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Avatar'**
+  String get mineAvatarDelete;
+
+  /// No description provided for @mineShareApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Share App'**
+  String get mineShareApp;
+
+  /// No description provided for @mineShareAppSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate share poster and save to gallery'**
+  String get mineShareAppSubtitle;
+
+  /// No description provided for @mineShareGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating share poster...'**
+  String get mineShareGenerating;
+
+  /// No description provided for @mineShareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Successfully'**
+  String get mineShareSuccess;
+
+  /// No description provided for @mineShareSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Share poster has been saved to gallery'**
+  String get mineShareSuccessMessage;
+
+  /// No description provided for @mineShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Save failed, please check gallery permissions'**
+  String get mineShareFailed;
+
+  /// No description provided for @sharePosterAppName.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount'**
+  String get sharePosterAppName;
+
+  /// No description provided for @sharePosterSlogan.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Accounting, Beautiful Life'**
+  String get sharePosterSlogan;
+
+  /// No description provided for @sharePosterFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'✨ Completely Open Source & Free'**
+  String get sharePosterFeature1;
+
+  /// No description provided for @sharePosterFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'🤖 AI Smart Bill Recognition'**
+  String get sharePosterFeature2;
+
+  /// No description provided for @sharePosterFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'⚡ Automated Accounting'**
+  String get sharePosterFeature3;
+
+  /// No description provided for @sharePosterFeature4.
+  ///
+  /// In en, this message translates to:
+  /// **'🔒 Privacy & Security'**
+  String get sharePosterFeature4;
+
+  /// No description provided for @sharePosterFeature5.
+  ///
+  /// In en, this message translates to:
+  /// **'☁️ Cloud Sync & Backup'**
+  String get sharePosterFeature5;
+
+  /// No description provided for @sharePosterFeature6.
+  ///
+  /// In en, this message translates to:
+  /// **'📊 Multiple Ledgers'**
+  String get sharePosterFeature6;
+
+  /// No description provided for @sharePosterScanText.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to visit open source project'**
+  String get sharePosterScanText;
+
+  /// No description provided for @sharePosterPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Poster Preview'**
+  String get sharePosterPreviewTitle;
+
+  /// No description provided for @sharePosterSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to Gallery'**
+  String get sharePosterSave;
+
+  /// No description provided for @sharePosterShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get sharePosterShare;
+
+  /// No description provided for @sharePosterSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to gallery'**
+  String get sharePosterSaveSuccess;
+
+  /// No description provided for @sharePosterSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save'**
+  String get sharePosterSaveFailed;
+
+  /// No description provided for @sharePosterPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery permission denied, please enable in settings'**
+  String get sharePosterPermissionDenied;
+
   /// No description provided for @mineDaysCount.
   ///
   /// In en, this message translates to:
@@ -1666,17 +1816,35 @@ abstract class AppLocalizations {
   /// **'Synced (local {count} records)'**
   String mineSyncInSync(Object count);
 
+  /// No description provided for @mineSyncInSyncSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced'**
+  String get mineSyncInSyncSimple;
+
   /// No description provided for @mineSyncLocalNewer.
   ///
   /// In en, this message translates to:
   /// **'Local newer (local {count} records, upload recommended)'**
   String mineSyncLocalNewer(Object count);
 
+  /// No description provided for @mineSyncLocalNewerSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'Local newer'**
+  String get mineSyncLocalNewerSimple;
+
   /// No description provided for @mineSyncCloudNewer.
   ///
   /// In en, this message translates to:
   /// **'Cloud newer (download recommended)'**
   String get mineSyncCloudNewer;
+
+  /// No description provided for @mineSyncCloudNewerSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud newer'**
+  String get mineSyncCloudNewerSimple;
 
   /// No description provided for @mineSyncDifferent.
   ///
@@ -4051,13 +4219,13 @@ abstract class AppLocalizations {
   /// No description provided for @exportButtonIOS.
   ///
   /// In en, this message translates to:
-  /// **'Export and Share (iOS)'**
+  /// **'Export and Share'**
   String get exportButtonIOS;
 
   /// No description provided for @exportButtonAndroid.
   ///
   /// In en, this message translates to:
-  /// **'Select Folder and Export'**
+  /// **'Export Data'**
   String get exportButtonAndroid;
 
   /// No description provided for @exportSavedTo.
@@ -5602,6 +5770,12 @@ abstract class AppLocalizations {
   /// **'Account Management'**
   String get accountsTitle;
 
+  /// No description provided for @accountsManageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage payment accounts and balances'**
+  String get accountsManageDesc;
+
   /// No description provided for @accountsEmptyMessage.
   ///
   /// In en, this message translates to:
@@ -6669,6 +6843,414 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time'**
   String get ocrTime;
+
+  /// No description provided for @cloudSyncAndBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Sync & Backup'**
+  String get cloudSyncAndBackup;
+
+  /// No description provided for @cloudSyncAndBackupDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud service config and data sync'**
+  String get cloudSyncAndBackupDesc;
+
+  /// No description provided for @cloudSyncPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Sync & Backup'**
+  String get cloudSyncPageTitle;
+
+  /// No description provided for @cloudSyncPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage cloud services and data sync'**
+  String get cloudSyncPageSubtitle;
+
+  /// No description provided for @dataManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Management'**
+  String get dataManagement;
+
+  /// No description provided for @dataManagementDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Import, export, categories and accounts'**
+  String get dataManagementDesc;
+
+  /// No description provided for @dataManagementPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Management'**
+  String get dataManagementPageTitle;
+
+  /// No description provided for @dataManagementPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage transaction data and categories'**
+  String get dataManagementPageSubtitle;
+
+  /// No description provided for @smartBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Billing'**
+  String get smartBilling;
+
+  /// No description provided for @smartBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'AI recognition, OCR scan, auto billing'**
+  String get smartBillingDesc;
+
+  /// No description provided for @smartBillingPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Billing'**
+  String get smartBillingPageTitle;
+
+  /// No description provided for @smartBillingPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI and automation billing features'**
+  String get smartBillingPageSubtitle;
+
+  /// No description provided for @automation.
+  ///
+  /// In en, this message translates to:
+  /// **'Automation'**
+  String get automation;
+
+  /// No description provided for @automationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions and reminders'**
+  String get automationDesc;
+
+  /// No description provided for @automationPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automation'**
+  String get automationPageTitle;
+
+  /// No description provided for @automationPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions and reminder settings'**
+  String get automationPageSubtitle;
+
+  /// No description provided for @appearanceSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceSettings;
+
+  /// No description provided for @appearanceSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme, font and language settings'**
+  String get appearanceSettingsDesc;
+
+  /// No description provided for @appearanceSettingsPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceSettingsPageTitle;
+
+  /// No description provided for @appearanceSettingsPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalize appearance and display'**
+  String get appearanceSettingsPageSubtitle;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @aboutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Version info, help and feedback'**
+  String get aboutDesc;
+
+  /// No description provided for @aboutPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get aboutPageTitle;
+
+  /// No description provided for @aboutPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App information and help'**
+  String get aboutPageSubtitle;
+
+  /// No description provided for @aboutPageLoadingVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading version...'**
+  String get aboutPageLoadingVersion;
+
+  /// No description provided for @aboutGitHubRepo.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub Repository'**
+  String get aboutGitHubRepo;
+
+  /// No description provided for @aboutContactEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Email'**
+  String get aboutContactEmail;
+
+  /// No description provided for @aboutWeChatGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'WeChat Group'**
+  String get aboutWeChatGroup;
+
+  /// No description provided for @aboutWeChatGroupDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view QR code'**
+  String get aboutWeChatGroupDesc;
+
+  /// No description provided for @aboutXiaohongshu.
+  ///
+  /// In en, this message translates to:
+  /// **'Xiaohongshu'**
+  String get aboutXiaohongshu;
+
+  /// No description provided for @aboutDouyin.
+  ///
+  /// In en, this message translates to:
+  /// **'Douyin'**
+  String get aboutDouyin;
+
+  /// No description provided for @aboutTelegramGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram Group'**
+  String get aboutTelegramGroup;
+
+  /// No description provided for @aboutCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get aboutCopied;
+
+  /// No description provided for @cloudService.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Service'**
+  String get cloudService;
+
+  /// No description provided for @cloudServiceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure cloud storage provider'**
+  String get cloudServiceDesc;
+
+  /// No description provided for @syncManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Management'**
+  String get syncManagement;
+
+  /// No description provided for @syncManagementDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Data sync and backup'**
+  String get syncManagementDesc;
+
+  /// No description provided for @moreSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'More Settings'**
+  String get moreSettings;
+
+  /// No description provided for @moreSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced cloud sync options'**
+  String get moreSettingsDesc;
+
+  /// No description provided for @configImportExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Config Import/Export'**
+  String get configImportExportTitle;
+
+  /// No description provided for @configImportExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup and restore app configurations'**
+  String get configImportExportSubtitle;
+
+  /// No description provided for @configImportExportInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature Description'**
+  String get configImportExportInfoTitle;
+
+  /// No description provided for @configImportExportInfoMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is used to export and import app configurations, including cloud service settings, AI settings, etc. The config file uses YAML format for easy viewing and editing.\n\n⚠️ Config files contain sensitive information (such as API keys, passwords, etc.), please keep them safe.'**
+  String get configImportExportInfoMessage;
+
+  /// No description provided for @configExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Config'**
+  String get configExportTitle;
+
+  /// No description provided for @configExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export current config to YAML file'**
+  String get configExportSubtitle;
+
+  /// No description provided for @configExportShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount Config File'**
+  String get configExportShareSubject;
+
+  /// No description provided for @configExportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Config exported successfully'**
+  String get configExportSuccess;
+
+  /// No description provided for @configExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Config export failed'**
+  String get configExportFailed;
+
+  /// No description provided for @configImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Config'**
+  String get configImportTitle;
+
+  /// No description provided for @configImportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore config from YAML file'**
+  String get configImportSubtitle;
+
+  /// No description provided for @configImportNoFilePath.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get configImportNoFilePath;
+
+  /// No description provided for @configImportConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Import'**
+  String get configImportConfirmTitle;
+
+  /// No description provided for @configImportConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing config will overwrite current settings, continue?'**
+  String get configImportConfirmMessage;
+
+  /// No description provided for @configImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Config imported successfully'**
+  String get configImportSuccess;
+
+  /// No description provided for @configImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Config import failed'**
+  String get configImportFailed;
+
+  /// No description provided for @configImportRestartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart Required'**
+  String get configImportRestartTitle;
+
+  /// No description provided for @configImportRestartMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Config has been imported. Some settings will take effect after restarting the app.'**
+  String get configImportRestartMessage;
+
+  /// No description provided for @configImportExportIncludesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Included Configurations'**
+  String get configImportExportIncludesTitle;
+
+  /// No description provided for @configExportSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to: {path}'**
+  String configExportSavedTo(String path);
+
+  /// No description provided for @configExportOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Folder'**
+  String get configExportOpenFile;
+
+  /// No description provided for @configExportOpenFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open folder'**
+  String get configExportOpenFileFailed;
+
+  /// No description provided for @configExportViewContent.
+  ///
+  /// In en, this message translates to:
+  /// **'View Content'**
+  String get configExportViewContent;
+
+  /// No description provided for @configExportCopyContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Content'**
+  String get configExportCopyContent;
+
+  /// No description provided for @configExportContentCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get configExportContentCopied;
+
+  /// No description provided for @configExportReadFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to read file'**
+  String get configExportReadFileFailed;
+
+  /// No description provided for @configIncludeSupabase.
+  ///
+  /// In en, this message translates to:
+  /// **'Supabase cloud service config'**
+  String get configIncludeSupabase;
+
+  /// No description provided for @configIncludeWebdav.
+  ///
+  /// In en, this message translates to:
+  /// **'WebDAV cloud service config'**
+  String get configIncludeWebdav;
+
+  /// No description provided for @configIncludeAI.
+  ///
+  /// In en, this message translates to:
+  /// **'AI smart recognition config'**
+  String get configIncludeAI;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

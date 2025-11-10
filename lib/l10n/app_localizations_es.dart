@@ -785,6 +785,81 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineSlogan => 'Contabilidad Abeja, Cada Centavo Cuenta';
 
   @override
+  String get mineAvatarTitle => 'Avatar Settings';
+
+  @override
+  String get mineAvatarFromGallery => 'Choose from Gallery';
+
+  @override
+  String get mineAvatarFromCamera => 'Take Photo';
+
+  @override
+  String get mineAvatarDelete => 'Delete Avatar';
+
+  @override
+  String get mineShareApp => 'Share App';
+
+  @override
+  String get mineShareAppSubtitle => 'Generate share poster and save to gallery';
+
+  @override
+  String get mineShareGenerating => 'Generating share poster...';
+
+  @override
+  String get mineShareSuccess => 'Saved Successfully';
+
+  @override
+  String get mineShareSuccessMessage => 'Share poster has been saved to gallery';
+
+  @override
+  String get mineShareFailed => 'Save failed, please check gallery permissions';
+
+  @override
+  String get sharePosterAppName => 'BeeCount';
+
+  @override
+  String get sharePosterSlogan => 'Smart Accounting, Beautiful Life';
+
+  @override
+  String get sharePosterFeature1 => '✨ Completely Open Source & Free';
+
+  @override
+  String get sharePosterFeature2 => '🤖 AI Smart Bill Recognition';
+
+  @override
+  String get sharePosterFeature3 => '⚡ Automated Accounting';
+
+  @override
+  String get sharePosterFeature4 => '🔒 Privacy & Security';
+
+  @override
+  String get sharePosterFeature5 => '☁️ Cloud Sync & Backup';
+
+  @override
+  String get sharePosterFeature6 => '📊 Multiple Ledgers';
+
+  @override
+  String get sharePosterScanText => 'Scan to visit open source project';
+
+  @override
+  String get sharePosterPreviewTitle => 'Share Poster Preview';
+
+  @override
+  String get sharePosterSave => 'Save to Gallery';
+
+  @override
+  String get sharePosterShare => 'Share';
+
+  @override
+  String get sharePosterSaveSuccess => 'Saved to gallery';
+
+  @override
+  String get sharePosterSaveFailed => 'Failed to save';
+
+  @override
+  String get sharePosterPermissionDenied => 'Gallery permission denied, please enable in settings';
+
+  @override
   String get mineDaysCount => 'Días';
 
   @override
@@ -849,12 +924,21 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get mineSyncInSyncSimple => 'Sincronizado';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return 'Local más reciente (local $count registros, se recomienda cargar)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => 'Local más reciente';
+
+  @override
   String get mineSyncCloudNewer => 'Nube más reciente (se recomienda descargar)';
+
+  @override
+  String get mineSyncCloudNewerSimple => 'Nube más reciente';
 
   @override
   String get mineSyncDifferent => 'Local y nube difieren';
@@ -2112,10 +2196,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exportDescription => 'Haz clic en el botón de abajo para seleccionar la ubicación de guardado y exportar el libro actual a un archivo CSV.';
 
   @override
-  String get exportButtonIOS => 'Exportar y compartir (iOS)';
+  String get exportButtonIOS => 'Exportar y compartir';
 
   @override
-  String get exportButtonAndroid => 'Seleccionar carpeta y exportar';
+  String get exportButtonAndroid => 'Exportar datos';
 
   @override
   String exportSavedTo(String path) {
@@ -2949,6 +3033,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountsTitle => 'Cuentas';
 
   @override
+  String get accountsManageDesc => 'Gestionar cuentas de pago y saldos';
+
+  @override
   String get accountsEmptyMessage => 'Aún no hay cuentas, toque la parte superior derecha para agregar';
 
   @override
@@ -3493,4 +3580,210 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ocrTime => 'Hora';
+
+  @override
+  String get cloudSyncAndBackup => 'Sincronización y copia de seguridad en la nube';
+
+  @override
+  String get cloudSyncAndBackupDesc => 'Configuración de servicio en la nube, gestión de sincronización de datos';
+
+  @override
+  String get cloudSyncPageTitle => 'Sincronización y copia de seguridad en la nube';
+
+  @override
+  String get cloudSyncPageSubtitle => 'Gestionar servicios en la nube y sincronización de datos';
+
+  @override
+  String get dataManagement => 'Gestión de datos';
+
+  @override
+  String get dataManagementDesc => 'Importar, exportar, categorías y cuentas';
+
+  @override
+  String get dataManagementPageTitle => 'Gestión de datos';
+
+  @override
+  String get dataManagementPageSubtitle => 'Gestionar datos de transacciones y categorías';
+
+  @override
+  String get smartBilling => 'Registro inteligente';
+
+  @override
+  String get smartBillingDesc => 'Reconocimiento IA, escaneo OCR, registro automático';
+
+  @override
+  String get smartBillingPageTitle => 'Registro inteligente';
+
+  @override
+  String get smartBillingPageSubtitle => 'Funciones de registro IA y automatización';
+
+  @override
+  String get automation => 'Automatización';
+
+  @override
+  String get automationDesc => 'Transacciones recurrentes y recordatorios';
+
+  @override
+  String get automationPageTitle => 'Funciones de automatización';
+
+  @override
+  String get automationPageSubtitle => 'Configuración de transacciones recurrentes y recordatorios';
+
+  @override
+  String get appearanceSettings => 'Configuración de apariencia';
+
+  @override
+  String get appearanceSettingsDesc => 'Configuración de tema, fuente e idioma';
+
+  @override
+  String get appearanceSettingsPageTitle => 'Configuración de apariencia';
+
+  @override
+  String get appearanceSettingsPageSubtitle => 'Personalizar apariencia y visualización';
+
+  @override
+  String get about => 'Acerca de';
+
+  @override
+  String get aboutDesc => 'Información de versión, ayuda y comentarios';
+
+  @override
+  String get aboutPageTitle => 'Acerca de';
+
+  @override
+  String get aboutPageSubtitle => 'Información de la aplicación y ayuda';
+
+  @override
+  String get aboutPageLoadingVersion => 'Cargando versión...';
+
+  @override
+  String get aboutGitHubRepo => 'Repositorio GitHub';
+
+  @override
+  String get aboutContactEmail => 'Correo de contacto';
+
+  @override
+  String get aboutWeChatGroup => 'Grupo de WeChat';
+
+  @override
+  String get aboutWeChatGroupDesc => 'Toca para ver el código QR';
+
+  @override
+  String get aboutXiaohongshu => 'Xiaohongshu';
+
+  @override
+  String get aboutDouyin => 'Douyin';
+
+  @override
+  String get aboutTelegramGroup => 'Grupo de Telegram';
+
+  @override
+  String get aboutCopied => 'Copiado al portapapeles';
+
+  @override
+  String get cloudService => 'Servicio en la nube';
+
+  @override
+  String get cloudServiceDesc => 'Configurar proveedor de almacenamiento en la nube';
+
+  @override
+  String get syncManagement => 'Gestión de sincronización';
+
+  @override
+  String get syncManagementDesc => 'Sincronización y copia de seguridad de datos';
+
+  @override
+  String get moreSettings => 'Más configuraciones';
+
+  @override
+  String get moreSettingsDesc => 'Opciones avanzadas de sincronización en la nube';
+
+  @override
+  String get configImportExportTitle => 'Config Import/Export';
+
+  @override
+  String get configImportExportSubtitle => 'Backup and restore app configurations';
+
+  @override
+  String get configImportExportInfoTitle => 'Feature Description';
+
+  @override
+  String get configImportExportInfoMessage => 'This feature is used to export and import app configurations, including cloud service settings, AI settings, etc. The config file uses YAML format for easy viewing and editing.\n\n⚠️ Config files contain sensitive information (such as API keys, passwords, etc.), please keep them safe.';
+
+  @override
+  String get configExportTitle => 'Export Config';
+
+  @override
+  String get configExportSubtitle => 'Export current config to YAML file';
+
+  @override
+  String get configExportShareSubject => 'BeeCount Config File';
+
+  @override
+  String get configExportSuccess => 'Config exported successfully';
+
+  @override
+  String get configExportFailed => 'Config export failed';
+
+  @override
+  String get configImportTitle => 'Import Config';
+
+  @override
+  String get configImportSubtitle => 'Restore config from YAML file';
+
+  @override
+  String get configImportNoFilePath => 'No file selected';
+
+  @override
+  String get configImportConfirmTitle => 'Confirm Import';
+
+  @override
+  String get configImportConfirmMessage => 'Importing config will overwrite current settings, continue?';
+
+  @override
+  String get configImportSuccess => 'Config imported successfully';
+
+  @override
+  String get configImportFailed => 'Config import failed';
+
+  @override
+  String get configImportRestartTitle => 'Restart Required';
+
+  @override
+  String get configImportRestartMessage => 'Config has been imported. Some settings will take effect after restarting the app.';
+
+  @override
+  String get configImportExportIncludesTitle => 'Included Configurations';
+
+  @override
+  String configExportSavedTo(String path) {
+    return 'Saved to: $path';
+  }
+
+  @override
+  String get configExportOpenFile => 'Open Folder';
+
+  @override
+  String get configExportOpenFileFailed => 'Unable to open folder';
+
+  @override
+  String get configExportViewContent => 'View Content';
+
+  @override
+  String get configExportCopyContent => 'Copy Content';
+
+  @override
+  String get configExportContentCopied => 'Copied to clipboard';
+
+  @override
+  String get configExportReadFileFailed => 'Failed to read file';
+
+  @override
+  String get configIncludeSupabase => 'Supabase cloud service config';
+
+  @override
+  String get configIncludeWebdav => 'WebDAV cloud service config';
+
+  @override
+  String get configIncludeAI => 'AI smart recognition config';
 }

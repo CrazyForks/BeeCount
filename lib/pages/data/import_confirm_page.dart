@@ -424,9 +424,11 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                 onPressed: () {
                   dialogOpen = false;
                   Navigator.of(dctx).pop();
-                  // 返回到我的页面继续后台导入
+                  // 返回到数据管理页面继续后台导入
                   if (mounted) {
-                    Navigator.of(currentContext).popUntil((r) => r.isFirst);
+                    // Pop回DataManagementPage: ImportConfirmPage -> ImportPage
+                    Navigator.of(currentContext).pop(); // Close ImportConfirmPage
+                    Navigator.of(currentContext).pop(); // Close ImportPage, back to DataManagementPage
                   }
                 },
                 child:
@@ -626,8 +628,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     if (dialogOpen) {
       Navigator.of(currentContext).pop();
     }
-    // 关闭确认页 -> 返回到我的页面
-    Navigator.of(currentContext).popUntil((r) => r.isFirst);
+    // 关闭确认页 -> 返回到数据管理页面
+    // Pop回DataManagementPage: ImportConfirmPage -> ImportPage
+    Navigator.of(currentContext).pop(); // Close ImportConfirmPage
+    Navigator.of(currentContext).pop(); // Close ImportPage, back to DataManagementPage
     // 返回后再显式刷新一次全局统计，确保顶部汇总即时更新
     try {
       container.read(statsRefreshProvider.notifier).state++;

@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, File;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -16,9 +16,11 @@ import '../../styles/colors.dart';
 import '../../cloud/auth.dart';
 import '../../cloud/sync.dart';
 import '../../cloud/cloud_service_config.dart';
-import '../settings/cloud_service_page.dart';
+import '../cloud/cloud_service_page.dart';
 import '../../utils/logger.dart';
 import '../../services/restore_service.dart';
+import '../../services/avatar_service.dart';
+import '../../services/share_poster_service.dart';
 import '../data/restore_progress_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../settings/font_settings_page.dart';
@@ -31,7 +33,13 @@ import '../account/accounts_page.dart';
 import '../settings/widget_management_page.dart';
 import '../automation/ocr_billing_page.dart';
 import '../automation/auto_billing_settings_page.dart';
-import '../ai_settings_page.dart';
+import '../ai/ai_settings_page.dart';
+import '../cloud/cloud_sync_page.dart';
+import '../settings/data_management_page.dart';
+import '../settings/appearance_settings_page.dart';
+import '../settings/smart_billing_page.dart';
+import '../settings/automation_page.dart';
+import '../settings/about_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/update_service.dart';
@@ -42,9 +50,8 @@ class MinePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ledgerId = ref.watch(currentLedgerIdProvider);
     final auth = ref.watch(authServiceProvider);
-    final sync = ref.watch(syncServiceProvider);
+    final ledgerId = ref.watch(currentLedgerIdProvider);
 
     // 登录后一次性触发云端备份检查
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -85,109 +92,7 @@ class MinePage extends ConsumerWidget {
             title: AppLocalizations.of(context).mineTitle,
             compact: true,
             showTitleSection: false,
-            content: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  12.0.scaled(context, ref),
-                  8.0.scaled(context, ref),
-                  12.0.scaled(context, ref),
-                  10.0.scaled(context, ref)),
-              child: IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        BeeIcon(
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 48.0.scaled(context, ref),
-                        ),
-                        Text(AppLocalizations.of(context).mineTitle,
-                            style: AppTextTokens.title(context)),
-                      ],
-                    ),
-                    SizedBox(width: 12.0.scaled(context, ref)),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).mineSlogan,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: BeeColors.primaryText,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(
-                              height: 5.0.scaled(context, ref)), // 标语与统计区间距增大
-                          Builder(builder: (ctx) {
-                            // 获取当前账本信息
-                            final currentLedgerId =
-                                ref.watch(currentLedgerIdProvider);
-                            final countsAsync = ref.watch(
-                                countsForLedgerProvider(currentLedgerId));
-                            final balanceAsync = ref
-                                .watch(currentBalanceProvider(currentLedgerId));
-                            final currentLedgerAsync = ref.watch(currentLedgerProvider);
-
-                            final day = countsAsync.asData?.value.dayCount ?? 0;
-                            final tx = countsAsync.asData?.value.txCount ?? 0;
-                            final balance = balanceAsync.asData?.value ?? 0.0;
-                            final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
-
-                            final labelStyle = Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(color: BeeColors.black54);
-                            // 需求：统计数字与左侧"我的"标题字号/字重保持一致，取消更粗/更大
-                            final numStyle = AppTextTokens.strongTitle(context)
-                                .copyWith(
-                                    fontSize: 20, color: BeeColors.primaryText);
-                            return IntrinsicHeight(
-                              child: Row(children: [
-                                Expanded(
-                                    child: _StatCell(
-                                        label: AppLocalizations.of(context)
-                                            .mineDaysCount,
-                                        value: day.toString(),
-                                        labelStyle: labelStyle,
-                                        numStyle: numStyle)),
-                                Expanded(
-                                    child: _StatCell(
-                                        label: AppLocalizations.of(context)
-                                            .mineTotalRecords,
-                                        value: tx.toString(),
-                                        labelStyle: labelStyle,
-                                        numStyle: numStyle)),
-                                Expanded(
-                                    child: _StatCell(
-                                        label: AppLocalizations.of(context)
-                                            .mineCurrentBalance,
-                                        value: balance,
-                                        isAmount: true,
-                                        currencyCode: currencyCode,
-                                        labelStyle: labelStyle,
-                                        numStyle: numStyle.copyWith(
-                                          color: balance >= 0
-                                              ? BeeColors.primaryText
-                                              : Colors.red,
-                                        ))),
-                              ]),
-                            );
-                          }),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            content: _MinePageHeader(),
           ),
           Expanded(
             child: ListView(
@@ -196,9 +101,8 @@ class MinePage extends ConsumerWidget {
               children: [
                 const Divider(height: 1),
                 SizedBox(height: 8.0.scaled(context, ref)),
-                // 同步分组
+                // 云同步与备份
                 Consumer(builder: (sectionContext, sectionRef, _) {
-                  // 添加错误边界,防止provider错误导致整个section消失
                   final activeCfg = sectionRef.watch(activeCloudConfigProvider);
 
                   return SectionCard(
@@ -206,6 +110,7 @@ class MinePage extends ConsumerWidget {
                         12.0.scaled(sectionContext, sectionRef), 0),
                     child: Column(
                       children: [
+                        // 云服务
                         AppListTile(
                           leading: Icons.cloud_queue_outlined,
                           title: AppLocalizations.of(sectionContext).mineCloudService,
@@ -219,7 +124,6 @@ class MinePage extends ConsumerWidget {
                                 return AppLocalizations.of(sectionContext)
                                     .mineCloudServiceOffline;
                               } else {
-                                // 云服务：根据类型显示
                                 if (cfg.type == CloudBackendType.webdav) {
                                   return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceWebDAV;
@@ -237,22 +141,21 @@ class MinePage extends ConsumerWidget {
                             );
                           },
                         ),
+                        // 同步状态
                         FutureBuilder<AuthUser?>(
                           future: auth.currentUser(),
                           builder: (ctx, snap) {
-                            // 添加错误处理,确保即使stream出错也不会导致整个widget崩溃
                             if (snap.hasError) {
                               return Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
                                   '${AppLocalizations.of(sectionContext).commonError}: ${snap.error}',
-                                  style: TextStyle(color: Colors.red),
+                                  style: const TextStyle(color: Colors.red),
                                 ),
                               );
                             }
 
                             final user = snap.data;
-                            // 检查云服务配置，本地存储模式下禁用云功能
                             final cloudConfig =
                                 sectionRef.watch(activeCloudConfigProvider);
                             final isLocalMode = cloudConfig.hasValue &&
@@ -263,16 +166,69 @@ class MinePage extends ConsumerWidget {
                             final cached =
                                 sectionRef.watch(lastSyncStatusProvider(ledgerId));
                             final st = asyncSt.asData?.value ?? cached;
-                            // (旧代码遗留变量 isFirstLoad 已不需要)
-                            return _buildSyncSection(
-                              context: sectionContext,
-                              ref: sectionRef,
-                              sync: sync,
-                              ledgerId: ledgerId,
-                              user: user,
-                              canUseCloud: canUseCloud,
-                              asyncStIsLoading: asyncSt.isLoading,
-                              st: st,
+
+                            // 计算简化的同步状态显示
+                            String subtitle = '';
+                            bool showCheckIcon = false;
+                            final isFirstLoad = st == null;
+                            final refreshing = asyncSt.isLoading;
+
+                            if (!isFirstLoad) {
+                              switch (st.diff) {
+                                case SyncDiff.notLoggedIn:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNotLoggedIn;
+                                  break;
+                                case SyncDiff.notConfigured:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNotConfigured;
+                                  break;
+                                case SyncDiff.noRemote:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNoRemote;
+                                  break;
+                                case SyncDiff.inSync:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncInSyncSimple;
+                                  showCheckIcon = true;
+                                  break;
+                                case SyncDiff.localNewer:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncLocalNewerSimple;
+                                  break;
+                                case SyncDiff.cloudNewer:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncCloudNewerSimple;
+                                  break;
+                                case SyncDiff.different:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncDifferent;
+                                  break;
+                                case SyncDiff.error:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncError;
+                                  break;
+                              }
+                            }
+
+                            return Column(
+                              children: [
+                                const Divider(height: 1, thickness: 0.5),
+                                AppListTile(
+                                  leading: Icons.cloud_sync_outlined,
+                                  title: AppLocalizations.of(sectionContext).mineSyncTitle,
+                                  subtitle: isFirstLoad ? null : subtitle,
+                                  enabled: !isLocalMode,
+                                  trailing: (canUseCloud && (isFirstLoad || refreshing))
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(strokeWidth: 2))
+                                      : showCheckIcon
+                                          ? Icon(Icons.check_circle,
+                                              color: sectionRef.watch(primaryColorProvider),
+                                              size: 20)
+                                          : const Icon(Icons.chevron_right,
+                                              color: Colors.black38, size: 20),
+                                  onTap: () async {
+                                    await Navigator.of(sectionContext).push(
+                                      MaterialPageRoute(builder: (_) => const CloudSyncPage()),
+                                    );
+                                  },
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -280,21 +236,151 @@ class MinePage extends ConsumerWidget {
                     ),
                   );
                 }),
-                // 智能记账（合并AI和OCR自动化）
+                // 功能管理
                 SizedBox(height: 8.0.scaled(context, ref)),
-                _buildSmartBillingSection(context, ref),
-                // 数据管理
+                SectionCard(
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
+                  child: Column(
+                    children: [
+                      // 智能记账
+                      AppListTile(
+                        leading: Icons.auto_awesome_outlined,
+                        title: AppLocalizations.of(context).smartBilling,
+                        subtitle: AppLocalizations.of(context).smartBillingDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const SmartBillingPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 数据管理
+                      AppListTile(
+                        leading: Icons.storage_outlined,
+                        title: AppLocalizations.of(context).dataManagement,
+                        subtitle: AppLocalizations.of(context).dataManagementDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const DataManagementPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 账户管理
+                      AppListTile(
+                        leading: Icons.account_balance_wallet_outlined,
+                        title: AppLocalizations.of(context).accountsTitle,
+                        subtitle: AppLocalizations.of(context).accountsManageDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AccountsPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 自动化功能
+                      AppListTile(
+                        leading: Icons.schedule_outlined,
+                        title: AppLocalizations.of(context).automation,
+                        subtitle: AppLocalizations.of(context).automationDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AutomationPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 外观设置
+                      AppListTile(
+                        leading: Icons.palette_outlined,
+                        title: AppLocalizations.of(context).appearanceSettings,
+                        subtitle: AppLocalizations.of(context).appearanceSettingsDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AppearanceSettingsPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                // 支持与关于
                 SizedBox(height: 8.0.scaled(context, ref)),
-                _buildDataManagementSection(context, ref),
-                // 自动化功能（周期和提醒）
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildAutomationSection(context, ref),
-                // 外观与显示
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildAppearanceSection(context, ref),
-                // 关于与版本
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildAboutSection(context, ref),
+                SectionCard(
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
+                  child: Column(
+                    children: [
+                      AppListTile(
+                        leading: Icons.info_outline,
+                        title: AppLocalizations.of(context).about,
+                        subtitle: AppLocalizations.of(context).aboutDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AboutPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.feedback_outlined,
+                        title: AppLocalizations.of(context).mineFeedback,
+                        subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,
+                        onTap: () async {
+                          final url = Uri.parse('https://github.com/TNT-Likely/BeeCount/issues');
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.star_outline,
+                        title: AppLocalizations.of(context).mineSupportAuthor,
+                        subtitle: AppLocalizations.of(context).mineSupportAuthorSubtitle,
+                        onTap: () async {
+                          final url = Uri.parse('https://github.com/TNT-Likely/BeeCount');
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.share_outlined,
+                        title: AppLocalizations.of(context).mineShareApp,
+                        subtitle: AppLocalizations.of(context).mineShareAppSubtitle,
+                        onTap: () async {
+                          try {
+                            showToast(context, AppLocalizations.of(context).mineShareGenerating);
+                            final primaryColor = ref.read(primaryColorProvider);
+                            final imageBytes = await SharePosterService.generatePoster(context, primaryColor);
+                            if (!context.mounted) return;
+                            if (imageBytes != null) {
+                              await SharePosterService.showPosterPreview(context, imageBytes);
+                            } else {
+                              await AppDialog.error(
+                                context,
+                                title: AppLocalizations.of(context).commonFailed,
+                                message: AppLocalizations.of(context).mineShareFailed,
+                              );
+                            }
+                          } catch (e) {
+                            if (!context.mounted) return;
+                            await AppDialog.error(
+                              context,
+                              title: AppLocalizations.of(context).commonFailed,
+                              message: '$e',
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: AppDimens.p16.scaled(context, ref)),
               ],
             ),
@@ -313,6 +399,7 @@ class MinePage extends ConsumerWidget {
     required bool canUseCloud,
     required bool asyncStIsLoading,
     required SyncStatus? st,
+    required bool isLocalMode,
   }) {
     String subtitle = '';
     IconData icon = Icons.sync_outlined;
@@ -635,16 +722,10 @@ class MinePage extends ConsumerWidget {
             },
           ),
           // 登录/登出
-          Consumer(builder: (ctx, r, _) {
-            final userNow = user; // capture
-            final cloudConfig = r.watch(activeCloudConfigProvider);
-
-            // 本地存储模式不显示登录入口
-            final isLocalMode = cloudConfig.hasValue &&
-                cloudConfig.value!.type == CloudBackendType.local;
-            if (isLocalMode) {
-              return const SizedBox.shrink();
-            }
+          if (!isLocalMode)
+            Consumer(builder: (ctx, r, _) {
+              final userNow = user; // capture
+              final cloudConfig = r.watch(activeCloudConfigProvider);
 
             // 根据云服务类型显示不同的用户信息
             String getUserDisplayName() {
@@ -705,39 +786,32 @@ class MinePage extends ConsumerWidget {
               ],
             );
           }),
-          Consumer(builder: (ctx, r, _) {
-            final cloudConfig = r.watch(activeCloudConfigProvider);
+          // 自动同步
+          if (!isLocalMode)
+            Consumer(builder: (ctx, r, _) {
+              final autoSync = r.watch(autoSyncValueProvider);
+              final setter = r.read(autoSyncSetterProvider);
+              final value = autoSync.asData?.value ?? false;
+              final can = canUseCloud;
 
-            // 本地存储模式下不显示自动同步选项
-            final isLocalMode = cloudConfig.hasValue &&
-                cloudConfig.value!.type == CloudBackendType.local;
-            if (isLocalMode) {
-              return const SizedBox.shrink();
-            }
-
-            final autoSync = r.watch(autoSyncValueProvider);
-            final setter = r.read(autoSyncSetterProvider);
-            final value = autoSync.asData?.value ?? false;
-            final can = canUseCloud;
-
-            return Column(
-              children: [
-                AppDivider.thin(),
-                SwitchListTile(
-                  title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
-                  subtitle: can
-                      ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
-                      : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
-                  value: can ? value : false,
-                  onChanged: can
-                      ? (v) async {
-                          await setter.set(v);
-                        }
-                      : null,
-                ),
-              ],
-            );
-          }),
+              return Column(
+                children: [
+                  AppDivider.thin(),
+                  SwitchListTile(
+                    title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
+                    subtitle: can
+                        ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
+                        : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
+                    value: can ? value : false,
+                    onChanged: can
+                        ? (v) async {
+                            await setter.set(v);
+                          }
+                        : null,
+                  ),
+                ],
+              );
+            }),
         ],
       );
     });
@@ -879,6 +953,7 @@ class _StatCell extends ConsumerWidget {
   final TextStyle? numStyle;
   final bool isAmount; // 是否为金额类型
   final String? currencyCode; // 币种代码
+  final bool centered; // 是否居中对齐
 
   const _StatCell({
     required this.label,
@@ -887,6 +962,7 @@ class _StatCell extends ConsumerWidget {
     this.numStyle,
     this.isAmount = false,
     this.currencyCode,
+    this.centered = false,
   });
 
   @override
@@ -908,11 +984,11 @@ class _StatCell extends ConsumerWidget {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         valueWidget,
         SizedBox(height: 4.0.scaled(context, ref)), // 数字与标签间距增大
-        Text(label, style: labelStyle),
+        Text(label, style: labelStyle, textAlign: centered ? TextAlign.center : TextAlign.start),
       ],
     );
   }
@@ -1376,5 +1452,248 @@ Future<bool> _tryOpenUrl(Uri url) async {
   } catch (e) {
     logE('MinePage', '打开URL失败: $url', e);
     return false;
+  }
+}
+
+/// 我的页面头部
+class _MinePageHeader extends ConsumerStatefulWidget {
+  const _MinePageHeader();
+
+  @override
+  ConsumerState<_MinePageHeader> createState() => _MinePageHeaderState();
+}
+
+class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
+  String? _avatarPath;
+  bool _isLoadingAvatar = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAvatar();
+  }
+
+  Future<void> _loadAvatar() async {
+    final path = await AvatarService.getAvatarPath();
+    if (mounted) {
+      setState(() {
+        _avatarPath = path;
+        _isLoadingAvatar = false;
+      });
+    }
+  }
+
+  Future<void> _showAvatarOptions() async {
+    final l10n = AppLocalizations.of(context);
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.mineAvatarTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: Text(l10n.mineAvatarFromGallery),
+              onTap: () => Navigator.pop(context, 'gallery'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: Text(l10n.mineAvatarFromCamera),
+              onTap: () => Navigator.pop(context, 'camera'),
+            ),
+            if (_avatarPath != null)
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: Text(l10n.mineAvatarDelete, style: const TextStyle(color: Colors.red)),
+                onTap: () => Navigator.pop(context, 'delete'),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.commonCancel),
+          ),
+        ],
+      ),
+    );
+
+    if (result == null || !mounted) return;
+
+    try {
+      if (result == 'gallery') {
+        final path = await AvatarService.pickAndSaveAvatar();
+        if (mounted && path != null) {
+          setState(() => _avatarPath = path);
+        }
+      } else if (result == 'camera') {
+        final path = await AvatarService.takePhotoAndSaveAvatar();
+        if (mounted && path != null) {
+          setState(() => _avatarPath = path);
+        }
+      } else if (result == 'delete') {
+        await AvatarService.deleteAvatar();
+        if (mounted) {
+          setState(() => _avatarPath = null);
+        }
+      }
+    } catch (e) {
+      if (!mounted) return;
+      showToast(context, '${AppLocalizations.of(context).commonError}: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final activeCfg = ref.watch(activeCloudConfigProvider);
+    final isLocalMode = activeCfg.hasValue && activeCfg.value!.type == CloudBackendType.local;
+    final canEditAvatar = !isLocalMode;
+
+    // 获取当前账本信息
+    final currentLedgerId = ref.watch(currentLedgerIdProvider);
+    final countsAsync = ref.watch(countsForLedgerProvider(currentLedgerId));
+    final balanceAsync = ref.watch(currentBalanceProvider(currentLedgerId));
+    final currentLedgerAsync = ref.watch(currentLedgerProvider);
+
+    final day = countsAsync.asData?.value.dayCount ?? 0;
+    final tx = countsAsync.asData?.value.txCount ?? 0;
+    final balance = balanceAsync.asData?.value ?? 0.0;
+    final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
+
+    final labelStyle = Theme.of(context)
+        .textTheme
+        .labelMedium
+        ?.copyWith(color: BeeColors.black54);
+    final numStyle = AppTextTokens.strongTitle(context)
+        .copyWith(fontSize: 20, color: BeeColors.primaryText);
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        12.0.scaled(context, ref),
+        12.0.scaled(context, ref),
+        12.0.scaled(context, ref),
+        10.0.scaled(context, ref),
+      ),
+      child: Column(
+        children: [
+          // 头像/Logo
+          GestureDetector(
+            onTap: canEditAvatar ? _showAvatarOptions : null,
+            child: Stack(
+              children: [
+                Container(
+                  width: 80.0.scaled(context, ref),
+                  height: 80.0.scaled(context, ref),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: _isLoadingAvatar
+                        ? Center(
+                            child: SizedBox(
+                              width: 20.0.scaled(context, ref),
+                              height: 20.0.scaled(context, ref),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          )
+                        : (_avatarPath != null && canEditAvatar
+                            ? Image.file(
+                                File(_avatarPath!),
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return BeeIcon(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    size: 40.0.scaled(context, ref),
+                                  );
+                                },
+                              )
+                            : BeeIcon(
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 40.0.scaled(context, ref),
+                              )),
+                  ),
+                ),
+                if (canEditAvatar)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 24.0.scaled(context, ref),
+                      height: 24.0.scaled(context, ref),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: Icon(
+                        Icons.camera_alt,
+                        size: 12.0.scaled(context, ref),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: 12.0.scaled(context, ref)),
+          // Slogan
+          Text(
+            AppLocalizations.of(context).mineSlogan,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: BeeColors.primaryText,
+                  fontWeight: FontWeight.w600,
+                ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 16.0.scaled(context, ref)),
+          // 统计数据
+          Row(
+            children: [
+              Expanded(
+                child: _StatCell(
+                  label: AppLocalizations.of(context).mineDaysCount,
+                  value: day.toString(),
+                  labelStyle: labelStyle,
+                  numStyle: numStyle,
+                  centered: true,
+                ),
+              ),
+              Expanded(
+                child: _StatCell(
+                  label: AppLocalizations.of(context).mineTotalRecords,
+                  value: tx.toString(),
+                  labelStyle: labelStyle,
+                  numStyle: numStyle,
+                  centered: true,
+                ),
+              ),
+              Expanded(
+                child: _StatCell(
+                  label: AppLocalizations.of(context).mineCurrentBalance,
+                  value: balance,
+                  isAmount: true,
+                  currencyCode: currencyCode,
+                  labelStyle: labelStyle,
+                  numStyle: numStyle.copyWith(
+                    color: balance >= 0 ? BeeColors.primaryText : Colors.red,
+                  ),
+                  centered: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

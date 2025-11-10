@@ -785,6 +785,81 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineSlogan => '蜜蜂记账，一笔一蜜';
 
   @override
+  String get mineAvatarTitle => '头像设置';
+
+  @override
+  String get mineAvatarFromGallery => '从相册选择';
+
+  @override
+  String get mineAvatarFromCamera => '拍照';
+
+  @override
+  String get mineAvatarDelete => '删除头像';
+
+  @override
+  String get mineShareApp => '分享应用';
+
+  @override
+  String get mineShareAppSubtitle => '生成分享海报并保存到相册';
+
+  @override
+  String get mineShareGenerating => '正在生成分享海报...';
+
+  @override
+  String get mineShareSuccess => '保存成功';
+
+  @override
+  String get mineShareSuccessMessage => '分享海报已保存到相册';
+
+  @override
+  String get mineShareFailed => '保存失败，请检查相册权限';
+
+  @override
+  String get sharePosterAppName => '蜜蜂记账';
+
+  @override
+  String get sharePosterSlogan => '一笔一蜜，记录美好生活';
+
+  @override
+  String get sharePosterFeature1 => '✨ 完全开源免费';
+
+  @override
+  String get sharePosterFeature2 => '🤖 AI智能识别账单';
+
+  @override
+  String get sharePosterFeature3 => '⚡ 自动化记账';
+
+  @override
+  String get sharePosterFeature4 => '🔒 数据隐私安全';
+
+  @override
+  String get sharePosterFeature5 => '☁️ 云端同步备份';
+
+  @override
+  String get sharePosterFeature6 => '📊 多账本管理';
+
+  @override
+  String get sharePosterScanText => '扫码访问开源项目';
+
+  @override
+  String get sharePosterPreviewTitle => '分享海报预览';
+
+  @override
+  String get sharePosterSave => '保存到相册';
+
+  @override
+  String get sharePosterShare => '分享';
+
+  @override
+  String get sharePosterSaveSuccess => '已保存到相册';
+
+  @override
+  String get sharePosterSaveFailed => '保存失败';
+
+  @override
+  String get sharePosterPermissionDenied => '相册权限被拒绝，请在设置中开启';
+
+  @override
   String get mineDaysCount => '记账天数';
 
   @override
@@ -849,12 +924,21 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get mineSyncInSyncSimple => '已同步';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return '本地较新 (本地$count条, 建议上传)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => '本地较新';
+
+  @override
   String get mineSyncCloudNewer => '云端较新 (建议下载并合并)';
+
+  @override
+  String get mineSyncCloudNewerSimple => '云端较新';
 
   @override
   String get mineSyncDifferent => '本地与云端不同步';
@@ -2112,10 +2196,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportDescription => '点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
 
   @override
-  String get exportButtonIOS => '导出并分享 (iOS)';
+  String get exportButtonIOS => '导出并分享';
 
   @override
-  String get exportButtonAndroid => '选择文件夹并导出';
+  String get exportButtonAndroid => '导出数据';
 
   @override
   String exportSavedTo(String path) {
@@ -2949,6 +3033,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountsTitle => '账户管理';
 
   @override
+  String get accountsManageDesc => '管理支付账户与余额';
+
+  @override
   String get accountsEmptyMessage => '还没有账户，点击右上角添加';
 
   @override
@@ -3493,6 +3580,212 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ocrTime => '时间';
+
+  @override
+  String get cloudSyncAndBackup => '云同步与备份';
+
+  @override
+  String get cloudSyncAndBackupDesc => '云服务配置、数据同步管理';
+
+  @override
+  String get cloudSyncPageTitle => '云同步与备份';
+
+  @override
+  String get cloudSyncPageSubtitle => '管理云服务和数据同步';
+
+  @override
+  String get dataManagement => '数据管理';
+
+  @override
+  String get dataManagementDesc => '导入导出、分类账户管理';
+
+  @override
+  String get dataManagementPageTitle => '数据管理';
+
+  @override
+  String get dataManagementPageSubtitle => '管理账单数据和分类';
+
+  @override
+  String get smartBilling => '智能记账';
+
+  @override
+  String get smartBillingDesc => 'AI识别、OCR扫描、自动记账';
+
+  @override
+  String get smartBillingPageTitle => '智能记账';
+
+  @override
+  String get smartBillingPageSubtitle => 'AI和自动化记账功能';
+
+  @override
+  String get automation => '自动化';
+
+  @override
+  String get automationDesc => '周期记账、记账提醒';
+
+  @override
+  String get automationPageTitle => '自动化功能';
+
+  @override
+  String get automationPageSubtitle => '周期记账和提醒设置';
+
+  @override
+  String get appearanceSettings => '外观设置';
+
+  @override
+  String get appearanceSettingsDesc => '主题、字体、语言设置';
+
+  @override
+  String get appearanceSettingsPageTitle => '外观设置';
+
+  @override
+  String get appearanceSettingsPageSubtitle => '个性化外观和显示';
+
+  @override
+  String get about => '关于';
+
+  @override
+  String get aboutDesc => '版本信息、帮助与反馈';
+
+  @override
+  String get aboutPageTitle => '关于';
+
+  @override
+  String get aboutPageSubtitle => '应用信息和帮助';
+
+  @override
+  String get aboutPageLoadingVersion => '加载版本号中...';
+
+  @override
+  String get aboutGitHubRepo => 'GitHub 仓库';
+
+  @override
+  String get aboutContactEmail => '联系邮箱';
+
+  @override
+  String get aboutWeChatGroup => '微信群';
+
+  @override
+  String get aboutWeChatGroupDesc => '点击查看二维码';
+
+  @override
+  String get aboutXiaohongshu => '小红书';
+
+  @override
+  String get aboutDouyin => '抖音';
+
+  @override
+  String get aboutTelegramGroup => 'Telegram 群';
+
+  @override
+  String get aboutCopied => '已复制到剪贴板';
+
+  @override
+  String get cloudService => '云服务';
+
+  @override
+  String get cloudServiceDesc => '配置云存储提供商';
+
+  @override
+  String get syncManagement => '同步管理';
+
+  @override
+  String get syncManagementDesc => '数据同步与备份';
+
+  @override
+  String get moreSettings => '更多设置';
+
+  @override
+  String get moreSettingsDesc => '高级云同步选项';
+
+  @override
+  String get configImportExportTitle => '配置导入导出';
+
+  @override
+  String get configImportExportSubtitle => '备份和恢复应用配置';
+
+  @override
+  String get configImportExportInfoTitle => '功能说明';
+
+  @override
+  String get configImportExportInfoMessage => '此功能用于导出和导入应用配置，包括云服务配置、AI配置等。配置文件采用YAML格式，方便查看和编辑。\n\n⚠️ 配置文件包含敏感信息（如API密钥、密码等），请妥善保管。';
+
+  @override
+  String get configExportTitle => '导出配置';
+
+  @override
+  String get configExportSubtitle => '将当前配置导出为YAML文件';
+
+  @override
+  String get configExportShareSubject => 'BeeCount 配置文件';
+
+  @override
+  String get configExportSuccess => '配置导出成功';
+
+  @override
+  String get configExportFailed => '配置导出失败';
+
+  @override
+  String get configImportTitle => '导入配置';
+
+  @override
+  String get configImportSubtitle => '从YAML文件恢复配置';
+
+  @override
+  String get configImportNoFilePath => '未选择文件';
+
+  @override
+  String get configImportConfirmTitle => '确认导入';
+
+  @override
+  String get configImportConfirmMessage => '导入配置将覆盖当前设置，是否继续？';
+
+  @override
+  String get configImportSuccess => '配置导入成功';
+
+  @override
+  String get configImportFailed => '配置导入失败';
+
+  @override
+  String get configImportRestartTitle => '需要重启';
+
+  @override
+  String get configImportRestartMessage => '配置已导入，部分配置需要重启应用后生效。';
+
+  @override
+  String get configImportExportIncludesTitle => '包含的配置项';
+
+  @override
+  String configExportSavedTo(String path) {
+    return '已保存至: $path';
+  }
+
+  @override
+  String get configExportOpenFile => '打开文件夹';
+
+  @override
+  String get configExportOpenFileFailed => '无法打开文件夹';
+
+  @override
+  String get configExportViewContent => '查看内容';
+
+  @override
+  String get configExportCopyContent => '复制内容';
+
+  @override
+  String get configExportContentCopied => '已复制到剪贴板';
+
+  @override
+  String get configExportReadFileFailed => '读取文件失败';
+
+  @override
+  String get configIncludeSupabase => 'Supabase 云服务配置';
+
+  @override
+  String get configIncludeWebdav => 'WebDAV 云服务配置';
+
+  @override
+  String get configIncludeAI => 'AI 智能识别配置';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4342,12 +4635,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get mineSyncInSyncSimple => '已同步';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return '本地較新 (本地$count條, 建議上傳)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => '本機較新';
+
+  @override
   String get mineSyncCloudNewer => '雲端較新 (建議下載並合併)';
+
+  @override
+  String get mineSyncCloudNewerSimple => '雲端較新';
 
   @override
   String get mineSyncDifferent => '本地與雲端不同步';
@@ -5605,10 +5907,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportDescription => '點擊下方按鈕選擇儲存位置，開始匯出當前帳本為 CSV 檔案。';
 
   @override
-  String get exportButtonIOS => '匯出並分享 (iOS)';
+  String get exportButtonIOS => '匯出並分享';
 
   @override
-  String get exportButtonAndroid => '選擇資料夾並匯出';
+  String get exportButtonAndroid => '匯出資料';
 
   @override
   String exportSavedTo(String path) {
@@ -6442,6 +6744,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountsTitle => '帳戶管理';
 
   @override
+  String get accountsManageDesc => '管理支付帳戶與餘額';
+
+  @override
   String get accountsEmptyMessage => '還没有帳戶，点击右上角添加';
 
   @override
@@ -6986,4 +7291,121 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get ocrTime => '時間';
+
+  @override
+  String get cloudSyncAndBackup => '雲同步與備份';
+
+  @override
+  String get cloudSyncAndBackupDesc => '雲端服務設定、資料同步管理';
+
+  @override
+  String get cloudSyncPageTitle => '雲同步與備份';
+
+  @override
+  String get cloudSyncPageSubtitle => '管理雲端服務和資料同步';
+
+  @override
+  String get dataManagement => '資料管理';
+
+  @override
+  String get dataManagementDesc => '匯入匯出、分類帳戶管理';
+
+  @override
+  String get dataManagementPageTitle => '資料管理';
+
+  @override
+  String get dataManagementPageSubtitle => '管理帳單資料和分類';
+
+  @override
+  String get smartBilling => '智慧記帳';
+
+  @override
+  String get smartBillingDesc => 'AI識別、OCR掃描、自動記帳';
+
+  @override
+  String get smartBillingPageTitle => '智慧記帳';
+
+  @override
+  String get smartBillingPageSubtitle => 'AI和自動化記帳功能';
+
+  @override
+  String get automation => '自動化';
+
+  @override
+  String get automationDesc => '週期記帳、記帳提醒';
+
+  @override
+  String get automationPageTitle => '自動化功能';
+
+  @override
+  String get automationPageSubtitle => '週期記帳和提醒設定';
+
+  @override
+  String get appearanceSettings => '外觀設定';
+
+  @override
+  String get appearanceSettingsDesc => '主題、字體、語言設定';
+
+  @override
+  String get appearanceSettingsPageTitle => '外觀設定';
+
+  @override
+  String get appearanceSettingsPageSubtitle => '個性化外觀和顯示';
+
+  @override
+  String get about => '關於';
+
+  @override
+  String get aboutDesc => '版本資訊、說明與回饋';
+
+  @override
+  String get aboutPageTitle => '關於';
+
+  @override
+  String get aboutPageSubtitle => '應用程式資訊和說明';
+
+  @override
+  String get aboutPageLoadingVersion => '載入版本號中...';
+
+  @override
+  String get aboutGitHubRepo => 'GitHub 儲存庫';
+
+  @override
+  String get aboutContactEmail => '聯絡電子郵件';
+
+  @override
+  String get aboutWeChatGroup => '微信群';
+
+  @override
+  String get aboutWeChatGroupDesc => '點擊檢視二維碼';
+
+  @override
+  String get aboutXiaohongshu => '小紅書';
+
+  @override
+  String get aboutDouyin => '抖音';
+
+  @override
+  String get aboutTelegramGroup => 'Telegram 群';
+
+  @override
+  String get aboutCopied => '已複製到剪貼簿';
+
+  @override
+  String get cloudService => '雲端服務';
+
+  @override
+  String get cloudServiceDesc => '設定雲端儲存提供商';
+
+  @override
+  String get syncManagement => '同步管理';
+
+  @override
+  String get syncManagementDesc => '資料同步與備份';
+
+  @override
+  String get moreSettings => '更多設定';
+
+  @override
+  String get moreSettingsDesc => '進階雲同步選項';
 }

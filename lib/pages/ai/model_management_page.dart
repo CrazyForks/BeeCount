@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ai_kit_tflite/flutter_ai_kit_tflite.dart';
 
-import '../widgets/ui/ui.dart';
-import '../widgets/biz/section_card.dart';
-import '../styles/colors.dart';
-import '../utils/ui_scale_extensions.dart';
-import '../providers/theme_providers.dart';
+import '../../widgets/ui/ui.dart';
+import '../../widgets/biz/section_card.dart';
+import '../../styles/colors.dart';
+import '../../utils/ui_scale_extensions.dart';
+import '../../providers/theme_providers.dart';
 
 /// 模型管理页面
 class ModelManagementPage extends ConsumerStatefulWidget {
