@@ -849,12 +849,21 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get mineSyncInSyncSimple => '同期済み';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return 'ローカルが新しい（ローカル$count件の記録、アップロード推奨）';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => 'ローカルが新しい';
+
+  @override
   String get mineSyncCloudNewer => 'クラウドが新しい（ダウンロード推奨）';
+
+  @override
+  String get mineSyncCloudNewerSimple => 'クラウドが新しい';
 
   @override
   String get mineSyncDifferent => 'ローカルとクラウドが異なります';
@@ -2949,6 +2958,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get accountsTitle => 'アカウント管理';
 
   @override
+  String get accountsManageDesc => '支払いアカウントと残高を管理';
+
+  @override
   String get accountsEmptyMessage => '还なしアカウント，タップ右上角追加';
 
   @override
@@ -3493,4 +3505,121 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get ocrTime => '時間';
+
+  @override
+  String get cloudSyncAndBackup => 'クラウド同期とバックアップ';
+
+  @override
+  String get cloudSyncAndBackupDesc => 'クラウドサービス設定、データ同期管理';
+
+  @override
+  String get cloudSyncPageTitle => 'クラウド同期とバックアップ';
+
+  @override
+  String get cloudSyncPageSubtitle => 'クラウドサービスとデータ同期を管理';
+
+  @override
+  String get dataManagement => 'データ管理';
+
+  @override
+  String get dataManagementDesc => 'インポート、エクスポート、カテゴリとアカウント';
+
+  @override
+  String get dataManagementPageTitle => 'データ管理';
+
+  @override
+  String get dataManagementPageSubtitle => '取引データとカテゴリを管理';
+
+  @override
+  String get smartBilling => 'スマート記帳';
+
+  @override
+  String get smartBillingDesc => 'AI認識、OCRスキャン、自動記帳';
+
+  @override
+  String get smartBillingPageTitle => 'スマート記帳';
+
+  @override
+  String get smartBillingPageSubtitle => 'AIと自動化記帳機能';
+
+  @override
+  String get automation => '自動化';
+
+  @override
+  String get automationDesc => '定期取引とリマインダー';
+
+  @override
+  String get automationPageTitle => '自動化機能';
+
+  @override
+  String get automationPageSubtitle => '定期取引とリマインダー設定';
+
+  @override
+  String get appearanceSettings => '外観設定';
+
+  @override
+  String get appearanceSettingsDesc => 'テーマ、フォント、言語設定';
+
+  @override
+  String get appearanceSettingsPageTitle => '外観設定';
+
+  @override
+  String get appearanceSettingsPageSubtitle => '外観と表示のカスタマイズ';
+
+  @override
+  String get about => 'について';
+
+  @override
+  String get aboutDesc => 'バージョン情報、ヘルプとフィードバック';
+
+  @override
+  String get aboutPageTitle => 'について';
+
+  @override
+  String get aboutPageSubtitle => 'アプリ情報とヘルプ';
+
+  @override
+  String get aboutPageLoadingVersion => 'バージョン番号を読み込み中...';
+
+  @override
+  String get aboutGitHubRepo => 'GitHub リポジトリ';
+
+  @override
+  String get aboutContactEmail => 'お問い合わせメール';
+
+  @override
+  String get aboutWeChatGroup => 'WeChatグループ';
+
+  @override
+  String get aboutWeChatGroupDesc => 'QRコードを表示するにはタップ';
+
+  @override
+  String get aboutXiaohongshu => '小紅書';
+
+  @override
+  String get aboutDouyin => 'Douyin';
+
+  @override
+  String get aboutTelegramGroup => 'Telegram グループ';
+
+  @override
+  String get aboutCopied => 'クリップボードにコピーしました';
+
+  @override
+  String get cloudService => 'クラウドサービス';
+
+  @override
+  String get cloudServiceDesc => 'クラウドストレージプロバイダーを設定';
+
+  @override
+  String get syncManagement => '同期管理';
+
+  @override
+  String get syncManagementDesc => 'データ同期とバックアップ';
+
+  @override
+  String get moreSettings => 'その他の設定';
+
+  @override
+  String get moreSettingsDesc => '高度なクラウド同期オプション';
 }

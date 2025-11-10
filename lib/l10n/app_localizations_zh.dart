@@ -849,12 +849,21 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get mineSyncInSyncSimple => '已同步';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return '本地较新 (本地$count条, 建议上传)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => '本地较新';
+
+  @override
   String get mineSyncCloudNewer => '云端较新 (建议下载并合并)';
+
+  @override
+  String get mineSyncCloudNewerSimple => '云端较新';
 
   @override
   String get mineSyncDifferent => '本地与云端不同步';
@@ -2949,6 +2958,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountsTitle => '账户管理';
 
   @override
+  String get accountsManageDesc => '管理支付账户与余额';
+
+  @override
   String get accountsEmptyMessage => '还没有账户，点击右上角添加';
 
   @override
@@ -3493,6 +3505,123 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ocrTime => '时间';
+
+  @override
+  String get cloudSyncAndBackup => '云同步与备份';
+
+  @override
+  String get cloudSyncAndBackupDesc => '云服务配置、数据同步管理';
+
+  @override
+  String get cloudSyncPageTitle => '云同步与备份';
+
+  @override
+  String get cloudSyncPageSubtitle => '管理云服务和数据同步';
+
+  @override
+  String get dataManagement => '数据管理';
+
+  @override
+  String get dataManagementDesc => '导入导出、分类账户管理';
+
+  @override
+  String get dataManagementPageTitle => '数据管理';
+
+  @override
+  String get dataManagementPageSubtitle => '管理账单数据和分类';
+
+  @override
+  String get smartBilling => '智能记账';
+
+  @override
+  String get smartBillingDesc => 'AI识别、OCR扫描、自动记账';
+
+  @override
+  String get smartBillingPageTitle => '智能记账';
+
+  @override
+  String get smartBillingPageSubtitle => 'AI和自动化记账功能';
+
+  @override
+  String get automation => '自动化';
+
+  @override
+  String get automationDesc => '周期记账、记账提醒';
+
+  @override
+  String get automationPageTitle => '自动化功能';
+
+  @override
+  String get automationPageSubtitle => '周期记账和提醒设置';
+
+  @override
+  String get appearanceSettings => '外观设置';
+
+  @override
+  String get appearanceSettingsDesc => '主题、字体、语言设置';
+
+  @override
+  String get appearanceSettingsPageTitle => '外观设置';
+
+  @override
+  String get appearanceSettingsPageSubtitle => '个性化外观和显示';
+
+  @override
+  String get about => '关于';
+
+  @override
+  String get aboutDesc => '版本信息、帮助与反馈';
+
+  @override
+  String get aboutPageTitle => '关于';
+
+  @override
+  String get aboutPageSubtitle => '应用信息和帮助';
+
+  @override
+  String get aboutPageLoadingVersion => '加载版本号中...';
+
+  @override
+  String get aboutGitHubRepo => 'GitHub 仓库';
+
+  @override
+  String get aboutContactEmail => '联系邮箱';
+
+  @override
+  String get aboutWeChatGroup => '微信群';
+
+  @override
+  String get aboutWeChatGroupDesc => '点击查看二维码';
+
+  @override
+  String get aboutXiaohongshu => '小红书';
+
+  @override
+  String get aboutDouyin => '抖音';
+
+  @override
+  String get aboutTelegramGroup => 'Telegram 群';
+
+  @override
+  String get aboutCopied => '已复制到剪贴板';
+
+  @override
+  String get cloudService => '云服务';
+
+  @override
+  String get cloudServiceDesc => '配置云存储提供商';
+
+  @override
+  String get syncManagement => '同步管理';
+
+  @override
+  String get syncManagementDesc => '数据同步与备份';
+
+  @override
+  String get moreSettings => '更多设置';
+
+  @override
+  String get moreSettingsDesc => '高级云同步选项';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4342,12 +4471,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get mineSyncInSyncSimple => '已同步';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return '本地較新 (本地$count條, 建議上傳)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => '本機較新';
+
+  @override
   String get mineSyncCloudNewer => '雲端較新 (建議下載並合併)';
+
+  @override
+  String get mineSyncCloudNewerSimple => '雲端較新';
 
   @override
   String get mineSyncDifferent => '本地與雲端不同步';
@@ -6442,6 +6580,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountsTitle => '帳戶管理';
 
   @override
+  String get accountsManageDesc => '管理支付帳戶與餘額';
+
+  @override
   String get accountsEmptyMessage => '還没有帳戶，点击右上角添加';
 
   @override
@@ -6986,4 +7127,121 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get ocrTime => '時間';
+
+  @override
+  String get cloudSyncAndBackup => '雲同步與備份';
+
+  @override
+  String get cloudSyncAndBackupDesc => '雲端服務設定、資料同步管理';
+
+  @override
+  String get cloudSyncPageTitle => '雲同步與備份';
+
+  @override
+  String get cloudSyncPageSubtitle => '管理雲端服務和資料同步';
+
+  @override
+  String get dataManagement => '資料管理';
+
+  @override
+  String get dataManagementDesc => '匯入匯出、分類帳戶管理';
+
+  @override
+  String get dataManagementPageTitle => '資料管理';
+
+  @override
+  String get dataManagementPageSubtitle => '管理帳單資料和分類';
+
+  @override
+  String get smartBilling => '智慧記帳';
+
+  @override
+  String get smartBillingDesc => 'AI識別、OCR掃描、自動記帳';
+
+  @override
+  String get smartBillingPageTitle => '智慧記帳';
+
+  @override
+  String get smartBillingPageSubtitle => 'AI和自動化記帳功能';
+
+  @override
+  String get automation => '自動化';
+
+  @override
+  String get automationDesc => '週期記帳、記帳提醒';
+
+  @override
+  String get automationPageTitle => '自動化功能';
+
+  @override
+  String get automationPageSubtitle => '週期記帳和提醒設定';
+
+  @override
+  String get appearanceSettings => '外觀設定';
+
+  @override
+  String get appearanceSettingsDesc => '主題、字體、語言設定';
+
+  @override
+  String get appearanceSettingsPageTitle => '外觀設定';
+
+  @override
+  String get appearanceSettingsPageSubtitle => '個性化外觀和顯示';
+
+  @override
+  String get about => '關於';
+
+  @override
+  String get aboutDesc => '版本資訊、說明與回饋';
+
+  @override
+  String get aboutPageTitle => '關於';
+
+  @override
+  String get aboutPageSubtitle => '應用程式資訊和說明';
+
+  @override
+  String get aboutPageLoadingVersion => '載入版本號中...';
+
+  @override
+  String get aboutGitHubRepo => 'GitHub 儲存庫';
+
+  @override
+  String get aboutContactEmail => '聯絡電子郵件';
+
+  @override
+  String get aboutWeChatGroup => '微信群';
+
+  @override
+  String get aboutWeChatGroupDesc => '點擊檢視二維碼';
+
+  @override
+  String get aboutXiaohongshu => '小紅書';
+
+  @override
+  String get aboutDouyin => '抖音';
+
+  @override
+  String get aboutTelegramGroup => 'Telegram 群';
+
+  @override
+  String get aboutCopied => '已複製到剪貼簿';
+
+  @override
+  String get cloudService => '雲端服務';
+
+  @override
+  String get cloudServiceDesc => '設定雲端儲存提供商';
+
+  @override
+  String get syncManagement => '同步管理';
+
+  @override
+  String get syncManagementDesc => '資料同步與備份';
+
+  @override
+  String get moreSettings => '更多設定';
+
+  @override
+  String get moreSettingsDesc => '進階雲同步選項';
 }

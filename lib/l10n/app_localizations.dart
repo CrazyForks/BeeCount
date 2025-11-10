@@ -1666,17 +1666,35 @@ abstract class AppLocalizations {
   /// **'Synced (local {count} records)'**
   String mineSyncInSync(Object count);
 
+  /// No description provided for @mineSyncInSyncSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced'**
+  String get mineSyncInSyncSimple;
+
   /// No description provided for @mineSyncLocalNewer.
   ///
   /// In en, this message translates to:
   /// **'Local newer (local {count} records, upload recommended)'**
   String mineSyncLocalNewer(Object count);
 
+  /// No description provided for @mineSyncLocalNewerSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'Local newer'**
+  String get mineSyncLocalNewerSimple;
+
   /// No description provided for @mineSyncCloudNewer.
   ///
   /// In en, this message translates to:
   /// **'Cloud newer (download recommended)'**
   String get mineSyncCloudNewer;
+
+  /// No description provided for @mineSyncCloudNewerSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud newer'**
+  String get mineSyncCloudNewerSimple;
 
   /// No description provided for @mineSyncDifferent.
   ///
@@ -5602,6 +5620,12 @@ abstract class AppLocalizations {
   /// **'Account Management'**
   String get accountsTitle;
 
+  /// No description provided for @accountsManageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage payment accounts and balances'**
+  String get accountsManageDesc;
+
   /// No description provided for @accountsEmptyMessage.
   ///
   /// In en, this message translates to:
@@ -6669,6 +6693,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time'**
   String get ocrTime;
+
+  /// No description provided for @cloudSyncAndBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Sync & Backup'**
+  String get cloudSyncAndBackup;
+
+  /// No description provided for @cloudSyncAndBackupDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud service config and data sync'**
+  String get cloudSyncAndBackupDesc;
+
+  /// No description provided for @cloudSyncPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Sync & Backup'**
+  String get cloudSyncPageTitle;
+
+  /// No description provided for @cloudSyncPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage cloud services and data sync'**
+  String get cloudSyncPageSubtitle;
+
+  /// No description provided for @dataManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Management'**
+  String get dataManagement;
+
+  /// No description provided for @dataManagementDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Import, export, categories and accounts'**
+  String get dataManagementDesc;
+
+  /// No description provided for @dataManagementPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Management'**
+  String get dataManagementPageTitle;
+
+  /// No description provided for @dataManagementPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage transaction data and categories'**
+  String get dataManagementPageSubtitle;
+
+  /// No description provided for @smartBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Billing'**
+  String get smartBilling;
+
+  /// No description provided for @smartBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'AI recognition, OCR scan, auto billing'**
+  String get smartBillingDesc;
+
+  /// No description provided for @smartBillingPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Billing'**
+  String get smartBillingPageTitle;
+
+  /// No description provided for @smartBillingPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI and automation billing features'**
+  String get smartBillingPageSubtitle;
+
+  /// No description provided for @automation.
+  ///
+  /// In en, this message translates to:
+  /// **'Automation'**
+  String get automation;
+
+  /// No description provided for @automationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions and reminders'**
+  String get automationDesc;
+
+  /// No description provided for @automationPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automation'**
+  String get automationPageTitle;
+
+  /// No description provided for @automationPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions and reminder settings'**
+  String get automationPageSubtitle;
+
+  /// No description provided for @appearanceSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceSettings;
+
+  /// No description provided for @appearanceSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme, font and language settings'**
+  String get appearanceSettingsDesc;
+
+  /// No description provided for @appearanceSettingsPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceSettingsPageTitle;
+
+  /// No description provided for @appearanceSettingsPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalize appearance and display'**
+  String get appearanceSettingsPageSubtitle;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @aboutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Version info, help and feedback'**
+  String get aboutDesc;
+
+  /// No description provided for @aboutPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get aboutPageTitle;
+
+  /// No description provided for @aboutPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App information and help'**
+  String get aboutPageSubtitle;
+
+  /// No description provided for @aboutPageLoadingVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading version...'**
+  String get aboutPageLoadingVersion;
+
+  /// No description provided for @aboutGitHubRepo.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub Repository'**
+  String get aboutGitHubRepo;
+
+  /// No description provided for @aboutContactEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Email'**
+  String get aboutContactEmail;
+
+  /// No description provided for @aboutWeChatGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'WeChat Group'**
+  String get aboutWeChatGroup;
+
+  /// No description provided for @aboutWeChatGroupDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view QR code'**
+  String get aboutWeChatGroupDesc;
+
+  /// No description provided for @aboutXiaohongshu.
+  ///
+  /// In en, this message translates to:
+  /// **'Xiaohongshu'**
+  String get aboutXiaohongshu;
+
+  /// No description provided for @aboutDouyin.
+  ///
+  /// In en, this message translates to:
+  /// **'Douyin'**
+  String get aboutDouyin;
+
+  /// No description provided for @aboutTelegramGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram Group'**
+  String get aboutTelegramGroup;
+
+  /// No description provided for @aboutCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get aboutCopied;
+
+  /// No description provided for @cloudService.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Service'**
+  String get cloudService;
+
+  /// No description provided for @cloudServiceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure cloud storage provider'**
+  String get cloudServiceDesc;
+
+  /// No description provided for @syncManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Management'**
+  String get syncManagement;
+
+  /// No description provided for @syncManagementDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Data sync and backup'**
+  String get syncManagementDesc;
+
+  /// No description provided for @moreSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'More Settings'**
+  String get moreSettings;
+
+  /// No description provided for @moreSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced cloud sync options'**
+  String get moreSettingsDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

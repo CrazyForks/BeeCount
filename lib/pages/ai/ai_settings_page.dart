@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/ui/ui.dart';
-import '../widgets/biz/section_card.dart';
-import '../styles/colors.dart';
-import '../utils/ui_scale_extensions.dart';
-import '../providers/theme_providers.dart';
-import '../l10n/app_localizations.dart';
+import '../../widgets/ui/ui.dart';
+import '../../widgets/biz/section_card.dart';
+import '../../styles/colors.dart';
+import '../../utils/ui_scale_extensions.dart';
+import '../../providers/theme_providers.dart';
+import '../../l10n/app_localizations.dart';
 
 /// AI智能识别设置页面
 class AISettingsPage extends ConsumerStatefulWidget {

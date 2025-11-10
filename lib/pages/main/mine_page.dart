@@ -16,7 +16,7 @@ import '../../styles/colors.dart';
 import '../../cloud/auth.dart';
 import '../../cloud/sync.dart';
 import '../../cloud/cloud_service_config.dart';
-import '../settings/cloud_service_page.dart';
+import '../cloud/cloud_service_page.dart';
 import '../../utils/logger.dart';
 import '../../services/restore_service.dart';
 import '../data/restore_progress_page.dart';
@@ -31,7 +31,13 @@ import '../account/accounts_page.dart';
 import '../settings/widget_management_page.dart';
 import '../automation/ocr_billing_page.dart';
 import '../automation/auto_billing_settings_page.dart';
-import '../ai_settings_page.dart';
+import '../ai/ai_settings_page.dart';
+import '../cloud/cloud_sync_page.dart';
+import '../settings/data_management_page.dart';
+import '../settings/appearance_settings_page.dart';
+import '../settings/smart_billing_page.dart';
+import '../settings/automation_page.dart';
+import '../settings/about_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/update_service.dart';
@@ -42,9 +48,8 @@ class MinePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ledgerId = ref.watch(currentLedgerIdProvider);
     final auth = ref.watch(authServiceProvider);
-    final sync = ref.watch(syncServiceProvider);
+    final ledgerId = ref.watch(currentLedgerIdProvider);
 
     // 登录后一次性触发云端备份检查
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -196,9 +201,8 @@ class MinePage extends ConsumerWidget {
               children: [
                 const Divider(height: 1),
                 SizedBox(height: 8.0.scaled(context, ref)),
-                // 同步分组
+                // 云同步与备份
                 Consumer(builder: (sectionContext, sectionRef, _) {
-                  // 添加错误边界,防止provider错误导致整个section消失
                   final activeCfg = sectionRef.watch(activeCloudConfigProvider);
 
                   return SectionCard(
@@ -206,6 +210,7 @@ class MinePage extends ConsumerWidget {
                         12.0.scaled(sectionContext, sectionRef), 0),
                     child: Column(
                       children: [
+                        // 云服务
                         AppListTile(
                           leading: Icons.cloud_queue_outlined,
                           title: AppLocalizations.of(sectionContext).mineCloudService,
@@ -219,7 +224,6 @@ class MinePage extends ConsumerWidget {
                                 return AppLocalizations.of(sectionContext)
                                     .mineCloudServiceOffline;
                               } else {
-                                // 云服务：根据类型显示
                                 if (cfg.type == CloudBackendType.webdav) {
                                   return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceWebDAV;
@@ -237,22 +241,21 @@ class MinePage extends ConsumerWidget {
                             );
                           },
                         ),
+                        // 同步状态
                         FutureBuilder<AuthUser?>(
                           future: auth.currentUser(),
                           builder: (ctx, snap) {
-                            // 添加错误处理,确保即使stream出错也不会导致整个widget崩溃
                             if (snap.hasError) {
                               return Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
                                   '${AppLocalizations.of(sectionContext).commonError}: ${snap.error}',
-                                  style: TextStyle(color: Colors.red),
+                                  style: const TextStyle(color: Colors.red),
                                 ),
                               );
                             }
 
                             final user = snap.data;
-                            // 检查云服务配置，本地存储模式下禁用云功能
                             final cloudConfig =
                                 sectionRef.watch(activeCloudConfigProvider);
                             final isLocalMode = cloudConfig.hasValue &&
@@ -263,16 +266,69 @@ class MinePage extends ConsumerWidget {
                             final cached =
                                 sectionRef.watch(lastSyncStatusProvider(ledgerId));
                             final st = asyncSt.asData?.value ?? cached;
-                            // (旧代码遗留变量 isFirstLoad 已不需要)
-                            return _buildSyncSection(
-                              context: sectionContext,
-                              ref: sectionRef,
-                              sync: sync,
-                              ledgerId: ledgerId,
-                              user: user,
-                              canUseCloud: canUseCloud,
-                              asyncStIsLoading: asyncSt.isLoading,
-                              st: st,
+
+                            // 计算简化的同步状态显示
+                            String subtitle = '';
+                            bool showCheckIcon = false;
+                            final isFirstLoad = st == null;
+                            final refreshing = asyncSt.isLoading;
+
+                            if (!isFirstLoad) {
+                              switch (st.diff) {
+                                case SyncDiff.notLoggedIn:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNotLoggedIn;
+                                  break;
+                                case SyncDiff.notConfigured:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNotConfigured;
+                                  break;
+                                case SyncDiff.noRemote:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNoRemote;
+                                  break;
+                                case SyncDiff.inSync:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncInSyncSimple;
+                                  showCheckIcon = true;
+                                  break;
+                                case SyncDiff.localNewer:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncLocalNewerSimple;
+                                  break;
+                                case SyncDiff.cloudNewer:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncCloudNewerSimple;
+                                  break;
+                                case SyncDiff.different:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncDifferent;
+                                  break;
+                                case SyncDiff.error:
+                                  subtitle = AppLocalizations.of(sectionContext).mineSyncError;
+                                  break;
+                              }
+                            }
+
+                            return Column(
+                              children: [
+                                const Divider(height: 1, thickness: 0.5),
+                                AppListTile(
+                                  leading: Icons.cloud_sync_outlined,
+                                  title: AppLocalizations.of(sectionContext).mineSyncTitle,
+                                  subtitle: isFirstLoad ? null : subtitle,
+                                  enabled: !isLocalMode,
+                                  trailing: (canUseCloud && (isFirstLoad || refreshing))
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(strokeWidth: 2))
+                                      : showCheckIcon
+                                          ? Icon(Icons.check_circle,
+                                              color: sectionRef.watch(primaryColorProvider),
+                                              size: 20)
+                                          : const Icon(Icons.chevron_right,
+                                              color: Colors.black38, size: 20),
+                                  onTap: () async {
+                                    await Navigator.of(sectionContext).push(
+                                      MaterialPageRoute(builder: (_) => const CloudSyncPage()),
+                                    );
+                                  },
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -280,21 +336,121 @@ class MinePage extends ConsumerWidget {
                     ),
                   );
                 }),
-                // 智能记账（合并AI和OCR自动化）
+                // 功能管理
                 SizedBox(height: 8.0.scaled(context, ref)),
-                _buildSmartBillingSection(context, ref),
-                // 数据管理
+                SectionCard(
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
+                  child: Column(
+                    children: [
+                      // 智能记账
+                      AppListTile(
+                        leading: Icons.auto_awesome_outlined,
+                        title: AppLocalizations.of(context).smartBilling,
+                        subtitle: AppLocalizations.of(context).smartBillingDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const SmartBillingPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 数据管理
+                      AppListTile(
+                        leading: Icons.storage_outlined,
+                        title: AppLocalizations.of(context).dataManagement,
+                        subtitle: AppLocalizations.of(context).dataManagementDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const DataManagementPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 账户管理
+                      AppListTile(
+                        leading: Icons.account_balance_wallet_outlined,
+                        title: AppLocalizations.of(context).accountsTitle,
+                        subtitle: AppLocalizations.of(context).accountsManageDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AccountsPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 自动化功能
+                      AppListTile(
+                        leading: Icons.schedule_outlined,
+                        title: AppLocalizations.of(context).automation,
+                        subtitle: AppLocalizations.of(context).automationDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AutomationPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 外观设置
+                      AppListTile(
+                        leading: Icons.palette_outlined,
+                        title: AppLocalizations.of(context).appearanceSettings,
+                        subtitle: AppLocalizations.of(context).appearanceSettingsDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AppearanceSettingsPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                // 支持与关于
                 SizedBox(height: 8.0.scaled(context, ref)),
-                _buildDataManagementSection(context, ref),
-                // 自动化功能（周期和提醒）
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildAutomationSection(context, ref),
-                // 外观与显示
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildAppearanceSection(context, ref),
-                // 关于与版本
-                SizedBox(height: 8.0.scaled(context, ref)),
-                _buildAboutSection(context, ref),
+                SectionCard(
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
+                  child: Column(
+                    children: [
+                      AppListTile(
+                        leading: Icons.info_outline,
+                        title: AppLocalizations.of(context).about,
+                        subtitle: AppLocalizations.of(context).aboutDesc,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AboutPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.feedback_outlined,
+                        title: AppLocalizations.of(context).mineFeedback,
+                        subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,
+                        onTap: () async {
+                          final url = Uri.parse('https://github.com/TNT-Likely/BeeCount/issues');
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.star_outline,
+                        title: AppLocalizations.of(context).mineSupportAuthor,
+                        subtitle: AppLocalizations.of(context).mineSupportAuthorSubtitle,
+                        onTap: () async {
+                          final url = Uri.parse('https://github.com/TNT-Likely/BeeCount');
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: AppDimens.p16.scaled(context, ref)),
               ],
             ),
@@ -313,6 +469,7 @@ class MinePage extends ConsumerWidget {
     required bool canUseCloud,
     required bool asyncStIsLoading,
     required SyncStatus? st,
+    required bool isLocalMode,
   }) {
     String subtitle = '';
     IconData icon = Icons.sync_outlined;
@@ -635,16 +792,10 @@ class MinePage extends ConsumerWidget {
             },
           ),
           // 登录/登出
-          Consumer(builder: (ctx, r, _) {
-            final userNow = user; // capture
-            final cloudConfig = r.watch(activeCloudConfigProvider);
-
-            // 本地存储模式不显示登录入口
-            final isLocalMode = cloudConfig.hasValue &&
-                cloudConfig.value!.type == CloudBackendType.local;
-            if (isLocalMode) {
-              return const SizedBox.shrink();
-            }
+          if (!isLocalMode)
+            Consumer(builder: (ctx, r, _) {
+              final userNow = user; // capture
+              final cloudConfig = r.watch(activeCloudConfigProvider);
 
             // 根据云服务类型显示不同的用户信息
             String getUserDisplayName() {
@@ -705,39 +856,32 @@ class MinePage extends ConsumerWidget {
               ],
             );
           }),
-          Consumer(builder: (ctx, r, _) {
-            final cloudConfig = r.watch(activeCloudConfigProvider);
+          // 自动同步
+          if (!isLocalMode)
+            Consumer(builder: (ctx, r, _) {
+              final autoSync = r.watch(autoSyncValueProvider);
+              final setter = r.read(autoSyncSetterProvider);
+              final value = autoSync.asData?.value ?? false;
+              final can = canUseCloud;
 
-            // 本地存储模式下不显示自动同步选项
-            final isLocalMode = cloudConfig.hasValue &&
-                cloudConfig.value!.type == CloudBackendType.local;
-            if (isLocalMode) {
-              return const SizedBox.shrink();
-            }
-
-            final autoSync = r.watch(autoSyncValueProvider);
-            final setter = r.read(autoSyncSetterProvider);
-            final value = autoSync.asData?.value ?? false;
-            final can = canUseCloud;
-
-            return Column(
-              children: [
-                AppDivider.thin(),
-                SwitchListTile(
-                  title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
-                  subtitle: can
-                      ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
-                      : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
-                  value: can ? value : false,
-                  onChanged: can
-                      ? (v) async {
-                          await setter.set(v);
-                        }
-                      : null,
-                ),
-              ],
-            );
-          }),
+              return Column(
+                children: [
+                  AppDivider.thin(),
+                  SwitchListTile(
+                    title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
+                    subtitle: can
+                        ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
+                        : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
+                    value: can ? value : false,
+                    onChanged: can
+                        ? (v) async {
+                            await setter.set(v);
+                          }
+                        : null,
+                  ),
+                ],
+              );
+            }),
         ],
       );
     });

@@ -849,12 +849,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mineSyncInSyncSimple => 'Synced';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return 'Local newer (local $count records, upload recommended)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => 'Local newer';
+
+  @override
   String get mineSyncCloudNewer => 'Cloud newer (download recommended)';
+
+  @override
+  String get mineSyncCloudNewerSimple => 'Cloud newer';
 
   @override
   String get mineSyncDifferent => 'Local and cloud differ';
@@ -2949,6 +2958,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountsTitle => 'Account Management';
 
   @override
+  String get accountsManageDesc => 'Manage payment accounts and balances';
+
+  @override
   String get accountsEmptyMessage => 'No accounts yet, tap the top right to add';
 
   @override
@@ -3493,4 +3505,121 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ocrTime => 'Time';
+
+  @override
+  String get cloudSyncAndBackup => 'Cloud Sync & Backup';
+
+  @override
+  String get cloudSyncAndBackupDesc => 'Cloud service config and data sync';
+
+  @override
+  String get cloudSyncPageTitle => 'Cloud Sync & Backup';
+
+  @override
+  String get cloudSyncPageSubtitle => 'Manage cloud services and data sync';
+
+  @override
+  String get dataManagement => 'Data Management';
+
+  @override
+  String get dataManagementDesc => 'Import, export, categories and accounts';
+
+  @override
+  String get dataManagementPageTitle => 'Data Management';
+
+  @override
+  String get dataManagementPageSubtitle => 'Manage transaction data and categories';
+
+  @override
+  String get smartBilling => 'Smart Billing';
+
+  @override
+  String get smartBillingDesc => 'AI recognition, OCR scan, auto billing';
+
+  @override
+  String get smartBillingPageTitle => 'Smart Billing';
+
+  @override
+  String get smartBillingPageSubtitle => 'AI and automation billing features';
+
+  @override
+  String get automation => 'Automation';
+
+  @override
+  String get automationDesc => 'Recurring transactions and reminders';
+
+  @override
+  String get automationPageTitle => 'Automation';
+
+  @override
+  String get automationPageSubtitle => 'Recurring transactions and reminder settings';
+
+  @override
+  String get appearanceSettings => 'Appearance';
+
+  @override
+  String get appearanceSettingsDesc => 'Theme, font and language settings';
+
+  @override
+  String get appearanceSettingsPageTitle => 'Appearance';
+
+  @override
+  String get appearanceSettingsPageSubtitle => 'Personalize appearance and display';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get aboutDesc => 'Version info, help and feedback';
+
+  @override
+  String get aboutPageTitle => 'About';
+
+  @override
+  String get aboutPageSubtitle => 'App information and help';
+
+  @override
+  String get aboutPageLoadingVersion => 'Loading version...';
+
+  @override
+  String get aboutGitHubRepo => 'GitHub Repository';
+
+  @override
+  String get aboutContactEmail => 'Contact Email';
+
+  @override
+  String get aboutWeChatGroup => 'WeChat Group';
+
+  @override
+  String get aboutWeChatGroupDesc => 'Tap to view QR code';
+
+  @override
+  String get aboutXiaohongshu => 'Xiaohongshu';
+
+  @override
+  String get aboutDouyin => 'Douyin';
+
+  @override
+  String get aboutTelegramGroup => 'Telegram Group';
+
+  @override
+  String get aboutCopied => 'Copied to clipboard';
+
+  @override
+  String get cloudService => 'Cloud Service';
+
+  @override
+  String get cloudServiceDesc => 'Configure cloud storage provider';
+
+  @override
+  String get syncManagement => 'Sync Management';
+
+  @override
+  String get syncManagementDesc => 'Data sync and backup';
+
+  @override
+  String get moreSettings => 'More Settings';
+
+  @override
+  String get moreSettingsDesc => 'Advanced cloud sync options';
 }

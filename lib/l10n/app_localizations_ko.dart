@@ -849,12 +849,21 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get mineSyncInSyncSimple => '동기화됨';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return '로컬이 최신 (로컬 $count개 기록, 업로드 권장)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => '로컬이 최신';
+
+  @override
   String get mineSyncCloudNewer => '클라우드가 최신 (다운로드 권장)';
+
+  @override
+  String get mineSyncCloudNewerSimple => '클라우드가 최신';
 
   @override
   String get mineSyncDifferent => '로컬과 클라우드가 다릅니다';
@@ -2949,6 +2958,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get accountsTitle => '계정관리';
 
   @override
+  String get accountsManageDesc => '결제 계정 및 잔액 관리';
+
+  @override
   String get accountsEmptyMessage => '还없음계정，탭右上角추가';
 
   @override
@@ -3493,4 +3505,121 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get ocrTime => '시간';
+
+  @override
+  String get cloudSyncAndBackup => '클라우드 동기화 및 백업';
+
+  @override
+  String get cloudSyncAndBackupDesc => '클라우드 서비스 구성, 데이터 동기화 관리';
+
+  @override
+  String get cloudSyncPageTitle => '클라우드 동기화 및 백업';
+
+  @override
+  String get cloudSyncPageSubtitle => '클라우드 서비스 및 데이터 동기화 관리';
+
+  @override
+  String get dataManagement => '데이터 관리';
+
+  @override
+  String get dataManagementDesc => '가져오기, 내보내기, 카테고리 및 계정';
+
+  @override
+  String get dataManagementPageTitle => '데이터 관리';
+
+  @override
+  String get dataManagementPageSubtitle => '거래 데이터 및 카테고리 관리';
+
+  @override
+  String get smartBilling => '스마트 기록';
+
+  @override
+  String get smartBillingDesc => 'AI 인식, OCR 스캔, 자동 기록';
+
+  @override
+  String get smartBillingPageTitle => '스마트 기록';
+
+  @override
+  String get smartBillingPageSubtitle => 'AI 및 자동화 기록 기능';
+
+  @override
+  String get automation => '자동화';
+
+  @override
+  String get automationDesc => '반복 거래 및 알림';
+
+  @override
+  String get automationPageTitle => '자동화 기능';
+
+  @override
+  String get automationPageSubtitle => '반복 거래 및 알림 설정';
+
+  @override
+  String get appearanceSettings => '외관 설정';
+
+  @override
+  String get appearanceSettingsDesc => '테마, 글꼴, 언어 설정';
+
+  @override
+  String get appearanceSettingsPageTitle => '외관 설정';
+
+  @override
+  String get appearanceSettingsPageSubtitle => '외관 및 디스플레이 사용자 지정';
+
+  @override
+  String get about => '정보';
+
+  @override
+  String get aboutDesc => '버전 정보, 도움말 및 피드백';
+
+  @override
+  String get aboutPageTitle => '정보';
+
+  @override
+  String get aboutPageSubtitle => '앱 정보 및 도움말';
+
+  @override
+  String get aboutPageLoadingVersion => '버전 번호 로드 중...';
+
+  @override
+  String get aboutGitHubRepo => 'GitHub 저장소';
+
+  @override
+  String get aboutContactEmail => '문의 이메일';
+
+  @override
+  String get aboutWeChatGroup => 'WeChat 그룹';
+
+  @override
+  String get aboutWeChatGroupDesc => 'QR 코드를 보려면 탭하세요';
+
+  @override
+  String get aboutXiaohongshu => '샤오홍슈';
+
+  @override
+  String get aboutDouyin => 'Douyin';
+
+  @override
+  String get aboutTelegramGroup => 'Telegram 그룹';
+
+  @override
+  String get aboutCopied => '클립보드에 복사됨';
+
+  @override
+  String get cloudService => '클라우드 서비스';
+
+  @override
+  String get cloudServiceDesc => '클라우드 스토리지 공급자 구성';
+
+  @override
+  String get syncManagement => '동기화 관리';
+
+  @override
+  String get syncManagementDesc => '데이터 동기화 및 백업';
+
+  @override
+  String get moreSettings => '추가 설정';
+
+  @override
+  String get moreSettingsDesc => '고급 클라우드 동기화 옵션';
 }

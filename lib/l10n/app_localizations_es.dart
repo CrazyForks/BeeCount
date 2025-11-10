@@ -849,12 +849,21 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get mineSyncInSyncSimple => 'Sincronizado';
+
+  @override
   String mineSyncLocalNewer(Object count) {
     return 'Local más reciente (local $count registros, se recomienda cargar)';
   }
 
   @override
+  String get mineSyncLocalNewerSimple => 'Local más reciente';
+
+  @override
   String get mineSyncCloudNewer => 'Nube más reciente (se recomienda descargar)';
+
+  @override
+  String get mineSyncCloudNewerSimple => 'Nube más reciente';
 
   @override
   String get mineSyncDifferent => 'Local y nube difieren';
@@ -2949,6 +2958,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountsTitle => 'Cuentas';
 
   @override
+  String get accountsManageDesc => 'Gestionar cuentas de pago y saldos';
+
+  @override
   String get accountsEmptyMessage => 'Aún no hay cuentas, toque la parte superior derecha para agregar';
 
   @override
@@ -3493,4 +3505,121 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ocrTime => 'Hora';
+
+  @override
+  String get cloudSyncAndBackup => 'Sincronización y copia de seguridad en la nube';
+
+  @override
+  String get cloudSyncAndBackupDesc => 'Configuración de servicio en la nube, gestión de sincronización de datos';
+
+  @override
+  String get cloudSyncPageTitle => 'Sincronización y copia de seguridad en la nube';
+
+  @override
+  String get cloudSyncPageSubtitle => 'Gestionar servicios en la nube y sincronización de datos';
+
+  @override
+  String get dataManagement => 'Gestión de datos';
+
+  @override
+  String get dataManagementDesc => 'Importar, exportar, categorías y cuentas';
+
+  @override
+  String get dataManagementPageTitle => 'Gestión de datos';
+
+  @override
+  String get dataManagementPageSubtitle => 'Gestionar datos de transacciones y categorías';
+
+  @override
+  String get smartBilling => 'Registro inteligente';
+
+  @override
+  String get smartBillingDesc => 'Reconocimiento IA, escaneo OCR, registro automático';
+
+  @override
+  String get smartBillingPageTitle => 'Registro inteligente';
+
+  @override
+  String get smartBillingPageSubtitle => 'Funciones de registro IA y automatización';
+
+  @override
+  String get automation => 'Automatización';
+
+  @override
+  String get automationDesc => 'Transacciones recurrentes y recordatorios';
+
+  @override
+  String get automationPageTitle => 'Funciones de automatización';
+
+  @override
+  String get automationPageSubtitle => 'Configuración de transacciones recurrentes y recordatorios';
+
+  @override
+  String get appearanceSettings => 'Configuración de apariencia';
+
+  @override
+  String get appearanceSettingsDesc => 'Configuración de tema, fuente e idioma';
+
+  @override
+  String get appearanceSettingsPageTitle => 'Configuración de apariencia';
+
+  @override
+  String get appearanceSettingsPageSubtitle => 'Personalizar apariencia y visualización';
+
+  @override
+  String get about => 'Acerca de';
+
+  @override
+  String get aboutDesc => 'Información de versión, ayuda y comentarios';
+
+  @override
+  String get aboutPageTitle => 'Acerca de';
+
+  @override
+  String get aboutPageSubtitle => 'Información de la aplicación y ayuda';
+
+  @override
+  String get aboutPageLoadingVersion => 'Cargando versión...';
+
+  @override
+  String get aboutGitHubRepo => 'Repositorio GitHub';
+
+  @override
+  String get aboutContactEmail => 'Correo de contacto';
+
+  @override
+  String get aboutWeChatGroup => 'Grupo de WeChat';
+
+  @override
+  String get aboutWeChatGroupDesc => 'Toca para ver el código QR';
+
+  @override
+  String get aboutXiaohongshu => 'Xiaohongshu';
+
+  @override
+  String get aboutDouyin => 'Douyin';
+
+  @override
+  String get aboutTelegramGroup => 'Grupo de Telegram';
+
+  @override
+  String get aboutCopied => 'Copiado al portapapeles';
+
+  @override
+  String get cloudService => 'Servicio en la nube';
+
+  @override
+  String get cloudServiceDesc => 'Configurar proveedor de almacenamiento en la nube';
+
+  @override
+  String get syncManagement => 'Gestión de sincronización';
+
+  @override
+  String get syncManagementDesc => 'Sincronización y copia de seguridad de datos';
+
+  @override
+  String get moreSettings => 'Más configuraciones';
+
+  @override
+  String get moreSettingsDesc => 'Opciones avanzadas de sincronización en la nube';
 }
