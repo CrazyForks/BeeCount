@@ -2,8 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:gal/gal.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
@@ -16,8 +15,7 @@ import '../widgets/ui/ui.dart';
 enum SavePosterResult {
   success,
   failed,
-  denied,
-  permanentlyDenied,
+  accessDenied,
 }
 
 /// 分享海报生成服务
@@ -80,47 +78,15 @@ class SharePosterService {
   /// 保存海报到相册
   static Future<SavePosterResult> savePosterToGallery(Uint8List imageBytes) async {
     try {
-      PermissionStatus status;
-
-      if (Platform.isIOS) {
-        // iOS 使用 photos 权限
-        status = await Permission.photos.request();
-      } else {
-        // Android 13+ (API 33+) 使用 photos 权限
-        // Android 10-12 使用 storage 权限
-        if (await Permission.photos.status != PermissionStatus.denied) {
-          status = await Permission.photos.request();
-        } else {
-          status = await Permission.storage.request();
-        }
+      // 使用 Gal 保存图片，会自动处理权限
+      await Gal.putImageBytes(imageBytes);
+      return SavePosterResult.success;
+    } on GalException catch (e) {
+      // 处理 Gal 特定异常
+      if (e.type == GalExceptionType.accessDenied) {
+        return SavePosterResult.accessDenied;
       }
-
-      // 检查权限状态
-      if (status.isPermanentlyDenied) {
-        return SavePosterResult.permanentlyDenied;
-      } else if (status.isDenied) {
-        return SavePosterResult.denied;
-      } else if (status.isGranted || status.isLimited) {
-        // 保存到相册
-        try {
-          final result = await ImageGallerySaver.saveImage(
-            imageBytes,
-            quality: 100,
-            name: 'beecount_share_${DateTime.now().millisecondsSinceEpoch}',
-          );
-
-          if (result != null && result['isSuccess'] == true) {
-            return SavePosterResult.success;
-          } else {
-            // 保存失败，可能是权限问题或其他原因
-            return SavePosterResult.failed;
-          }
-        } catch (e) {
-          return SavePosterResult.failed;
-        }
-      } else {
-        return SavePosterResult.denied;
-      }
+      return SavePosterResult.failed;
     } catch (e) {
       return SavePosterResult.failed;
     }
@@ -191,15 +157,8 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
         showToast(context, widget.l10n.sharePosterSaveSuccess);
         Navigator.pop(context);
         break;
-      case SavePosterResult.permanentlyDenied:
-        // 权限被永久拒绝，引导用户去设置
-        showToast(context, widget.l10n.sharePosterPermissionDenied);
-        // 延迟打开设置
-        await Future.delayed(const Duration(milliseconds: 500));
-        await openAppSettings();
-        break;
-      case SavePosterResult.denied:
-        // 用户拒绝了权限
+      case SavePosterResult.accessDenied:
+        // 权限被拒绝
         showToast(context, widget.l10n.sharePosterPermissionDenied);
         break;
       case SavePosterResult.failed:

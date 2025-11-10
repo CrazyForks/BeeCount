@@ -2,8 +2,9 @@
     <!-- Required for Supabase network requests -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Required for downloading APK files and saving images -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Required for downloading APK files and saving images (API <= 29) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
     <!-- Required for reading screenshots (Android 13+) -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <!-- Required for reading screenshots (Android 10-12) -->
