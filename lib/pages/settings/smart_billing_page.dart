@@ -6,7 +6,7 @@ import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/colors.dart';
-import '../ai_settings_page.dart';
+import '../ai/ai_settings_page.dart';
 import '../automation/ocr_billing_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import '../../l10n/app_localizations.dart';

@@ -3622,4 +3622,93 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get moreSettingsDesc => '高度なクラウド同期オプション';
+
+  @override
+  String get configImportExportTitle => 'Config Import/Export';
+
+  @override
+  String get configImportExportSubtitle => 'Backup and restore app configurations';
+
+  @override
+  String get configImportExportInfoTitle => 'Feature Description';
+
+  @override
+  String get configImportExportInfoMessage => 'This feature is used to export and import app configurations, including cloud service settings, AI settings, etc. The config file uses YAML format for easy viewing and editing.\n\n⚠️ Config files contain sensitive information (such as API keys, passwords, etc.), please keep them safe.';
+
+  @override
+  String get configExportTitle => 'Export Config';
+
+  @override
+  String get configExportSubtitle => 'Export current config to YAML file';
+
+  @override
+  String get configExportShareSubject => 'BeeCount Config File';
+
+  @override
+  String get configExportSuccess => 'Config exported successfully';
+
+  @override
+  String get configExportFailed => 'Config export failed';
+
+  @override
+  String get configImportTitle => 'Import Config';
+
+  @override
+  String get configImportSubtitle => 'Restore config from YAML file';
+
+  @override
+  String get configImportNoFilePath => 'No file selected';
+
+  @override
+  String get configImportConfirmTitle => 'Confirm Import';
+
+  @override
+  String get configImportConfirmMessage => 'Importing config will overwrite current settings, continue?';
+
+  @override
+  String get configImportSuccess => 'Config imported successfully';
+
+  @override
+  String get configImportFailed => 'Config import failed';
+
+  @override
+  String get configImportRestartTitle => 'Restart Required';
+
+  @override
+  String get configImportRestartMessage => 'Config has been imported. Some settings will take effect after restarting the app.';
+
+  @override
+  String get configImportExportIncludesTitle => 'Included Configurations';
+
+  @override
+  String configExportSavedTo(String path) {
+    return 'Saved to: $path';
+  }
+
+  @override
+  String get configExportOpenFile => 'Open Folder';
+
+  @override
+  String get configExportOpenFileFailed => 'Unable to open folder';
+
+  @override
+  String get configExportViewContent => 'View Content';
+
+  @override
+  String get configExportCopyContent => 'Copy Content';
+
+  @override
+  String get configExportContentCopied => 'Copied to clipboard';
+
+  @override
+  String get configExportReadFileFailed => 'Failed to read file';
+
+  @override
+  String get configIncludeSupabase => 'Supabase cloud service config';
+
+  @override
+  String get configIncludeWebdav => 'WebDAV cloud service config';
+
+  @override
+  String get configIncludeAI => 'AI smart recognition config';
 }

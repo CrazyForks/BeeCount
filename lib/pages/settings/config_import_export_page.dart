@@ -1,0 +1,524 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../../widgets/ui/ui.dart';
+import '../../widgets/biz/biz.dart';
+import '../../styles/colors.dart';
+import '../../utils/ui_scale_extensions.dart';
+import '../../providers/theme_providers.dart';
+import '../../l10n/app_localizations.dart';
+import '../../services/config_export_service.dart';
+import '../../utils/logger.dart';
+
+/// 配置导入导出页面
+class ConfigImportExportPage extends ConsumerStatefulWidget {
+  const ConfigImportExportPage({super.key});
+
+  @override
+  ConsumerState<ConfigImportExportPage> createState() =>
+      _ConfigImportExportPageState();
+}
+
+class _ConfigImportExportPageState
+    extends ConsumerState<ConfigImportExportPage> {
+  bool _isExporting = false;
+  bool _isImporting = false;
+  String? _lastExportedFilePath;
+
+  /// 获取配置导出目录
+  Future<Directory> _getExportDirectory() async {
+    if (Platform.isAndroid) {
+      // Android: 保存到公共 Download/BeeCount 目录
+      final downloadPath = '/storage/emulated/0/Download/BeeCount';
+      final dir = Directory(downloadPath);
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
+      return dir;
+    } else {
+      // iOS: 使用分享功能
+      return await getTemporaryDirectory();
+    }
+  }
+
+  Future<void> _exportConfig() async {
+    setState(() {
+      _isExporting = true;
+      _lastExportedFilePath = null;
+    });
+
+    try {
+      final yamlContent = await ConfigExportService.exportToYaml();
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
+      final fileName = 'beecount_config_$timestamp.yml';
+
+      if (Platform.isAndroid) {
+        // Android: 直接保存到 Download/BeeCount 目录
+        final exportDir = await _getExportDirectory();
+        final filePath = '${exportDir.path}/$fileName';
+
+        final file = File(filePath);
+        await file.writeAsString(yamlContent);
+
+        logI('ConfigExport', '配置已导出到: $filePath');
+
+        if (!mounted) return;
+
+        setState(() {
+          _lastExportedFilePath = filePath;
+        });
+
+        showToast(context, AppLocalizations.of(context).configExportSuccess);
+      } else {
+        // iOS: 使用分享功能
+        final tempDir = await getTemporaryDirectory();
+        final filePath = '${tempDir.path}/$fileName';
+
+        final file = File(filePath);
+        await file.writeAsString(yamlContent);
+
+        if (!mounted) return;
+
+        final result = await Share.shareXFiles(
+          [XFile(filePath)],
+          subject: AppLocalizations.of(context).configExportShareSubject,
+        );
+
+        if (result.status == ShareResultStatus.success) {
+          if (!mounted) return;
+          showToast(context, AppLocalizations.of(context).configExportSuccess);
+        }
+      }
+    } catch (e) {
+      logE('ConfigExport', '导出配置失败: $e');
+      if (!mounted) return;
+      await AppDialog.error(
+        context,
+        title: AppLocalizations.of(context).configExportFailed,
+        message: e.toString(),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isExporting = false);
+      }
+    }
+  }
+
+  /// 查看配置文件内容
+  Future<void> _viewExportedContent() async {
+    if (_lastExportedFilePath == null) return;
+
+    try {
+      final file = File(_lastExportedFilePath!);
+      final content = await file.readAsString();
+
+      if (!mounted) return;
+      final dialogContext = context;
+      final l10n = AppLocalizations.of(context);
+
+      await showDialog(
+        context: dialogContext,
+        builder: (context) => _ConfigContentDialog(
+          content: content,
+          onCopy: () async {
+            await Clipboard.setData(ClipboardData(text: content));
+            if (!mounted) return;
+            Navigator.pop(context);
+            showToast(dialogContext, l10n.configExportContentCopied);
+          },
+        ),
+      );
+    } catch (e) {
+      logE('ConfigExport', '读取配置文件失败: $e');
+      if (!mounted) return;
+      showToast(context, AppLocalizations.of(context).configExportReadFileFailed);
+    }
+  }
+
+  Future<void> _importConfig() async {
+    setState(() => _isImporting = true);
+
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['yml', 'yaml'],
+      );
+
+      if (result == null || result.files.isEmpty) {
+        if (mounted) {
+          setState(() => _isImporting = false);
+        }
+        return;
+      }
+
+      final filePath = result.files.first.path;
+      if (filePath == null) {
+        if (!mounted) return;
+        throw Exception(AppLocalizations.of(context).configImportNoFilePath);
+      }
+
+      // 确认导入
+      if (!mounted) return;
+      final confirm = await AppDialog.confirm<bool>(
+            context,
+            title: AppLocalizations.of(context).configImportConfirmTitle,
+            message: AppLocalizations.of(context).configImportConfirmMessage,
+          ) ??
+          false;
+
+      if (!confirm) {
+        if (mounted) {
+          setState(() => _isImporting = false);
+        }
+        return;
+      }
+
+      // 执行导入
+      await ConfigExportService.importFromFile(filePath);
+
+      if (!mounted) return;
+      showToast(context, AppLocalizations.of(context).configImportSuccess);
+
+      // 提示需要重启应用
+      if (!mounted) return;
+      await AppDialog.info(
+        context,
+        title: AppLocalizations.of(context).configImportRestartTitle,
+        message: AppLocalizations.of(context).configImportRestartMessage,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      await AppDialog.error(
+        context,
+        title: AppLocalizations.of(context).configImportFailed,
+        message: e.toString(),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isImporting = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Scaffold(
+      backgroundColor: BeeColors.greyBg,
+      body: Column(
+        children: [
+          PrimaryHeader(
+            title: l10n.configImportExportTitle,
+            subtitle: l10n.configImportExportSubtitle,
+            showBack: true,
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12.0.scaled(context, ref),
+                vertical: 8.0.scaled(context, ref),
+              ),
+              children: [
+                // 说明卡片
+                SectionCard(
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0.scaled(context, ref)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              size: 20.0.scaled(context, ref),
+                              color: ref.watch(primaryColorProvider),
+                            ),
+                            SizedBox(width: 8.0.scaled(context, ref)),
+                            Text(
+                              l10n.configImportExportInfoTitle,
+                              style: TextStyle(
+                                fontSize: 16.0.scaled(context, ref),
+                                fontWeight: FontWeight.w600,
+                                color: BeeColors.primaryText,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        Text(
+                          l10n.configImportExportInfoMessage,
+                          style: TextStyle(
+                            fontSize: 14.0.scaled(context, ref),
+                            color: BeeColors.secondaryText,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8.0.scaled(context, ref)),
+                // 功能按钮
+                SectionCard(
+                  child: Column(
+                    children: [
+                      // 导出配置
+                      AppListTile(
+                        leading: Icons.upload_file,
+                        title: l10n.configExportTitle,
+                        subtitle: l10n.configExportSubtitle,
+                        trailing: _isExporting
+                            ? SizedBox(
+                                width: 20.0.scaled(context, ref),
+                                height: 20.0.scaled(context, ref),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: ref.watch(primaryColorProvider),
+                                ),
+                              )
+                            : null,
+                        onTap: _isExporting ? null : _exportConfig,
+                      ),
+                      // Android平台显示导出路径和打开按钮
+                      if (Platform.isAndroid && _lastExportedFilePath != null) ...[
+                        const Divider(height: 1, thickness: 0.5),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.0.scaled(context, ref),
+                            vertical: 12.0.scaled(context, ref),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    size: 16.0.scaled(context, ref),
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 8.0.scaled(context, ref)),
+                                  Expanded(
+                                    child: Text(
+                                      l10n.configExportSavedTo(_lastExportedFilePath!.replaceAll('/storage/emulated/0/', '')),
+                                      style: TextStyle(
+                                        fontSize: 13.0.scaled(context, ref),
+                                        color: BeeColors.secondaryText,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8.0.scaled(context, ref)),
+                              SizedBox(
+                                width: double.infinity,
+                                child: OutlinedButton.icon(
+                                  onPressed: _viewExportedContent,
+                                  icon: const Icon(Icons.visibility_outlined, size: 18),
+                                  label: Text(l10n.configExportViewContent),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: ref.watch(primaryColorProvider),
+                                    side: BorderSide(
+                                      color: ref.watch(primaryColorProvider).withValues(alpha: 0.5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      const Divider(height: 1, thickness: 0.5),
+                      // 导入配置
+                      AppListTile(
+                        leading: Icons.download_outlined,
+                        title: l10n.configImportTitle,
+                        subtitle: l10n.configImportSubtitle,
+                        trailing: _isImporting
+                            ? SizedBox(
+                                width: 20.0.scaled(context, ref),
+                                height: 20.0.scaled(context, ref),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: ref.watch(primaryColorProvider),
+                                ),
+                              )
+                            : null,
+                        onTap: _isImporting ? null : _importConfig,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 8.0.scaled(context, ref)),
+                // 包含的配置项
+                SectionCard(
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0.scaled(context, ref)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.configImportExportIncludesTitle,
+                          style: TextStyle(
+                            fontSize: 16.0.scaled(context, ref),
+                            fontWeight: FontWeight.w600,
+                            color: BeeColors.primaryText,
+                          ),
+                        ),
+                        SizedBox(height: 12.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.cloud_outlined,
+                          l10n.configIncludeSupabase,
+                        ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.folder_outlined,
+                          l10n.configIncludeWebdav,
+                        ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.smart_toy_outlined,
+                          l10n.configIncludeAI,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildConfigItem(
+    BuildContext context,
+    WidgetRef ref,
+    IconData icon,
+    String text,
+  ) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 18.0.scaled(context, ref),
+          color: ref.watch(primaryColorProvider),
+        ),
+        SizedBox(width: 8.0.scaled(context, ref)),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14.0.scaled(context, ref),
+            color: BeeColors.primaryText,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// 配置内容查看对话框
+class _ConfigContentDialog extends StatelessWidget {
+  final String content;
+  final VoidCallback onCopy;
+
+  const _ConfigContentDialog({
+    required this.content,
+    required this.onCopy,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+      child: Column(
+        children: [
+          // 标题栏
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeColors.greyBg,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(4),
+                topRight: Radius.circular(4),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.description_outlined),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.configExportViewContent,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          // 内容区域
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: SelectableText(
+                  content,
+                  style: const TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // 底部按钮
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeColors.greyBg,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(4),
+                bottomRight: Radius.circular(4),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  onPressed: onCopy,
+                  icon: const Icon(Icons.copy, size: 18),
+                  label: Text(l10n.configExportCopyContent),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

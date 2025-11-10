@@ -3622,6 +3622,95 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get moreSettingsDesc => '高级云同步选项';
+
+  @override
+  String get configImportExportTitle => '配置导入导出';
+
+  @override
+  String get configImportExportSubtitle => '备份和恢复应用配置';
+
+  @override
+  String get configImportExportInfoTitle => '功能说明';
+
+  @override
+  String get configImportExportInfoMessage => '此功能用于导出和导入应用配置，包括云服务配置、AI配置等。配置文件采用YAML格式，方便查看和编辑。\n\n⚠️ 配置文件包含敏感信息（如API密钥、密码等），请妥善保管。';
+
+  @override
+  String get configExportTitle => '导出配置';
+
+  @override
+  String get configExportSubtitle => '将当前配置导出为YAML文件';
+
+  @override
+  String get configExportShareSubject => 'BeeCount 配置文件';
+
+  @override
+  String get configExportSuccess => '配置导出成功';
+
+  @override
+  String get configExportFailed => '配置导出失败';
+
+  @override
+  String get configImportTitle => '导入配置';
+
+  @override
+  String get configImportSubtitle => '从YAML文件恢复配置';
+
+  @override
+  String get configImportNoFilePath => '未选择文件';
+
+  @override
+  String get configImportConfirmTitle => '确认导入';
+
+  @override
+  String get configImportConfirmMessage => '导入配置将覆盖当前设置，是否继续？';
+
+  @override
+  String get configImportSuccess => '配置导入成功';
+
+  @override
+  String get configImportFailed => '配置导入失败';
+
+  @override
+  String get configImportRestartTitle => '需要重启';
+
+  @override
+  String get configImportRestartMessage => '配置已导入，部分配置需要重启应用后生效。';
+
+  @override
+  String get configImportExportIncludesTitle => '包含的配置项';
+
+  @override
+  String configExportSavedTo(String path) {
+    return '已保存至: $path';
+  }
+
+  @override
+  String get configExportOpenFile => '打开文件夹';
+
+  @override
+  String get configExportOpenFileFailed => '无法打开文件夹';
+
+  @override
+  String get configExportViewContent => '查看内容';
+
+  @override
+  String get configExportCopyContent => '复制内容';
+
+  @override
+  String get configExportContentCopied => '已复制到剪贴板';
+
+  @override
+  String get configExportReadFileFailed => '读取文件失败';
+
+  @override
+  String get configIncludeSupabase => 'Supabase 云服务配置';
+
+  @override
+  String get configIncludeWebdav => 'WebDAV 云服务配置';
+
+  @override
+  String get configIncludeAI => 'AI 智能识别配置';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

@@ -6927,6 +6927,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Advanced cloud sync options'**
   String get moreSettingsDesc;
+
+  /// No description provided for @configImportExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Config Import/Export'**
+  String get configImportExportTitle;
+
+  /// No description provided for @configImportExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup and restore app configurations'**
+  String get configImportExportSubtitle;
+
+  /// No description provided for @configImportExportInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature Description'**
+  String get configImportExportInfoTitle;
+
+  /// No description provided for @configImportExportInfoMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is used to export and import app configurations, including cloud service settings, AI settings, etc. The config file uses YAML format for easy viewing and editing.\n\n⚠️ Config files contain sensitive information (such as API keys, passwords, etc.), please keep them safe.'**
+  String get configImportExportInfoMessage;
+
+  /// No description provided for @configExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Config'**
+  String get configExportTitle;
+
+  /// No description provided for @configExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export current config to YAML file'**
+  String get configExportSubtitle;
+
+  /// No description provided for @configExportShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount Config File'**
+  String get configExportShareSubject;
+
+  /// No description provided for @configExportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Config exported successfully'**
+  String get configExportSuccess;
+
+  /// No description provided for @configExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Config export failed'**
+  String get configExportFailed;
+
+  /// No description provided for @configImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Config'**
+  String get configImportTitle;
+
+  /// No description provided for @configImportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore config from YAML file'**
+  String get configImportSubtitle;
+
+  /// No description provided for @configImportNoFilePath.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get configImportNoFilePath;
+
+  /// No description provided for @configImportConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Import'**
+  String get configImportConfirmTitle;
+
+  /// No description provided for @configImportConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing config will overwrite current settings, continue?'**
+  String get configImportConfirmMessage;
+
+  /// No description provided for @configImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Config imported successfully'**
+  String get configImportSuccess;
+
+  /// No description provided for @configImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Config import failed'**
+  String get configImportFailed;
+
+  /// No description provided for @configImportRestartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart Required'**
+  String get configImportRestartTitle;
+
+  /// No description provided for @configImportRestartMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Config has been imported. Some settings will take effect after restarting the app.'**
+  String get configImportRestartMessage;
+
+  /// No description provided for @configImportExportIncludesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Included Configurations'**
+  String get configImportExportIncludesTitle;
+
+  /// No description provided for @configExportSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to: {path}'**
+  String configExportSavedTo(String path);
+
+  /// No description provided for @configExportOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Folder'**
+  String get configExportOpenFile;
+
+  /// No description provided for @configExportOpenFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open folder'**
+  String get configExportOpenFileFailed;
+
+  /// No description provided for @configExportViewContent.
+  ///
+  /// In en, this message translates to:
+  /// **'View Content'**
+  String get configExportViewContent;
+
+  /// No description provided for @configExportCopyContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Content'**
+  String get configExportCopyContent;
+
+  /// No description provided for @configExportContentCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get configExportContentCopied;
+
+  /// No description provided for @configExportReadFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to read file'**
+  String get configExportReadFileFailed;
+
+  /// No description provided for @configIncludeSupabase.
+  ///
+  /// In en, this message translates to:
+  /// **'Supabase cloud service config'**
+  String get configIncludeSupabase;
+
+  /// No description provided for @configIncludeWebdav.
+  ///
+  /// In en, this message translates to:
+  /// **'WebDAV cloud service config'**
+  String get configIncludeWebdav;
+
+  /// No description provided for @configIncludeAI.
+  ///
+  /// In en, this message translates to:
+  /// **'AI smart recognition config'**
+  String get configIncludeAI;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

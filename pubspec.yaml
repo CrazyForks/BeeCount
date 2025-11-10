@@ -42,6 +42,7 @@ dependencies:
   image_picker: ^1.1.2
   gbk_codec: ^0.4.0
   app_links: ^6.4.1
+  yaml: ^3.1.2
   flutter_ai_kit:
     path: packages/flutter_ai_kit
   flutter_ai_kit_zhipu:

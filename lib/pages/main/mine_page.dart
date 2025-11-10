@@ -38,6 +38,7 @@ import '../settings/appearance_settings_page.dart';
 import '../settings/smart_billing_page.dart';
 import '../settings/automation_page.dart';
 import '../settings/about_page.dart';
+import '../settings/config_import_export_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/update_service.dart';
@@ -446,6 +447,18 @@ class MinePage extends ConsumerWidget {
                         onTap: () async {
                           final url = Uri.parse('https://github.com/TNT-Likely/BeeCount');
                           await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.settings_backup_restore,
+                        title: AppLocalizations.of(context).configImportExportTitle,
+                        subtitle: AppLocalizations.of(context).configImportExportSubtitle,
+                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const ConfigImportExportPage()),
+                          );
                         },
                       ),
                     ],

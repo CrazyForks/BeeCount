@@ -1509,5 +1509,41 @@
   "syncManagement": "Sync Management",
   "syncManagementDesc": "Data sync and backup",
   "moreSettings": "More Settings",
-  "moreSettingsDesc": "Advanced cloud sync options"
+  "moreSettingsDesc": "Advanced cloud sync options",
+  "configImportExportTitle": "Config Import/Export",
+  "configImportExportSubtitle": "Backup and restore app configurations",
+  "configImportExportInfoTitle": "Feature Description",
+  "configImportExportInfoMessage": "This feature is used to export and import app configurations, including cloud service settings, AI settings, etc. The config file uses YAML format for easy viewing and editing.\n\n⚠️ Config files contain sensitive information (such as API keys, passwords, etc.), please keep them safe.",
+  "configExportTitle": "Export Config",
+  "configExportSubtitle": "Export current config to YAML file",
+  "configExportShareSubject": "BeeCount Config File",
+  "configExportSuccess": "Config exported successfully",
+  "configExportFailed": "Config export failed",
+  "configImportTitle": "Import Config",
+  "configImportSubtitle": "Restore config from YAML file",
+  "configImportNoFilePath": "No file selected",
+  "configImportConfirmTitle": "Confirm Import",
+  "configImportConfirmMessage": "Importing config will overwrite current settings, continue?",
+  "configImportSuccess": "Config imported successfully",
+  "configImportFailed": "Config import failed",
+  "configImportRestartTitle": "Restart Required",
+  "configImportRestartMessage": "Config has been imported. Some settings will take effect after restarting the app.",
+  "configImportExportIncludesTitle": "Included Configurations",
+  "configExportSavedTo": "Saved to: {path}",
+  "configExportOpenFile": "Open Folder",
+  "configExportOpenFileFailed": "Unable to open folder",
+  "configExportViewContent": "View Content",
+  "configExportCopyContent": "Copy Content",
+  "configExportContentCopied": "Copied to clipboard",
+  "configExportReadFileFailed": "Failed to read file",
+  "@configExportSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "configIncludeSupabase": "Supabase cloud service config",
+  "configIncludeWebdav": "WebDAV cloud service config",
+  "configIncludeAI": "AI smart recognition config"
 }
