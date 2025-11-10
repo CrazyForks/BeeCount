@@ -797,6 +797,69 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mineAvatarDelete => 'Delete Avatar';
 
   @override
+  String get mineShareApp => 'Share App';
+
+  @override
+  String get mineShareAppSubtitle => 'Generate share poster and save to gallery';
+
+  @override
+  String get mineShareGenerating => 'Generating share poster...';
+
+  @override
+  String get mineShareSuccess => 'Saved Successfully';
+
+  @override
+  String get mineShareSuccessMessage => 'Share poster has been saved to gallery';
+
+  @override
+  String get mineShareFailed => 'Save failed, please check gallery permissions';
+
+  @override
+  String get sharePosterAppName => 'BeeCount';
+
+  @override
+  String get sharePosterSlogan => 'Smart Accounting, Beautiful Life';
+
+  @override
+  String get sharePosterFeature1 => '✨ Completely Open Source & Free';
+
+  @override
+  String get sharePosterFeature2 => '🤖 AI Smart Bill Recognition';
+
+  @override
+  String get sharePosterFeature3 => '⚡ Automated Accounting';
+
+  @override
+  String get sharePosterFeature4 => '🔒 Privacy & Security';
+
+  @override
+  String get sharePosterFeature5 => '☁️ Cloud Sync & Backup';
+
+  @override
+  String get sharePosterFeature6 => '📊 Multiple Ledgers';
+
+  @override
+  String get sharePosterScanText => 'Scan to visit open source project';
+
+  @override
+  String get sharePosterPreviewTitle => 'Share Poster Preview';
+
+  @override
+  String get sharePosterSave => 'Save to Gallery';
+
+  @override
+  String get sharePosterShare => 'Share';
+
+  @override
+  String get sharePosterSaveSuccess => 'Saved to gallery';
+
+  @override
+  String get sharePosterSaveFailed => 'Failed to save';
+
+  @override
+  String get sharePosterPermissionDenied => 'Gallery permission denied, please enable in settings';
+
+  @override
   String get mineDaysCount => 'Días';
 
   @override

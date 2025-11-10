@@ -1570,6 +1570,132 @@ abstract class AppLocalizations {
   /// **'Delete Avatar'**
   String get mineAvatarDelete;
 
+  /// No description provided for @mineShareApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Share App'**
+  String get mineShareApp;
+
+  /// No description provided for @mineShareAppSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate share poster and save to gallery'**
+  String get mineShareAppSubtitle;
+
+  /// No description provided for @mineShareGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating share poster...'**
+  String get mineShareGenerating;
+
+  /// No description provided for @mineShareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Successfully'**
+  String get mineShareSuccess;
+
+  /// No description provided for @mineShareSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Share poster has been saved to gallery'**
+  String get mineShareSuccessMessage;
+
+  /// No description provided for @mineShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Save failed, please check gallery permissions'**
+  String get mineShareFailed;
+
+  /// No description provided for @sharePosterAppName.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount'**
+  String get sharePosterAppName;
+
+  /// No description provided for @sharePosterSlogan.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Accounting, Beautiful Life'**
+  String get sharePosterSlogan;
+
+  /// No description provided for @sharePosterFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'✨ Completely Open Source & Free'**
+  String get sharePosterFeature1;
+
+  /// No description provided for @sharePosterFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'🤖 AI Smart Bill Recognition'**
+  String get sharePosterFeature2;
+
+  /// No description provided for @sharePosterFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'⚡ Automated Accounting'**
+  String get sharePosterFeature3;
+
+  /// No description provided for @sharePosterFeature4.
+  ///
+  /// In en, this message translates to:
+  /// **'🔒 Privacy & Security'**
+  String get sharePosterFeature4;
+
+  /// No description provided for @sharePosterFeature5.
+  ///
+  /// In en, this message translates to:
+  /// **'☁️ Cloud Sync & Backup'**
+  String get sharePosterFeature5;
+
+  /// No description provided for @sharePosterFeature6.
+  ///
+  /// In en, this message translates to:
+  /// **'📊 Multiple Ledgers'**
+  String get sharePosterFeature6;
+
+  /// No description provided for @sharePosterScanText.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to visit open source project'**
+  String get sharePosterScanText;
+
+  /// No description provided for @sharePosterPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Poster Preview'**
+  String get sharePosterPreviewTitle;
+
+  /// No description provided for @sharePosterSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to Gallery'**
+  String get sharePosterSave;
+
+  /// No description provided for @sharePosterShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get sharePosterShare;
+
+  /// No description provided for @sharePosterSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to gallery'**
+  String get sharePosterSaveSuccess;
+
+  /// No description provided for @sharePosterSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save'**
+  String get sharePosterSaveFailed;
+
+  /// No description provided for @sharePosterPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery permission denied, please enable in settings'**
+  String get sharePosterPermissionDenied;
+
   /// No description provided for @mineDaysCount.
   ///
   /// In en, this message translates to:

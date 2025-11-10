@@ -797,6 +797,69 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineAvatarDelete => '删除头像';
 
   @override
+  String get mineShareApp => '分享应用';
+
+  @override
+  String get mineShareAppSubtitle => '生成分享海报并保存到相册';
+
+  @override
+  String get mineShareGenerating => '正在生成分享海报...';
+
+  @override
+  String get mineShareSuccess => '保存成功';
+
+  @override
+  String get mineShareSuccessMessage => '分享海报已保存到相册';
+
+  @override
+  String get mineShareFailed => '保存失败，请检查相册权限';
+
+  @override
+  String get sharePosterAppName => '蜜蜂记账';
+
+  @override
+  String get sharePosterSlogan => '一笔一蜜，记录美好生活';
+
+  @override
+  String get sharePosterFeature1 => '✨ 完全开源免费';
+
+  @override
+  String get sharePosterFeature2 => '🤖 AI智能识别账单';
+
+  @override
+  String get sharePosterFeature3 => '⚡ 自动化记账';
+
+  @override
+  String get sharePosterFeature4 => '🔒 数据隐私安全';
+
+  @override
+  String get sharePosterFeature5 => '☁️ 云端同步备份';
+
+  @override
+  String get sharePosterFeature6 => '📊 多账本管理';
+
+  @override
+  String get sharePosterScanText => '扫码访问开源项目';
+
+  @override
+  String get sharePosterPreviewTitle => '分享海报预览';
+
+  @override
+  String get sharePosterSave => '保存到相册';
+
+  @override
+  String get sharePosterShare => '分享';
+
+  @override
+  String get sharePosterSaveSuccess => '已保存到相册';
+
+  @override
+  String get sharePosterSaveFailed => '保存失败';
+
+  @override
+  String get sharePosterPermissionDenied => '相册权限被拒绝，请在设置中开启';
+
+  @override
   String get mineDaysCount => '记账天数';
 
   @override

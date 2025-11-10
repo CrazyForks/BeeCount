@@ -9,6 +9,7 @@ import '../data/import_page.dart';
 import '../data/export_page.dart';
 import '../category/category_manage_page.dart';
 import '../category/category_migration_page.dart';
+import '../settings/config_import_export_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 
@@ -113,6 +114,26 @@ class DataManagementPage extends ConsumerWidget {
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => const CategoryMigrationPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 8.0.scaled(context, ref)),
+                // 配置管理
+                SectionCard(
+                  margin: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      // 配置导入导出
+                      AppListTile(
+                        leading: Icons.settings_backup_restore,
+                        title: AppLocalizations.of(context).configImportExportTitle,
+                        subtitle: AppLocalizations.of(context).configImportExportSubtitle,
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const ConfigImportExportPage()),
                           );
                         },
                       ),

@@ -2,9 +2,8 @@
     <!-- Required for Supabase network requests -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Required for downloading APK files -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+    <!-- Required for downloading APK files and saving images -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Required for reading screenshots (Android 13+) -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <!-- Required for reading screenshots (Android 10-12) -->
@@ -31,7 +30,8 @@
     <application
         android:label="@string/app_name"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"

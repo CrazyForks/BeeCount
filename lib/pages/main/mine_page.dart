@@ -20,6 +20,7 @@ import '../cloud/cloud_service_page.dart';
 import '../../utils/logger.dart';
 import '../../services/restore_service.dart';
 import '../../services/avatar_service.dart';
+import '../../services/share_poster_service.dart';
 import '../data/restore_progress_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../settings/font_settings_page.dart';
@@ -39,7 +40,6 @@ import '../settings/appearance_settings_page.dart';
 import '../settings/smart_billing_page.dart';
 import '../settings/automation_page.dart';
 import '../settings/about_page.dart';
-import '../settings/config_import_export_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/update_service.dart';
@@ -350,14 +350,32 @@ class MinePage extends ConsumerWidget {
                       ),
                       const Divider(height: 1, thickness: 0.5),
                       AppListTile(
-                        leading: Icons.settings_backup_restore,
-                        title: AppLocalizations.of(context).configImportExportTitle,
-                        subtitle: AppLocalizations.of(context).configImportExportSubtitle,
-                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        leading: Icons.share_outlined,
+                        title: AppLocalizations.of(context).mineShareApp,
+                        subtitle: AppLocalizations.of(context).mineShareAppSubtitle,
                         onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const ConfigImportExportPage()),
-                          );
+                          try {
+                            showToast(context, AppLocalizations.of(context).mineShareGenerating);
+                            final primaryColor = ref.read(primaryColorProvider);
+                            final imageBytes = await SharePosterService.generatePoster(context, primaryColor);
+                            if (!context.mounted) return;
+                            if (imageBytes != null) {
+                              await SharePosterService.showPosterPreview(context, imageBytes);
+                            } else {
+                              await AppDialog.error(
+                                context,
+                                title: AppLocalizations.of(context).commonFailed,
+                                message: AppLocalizations.of(context).mineShareFailed,
+                              );
+                            }
+                          } catch (e) {
+                            if (!context.mounted) return;
+                            await AppDialog.error(
+                              context,
+                              title: AppLocalizations.of(context).commonFailed,
+                              message: '$e',
+                            );
+                          }
                         },
                       ),
                     ],
