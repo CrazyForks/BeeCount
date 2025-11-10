@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:csv/csv.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -33,19 +32,19 @@ class _ExportPageState extends ConsumerState<ExportPage> {
     return Scaffold(
       body: Column(
         children: [
-          PrimaryHeader(title: AppLocalizations.of(context)!.exportTitle, showBack: true),
+          PrimaryHeader(title: AppLocalizations.of(context).exportTitle, showBack: true),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.of(context)!.exportDescription),
+                  Text(AppLocalizations.of(context).exportDescription),
                   const SizedBox(height: 12),
                   FilledButton.icon(
                     onPressed: exporting ? null : () => _export(repo, ledgerId),
                     icon: const Icon(Icons.save_alt_outlined),
-                    label: Text(Platform.isIOS ? AppLocalizations.of(context)!.exportButtonIOS : AppLocalizations.of(context)!.exportButtonAndroid),
+                    label: Text(Platform.isIOS ? AppLocalizations.of(context).exportButtonIOS : AppLocalizations.of(context).exportButtonAndroid),
                   ),
                   const SizedBox(height: 16),
                   if (exporting)
@@ -65,7 +64,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
                     ),
                   if (savedPath != null) ...[
                     const SizedBox(height: 12),
-                    Text(AppLocalizations.of(context)!.exportSavedTo(savedPath!)),
+                    Text(AppLocalizations.of(context).exportSavedTo(savedPath!)),
                   ],
                 ],
               ),
@@ -83,21 +82,21 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         progress = 0;
         savedPath = null;
       });
-      String? directory;
+      String directory;
       bool shareAfter = false;
       if (Platform.isIOS) {
-        // iOS: 写入应用文档目录，然后使用系统分享，不使用 getDirectoryPath（iOS 不支持）
+        // iOS: 写入应用文档目录，然后使用系统分享
         final docDir = await getApplicationDocumentsDirectory();
         directory = docDir.path;
         shareAfter = true;
       } else {
-        directory = await FilePicker.platform.getDirectoryPath(
-          dialogTitle: AppLocalizations.of(context)!.exportSelectFolder,
-        );
-        if (directory == null) {
-          setState(() => exporting = false);
-          return;
+        // Android: 直接保存到公共 Download/BeeCount 目录
+        const downloadPath = '/storage/emulated/0/Download/BeeCount';
+        final dir = Directory(downloadPath);
+        if (!await dir.exists()) {
+          await dir.create(recursive: true);
         }
+        directory = downloadPath;
       }
 
       final q = (repo.db.select(repo.db.transactions)
@@ -114,29 +113,28 @@ class _ExportPageState extends ConsumerState<ExportPage> {
       final rowsJoin = await q.get();
       final total = rowsJoin.length;
       final rows = <List<dynamic>>[];
+      final l10n = AppLocalizations.of(context);
       rows.add([
-        AppLocalizations.of(context)!.exportCsvHeaderType,
-        AppLocalizations.of(context)!.exportCsvHeaderCategory,
-        AppLocalizations.of(context)!.exportCsvHeaderAmount,
-        AppLocalizations.of(context)!.exportCsvHeaderNote,
-        AppLocalizations.of(context)!.exportCsvHeaderTime,
+        l10n.exportCsvHeaderType,
+        l10n.exportCsvHeaderCategory,
+        l10n.exportCsvHeaderAmount,
+        l10n.exportCsvHeaderNote,
+        l10n.exportCsvHeaderTime,
       ]);
       for (int i = 0; i < rowsJoin.length; i++) {
         final r = rowsJoin[i];
         final t = r.readTable(repo.db.transactions);
         final c = r.readTableOrNull(repo.db.categories);
         // 使用完整的时间格式，包含年份和秒，添加前导空格增加列宽
-        final timeStr = t.happenedAt != null
-            ? () {
-                try {
-                  final localTime = t.happenedAt.toLocal();
-                  // 完整时间格式: YYYY-MM-DD HH:mm:ss，前面添加空格增加列宽
-                  return '  ${localTime.year}-${localTime.month.toString().padLeft(2, '0')}-${localTime.day.toString().padLeft(2, '0')} ${localTime.hour.toString().padLeft(2, '0')}:${localTime.minute.toString().padLeft(2, '0')}:${localTime.second.toString().padLeft(2, '0')}  ';
-                } catch (e) {
-                  return '';
-                }
-              }()
-            : '';
+        final timeStr = () {
+          try {
+            final localTime = t.happenedAt.toLocal();
+            // 完整时间格式: YYYY-MM-DD HH:mm:ss，前面添加空格增加列宽
+            return '  ${localTime.year}-${localTime.month.toString().padLeft(2, '0')}-${localTime.day.toString().padLeft(2, '0')} ${localTime.hour.toString().padLeft(2, '0')}:${localTime.minute.toString().padLeft(2, '0')}:${localTime.second.toString().padLeft(2, '0')}  ';
+          } catch (e) {
+            return '';
+          }
+        }();
         final typeStr = _getTypeDisplayName(t.type);
         final categoryName = CategoryUtils.getDisplayName(c?.name, context);
         rows.add([
@@ -164,30 +162,33 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         progress = 1;
       });
       if (!mounted) return;
+      final l10nDialog = AppLocalizations.of(context);
       if (shareAfter) {
         // 触发分享面板
-        await Share.shareXFiles([XFile(path)], text: AppLocalizations.of(context)!.exportShareText);
+        await Share.shareXFiles([XFile(path)], text: l10nDialog.exportShareText);
         await AppDialog.info(context,
-            title: AppLocalizations.of(context)!.exportSuccessTitle, message: AppLocalizations.of(context)!.exportSuccessMessageIOS(path));
+            title: l10nDialog.exportSuccessTitle, message: l10nDialog.exportSuccessMessageIOS(path));
       } else {
-        await AppDialog.info(context, title: AppLocalizations.of(context)!.exportSuccessTitle, message: AppLocalizations.of(context)!.exportSuccessMessageAndroid(path));
+        await AppDialog.info(context, title: l10nDialog.exportSuccessTitle, message: l10nDialog.exportSuccessMessageAndroid(path));
       }
     } catch (e) {
       if (!mounted) return;
       setState(() => exporting = false);
-      await AppDialog.error(context, title: AppLocalizations.of(context)!.exportFailedTitle, message: e.toString());
+      final l10nError = AppLocalizations.of(context);
+      await AppDialog.error(context, title: l10nError.exportFailedTitle, message: e.toString());
     }
   }
 
   /// 将英文类型转换为中文显示名称
   String _getTypeDisplayName(String type) {
+    final l10nType = AppLocalizations.of(context);
     switch (type) {
       case 'income':
-        return AppLocalizations.of(context)!.exportTypeIncome;
+        return l10nType.exportTypeIncome;
       case 'expense':
-        return AppLocalizations.of(context)!.exportTypeExpense;
+        return l10nType.exportTypeExpense;
       case 'transfer':
-        return AppLocalizations.of(context)!.exportTypeTransfer;
+        return l10nType.exportTypeTransfer;
       default:
         return type; // 兜底返回原始值
     }

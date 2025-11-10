@@ -2121,10 +2121,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportDescription => 'Click the button below to select save location and export current ledger to CSV file.';
 
   @override
-  String get exportButtonIOS => 'Export and Share (iOS)';
+  String get exportButtonIOS => 'Export and Share';
 
   @override
-  String get exportButtonAndroid => 'Select Folder and Export';
+  String get exportButtonAndroid => 'Export Data';
 
   @override
   String exportSavedTo(String path) {

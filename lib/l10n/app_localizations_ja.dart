@@ -2121,10 +2121,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get exportDescription => '下のボタンをクリックして保存場所を選択し、現在の家計簿をCSVファイルにエクスポートします。';
 
   @override
-  String get exportButtonIOS => 'エクスポートして共有（iOS）';
+  String get exportButtonIOS => 'エクスポートして共有';
 
   @override
-  String get exportButtonAndroid => 'フォルダを選択してエクスポート';
+  String get exportButtonAndroid => 'データをエクスポート';
 
   @override
   String exportSavedTo(String path) {

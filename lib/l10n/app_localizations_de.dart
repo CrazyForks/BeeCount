@@ -2121,10 +2121,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportDescription => 'Klicken Sie auf die Schaltfläche unten, um den Speicherort auszuwählen und das aktuelle Kontenbuch in eine CSV-Datei zu exportieren.';
 
   @override
-  String get exportButtonIOS => 'Exportieren und teilen (iOS)';
+  String get exportButtonIOS => 'Exportieren und teilen';
 
   @override
-  String get exportButtonAndroid => 'Ordner auswählen und exportieren';
+  String get exportButtonAndroid => 'Daten exportieren';
 
   @override
   String exportSavedTo(String path) {

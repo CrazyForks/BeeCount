@@ -164,8 +164,8 @@
   "exportTitle": "Exportar",
   "reminderTitle": "Recordatorio de registro",
   "exportDescription": "Haz clic en el botón de abajo para seleccionar la ubicación de guardado y exportar el libro actual a un archivo CSV.",
-  "exportButtonIOS": "Exportar y compartir (iOS)",
-  "exportButtonAndroid": "Seleccionar carpeta y exportar",
+  "exportButtonIOS": "Exportar y compartir",
+  "exportButtonAndroid": "Exportar datos",
   "exportSavedTo": "Guardado en: {path}",
   "@exportSavedTo": {
     "placeholders": {

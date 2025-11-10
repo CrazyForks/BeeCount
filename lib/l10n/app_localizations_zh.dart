@@ -2121,10 +2121,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportDescription => '点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
 
   @override
-  String get exportButtonIOS => '导出并分享 (iOS)';
+  String get exportButtonIOS => '导出并分享';
 
   @override
-  String get exportButtonAndroid => '选择文件夹并导出';
+  String get exportButtonAndroid => '导出数据';
 
   @override
   String exportSavedTo(String path) {
@@ -5832,10 +5832,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportDescription => '點擊下方按鈕選擇儲存位置，開始匯出當前帳本為 CSV 檔案。';
 
   @override
-  String get exportButtonIOS => '匯出並分享 (iOS)';
+  String get exportButtonIOS => '匯出並分享';
 
   @override
-  String get exportButtonAndroid => '選擇資料夾並匯出';
+  String get exportButtonAndroid => '匯出資料';
 
   @override
   String exportSavedTo(String path) {

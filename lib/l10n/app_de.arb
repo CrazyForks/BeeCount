@@ -993,8 +993,8 @@
   "reminderAlarmTestSent": "AlarmManager-Test-Benachrichtigung eingestellt (1 Sekunde später), tippen Sie, um zu sehen, ob die App geöffnet wird",
   "exportTitle": "Exportieren",
   "exportDescription": "Klicken Sie auf die Schaltfläche unten, um den Speicherort auszuwählen und das aktuelle Kontenbuch in eine CSV-Datei zu exportieren.",
-  "exportButtonIOS": "Exportieren und teilen (iOS)",
-  "exportButtonAndroid": "Ordner auswählen und exportieren",
+  "exportButtonIOS": "Exportieren und teilen",
+  "exportButtonAndroid": "Daten exportieren",
   "exportSavedTo": "Gespeichert in: {path}",
   "@exportSavedTo": {
     "placeholders": {

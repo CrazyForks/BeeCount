@@ -4069,13 +4069,13 @@ abstract class AppLocalizations {
   /// No description provided for @exportButtonIOS.
   ///
   /// In en, this message translates to:
-  /// **'Export and Share (iOS)'**
+  /// **'Export and Share'**
   String get exportButtonIOS;
 
   /// No description provided for @exportButtonAndroid.
   ///
   /// In en, this message translates to:
-  /// **'Select Folder and Export'**
+  /// **'Export Data'**
   String get exportButtonAndroid;
 
   /// No description provided for @exportSavedTo.

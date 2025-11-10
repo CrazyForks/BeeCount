@@ -1119,8 +1119,8 @@
   "importSelectCsvFile": "Veuillez sélectionner un fichier à importer (CSV/TSV/XLSX supportés)",
   "exportTitle": "Exporter",
   "exportDescription": "Cliquez sur le bouton ci-dessous pour sélectionner l'emplacement de sauvegarde et exporter le livre actuel vers un fichier CSV.",
-  "exportButtonIOS": "Exporter et partager (iOS)",
-  "exportButtonAndroid": "Sélectionner le dossier et exporter",
+  "exportButtonIOS": "Exporter et partager",
+  "exportButtonAndroid": "Exporter les données",
   "exportSavedTo": "Enregistré dans : {path}",
   "@exportSavedTo": {
     "placeholders": {

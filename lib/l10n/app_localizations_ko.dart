@@ -2121,10 +2121,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get exportDescription => '아래 버튼을 클릭하여 저장 위치를 선택하고 현재 가계부를 CSV 파일로 내보내세요.';
 
   @override
-  String get exportButtonIOS => '내보내기 및 공유 (iOS)';
+  String get exportButtonIOS => '내보내기 및 공유';
 
   @override
-  String get exportButtonAndroid => '폴더 선택 및 내보내기';
+  String get exportButtonAndroid => '데이터 내보내기';
 
   @override
   String exportSavedTo(String path) {

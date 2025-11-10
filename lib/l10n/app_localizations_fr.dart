@@ -2121,10 +2121,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get exportDescription => 'Cliquez sur le bouton ci-dessous pour sélectionner l\'emplacement de sauvegarde et exporter le livre actuel vers un fichier CSV.';
 
   @override
-  String get exportButtonIOS => 'Exporter et partager (iOS)';
+  String get exportButtonIOS => 'Exporter et partager';
 
   @override
-  String get exportButtonAndroid => 'Sélectionner le dossier et exporter';
+  String get exportButtonAndroid => 'Exporter les données';
 
   @override
   String exportSavedTo(String path) {
