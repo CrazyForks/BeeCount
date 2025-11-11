@@ -13,9 +13,8 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/design.dart';
 import '../../styles/colors.dart';
-import '../../cloud/auth.dart';
-import '../../cloud/sync.dart';
-import '../../cloud/cloud_service_config.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
+import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
 import '../../utils/logger.dart';
 import '../../services/restore_service.dart';
@@ -50,13 +49,15 @@ class MinePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authServiceProvider);
+    final authAsync = ref.watch(authServiceProvider);
     final ledgerId = ref.watch(currentLedgerIdProvider);
 
     // 登录后一次性触发云端备份检查
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final needCheck = ref.read(restoreCheckRequestProvider);
-      final user = await ref.read(authServiceProvider).currentUser();
+      if (!authAsync.hasValue) return;
+      final auth = authAsync.value!;
+      final user = await auth.currentUser;
       if (!needCheck || user == null || !context.mounted) return;
       ref.read(restoreCheckRequestProvider.notifier).state = false;
       try {
@@ -106,14 +107,18 @@ class MinePage extends ConsumerWidget {
                   final activeCfg = sectionRef.watch(activeCloudConfigProvider);
 
                   return SectionCard(
-                    margin: EdgeInsets.fromLTRB(12.0.scaled(sectionContext, sectionRef), 0,
-                        12.0.scaled(sectionContext, sectionRef), 0),
+                    margin: EdgeInsets.fromLTRB(
+                        12.0.scaled(sectionContext, sectionRef),
+                        0,
+                        12.0.scaled(sectionContext, sectionRef),
+                        0),
                     child: Column(
                       children: [
                         // 云服务
                         AppListTile(
                           leading: Icons.cloud_queue_outlined,
-                          title: AppLocalizations.of(sectionContext).mineCloudService,
+                          title: AppLocalizations.of(sectionContext)
+                              .mineCloudService,
                           subtitle: activeCfg.when(
                             loading: () => AppLocalizations.of(sectionContext)
                                 .mineCloudServiceLoading,
@@ -142,93 +147,141 @@ class MinePage extends ConsumerWidget {
                           },
                         ),
                         // 同步状态
-                        FutureBuilder<AuthUser?>(
-                          future: auth.currentUser(),
-                          builder: (ctx, snap) {
-                            if (snap.hasError) {
-                              return Padding(
+                        Builder(
+                          builder: (ctx) {
+                            return authAsync.when(
+                              loading: () => const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                              ),
+                              error: (e, _) => Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
-                                  '${AppLocalizations.of(sectionContext).commonError}: ${snap.error}',
+                                  '${AppLocalizations.of(sectionContext).commonError}: $e',
                                   style: const TextStyle(color: Colors.red),
                                 ),
-                              );
-                            }
-
-                            final user = snap.data;
-                            final cloudConfig =
-                                sectionRef.watch(activeCloudConfigProvider);
-                            final isLocalMode = cloudConfig.hasValue &&
-                                cloudConfig.value!.type == CloudBackendType.local;
-                            final canUseCloud = user != null && !isLocalMode;
-                            final asyncSt =
-                                sectionRef.watch(syncStatusProvider(ledgerId));
-                            final cached =
-                                sectionRef.watch(lastSyncStatusProvider(ledgerId));
-                            final st = asyncSt.asData?.value ?? cached;
-
-                            // 计算简化的同步状态显示
-                            String subtitle = '';
-                            bool showCheckIcon = false;
-                            final isFirstLoad = st == null;
-                            final refreshing = asyncSt.isLoading;
-
-                            if (!isFirstLoad) {
-                              switch (st.diff) {
-                                case SyncDiff.notLoggedIn:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNotLoggedIn;
-                                  break;
-                                case SyncDiff.notConfigured:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNotConfigured;
-                                  break;
-                                case SyncDiff.noRemote:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncNoRemote;
-                                  break;
-                                case SyncDiff.inSync:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncInSyncSimple;
-                                  showCheckIcon = true;
-                                  break;
-                                case SyncDiff.localNewer:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncLocalNewerSimple;
-                                  break;
-                                case SyncDiff.cloudNewer:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncCloudNewerSimple;
-                                  break;
-                                case SyncDiff.different:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncDifferent;
-                                  break;
-                                case SyncDiff.error:
-                                  subtitle = AppLocalizations.of(sectionContext).mineSyncError;
-                                  break;
-                              }
-                            }
-
-                            return Column(
-                              children: [
-                                const Divider(height: 1, thickness: 0.5),
-                                AppListTile(
-                                  leading: Icons.cloud_sync_outlined,
-                                  title: AppLocalizations.of(sectionContext).mineSyncTitle,
-                                  subtitle: isFirstLoad ? null : subtitle,
-                                  enabled: !isLocalMode,
-                                  trailing: (canUseCloud && (isFirstLoad || refreshing))
-                                      ? const SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(strokeWidth: 2))
-                                      : showCheckIcon
-                                          ? Icon(Icons.check_circle,
-                                              color: sectionRef.watch(primaryColorProvider),
-                                              size: 20)
-                                          : const Icon(Icons.chevron_right,
-                                              color: Colors.black38, size: 20),
-                                  onTap: () async {
-                                    await Navigator.of(sectionContext).push(
-                                      MaterialPageRoute(builder: (_) => const CloudSyncPage()),
+                              ),
+                              data: (auth) => FutureBuilder<CloudUser?>(
+                                future: auth.currentUser,
+                                builder: (ctx, snap) {
+                                  if (snap.hasError) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Text(
+                                        '${AppLocalizations.of(sectionContext).commonError}: ${snap.error}',
+                                        style:
+                                            const TextStyle(color: Colors.red),
+                                      ),
                                     );
-                                  },
-                                ),
-                              ],
+                                  }
+
+                                  final user = snap.data;
+                                  final cloudConfig = sectionRef
+                                      .watch(activeCloudConfigProvider);
+                                  final isLocalMode = cloudConfig.hasValue &&
+                                      cloudConfig.value!.type ==
+                                          CloudBackendType.local;
+                                  final canUseCloud =
+                                      user != null && !isLocalMode;
+                                  final asyncSt = sectionRef
+                                      .watch(syncStatusProvider(ledgerId));
+                                  final cached = sectionRef
+                                      .watch(lastSyncStatusProvider(ledgerId));
+                                  final st = asyncSt.asData?.value ?? cached;
+
+                                  // 计算简化的同步状态显示
+                                  String subtitle = '';
+                                  bool showCheckIcon = false;
+                                  final isFirstLoad = st == null;
+                                  final refreshing = asyncSt.isLoading;
+
+                                  if (!isFirstLoad) {
+                                    switch (st.diff) {
+                                      case SyncDiff.notLoggedIn:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncNotLoggedIn;
+                                        break;
+                                      case SyncDiff.notConfigured:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncNotConfigured;
+                                        break;
+                                      case SyncDiff.noRemote:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncNoRemote;
+                                        break;
+                                      case SyncDiff.inSync:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncInSyncSimple;
+                                        showCheckIcon = true;
+                                        break;
+                                      case SyncDiff.localNewer:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncLocalNewerSimple;
+                                        break;
+                                      case SyncDiff.cloudNewer:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncCloudNewerSimple;
+                                        break;
+                                      case SyncDiff.different:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncDifferent;
+                                        break;
+                                      case SyncDiff.error:
+                                        subtitle =
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncError;
+                                        break;
+                                    }
+                                  }
+
+                                  return Column(
+                                    children: [
+                                      const Divider(height: 1, thickness: 0.5),
+                                      AppListTile(
+                                        leading: Icons.cloud_sync_outlined,
+                                        title:
+                                            AppLocalizations.of(sectionContext)
+                                                .mineSyncTitle,
+                                        subtitle: isFirstLoad ? null : subtitle,
+                                        enabled: !isLocalMode,
+                                        trailing: (canUseCloud &&
+                                                (isFirstLoad || refreshing))
+                                            ? const SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        strokeWidth: 2))
+                                            : showCheckIcon
+                                                ? Icon(Icons.check_circle,
+                                                    color: sectionRef.watch(
+                                                        primaryColorProvider),
+                                                    size: 20)
+                                                : const Icon(
+                                                    Icons.chevron_right,
+                                                    color: Colors.black38,
+                                                    size: 20),
+                                        onTap: () async {
+                                          await Navigator.of(sectionContext)
+                                              .push(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const CloudSyncPage()),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                             );
                           },
                         ),
@@ -248,10 +301,12 @@ class MinePage extends ConsumerWidget {
                         leading: Icons.auto_awesome_outlined,
                         title: AppLocalizations.of(context).smartBilling,
                         subtitle: AppLocalizations.of(context).smartBillingDesc,
-                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: Colors.black38, size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const SmartBillingPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const SmartBillingPage()),
                           );
                         },
                       ),
@@ -260,11 +315,14 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.storage_outlined,
                         title: AppLocalizations.of(context).dataManagement,
-                        subtitle: AppLocalizations.of(context).dataManagementDesc,
-                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        subtitle:
+                            AppLocalizations.of(context).dataManagementDesc,
+                        trailing: const Icon(Icons.chevron_right,
+                            color: Colors.black38, size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const DataManagementPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const DataManagementPage()),
                           );
                         },
                       ),
@@ -273,11 +331,14 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.account_balance_wallet_outlined,
                         title: AppLocalizations.of(context).accountsTitle,
-                        subtitle: AppLocalizations.of(context).accountsManageDesc,
-                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        subtitle:
+                            AppLocalizations.of(context).accountsManageDesc,
+                        trailing: const Icon(Icons.chevron_right,
+                            color: Colors.black38, size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const AccountsPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const AccountsPage()),
                           );
                         },
                       ),
@@ -287,10 +348,12 @@ class MinePage extends ConsumerWidget {
                         leading: Icons.schedule_outlined,
                         title: AppLocalizations.of(context).automation,
                         subtitle: AppLocalizations.of(context).automationDesc,
-                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: Colors.black38, size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const AutomationPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const AutomationPage()),
                           );
                         },
                       ),
@@ -299,11 +362,14 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.palette_outlined,
                         title: AppLocalizations.of(context).appearanceSettings,
-                        subtitle: AppLocalizations.of(context).appearanceSettingsDesc,
-                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        subtitle:
+                            AppLocalizations.of(context).appearanceSettingsDesc,
+                        trailing: const Icon(Icons.chevron_right,
+                            color: Colors.black38, size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const AppearanceSettingsPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const AppearanceSettingsPage()),
                           );
                         },
                       ),
@@ -321,10 +387,12 @@ class MinePage extends ConsumerWidget {
                         leading: Icons.info_outline,
                         title: AppLocalizations.of(context).about,
                         subtitle: AppLocalizations.of(context).aboutDesc,
-                        trailing: const Icon(Icons.chevron_right, color: Colors.black38, size: 20),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: Colors.black38, size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const AboutPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const AboutPage()),
                           );
                         },
                       ),
@@ -332,9 +400,11 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.feedback_outlined,
                         title: AppLocalizations.of(context).mineFeedback,
-                        subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,
+                        subtitle:
+                            AppLocalizations.of(context).mineFeedbackSubtitle,
                         onTap: () async {
-                          final url = Uri.parse('https://github.com/TNT-Likely/BeeCount/issues');
+                          final url = Uri.parse(
+                              'https://github.com/TNT-Likely/BeeCount/issues');
                           await _tryOpenUrl(url);
                         },
                       ),
@@ -342,9 +412,11 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.star_outline,
                         title: AppLocalizations.of(context).mineSupportAuthor,
-                        subtitle: AppLocalizations.of(context).mineSupportAuthorSubtitle,
+                        subtitle: AppLocalizations.of(context)
+                            .mineSupportAuthorSubtitle,
                         onTap: () async {
-                          final url = Uri.parse('https://github.com/TNT-Likely/BeeCount');
+                          final url = Uri.parse(
+                              'https://github.com/TNT-Likely/BeeCount');
                           await _tryOpenUrl(url);
                         },
                       ),
@@ -352,20 +424,29 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.share_outlined,
                         title: AppLocalizations.of(context).mineShareApp,
-                        subtitle: AppLocalizations.of(context).mineShareAppSubtitle,
+                        subtitle:
+                            AppLocalizations.of(context).mineShareAppSubtitle,
                         onTap: () async {
                           try {
-                            showToast(context, AppLocalizations.of(context).mineShareGenerating);
+                            showToast(
+                                context,
+                                AppLocalizations.of(context)
+                                    .mineShareGenerating);
                             final primaryColor = ref.read(primaryColorProvider);
-                            final imageBytes = await SharePosterService.generatePoster(context, primaryColor);
+                            final imageBytes =
+                                await SharePosterService.generatePoster(
+                                    context, primaryColor);
                             if (!context.mounted) return;
                             if (imageBytes != null) {
-                              await SharePosterService.showPosterPreview(context, imageBytes);
+                              await SharePosterService.showPosterPreview(
+                                  context, imageBytes);
                             } else {
                               await AppDialog.error(
                                 context,
-                                title: AppLocalizations.of(context).commonFailed,
-                                message: AppLocalizations.of(context).mineShareFailed,
+                                title:
+                                    AppLocalizations.of(context).commonFailed,
+                                message: AppLocalizations.of(context)
+                                    .mineShareFailed,
                               );
                             }
                           } catch (e) {
@@ -387,561 +468,6 @@ class MinePage extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildSyncSection({
-    required BuildContext context,
-    required WidgetRef ref,
-    required SyncService sync,
-    required int ledgerId,
-    required AuthUser? user,
-    required bool canUseCloud,
-    required bool asyncStIsLoading,
-    required SyncStatus? st,
-    required bool isLocalMode,
-  }) {
-    String subtitle = '';
-    IconData icon = Icons.sync_outlined;
-    bool inSync = false;
-    bool notLoggedIn = false;
-    final isFirstLoad = st == null;
-    final refreshing = asyncStIsLoading;
-    if (!isFirstLoad) {
-      switch (st.diff) {
-        case SyncDiff.notLoggedIn:
-          subtitle = AppLocalizations.of(context).mineSyncNotLoggedIn;
-          icon = Icons.lock_outline;
-          notLoggedIn = true;
-          break;
-        case SyncDiff.notConfigured:
-          subtitle = AppLocalizations.of(context).mineSyncNotConfigured;
-          icon = Icons.cloud_off_outlined;
-          break;
-        case SyncDiff.noRemote:
-          subtitle = AppLocalizations.of(context).mineSyncNoRemote;
-          icon = Icons.cloud_queue_outlined;
-          break;
-        case SyncDiff.inSync:
-          subtitle = AppLocalizations.of(context).mineSyncInSync(st.localCount);
-          icon = Icons.verified_outlined;
-          inSync = true;
-          break;
-        case SyncDiff.localNewer:
-          subtitle =
-              AppLocalizations.of(context).mineSyncLocalNewer(st.localCount);
-          icon = Icons.upload_outlined;
-          break;
-        case SyncDiff.cloudNewer:
-          subtitle = AppLocalizations.of(context).mineSyncCloudNewer;
-          icon = Icons.download_outlined;
-          break;
-        case SyncDiff.different:
-          subtitle = AppLocalizations.of(context).mineSyncDifferent;
-          icon = Icons.change_circle_outlined;
-          break;
-        case SyncDiff.error:
-          // 本地化同步消息
-          String? localizedMessage;
-          if (st.message != null) {
-            switch (st.message!) {
-              case '__SYNC_NOT_CONFIGURED__':
-                localizedMessage =
-                    AppLocalizations.of(context).syncNotConfiguredMessage;
-                break;
-              case '__SYNC_NOT_LOGGED_IN__':
-                localizedMessage =
-                    AppLocalizations.of(context).syncNotLoggedInMessage;
-                break;
-              case '__SYNC_CLOUD_BACKUP_CORRUPTED__':
-                localizedMessage = AppLocalizations.of(context)
-                    .syncCloudBackupCorruptedMessage;
-                break;
-              case '__SYNC_NO_CLOUD_BACKUP__':
-                localizedMessage =
-                    AppLocalizations.of(context).syncNoCloudBackupMessage;
-                break;
-              case '__SYNC_ACCESS_DENIED__':
-                localizedMessage =
-                    AppLocalizations.of(context).syncAccessDeniedMessage;
-                break;
-              default:
-                localizedMessage = st.message;
-            }
-          }
-          subtitle =
-              localizedMessage ?? AppLocalizations.of(context).mineSyncError;
-          icon = Icons.error_outline;
-          break;
-      }
-    }
-    bool uploadBusy = false;
-    bool downloadBusy = false;
-
-    return StatefulBuilder(builder: (ctx, setSB) {
-      return Column(
-        children: [
-          // 首次全量上传提示按钮
-          Consumer(builder: (ctx3, r3, _) {
-            final firstFlag = r3.watch(firstFullUploadPendingProvider);
-            final activeCfg = r3.watch(activeCloudConfigProvider);
-            final show = firstFlag.asData?.value == true &&
-                activeCfg.asData?.value.type != CloudBackendType.local &&
-                canUseCloud &&
-                !notLoggedIn;
-            if (!show) return const SizedBox.shrink();
-            return Column(children: [
-              AppDivider.thin(),
-              AppListTile(
-                leading: Icons.cloud_upload,
-                title: AppLocalizations.of(context).mineFirstFullUpload,
-                subtitle:
-                    AppLocalizations.of(context).mineFirstFullUploadSubtitle,
-                onTap: () async {
-                  try {
-                    await sync.uploadCurrentLedger(ledgerId: ledgerId);
-                    if (context.mounted) {
-                      await AppDialog.info(context,
-                          title: AppLocalizations.of(context)
-                              .mineFirstFullUploadComplete,
-                          message: AppLocalizations.of(context)
-                              .mineFirstFullUploadMessage);
-                    }
-                    await r3
-                        .read(cloudServiceStoreProvider)
-                        .clearFirstFullUploadFlag();
-                    r3.invalidate(firstFullUploadPendingProvider);
-                    r3.read(syncStatusRefreshProvider.notifier).state++;
-                  } catch (e) {
-                    if (context.mounted) {
-                      await AppDialog.error(context,
-                          title: AppLocalizations.of(context)
-                              .mineFirstFullUploadFailed,
-                          message: '$e');
-                    }
-                  }
-                },
-              ),
-            ]);
-          }),
-          AppDivider.thin(),
-          AppListTile(
-            leading: icon,
-            title: AppLocalizations.of(context).mineSyncTitle,
-            subtitle: isFirstLoad ? null : subtitle,
-            enabled: canUseCloud &&
-                !isFirstLoad &&
-                !refreshing &&
-                !uploadBusy &&
-                !downloadBusy,
-            trailing: (canUseCloud &&
-                    (isFirstLoad || refreshing || uploadBusy || downloadBusy))
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2))
-                : null,
-            onTap: (isFirstLoad ||
-                    !canUseCloud ||
-                    refreshing ||
-                    uploadBusy ||
-                    downloadBusy)
-                ? null
-                : () async {
-                    if (!context.mounted) return;
-                    final lines = <String>[
-                      AppLocalizations.of(context)
-                          .mineSyncLocalRecords(st.localCount),
-                      if (st.cloudCount != null)
-                        AppLocalizations.of(context)
-                            .mineSyncCloudRecords(st.cloudCount!),
-                      if (st.cloudExportedAt != null)
-                        AppLocalizations.of(context).mineSyncCloudLatest(
-                            DateFormat('yyyy-MM-dd HH:mm:ss')
-                                .format(st.cloudExportedAt!.toLocal())),
-                      AppLocalizations.of(context)
-                          .mineSyncLocalFingerprint(st.localFingerprint),
-                      if (st.cloudFingerprint != null)
-                        AppLocalizations.of(context)
-                            .mineSyncCloudFingerprint(st.cloudFingerprint!),
-                      if (st.message != null)
-                        () {
-                          String localizedMessage = st.message!;
-                          switch (st.message!) {
-                            case '__SYNC_NOT_CONFIGURED__':
-                              localizedMessage = AppLocalizations.of(context)
-                                  .syncNotConfiguredMessage;
-                              break;
-                            case '__SYNC_NOT_LOGGED_IN__':
-                              localizedMessage = AppLocalizations.of(context)
-                                  .syncNotLoggedInMessage;
-                              break;
-                            case '__SYNC_CLOUD_BACKUP_CORRUPTED__':
-                              localizedMessage = AppLocalizations.of(context)
-                                  .syncCloudBackupCorruptedMessage;
-                              break;
-                            case '__SYNC_NO_CLOUD_BACKUP__':
-                              localizedMessage = AppLocalizations.of(context)
-                                  .syncNoCloudBackupMessage;
-                              break;
-                            case '__SYNC_ACCESS_DENIED__':
-                              localizedMessage = AppLocalizations.of(context)
-                                  .syncAccessDeniedMessage;
-                              break;
-                          }
-                          return AppLocalizations.of(context)
-                              .mineSyncMessage(localizedMessage);
-                        }(),
-                    ];
-                    await AppDialog.info(context,
-                        title: AppLocalizations.of(context).mineSyncDetailTitle,
-                        message: lines.join('\n'));
-                  },
-          ),
-          AppDivider.thin(),
-          AppListTile(
-            leading: Icons.cloud_upload_outlined,
-            title: AppLocalizations.of(context).mineUploadTitle,
-            subtitle: isFirstLoad
-                ? null
-                : !canUseCloud
-                    ? AppLocalizations.of(context).mineUploadNeedCloudService
-                    : notLoggedIn
-                        ? AppLocalizations.of(context).mineUploadNeedLogin
-                        : uploadBusy
-                            ? AppLocalizations.of(context).mineUploadInProgress
-                            : (refreshing
-                                ? AppLocalizations.of(context).mineUploadRefreshing
-                                : (inSync
-                                    ? AppLocalizations.of(context).mineUploadSynced
-                                    : null)),
-            enabled: canUseCloud &&
-                !inSync &&
-                !notLoggedIn &&
-                !uploadBusy &&
-                !downloadBusy &&
-                !isFirstLoad &&
-                !refreshing,
-            trailing: (uploadBusy || refreshing || (isFirstLoad && canUseCloud))
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2))
-                : null,
-            onTap: () async {
-              setSB(() => uploadBusy = true);
-              try {
-                await sync.uploadCurrentLedger(ledgerId: ledgerId);
-                if (!context.mounted) return;
-                await AppDialog.info(context,
-                    title: AppLocalizations.of(context).mineUploadSuccess,
-                    message:
-                        AppLocalizations.of(context).mineUploadSuccessMessage);
-                Future(() async {
-                  try {
-                    await sync.refreshCloudFingerprint(ledgerId: ledgerId);
-                  } catch (_) {}
-                  try {
-                    const maxAttempts = 6;
-                    var delay = const Duration(milliseconds: 500);
-                    for (var i = 0; i < maxAttempts; i++) {
-                      final stNow = await sync.getStatus(ledgerId: ledgerId);
-                      if (stNow.diff == SyncDiff.inSync) {
-                        ref
-                            .read(lastSyncStatusProvider(ledgerId).notifier)
-                            .state = stNow;
-                        break;
-                      }
-                      if (i < maxAttempts - 1) {
-                        await Future.delayed(delay);
-                        delay *= 2;
-                      }
-                    }
-                    ref.read(syncStatusRefreshProvider.notifier).state++;
-                  } catch (_) {}
-                });
-              } catch (e) {
-                if (!context.mounted) return;
-                await AppDialog.info(context,
-                    title: AppLocalizations.of(context).commonFailed,
-                    message: '$e');
-              } finally {
-                if (ctx.mounted) setSB(() => uploadBusy = false);
-              }
-            },
-          ),
-          AppDivider.thin(),
-          AppListTile(
-            leading: Icons.cloud_download_outlined,
-            title: AppLocalizations.of(context).mineDownloadTitle,
-            subtitle: isFirstLoad
-                ? null
-                : !canUseCloud
-                    ? AppLocalizations.of(context).mineDownloadNeedCloudService
-                    : notLoggedIn
-                        ? AppLocalizations.of(context).mineUploadNeedLogin
-                        : (refreshing
-                            ? AppLocalizations.of(context).mineUploadRefreshing
-                            : (inSync
-                                ? AppLocalizations.of(context).mineUploadSynced
-                                : null)),
-            enabled: canUseCloud &&
-                !inSync &&
-                !notLoggedIn &&
-                !downloadBusy &&
-                !isFirstLoad &&
-                !refreshing &&
-                !uploadBusy,
-            trailing:
-                (downloadBusy || refreshing || (isFirstLoad && canUseCloud))
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : null,
-            onTap: () async {
-              setSB(() => downloadBusy = true);
-              try {
-                final res = await sync.downloadAndRestoreToCurrentLedger(
-                    ledgerId: ledgerId);
-                if (!context.mounted) return;
-                final msg = AppLocalizations.of(context).mineDownloadResult(
-                    res.inserted, res.skipped, res.deletedDup);
-                await AppDialog.info(context,
-                    title: AppLocalizations.of(context).mineDownloadComplete,
-                    message: msg);
-                ref.read(syncStatusRefreshProvider.notifier).state++;
-              } catch (e) {
-                if (!context.mounted) return;
-                await AppDialog.error(context,
-                    title: AppLocalizations.of(context).commonFailed,
-                    message: '$e');
-              } finally {
-                if (ctx.mounted) setSB(() => downloadBusy = false);
-              }
-            },
-          ),
-          // 登录/登出
-          if (!isLocalMode)
-            Consumer(builder: (ctx, r, _) {
-              final userNow = user; // capture
-              final cloudConfig = r.watch(activeCloudConfigProvider);
-
-            // 根据云服务类型显示不同的用户信息
-            String getUserDisplayName() {
-              if (userNow == null) {
-                return AppLocalizations.of(context).mineLoginTitle;
-              }
-
-              if (cloudConfig.hasValue &&
-                  cloudConfig.value!.type == CloudBackendType.webdav) {
-                // WebDAV: 显示用户名（去掉 @webdav 后缀）
-                return userNow.id;
-              } else {
-                // Supabase: 显示邮箱
-                return userNow.email ??
-                    AppLocalizations.of(context).mineLoggedInEmail;
-              }
-            }
-
-            return Column(
-              children: [
-                AppDivider.thin(),
-                AppListTile(
-                  leading: userNow == null
-                      ? Icons.login
-                      : Icons.verified_user_outlined,
-                  title: getUserDisplayName(),
-                  subtitle: userNow == null
-                      ? AppLocalizations.of(context).mineLoginSubtitle
-                      : AppLocalizations.of(context).mineLogoutSubtitle,
-                  onTap: () async {
-                    if (userNow == null) {
-                      await Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const LoginPage()));
-                      ref.read(syncStatusRefreshProvider.notifier).state++;
-                      ref.read(statsRefreshProvider.notifier).state++;
-                    } else {
-                      final confirmed = await AppDialog.confirm<bool>(
-                            context,
-                            title: AppLocalizations.of(context)
-                                .mineLogoutConfirmTitle,
-                            message: AppLocalizations.of(context)
-                                .mineLogoutConfirmMessage,
-                            okLabel:
-                                AppLocalizations.of(context).mineLogoutButton,
-                            cancelLabel:
-                                AppLocalizations.of(context).commonCancel,
-                          ) ??
-                          false;
-
-                      if (confirmed) {
-                        await ref.read(authServiceProvider).signOut();
-                        ref.read(syncStatusRefreshProvider.notifier).state++;
-                        ref.read(statsRefreshProvider.notifier).state++;
-                      }
-                    }
-                  },
-                ),
-              ],
-            );
-          }),
-          // 自动同步
-          if (!isLocalMode)
-            Consumer(builder: (ctx, r, _) {
-              final autoSync = r.watch(autoSyncValueProvider);
-              final setter = r.read(autoSyncSetterProvider);
-              final value = autoSync.asData?.value ?? false;
-              final can = canUseCloud;
-
-              return Column(
-                children: [
-                  AppDivider.thin(),
-                  SwitchListTile(
-                    title: Text(AppLocalizations.of(context).mineAutoSyncTitle),
-                    subtitle: can
-                        ? Text(AppLocalizations.of(context).mineAutoSyncSubtitle)
-                        : Text(AppLocalizations.of(context).mineAutoSyncNeedLogin),
-                    value: can ? value : false,
-                    onChanged: can
-                        ? (v) async {
-                            await setter.set(v);
-                          }
-                        : null,
-                  ),
-                ],
-              );
-            }),
-        ],
-      );
-    });
-  }
-
-  Widget _buildAboutSection(BuildContext context, WidgetRef ref) {
-    return SectionCard(
-      margin: EdgeInsets.fromLTRB(
-          12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-      child: Column(children: [
-        AppListTile(
-          leading: Icons.info_outline,
-          title: AppLocalizations.of(context).mineAboutTitle,
-          onTap: () async {
-            final info = await _getAppInfo();
-            if (!context.mounted) return;
-            final versionText = info.version.startsWith('dev-')
-                ? '${info.version} (${info.buildNumber})'
-                : info.version;
-            final msg =
-                '${AppLocalizations.of(context).mineAboutAppName}\n${AppLocalizations.of(context).mineAboutVersion(versionText)}\n${AppLocalizations.of(context).mineAboutRepo}\n${AppLocalizations.of(context).mineAboutLicense}';
-            await AppDialog.info<void>(
-              context,
-              title: AppLocalizations.of(context).mineAboutTitle,
-              message: msg,
-              okLabel: AppLocalizations.of(context).mineAboutOpenGitHub,
-              onOk: () async {
-                final url = Uri.parse('https://github.com/TNT-Likely/BeeCount');
-                await _tryOpenUrl(url);
-              },
-            );
-          },
-        ),
-        // iOS 平台隐藏检查更新功能（使用 App Store/TestFlight 分发）
-        if (!Platform.isIOS) ...[
-          AppDivider.thin(),
-          Consumer(builder: (context, ref2, child) {
-            final isLoading = ref2.watch(checkUpdateLoadingProvider);
-            final downloadProgress = ref2.watch(updateProgressProvider);
-
-            // 确定显示状态
-            bool showProgress = false;
-            String title = AppLocalizations.of(context).mineCheckUpdate;
-            String? subtitle;
-            IconData icon = Icons.system_update_alt_outlined;
-            Widget? trailing;
-
-            if (isLoading) {
-              title = AppLocalizations.of(context).mineCheckUpdateDetecting;
-              subtitle =
-                  AppLocalizations.of(context).mineCheckUpdateSubtitleDetecting;
-              icon = Icons.hourglass_empty;
-              trailing = const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2));
-            } else if (downloadProgress.isActive) {
-              showProgress = true;
-              title = AppLocalizations.of(context).mineUpdateDownloadTitle;
-              icon = Icons.download_outlined;
-              trailing = SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    value: downloadProgress.progress,
-                  ));
-            }
-
-            return AppListTile(
-              leading: icon,
-              title: title,
-              subtitle: showProgress ? downloadProgress.status : subtitle,
-              trailing: trailing,
-              onTap: (isLoading || showProgress)
-                  ? null
-                  : () async {
-                      await UpdateService.checkUpdateWithUI(
-                        context,
-                        setLoading: (loading) => ref2
-                            .read(checkUpdateLoadingProvider.notifier)
-                            .state = loading,
-                        setProgress: (progress, status) {
-                          if (status.isEmpty) {
-                            ref2.read(updateProgressProvider.notifier).state =
-                                UpdateProgress.idle();
-                          } else {
-                            ref2.read(updateProgressProvider.notifier).state =
-                                UpdateProgress.active(progress, status);
-                          }
-                        },
-                      );
-                    },
-            );
-          }),
-        ],
-        AppDivider.thin(),
-        AppListTile(
-          leading: Icons.help_outline,
-          title: AppLocalizations.of(context).mineHelp,
-          subtitle: AppLocalizations.of(context).mineHelpSubtitle,
-          onTap: () async {
-            final url =
-                Uri.parse('https://github.com/TNT-Likely/BeeCount/wiki');
-            await _tryOpenUrl(url);
-          },
-        ),
-        AppDivider.thin(),
-        AppListTile(
-          leading: Icons.feedback_outlined,
-          title: AppLocalizations.of(context).mineFeedback,
-          subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,
-          onTap: () async {
-            final url =
-                Uri.parse('https://github.com/TNT-Likely/BeeCount/issues');
-            await _tryOpenUrl(url);
-          },
-        ),
-        AppDivider.thin(),
-        AppListTile(
-          leading: Icons.star_outline,
-          title: AppLocalizations.of(context).mineSupportAuthor,
-          subtitle: AppLocalizations.of(context).mineSupportAuthorSubtitle,
-          onTap: () async {
-            final url =
-                Uri.parse('https://github.com/TNT-Likely/BeeCount');
-            await _tryOpenUrl(url);
-          },
-        ),
-      ]),
     );
   }
 }
@@ -984,11 +510,14 @@ class _StatCell extends ConsumerWidget {
     }
 
     return Column(
-      crossAxisAlignment: centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         valueWidget,
         SizedBox(height: 4.0.scaled(context, ref)), // 数字与标签间距增大
-        Text(label, style: labelStyle, textAlign: centered ? TextAlign.center : TextAlign.start),
+        Text(label,
+            style: labelStyle,
+            textAlign: centered ? TextAlign.center : TextAlign.start),
       ],
     );
   }
@@ -1206,7 +735,8 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
           ),
           onTap: () async {
             await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const AutoBillingSettingsPage()),
+              MaterialPageRoute(
+                  builder: (_) => const AutoBillingSettingsPage()),
             );
           },
         ),
@@ -1226,7 +756,10 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -1249,7 +782,9 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
                         ),
                       ),
                       Text(
-                        cameraFirst ? l10n.aiFabSettingDescCamera : l10n.aiFabSettingDescManual,
+                        cameraFirst
+                            ? l10n.aiFabSettingDescCamera
+                            : l10n.aiFabSettingDescManual,
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey[600],
@@ -1261,7 +796,9 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
                 Switch(
                   value: cameraFirst,
                   onChanged: (value) async {
-                    await ref.read(fabBehaviorSetterProvider).setCameraFirst(value);
+                    await ref
+                        .read(fabBehaviorSetterProvider)
+                        .setCameraFirst(value);
                     ref.invalidate(fabCameraFirstProvider);
                   },
                 ),
@@ -1285,10 +822,12 @@ Widget _buildAutomationSection(BuildContext context, WidgetRef ref) {
         AppListTile(
           leading: Icons.repeat,
           title: AppLocalizations.of(context).mineRecurringTransactions,
-          subtitle: AppLocalizations.of(context).mineRecurringTransactionsSubtitle,
+          subtitle:
+              AppLocalizations.of(context).mineRecurringTransactionsSubtitle,
           onTap: () async {
             await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const RecurringTransactionPage()),
+              MaterialPageRoute(
+                  builder: (_) => const RecurringTransactionPage()),
             );
           },
         ),
@@ -1505,7 +1044,8 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
             if (_avatarPath != null)
               ListTile(
                 leading: const Icon(Icons.delete, color: Colors.red),
-                title: Text(l10n.mineAvatarDelete, style: const TextStyle(color: Colors.red)),
+                title: Text(l10n.mineAvatarDelete,
+                    style: const TextStyle(color: Colors.red)),
                 onTap: () => Navigator.pop(context, 'delete'),
               ),
           ],
@@ -1547,7 +1087,8 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
   @override
   Widget build(BuildContext context) {
     final activeCfg = ref.watch(activeCloudConfigProvider);
-    final isLocalMode = activeCfg.hasValue && activeCfg.value!.type == CloudBackendType.local;
+    final isLocalMode =
+        activeCfg.hasValue && activeCfg.value!.type == CloudBackendType.local;
     final canEditAvatar = !isLocalMode;
 
     // 获取当前账本信息
@@ -1587,9 +1128,15 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
                   height: 80.0.scaled(context, ref),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -1611,7 +1158,8 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return BeeIcon(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     size: 40.0.scaled(context, ref),
                                   );
                                 },

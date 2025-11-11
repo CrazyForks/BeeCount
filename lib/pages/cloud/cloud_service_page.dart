@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
-import '../../cloud/cloud_service_config.dart';
-import '../../cloud/supabase_initializer.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
+import '../../cloud/sync_service.dart';
 import '../../providers/sync_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
@@ -413,7 +413,8 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
     try {
       // 登出
-      await ref.read(authServiceProvider).signOut();
+      final authService = await ref.read(authServiceProvider.future);
+      await authService.signOut();
 
       // 激活新配置
       final success = await store.activate(type);
@@ -424,20 +425,11 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         return;
       }
 
-      // 重新初始化 Supabase（如果切换到了 Supabase 服务）
-      final newConfig = await store.loadActive();
-      if (newConfig.type == CloudBackendType.supabase && newConfig.valid) {
-        await SupabaseInitializer.initialize(newConfig);
-      } else {
-        // 切换到非 Supabase 服务，清理 Supabase 实例
-        await SupabaseInitializer.dispose();
-      }
-
-      // 刷新
+      // 刷新 providers，下次使用时会自动初始化对应的服务
       ref.invalidate(activeCloudConfigProvider);
       ref.invalidate(supabaseConfigProvider);
       ref.invalidate(webdavConfigProvider);
-      ref.invalidate(supabaseClientProvider);
+      ref.invalidate(authServiceProvider);
 
       if (mounted) {
         showToast(context, AppLocalizations.of(context).cloudSwitchedTo(_getTypeName(type)));

@@ -1,7 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/logger.dart';
 import 'cloud_service_config.dart';
-import 'supabase_initializer.dart';
 
 /// 云服务配置持久化存储
 /// 支持3种类型:本地存储、自定义Supabase、自定义WebDAV
@@ -27,7 +25,7 @@ class CloudServiceStore {
           try {
             return decodeCloudConfig(raw);
           } catch (e) {
-            logW('cloudStore', '解析Supabase配置失败: $e');
+            // 解析失败，静默回退到本地存储
           }
         }
         // 回退到本地存储
@@ -39,7 +37,7 @@ class CloudServiceStore {
           try {
             return decodeCloudConfig(raw);
           } catch (e) {
-            logW('cloudStore', '解析WebDAV配置失败: $e');
+            // 解析失败，静默回退到本地存储
           }
         }
         // 回退到本地存储
@@ -58,7 +56,6 @@ class CloudServiceStore {
     try {
       return decodeCloudConfig(raw);
     } catch (e) {
-      logW('cloudStore', '解析Supabase配置失败: $e');
       return null;
     }
   }
@@ -71,7 +68,6 @@ class CloudServiceStore {
     try {
       return decodeCloudConfig(raw);
     } catch (e) {
-      logW('cloudStore', '解析WebDAV配置失败: $e');
       return null;
     }
   }
@@ -83,8 +79,7 @@ class CloudServiceStore {
     switch (cfg.type) {
       case CloudBackendType.local:
         await sp.setString(_kActiveType, 'local');
-        // 清理 Supabase 实例
-        await SupabaseInitializer.dispose();
+        // Provider 会在下次使用时自动初始化
         break;
 
       case CloudBackendType.supabase:
@@ -92,8 +87,7 @@ class CloudServiceStore {
         await sp.setString(_kActiveType, 'supabase');
         // 标记需要首次全量上传（仅针对 Supabase）
         await sp.setBool(_kFirstFullUploadFlagSupabase, true);
-        // 重新初始化 Supabase
-        await SupabaseInitializer.initialize(cfg);
+        // Provider 会在下次使用时自动初始化
         break;
 
       case CloudBackendType.webdav:
@@ -101,12 +95,9 @@ class CloudServiceStore {
         await sp.setString(_kActiveType, 'webdav');
         // 标记需要首次全量上传（仅针对 WebDAV）
         await sp.setBool(_kFirstFullUploadFlagWebdav, true);
-        // 清理 Supabase 实例
-        await SupabaseInitializer.dispose();
+        // Provider 会在下次使用时自动初始化
         break;
     }
-
-    logI('cloudStore', '配置已保存并激活: ${cfg.type.name}');
   }
 
   /// 仅保存配置,不激活
@@ -120,12 +111,10 @@ class CloudServiceStore {
 
       case CloudBackendType.supabase:
         await sp.setString(_kSupabaseCfg, encodeCloudConfig(cfg));
-        logI('cloudStore', 'Supabase配置已保存');
         break;
 
       case CloudBackendType.webdav:
         await sp.setString(_kWebdavCfg, encodeCloudConfig(cfg));
-        logI('cloudStore', 'WebDAV配置已保存');
         break;
     }
   }
@@ -150,7 +139,6 @@ class CloudServiceStore {
           await sp.setBool(_kFirstFullUploadFlagSupabase, true);
           return true;
         } catch (e) {
-          logW('cloudStore', '激活Supabase配置失败: $e');
           return false;
         }
 
@@ -165,7 +153,6 @@ class CloudServiceStore {
           await sp.setBool(_kFirstFullUploadFlagWebdav, true);
           return true;
         } catch (e) {
-          logW('cloudStore', '激活WebDAV配置失败: $e');
           return false;
         }
     }

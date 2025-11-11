@@ -1,14 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../cloud/cloud_service_config.dart';
-import '../cloud/cloud_service_store.dart';
-import '../cloud/supabase_initializer.dart';
-import '../cloud/auth.dart';
-import '../cloud/sync.dart';
-import '../cloud/supabase_auth.dart';
-import '../cloud/supabase_sync.dart';
-import '../cloud/webdav_auth.dart';
-import '../cloud/webdav_sync.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
+import '../cloud/sync_service.dart';
+import '../cloud/transactions_sync_manager.dart';
 import 'database_providers.dart';
 
 // 同步状态（根据 ledgerId 与刷新 tick 缓存），避免因 UI 重建重复拉取
@@ -86,40 +80,27 @@ final firstFullUploadPendingProvider = FutureProvider<bool>((ref) async {
   return store.isFirstFullUploadPending();
 });
 
-// Supabase Client Provider（使用全局初始化的实例）
-final supabaseClientProvider = Provider((ref) {
+final authServiceProvider = FutureProvider<CloudAuthService>((ref) async {
   final activeAsync = ref.watch(activeCloudConfigProvider);
-  if (!activeAsync.hasValue) return null;
-
-  final cfg = activeAsync.value!;
-
-  // 只有Supabase服务才返回client
-  if (cfg.type == CloudBackendType.supabase && cfg.valid) {
-    return SupabaseInitializer.client;
+  if (!activeAsync.hasValue) {
+    return NoopAuthService();
   }
-
-  return null;
-});
-
-final authServiceProvider = Provider<AuthService>((ref) {
-  final activeAsync = ref.watch(activeCloudConfigProvider);
-  if (!activeAsync.hasValue) return NoopAuthService();
 
   final config = activeAsync.value!;
-  if (!config.valid) return NoopAuthService();
-
-  switch (config.type) {
-    case CloudBackendType.local:
-      return NoopAuthService();
-
-    case CloudBackendType.supabase:
-      final client = ref.watch(supabaseClientProvider);
-      if (client == null) return NoopAuthService();
-      return SupabaseAuthService(client);
-
-    case CloudBackendType.webdav:
-      return WebdavAuthService(config);
+  if (!config.valid || config.type == CloudBackendType.local) {
+    return NoopAuthService();
   }
+
+  try {
+    final services = await createCloudServices(config);
+    if (services.auth != null) {
+      return services.auth!;
+    }
+  } catch (e) {
+    // 初始化失败，返回 NoopAuthService
+  }
+
+  return NoopAuthService();
 });
 
 final syncServiceProvider = Provider<SyncService>((ref) {
@@ -131,19 +112,20 @@ final syncServiceProvider = Provider<SyncService>((ref) {
 
   final db = ref.watch(databaseProvider);
   final repo = ref.watch(repositoryProvider);
-  final auth = ref.watch(authServiceProvider);
 
   switch (config.type) {
     case CloudBackendType.local:
       return LocalOnlySyncService();
 
     case CloudBackendType.supabase:
-      final client = ref.watch(supabaseClientProvider);
-      if (client == null) return LocalOnlySyncService();
-      return SupabaseSyncService(client: client, db: db, repo: repo, auth: auth);
-
     case CloudBackendType.webdav:
-      return WebdavSyncService(config: config, db: db, repo: repo, auth: auth);
+      // 使用新的 TransactionsSyncManager (基于 flutter_cloud_sync 包)
+      // 采用延迟初始化，首次使用时自动初始化
+      return TransactionsSyncManager(
+        config: config,
+        db: db,
+        repo: repo,
+      );
   }
 });
 

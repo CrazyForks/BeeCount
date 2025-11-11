@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers.dart';
 import '../utils/logger.dart';
-import '../cloud/sync.dart';
+import '../cloud/transactions_json.dart';
 
 class RestoreCheckResult {
   final bool needsRestore;

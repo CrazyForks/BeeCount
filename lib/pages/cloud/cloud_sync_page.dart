@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
@@ -8,9 +9,7 @@ import '../../widgets/biz/biz.dart';
 import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../cloud/auth.dart';
-import '../../cloud/sync.dart';
-import '../../cloud/cloud_service_config.dart';
+import '../../cloud/sync_service.dart';
 import '../auth/login_page.dart';
 
 /// 云同步与备份二级页面 - 包含所有同步操作
@@ -27,7 +26,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authServiceProvider);
+    final authAsync = ref.watch(authServiceProvider);
     final sync = ref.watch(syncServiceProvider);
     final ledgerId = ref.watch(currentLedgerIdProvider);
 
@@ -66,14 +65,19 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
             showBack: true,
           ),
           Expanded(
-            child: FutureBuilder<AuthUser?>(
-              future: auth.currentUser(),
-              builder: (ctx, snap) {
-                if (snap.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            child: authAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(
+                child: Text('${AppLocalizations.of(context).commonError}: $e'),
+              ),
+              data: (auth) => FutureBuilder<CloudUser?>(
+                future: auth.currentUser,
+                builder: (ctx, snap) {
+                  if (snap.connectionState != ConnectionState.done) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                final user = snap.data;
+                  final user = snap.data;
                 final cloudConfig = ref.watch(activeCloudConfigProvider);
                 final isLocalMode = cloudConfig.hasValue &&
                     cloudConfig.value!.type == CloudBackendType.local;
@@ -507,9 +511,9 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                                 false;
 
                                         if (confirmed) {
-                                          await ref
-                                              .read(authServiceProvider)
-                                              .signOut();
+                                          final authService = await ref
+                                              .read(authServiceProvider.future);
+                                          await authService.signOut();
                                           ref
                                               .read(syncStatusRefreshProvider
                                                   .notifier)
@@ -559,7 +563,8 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                     ),
                   ],
                 );
-              },
+                },
+              ),
             ),
           ),
         ],

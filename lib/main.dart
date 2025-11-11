@@ -18,8 +18,6 @@ import 'services/screenshot_monitor_service.dart';
 import 'services/shortcuts_handler_service.dart';
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
-import 'cloud/cloud_service_store.dart';
-import 'cloud/supabase_initializer.dart';
 import 'widget/widget_manager.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:app_links/app_links.dart';
@@ -43,9 +41,6 @@ Future<void> main() async {
   } catch (e) {
     print('⚠️  HomeWidget 插件初始化失败（可能在不支持的平台上运行）: $e');
   }
-
-  // 全局初始化Supabase（如果配置了自定义Supabase服务）
-  await _initializeSupabase();
 
   // 初始化通知服务
   try {
@@ -122,23 +117,6 @@ class _WidgetUpdateObserver extends ProviderObserver {
     } catch (e) {
       print('❌ 更新小组件失败（可能在不支持的平台上运行）: $e');
     }
-  }
-}
-
-/// 全局初始化Supabase
-///
-/// 在应用启动时检查用户是否配置了自定义Supabase服务，如果配置了则全局初始化
-/// 这样可以确保session在应用重启后能够正确恢复
-Future<void> _initializeSupabase() async {
-  try {
-    final store = CloudServiceStore();
-    final config = await store.loadActive();
-
-    // 只在配置了Supabase服务时才初始化
-    await SupabaseInitializer.initialize(config);
-  } catch (e) {
-    print('⚠️  Supabase 初始化失败（非致命错误）: $e');
-    // 不抛出异常，避免影响应用启动
   }
 }
 
