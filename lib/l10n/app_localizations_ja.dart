@@ -3681,6 +3681,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get aboutCopied => 'クリップボードにコピーしました';
 
   @override
+  String get aboutSupportDevelopment => 'Support Development';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
+
+  @override
   String get cloudService => 'クラウドサービス';
 
   @override

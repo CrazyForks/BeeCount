@@ -3681,6 +3681,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get aboutCopied => 'Copié dans le presse-papiers';
 
   @override
+  String get aboutSupportDevelopment => 'Support Development';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
+
+  @override
   String get cloudService => 'Service cloud';
 
   @override

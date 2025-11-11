@@ -84,8 +84,12 @@
   "searchBatchModeWithCount": "批量操作 ({selected}/{total})",
   "@searchBatchModeWithCount": {
     "placeholders": {
-      "selected": {"type": "int"},
-      "total": {"type": "int"}
+      "selected": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "searchExitBatchMode": "退出批量操作",
@@ -94,7 +98,9 @@
   "searchSelectedCount": "已选择 {count} 项",
   "@searchSelectedCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBatchSetNote": "设置备注",
@@ -103,14 +109,18 @@
   "searchBatchDeleteConfirmMessage": "确定要删除选中的 {count} 笔记账吗?\n此操作无法撤销。",
   "@searchBatchDeleteConfirmMessage": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBatchSetNoteTitle": "批量设置备注",
   "searchBatchSetNoteMessage": "将为选中的 {count} 笔记账设置相同的备注",
   "@searchBatchSetNoteMessage": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBatchSetNoteHint": "输入备注内容 (留空则清空备注)",
@@ -118,50 +128,66 @@
   "searchBatchChangeCategoryMessage": "将为选中的 {count} 笔记账设置新的分类",
   "@searchBatchChangeCategoryMessage": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBatchChangeCategoryLabel": "选择分类",
   "searchBatchDeleteSuccess": "成功删除 {count} 笔记账",
   "@searchBatchDeleteSuccess": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBatchDeleteFailed": "删除失败: {error}",
   "@searchBatchDeleteFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "searchBatchSetNoteSuccess": "成功为 {count} 笔记账设置备注",
   "@searchBatchSetNoteSuccess": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBatchSetNoteFailed": "设置备注失败: {error}",
   "@searchBatchSetNoteFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "searchBatchChangeCategorySuccess": "成功为 {count} 笔记账调整分类",
   "@searchBatchChangeCategorySuccess": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBatchChangeCategoryFailed": "调整分类失败: {error}",
   "@searchBatchChangeCategoryFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "searchResultsCount": "共 {count} 条结果",
   "@searchResultsCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "analyticsTitle": "分析",
@@ -1374,6 +1400,8 @@
   "aboutDouyin": "抖音",
   "aboutTelegramGroup": "Telegram 群",
   "aboutCopied": "已复制到剪贴板",
+  "aboutSupportDevelopment": "支持开发",
+  "aboutSupportDevelopmentSubtitle": "请开发者喝杯咖啡",
   "cloudService": "云服务",
   "cloudServiceDesc": "配置云存储提供商",
   "syncManagement": "同步管理",

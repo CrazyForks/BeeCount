@@ -3681,6 +3681,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutCopied => '已复制到剪贴板';
 
   @override
+  String get aboutSupportDevelopment => '支持开发';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => '请开发者喝杯咖啡';
+
+  @override
   String get cloudService => '云服务';
 
   @override

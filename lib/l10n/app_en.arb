@@ -1529,6 +1529,8 @@
   "aboutDouyin": "Douyin",
   "aboutTelegramGroup": "Telegram Group",
   "aboutCopied": "Copied to clipboard",
+  "aboutSupportDevelopment": "Support Development",
+  "aboutSupportDevelopmentSubtitle": "Buy me a coffee",
   "cloudService": "Cloud Service",
   "cloudServiceDesc": "Configure cloud storage provider",
   "syncManagement": "Sync Management",

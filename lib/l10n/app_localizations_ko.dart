@@ -3681,6 +3681,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get aboutCopied => '클립보드에 복사됨';
 
   @override
+  String get aboutSupportDevelopment => 'Support Development';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
+
+  @override
   String get cloudService => '클라우드 서비스';
 
   @override

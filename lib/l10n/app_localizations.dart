@@ -7042,6 +7042,18 @@ abstract class AppLocalizations {
   /// **'Copied to clipboard'**
   String get aboutCopied;
 
+  /// No description provided for @aboutSupportDevelopment.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Development'**
+  String get aboutSupportDevelopment;
+
+  /// No description provided for @aboutSupportDevelopmentSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy me a coffee'**
+  String get aboutSupportDevelopmentSubtitle;
+
   /// No description provided for @cloudService.
   ///
   /// In en, this message translates to:

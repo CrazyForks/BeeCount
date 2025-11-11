@@ -3681,6 +3681,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get aboutCopied => 'Copiado al portapapeles';
 
   @override
+  String get aboutSupportDevelopment => 'Support Development';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
+
+  @override
   String get cloudService => 'Servicio en la nube';
 
   @override

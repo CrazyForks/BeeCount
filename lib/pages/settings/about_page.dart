@@ -134,10 +134,8 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           title: AppLocalizations.of(context).aboutXiaohongshu,
                           subtitle: '278979339',
                           onTap: () async {
-                            await Clipboard.setData(const ClipboardData(text: '278979339'));
-                            if (context.mounted) {
-                              showToast(context, AppLocalizations.of(context).aboutCopied);
-                            }
+                            final url = Uri.parse('https://xhslink.com/m/8K1ekg7EFOq');
+                            await _tryOpenUrl(url);
                           },
                         ),
                         const Divider(height: 1, thickness: 0.5),
@@ -146,10 +144,8 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           title: AppLocalizations.of(context).aboutDouyin,
                           subtitle: '75639334477',
                           onTap: () async {
-                            await Clipboard.setData(const ClipboardData(text: '75639334477'));
-                            if (context.mounted) {
-                              showToast(context, AppLocalizations.of(context).aboutCopied);
-                            }
+                            final url = Uri.parse('https://v.douyin.com/YG7tUweYYyQ/');
+                            await _tryOpenUrl(url);
                           },
                         ),
                       ],
@@ -249,6 +245,20 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                         onTap: () async {
                           final url =
                               Uri.parse('https://github.com/TNT-Likely/BeeCount/wiki');
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.favorite_border,
+                        title: AppLocalizations.of(context).aboutSupportDevelopment,
+                        subtitle: AppLocalizations.of(context).aboutSupportDevelopmentSubtitle,
+                        onTap: () async {
+                          final locale = Localizations.localeOf(context).languageCode;
+                          final docUrl = locale == 'zh'
+                            ? 'https://github.com/TNT-Likely/BeeCount/blob/main/docs/donate/README_ZH.md'
+                            : 'https://github.com/TNT-Likely/BeeCount/blob/main/docs/donate/README_EN.md';
+                          final url = Uri.parse(docUrl);
                           await _tryOpenUrl(url);
                         },
                       ),
