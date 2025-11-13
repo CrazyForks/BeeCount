@@ -12,7 +12,22 @@
 
 **Core Advantage: Self-hosted Supabase/WebDAV servers - Your data, Your control**
 
-[📥 Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [💬 Issues](https://github.com/TNT-Likely/BeeCount/issues) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
+<br/>
+
+<a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
+  <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
+</a>
+<a href="https://apps.apple.com/app/id6754611670">
+  <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1480636800" alt="Download on App Store" height="50"/>
+</a>
+<a href="https://testflight.apple.com/join/Eaw2rWxa">
+  <img src="https://img.shields.io/badge/TestFlight-Public%20Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+</a>
+
+<br/>
+<br/>
+
+[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -20,15 +35,17 @@
 
 > ## 🎉 Great News
 >
+> **🍎 iOS Version Now Available on App Store!**
+>
+> Search for **"BeeCount"** on the App Store to download and install
+>
+> ---
+>
 > **🚀 Alipay/WeChat Auto-Billing - Zero Manual Input!**
 >
-> 📸 **Snap & Record** - Point camera at payment receipt, AI auto-extracts amount, merchant, and category
+> 📸 **Photo Recognition** - AI auto-extracts amount, merchant, and category (Local Model in training + GLM Cloud Model)
 >
-> 🤖 **AI-Powered Recognition** - Supports Zhipu GLM-4-Flash (completely free) + Local Model (in training)
->
-> ⚡ **Screenshot Auto-Billing** - Android screenshot monitoring + iOS Shortcuts, auto-create bills after payment
->
-> 💡 **Revolutionary Experience** - Say goodbye to tedious manual entry, make bookkeeping as natural as breathing
+> ⚡ **Screenshot Billing** - Android screenshot monitoring + iOS Shortcuts, auto-create bills after payment
 
 ---
 
@@ -56,9 +73,11 @@
 
 > ## 📱 Platform Support
 >
-> 🍎 **iOS Version Submitting to App Store** - Beta version available via **[TestFlight](https://testflight.apple.com/join/Eaw2rWxa)**
+> 🤖 **Android** - [Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | Supports Android 5.0+
 >
-> 📱 **HarmonyOS Version Coming Soon** - Supports HarmonyOS 5.0+ - [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
+> 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa) | Supports iOS 13.0+
+>
+> 📱 **HarmonyOS** - Coming Soon | Supports HarmonyOS 5.0+ | [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 
 ---
 
@@ -188,30 +207,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 > 💡 Want to add a new language? Welcome to create an [Issue](https://github.com/TNT-Likely/BeeCount/issues)!
 
-## 🚀 Quick Start
-
-### 📥 Option 1: Direct Download (Recommended)
-
-<div align="center">
-
-[![Download Android APK](https://img.shields.io/badge/Download_Android_APK-Latest_Version-brightgreen?style=for-the-badge&logo=android)](https://github.com/TNT-Likely/BeeCount/releases/latest)
-[![Join iOS TestFlight](https://img.shields.io/badge/Join_iOS_TestFlight-Beta_Version-blue?style=for-the-badge&logo=apple)](https://testflight.apple.com/join/Eaw2rWxa)
-
-</div>
-
-**Android Users:**
-
-1. Click the button above to go to [Releases](https://github.com/TNT-Likely/BeeCount/releases) page
-2. Download the latest `app-prod-release-*.apk` file
-3. Install and start using (default local mode, no configuration needed)
-
-**iOS Users:**
-
-1. Install [TestFlight](https://apps.apple.com/app/testflight/id899247664) on your iPhone/iPad
-2. Click [TestFlight Beta Link](https://testflight.apple.com/join/Eaw2rWxa) to join
-3. Install BeeCount from TestFlight
-
-### 🔨 Option 2: Build from Source
+## 🔨 Developer Build
 
 ```bash
 # Clone the project
