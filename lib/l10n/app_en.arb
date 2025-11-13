@@ -900,6 +900,7 @@
   "exportCsvHeaderType": "Type",
   "exportCsvHeaderCategory": "Category",
   "exportCsvHeaderAmount": "Amount",
+  "exportCsvHeaderAccount": "Account",
   "exportCsvHeaderNote": "Note",
   "exportCsvHeaderTime": "Time",
   "exportShareText": "BeeCount Export File",

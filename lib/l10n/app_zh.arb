@@ -857,6 +857,7 @@
   "exportCsvHeaderType": "类型",
   "exportCsvHeaderCategory": "分类",
   "exportCsvHeaderAmount": "金额",
+  "exportCsvHeaderAccount": "账户",
   "exportCsvHeaderNote": "备注",
   "exportCsvHeaderTime": "时间",
   "exportShareText": "BeeCount 导出文件",

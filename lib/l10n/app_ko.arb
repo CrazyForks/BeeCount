@@ -771,6 +771,7 @@
   "exportCsvHeaderType": "유형",
   "exportCsvHeaderCategory": "카테고리",
   "exportCsvHeaderAmount": "금액",
+  "exportCsvHeaderAccount": "계정",
   "exportCsvHeaderNote": "메모",
   "exportCsvHeaderTime": "시간",
   "exportShareText": "BeeCount 내보내기 파일",

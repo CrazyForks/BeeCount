@@ -2319,6 +2319,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get exportCsvHeaderAmount => '금액';
 
   @override
+  String get exportCsvHeaderAccount => '계정';
+
+  @override
   String get exportCsvHeaderNote => '메모';
 
   @override

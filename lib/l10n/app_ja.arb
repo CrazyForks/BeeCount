@@ -771,6 +771,7 @@
   "exportCsvHeaderType": "タイプ",
   "exportCsvHeaderCategory": "カテゴリ",
   "exportCsvHeaderAmount": "金額",
+  "exportCsvHeaderAccount": "アカウント",
   "exportCsvHeaderNote": "メモ",
   "exportCsvHeaderTime": "時刻",
   "exportShareText": "BeeCountエクスポートファイル",

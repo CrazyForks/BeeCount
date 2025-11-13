@@ -4414,6 +4414,12 @@ abstract class AppLocalizations {
   /// **'Amount'**
   String get exportCsvHeaderAmount;
 
+  /// No description provided for @exportCsvHeaderAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get exportCsvHeaderAccount;
+
   /// No description provided for @exportCsvHeaderNote.
   ///
   /// In en, this message translates to:

@@ -178,6 +178,7 @@
   "exportCsvHeaderType": "Tipo",
   "exportCsvHeaderCategory": "Categoría",
   "exportCsvHeaderAmount": "Monto",
+  "exportCsvHeaderAccount": "Cuenta",
   "exportCsvHeaderNote": "Nota",
   "exportCsvHeaderTime": "Hora",
   "exportShareText": "Archivo de exportación de BeeCount",

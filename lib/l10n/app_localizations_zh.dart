@@ -2319,6 +2319,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportCsvHeaderAmount => '金额';
 
   @override
+  String get exportCsvHeaderAccount => '账户';
+
+  @override
   String get exportCsvHeaderNote => '备注';
 
   @override
@@ -6071,6 +6074,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get exportCsvHeaderAmount => '金額';
+
+  @override
+  String get exportCsvHeaderAccount => '帳戶';
 
   @override
   String get exportCsvHeaderNote => '備註';

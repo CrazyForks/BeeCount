@@ -691,6 +691,7 @@
   "exportCsvHeaderType": "類型",
   "exportCsvHeaderCategory": "分類",
   "exportCsvHeaderAmount": "金額",
+  "exportCsvHeaderAccount": "帳戶",
   "exportCsvHeaderNote": "備註",
   "exportCsvHeaderTime": "時間",
   "exportShareText": "BeeCount 匯出檔案",

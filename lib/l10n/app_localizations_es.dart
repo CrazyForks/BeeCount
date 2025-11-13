@@ -2319,6 +2319,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exportCsvHeaderAmount => 'Monto';
 
   @override
+  String get exportCsvHeaderAccount => 'Cuenta';
+
+  @override
   String get exportCsvHeaderNote => 'Nota';
 
   @override
