@@ -1477,5 +1477,30 @@
   "smartBillingPageSubtitle": "AI 및 자동화 기록 기능",
   "smartBillingPageTitle": "스마트 기록",
   "syncManagement": "동기화 관리",
-  "syncManagementDesc": "데이터 동기화 및 백업"
+  "syncManagementDesc": "데이터 동기화 및 백업",
+  "storageManagementTitle": "저장 공간 관리",
+  "storageManagementSubtitle": "캐시를 정리하여 공간 확보",
+  "storageAIModels": "AI 모델",
+  "storageAPKFiles": "설치 패키지",
+  "storageNoData": "데이터 없음",
+  "storageFiles": "개 파일",
+  "storageHint": "항목을 탭하면 해당 캐시 파일을 정리할 수 있습니다",
+  "storageClearConfirmTitle": "정리 확인",
+  "storageClearAIModelsMessage": "모든 AI 모델을 정리하시겠습니까? 크기: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "모든 설치 패키지를 정리하시겠습니까? 크기: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "정리 성공"
 }

@@ -3970,6 +3970,43 @@ class AppLocalizationsZh extends AppLocalizations {
   String ledgersConflictDownloadSuccess(int inserted) {
     return '下载成功，已合并 $inserted 笔账单';
   }
+
+  @override
+  String get storageManagementTitle => '存储空间管理';
+
+  @override
+  String get storageManagementSubtitle => '清理缓存释放空间';
+
+  @override
+  String get storageAIModels => 'AI模型';
+
+  @override
+  String get storageAPKFiles => '安装包';
+
+  @override
+  String get storageNoData => '无数据';
+
+  @override
+  String get storageFiles => '个文件';
+
+  @override
+  String get storageHint => '点击项目可清理对应的缓存文件';
+
+  @override
+  String get storageClearConfirmTitle => '确认清理';
+
+  @override
+  String storageClearAIModelsMessage(String size) {
+    return '确定要清理所有AI模型吗？大小: $size';
+  }
+
+  @override
+  String storageClearAPKMessage(String size) {
+    return '确定要清理所有安装包吗？大小: $size';
+  }
+
+  @override
+  String get storageClearSuccess => '清理成功';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -7595,4 +7632,41 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get moreSettingsDesc => '進階雲同步選項';
+
+  @override
+  String get storageManagementTitle => '儲存空間管理';
+
+  @override
+  String get storageManagementSubtitle => '清理快取釋放空間';
+
+  @override
+  String get storageAIModels => 'AI模型';
+
+  @override
+  String get storageAPKFiles => '安裝包';
+
+  @override
+  String get storageNoData => '無資料';
+
+  @override
+  String get storageFiles => '個檔案';
+
+  @override
+  String get storageHint => '點擊項目可清理對應的快取檔案';
+
+  @override
+  String get storageClearConfirmTitle => '確認清理';
+
+  @override
+  String storageClearAIModelsMessage(String size) {
+    return '確定要清理所有AI模型嗎？大小：$size';
+  }
+
+  @override
+  String storageClearAPKMessage(String size) {
+    return '確定要清理所有安裝包嗎？大小：$size';
+  }
+
+  @override
+  String get storageClearSuccess => '清理成功';
 }

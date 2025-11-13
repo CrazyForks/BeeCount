@@ -1599,5 +1599,30 @@
         "type": "int"
       }
     }
-  }
+  },
+  "storageManagementTitle": "存储空间管理",
+  "storageManagementSubtitle": "清理缓存释放空间",
+  "storageAIModels": "AI模型",
+  "storageAPKFiles": "安装包",
+  "storageNoData": "无数据",
+  "storageFiles": "个文件",
+  "storageHint": "点击项目可清理对应的缓存文件",
+  "storageClearConfirmTitle": "确认清理",
+  "storageClearAIModelsMessage": "确定要清理所有AI模型吗？大小: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "确定要清理所有安装包吗？大小: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "清理成功"
 }

@@ -1859,5 +1859,30 @@
   "smartBillingPageSubtitle": "KI- und Automatisierungsfunktionen für Buchführung",
   "smartBillingPageTitle": "Intelligente Buchführung",
   "syncManagement": "Synchronisierungsverwaltung",
-  "syncManagementDesc": "Datensynchronisierung und Sicherung"
+  "syncManagementDesc": "Datensynchronisierung und Sicherung",
+  "storageManagementTitle": "Speicherverwaltung",
+  "storageManagementSubtitle": "Cache löschen, um Speicherplatz freizugeben",
+  "storageAIModels": "AI-Modelle",
+  "storageAPKFiles": "Installationspakete",
+  "storageNoData": "Keine Daten",
+  "storageFiles": "Dateien",
+  "storageHint": "Tippen Sie auf Elemente, um entsprechende Cache-Dateien zu löschen",
+  "storageClearConfirmTitle": "Löschen bestätigen",
+  "storageClearAIModelsMessage": "Möchten Sie wirklich alle AI-Modelle löschen? Größe: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "Möchten Sie wirklich alle Installationspakete löschen? Größe: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "Erfolgreich gelöscht"
 }

@@ -3970,4 +3970,41 @@ class AppLocalizationsDe extends AppLocalizations {
   String ledgersConflictDownloadSuccess(int inserted) {
     return 'Download successful, merged $inserted transactions';
   }
+
+  @override
+  String get storageManagementTitle => 'Speicherverwaltung';
+
+  @override
+  String get storageManagementSubtitle => 'Cache löschen, um Speicherplatz freizugeben';
+
+  @override
+  String get storageAIModels => 'AI-Modelle';
+
+  @override
+  String get storageAPKFiles => 'Installationspakete';
+
+  @override
+  String get storageNoData => 'Keine Daten';
+
+  @override
+  String get storageFiles => 'Dateien';
+
+  @override
+  String get storageHint => 'Tippen Sie auf Elemente, um entsprechende Cache-Dateien zu löschen';
+
+  @override
+  String get storageClearConfirmTitle => 'Löschen bestätigen';
+
+  @override
+  String storageClearAIModelsMessage(String size) {
+    return 'Möchten Sie wirklich alle AI-Modelle löschen? Größe: $size';
+  }
+
+  @override
+  String storageClearAPKMessage(String size) {
+    return 'Möchten Sie wirklich alle Installationspakete löschen? Größe: $size';
+  }
+
+  @override
+  String get storageClearSuccess => 'Erfolgreich gelöscht';
 }

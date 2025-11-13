@@ -1866,5 +1866,30 @@
   "smartBillingPageSubtitle": "Funciones de registro IA y automatización",
   "smartBillingPageTitle": "Registro inteligente",
   "syncManagement": "Gestión de sincronización",
-  "syncManagementDesc": "Sincronización y copia de seguridad de datos"
+  "syncManagementDesc": "Sincronización y copia de seguridad de datos",
+  "storageManagementTitle": "Gestión de almacenamiento",
+  "storageManagementSubtitle": "Limpiar caché para liberar espacio",
+  "storageAIModels": "Modelos de IA",
+  "storageAPKFiles": "Paquetes de instalación",
+  "storageNoData": "Sin datos",
+  "storageFiles": "archivos",
+  "storageHint": "Toque los elementos para limpiar los archivos de caché correspondientes",
+  "storageClearConfirmTitle": "Confirmar limpieza",
+  "storageClearAIModelsMessage": "¿Está seguro de que desea limpiar todos los modelos de IA? Tamaño: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "¿Está seguro de que desea limpiar todos los paquetes de instalación? Tamaño: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "Limpieza exitosa"
 }

@@ -1477,5 +1477,30 @@
   "smartBillingPageSubtitle": "AIと自動化記帳機能",
   "smartBillingPageTitle": "スマート記帳",
   "syncManagement": "同期管理",
-  "syncManagementDesc": "データ同期とバックアップ"
+  "syncManagementDesc": "データ同期とバックアップ",
+  "storageManagementTitle": "ストレージ管理",
+  "storageManagementSubtitle": "キャッシュをクリアして空き容量を増やす",
+  "storageAIModels": "AIモデル",
+  "storageAPKFiles": "インストールパッケージ",
+  "storageNoData": "データなし",
+  "storageFiles": "個のファイル",
+  "storageHint": "項目をタップすると対応するキャッシュファイルをクリアできます",
+  "storageClearConfirmTitle": "クリアの確認",
+  "storageClearAIModelsMessage": "すべてのAIモデルをクリアしてもよろしいですか？サイズ: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "すべてのインストールパッケージをクリアしてもよろしいですか？サイズ: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "クリア成功"
 }

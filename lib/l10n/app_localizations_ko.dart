@@ -3970,4 +3970,41 @@ class AppLocalizationsKo extends AppLocalizations {
   String ledgersConflictDownloadSuccess(int inserted) {
     return 'Download successful, merged $inserted transactions';
   }
+
+  @override
+  String get storageManagementTitle => '저장 공간 관리';
+
+  @override
+  String get storageManagementSubtitle => '캐시를 정리하여 공간 확보';
+
+  @override
+  String get storageAIModels => 'AI 모델';
+
+  @override
+  String get storageAPKFiles => '설치 패키지';
+
+  @override
+  String get storageNoData => '데이터 없음';
+
+  @override
+  String get storageFiles => '개 파일';
+
+  @override
+  String get storageHint => '항목을 탭하면 해당 캐시 파일을 정리할 수 있습니다';
+
+  @override
+  String get storageClearConfirmTitle => '정리 확인';
+
+  @override
+  String storageClearAIModelsMessage(String size) {
+    return '모든 AI 모델을 정리하시겠습니까? 크기: $size';
+  }
+
+  @override
+  String storageClearAPKMessage(String size) {
+    return '모든 설치 패키지를 정리하시겠습니까? 크기: $size';
+  }
+
+  @override
+  String get storageClearSuccess => '정리 성공';
 }

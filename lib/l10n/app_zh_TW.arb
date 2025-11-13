@@ -1247,5 +1247,30 @@
   "smartBillingPageSubtitle": "AI和自動化記帳功能",
   "smartBillingPageTitle": "智慧記帳",
   "syncManagement": "同步管理",
-  "syncManagementDesc": "資料同步與備份"
+  "syncManagementDesc": "資料同步與備份",
+  "storageManagementTitle": "儲存空間管理",
+  "storageManagementSubtitle": "清理快取釋放空間",
+  "storageAIModels": "AI模型",
+  "storageAPKFiles": "安裝包",
+  "storageNoData": "無資料",
+  "storageFiles": "個檔案",
+  "storageHint": "點擊項目可清理對應的快取檔案",
+  "storageClearConfirmTitle": "確認清理",
+  "storageClearAIModelsMessage": "確定要清理所有AI模型嗎？大小：{size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "確定要清理所有安裝包嗎？大小：{size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "清理成功"
 }

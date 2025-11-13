@@ -3970,4 +3970,41 @@ class AppLocalizationsJa extends AppLocalizations {
   String ledgersConflictDownloadSuccess(int inserted) {
     return 'Download successful, merged $inserted transactions';
   }
+
+  @override
+  String get storageManagementTitle => 'ストレージ管理';
+
+  @override
+  String get storageManagementSubtitle => 'キャッシュをクリアして空き容量を増やす';
+
+  @override
+  String get storageAIModels => 'AIモデル';
+
+  @override
+  String get storageAPKFiles => 'インストールパッケージ';
+
+  @override
+  String get storageNoData => 'データなし';
+
+  @override
+  String get storageFiles => '個のファイル';
+
+  @override
+  String get storageHint => '項目をタップすると対応するキャッシュファイルをクリアできます';
+
+  @override
+  String get storageClearConfirmTitle => 'クリアの確認';
+
+  @override
+  String storageClearAIModelsMessage(String size) {
+    return 'すべてのAIモデルをクリアしてもよろしいですか？サイズ: $size';
+  }
+
+  @override
+  String storageClearAPKMessage(String size) {
+    return 'すべてのインストールパッケージをクリアしてもよろしいですか？サイズ: $size';
+  }
+
+  @override
+  String get storageClearSuccess => 'クリア成功';
 }

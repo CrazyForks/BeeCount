@@ -1735,5 +1735,30 @@
         "type": "int"
       }
     }
-  }
+  },
+  "storageManagementTitle": "Storage Management",
+  "storageManagementSubtitle": "Clear cache to free up space",
+  "storageAIModels": "AI Models",
+  "storageAPKFiles": "Installation Packages",
+  "storageNoData": "No Data",
+  "storageFiles": "files",
+  "storageHint": "Tap items to clear corresponding cache files",
+  "storageClearConfirmTitle": "Confirm Clear",
+  "storageClearAIModelsMessage": "Are you sure you want to clear all AI models? Size: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "Are you sure you want to clear all installation packages? Size: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "Cleared successfully"
 }

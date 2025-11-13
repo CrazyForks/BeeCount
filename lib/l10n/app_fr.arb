@@ -1849,5 +1849,30 @@
   "smartBillingPageSubtitle": "Fonctions d'enregistrement IA et automatisation",
   "smartBillingPageTitle": "Enregistrement intelligent",
   "syncManagement": "Gestion de la synchronisation",
-  "syncManagementDesc": "Synchronisation et sauvegarde des données"
+  "syncManagementDesc": "Synchronisation et sauvegarde des données",
+  "storageManagementTitle": "Gestion du stockage",
+  "storageManagementSubtitle": "Effacer le cache pour libérer de l'espace",
+  "storageAIModels": "Modèles IA",
+  "storageAPKFiles": "Paquets d'installation",
+  "storageNoData": "Aucune donnée",
+  "storageFiles": "fichiers",
+  "storageHint": "Appuyez sur les éléments pour effacer les fichiers cache correspondants",
+  "storageClearConfirmTitle": "Confirmer l'effacement",
+  "storageClearAIModelsMessage": "Voulez-vous vraiment effacer tous les modèles IA ? Taille : {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "Voulez-vous vraiment effacer tous les paquets d'installation ? Taille : {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "Effacé avec succès"
 }

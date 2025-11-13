@@ -7539,6 +7539,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download successful, merged {inserted} transactions'**
   String ledgersConflictDownloadSuccess(int inserted);
+
+  /// No description provided for @storageManagementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage Management'**
+  String get storageManagementTitle;
+
+  /// No description provided for @storageManagementSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear cache to free up space'**
+  String get storageManagementSubtitle;
+
+  /// No description provided for @storageAIModels.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Models'**
+  String get storageAIModels;
+
+  /// No description provided for @storageAPKFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Installation Packages'**
+  String get storageAPKFiles;
+
+  /// No description provided for @storageNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No Data'**
+  String get storageNoData;
+
+  /// No description provided for @storageFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'files'**
+  String get storageFiles;
+
+  /// No description provided for @storageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap items to clear corresponding cache files'**
+  String get storageHint;
+
+  /// No description provided for @storageClearConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Clear'**
+  String get storageClearConfirmTitle;
+
+  /// No description provided for @storageClearAIModelsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all AI models? Size: {size}'**
+  String storageClearAIModelsMessage(String size);
+
+  /// No description provided for @storageClearAPKMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all installation packages? Size: {size}'**
+  String storageClearAPKMessage(String size);
+
+  /// No description provided for @storageClearSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleared successfully'**
+  String get storageClearSuccess;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
