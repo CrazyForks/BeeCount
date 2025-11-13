@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaml/yaml.dart';
-import '../cloud/cloud_service_config.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import '../utils/logger.dart';
 
 /// 应用配置模型
@@ -37,10 +37,12 @@ class AppConfig {
   static AppConfig fromYaml(Map<dynamic, dynamic> yaml) {
     return AppConfig(
       supabase: yaml.containsKey('supabase')
-          ? SupabaseConfig.fromMap(Map<String, dynamic>.from(yaml['supabase'] as Map))
+          ? SupabaseConfig.fromMap(
+              Map<String, dynamic>.from(yaml['supabase'] as Map))
           : null,
       webdav: yaml.containsKey('webdav')
-          ? WebdavConfig.fromMap(Map<String, dynamic>.from(yaml['webdav'] as Map))
+          ? WebdavConfig.fromMap(
+              Map<String, dynamic>.from(yaml['webdav'] as Map))
           : null,
       ai: yaml.containsKey('ai')
           ? AIConfig.fromMap(Map<String, dynamic>.from(yaml['ai'] as Map))
@@ -266,7 +268,8 @@ class ConfigExportService {
         supabaseUrl: config.supabase!.url,
         supabaseAnonKey: config.supabase!.anonKey,
       );
-      await prefs.setString('cloud_supabase_cfg', encodeCloudConfig(supabaseCfg));
+      await prefs.setString(
+          'cloud_supabase_cfg', encodeCloudConfig(supabaseCfg));
       logI('ConfigImport', 'Supabase配置已导入');
     }
 

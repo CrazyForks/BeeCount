@@ -219,11 +219,6 @@
   "mineCloudServiceOffline": "預設模式 (離線)",
   "mineCloudServiceCustom": "自訂 Supabase",
   "mineCloudServiceWebDAV": "自訂雲服務 (WebDAV)",
-  "mineFirstFullUpload": "首次全量上傳",
-  "mineFirstFullUploadSubtitle": "將所有本地帳本上傳到雲端",
-  "mineFirstFullUploadComplete": "完成",
-  "mineFirstFullUploadMessage": "已上傳當前帳本。其它帳本請切換後再上傳。",
-  "mineFirstFullUploadFailed": "失敗",
   "mineSyncTitle": "同步",
   "mineSyncNotLoggedIn": "未登入",
   "mineSyncNotConfigured": "未設定雲端",
@@ -525,6 +520,7 @@
   "importFieldType": "類型",
   "importFieldAmount": "金額",
   "importFieldCategory": "分類",
+  "importFieldAccount": "帳戶",
   "importFieldNote": "備註",
   "importPreview": "資料預覽",
   "importPreviewLimit": "僅預覽前 {shown} 行，共 {total} 行",
@@ -547,6 +543,8 @@
   "importBackgroundImport": "背景匯入",
   "importCancelled": "（已取消）",
   "importCompleted": "匯入完成{cancelled}：成功 {ok} 條，失敗 {fail} 條",
+  "importSkippedNonTransactionTypes": "跳過 {count} 條非收支記錄（轉帳、債務等）",
+  "importTransactionFailed": "匯入失敗，已回滾所有更改：{error}",
   "cloudBackupFound": "發現雲端備份",
   "cloudBackupRestoreMessage": "檢測到雲端與本地帳本不一致，是否恢復到本地？\n(將進入恢復進度頁)",
   "cloudBackupRestoreFailed": "恢復失敗",
@@ -571,8 +569,6 @@
   "cloudOfflineMode": "離線模式",
   "cloudAvailableServices": "可用雲服務",
   "cloudReadCustomConfigFailed": "讀取自訂設定失敗",
-  "cloudFirstUploadNotComplete": "首次全量上傳尚未完成",
-  "cloudFirstUploadInstruction": "登入後在\"我的/同步\"中手動執行\"上傳\"完成初始化",
   "cloudNotConfigured": "未設定",
   "cloudNotTested": "未測試",
   "cloudConnectionNormal": "連接正常",
@@ -698,6 +694,7 @@
   "exportCsvHeaderType": "類型",
   "exportCsvHeaderCategory": "分類",
   "exportCsvHeaderAmount": "金額",
+  "exportCsvHeaderAccount": "帳戶",
   "exportCsvHeaderNote": "備註",
   "exportCsvHeaderTime": "時間",
   "exportShareText": "BeeCount 匯出檔案",
@@ -1210,6 +1207,8 @@
   "aboutContactEmail": "聯絡電子郵件",
   "aboutCopied": "已複製到剪貼簿",
   "aboutDesc": "版本資訊、說明與回饋",
+  "mineRateApp": "給應用評分",
+  "mineRateAppSubtitle": "在App Store上為我們打分",
   "aboutDouyin": "抖音",
   "aboutGitHubRepo": "GitHub 儲存庫",
   "aboutPageLoadingVersion": "載入版本號中...",
@@ -1248,5 +1247,30 @@
   "smartBillingPageSubtitle": "AI和自動化記帳功能",
   "smartBillingPageTitle": "智慧記帳",
   "syncManagement": "同步管理",
-  "syncManagementDesc": "資料同步與備份"
+  "syncManagementDesc": "資料同步與備份",
+  "storageManagementTitle": "儲存空間管理",
+  "storageManagementSubtitle": "清理快取釋放空間",
+  "storageAIModels": "AI模型",
+  "storageAPKFiles": "安裝包",
+  "storageNoData": "無資料",
+  "storageFiles": "個檔案",
+  "storageHint": "點擊項目可清理對應的快取檔案",
+  "storageClearConfirmTitle": "確認清理",
+  "storageClearAIModelsMessage": "確定要清理所有AI模型嗎？大小：{size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "確定要清理所有安裝包嗎？大小：{size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "清理成功"
 }

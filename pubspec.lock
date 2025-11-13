@@ -411,6 +411,27 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  flutter_cloud_sync:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_cloud_sync"
+      relative: true
+    source: path
+    version: "0.1.0"
+  flutter_cloud_sync_supabase:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_cloud_sync_supabase"
+      relative: true
+    source: path
+    version: "0.1.0"
+  flutter_cloud_sync_webdav:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_cloud_sync_webdav"
+      relative: true
+    source: path
+    version: "0.1.0"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -700,6 +721,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
+  in_app_review:
+    dependency: "direct main"
+    description:
+      name: in_app_review
+      sha256: ab26ac54dbd802896af78c670b265eaeab7ecddd6af4d0751e9604b60574817f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.11"
+  in_app_review_platform_interface:
+    dependency: transitive
+    description:
+      name: in_app_review_platform_interface
+      sha256: fed2c755f2125caa9ae10495a3c163aa7fab5af3585a9c62ef4a6920c5b45f10
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -1518,6 +1555,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  webdav_client:
+    dependency: transitive
+    description:
+      name: webdav_client
+      sha256: "682fffc50b61dc0e8f46717171db03bf9caaa17347be41c0c91e297553bf86b2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
   webdriver:
     dependency: transitive
     description:

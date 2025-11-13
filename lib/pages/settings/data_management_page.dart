@@ -10,6 +10,7 @@ import '../data/export_page.dart';
 import '../category/category_manage_page.dart';
 import '../category/category_migration_page.dart';
 import '../settings/config_import_export_page.dart';
+import '../settings/storage_management_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 
@@ -134,6 +135,18 @@ class DataManagementPage extends ConsumerWidget {
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => const ConfigImportExportPage()),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      // 存储空间管理
+                      AppListTile(
+                        leading: Icons.storage_outlined,
+                        title: AppLocalizations.of(context).storageManagementTitle,
+                        subtitle: AppLocalizations.of(context).storageManagementSubtitle,
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const StorageManagementPage()),
                           );
                         },
                       ),

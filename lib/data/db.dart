@@ -109,6 +109,7 @@ class BeeDatabase extends _$BeeDatabase {
         // 为 accounts 表添加 initial_balance 字段
         await customStatement('ALTER TABLE accounts ADD COLUMN initial_balance REAL NOT NULL DEFAULT 0.0;');
       }
+      // Schema version 5 was used temporarily but reverted - no migration needed
     },
   );
 

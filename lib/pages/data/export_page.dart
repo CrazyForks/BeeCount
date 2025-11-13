@@ -108,6 +108,8 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           .join([
         d.leftOuterJoin(repo.db.categories,
             repo.db.categories.id.equalsExp(repo.db.transactions.categoryId)),
+        d.leftOuterJoin(repo.db.accounts,
+            repo.db.accounts.id.equalsExp(repo.db.transactions.accountId)),
       ]);
 
       final rowsJoin = await q.get();
@@ -118,6 +120,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         l10n.exportCsvHeaderType,
         l10n.exportCsvHeaderCategory,
         l10n.exportCsvHeaderAmount,
+        l10n.exportCsvHeaderAccount,
         l10n.exportCsvHeaderNote,
         l10n.exportCsvHeaderTime,
       ]);
@@ -125,6 +128,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         final r = rowsJoin[i];
         final t = r.readTable(repo.db.transactions);
         final c = r.readTableOrNull(repo.db.categories);
+        final a = r.readTableOrNull(repo.db.accounts);
         // 使用完整的时间格式，包含年份和秒，添加前导空格增加列宽
         final timeStr = () {
           try {
@@ -137,10 +141,12 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         }();
         final typeStr = _getTypeDisplayName(t.type);
         final categoryName = CategoryUtils.getDisplayName(c?.name, context);
+        final accountName = a?.name ?? '';
         rows.add([
           typeStr,
           categoryName,
           t.amount.toStringAsFixed(2),
+          accountName,
           t.note ?? '',
           timeStr
         ]);

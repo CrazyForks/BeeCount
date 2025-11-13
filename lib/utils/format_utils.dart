@@ -3,7 +3,9 @@
 /// 包含各种数据格式化的工具函数
 library;
 
+import 'package:flutter/material.dart';
 import 'currencies.dart';
+import '../l10n/app_localizations.dart';
 
 /// 格式化余额显示，支持多语言单位和多币种
 ///
@@ -36,4 +38,26 @@ String formatBalance(double balance, String currencyCode,
       return '$sign${absBalance.toStringAsFixed(2)}';
     }
   }
+}
+
+/// 翻译账本名称
+///
+/// 如果账本名称是 "Default Ledger"，则返回国际化后的名称
+/// 否则返回原始名称
+String translateLedgerName(BuildContext context, String ledgerName) {
+  final l10n = AppLocalizations.of(context);
+
+  // 处理默认账本名称的多种形式
+  if (ledgerName == 'Default Ledger' ||
+      ledgerName == '默认账本' ||
+      ledgerName == 'デフォルト家計簿' ||
+      ledgerName == '기본 가계부' ||
+      ledgerName == 'Standard-Kontenbuch' ||
+      ledgerName == 'Livre par Défaut' ||
+      ledgerName == 'Libro Predeterminado' ||
+      ledgerName == '預設帳本') {
+    return l10n.ledgersDefaultLedgerName;
+  }
+
+  return ledgerName;
 }

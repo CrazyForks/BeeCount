@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'pages/main/home_page.dart';
 import 'pages/main/analytics_page.dart';
-import 'pages/main/ledgers_page.dart';
+import 'pages/main/ledgers_page_new.dart';
 import 'pages/main/mine_page.dart';
 import 'pages/category/category_picker.dart';
 import 'pages/settings/personalize_page.dart' show headerStyleProvider;
@@ -16,6 +16,7 @@ import 'widget/widget_manager.dart';
 import 'services/automation/ocr_service.dart';
 import 'services/automation/bill_creation_service.dart';
 import 'widgets/ui/ui.dart';
+import 'cloud/transactions_sync_manager.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -28,7 +29,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   final _pages = const [
     HomePage(),
     AnalyticsPage(),
-    LedgersPage(),
+    LedgersPageNew(),
     MinePage(),
   ];
 
@@ -40,6 +41,24 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // 后台刷新账本同步状态
+    _refreshLedgersStatusInBackground();
+  }
+
+  /// 后台刷新账本同步状态
+  void _refreshLedgersStatusInBackground() {
+    Future.microtask(() async {
+      try {
+        final syncService = ref.read(syncServiceProvider);
+        if (syncService is TransactionsSyncManager) {
+          await syncService.refreshAllLedgersStatus();
+          // 刷新完成后触发账本列表更新
+          ref.read(ledgerListRefreshProvider.notifier).state++;
+        }
+      } catch (e) {
+        // 静默失败，不影响App启动
+      }
+    });
   }
 
   @override

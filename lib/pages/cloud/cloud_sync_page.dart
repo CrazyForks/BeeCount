@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
@@ -8,9 +9,8 @@ import '../../widgets/biz/biz.dart';
 import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../cloud/auth.dart';
-import '../../cloud/sync.dart';
-import '../../cloud/cloud_service_config.dart';
+import '../../utils/sync_helpers.dart';
+import '../../cloud/sync_service.dart';
 import '../auth/login_page.dart';
 
 /// 云同步与备份二级页面 - 包含所有同步操作
@@ -27,7 +27,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authServiceProvider);
+    final authAsync = ref.watch(authServiceProvider);
     final sync = ref.watch(syncServiceProvider);
     final ledgerId = ref.watch(currentLedgerIdProvider);
 
@@ -66,14 +66,19 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
             showBack: true,
           ),
           Expanded(
-            child: FutureBuilder<AuthUser?>(
-              future: auth.currentUser(),
-              builder: (ctx, snap) {
-                if (snap.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            child: authAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(
+                child: Text('${AppLocalizations.of(context).commonError}: $e'),
+              ),
+              data: (auth) => FutureBuilder<CloudUser?>(
+                future: auth.currentUser,
+                builder: (ctx, snap) {
+                  if (snap.connectionState != ConnectionState.done) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                final user = snap.data;
+                  final user = snap.data;
                 final cloudConfig = ref.watch(activeCloudConfigProvider);
                 final isLocalMode = cloudConfig.hasValue &&
                     cloudConfig.value!.type == CloudBackendType.local;
@@ -235,54 +240,6 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                   },
                           ),
                           const Divider(height: 1, thickness: 0.5),
-                          // 首次全量上传提示按钮
-                          Consumer(builder: (ctx3, r3, _) {
-                            final firstFlag =
-                                r3.watch(firstFullUploadPendingProvider);
-                            final activeCfg = r3.watch(activeCloudConfigProvider);
-                            final show = firstFlag.asData?.value == true &&
-                                activeCfg.asData?.value != null &&
-                                activeCfg.asData!.value.type !=
-                                    CloudBackendType.local &&
-                                canUseCloud &&
-                                !notLoggedIn;
-                            if (!show) return const SizedBox.shrink();
-                            return Column(children: [
-                              AppListTile(
-                                leading: Icons.cloud_upload,
-                                title: AppLocalizations.of(context)
-                                    .mineFirstFullUpload,
-                                subtitle: AppLocalizations.of(context)
-                                    .mineFirstFullUploadSubtitle,
-                                onTap: () async {
-                                  try {
-                                    await sync.uploadCurrentLedger(
-                                        ledgerId: ledgerId);
-                                    if (context.mounted) {
-                                      await AppDialog.info(context,
-                                          title: AppLocalizations.of(context)
-                                              .mineFirstFullUploadComplete,
-                                          message: AppLocalizations.of(context)
-                                              .mineFirstFullUploadMessage);
-                                    }
-                                    await r3
-                                        .read(cloudServiceStoreProvider)
-                                        .clearFirstFullUploadFlag();
-                                    r3.invalidate(firstFullUploadPendingProvider);
-                                    r3.read(syncStatusRefreshProvider.notifier).state++;
-                                  } catch (e) {
-                                    if (context.mounted) {
-                                      await AppDialog.error(context,
-                                          title: AppLocalizations.of(context)
-                                              .mineFirstFullUploadFailed,
-                                          message: '$e');
-                                    }
-                                  }
-                                },
-                              ),
-                              const Divider(height: 1, thickness: 0.5),
-                            ]);
-                          }),
                           // 上传
                           AppListTile(
                             leading: Icons.cloud_upload_outlined,
@@ -325,10 +282,18 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                 : null,
                             onTap: () async {
                               setState(() => uploadBusy = true);
+                              // 标记为上传中
+                              final uploadingIds = ref.read(uploadingLedgerIdsProvider);
+                              ref.read(uploadingLedgerIdsProvider.notifier).state = {...uploadingIds, ledgerId};
+
                               try {
                                 await sync.uploadCurrentLedger(
                                     ledgerId: ledgerId);
                                 if (!context.mounted) return;
+
+                                // 刷新账本列表
+                                ref.read(ledgerListRefreshProvider.notifier).state++;
+
                                 await AppDialog.info(context,
                                     title: AppLocalizations.of(context)
                                         .mineUploadSuccess,
@@ -358,6 +323,8 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                       }
                                     }
                                     ref.read(syncStatusRefreshProvider.notifier).state++;
+                                    // 再次刷新账本列表确保状态更新
+                                    ref.read(ledgerListRefreshProvider.notifier).state++;
                                   } catch (_) {}
                                 });
                               } catch (e) {
@@ -368,6 +335,9 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                     message: '$e');
                               } finally {
                                 if (mounted) setState(() => uploadBusy = false);
+                                // 移除上传中标记
+                                final uploadingIds = ref.read(uploadingLedgerIdsProvider);
+                                ref.read(uploadingLedgerIdsProvider.notifier).state = uploadingIds.where((id) => id != ledgerId).toSet();
                               }
                             },
                           ),
@@ -421,7 +391,9 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                     title: AppLocalizations.of(context)
                                         .mineDownloadComplete,
                                     message: msg);
-                                ref.read(syncStatusRefreshProvider.notifier).state++;
+
+                                // 下载完成后，触发handleLocalChange刷新状态和账本列表
+                                await handleLocalChange(ref, ledgerId: ledgerId, background: true);
                               } catch (e) {
                                 if (!context.mounted) return;
                                 await AppDialog.error(context,
@@ -507,9 +479,9 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                                 false;
 
                                         if (confirmed) {
-                                          await ref
-                                              .read(authServiceProvider)
-                                              .signOut();
+                                          final authService = await ref
+                                              .read(authServiceProvider.future);
+                                          await authService.signOut();
                                           ref
                                               .read(syncStatusRefreshProvider
                                                   .notifier)
@@ -559,7 +531,8 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                     ),
                   ],
                 );
-              },
+                },
+              ),
             ),
           ),
         ],

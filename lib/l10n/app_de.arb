@@ -256,6 +256,7 @@
   "importFieldType": "Typ",
   "importFieldAmount": "Betrag",
   "importFieldCategory": "Kategorie",
+  "importFieldAccount": "Konto",
   "importFieldNote": "Notiz",
   "importPreview": "Vorschau:",
   "importPreviewLimit": "Nur erste {shown} von {total} Zeilen anzeigen",
@@ -328,6 +329,8 @@
   "importBackgroundImport": "Hintergrund-Import",
   "importCancelled": "(abgebrochen)",
   "importCompleted": "Import abgeschlossen{cancelled}: Erfolg {ok}, Fehler {fail}",
+  "importSkippedNonTransactionTypes": "{count} Nicht-Transaktionsdatensätze übersprungen (Überweisungen, Schulden usw.)",
+  "importTransactionFailed": "Import fehlgeschlagen, alle Änderungen wurden rückgängig gemacht: {error}",
   "@importCompleted": {
     "placeholders": {
       "cancelled": {
@@ -414,11 +417,6 @@
   "mineCloudServiceOffline": "Standardmodus (offline)",
   "mineCloudServiceCustom": "Benutzerdefiniertes Supabase",
   "mineCloudServiceWebDAV": "Benutzerdefinierter Cloud-Dienst (WebDAV)",
-  "mineFirstFullUpload": "Erster vollständiger Upload",
-  "mineFirstFullUploadSubtitle": "Alle lokalen Kontenbücher in die Cloud hochladen",
-  "mineFirstFullUploadComplete": "Abgeschlossen",
-  "mineFirstFullUploadMessage": "Aktuelles Kontenbuch hochgeladen. Wechseln Sie zu anderen Kontenbüchern, um sie hochzuladen.",
-  "mineFirstFullUploadFailed": "Fehlgeschlagen",
   "mineSyncTitle": "Synchronisierung",
   "mineSyncNotLoggedIn": "Nicht angemeldet",
   "mineSyncNotConfigured": "Cloud nicht konfiguriert",
@@ -1007,6 +1005,7 @@
   "exportCsvHeaderType": "Typ",
   "exportCsvHeaderCategory": "Kategorie",
   "exportCsvHeaderAmount": "Betrag",
+  "exportCsvHeaderAccount": "Konto",
   "exportCsvHeaderNote": "Notiz",
   "exportCsvHeaderTime": "Zeit",
   "exportShareText": "BeeCount Export-Datei",
@@ -1461,8 +1460,6 @@
   "cloudOfflineMode": "Offline-Modus",
   "cloudAvailableServices": "Verfügbare Cloud-Dienste",
   "cloudReadCustomConfigFailed": "Lesen der benutzerdefinierten Konfiguration fehlgeschlagen",
-  "cloudFirstUploadNotComplete": "Erster vollständiger Upload noch nicht abgeschlossen",
-  "cloudFirstUploadInstruction": "Nach der Anmeldung in \"Mein/Synchronisierung\" manuell \"Hochladen\" ausführen, um die Initialisierung abzuschließen",
   "cloudNotConfigured": "Nicht konfiguriert",
   "cloudNotTested": "Nicht getestet",
   "cloudConnectionNormal": "Verbindung normal",
@@ -1822,6 +1819,8 @@
   "aboutContactEmail": "Kontakt-E-Mail",
   "aboutCopied": "In die Zwischenablage kopiert",
   "aboutDesc": "Versionsinformationen, Hilfe und Feedback",
+  "mineRateApp": "App bewerten",
+  "mineRateAppSubtitle": "Bewerten Sie uns im App Store",
   "aboutDouyin": "Douyin",
   "aboutGitHubRepo": "GitHub-Repository",
   "aboutPageLoadingVersion": "Version wird geladen...",
@@ -1860,5 +1859,30 @@
   "smartBillingPageSubtitle": "KI- und Automatisierungsfunktionen für Buchführung",
   "smartBillingPageTitle": "Intelligente Buchführung",
   "syncManagement": "Synchronisierungsverwaltung",
-  "syncManagementDesc": "Datensynchronisierung und Sicherung"
+  "syncManagementDesc": "Datensynchronisierung und Sicherung",
+  "storageManagementTitle": "Speicherverwaltung",
+  "storageManagementSubtitle": "Cache löschen, um Speicherplatz freizugeben",
+  "storageAIModels": "AI-Modelle",
+  "storageAPKFiles": "Installationspakete",
+  "storageNoData": "Keine Daten",
+  "storageFiles": "Dateien",
+  "storageHint": "Tippen Sie auf Elemente, um entsprechende Cache-Dateien zu löschen",
+  "storageClearConfirmTitle": "Löschen bestätigen",
+  "storageClearAIModelsMessage": "Möchten Sie wirklich alle AI-Modelle löschen? Größe: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "Möchten Sie wirklich alle Installationspakete löschen? Größe: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "Erfolgreich gelöscht"
 }

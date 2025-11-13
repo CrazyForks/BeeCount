@@ -15,6 +15,8 @@ final ledgerCountProvider = FutureProvider.autoDispose<int>((ref) async {
 final countsForLedgerProvider = FutureProvider.family
     .autoDispose<({int dayCount, int txCount}), int>((ref, ledgerId) async {
   final repo = ref.watch(repositoryProvider);
+  // 依赖 tick 触发刷新
+  ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
   return repo.countsForLedger(ledgerId: ledgerId);

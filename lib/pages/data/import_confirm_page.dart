@@ -40,10 +40,11 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     'type': null,
     'amount': null,
     'category': null,
+    'account': null,
     'note': null,
   };
   bool importing = false;
-  int ok = 0, fail = 0;
+  int ok = 0, fail = 0, skipped = 0; // skipped: 跳过的非收支类型记录
   int step = 0; // 0: 字段映射, 1: 分类映射
   bool _cancelled = false;
   List<String> distinctCategories = [];
@@ -165,6 +166,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                           'amount', items()),
                       _mapRow(AppLocalizations.of(context)!.importFieldCategory,
                           'category', items()),
+                      _mapRow(AppLocalizations.of(context)!.importFieldAccount,
+                          'account', items()),
                       _mapRow(AppLocalizations.of(context)!.importFieldNote,
                           'note', items()),
                     ],
@@ -448,39 +451,98 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       },
     );
 
-    // 分类缓存：当选择“保持原名”时，按 (name, kind) 维度缓存 upsert 结果，避免重复查询
-    final Map<String, int> incomeCatCache = {};
-    final Map<String, int> expenseCatCache = {};
-    // 批量缓冲
-    const int batchSize = 500;
-    final List<schema.TransactionsCompanion> batch = [];
-    int done = 0;
-
-    Future<void> flushBatch() async {
-      if (batch.isEmpty) return;
-      try {
-        final inserted = await repo.insertTransactionsBatch(batch);
-        ok += inserted;
-      } catch (_) {
-        // 回退到逐条插入，尽可能保留成功数
-        for (final item in batch) {
-          if (_cancelled) break;
-          try {
-            await repo.db.into(repo.db.transactions).insert(item);
-            ok++;
-          } catch (_) {
-            fail++;
+    // 第一步：提取所有唯一账户名并批量创建账户（在事务中）
+    final accountIdx = mapping['account'];
+    final Set<String> uniqueAccountNames = {};
+    if (accountIdx != null) {
+      for (int i = dataStart; i < rows.length; i++) {
+        final r = rows[i];
+        if (accountIdx < r.length) {
+          final accountName = r[accountIdx].toString().trim();
+          if (accountName.isNotEmpty) {
+            uniqueAccountNames.add(accountName);
           }
         }
-      } finally {
-        batch.clear();
-        // 批次完成后更新一次进度
-        container.read(importProgressProvider.notifier).state = ImportProgress(
-            running: true, total: total, done: done, ok: ok, fail: fail);
-        await Future<void>.delayed(Duration.zero);
-        if (mounted) setState(() {});
       }
     }
+
+    // 账户名到ID的映射
+    final Map<String, int> accountNameToId = {};
+
+    // 定义进度变量（需要在事务外部，以便后续访问）
+    int done = 0;
+
+    // 收集跳过的类型（用于提示用户）
+    final Map<String, int> skippedTypes = {};
+
+    try {
+      // 使用事务确保账户创建和记录导入的原子性
+      await repo.db.transaction(() async {
+        // 步骤1：批量创建账户
+        if (uniqueAccountNames.isNotEmpty) {
+          for (final accountName in uniqueAccountNames) {
+            if (_cancelled) break;
+            try {
+              // 检查账户是否已存在
+              final existing = await (repo.db.select(repo.db.accounts)
+                    ..where((a) => a.name.equals(accountName))
+                    ..where((a) => a.ledgerId.equals(ledgerId)))
+                  .getSingleOrNull();
+
+              if (existing != null) {
+                accountNameToId[accountName] = existing.id;
+              } else {
+                // 创建新账户
+                final accountId = await repo.db.into(repo.db.accounts).insert(
+                      schema.AccountsCompanion.insert(
+                        ledgerId: ledgerId,
+                        name: accountName,
+                        initialBalance: const d.Value(0.0), // 初始余额为0
+                      ),
+                    );
+                accountNameToId[accountName] = accountId;
+              }
+            } catch (e) {
+              // 账户创建失败，继续处理其他账户
+              print('Failed to create account: $accountName, $e');
+            }
+          }
+        }
+
+        // 步骤2：批量导入记录
+        // 分类缓存：当选择"保持原名"时，按 (name, kind) 维度缓存 upsert 结果，避免重复查询
+        final Map<String, int> incomeCatCache = {};
+        final Map<String, int> expenseCatCache = {};
+        // 批量缓冲
+        const int batchSize = 500;
+        final List<schema.TransactionsCompanion> batch = [];
+
+        Future<void> flushBatch() async {
+          if (batch.isEmpty) return;
+          try {
+            final inserted = await repo.insertTransactionsBatch(batch);
+            ok += inserted;
+          } catch (_) {
+            // 回退到逐条插入，尽可能保留成功数
+            for (final item in batch) {
+              if (_cancelled) break;
+              try {
+                await repo.db.into(repo.db.transactions).insert(item);
+                ok++;
+              } catch (_) {
+                fail++;
+              }
+            }
+          } finally {
+            batch.clear();
+            // 批次完成后更新一次进度
+            container.read(importProgressProvider.notifier).state =
+                ImportProgress(
+                    running: true, total: total, done: done, ok: ok, fail: fail);
+            await Future<void>.delayed(Duration.zero);
+            if (mounted) setState(() {});
+          }
+        }
 
     for (int i = dataStart; i < rows.length; i++) {
       if (_cancelled) break;
@@ -498,12 +560,32 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         var typeRaw = getBy('type', 1) ?? 'expense';
         final amountStr = getBy('amount', 2);
         final categoryName = getBy('category', 3);
+        final accountName = getBy('account', 999); // 使用不存在的fallback，确保只从映射列获取
         final note = getBy('note', 4);
 
-        // 类型中文到内部值
-        final lower = typeRaw.trim().toLowerCase();
-        final type =
-            (lower == '收入' || lower == 'income') ? 'income' : 'expense';
+        // 类型识别：精准匹配收入/支出，其他类型跳过
+        final typeStr = typeRaw.trim();
+        final lower = typeStr.toLowerCase();
+
+        String? type;
+
+        // 精准匹配收入
+        if (lower == '收入' || lower == '收' || lower == '入账' || lower == '进账' ||
+            lower == 'income' || lower == 'revenue' || lower == 'earning') {
+          type = 'income';
+        }
+        // 精准匹配支出
+        else if (lower == '支出' || lower == '支' || lower == '出账' ||
+                 lower == '消费' || lower == '花费' ||
+                 lower == 'expense' || lower == 'spending' || lower == 'expenditure') {
+          type = 'expense';
+        }
+        // 未识别的类型：跳过（转账、债务等非收支记录）
+        else {
+          skipped++;
+          skippedTypes[typeStr] = (skippedTypes[typeStr] ?? 0) + 1;
+          continue;
+        }
 
         // 金额解析
         final amountClean =
@@ -549,13 +631,19 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           }
         }
 
+        // 获取账户ID
+        int? accountId;
+        if (accountName != null && accountName.trim().isNotEmpty) {
+          accountId = accountNameToId[accountName.trim()];
+        }
+
         // 构造行
         final item = schema.TransactionsCompanion.insert(
           ledgerId: ledgerId,
           type: type,
           amount: amount,
           categoryId: d.Value(categoryId),
-          accountId: const d.Value(null),
+          accountId: d.Value(accountId),
           toAccountId: const d.Value(null),
           happenedAt: d.Value(date),
           note: d.Value(note),
@@ -581,8 +669,16 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       }
     }
 
-    // 刷新剩余缓冲
-    await flushBatch();
+        // 刷新剩余缓冲
+        await flushBatch();
+      }); // 结束事务
+    } catch (e) {
+      // 事务失败，全部回滚
+      if (mounted) {
+        showToast(context, AppLocalizations.of(context)!.importTransactionFailed('$e'));
+      }
+      fail = total - ok; // 更新失败数
+    }
 
     // 即使页面已被关闭（mounted=false），也要继续更新全局进度供"我的"页展示
     // 先切换为"完成"以驱动 UI 展示成功动画/提示（不等待云上传）
@@ -593,6 +689,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         done: done,
         ok: ok,
         fail: fail,
+        ledgerId: ledgerId, // 设置账本ID，用于触发账本列表页面刷新
+        skipped: skipped, // 跳过的记录数
+        skippedTypes: skippedTypes, // 跳过的类型及数量
       );
     } catch (e) {}
 
@@ -614,38 +713,67 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     }
 
     // Check if context is still mounted for UI operations
-    if (!context.mounted) {
+    if (!currentContext.mounted) {
       return;
     }
 
     // 显示导入完成提示
     final cancelledText =
-        _cancelled ? AppLocalizations.of(context)!.importCancelled : '';
-    showToast(context,
-        AppLocalizations.of(context)!.importCompleted(cancelledText, fail, ok));
+        _cancelled ? AppLocalizations.of(currentContext)!.importCancelled : '';
+    final l10nToast = AppLocalizations.of(currentContext)!;
+
+    // 构建提示信息
+    String message = l10nToast.importCompleted(cancelledText, fail, ok);
+    bool hasSkipped = skipped > 0;
+
+    if (hasSkipped) {
+      // 构建跳过类型列表
+      final skippedList = skippedTypes.entries
+          .map((e) => '${e.key}(${e.value})')
+          .join('、');
+      message += '\n${l10nToast.importSkippedNonTransactionTypes(skipped)}\n$skippedList';
+    }
 
     // Handle UI operations before cloud upload
     if (dialogOpen) {
       Navigator.of(currentContext).pop();
     }
-    // 关闭确认页 -> 返回到数据管理页面
-    // Pop回DataManagementPage: ImportConfirmPage -> ImportPage
-    Navigator.of(currentContext).pop(); // Close ImportConfirmPage
-    Navigator.of(currentContext).pop(); // Close ImportPage, back to DataManagementPage
+
+    // 判断显示方式: 完全成功用toast,有失败或跳过用弹窗
+    if (fail == 0 && !hasSkipped) {
+      // 完全成功: 使用toast,然后关闭页面
+      showToast(currentContext, message);
+      // 关闭确认页 -> 返回到数据管理页面
+      // Pop回DataManagementPage: ImportConfirmPage -> ImportPage
+      Navigator.of(currentContext).pop(); // Close ImportConfirmPage
+      Navigator.of(currentContext).pop(); // Close ImportPage, back to DataManagementPage
+    } else {
+      // 有失败或跳过: 使用弹窗显示详细信息,等待用户确认后再关闭页面
+      await showDialog(
+        context: currentContext,
+        builder: (ctx) => AlertDialog(
+          title: Text(l10nToast.importCompleteTitle),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(l10nToast.commonConfirm),
+            ),
+          ],
+        ),
+      );
+
+      // 用户确认后再关闭页面
+      Navigator.of(currentContext).pop(); // Close ImportConfirmPage
+      Navigator.of(currentContext).pop(); // Close ImportPage, back to DataManagementPage
+    }
     // 返回后再显式刷新一次全局统计，确保顶部汇总即时更新
     try {
       container.read(statsRefreshProvider.notifier).state++;
     } catch (_) {}
 
-    // 导入完成后，云上传改为后台并行执行，不阻塞 UI
-    () async {
-      try {
-        final sync = container.read(syncServiceProvider);
-        await sync.uploadCurrentLedger(ledgerId: ledgerId);
-        // 上传完成后再触发一次状态刷新（若站点有变更则更新）
-        container.read(syncStatusRefreshProvider.notifier).state++;
-      } catch (_) {}
-    }();
+    // 导入完成后，账本列表页面会通过监听 importProgressProvider 自动刷新
+    // ledgerId 已经在上面的 importProgressProvider 中设置
   }
 
   void _buildDistinctCategories() {

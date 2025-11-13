@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as s;
 import '../../providers.dart';
-import '../../cloud/auth.dart';
-import '../../cloud/cloud_service_config.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../widgets/ui/ui.dart';
 import '../../utils/logger.dart';
 import '../../l10n/app_localizations.dart';
@@ -35,8 +34,6 @@ class _AuthPageState extends ConsumerState<AuthPage> {
       infoText = null;
     });
   }
-
-  AuthService get auth => ref.read(authServiceProvider);
 
   @override
   void initState() {
@@ -411,6 +408,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                             infoText = null;
                                           });
                                           try {
+                                            final auth = await ref.read(authServiceProvider.future);
                                             await auth.signUpWithEmail(
                                                 email: email, password: pwd);
                                             if (!context.mounted) return;
@@ -474,6 +472,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                             infoText = null;
                                           });
                                           try {
+                                            final auth = await ref.read(authServiceProvider.future);
                                             await auth.signInWithEmail(
                                                 email: email, password: pwd);
                                             if (!context.mounted) return;
@@ -482,12 +481,6 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                                 .read(syncStatusRefreshProvider
                                                     .notifier)
                                                 .state++;
-                                            // 登录成功：让“我的”页去检测是否需要恢复
-                                            ref
-                                                .read(
-                                                    restoreCheckRequestProvider
-                                                        .notifier)
-                                                .state = true;
                                             // 直接切到"我的"页并关闭登录页
                                             ref
                                                 .read(bottomTabIndexProvider
@@ -546,6 +539,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                         busy = true;
                                       });
                                       try {
+                                        final auth = await ref.read(authServiceProvider.future);
                                         await auth.resendEmailVerification(
                                             email: email);
                                         if (!context.mounted) return;

@@ -154,7 +154,7 @@ class AppDialog {
               Flexible(
                 child: SingleChildScrollView(
                   child: Text(
-                    message,
+                    message.replaceAll('\\n', '\n'),  // 处理转义的换行符
                     textAlign: TextAlign.left,
                     style: Theme.of(ctx).textTheme.bodyMedium,
                   ),

@@ -424,7 +424,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get ledgersClearConfirm => '현재 가계부를 비우시겠습니까?';
 
   @override
-  String get ledgersClearMessage => '이 가계부의 모든 거래 기록이 삭제되며 복구할 수 없습니다.';
+  String ledgersClearMessage(Object name) {
+    return '이 가계부의 모든 거래 기록이 삭제되며 복구할 수 없습니다.';
+  }
 
   @override
   String get ledgersEdit => '가계부 편집';
@@ -443,6 +445,26 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get ledgersDeleteFailed => '삭제 실패';
+
+  @override
+  String get ledgersClearTitle => 'Clear Ledger';
+
+  @override
+  String get ledgersClearSuccess => 'Ledger cleared';
+
+  @override
+  String get ledgersDeleteLocal => 'Delete Local Ledger Only';
+
+  @override
+  String get ledgersDeleteLocalTitle => 'Delete Local Ledger';
+
+  @override
+  String ledgersDeleteLocalMessage(Object name) {
+    return 'Are you sure to delete local ledger \"$name\"?\\nCloud backup will be kept and you can restore it anytime.';
+  }
+
+  @override
+  String get ledgersDeleteLocalSuccess => 'Local ledger deleted';
 
   @override
   String ledgersRecordsDeleted(int count) {
@@ -484,6 +506,105 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String ledgersBalance(String balance) {
     return '잔액: $balance';
+  }
+
+  @override
+  String get ledgerCardTransactions => 'transactions';
+
+  @override
+  String get ledgerCardRemoteOnly => 'Cloud only';
+
+  @override
+  String get ledgerCardDownloadCloud => 'Download from Cloud';
+
+  @override
+  String get ledgerCardJustNow => 'Just now';
+
+  @override
+  String ledgerCardMinutesAgo(int minutes) {
+    return '$minutes minutes ago';
+  }
+
+  @override
+  String ledgerCardHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String ledgerCardDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get ledgersLocal => 'Local Ledgers';
+
+  @override
+  String get ledgersRemote => 'Cloud Ledgers';
+
+  @override
+  String get ledgersEmpty => 'No ledgers';
+
+  @override
+  String get ledgersRestoreAll => 'Restore All';
+
+  @override
+  String ledgersSwitched(String name) {
+    return 'Switched to ledger \"$name\"';
+  }
+
+  @override
+  String get ledgersDownloadTitle => 'Download Ledger';
+
+  @override
+  String ledgersDownloadMessage(String name) {
+    return 'Confirm download ledger \"$name\" to local?';
+  }
+
+  @override
+  String get ledgersDownloading => 'Downloading...';
+
+  @override
+  String ledgersDownloadSuccess(String name) {
+    return 'Ledger \"$name\" downloaded successfully';
+  }
+
+  @override
+  String get ledgersDownload => 'Download';
+
+  @override
+  String get ledgersDeleteRemote => 'Delete Cloud Ledger';
+
+  @override
+  String get ledgersDeleteRemoteConfirm => 'Delete Cloud Ledger';
+
+  @override
+  String ledgersDeleteRemoteMessage(String name) {
+    return 'Confirm delete cloud ledger \"$name\"? This action cannot be undone.';
+  }
+
+  @override
+  String get ledgersDeleting => 'Deleting...';
+
+  @override
+  String get ledgersDeleteRemoteSuccess => 'Cloud ledger deleted';
+
+  @override
+  String get ledgersRestoreAllTitle => 'Batch Restore';
+
+  @override
+  String ledgersRestoreAllMessage(int count) {
+    return 'Confirm restore all cloud ledgers? Total $count.';
+  }
+
+  @override
+  String get ledgersRestoring => 'Restoring...';
+
+  @override
+  String get ledgersRestoreComplete => 'Restore Complete';
+
+  @override
+  String ledgersRestoreResult(int success, int failed) {
+    return 'Success: $success, Failed: $failed';
   }
 
   @override
@@ -614,6 +735,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importFieldCategory => '카테고리';
 
   @override
+  String get importFieldAccount => '계정';
+
+  @override
   String get importFieldNote => '메모';
 
   @override
@@ -689,6 +813,16 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
     return '가져오기 완료$cancelled, 성공 $ok개, 실패 $fail개';
+  }
+
+  @override
+  String importSkippedNonTransactionTypes(Object count) {
+    return '$count개의 비거래 기록 건너뜀 (이체, 부채 등)';
+  }
+
+  @override
+  String importTransactionFailed(Object error) {
+    return '가져오기 실패, 모든 변경 사항이 롤백되었습니다: $error';
   }
 
   @override
@@ -890,21 +1024,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mineCloudServiceWebDAV => '사용자 정의 클라우드 서비스 (WebDAV)';
-
-  @override
-  String get mineFirstFullUpload => '첫 번째 전체 업로드';
-
-  @override
-  String get mineFirstFullUploadSubtitle => '모든 로컬 가계부를 클라우드에 업로드';
-
-  @override
-  String get mineFirstFullUploadComplete => '완료';
-
-  @override
-  String get mineFirstFullUploadMessage => '현재 가계부가 업로드되었습니다. 다른 가계부로 전환하여 업로드하세요.';
-
-  @override
-  String get mineFirstFullUploadFailed => '실패';
 
   @override
   String get mineSyncTitle => '동기화';
@@ -1933,12 +2052,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cloudReadCustomConfigFailed => '사용자 정의 설정 읽기 실패';
 
   @override
-  String get cloudFirstUploadNotComplete => '첫 번째 전체 업로드가 완료되지 않음';
-
-  @override
-  String get cloudFirstUploadInstruction => '로그인하고 \"마이페이지/동기화\"에서 수동으로 \"업로드\"를 실행하여 초기화를 완료하세요';
-
-  @override
   String get cloudNotConfigured => '설정되지 않음';
 
   @override
@@ -2217,6 +2330,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get exportCsvHeaderAmount => '금액';
+
+  @override
+  String get exportCsvHeaderAccount => '계정';
 
   @override
   String get exportCsvHeaderNote => '메모';
@@ -3648,6 +3764,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get aboutDesc => '버전 정보, 도움말 및 피드백';
 
   @override
+  String get mineRateApp => '앱 평가하기';
+
+  @override
+  String get mineRateAppSubtitle => 'App Store에서 평가하기';
+
+  @override
   String get aboutPageTitle => '정보';
 
   @override
@@ -3679,6 +3801,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get aboutCopied => '클립보드에 복사됨';
+
+  @override
+  String get aboutSupportDevelopment => 'Support Development';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
 
   @override
   String get cloudService => '클라우드 서비스';
@@ -3786,4 +3914,97 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI smart recognition config';
+
+  @override
+  String get ledgersConflictTitle => 'Sync Conflict';
+
+  @override
+  String get ledgersConflictMessage => 'Local and cloud ledger data are inconsistent, please choose an action:';
+
+  @override
+  String ledgersConflictLocalInfo(int count) {
+    return 'Local: $count transactions';
+  }
+
+  @override
+  String ledgersConflictRemoteInfo(int count) {
+    return 'Cloud: $count transactions';
+  }
+
+  @override
+  String ledgersConflictLocalUpdated(String time) {
+    return 'Local updated: $time';
+  }
+
+  @override
+  String ledgersConflictRemoteUpdated(String time) {
+    return 'Cloud updated: $time';
+  }
+
+  @override
+  String ledgersConflictLocalFingerprint(String fp) {
+    return 'Local fingerprint: $fp';
+  }
+
+  @override
+  String ledgersConflictRemoteFingerprint(String fp) {
+    return 'Cloud fingerprint: $fp';
+  }
+
+  @override
+  String get ledgersConflictUpload => 'Upload to Cloud';
+
+  @override
+  String get ledgersConflictDownload => 'Download to Local';
+
+  @override
+  String get ledgersConflictUploading => 'Uploading...';
+
+  @override
+  String get ledgersConflictDownloading => 'Downloading...';
+
+  @override
+  String get ledgersConflictUploadSuccess => 'Upload successful';
+
+  @override
+  String ledgersConflictDownloadSuccess(int inserted) {
+    return 'Download successful, merged $inserted transactions';
+  }
+
+  @override
+  String get storageManagementTitle => '저장 공간 관리';
+
+  @override
+  String get storageManagementSubtitle => '캐시를 정리하여 공간 확보';
+
+  @override
+  String get storageAIModels => 'AI 모델';
+
+  @override
+  String get storageAPKFiles => '설치 패키지';
+
+  @override
+  String get storageNoData => '데이터 없음';
+
+  @override
+  String get storageFiles => '개 파일';
+
+  @override
+  String get storageHint => '항목을 탭하면 해당 캐시 파일을 정리할 수 있습니다';
+
+  @override
+  String get storageClearConfirmTitle => '정리 확인';
+
+  @override
+  String storageClearAIModelsMessage(String size) {
+    return '모든 AI 모델을 정리하시겠습니까? 크기: $size';
+  }
+
+  @override
+  String storageClearAPKMessage(String size) {
+    return '모든 설치 패키지를 정리하시겠습니까? 크기: $size';
+  }
+
+  @override
+  String get storageClearSuccess => '정리 성공';
 }

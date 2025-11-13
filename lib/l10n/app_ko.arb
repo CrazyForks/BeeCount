@@ -241,6 +241,7 @@
   "importFieldType": "유형",
   "importFieldAmount": "금액",
   "importFieldCategory": "카테고리",
+  "importFieldAccount": "계정",
   "importFieldNote": "메모",
   "importPreview": "데이터 미리보기",
   "importPreviewLimit": "{total}개 중 처음 {shown}개 표시",
@@ -263,6 +264,8 @@
   "importBackgroundImport": "백그라운드 가져오기",
   "importCancelled": "가져오기 취소됨",
   "importCompleted": "가져오기 완료{cancelled}, 성공 {ok}개, 실패 {fail}개",
+  "importSkippedNonTransactionTypes": "{count}개의 비거래 기록 건너뜀 (이체, 부채 등)",
+  "importTransactionFailed": "가져오기 실패, 모든 변경 사항이 롤백되었습니다: {error}",
   "importFileOpenError": "파일 선택기를 열 수 없습니다: {error}",
   "@importFileOpenError": {
     "placeholders": {
@@ -322,11 +325,6 @@
   "mineCloudServiceOffline": "기본 모드 (오프라인)",
   "mineCloudServiceCustom": "사용자 정의 Supabase",
   "mineCloudServiceWebDAV": "사용자 정의 클라우드 서비스 (WebDAV)",
-  "mineFirstFullUpload": "첫 번째 전체 업로드",
-  "mineFirstFullUploadSubtitle": "모든 로컬 가계부를 클라우드에 업로드",
-  "mineFirstFullUploadComplete": "완료",
-  "mineFirstFullUploadMessage": "현재 가계부가 업로드되었습니다. 다른 가계부로 전환하여 업로드하세요.",
-  "mineFirstFullUploadFailed": "실패",
   "mineSyncTitle": "동기화",
   "mineSyncNotLoggedIn": "로그인되지 않음",
   "mineSyncNotConfigured": "클라우드가 설정되지 않음",
@@ -658,8 +656,6 @@
   "cloudOfflineMode": "오프라인 모드",
   "cloudAvailableServices": "사용 가능한 클라우드 서비스",
   "cloudReadCustomConfigFailed": "사용자 정의 설정 읽기 실패",
-  "cloudFirstUploadNotComplete": "첫 번째 전체 업로드가 완료되지 않음",
-  "cloudFirstUploadInstruction": "로그인하고 \"마이페이지/동기화\"에서 수동으로 \"업로드\"를 실행하여 초기화를 완료하세요",
   "cloudNotConfigured": "설정되지 않음",
   "cloudNotTested": "테스트되지 않음",
   "cloudConnectionNormal": "연결 정상",
@@ -778,6 +774,7 @@
   "exportCsvHeaderType": "유형",
   "exportCsvHeaderCategory": "카테고리",
   "exportCsvHeaderAmount": "금액",
+  "exportCsvHeaderAccount": "계정",
   "exportCsvHeaderNote": "메모",
   "exportCsvHeaderTime": "시간",
   "exportShareText": "BeeCount 내보내기 파일",
@@ -1440,6 +1437,8 @@
   "aboutContactEmail": "문의 이메일",
   "aboutCopied": "클립보드에 복사됨",
   "aboutDesc": "버전 정보, 도움말 및 피드백",
+  "mineRateApp": "앱 평가하기",
+  "mineRateAppSubtitle": "App Store에서 평가하기",
   "aboutDouyin": "Douyin",
   "aboutGitHubRepo": "GitHub 저장소",
   "aboutPageLoadingVersion": "버전 번호 로드 중...",
@@ -1478,5 +1477,30 @@
   "smartBillingPageSubtitle": "AI 및 자동화 기록 기능",
   "smartBillingPageTitle": "스마트 기록",
   "syncManagement": "동기화 관리",
-  "syncManagementDesc": "데이터 동기화 및 백업"
+  "syncManagementDesc": "데이터 동기화 및 백업",
+  "storageManagementTitle": "저장 공간 관리",
+  "storageManagementSubtitle": "캐시를 정리하여 공간 확보",
+  "storageAIModels": "AI 모델",
+  "storageAPKFiles": "설치 패키지",
+  "storageNoData": "데이터 없음",
+  "storageFiles": "개 파일",
+  "storageHint": "항목을 탭하면 해당 캐시 파일을 정리할 수 있습니다",
+  "storageClearConfirmTitle": "정리 확인",
+  "storageClearAIModelsMessage": "모든 AI 모델을 정리하시겠습니까? 크기: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "모든 설치 패키지를 정리하시겠습니까? 크기: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "정리 성공"
 }

@@ -241,6 +241,7 @@
   "importFieldType": "タイプ",
   "importFieldAmount": "金額",
   "importFieldCategory": "カテゴリ",
+  "importFieldAccount": "アカウント",
   "importFieldNote": "メモ",
   "importPreview": "データプレビュー",
   "importPreviewLimit": "{total}件中最初の{shown}件を表示",
@@ -263,6 +264,8 @@
   "importBackgroundImport": "バックグラウンドインポート",
   "importCancelled": "インポートキャンセル",
   "importCompleted": "インポート完了{cancelled}、成功{ok}件、失敗{fail}件",
+  "importSkippedNonTransactionTypes": "{count}件の非取引記録をスキップしました（振替、債務など）",
+  "importTransactionFailed": "インポートに失敗しました。すべての変更がロールバックされました：{error}",
   "importFileOpenError": "ファイルピッカーを開けません：{error}",
   "@importFileOpenError": {
     "placeholders": {
@@ -322,11 +325,6 @@
   "mineCloudServiceOffline": "デフォルトモード（オフライン）",
   "mineCloudServiceCustom": "カスタムSupabase",
   "mineCloudServiceWebDAV": "カスタムクラウドサービス (WebDAV)",
-  "mineFirstFullUpload": "初回フルアップロード",
-  "mineFirstFullUploadSubtitle": "すべてのローカル家計簿をクラウドにアップロード",
-  "mineFirstFullUploadComplete": "完了",
-  "mineFirstFullUploadMessage": "現在の家計簿がアップロードされました。他の家計簿に切り替えてアップロードしてください。",
-  "mineFirstFullUploadFailed": "失敗",
   "mineSyncTitle": "同期",
   "mineSyncNotLoggedIn": "ログインしていません",
   "mineSyncNotConfigured": "クラウドが設定されていません",
@@ -658,8 +656,6 @@
   "cloudOfflineMode": "オフラインモード",
   "cloudAvailableServices": "利用可能なクラウドサービス",
   "cloudReadCustomConfigFailed": "カスタム設定の読み込みに失敗しました",
-  "cloudFirstUploadNotComplete": "初回フルアップロードが完了していません",
-  "cloudFirstUploadInstruction": "ログインして「マイページ/同期」で手動で「アップロード」を実行して初期化を完了してください",
   "cloudNotConfigured": "設定されていません",
   "cloudNotTested": "テストされていません",
   "cloudConnectionNormal": "接続正常",
@@ -778,6 +774,7 @@
   "exportCsvHeaderType": "タイプ",
   "exportCsvHeaderCategory": "カテゴリ",
   "exportCsvHeaderAmount": "金額",
+  "exportCsvHeaderAccount": "アカウント",
   "exportCsvHeaderNote": "メモ",
   "exportCsvHeaderTime": "時刻",
   "exportShareText": "BeeCountエクスポートファイル",
@@ -1440,6 +1437,8 @@
   "aboutContactEmail": "お問い合わせメール",
   "aboutCopied": "クリップボードにコピーしました",
   "aboutDesc": "バージョン情報、ヘルプとフィードバック",
+  "mineRateApp": "アプリを評価",
+  "mineRateAppSubtitle": "App Storeで評価する",
   "aboutDouyin": "Douyin",
   "aboutGitHubRepo": "GitHub リポジトリ",
   "aboutPageLoadingVersion": "バージョン番号を読み込み中...",
@@ -1478,5 +1477,30 @@
   "smartBillingPageSubtitle": "AIと自動化記帳機能",
   "smartBillingPageTitle": "スマート記帳",
   "syncManagement": "同期管理",
-  "syncManagementDesc": "データ同期とバックアップ"
+  "syncManagementDesc": "データ同期とバックアップ",
+  "storageManagementTitle": "ストレージ管理",
+  "storageManagementSubtitle": "キャッシュをクリアして空き容量を増やす",
+  "storageAIModels": "AIモデル",
+  "storageAPKFiles": "インストールパッケージ",
+  "storageNoData": "データなし",
+  "storageFiles": "個のファイル",
+  "storageHint": "項目をタップすると対応するキャッシュファイルをクリアできます",
+  "storageClearConfirmTitle": "クリアの確認",
+  "storageClearAIModelsMessage": "すべてのAIモデルをクリアしてもよろしいですか？サイズ: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "すべてのインストールパッケージをクリアしてもよろしいですか？サイズ: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "クリア成功"
 }

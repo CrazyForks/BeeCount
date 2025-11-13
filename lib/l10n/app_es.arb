@@ -157,6 +157,7 @@
   "importFieldDate": "Fecha",
   "importFieldAmount": "Monto",
   "importFieldCategory": "Categoría",
+  "importFieldAccount": "Cuenta",
   "importFieldNote": "Nota",
   "importFieldType": "Tipo",
   "importFailed": "Importación fallida",
@@ -178,6 +179,7 @@
   "exportCsvHeaderType": "Tipo",
   "exportCsvHeaderCategory": "Categoría",
   "exportCsvHeaderAmount": "Monto",
+  "exportCsvHeaderAccount": "Cuenta",
   "exportCsvHeaderNote": "Nota",
   "exportCsvHeaderTime": "Hora",
   "exportShareText": "Archivo de exportación de BeeCount",
@@ -827,6 +829,8 @@
   "importBackgroundImport": "Importación en Segundo Plano",
   "importCancelled": "Importación Cancelada",
   "importCompleted": "Importación Completada{cancelled}, éxito {ok}, fallidos {fail}",
+  "importSkippedNonTransactionTypes": "{count} registros no transaccionales omitidos (transferencias, deudas, etc.)",
+  "importTransactionFailed": "Importación fallida, se han revertido todos los cambios: {error}",
   "@importCompleted": {
     "placeholders": {
       "cancelled": {
@@ -898,11 +902,6 @@
   "mineCloudServiceDefault": "Nube Predeterminada (Habilitada)",
   "mineCloudServiceOffline": "Modo Predeterminado (Sin Conexión)",
   "mineCloudServiceCustom": "Supabase Personalizado",
-  "mineFirstFullUpload": "Primera Carga Completa",
-  "mineFirstFullUploadSubtitle": "Cargar todos los libros locales a la nube",
-  "mineFirstFullUploadComplete": "Completo",
-  "mineFirstFullUploadMessage": "Libro actual cargado. Cambie a otros libros para cargarlos.",
-  "mineFirstFullUploadFailed": "Fallido",
   "mineSyncNotLoggedIn": "No conectado",
   "mineSyncNotConfigured": "Nube no configurada",
   "mineSyncNoRemote": "Sin copia de seguridad en la nube",
@@ -1431,8 +1430,6 @@
   "cloudOfflineMode": "Modo Sin Conexión",
   "cloudAvailableServices": "Servicios de Nube Disponibles",
   "cloudReadCustomConfigFailed": "Error al leer la configuración personalizada",
-  "cloudFirstUploadNotComplete": "Primera carga completa no completada",
-  "cloudFirstUploadInstruction": "Inicie sesión y ejecute manualmente \"Cargar\" en \"Mío/Sincronizar\" para completar la inicialización",
   "cloudNotConfigured": "No configurado",
   "cloudNotTested": "No probado",
   "cloudConnectionNormal": "Conexión normal",
@@ -1829,6 +1826,8 @@
   "aboutContactEmail": "Correo de contacto",
   "aboutCopied": "Copiado al portapapeles",
   "aboutDesc": "Información de versión, ayuda y comentarios",
+  "mineRateApp": "Calificar la aplicación",
+  "mineRateAppSubtitle": "Califícanos en la App Store",
   "aboutDouyin": "Douyin",
   "aboutGitHubRepo": "Repositorio GitHub",
   "aboutPageLoadingVersion": "Cargando versión...",
@@ -1867,5 +1866,30 @@
   "smartBillingPageSubtitle": "Funciones de registro IA y automatización",
   "smartBillingPageTitle": "Registro inteligente",
   "syncManagement": "Gestión de sincronización",
-  "syncManagementDesc": "Sincronización y copia de seguridad de datos"
+  "syncManagementDesc": "Sincronización y copia de seguridad de datos",
+  "storageManagementTitle": "Gestión de almacenamiento",
+  "storageManagementSubtitle": "Limpiar caché para liberar espacio",
+  "storageAIModels": "Modelos de IA",
+  "storageAPKFiles": "Paquetes de instalación",
+  "storageNoData": "Sin datos",
+  "storageFiles": "archivos",
+  "storageHint": "Toque los elementos para limpiar los archivos de caché correspondientes",
+  "storageClearConfirmTitle": "Confirmar limpieza",
+  "storageClearAIModelsMessage": "¿Está seguro de que desea limpiar todos los modelos de IA? Tamaño: {size}",
+  "@storageClearAIModelsMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearAPKMessage": "¿Está seguro de que desea limpiar todos los paquetes de instalación? Tamaño: {size}",
+  "@storageClearAPKMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "storageClearSuccess": "Limpieza exitosa"
 }

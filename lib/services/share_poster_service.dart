@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gal/gal.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../l10n/app_localizations.dart';
 import '../widgets/ui/ui.dart';
+import '../providers/theme_providers.dart';
 
 /// 保存海报结果
 enum SavePosterResult {
@@ -174,6 +176,10 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final primaryColor = ref.watch(primaryColorProvider);
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
@@ -203,10 +209,10 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: _isSaving ? null : _sharePoster,
-                    icon: const Icon(Icons.share_outlined),
+                    icon: Icon(Icons.share_outlined, color: primaryColor),
                     label: Text(widget.l10n.sharePosterShare),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: const Color(0xFFFFB300),
+                      foregroundColor: primaryColor,
                       backgroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -229,10 +235,10 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
                               valueColor: AlwaysStoppedAnimation(Colors.white),
                             ),
                           )
-                        : const Icon(Icons.download_outlined),
+                        : const Icon(Icons.download_outlined, color: Colors.white),
                     label: Text(widget.l10n.sharePosterSave),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFB300),
+                      backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -247,6 +253,8 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
           ),
         ],
       ),
+    );
+      },
     );
   }
 }

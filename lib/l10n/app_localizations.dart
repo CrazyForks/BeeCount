@@ -871,7 +871,7 @@ abstract class AppLocalizations {
   /// No description provided for @ledgersClear.
   ///
   /// In en, this message translates to:
-  /// **'Clear Current Ledger'**
+  /// **'Clear Ledger'**
   String get ledgersClear;
 
   /// No description provided for @ledgersClearConfirm.
@@ -883,8 +883,8 @@ abstract class AppLocalizations {
   /// No description provided for @ledgersClearMessage.
   ///
   /// In en, this message translates to:
-  /// **'All transaction records in this ledger will be deleted and cannot be recovered.'**
-  String get ledgersClearMessage;
+  /// **'Are you sure to clear all transactions in ledger \"{name}\"? This action cannot be undone.\\nThe ledger will be kept, only transaction data will be deleted.'**
+  String ledgersClearMessage(Object name);
 
   /// No description provided for @ledgersEdit.
   ///
@@ -921,6 +921,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete Failed'**
   String get ledgersDeleteFailed;
+
+  /// No description provided for @ledgersClearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Ledger'**
+  String get ledgersClearTitle;
+
+  /// No description provided for @ledgersClearSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger cleared'**
+  String get ledgersClearSuccess;
+
+  /// No description provided for @ledgersDeleteLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Local Ledger Only'**
+  String get ledgersDeleteLocal;
+
+  /// No description provided for @ledgersDeleteLocalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Local Ledger'**
+  String get ledgersDeleteLocalTitle;
+
+  /// No description provided for @ledgersDeleteLocalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure to delete local ledger \"{name}\"?\\nCloud backup will be kept and you can restore it anytime.'**
+  String ledgersDeleteLocalMessage(Object name);
+
+  /// No description provided for @ledgersDeleteLocalSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Local ledger deleted'**
+  String get ledgersDeleteLocalSuccess;
 
   /// No description provided for @ledgersRecordsDeleted.
   ///
@@ -993,6 +1029,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Balance: {balance}'**
   String ledgersBalance(String balance);
+
+  /// No description provided for @ledgerCardTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'transactions'**
+  String get ledgerCardTransactions;
+
+  /// No description provided for @ledgerCardRemoteOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud only'**
+  String get ledgerCardRemoteOnly;
+
+  /// No description provided for @ledgerCardDownloadCloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Download from Cloud'**
+  String get ledgerCardDownloadCloud;
+
+  /// No description provided for @ledgerCardJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get ledgerCardJustNow;
+
+  /// No description provided for @ledgerCardMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes ago'**
+  String ledgerCardMinutesAgo(int minutes);
+
+  /// No description provided for @ledgerCardHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} hours ago'**
+  String ledgerCardHoursAgo(int hours);
+
+  /// No description provided for @ledgerCardDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days ago'**
+  String ledgerCardDaysAgo(int days);
+
+  /// No description provided for @ledgersLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Ledgers'**
+  String get ledgersLocal;
+
+  /// No description provided for @ledgersRemote.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Ledgers'**
+  String get ledgersRemote;
+
+  /// No description provided for @ledgersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No ledgers'**
+  String get ledgersEmpty;
+
+  /// No description provided for @ledgersRestoreAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore All'**
+  String get ledgersRestoreAll;
+
+  /// No description provided for @ledgersSwitched.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to ledger \"{name}\"'**
+  String ledgersSwitched(String name);
+
+  /// No description provided for @ledgersDownloadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Ledger'**
+  String get ledgersDownloadTitle;
+
+  /// No description provided for @ledgersDownloadMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm download ledger \"{name}\" to local?'**
+  String ledgersDownloadMessage(String name);
+
+  /// No description provided for @ledgersDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading...'**
+  String get ledgersDownloading;
+
+  /// No description provided for @ledgersDownloadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger \"{name}\" downloaded successfully'**
+  String ledgersDownloadSuccess(String name);
+
+  /// No description provided for @ledgersDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get ledgersDownload;
+
+  /// No description provided for @ledgersDeleteRemote.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Cloud Ledger'**
+  String get ledgersDeleteRemote;
+
+  /// No description provided for @ledgersDeleteRemoteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Cloud Ledger'**
+  String get ledgersDeleteRemoteConfirm;
+
+  /// No description provided for @ledgersDeleteRemoteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm delete cloud ledger \"{name}\"? This action cannot be undone.'**
+  String ledgersDeleteRemoteMessage(String name);
+
+  /// No description provided for @ledgersDeleting.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting...'**
+  String get ledgersDeleting;
+
+  /// No description provided for @ledgersDeleteRemoteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud ledger deleted'**
+  String get ledgersDeleteRemoteSuccess;
+
+  /// No description provided for @ledgersRestoreAllTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Batch Restore'**
+  String get ledgersRestoreAllTitle;
+
+  /// No description provided for @ledgersRestoreAllMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm restore all cloud ledgers? Total {count}.'**
+  String ledgersRestoreAllMessage(int count);
+
+  /// No description provided for @ledgersRestoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring...'**
+  String get ledgersRestoring;
+
+  /// No description provided for @ledgersRestoreComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Complete'**
+  String get ledgersRestoreComplete;
+
+  /// No description provided for @ledgersRestoreResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Success: {success}, Failed: {failed}'**
+  String ledgersRestoreResult(int success, int failed);
 
   /// No description provided for @categoryTitle.
   ///
@@ -1240,6 +1438,12 @@ abstract class AppLocalizations {
   /// **'Category'**
   String get importFieldCategory;
 
+  /// No description provided for @importFieldAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get importFieldAccount;
+
   /// No description provided for @importFieldNote.
   ///
   /// In en, this message translates to:
@@ -1371,6 +1575,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Import Completed{cancelled}, success {ok}, failed {fail}'**
   String importCompleted(Object cancelled, Object fail, Object ok);
+
+  /// No description provided for @importSkippedNonTransactionTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped {count} non-transaction records (transfers, debts, etc.)'**
+  String importSkippedNonTransactionTypes(Object count);
+
+  /// No description provided for @importTransactionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed, all changes have been rolled back: {error}'**
+  String importTransactionFailed(Object error);
 
   /// No description provided for @importFileOpenError.
   ///
@@ -1755,36 +1971,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom Cloud Service (WebDAV)'**
   String get mineCloudServiceWebDAV;
-
-  /// No description provided for @mineFirstFullUpload.
-  ///
-  /// In en, this message translates to:
-  /// **'First Full Upload'**
-  String get mineFirstFullUpload;
-
-  /// No description provided for @mineFirstFullUploadSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload all local ledgers to cloud'**
-  String get mineFirstFullUploadSubtitle;
-
-  /// No description provided for @mineFirstFullUploadComplete.
-  ///
-  /// In en, this message translates to:
-  /// **'Complete'**
-  String get mineFirstFullUploadComplete;
-
-  /// No description provided for @mineFirstFullUploadMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Current ledger uploaded. Switch to other ledgers to upload them.'**
-  String get mineFirstFullUploadMessage;
-
-  /// No description provided for @mineFirstFullUploadFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed'**
-  String get mineFirstFullUploadFailed;
 
   /// No description provided for @mineSyncTitle.
   ///
@@ -3706,18 +3892,6 @@ abstract class AppLocalizations {
   /// **'Failed to read custom configuration'**
   String get cloudReadCustomConfigFailed;
 
-  /// No description provided for @cloudFirstUploadNotComplete.
-  ///
-  /// In en, this message translates to:
-  /// **'First full upload not completed'**
-  String get cloudFirstUploadNotComplete;
-
-  /// No description provided for @cloudFirstUploadInstruction.
-  ///
-  /// In en, this message translates to:
-  /// **'Login and manually execute \"Upload\" in \"Mine/Sync\" to complete initialization'**
-  String get cloudFirstUploadInstruction;
-
   /// No description provided for @cloudNotConfigured.
   ///
   /// In en, this message translates to:
@@ -4257,6 +4431,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Amount'**
   String get exportCsvHeaderAmount;
+
+  /// No description provided for @exportCsvHeaderAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get exportCsvHeaderAccount;
 
   /// No description provided for @exportCsvHeaderNote.
   ///
@@ -6976,6 +7156,18 @@ abstract class AppLocalizations {
   /// **'Version info, help and feedback'**
   String get aboutDesc;
 
+  /// No description provided for @mineRateApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the App'**
+  String get mineRateApp;
+
+  /// No description provided for @mineRateAppSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate us on the App Store'**
+  String get mineRateAppSubtitle;
+
   /// No description provided for @aboutPageTitle.
   ///
   /// In en, this message translates to:
@@ -7041,6 +7233,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copied to clipboard'**
   String get aboutCopied;
+
+  /// No description provided for @aboutSupportDevelopment.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Development'**
+  String get aboutSupportDevelopment;
+
+  /// No description provided for @aboutSupportDevelopmentSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy me a coffee'**
+  String get aboutSupportDevelopmentSubtitle;
 
   /// No description provided for @cloudService.
   ///
@@ -7251,6 +7455,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI smart recognition config'**
   String get configIncludeAI;
+
+  /// No description provided for @ledgersConflictTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Conflict'**
+  String get ledgersConflictTitle;
+
+  /// No description provided for @ledgersConflictMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Local and cloud ledger data are inconsistent, please choose an action:'**
+  String get ledgersConflictMessage;
+
+  /// No description provided for @ledgersConflictLocalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Local: {count} transactions'**
+  String ledgersConflictLocalInfo(int count);
+
+  /// No description provided for @ledgersConflictRemoteInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud: {count} transactions'**
+  String ledgersConflictRemoteInfo(int count);
+
+  /// No description provided for @ledgersConflictLocalUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Local updated: {time}'**
+  String ledgersConflictLocalUpdated(String time);
+
+  /// No description provided for @ledgersConflictRemoteUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud updated: {time}'**
+  String ledgersConflictRemoteUpdated(String time);
+
+  /// No description provided for @ledgersConflictLocalFingerprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Local fingerprint: {fp}'**
+  String ledgersConflictLocalFingerprint(String fp);
+
+  /// No description provided for @ledgersConflictRemoteFingerprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud fingerprint: {fp}'**
+  String ledgersConflictRemoteFingerprint(String fp);
+
+  /// No description provided for @ledgersConflictUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to Cloud'**
+  String get ledgersConflictUpload;
+
+  /// No description provided for @ledgersConflictDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download to Local'**
+  String get ledgersConflictDownload;
+
+  /// No description provided for @ledgersConflictUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading...'**
+  String get ledgersConflictUploading;
+
+  /// No description provided for @ledgersConflictDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading...'**
+  String get ledgersConflictDownloading;
+
+  /// No description provided for @ledgersConflictUploadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload successful'**
+  String get ledgersConflictUploadSuccess;
+
+  /// No description provided for @ledgersConflictDownloadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Download successful, merged {inserted} transactions'**
+  String ledgersConflictDownloadSuccess(int inserted);
+
+  /// No description provided for @storageManagementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage Management'**
+  String get storageManagementTitle;
+
+  /// No description provided for @storageManagementSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear cache to free up space'**
+  String get storageManagementSubtitle;
+
+  /// No description provided for @storageAIModels.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Models'**
+  String get storageAIModels;
+
+  /// No description provided for @storageAPKFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Installation Packages'**
+  String get storageAPKFiles;
+
+  /// No description provided for @storageNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No Data'**
+  String get storageNoData;
+
+  /// No description provided for @storageFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'files'**
+  String get storageFiles;
+
+  /// No description provided for @storageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap items to clear corresponding cache files'**
+  String get storageHint;
+
+  /// No description provided for @storageClearConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Clear'**
+  String get storageClearConfirmTitle;
+
+  /// No description provided for @storageClearAIModelsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all AI models? Size: {size}'**
+  String storageClearAIModelsMessage(String size);
+
+  /// No description provided for @storageClearAPKMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all installation packages? Size: {size}'**
+  String storageClearAPKMessage(String size);
+
+  /// No description provided for @storageClearSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleared successfully'**
+  String get storageClearSuccess;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

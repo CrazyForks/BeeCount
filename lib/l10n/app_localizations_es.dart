@@ -424,7 +424,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ledgersClearConfirm => '¿Limpiar libro actual?';
 
   @override
-  String get ledgersClearMessage => 'Todos los registros de transacciones en este libro serán eliminados y no se podrán recuperar.';
+  String ledgersClearMessage(Object name) {
+    return 'Todos los registros de transacciones en este libro serán eliminados y no se podrán recuperar.';
+  }
 
   @override
   String get ledgersEdit => 'Editar libro';
@@ -443,6 +445,26 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ledgersDeleteFailed => 'Error al Eliminar';
+
+  @override
+  String get ledgersClearTitle => 'Clear Ledger';
+
+  @override
+  String get ledgersClearSuccess => 'Ledger cleared';
+
+  @override
+  String get ledgersDeleteLocal => 'Delete Local Ledger Only';
+
+  @override
+  String get ledgersDeleteLocalTitle => 'Delete Local Ledger';
+
+  @override
+  String ledgersDeleteLocalMessage(Object name) {
+    return 'Are you sure to delete local ledger \"$name\"?\\nCloud backup will be kept and you can restore it anytime.';
+  }
+
+  @override
+  String get ledgersDeleteLocalSuccess => 'Local ledger deleted';
 
   @override
   String ledgersRecordsDeleted(int count) {
@@ -484,6 +506,105 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String ledgersBalance(String balance) {
     return 'Balance: $balance';
+  }
+
+  @override
+  String get ledgerCardTransactions => 'transactions';
+
+  @override
+  String get ledgerCardRemoteOnly => 'Cloud only';
+
+  @override
+  String get ledgerCardDownloadCloud => 'Download from Cloud';
+
+  @override
+  String get ledgerCardJustNow => 'Just now';
+
+  @override
+  String ledgerCardMinutesAgo(int minutes) {
+    return '$minutes minutes ago';
+  }
+
+  @override
+  String ledgerCardHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String ledgerCardDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get ledgersLocal => 'Local Ledgers';
+
+  @override
+  String get ledgersRemote => 'Cloud Ledgers';
+
+  @override
+  String get ledgersEmpty => 'No ledgers';
+
+  @override
+  String get ledgersRestoreAll => 'Restore All';
+
+  @override
+  String ledgersSwitched(String name) {
+    return 'Switched to ledger \"$name\"';
+  }
+
+  @override
+  String get ledgersDownloadTitle => 'Download Ledger';
+
+  @override
+  String ledgersDownloadMessage(String name) {
+    return 'Confirm download ledger \"$name\" to local?';
+  }
+
+  @override
+  String get ledgersDownloading => 'Downloading...';
+
+  @override
+  String ledgersDownloadSuccess(String name) {
+    return 'Ledger \"$name\" downloaded successfully';
+  }
+
+  @override
+  String get ledgersDownload => 'Download';
+
+  @override
+  String get ledgersDeleteRemote => 'Delete Cloud Ledger';
+
+  @override
+  String get ledgersDeleteRemoteConfirm => 'Delete Cloud Ledger';
+
+  @override
+  String ledgersDeleteRemoteMessage(String name) {
+    return 'Confirm delete cloud ledger \"$name\"? This action cannot be undone.';
+  }
+
+  @override
+  String get ledgersDeleting => 'Deleting...';
+
+  @override
+  String get ledgersDeleteRemoteSuccess => 'Cloud ledger deleted';
+
+  @override
+  String get ledgersRestoreAllTitle => 'Batch Restore';
+
+  @override
+  String ledgersRestoreAllMessage(int count) {
+    return 'Confirm restore all cloud ledgers? Total $count.';
+  }
+
+  @override
+  String get ledgersRestoring => 'Restoring...';
+
+  @override
+  String get ledgersRestoreComplete => 'Restore Complete';
+
+  @override
+  String ledgersRestoreResult(int success, int failed) {
+    return 'Success: $success, Failed: $failed';
   }
 
   @override
@@ -614,6 +735,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get importFieldCategory => 'Categoría';
 
   @override
+  String get importFieldAccount => 'Cuenta';
+
+  @override
   String get importFieldNote => 'Nota';
 
   @override
@@ -689,6 +813,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
     return 'Importación Completada$cancelled, éxito $ok, fallidos $fail';
+  }
+
+  @override
+  String importSkippedNonTransactionTypes(Object count) {
+    return '$count registros no transaccionales omitidos (transferencias, deudas, etc.)';
+  }
+
+  @override
+  String importTransactionFailed(Object error) {
+    return 'Importación fallida, se han revertido todos los cambios: $error';
   }
 
   @override
@@ -890,21 +1024,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mineCloudServiceWebDAV => 'Servicio de nube personalizado (WebDAV)';
-
-  @override
-  String get mineFirstFullUpload => 'Primera Carga Completa';
-
-  @override
-  String get mineFirstFullUploadSubtitle => 'Cargar todos los libros locales a la nube';
-
-  @override
-  String get mineFirstFullUploadComplete => 'Completo';
-
-  @override
-  String get mineFirstFullUploadMessage => 'Libro actual cargado. Cambie a otros libros para cargarlos.';
-
-  @override
-  String get mineFirstFullUploadFailed => 'Fallido';
 
   @override
   String get mineSyncTitle => 'Sincronizar';
@@ -1933,12 +2052,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cloudReadCustomConfigFailed => 'Error al leer la configuración personalizada';
 
   @override
-  String get cloudFirstUploadNotComplete => 'Primera carga completa no completada';
-
-  @override
-  String get cloudFirstUploadInstruction => 'Inicie sesión y ejecute manualmente \"Cargar\" en \"Mío/Sincronizar\" para completar la inicialización';
-
-  @override
   String get cloudNotConfigured => 'No configurado';
 
   @override
@@ -2217,6 +2330,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exportCsvHeaderAmount => 'Monto';
+
+  @override
+  String get exportCsvHeaderAccount => 'Cuenta';
 
   @override
   String get exportCsvHeaderNote => 'Nota';
@@ -3648,6 +3764,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get aboutDesc => 'Información de versión, ayuda y comentarios';
 
   @override
+  String get mineRateApp => 'Calificar la aplicación';
+
+  @override
+  String get mineRateAppSubtitle => 'Califícanos en la App Store';
+
+  @override
   String get aboutPageTitle => 'Acerca de';
 
   @override
@@ -3679,6 +3801,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aboutCopied => 'Copiado al portapapeles';
+
+  @override
+  String get aboutSupportDevelopment => 'Support Development';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
 
   @override
   String get cloudService => 'Servicio en la nube';
@@ -3786,4 +3914,97 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI smart recognition config';
+
+  @override
+  String get ledgersConflictTitle => 'Sync Conflict';
+
+  @override
+  String get ledgersConflictMessage => 'Local and cloud ledger data are inconsistent, please choose an action:';
+
+  @override
+  String ledgersConflictLocalInfo(int count) {
+    return 'Local: $count transactions';
+  }
+
+  @override
+  String ledgersConflictRemoteInfo(int count) {
+    return 'Cloud: $count transactions';
+  }
+
+  @override
+  String ledgersConflictLocalUpdated(String time) {
+    return 'Local updated: $time';
+  }
+
+  @override
+  String ledgersConflictRemoteUpdated(String time) {
+    return 'Cloud updated: $time';
+  }
+
+  @override
+  String ledgersConflictLocalFingerprint(String fp) {
+    return 'Local fingerprint: $fp';
+  }
+
+  @override
+  String ledgersConflictRemoteFingerprint(String fp) {
+    return 'Cloud fingerprint: $fp';
+  }
+
+  @override
+  String get ledgersConflictUpload => 'Upload to Cloud';
+
+  @override
+  String get ledgersConflictDownload => 'Download to Local';
+
+  @override
+  String get ledgersConflictUploading => 'Uploading...';
+
+  @override
+  String get ledgersConflictDownloading => 'Downloading...';
+
+  @override
+  String get ledgersConflictUploadSuccess => 'Upload successful';
+
+  @override
+  String ledgersConflictDownloadSuccess(int inserted) {
+    return 'Download successful, merged $inserted transactions';
+  }
+
+  @override
+  String get storageManagementTitle => 'Gestión de almacenamiento';
+
+  @override
+  String get storageManagementSubtitle => 'Limpiar caché para liberar espacio';
+
+  @override
+  String get storageAIModels => 'Modelos de IA';
+
+  @override
+  String get storageAPKFiles => 'Paquetes de instalación';
+
+  @override
+  String get storageNoData => 'Sin datos';
+
+  @override
+  String get storageFiles => 'archivos';
+
+  @override
+  String get storageHint => 'Toque los elementos para limpiar los archivos de caché correspondientes';
+
+  @override
+  String get storageClearConfirmTitle => 'Confirmar limpieza';
+
+  @override
+  String storageClearAIModelsMessage(String size) {
+    return '¿Está seguro de que desea limpiar todos los modelos de IA? Tamaño: $size';
+  }
+
+  @override
+  String storageClearAPKMessage(String size) {
+    return '¿Está seguro de que desea limpiar todos los paquetes de instalación? Tamaño: $size';
+  }
+
+  @override
+  String get storageClearSuccess => 'Limpieza exitosa';
 }
