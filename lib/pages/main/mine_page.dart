@@ -1092,10 +1092,8 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final activeCfg = ref.watch(activeCloudConfigProvider);
-    final isLocalMode =
-        activeCfg.hasValue && activeCfg.value!.type == CloudBackendType.local;
-    final canEditAvatar = !isLocalMode;
+    // 头像功能不受云同步限制，任何时候都可以上传
+    final canEditAvatar = true;
 
     // 获取当前账本信息
     final currentLedgerId = ref.watch(currentLedgerIdProvider);
@@ -1158,7 +1156,7 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
                               ),
                             ),
                           )
-                        : (_avatarPath != null && canEditAvatar
+                        : (_avatarPath != null
                             ? Image.file(
                                 File(_avatarPath!),
                                 fit: BoxFit.cover,
