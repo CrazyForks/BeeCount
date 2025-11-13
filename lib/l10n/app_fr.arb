@@ -1809,6 +1809,8 @@
   "aboutContactEmail": "E-mail de contact",
   "aboutCopied": "Copié dans le presse-papiers",
   "aboutDesc": "Informations de version, aide et commentaires",
+  "mineRateApp": "Évaluer l'application",
+  "mineRateAppSubtitle": "Notez-nous sur l'App Store",
   "aboutDouyin": "Douyin",
   "aboutGitHubRepo": "Dépôt GitHub",
   "aboutPageLoadingVersion": "Chargement de la version...",

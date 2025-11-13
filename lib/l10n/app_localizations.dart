@@ -7156,6 +7156,18 @@ abstract class AppLocalizations {
   /// **'Version info, help and feedback'**
   String get aboutDesc;
 
+  /// No description provided for @mineRateApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the App'**
+  String get mineRateApp;
+
+  /// No description provided for @mineRateAppSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate us on the App Store'**
+  String get mineRateAppSubtitle;
+
   /// No description provided for @aboutPageTitle.
   ///
   /// In en, this message translates to:

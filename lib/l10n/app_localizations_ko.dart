@@ -3764,6 +3764,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get aboutDesc => '버전 정보, 도움말 및 피드백';
 
   @override
+  String get mineRateApp => '앱 평가하기';
+
+  @override
+  String get mineRateAppSubtitle => 'App Store에서 평가하기';
+
+  @override
   String get aboutPageTitle => '정보';
 
   @override

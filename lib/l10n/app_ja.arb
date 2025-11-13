@@ -1437,6 +1437,8 @@
   "aboutContactEmail": "お問い合わせメール",
   "aboutCopied": "クリップボードにコピーしました",
   "aboutDesc": "バージョン情報、ヘルプとフィードバック",
+  "mineRateApp": "アプリを評価",
+  "mineRateAppSubtitle": "App Storeで評価する",
   "aboutDouyin": "Douyin",
   "aboutGitHubRepo": "GitHub リポジトリ",
   "aboutPageLoadingVersion": "バージョン番号を読み込み中...",

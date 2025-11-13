@@ -1417,6 +1417,8 @@
   "aboutDesc": "版本信息、帮助与反馈",
   "aboutPageTitle": "关于",
   "aboutPageSubtitle": "应用信息和帮助",
+  "mineRateApp": "给应用评分",
+  "mineRateAppSubtitle": "在App Store上为我们打分",
   "aboutPageLoadingVersion": "加载版本号中...",
   "aboutGitHubRepo": "GitHub 仓库",
   "aboutContactEmail": "联系邮箱",

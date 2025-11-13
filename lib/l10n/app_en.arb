@@ -1616,6 +1616,8 @@
   "appearanceSettingsPageSubtitle": "Personalize appearance and display",
   "about": "About",
   "aboutDesc": "Version info, help and feedback",
+  "mineRateApp": "Rate the App",
+  "mineRateAppSubtitle": "Rate us on the App Store",
   "aboutPageTitle": "About",
   "aboutPageSubtitle": "App information and help",
   "aboutPageLoadingVersion": "Loading version...",

@@ -1207,6 +1207,8 @@
   "aboutContactEmail": "聯絡電子郵件",
   "aboutCopied": "已複製到剪貼簿",
   "aboutDesc": "版本資訊、說明與回饋",
+  "mineRateApp": "給應用評分",
+  "mineRateAppSubtitle": "在App Store上為我們打分",
   "aboutDouyin": "抖音",
   "aboutGitHubRepo": "GitHub 儲存庫",
   "aboutPageLoadingVersion": "載入版本號中...",

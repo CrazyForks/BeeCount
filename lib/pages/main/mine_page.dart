@@ -39,6 +39,7 @@ import '../settings/automation_page.dart';
 import '../settings/about_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:in_app_review/in_app_review.dart';
 import '../../services/update_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 
@@ -425,6 +426,16 @@ class MinePage extends ConsumerWidget {
                           }
                         },
                       ),
+                      // 只在iOS上显示评分入口（Android还未上架）
+                      if (Platform.isIOS) ...[
+                        const Divider(height: 1, thickness: 0.5),
+                        AppListTile(
+                          leading: Icons.star_border_rounded,
+                          title: AppLocalizations.of(context).mineRateApp,
+                          subtitle: AppLocalizations.of(context).mineRateAppSubtitle,
+                          onTap: () => _rateApp(context),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -957,6 +968,35 @@ Future<bool> _tryOpenUrl(Uri url) async {
   } catch (e) {
     logE('MinePage', '打开URL失败: $url', e);
     return false;
+  }
+}
+
+/// 请求应用评分
+///
+/// iOS系统对原生评分弹窗有限制：
+/// 1. 每365天最多弹出3次
+/// 2. 模拟器上不显示
+/// 3. 用户可在系统设置中禁用
+///
+/// 因此直接打开App Store评分页面更可靠
+Future<void> _rateApp(BuildContext context) async {
+  try {
+    final InAppReview inAppReview = InAppReview.instance;
+
+    // 直接打开应用商店评分页面（更可靠，不受系统限制）
+    if (Platform.isIOS) {
+      await inAppReview.openStoreListing(
+        appStoreId: '6754611670', // BeeCount的App Store ID
+      );
+      logI('MinePage', '已打开App Store评分页面');
+    } else {
+      // Android会自动打开Google Play（如果已上架）
+      await inAppReview.openStoreListing();
+      logI('MinePage', '已打开Google Play评分页面');
+    }
+  } catch (e) {
+    logE('MinePage', '打开评分失败', e);
+    // 失败时不显示错误提示，静默失败
   }
 }
 

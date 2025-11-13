@@ -3764,6 +3764,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get aboutDesc => 'バージョン情報、ヘルプとフィードバック';
 
   @override
+  String get mineRateApp => 'アプリを評価';
+
+  @override
+  String get mineRateAppSubtitle => 'App Storeで評価する';
+
+  @override
   String get aboutPageTitle => 'について';
 
   @override

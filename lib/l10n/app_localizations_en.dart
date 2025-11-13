@@ -3764,6 +3764,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutDesc => 'Version info, help and feedback';
 
   @override
+  String get mineRateApp => 'Rate the App';
+
+  @override
+  String get mineRateAppSubtitle => 'Rate us on the App Store';
+
+  @override
   String get aboutPageTitle => 'About';
 
   @override

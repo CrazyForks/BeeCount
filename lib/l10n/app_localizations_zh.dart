@@ -3764,6 +3764,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutDesc => '版本信息、帮助与反馈';
 
   @override
+  String get mineRateApp => '给应用评分';
+
+  @override
+  String get mineRateAppSubtitle => '在App Store上为我们打分';
+
+  @override
   String get aboutPageTitle => '关于';
 
   @override
@@ -7532,6 +7538,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aboutDesc => '版本資訊、說明與回饋';
+
+  @override
+  String get mineRateApp => '給應用評分';
+
+  @override
+  String get mineRateAppSubtitle => '在App Store上為我們打分';
 
   @override
   String get aboutPageTitle => '關於';
