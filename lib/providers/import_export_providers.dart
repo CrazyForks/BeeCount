@@ -7,19 +7,24 @@ class ImportProgress {
   final int done;
   final int ok;
   final int fail;
+  final int? ledgerId; // 关联的账本ID，用于导入完成后触发刷新
+
   const ImportProgress({
     required this.running,
     required this.total,
     required this.done,
     required this.ok,
     required this.fail,
+    this.ledgerId,
   });
+
   ImportProgress copyWith({
     bool? running,
     int? total,
     int? done,
     int? ok,
     int? fail,
+    int? ledgerId,
   }) =>
       ImportProgress(
         running: running ?? this.running,
@@ -27,7 +32,12 @@ class ImportProgress {
         done: done ?? this.done,
         ok: ok ?? this.ok,
         fail: fail ?? this.fail,
+        ledgerId: ledgerId ?? this.ledgerId,
       );
+
+  /// 判断是否刚完成导入（从运行中变为完成状态）
+  bool get isJustCompleted => !running && total > 0;
+
   static const empty =
       ImportProgress(running: false, total: 0, done: 0, ok: 0, fail: 0);
 }

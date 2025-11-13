@@ -481,12 +481,6 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                                 .read(syncStatusRefreshProvider
                                                     .notifier)
                                                 .state++;
-                                            // 登录成功：让“我的”页去检测是否需要恢复
-                                            ref
-                                                .read(
-                                                    restoreCheckRequestProvider
-                                                        .notifier)
-                                                .state = true;
                                             // 直接切到"我的"页并关闭登录页
                                             ref
                                                 .read(bottomTabIndexProvider

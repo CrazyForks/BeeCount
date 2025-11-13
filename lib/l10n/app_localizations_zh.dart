@@ -418,13 +418,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ledgersNew => '新建账本';
 
   @override
-  String get ledgersClear => '清空当前账本';
+  String get ledgersClear => '清空账本';
 
   @override
   String get ledgersClearConfirm => '清空当前账本？';
 
   @override
-  String get ledgersClearMessage => '将删除该账本下所有交易记录，且不可恢复。';
+  String ledgersClearMessage(Object name) {
+    return '确定要清空账本\"$name\"的所有账单吗？此操作不可恢复。\\n账本本身会保留，仅删除账单数据。';
+  }
 
   @override
   String get ledgersEdit => '编辑账本';
@@ -443,6 +445,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ledgersDeleteFailed => '删除失败';
+
+  @override
+  String get ledgersClearTitle => '清空账本';
+
+  @override
+  String get ledgersClearSuccess => '账本已清空';
+
+  @override
+  String get ledgersDeleteLocal => '仅删除本地账本';
+
+  @override
+  String get ledgersDeleteLocalTitle => '删除本地账本';
+
+  @override
+  String ledgersDeleteLocalMessage(Object name) {
+    return '确定要删除本地账本\"$name\"吗？\\n云端备份会保留，您可以随时恢复。';
+  }
+
+  @override
+  String get ledgersDeleteLocalSuccess => '本地账本已删除';
 
   @override
   String ledgersRecordsDeleted(int count) {
@@ -484,6 +506,105 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String ledgersBalance(String balance) {
     return '余额：$balance';
+  }
+
+  @override
+  String get ledgerCardTransactions => '笔账单';
+
+  @override
+  String get ledgerCardRemoteOnly => '仅在云端';
+
+  @override
+  String get ledgerCardDownloadCloud => '下载云账本';
+
+  @override
+  String get ledgerCardJustNow => '刚刚';
+
+  @override
+  String ledgerCardMinutesAgo(int minutes) {
+    return '$minutes分钟前';
+  }
+
+  @override
+  String ledgerCardHoursAgo(int hours) {
+    return '$hours小时前';
+  }
+
+  @override
+  String ledgerCardDaysAgo(int days) {
+    return '$days天前';
+  }
+
+  @override
+  String get ledgersLocal => '本地账本';
+
+  @override
+  String get ledgersRemote => '云端账本';
+
+  @override
+  String get ledgersEmpty => '暂无账本';
+
+  @override
+  String get ledgersRestoreAll => '全部恢复';
+
+  @override
+  String ledgersSwitched(String name) {
+    return '已切换到账本\"$name\"';
+  }
+
+  @override
+  String get ledgersDownloadTitle => '下载账本';
+
+  @override
+  String ledgersDownloadMessage(String name) {
+    return '确认下载账本\"$name\"到本地？';
+  }
+
+  @override
+  String get ledgersDownloading => '下载中...';
+
+  @override
+  String ledgersDownloadSuccess(String name) {
+    return '账本\"$name\"下载成功';
+  }
+
+  @override
+  String get ledgersDownload => '下载';
+
+  @override
+  String get ledgersDeleteRemote => '删除云端账本';
+
+  @override
+  String get ledgersDeleteRemoteConfirm => '删除云端账本';
+
+  @override
+  String ledgersDeleteRemoteMessage(String name) {
+    return '确认删除云端账本\"$name\"？此操作不可恢复。';
+  }
+
+  @override
+  String get ledgersDeleting => '删除中...';
+
+  @override
+  String get ledgersDeleteRemoteSuccess => '已删除云端账本';
+
+  @override
+  String get ledgersRestoreAllTitle => '批量恢复';
+
+  @override
+  String ledgersRestoreAllMessage(int count) {
+    return '确认恢复所有云端账本？共 $count 个。';
+  }
+
+  @override
+  String get ledgersRestoring => '恢复中...';
+
+  @override
+  String get ledgersRestoreComplete => '恢复完成';
+
+  @override
+  String ledgersRestoreResult(int success, int failed) {
+    return '成功: $success，失败: $failed';
   }
 
   @override
@@ -890,21 +1011,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineCloudServiceWebDAV => '自定义云服务 (WebDAV)';
-
-  @override
-  String get mineFirstFullUpload => '首次全量上传';
-
-  @override
-  String get mineFirstFullUploadSubtitle => '将所有本地账本上传到云端';
-
-  @override
-  String get mineFirstFullUploadComplete => '完成';
-
-  @override
-  String get mineFirstFullUploadMessage => '已上传当前账本。其它账本请切换后再上传。';
-
-  @override
-  String get mineFirstFullUploadFailed => '失败';
 
   @override
   String get mineSyncTitle => '同步';
@@ -1931,12 +2037,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudReadCustomConfigFailed => '读取自定义配置失败';
-
-  @override
-  String get cloudFirstUploadNotComplete => '首次全量上传尚未完成';
-
-  @override
-  String get cloudFirstUploadInstruction => '登录后在\"我的/同步\"中手动执行\"上传\"完成初始化';
 
   @override
   String get cloudNotConfigured => '未配置';
@@ -3792,6 +3892,62 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI 智能识别配置';
+
+  @override
+  String get ledgersConflictTitle => '同步冲突';
+
+  @override
+  String get ledgersConflictMessage => '本地和云端账本数据不一致，请选择操作：';
+
+  @override
+  String ledgersConflictLocalInfo(int count) {
+    return '本地：$count 笔账单';
+  }
+
+  @override
+  String ledgersConflictRemoteInfo(int count) {
+    return '云端：$count 笔账单';
+  }
+
+  @override
+  String ledgersConflictLocalUpdated(String time) {
+    return '本地更新：$time';
+  }
+
+  @override
+  String ledgersConflictRemoteUpdated(String time) {
+    return '云端更新：$time';
+  }
+
+  @override
+  String ledgersConflictLocalFingerprint(String fp) {
+    return '本地指纹：$fp';
+  }
+
+  @override
+  String ledgersConflictRemoteFingerprint(String fp) {
+    return '云端指纹：$fp';
+  }
+
+  @override
+  String get ledgersConflictUpload => '上传到云端';
+
+  @override
+  String get ledgersConflictDownload => '下载到本地';
+
+  @override
+  String get ledgersConflictUploading => '正在上传...';
+
+  @override
+  String get ledgersConflictDownloading => '正在下载...';
+
+  @override
+  String get ledgersConflictUploadSuccess => '上传成功';
+
+  @override
+  String ledgersConflictDownloadSuccess(int inserted) {
+    return '下载成功，已合并 $inserted 笔账单';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4216,7 +4372,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get ledgersClearConfirm => '清空當前帳本？';
 
   @override
-  String get ledgersClearMessage => '將刪除該帳本下所有交易記錄，且不可復原。';
+  String ledgersClearMessage(Object name) {
+    return '將刪除該帳本下所有交易記錄，且不可復原。';
+  }
 
   @override
   String get ledgersEdit => '編輯帳本';
@@ -4607,21 +4765,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineCloudServiceWebDAV => '自訂雲服務 (WebDAV)';
-
-  @override
-  String get mineFirstFullUpload => '首次全量上傳';
-
-  @override
-  String get mineFirstFullUploadSubtitle => '將所有本地帳本上傳到雲端';
-
-  @override
-  String get mineFirstFullUploadComplete => '完成';
-
-  @override
-  String get mineFirstFullUploadMessage => '已上傳當前帳本。其它帳本請切換後再上傳。';
-
-  @override
-  String get mineFirstFullUploadFailed => '失敗';
 
   @override
   String get mineSyncTitle => '同步';
@@ -5648,12 +5791,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudReadCustomConfigFailed => '讀取自訂設定失敗';
-
-  @override
-  String get cloudFirstUploadNotComplete => '首次全量上傳尚未完成';
-
-  @override
-  String get cloudFirstUploadInstruction => '登入後在\"我的/同步\"中手動執行\"上傳\"完成初始化';
 
   @override
   String get cloudNotConfigured => '未設定';

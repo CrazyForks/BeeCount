@@ -418,13 +418,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ledgersNew => 'New Ledger';
 
   @override
-  String get ledgersClear => 'Clear Current Ledger';
+  String get ledgersClear => 'Clear Ledger';
 
   @override
   String get ledgersClearConfirm => 'Clear current ledger?';
 
   @override
-  String get ledgersClearMessage => 'All transaction records in this ledger will be deleted and cannot be recovered.';
+  String ledgersClearMessage(Object name) {
+    return 'Are you sure to clear all transactions in ledger \"$name\"? This action cannot be undone.\\nThe ledger will be kept, only transaction data will be deleted.';
+  }
 
   @override
   String get ledgersEdit => 'Edit Ledger';
@@ -443,6 +445,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ledgersDeleteFailed => 'Delete Failed';
+
+  @override
+  String get ledgersClearTitle => 'Clear Ledger';
+
+  @override
+  String get ledgersClearSuccess => 'Ledger cleared';
+
+  @override
+  String get ledgersDeleteLocal => 'Delete Local Ledger Only';
+
+  @override
+  String get ledgersDeleteLocalTitle => 'Delete Local Ledger';
+
+  @override
+  String ledgersDeleteLocalMessage(Object name) {
+    return 'Are you sure to delete local ledger \"$name\"?\\nCloud backup will be kept and you can restore it anytime.';
+  }
+
+  @override
+  String get ledgersDeleteLocalSuccess => 'Local ledger deleted';
 
   @override
   String ledgersRecordsDeleted(int count) {
@@ -484,6 +506,105 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String ledgersBalance(String balance) {
     return 'Balance: $balance';
+  }
+
+  @override
+  String get ledgerCardTransactions => 'transactions';
+
+  @override
+  String get ledgerCardRemoteOnly => 'Cloud only';
+
+  @override
+  String get ledgerCardDownloadCloud => 'Download from Cloud';
+
+  @override
+  String get ledgerCardJustNow => 'Just now';
+
+  @override
+  String ledgerCardMinutesAgo(int minutes) {
+    return '$minutes minutes ago';
+  }
+
+  @override
+  String ledgerCardHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String ledgerCardDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get ledgersLocal => 'Local Ledgers';
+
+  @override
+  String get ledgersRemote => 'Cloud Ledgers';
+
+  @override
+  String get ledgersEmpty => 'No ledgers';
+
+  @override
+  String get ledgersRestoreAll => 'Restore All';
+
+  @override
+  String ledgersSwitched(String name) {
+    return 'Switched to ledger \"$name\"';
+  }
+
+  @override
+  String get ledgersDownloadTitle => 'Download Ledger';
+
+  @override
+  String ledgersDownloadMessage(String name) {
+    return 'Confirm download ledger \"$name\" to local?';
+  }
+
+  @override
+  String get ledgersDownloading => 'Downloading...';
+
+  @override
+  String ledgersDownloadSuccess(String name) {
+    return 'Ledger \"$name\" downloaded successfully';
+  }
+
+  @override
+  String get ledgersDownload => 'Download';
+
+  @override
+  String get ledgersDeleteRemote => 'Delete Cloud Ledger';
+
+  @override
+  String get ledgersDeleteRemoteConfirm => 'Delete Cloud Ledger';
+
+  @override
+  String ledgersDeleteRemoteMessage(String name) {
+    return 'Confirm delete cloud ledger \"$name\"? This action cannot be undone.';
+  }
+
+  @override
+  String get ledgersDeleting => 'Deleting...';
+
+  @override
+  String get ledgersDeleteRemoteSuccess => 'Cloud ledger deleted';
+
+  @override
+  String get ledgersRestoreAllTitle => 'Batch Restore';
+
+  @override
+  String ledgersRestoreAllMessage(int count) {
+    return 'Confirm restore all cloud ledgers? Total $count.';
+  }
+
+  @override
+  String get ledgersRestoring => 'Restoring...';
+
+  @override
+  String get ledgersRestoreComplete => 'Restore Complete';
+
+  @override
+  String ledgersRestoreResult(int success, int failed) {
+    return 'Success: $success, Failed: $failed';
   }
 
   @override
@@ -890,21 +1011,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mineCloudServiceWebDAV => 'Custom Cloud Service (WebDAV)';
-
-  @override
-  String get mineFirstFullUpload => 'First Full Upload';
-
-  @override
-  String get mineFirstFullUploadSubtitle => 'Upload all local ledgers to cloud';
-
-  @override
-  String get mineFirstFullUploadComplete => 'Complete';
-
-  @override
-  String get mineFirstFullUploadMessage => 'Current ledger uploaded. Switch to other ledgers to upload them.';
-
-  @override
-  String get mineFirstFullUploadFailed => 'Failed';
 
   @override
   String get mineSyncTitle => 'Sync';
@@ -1931,12 +2037,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudReadCustomConfigFailed => 'Failed to read custom configuration';
-
-  @override
-  String get cloudFirstUploadNotComplete => 'First full upload not completed';
-
-  @override
-  String get cloudFirstUploadInstruction => 'Login and manually execute \"Upload\" in \"Mine/Sync\" to complete initialization';
 
   @override
   String get cloudNotConfigured => 'Not configured';
@@ -3792,4 +3892,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI smart recognition config';
+
+  @override
+  String get ledgersConflictTitle => 'Sync Conflict';
+
+  @override
+  String get ledgersConflictMessage => 'Local and cloud ledger data are inconsistent, please choose an action:';
+
+  @override
+  String ledgersConflictLocalInfo(int count) {
+    return 'Local: $count transactions';
+  }
+
+  @override
+  String ledgersConflictRemoteInfo(int count) {
+    return 'Cloud: $count transactions';
+  }
+
+  @override
+  String ledgersConflictLocalUpdated(String time) {
+    return 'Local updated: $time';
+  }
+
+  @override
+  String ledgersConflictRemoteUpdated(String time) {
+    return 'Cloud updated: $time';
+  }
+
+  @override
+  String ledgersConflictLocalFingerprint(String fp) {
+    return 'Local fingerprint: $fp';
+  }
+
+  @override
+  String ledgersConflictRemoteFingerprint(String fp) {
+    return 'Cloud fingerprint: $fp';
+  }
+
+  @override
+  String get ledgersConflictUpload => 'Upload to Cloud';
+
+  @override
+  String get ledgersConflictDownload => 'Download to Local';
+
+  @override
+  String get ledgersConflictUploading => 'Uploading...';
+
+  @override
+  String get ledgersConflictDownloading => 'Downloading...';
+
+  @override
+  String get ledgersConflictUploadSuccess => 'Upload successful';
+
+  @override
+  String ledgersConflictDownloadSuccess(int inserted) {
+    return 'Download successful, merged $inserted transactions';
+  }
 }

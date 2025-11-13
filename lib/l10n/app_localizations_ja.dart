@@ -424,7 +424,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get ledgersClearConfirm => '現在の家計簿をクリアしますか？';
 
   @override
-  String get ledgersClearMessage => 'この家計簿のすべての取引記録が削除され、復元できません。';
+  String ledgersClearMessage(Object name) {
+    return 'この家計簿のすべての取引記録が削除され、復元できません。';
+  }
 
   @override
   String get ledgersEdit => '家計簿を編集';
@@ -443,6 +445,26 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get ledgersDeleteFailed => '削除失敗';
+
+  @override
+  String get ledgersClearTitle => 'Clear Ledger';
+
+  @override
+  String get ledgersClearSuccess => 'Ledger cleared';
+
+  @override
+  String get ledgersDeleteLocal => 'Delete Local Ledger Only';
+
+  @override
+  String get ledgersDeleteLocalTitle => 'Delete Local Ledger';
+
+  @override
+  String ledgersDeleteLocalMessage(Object name) {
+    return 'Are you sure to delete local ledger \"$name\"?\\nCloud backup will be kept and you can restore it anytime.';
+  }
+
+  @override
+  String get ledgersDeleteLocalSuccess => 'Local ledger deleted';
 
   @override
   String ledgersRecordsDeleted(int count) {
@@ -484,6 +506,105 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String ledgersBalance(String balance) {
     return '残高：$balance';
+  }
+
+  @override
+  String get ledgerCardTransactions => 'transactions';
+
+  @override
+  String get ledgerCardRemoteOnly => 'Cloud only';
+
+  @override
+  String get ledgerCardDownloadCloud => 'Download from Cloud';
+
+  @override
+  String get ledgerCardJustNow => 'Just now';
+
+  @override
+  String ledgerCardMinutesAgo(int minutes) {
+    return '$minutes minutes ago';
+  }
+
+  @override
+  String ledgerCardHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String ledgerCardDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get ledgersLocal => 'Local Ledgers';
+
+  @override
+  String get ledgersRemote => 'Cloud Ledgers';
+
+  @override
+  String get ledgersEmpty => 'No ledgers';
+
+  @override
+  String get ledgersRestoreAll => 'Restore All';
+
+  @override
+  String ledgersSwitched(String name) {
+    return 'Switched to ledger \"$name\"';
+  }
+
+  @override
+  String get ledgersDownloadTitle => 'Download Ledger';
+
+  @override
+  String ledgersDownloadMessage(String name) {
+    return 'Confirm download ledger \"$name\" to local?';
+  }
+
+  @override
+  String get ledgersDownloading => 'Downloading...';
+
+  @override
+  String ledgersDownloadSuccess(String name) {
+    return 'Ledger \"$name\" downloaded successfully';
+  }
+
+  @override
+  String get ledgersDownload => 'Download';
+
+  @override
+  String get ledgersDeleteRemote => 'Delete Cloud Ledger';
+
+  @override
+  String get ledgersDeleteRemoteConfirm => 'Delete Cloud Ledger';
+
+  @override
+  String ledgersDeleteRemoteMessage(String name) {
+    return 'Confirm delete cloud ledger \"$name\"? This action cannot be undone.';
+  }
+
+  @override
+  String get ledgersDeleting => 'Deleting...';
+
+  @override
+  String get ledgersDeleteRemoteSuccess => 'Cloud ledger deleted';
+
+  @override
+  String get ledgersRestoreAllTitle => 'Batch Restore';
+
+  @override
+  String ledgersRestoreAllMessage(int count) {
+    return 'Confirm restore all cloud ledgers? Total $count.';
+  }
+
+  @override
+  String get ledgersRestoring => 'Restoring...';
+
+  @override
+  String get ledgersRestoreComplete => 'Restore Complete';
+
+  @override
+  String ledgersRestoreResult(int success, int failed) {
+    return 'Success: $success, Failed: $failed';
   }
 
   @override
@@ -890,21 +1011,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mineCloudServiceWebDAV => 'カスタムクラウドサービス (WebDAV)';
-
-  @override
-  String get mineFirstFullUpload => '初回フルアップロード';
-
-  @override
-  String get mineFirstFullUploadSubtitle => 'すべてのローカル家計簿をクラウドにアップロード';
-
-  @override
-  String get mineFirstFullUploadComplete => '完了';
-
-  @override
-  String get mineFirstFullUploadMessage => '現在の家計簿がアップロードされました。他の家計簿に切り替えてアップロードしてください。';
-
-  @override
-  String get mineFirstFullUploadFailed => '失敗';
 
   @override
   String get mineSyncTitle => '同期';
@@ -1931,12 +2037,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get cloudReadCustomConfigFailed => 'カスタム設定の読み込みに失敗しました';
-
-  @override
-  String get cloudFirstUploadNotComplete => '初回フルアップロードが完了していません';
-
-  @override
-  String get cloudFirstUploadInstruction => 'ログインして「マイページ/同期」で手動で「アップロード」を実行して初期化を完了してください';
 
   @override
   String get cloudNotConfigured => '設定されていません';
@@ -3792,4 +3892,60 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI smart recognition config';
+
+  @override
+  String get ledgersConflictTitle => 'Sync Conflict';
+
+  @override
+  String get ledgersConflictMessage => 'Local and cloud ledger data are inconsistent, please choose an action:';
+
+  @override
+  String ledgersConflictLocalInfo(int count) {
+    return 'Local: $count transactions';
+  }
+
+  @override
+  String ledgersConflictRemoteInfo(int count) {
+    return 'Cloud: $count transactions';
+  }
+
+  @override
+  String ledgersConflictLocalUpdated(String time) {
+    return 'Local updated: $time';
+  }
+
+  @override
+  String ledgersConflictRemoteUpdated(String time) {
+    return 'Cloud updated: $time';
+  }
+
+  @override
+  String ledgersConflictLocalFingerprint(String fp) {
+    return 'Local fingerprint: $fp';
+  }
+
+  @override
+  String ledgersConflictRemoteFingerprint(String fp) {
+    return 'Cloud fingerprint: $fp';
+  }
+
+  @override
+  String get ledgersConflictUpload => 'Upload to Cloud';
+
+  @override
+  String get ledgersConflictDownload => 'Download to Local';
+
+  @override
+  String get ledgersConflictUploading => 'Uploading...';
+
+  @override
+  String get ledgersConflictDownloading => 'Downloading...';
+
+  @override
+  String get ledgersConflictUploadSuccess => 'Upload successful';
+
+  @override
+  String ledgersConflictDownloadSuccess(int inserted) {
+    return 'Download successful, merged $inserted transactions';
+  }
 }

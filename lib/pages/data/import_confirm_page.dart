@@ -593,6 +593,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         done: done,
         ok: ok,
         fail: fail,
+        ledgerId: ledgerId, // 设置账本ID，用于触发账本列表页面刷新
       );
     } catch (e) {}
 
@@ -637,15 +638,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       container.read(statsRefreshProvider.notifier).state++;
     } catch (_) {}
 
-    // 导入完成后，云上传改为后台并行执行，不阻塞 UI
-    () async {
-      try {
-        final sync = container.read(syncServiceProvider);
-        await sync.uploadCurrentLedger(ledgerId: ledgerId);
-        // 上传完成后再触发一次状态刷新（若站点有变更则更新）
-        container.read(syncStatusRefreshProvider.notifier).state++;
-      } catch (_) {}
-    }();
+    // 导入完成后，账本列表页面会通过监听 importProgressProvider 自动刷新
+    // ledgerId 已经在上面的 importProgressProvider 中设置
   }
 
   void _buildDistinctCategories() {

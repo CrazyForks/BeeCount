@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' as fcs;
 
 import '../data/db.dart';
 import '../data/repository.dart';
+import '../models/ledger_display_item.dart';
 import '../utils/logger.dart';
 import 'sync_service.dart';
 import 'transactions_json.dart';
@@ -217,8 +219,11 @@ class TransactionsSyncManager implements SyncService {
     // 检查缓存
     final cached = _statusCache[ledgerId];
     if (cached != null) {
+      print('🟡 [getStatus] 缓存命中: ledgerId=$ledgerId, diff=${cached.diff}');
       return cached;
     }
+
+    print('🟡 [getStatus] 缓存未命中，开始计算: ledgerId=$ledgerId');
 
     try {
       // 计算本地指纹
@@ -250,10 +255,10 @@ class TransactionsSyncManager implements SyncService {
 
       // 调用包的 getStatus，传入时间戳用于方向判断
       final fcsStatus = await _syncManager!.getStatus(
-        data: ledgerId,
-        path: _pathForLedger(ledgerId),
-        localUpdatedAt: _getLocalUpdatedAt(ledgerId),
-      );
+          data: ledgerId,
+          path: _pathForLedger(ledgerId),
+          localUpdatedAt: _getLocalUpdatedAt(ledgerId),
+          forceRefresh: true);
 
       // 转换包的 SyncStatus 为 BeeCount 的 SyncStatus
       final status = _convertSyncStatus(fcsStatus);
@@ -422,6 +427,395 @@ class TransactionsSyncManager implements SyncService {
       }
 
       logE('CloudSync', '删除失败: $ledgerId', e);
+      rethrow;
+    }
+  }
+
+  /// 获取本地账本列表
+  Future<List<LedgerDisplayItem>> getLocalLedgers() async {
+    await _ensureInitialized();
+
+    final localLedgers = await db.select(db.ledgers).get();
+    final result = <LedgerDisplayItem>[];
+
+    for (final ledger in localLedgers) {
+      // 获取账单数据
+      final transactions = await (db.select(db.transactions)
+            ..where((t) => t.ledgerId.equals(ledger.id)))
+          .get();
+
+      // 计算账单数量和余额
+      final count = transactions.length;
+      double balance = 0.0;
+
+      for (final t in transactions) {
+        if (t.type == 'income') {
+          balance += t.amount;
+        } else if (t.type == 'expense') {
+          balance -= t.amount;
+        }
+      }
+
+      result.add(LedgerDisplayItem.fromLocal(
+        id: ledger.id,
+        name: ledger.name,
+        currency: ledger.currency,
+        createdAt: ledger.createdAt,
+        transactionCount: count,
+        balance: balance,
+      ));
+    }
+
+    logI('CloudSync', '已加载本地账本: ${result.length} 个');
+    return result;
+  }
+
+  /// 获取远程账本列表（仅云端，不在本地）
+  Future<List<LedgerDisplayItem>> getRemoteLedgers() async {
+    await _ensureInitialized();
+
+    // 获取本地账本ID列表（用于过滤）
+    final localLedgers = await db.select(db.ledgers).get();
+    final localLedgerIds = localLedgers.map((l) => l.id).toSet();
+
+    final result = <LedgerDisplayItem>[];
+
+    // 直接从云端文件列表获取远程账本
+    try {
+      final files = await _provider!.storage.list(path: '');
+      logI('CloudSync', '云端文件列表: ${files.map((f) => f.name).toList()}');
+      int remoteCount = 0;
+
+      for (final file in files) {
+        try {
+          // 只处理 ledger_*.json 文件
+          final fileName = file.name;
+          if (!fileName.startsWith('ledger_') || !fileName.endsWith('.json')) {
+            continue;
+          }
+
+          // 从文件名提取账本ID
+          final idStr =
+              fileName.replaceAll('ledger_', '').replaceAll('.json', '');
+          final remoteId = int.tryParse(idStr);
+          if (remoteId == null) continue;
+
+          // 如果本地已存在，跳过
+          if (localLedgerIds.contains(remoteId)) continue;
+
+          // 下载文件获取账本元数据（使用 file.name 而非 file.path，避免路径重复）
+          logI('CloudSync',
+              '尝试下载远程账本: file.name=${file.name}, file.path=${file.path}');
+          final jsonStr = await _provider!.storage.download(path: file.name);
+          if (jsonStr == null) {
+            logW('CloudSync', '下载结果为空: ${file.name}');
+            continue;
+          }
+
+          final json = jsonDecode(jsonStr) as Map<String, dynamic>;
+          final name = json['ledgerName'] as String? ??
+              json['name'] as String? ??
+              'Unknown';
+          final currency = json['currency'] as String? ?? 'CNY';
+          final updatedAtStr = json['exportedAt'] as String?;
+          final transactionCount = json['count'] as int? ?? 0;
+
+          // 优先使用 balance 字段，没有则从 items 计算
+          double balance;
+          if (json.containsKey('balance')) {
+            balance = (json['balance'] as num?)?.toDouble() ?? 0.0;
+          } else {
+            balance = 0.0;
+            final items =
+                (json['items'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+            for (final item in items) {
+              final type = item['type'] as String?;
+              final amount = (item['amount'] as num?)?.toDouble() ?? 0.0;
+              if (type == 'income') {
+                balance += amount;
+              } else if (type == 'expense') {
+                balance -= amount;
+              }
+            }
+          }
+
+          DateTime updatedAt;
+          try {
+            updatedAt = DateTime.parse(updatedAtStr ?? '');
+          } catch (_) {
+            updatedAt = DateTime.now();
+          }
+
+          result.add(LedgerDisplayItem.fromRemote(
+            remoteId: remoteId,
+            name: name,
+            currency: currency,
+            updatedAt: updatedAt,
+            transactionCount: transactionCount,
+            balance: balance,
+          ));
+
+          remoteCount++;
+        } catch (e) {
+          logW('CloudSync', '解析远程账本文件失败: ${file.name} - $e');
+          continue;
+        }
+      }
+
+      logI('CloudSync', '已加载远程账本: $remoteCount 个');
+    } catch (e) {
+      logW('CloudSync', '获取远程账本失败: $e');
+      // 失败不影响，返回空列表
+    }
+
+    return result;
+  }
+
+  /// 获取所有账本（本地 + 云端）
+  Future<List<LedgerDisplayItem>> getAllLedgers() async {
+    await _ensureInitialized();
+
+    // 并行获取本地和远程账本
+    final results = await Future.wait([
+      getLocalLedgers(),
+      getRemoteLedgers(),
+    ]);
+
+    final localLedgers = results[0];
+    final remoteLedgers = results[1];
+
+    // 组合结果
+    final allLedgers = [...localLedgers, ...remoteLedgers];
+
+    logI('CloudSync', '已加载所有账本: 本地=${localLedgers.length}, 远程=${remoteLedgers.length}, 总计=${allLedgers.length}');
+
+    return allLedgers;
+  }
+
+  /// 刷新所有账本的同步状态（后台预热缓存）
+  Future<void> refreshAllLedgersStatus() async {
+    await _ensureInitialized();
+
+    try {
+      final ledgers = await db.select(db.ledgers).get();
+
+      for (final ledger in ledgers) {
+        try {
+          await getStatus(ledgerId: ledger.id);
+        } catch (e) {
+          logW('CloudSync', '刷新账本 ${ledger.id} 状态失败: $e');
+        }
+      }
+
+      logI('CloudSync', '已刷新 ${ledgers.length} 个账本的同步状态');
+    } catch (e) {
+      logE('CloudSync', '刷新所有账本状态失败', e);
+    }
+  }
+
+  /// 下载远程账本（创建新的本地账本）
+  ///
+  /// 如果本地不存在远程账本的 ID，则复用远程 ID
+  /// 如果本地已存在该 ID，则创建新 ID
+  Future<int?> downloadRemoteLedger({
+    required String name,
+    required String currency,
+    required String remotePath,
+  }) async {
+    await _ensureInitialized();
+
+    try {
+      logI('CloudSync', '下载远程账本: $remotePath');
+
+      // 从远程路径提取账本ID
+      final remoteIdStr =
+          remotePath.replaceAll('ledger_', '').replaceAll('.json', '');
+      final remoteId = int.tryParse(remoteIdStr);
+
+      // 检查本地是否已存在该 ID
+      final existingLedger = remoteId != null
+          ? await (db.select(db.ledgers)..where((t) => t.id.equals(remoteId)))
+              .getSingleOrNull()
+          : null;
+
+      final int ledgerId;
+      final bool reuseRemoteId = remoteId != null && existingLedger == null;
+
+      if (reuseRemoteId) {
+        // 复用远程 ID
+        logI('CloudSync', '复用远程ID: $remoteId');
+        await db.into(db.ledgers).insert(
+              LedgersCompanion.insert(
+                id: drift.Value(remoteId),
+                name: name,
+                currency: drift.Value(currency),
+              ),
+            );
+        ledgerId = remoteId;
+      } else {
+        // 创建新 ID（自动递增）
+        logI('CloudSync', '本地ID冲突或无效，创建新ID');
+        ledgerId = await db.into(db.ledgers).insert(
+              LedgersCompanion.insert(
+                name: name,
+                currency: drift.Value(currency),
+              ),
+            );
+      }
+
+      // 下载数据
+      final jsonStr = await _provider!.storage.download(path: remotePath);
+
+      if (jsonStr == null) {
+        logW('CloudSync', '云端账本不存在: $remotePath');
+        // 删除刚创建的空账本
+        await (db.delete(db.ledgers)..where((t) => t.id.equals(ledgerId))).go();
+        return null;
+      }
+
+      // 导入数据
+      final result = await importTransactionsJson(repo, ledgerId, jsonStr);
+
+      logI('CloudSync',
+          '下载完成: ledgerId=$ledgerId, inserted=${result.inserted}, skipped=${result.skipped}');
+
+      // 删除旧的远程文件（只有在 ID 改变时才需要删除旧文件并上传新文件）
+      if (reuseRemoteId) {
+        // 复用了远程ID，无需删除和重新上传
+        logI('CloudSync', '复用远程ID，无需更新云端文件');
+      } else {
+        // ID 改变了，需要删除旧文件并上传新文件
+        try {
+          await _provider!.storage.delete(path: remotePath);
+          logI('CloudSync', '旧远程文件已删除: $remotePath');
+        } catch (e) {
+          logW('CloudSync', '删除旧远程文件失败（忽略）: $e');
+        }
+      }
+
+      // 上传新创建的本地账本到云端
+      try {
+        await uploadCurrentLedger(ledgerId: ledgerId);
+        logI('CloudSync', '新账本已上传到云端: ledger_$ledgerId.json');
+      } catch (e) {
+        logW('CloudSync', '上传新账本失败（忽略）: $e');
+      }
+
+      return ledgerId;
+    } catch (e, stack) {
+      logE('CloudSync', '下载远程账本失败: $remotePath', e);
+      logE('CloudSync', '堆栈', stack);
+      rethrow;
+    }
+  }
+
+  /// 删除远程账本（仅云端）
+  Future<void> deleteRemoteLedger({required String remotePath}) async {
+    await _ensureInitialized();
+
+    try {
+      logI('CloudSync', '删除远程账本: $remotePath');
+
+      await _provider!.storage.delete(path: remotePath);
+
+      logI('CloudSync', '删除完成: $remotePath');
+    } catch (e) {
+      // 忽略 404 错误
+      if (e.toString().contains('404') || e.toString().contains('not found')) {
+        logW('CloudSync', '远程账本不存在（忽略）: $remotePath');
+        return;
+      }
+
+      logE('CloudSync', '删除远程账本失败: $remotePath', e);
+      rethrow;
+    }
+  }
+
+  /// 恢复所有远程账本到本地（并行执行）
+  Future<({int success, int failed})> restoreAllRemoteLedgers() async {
+    await _ensureInitialized();
+
+    try {
+      logI('CloudSync', '开始恢复所有远程账本');
+
+      // 获取本地已存在的账本ID
+      final localLedgers = await db.select(db.ledgers).get();
+      final localLedgerIds = localLedgers.map((l) => l.id).toSet();
+      logI('CloudSync', '本地已存在账本: $localLedgerIds');
+
+      // 列出所有远程账本文件
+      final files = await _provider!.storage.list(path: '');
+
+      // 过滤出账本文件，并排除本地已存在的
+      final ledgerFiles = files.where((file) {
+        final fileName = file.name;
+        if (!fileName.startsWith('ledger_') || !fileName.endsWith('.json')) {
+          return false;
+        }
+
+        // 从文件名提取账本ID
+        final idStr =
+            fileName.replaceAll('ledger_', '').replaceAll('.json', '');
+        final remoteId = int.tryParse(idStr);
+
+        // 跳过本地已存在的账本
+        if (remoteId != null && localLedgerIds.contains(remoteId)) {
+          logI('CloudSync', '跳过已存在的账本: $fileName (ID=$remoteId)');
+          return false;
+        }
+
+        return true;
+      }).toList();
+
+      logI('CloudSync', '找到 ${ledgerFiles.length} 个需要恢复的远程账本文件');
+
+      // 并行恢复所有账本
+      final results = await Future.wait(
+        ledgerFiles.map((file) async {
+          try {
+            // 下载文件内容以获取账本信息（使用 file.name 而非 file.path）
+            final jsonStr = await _provider!.storage.download(path: file.name);
+            if (jsonStr == null) {
+              logW('CloudSync', '下载失败: ${file.name}');
+              return false;
+            }
+
+            final json = jsonDecode(jsonStr) as Map<String, dynamic>;
+            final name = json['ledgerName'] as String? ??
+                json['name'] as String? ??
+                'Unknown';
+            final currency = json['currency'] as String? ?? 'CNY';
+
+            // 下载远程账本
+            final ledgerId = await downloadRemoteLedger(
+              name: name,
+              currency: currency,
+              remotePath: file.name,
+            );
+
+            if (ledgerId != null) {
+              logI('CloudSync', '恢复成功: ${file.name} -> ledgerId=$ledgerId');
+              return true;
+            } else {
+              logW('CloudSync', '恢复失败: ${file.name}');
+              return false;
+            }
+          } catch (e) {
+            logW('CloudSync', '恢复账本失败: ${file.name} - $e');
+            return false;
+          }
+        }),
+      );
+
+      // 统计结果
+      final success = results.where((r) => r).length;
+      final failed = results.where((r) => !r).length;
+
+      logI('CloudSync', '恢复完成: 成功=$success, 失败=$failed');
+      return (success: success, failed: failed);
+    } catch (e, stack) {
+      logE('CloudSync', '恢复所有远程账本失败', e);
+      logE('CloudSync', '堆栈', stack);
       rethrow;
     }
   }

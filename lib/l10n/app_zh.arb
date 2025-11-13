@@ -223,6 +223,28 @@
   "ledgersDeleteMessage": "确定要删除该账本及其全部记录吗？此操作不可恢复。\\n若云端存在备份，也会一并删除。",
   "ledgersDeleted": "已删除",
   "ledgersDeleteFailed": "删除失败",
+  "ledgersClear": "清空账本",
+  "ledgersClearTitle": "清空账本",
+  "ledgersClearMessage": "确定要清空账本\"{name}\"的所有账单吗？此操作不可恢复。\\n账本本身会保留，仅删除账单数据。",
+  "@ledgersClearMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersClearSuccess": "账本已清空",
+  "ledgersDeleteLocal": "仅删除本地账本",
+  "ledgersDeleteLocalTitle": "删除本地账本",
+  "ledgersDeleteLocalMessage": "确定要删除本地账本\"{name}\"吗？\\n云端备份会保留，您可以随时恢复。",
+  "@ledgersDeleteLocalMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersDeleteLocalSuccess": "本地账本已删除",
   "ledgersRecordsDeleted": "已删除 {count} 条记录",
   "ledgersName": "名称",
   "ledgersDefaultLedgerName": "默认账本",
@@ -235,6 +257,13 @@
   "ledgersActions": "操作",
   "ledgersRecords": "笔数：{count}",
   "ledgersBalance": "余额：{balance}",
+  "ledgerCardTransactions": "笔账单",
+  "ledgerCardRemoteOnly": "仅在云端",
+  "ledgerCardDownloadCloud": "下载云账本",
+  "ledgerCardJustNow": "刚刚",
+  "ledgerCardMinutesAgo": "{minutes}分钟前",
+  "ledgerCardHoursAgo": "{hours}小时前",
+  "ledgerCardDaysAgo": "{days}天前",
   "categoryTitle": "分类管理",
   "categoryNew": "新建分类",
   "categoryExpense": "支出分类",
@@ -335,11 +364,6 @@
   "mineCloudServiceOffline": "默认模式 (离线)",
   "mineCloudServiceCustom": "自定义 Supabase",
   "mineCloudServiceWebDAV": "自定义云服务 (WebDAV)",
-  "mineFirstFullUpload": "首次全量上传",
-  "mineFirstFullUploadSubtitle": "将所有本地账本上传到云端",
-  "mineFirstFullUploadComplete": "完成",
-  "mineFirstFullUploadMessage": "已上传当前账本。其它账本请切换后再上传。",
-  "mineFirstFullUploadFailed": "失败",
   "mineSyncTitle": "同步",
   "mineSyncNotLoggedIn": "未登录",
   "mineSyncNotConfigured": "未配置云端",
@@ -686,8 +710,6 @@
   "cloudOfflineMode": "离线模式",
   "cloudAvailableServices": "可用云服务",
   "cloudReadCustomConfigFailed": "读取自定义配置失败",
-  "cloudFirstUploadNotComplete": "首次全量上传尚未完成",
-  "cloudFirstUploadInstruction": "登录后在\"我的/同步\"中手动执行\"上传\"完成初始化",
   "cloudNotConfigured": "未配置",
   "cloudNotTested": "未测试",
   "cloudConnectionNormal": "连接正常",
@@ -1443,5 +1465,133 @@
   },
   "configIncludeSupabase": "Supabase 云服务配置",
   "configIncludeWebdav": "WebDAV 云服务配置",
-  "configIncludeAI": "AI 智能识别配置"
+  "configIncludeAI": "AI 智能识别配置",
+  "ledgersLocal": "本地账本",
+  "ledgersRemote": "云端账本",
+  "ledgersEmpty": "暂无账本",
+  "ledgersRestoreAll": "全部恢复",
+  "ledgersSwitched": "已切换到账本\"{name}\"",
+  "@ledgersSwitched": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersDownloadTitle": "下载账本",
+  "ledgersDownloadMessage": "确认下载账本\"{name}\"到本地？",
+  "@ledgersDownloadMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersDownloading": "下载中...",
+  "ledgersDownloadSuccess": "账本\"{name}\"下载成功",
+  "@ledgersDownloadSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersDownload": "下载",
+  "ledgersDeleteRemote": "删除云端账本",
+  "ledgersDeleteRemoteConfirm": "删除云端账本",
+  "ledgersDeleteRemoteMessage": "确认删除云端账本\"{name}\"？此操作不可恢复。",
+  "@ledgersDeleteRemoteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersDeleting": "删除中...",
+  "ledgersDeleteRemoteSuccess": "已删除云端账本",
+  "ledgersRestoreAllTitle": "批量恢复",
+  "ledgersRestoreAllMessage": "确认恢复所有云端账本？共 {count} 个。",
+  "@ledgersRestoreAllMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ledgersRestoring": "恢复中...",
+  "ledgersRestoreComplete": "恢复完成",
+  "ledgersRestoreResult": "成功: {success}，失败: {failed}",
+  "@ledgersRestoreResult": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "ledgersConflictTitle": "同步冲突",
+  "ledgersConflictMessage": "本地和云端账本数据不一致，请选择操作：",
+  "ledgersConflictLocalInfo": "本地：{count} 笔账单",
+  "@ledgersConflictLocalInfo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ledgersConflictRemoteInfo": "云端：{count} 笔账单",
+  "@ledgersConflictRemoteInfo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ledgersConflictLocalUpdated": "本地更新：{time}",
+  "@ledgersConflictLocalUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersConflictRemoteUpdated": "云端更新：{time}",
+  "@ledgersConflictRemoteUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersConflictLocalFingerprint": "本地指纹：{fp}",
+  "@ledgersConflictLocalFingerprint": {
+    "placeholders": {
+      "fp": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersConflictRemoteFingerprint": "云端指纹：{fp}",
+  "@ledgersConflictRemoteFingerprint": {
+    "placeholders": {
+      "fp": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgersConflictUpload": "上传到云端",
+  "ledgersConflictDownload": "下载到本地",
+  "ledgersConflictUploading": "正在上传...",
+  "ledgersConflictDownloading": "正在下载...",
+  "ledgersConflictUploadSuccess": "上传成功",
+  "ledgersConflictDownloadSuccess": "下载成功，已合并 {inserted} 笔账单",
+  "@ledgersConflictDownloadSuccess": {
+    "placeholders": {
+      "inserted": {
+        "type": "int"
+      }
+    }
+  }
 }

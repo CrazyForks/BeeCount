@@ -17,10 +17,8 @@ import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
 import '../../utils/logger.dart';
-import '../../services/restore_service.dart';
 import '../../services/avatar_service.dart';
 import '../../services/share_poster_service.dart';
-import '../data/restore_progress_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../settings/font_settings_page.dart';
 import '../category/category_manage_page.dart';
@@ -51,38 +49,6 @@ class MinePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authAsync = ref.watch(authServiceProvider);
     final ledgerId = ref.watch(currentLedgerIdProvider);
-
-    // 登录后一次性触发云端备份检查
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final needCheck = ref.read(restoreCheckRequestProvider);
-      if (!authAsync.hasValue) return;
-      final auth = authAsync.value!;
-      final user = await auth.currentUser;
-      if (!needCheck || user == null || !context.mounted) return;
-      ref.read(restoreCheckRequestProvider.notifier).state = false;
-      try {
-        final check = await RestoreService.checkNeedRestore(ref);
-        if (!check.needsRestore) return;
-        if (!context.mounted) return;
-        final ok = await AppDialog.confirm<bool>(context,
-                title: AppLocalizations.of(context).cloudBackupFound,
-                message:
-                    AppLocalizations.of(context).cloudBackupRestoreMessage) ??
-            false;
-        if (!ok || !context.mounted) return;
-        RestoreService.startBackgroundRestore(check.backups, ref);
-        await Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const RestoreProgressPage()),
-        );
-        ref.read(syncStatusRefreshProvider.notifier).state++;
-        ref.read(statsRefreshProvider.notifier).state++;
-      } catch (e) {
-        if (!context.mounted) return;
-        await AppDialog.error(context,
-            title: AppLocalizations.of(context).cloudBackupRestoreFailed,
-            message: '$e');
-      }
-    });
 
     return Scaffold(
       backgroundColor: BeeColors.greyBg,
