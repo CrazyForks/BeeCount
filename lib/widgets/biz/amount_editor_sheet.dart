@@ -434,7 +434,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                         child: const SizedBox(
                           height: 60,
                           child: Center(
-                              child: Icon(Icons.close_rounded,
+                              child: Icon(Icons.backspace_outlined,
                                   color: BeeColors.primaryText)),
                         ),
                       ),
