@@ -12,7 +12,22 @@
 
 **核心优势：支持自建 Supabase/WebDAV 服务器，数据完全掌控在你手中**
 
-[📥 下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | [📖 使用文档](#-使用说明) | [💝 捐赠支持](#-捐赠) | [💬 问题反馈](https://github.com/TNT-Likely/BeeCount/issues) | [💬 Telegram 群组](https://t.me/beecount) | [🌐 English](README_EN.md)
+<br/>
+
+<a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
+  <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
+</a>
+<a href="https://apps.apple.com/app/id6754611670">
+  <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1480636800" alt="Download on App Store" height="50"/>
+</a>
+<a href="https://testflight.apple.com/join/Eaw2rWxa">
+  <img src="https://img.shields.io/badge/TestFlight-Public%20Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+</a>
+
+<br/>
+<br/>
+
+[📖 使用文档](#-使用说明) | [💝 捐赠支持](#-捐赠) | [💬 Telegram 群组](https://t.me/beecount) | [🌐 English](README_EN.md)
 
 </div>
 
@@ -20,15 +35,17 @@
 
 > ## 🎉 重大消息
 >
+> **🍎 iOS 正式版已上架 App Store！**
+>
+> 在 App Store 搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
+>
+> ---
+>
 > **🚀 支付宝/微信自动记账，全程 0 操作！**
 >
-> 📸 **拍照即记账** - 对准支付凭证拍照，AI 自动识别金额、商家、分类，无需手动输入
+> 📸 **拍照识别** - AI 自动提取金额、商家、分类信息（本地模型训练中 + GLM 云端模型）
 >
-> 🤖 **AI 智能识别** - 支持智谱 GLM-4-Flash（完全免费）+ 本地模型（训练中），准确提取账单信息
->
-> ⚡ **截图自动记账** - Android 截图监听 + iOS 快捷指令，支付完成后自动创建账单
->
-> 💡 **体验革命性提升** - 从此告别繁琐的手动记账，让记账变得像呼吸一样自然
+> ⚡ **截图记账** - Android 截图监听 + iOS 快捷指令，支付后自动创建账单
 
 ---
 
@@ -67,9 +84,11 @@
 
 > ## 📱 平台支持
 >
-> 🍎 **iOS 版本正在上架 App Store** - 公测版本可通过 **[TestFlight 加入](https://testflight.apple.com/join/Eaw2rWxa)**
+> 🤖 **Android** - [下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | 支持 Android 5.0+
 >
-> 📱 **鸿蒙版本正在上架中** - 支持 HarmonyOS 5.0+ - [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
+> 🍎 **iOS** - [App Store 正式版](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 13.0+
+>
+> 📱 **HarmonyOS** - 正在上架中 | 支持 HarmonyOS 5.0+ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
 ---
 
@@ -199,28 +218,7 @@
 
 > 💡 需要添加新语言？欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出！
 
-## 🚀 快速开始
-
-### 📥 方式一：直接下载（推荐）
-
-<div align="center">
-
-[![下载 Android APK](https://img.shields.io/badge/下载_Android_APK-最新版本-brightgreen?style=for-the-badge&logo=android)](https://github.com/TNT-Likely/BeeCount/releases/latest)
-[![加入 iOS TestFlight](https://img.shields.io/badge/加入_iOS_TestFlight-公测版本-blue?style=for-the-badge&logo=apple)](https://testflight.apple.com/join/Eaw2rWxa)
-
-</div>
-
-**Android 用户：**
-1. 点击上方按钮前往 [Releases](https://github.com/TNT-Likely/BeeCount/releases) 页面
-2. 下载最新版本的 `app-prod-release-*.apk` 文件
-3. 安装后即可开始使用（默认本地模式，无需任何配置）
-
-**iOS 用户：**
-1. 在 iPhone/iPad 上安装 [TestFlight](https://apps.apple.com/app/testflight/id899247664)
-2. 点击 [TestFlight 公测链接](https://testflight.apple.com/join/Eaw2rWxa) 加入
-3. 在 TestFlight 中安装蜜蜂记账
-
-### 🔨 方式二：自行构建
+## 🔨 开发者构建
 
 ```bash
 # 克隆项目
