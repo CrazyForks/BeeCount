@@ -8,6 +8,8 @@ class ImportProgress {
   final int ok;
   final int fail;
   final int? ledgerId; // 关联的账本ID，用于导入完成后触发刷新
+  final int skipped; // 跳过的记录数
+  final Map<String, int> skippedTypes; // 跳过的类型及数量
 
   const ImportProgress({
     required this.running,
@@ -16,6 +18,8 @@ class ImportProgress {
     required this.ok,
     required this.fail,
     this.ledgerId,
+    this.skipped = 0,
+    this.skippedTypes = const {},
   });
 
   ImportProgress copyWith({
@@ -25,6 +29,8 @@ class ImportProgress {
     int? ok,
     int? fail,
     int? ledgerId,
+    int? skipped,
+    Map<String, int>? skippedTypes,
   }) =>
       ImportProgress(
         running: running ?? this.running,
@@ -33,6 +39,8 @@ class ImportProgress {
         ok: ok ?? this.ok,
         fail: fail ?? this.fail,
         ledgerId: ledgerId ?? this.ledgerId,
+        skipped: skipped ?? this.skipped,
+        skippedTypes: skippedTypes ?? this.skippedTypes,
       );
 
   /// 判断是否刚完成导入（从运行中变为完成状态）

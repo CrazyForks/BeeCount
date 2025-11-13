@@ -863,6 +863,7 @@
   "importFieldType": "Type",
   "importFieldAmount": "Montant",
   "importFieldCategory": "Catégorie",
+  "importFieldAccount": "Compte",
   "importFieldNote": "Note",
   "importPreview": "Aperçu : ",
   "importPreviewLimit": "Affiche les {shown} premiers enregistrements sur {total}",
@@ -935,6 +936,8 @@
   "importBackgroundImport": "Importation en Arrière-plan",
   "importCancelled": "(Annulé)",
   "importCompleted": "Importation terminée{cancelled} : réussi {ok}, échoué {fail}",
+  "importSkippedNonTransactionTypes": "{count} enregistrements non-transaction ignorés (transferts, dettes, etc.)",
+  "importTransactionFailed": "Échec de l'importation, toutes les modifications ont été annulées : {error}",
   "@importCompleted": {
     "placeholders": {
       "cancelled": {

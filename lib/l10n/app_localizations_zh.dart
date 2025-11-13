@@ -735,6 +735,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importFieldCategory => '分类';
 
   @override
+  String get importFieldAccount => '账户';
+
+  @override
   String get importFieldNote => '备注';
 
   @override
@@ -810,6 +813,16 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
     return '导入完成$cancelled：成功 $ok 条，失败 $fail 条';
+  }
+
+  @override
+  String importSkippedNonTransactionTypes(Object count) {
+    return '跳过 $count 条非收支记录（转账、债务等）';
+  }
+
+  @override
+  String importTransactionFailed(Object error) {
+    return '导入失败，已回滚所有更改：$error';
   }
 
   @override
@@ -4567,6 +4580,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get importFieldCategory => '分類';
 
   @override
+  String get importFieldAccount => '帳戶';
+
+  @override
   String get importFieldNote => '備註';
 
   @override
@@ -4642,6 +4658,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
     return '匯入完成$cancelled：成功 $ok 條，失敗 $fail 條';
+  }
+
+  @override
+  String importSkippedNonTransactionTypes(Object count) {
+    return '跳過 $count 條非收支記錄（轉帳、債務等）';
+  }
+
+  @override
+  String importTransactionFailed(Object error) {
+    return '匯入失敗，已回滾所有更改：$error';
   }
 
   @override

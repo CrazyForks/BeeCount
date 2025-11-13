@@ -256,6 +256,7 @@
   "importFieldType": "Typ",
   "importFieldAmount": "Betrag",
   "importFieldCategory": "Kategorie",
+  "importFieldAccount": "Konto",
   "importFieldNote": "Notiz",
   "importPreview": "Vorschau:",
   "importPreviewLimit": "Nur erste {shown} von {total} Zeilen anzeigen",
@@ -328,6 +329,8 @@
   "importBackgroundImport": "Hintergrund-Import",
   "importCancelled": "(abgebrochen)",
   "importCompleted": "Import abgeschlossen{cancelled}: Erfolg {ok}, Fehler {fail}",
+  "importSkippedNonTransactionTypes": "{count} Nicht-Transaktionsdatensätze übersprungen (Überweisungen, Schulden usw.)",
+  "importTransactionFailed": "Import fehlgeschlagen, alle Änderungen wurden rückgängig gemacht: {error}",
   "@importCompleted": {
     "placeholders": {
       "cancelled": {

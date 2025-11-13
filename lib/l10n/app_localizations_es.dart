@@ -735,6 +735,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get importFieldCategory => 'Categoría';
 
   @override
+  String get importFieldAccount => 'Cuenta';
+
+  @override
   String get importFieldNote => 'Nota';
 
   @override
@@ -810,6 +813,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
     return 'Importación Completada$cancelled, éxito $ok, fallidos $fail';
+  }
+
+  @override
+  String importSkippedNonTransactionTypes(Object count) {
+    return '$count registros no transaccionales omitidos (transferencias, deudas, etc.)';
+  }
+
+  @override
+  String importTransactionFailed(Object error) {
+    return 'Importación fallida, se han revertido todos los cambios: $error';
   }
 
   @override

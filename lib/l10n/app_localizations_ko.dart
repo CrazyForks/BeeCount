@@ -735,6 +735,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importFieldCategory => '카테고리';
 
   @override
+  String get importFieldAccount => '계정';
+
+  @override
   String get importFieldNote => '메모';
 
   @override
@@ -810,6 +813,16 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
     return '가져오기 완료$cancelled, 성공 $ok개, 실패 $fail개';
+  }
+
+  @override
+  String importSkippedNonTransactionTypes(Object count) {
+    return '$count개의 비거래 기록 건너뜀 (이체, 부채 등)';
+  }
+
+  @override
+  String importTransactionFailed(Object error) {
+    return '가져오기 실패, 모든 변경 사항이 롤백되었습니다: $error';
   }
 
   @override

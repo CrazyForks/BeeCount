@@ -157,6 +157,7 @@
   "importFieldDate": "Fecha",
   "importFieldAmount": "Monto",
   "importFieldCategory": "Categoría",
+  "importFieldAccount": "Cuenta",
   "importFieldNote": "Nota",
   "importFieldType": "Tipo",
   "importFailed": "Importación fallida",
@@ -828,6 +829,8 @@
   "importBackgroundImport": "Importación en Segundo Plano",
   "importCancelled": "Importación Cancelada",
   "importCompleted": "Importación Completada{cancelled}, éxito {ok}, fallidos {fail}",
+  "importSkippedNonTransactionTypes": "{count} registros no transaccionales omitidos (transferencias, deudas, etc.)",
+  "importTransactionFailed": "Importación fallida, se han revertido todos los cambios: {error}",
   "@importCompleted": {
     "placeholders": {
       "cancelled": {

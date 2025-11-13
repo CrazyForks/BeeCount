@@ -342,6 +342,7 @@
   "importFieldType": "Type",
   "importFieldAmount": "Amount",
   "importFieldCategory": "Category",
+  "importFieldAccount": "Account",
   "importFieldNote": "Note",
   "importPreview": "Data Preview",
   "importPreviewLimit": "Showing first {shown} of {total} records",
@@ -364,6 +365,8 @@
   "importBackgroundImport": "Background Import",
   "importCancelled": "Import Cancelled",
   "importCompleted": "Import Completed{cancelled}, success {ok}, failed {fail}",
+  "importSkippedNonTransactionTypes": "Skipped {count} non-transaction records (transfers, debts, etc.)",
+  "importTransactionFailed": "Import failed, all changes have been rolled back: {error}",
   "importFileOpenError": "Unable to open file picker: {error}",
   "@importFileOpenError": {
     "placeholders": {

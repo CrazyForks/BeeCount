@@ -241,6 +241,7 @@
   "importFieldType": "タイプ",
   "importFieldAmount": "金額",
   "importFieldCategory": "カテゴリ",
+  "importFieldAccount": "アカウント",
   "importFieldNote": "メモ",
   "importPreview": "データプレビュー",
   "importPreviewLimit": "{total}件中最初の{shown}件を表示",
@@ -263,6 +264,8 @@
   "importBackgroundImport": "バックグラウンドインポート",
   "importCancelled": "インポートキャンセル",
   "importCompleted": "インポート完了{cancelled}、成功{ok}件、失敗{fail}件",
+  "importSkippedNonTransactionTypes": "{count}件の非取引記録をスキップしました（振替、債務など）",
+  "importTransactionFailed": "インポートに失敗しました。すべての変更がロールバックされました：{error}",
   "importFileOpenError": "ファイルピッカーを開けません：{error}",
   "@importFileOpenError": {
     "placeholders": {

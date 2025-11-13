@@ -1438,6 +1438,12 @@ abstract class AppLocalizations {
   /// **'Category'**
   String get importFieldCategory;
 
+  /// No description provided for @importFieldAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get importFieldAccount;
+
   /// No description provided for @importFieldNote.
   ///
   /// In en, this message translates to:
@@ -1569,6 +1575,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Import Completed{cancelled}, success {ok}, failed {fail}'**
   String importCompleted(Object cancelled, Object fail, Object ok);
+
+  /// No description provided for @importSkippedNonTransactionTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped {count} non-transaction records (transfers, debts, etc.)'**
+  String importSkippedNonTransactionTypes(Object count);
+
+  /// No description provided for @importTransactionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed, all changes have been rolled back: {error}'**
+  String importTransactionFailed(Object error);
 
   /// No description provided for @importFileOpenError.
   ///

@@ -735,6 +735,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get importFieldCategory => 'カテゴリ';
 
   @override
+  String get importFieldAccount => 'アカウント';
+
+  @override
   String get importFieldNote => 'メモ';
 
   @override
@@ -810,6 +813,16 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String importCompleted(Object cancelled, Object fail, Object ok) {
     return 'インポート完了$cancelled、成功$ok件、失敗$fail件';
+  }
+
+  @override
+  String importSkippedNonTransactionTypes(Object count) {
+    return '$count件の非取引記録をスキップしました（振替、債務など）';
+  }
+
+  @override
+  String importTransactionFailed(Object error) {
+    return 'インポートに失敗しました。すべての変更がロールバックされました：$error';
   }
 
   @override

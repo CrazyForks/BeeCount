@@ -241,6 +241,7 @@
   "importFieldType": "유형",
   "importFieldAmount": "금액",
   "importFieldCategory": "카테고리",
+  "importFieldAccount": "계정",
   "importFieldNote": "메모",
   "importPreview": "데이터 미리보기",
   "importPreviewLimit": "{total}개 중 처음 {shown}개 표시",
@@ -263,6 +264,8 @@
   "importBackgroundImport": "백그라운드 가져오기",
   "importCancelled": "가져오기 취소됨",
   "importCompleted": "가져오기 완료{cancelled}, 성공 {ok}개, 실패 {fail}개",
+  "importSkippedNonTransactionTypes": "{count}개의 비거래 기록 건너뜀 (이체, 부채 등)",
+  "importTransactionFailed": "가져오기 실패, 모든 변경 사항이 롤백되었습니다: {error}",
   "importFileOpenError": "파일 선택기를 열 수 없습니다: {error}",
   "@importFileOpenError": {
     "placeholders": {
