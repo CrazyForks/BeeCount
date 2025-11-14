@@ -184,8 +184,9 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
         final l10n = AppLocalizations.of(context);
         final transactionKind = (_ocrResult?.aiType == 'income') ? 'income' : 'expense';
         final typeText = transactionKind == 'income' ? l10n.aiTypeIncome : l10n.aiTypeExpense;
-        final amount = _ocrResult?.amount?.abs().toStringAsFixed(2) ?? '0.00';
-        showToast(context, l10n.aiOcrSuccess(typeText, amount));
+        // 使用用户最终选择的金额而不是默认金额
+        final finalAmount = amount.toStringAsFixed(2);
+        showToast(context, l10n.aiOcrSuccess(typeText, finalAmount));
 
         // 返回上一页
         Navigator.of(context).pop();
