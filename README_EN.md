@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
+[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -67,6 +67,7 @@
 >
 > 💌 **Contact:**
 > - GitHub Issues: [Submit design proposals](https://github.com/TNT-Likely/BeeCount/issues)
+> - Telegram Group: [Join discussion](https://t.me/beecount)
 
 ---
 
@@ -538,6 +539,7 @@ Commercial license is required for:
 
 For commercial use, please contact us via:
 - 📧 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues)
+- 💬 [Telegram Group](https://t.me/beecount)
 
 For detailed license terms, please see the [LICENSE](LICENSE) file.
 

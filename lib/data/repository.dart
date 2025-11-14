@@ -838,15 +838,23 @@ class BeeRepository {
   }
 
   /// 响应式监听分类下的交易变化
-  Stream<List<Transaction>> watchTransactionsByCategory(int categoryId) {
-    return (db.select(db.transactions)
-      ..where((t) => t.categoryId.equals(categoryId))
-      ..orderBy([
-        (t) => d.OrderingTerm(
-          expression: t.happenedAt,
-          mode: d.OrderingMode.desc,
-        )
-      ])).watch();
+  Stream<List<Transaction>> watchTransactionsByCategory(int categoryId, {int? ledgerId}) {
+    final query = db.select(db.transactions)
+      ..where((t) => t.categoryId.equals(categoryId));
+
+    // 如果指定了账本ID，则只返回该账本的交易
+    if (ledgerId != null) {
+      query.where((t) => t.ledgerId.equals(ledgerId));
+    }
+
+    query.orderBy([
+      (t) => d.OrderingTerm(
+        expression: t.happenedAt,
+        mode: d.OrderingMode.desc,
+      )
+    ]);
+
+    return query.watch();
   }
 
   /// 响应式监听分类信息变化

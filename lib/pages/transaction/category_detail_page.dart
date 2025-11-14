@@ -51,8 +51,10 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
       data: (transactions) {
         if (widget.startDate != null && widget.endDate != null) {
           final filtered = transactions.where((t) {
-            return t.happenedAt.isAfter(widget.startDate!) &&
-                   t.happenedAt.isBefore(widget.endDate!);
+            // 修复：使用 >= 和 < 来包含起始日期，排除结束日期的下一天
+            return t.happenedAt.isAtSameMomentAs(widget.startDate!) ||
+                   (t.happenedAt.isAfter(widget.startDate!) &&
+                    t.happenedAt.isBefore(widget.endDate!));
           }).toList();
           return AsyncValue.data(filtered);
         }
@@ -559,10 +561,11 @@ final _categoryStreamProvider = StreamProvider.family<db.Category?, int>((ref, c
   return repo.watchCategory(categoryId);
 });
 
-// 基础数据流：监听分类下交易变化
+// 基础数据流：监听分类下交易变化（仅当前账本）
 final _categoryTransactionsStreamProvider = StreamProvider.family<List<db.Transaction>, int>((ref, categoryId) {
   final repo = ref.watch(repositoryProvider);
-  return repo.watchTransactionsByCategory(categoryId);
+  final ledgerId = ref.watch(currentLedgerIdProvider);
+  return repo.watchTransactionsByCategory(categoryId, ledgerId: ledgerId);
 });
 
 // 排序状态管理
