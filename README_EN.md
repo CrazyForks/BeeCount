@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
+[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -67,7 +67,6 @@
 >
 > 💌 **Contact:**
 > - GitHub Issues: [Submit design proposals](https://github.com/TNT-Likely/BeeCount/issues)
-> - Telegram Group: [Join discussion](https://t.me/beecount)
 
 ---
 
@@ -206,21 +205,6 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
   - CSV import auto-recognizes multi-language categories
 
 > 💡 Want to add a new language? Welcome to create an [Issue](https://github.com/TNT-Likely/BeeCount/issues)!
-
-## 🔨 Developer Build
-
-```bash
-# Clone the project
-git clone https://github.com/TNT-Likely/BeeCount.git
-cd BeeCount
-
-# Install dependencies
-flutter pub get
-dart run build_runner build -d
-
-# Run the app
-flutter run --flavor dev -d android
-```
 
 ## 📖 User Guide
 
@@ -554,7 +538,6 @@ Commercial license is required for:
 
 For commercial use, please contact us via:
 - 📧 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues)
-- 💬 [Telegram Group](https://t.me/beecount)
 
 For detailed license terms, please see the [LICENSE](LICENSE) file.
 

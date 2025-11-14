@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 使用文档](#-使用说明) | [💝 捐赠支持](#-捐赠) | [💬 Telegram 群组](https://t.me/beecount) | [🌐 English](README_EN.md)
+[📖 使用文档](#-使用说明) | [💝 捐赠支持](#-捐赠) | [🌐 English](README_EN.md)
 
 </div>
 
@@ -61,6 +61,7 @@
 
 > ## 🎨 招募设计师
 >
+>
 > **我们正在寻找有才华的 UI/UX 设计师加入蜜蜂记账项目！**
 >
 > 📐 **参与内容：**
@@ -77,7 +78,6 @@
 >
 > 💌 **联系方式：**
 > - GitHub Issues: [提交设计建议](https://github.com/TNT-Likely/BeeCount/issues)
-> - Telegram 群组: [加入讨论](https://t.me/beecount)
 > - 微信群：扫描上方二维码
 
 ---
@@ -217,21 +217,6 @@
   - CSV 导入自动识别多语言分类
 
 > 💡 需要添加新语言？欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出！
-
-## 🔨 开发者构建
-
-```bash
-# 克隆项目
-git clone https://github.com/TNT-Likely/BeeCount.git
-cd BeeCount
-
-# 安装依赖
-flutter pub get
-dart run build_runner build -d
-
-# 运行应用
-flutter run --flavor dev -d android
-```
 
 ## 📖 使用说明
 
@@ -555,7 +540,6 @@ A:
 
 如需商业使用，请通过以下方式联系：
 - 📧 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues)
-- 💬 [Telegram 群组](https://t.me/beecount)
 
 详细许可条款请查看 [LICENSE](LICENSE) 文件。
 
