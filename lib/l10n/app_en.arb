@@ -1760,5 +1760,12 @@
       }
     }
   },
-  "storageClearSuccess": "Cleared successfully"
+  "storageClearSuccess": "Cleared successfully",
+  "accountNoTransactions": "No transactions",
+  "accountTransactionHistory": "Transaction History",
+  "accountTotalBalance": "Total Balance",
+  "accountTotalExpense": "Total Expense",
+  "accountTotalIncome": "Total Income",
+  "accountDetailTitle": "Account Details",
+  "commonUncategorized": "Uncategorized"
 }

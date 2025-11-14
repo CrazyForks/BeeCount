@@ -4007,6 +4007,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get storageClearSuccess => '清理成功';
+
+  @override
+  String get accountNoTransactions => '暂无交易记录';
+
+  @override
+  String get accountTransactionHistory => '交易记录';
+
+  @override
+  String get accountTotalBalance => '总余额';
+
+  @override
+  String get accountTotalExpense => '总支出';
+
+  @override
+  String get accountTotalIncome => '总收入';
+
+  @override
+  String get accountDetailTitle => '账户详情';
+
+  @override
+  String get commonUncategorized => '未分类';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

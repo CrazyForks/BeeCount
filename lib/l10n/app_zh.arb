@@ -1624,5 +1624,12 @@
       }
     }
   },
-  "storageClearSuccess": "清理成功"
+  "storageClearSuccess": "清理成功",
+  "accountNoTransactions": "暂无交易记录",
+  "accountTransactionHistory": "交易记录",
+  "accountTotalBalance": "总余额",
+  "accountTotalExpense": "总支出",
+  "accountTotalIncome": "总收入",
+  "accountDetailTitle": "账户详情",
+  "commonUncategorized": "未分类"
 }

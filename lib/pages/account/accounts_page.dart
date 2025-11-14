@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/amount_text.dart';
+import '../../widgets/biz/section_card.dart';
 import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
+import '../../styles/colors.dart';
+import '../../utils/ui_scale_extensions.dart';
 import 'account_edit_page.dart';
+import 'account_detail_page.dart';
 
 class AccountsPage extends ConsumerWidget {
   const AccountsPage({super.key});
@@ -49,15 +54,37 @@ class AccountsPage extends ConsumerWidget {
     }
   }
 
+  Color _getColorForType(String type, Color primaryColor) {
+    switch (type) {
+      case 'alipay':
+        return const Color(0xFF1677FF); // 支付宝蓝
+      case 'wechat':
+        return const Color(0xFF07C160); // 微信绿
+      case 'cash':
+        return Colors.orange;
+      case 'bank_card':
+        return const Color(0xFF1890FF); // 银行卡蓝
+      case 'credit_card':
+        return Colors.purple;
+      default:
+        return primaryColor;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final ledgerId = ref.watch(currentLedgerIdProvider);
     final accountsAsync = ref.watch(accountsStreamProvider(ledgerId));
     final accountFeatureAsync = ref.watch(accountFeatureEnabledProvider);
-    final primaryColor = Theme.of(context).primaryColor;
+    final primaryColor = ref.watch(primaryColorProvider);
+    final totalStatsAsync = ref.watch(allAccountsTotalStatsProvider(ledgerId));
+    final allStatsAsync = ref.watch(allAccountStatsProvider(ledgerId));
+    final currentLedgerAsync = ref.watch(currentLedgerProvider);
+    final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
 
     return Scaffold(
+      backgroundColor: BeeColors.greyBg,
       body: Column(
         children: [
           PrimaryHeader(
@@ -65,7 +92,7 @@ class AccountsPage extends ConsumerWidget {
             showBack: true,
             actions: [
               IconButton(
-                onPressed: () => _addAccount(context, ledgerId),
+                onPressed: () => _addAccount(context, ref, ledgerId),
                 icon: const Icon(Icons.add),
                 tooltip: l10n.accountAddTooltip,
               ),
@@ -74,128 +101,161 @@ class AccountsPage extends ConsumerWidget {
           Expanded(
             child: accountsAsync.when(
               data: (accounts) {
-                if (accounts.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.account_balance_wallet_outlined,
-                          size: 64,
-                          color: Colors.grey[400],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          l10n.accountsEmptyMessage,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        ElevatedButton.icon(
-                          onPressed: () => _addAccount(context, ledgerId),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            foregroundColor: Colors.white,
-                          ),
-                          icon: const Icon(Icons.add),
-                          label: Text(l10n.accountAddButton),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return FutureBuilder<Map<int, double>>(
-                  future: ref.read(repositoryProvider).getAllAccountBalances(ledgerId),
-                  builder: (context, balanceSnapshot) {
-                    final balances = balanceSnapshot.data ?? {};
-
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: accounts.length + 1, // +1 for the switch tile
-                      itemBuilder: (context, index) {
-                        // 第一项显示功能开关
-                        if (index == 0) {
-                          return accountFeatureAsync.when(
-                            data: (enabled) {
-                              return Card(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                child: SwitchListTile(
-                                  title: Text(
-                                    l10n.accountsEnableFeature,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  subtitle: Text(l10n.accountsFeatureDescription),
-                                  value: enabled,
-                                  activeColor: primaryColor,
-                                  onChanged: (value) async {
-                                    await ref.read(accountFeatureSetterProvider).setEnabled(value);
-                                    ref.invalidate(accountFeatureEnabledProvider);
-                                  },
-                                ),
-                              );
-                            },
-                            loading: () => const SizedBox.shrink(),
-                            error: (_, __) => const SizedBox.shrink(),
-                          );
-                        }
-
-                        // 账户列表项
-                        final account = accounts[index - 1];
-                        final balance = balances[account.id] ?? 0.0;
-
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: primaryColor.withValues(alpha: 0.12),
-                              child: Icon(
-                                _getIconForType(account.type),
-                                color: primaryColor,
-                              ),
-                            ),
+                return ListView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.0.scaled(context, ref),
+                    vertical: 8.0.scaled(context, ref),
+                  ),
+                  children: [
+                    // 功能开关卡片
+                    accountFeatureAsync.when(
+                      data: (enabled) {
+                        return SectionCard(
+                          margin: EdgeInsets.zero,
+                          child: SwitchListTile(
                             title: Text(
-                              account.name,
+                              l10n.accountsEnableFeature,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
-                            subtitle: Text(_getTypeLabel(context, account.type)),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                            subtitle: Text(l10n.accountsFeatureDescription),
+                            value: enabled,
+                            activeColor: primaryColor,
+                            onChanged: (value) async {
+                              await ref
+                                  .read(accountFeatureSetterProvider)
+                                  .setEnabled(value);
+                              ref.invalidate(accountFeatureEnabledProvider);
+                            },
+                          ),
+                        );
+                      },
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, __) => const SizedBox.shrink(),
+                    ),
+
+                    if (accounts.isEmpty)
+                      // 空状态
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.account_balance_wallet_outlined,
+                                size: 64.0.scaled(context, ref),
+                                color: Colors.grey[400],
+                              ),
+                              SizedBox(height: 16.0.scaled(context, ref)),
+                              Text(
+                                l10n.accountsEmptyMessage,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              SizedBox(height: 24.0.scaled(context, ref)),
+                              ElevatedButton.icon(
+                                onPressed: () => _addAccount(context, ref, ledgerId),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: primaryColor,
+                                  foregroundColor: Colors.white,
+                                ),
+                                icon: const Icon(Icons.add),
+                                label: Text(l10n.accountAddButton),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    else ...[
+                      // 顶部汇总统计卡片
+                      SizedBox(height: 8.0.scaled(context, ref)),
+                      totalStatsAsync.when(
+                        data: (stats) => SectionCard(
+                          margin: EdgeInsets.zero,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.0.scaled(context, ref),
+                              vertical: 12.0.scaled(context, ref),
+                            ),
+                            child: Row(
                               children: [
-                                AmountText(
-                                  value: balance,
-                                  signed: false,
-                                  showCurrency: true,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: balance >= 0 ? Colors.green : Colors.red,
+                                Expanded(
+                                  child: _StatCell(
+                                    label: l10n.accountTotalBalance,
+                                    value: stats.totalBalance,
+                                    currencyCode: currencyCode,
+                                    color: stats.totalBalance >= 0
+                                        ? BeeColors.primaryText
+                                        : Colors.red,
                                   ),
                                 ),
-                                Text(
-                                  l10n.accountBalance,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey[600],
+                                Container(
+                                  width: 1,
+                                  height: 40.0.scaled(context, ref),
+                                  color: Colors.grey[300],
+                                ),
+                                Expanded(
+                                  child: _StatCell(
+                                    label: l10n.accountTotalIncome,
+                                    value: stats.totalIncome,
+                                    currencyCode: currencyCode,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                Container(
+                                  width: 1,
+                                  height: 40.0.scaled(context, ref),
+                                  color: Colors.grey[300],
+                                ),
+                                Expanded(
+                                  child: _StatCell(
+                                    label: l10n.accountTotalExpense,
+                                    value: stats.totalExpense,
+                                    currencyCode: currencyCode,
+                                    color: Colors.red,
                                   ),
                                 ),
                               ],
                             ),
-                            onTap: () => _editAccount(context, account, ledgerId),
                           ),
+                        ),
+                        loading: () => SectionCard(
+                          child: Center(
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.all(16.0.scaled(context, ref)),
+                              child: const CircularProgressIndicator(),
+                            ),
+                          ),
+                        ),
+                        error: (err, stack) => const SizedBox.shrink(),
+                      ),
+
+                      // 账户列表
+                      SizedBox(height: 8.0.scaled(context, ref)),
+                      ...accounts.map((account) {
+                        return _AccountCard(
+                          account: account,
+                          currencyCode: currencyCode,
+                          primaryColor: primaryColor,
+                          typeColor:
+                              _getColorForType(account.type, primaryColor),
+                          icon: _getIconForType(account.type),
+                          typeLabel: _getTypeLabel(context, account.type),
+                          stats: allStatsAsync.asData?.value[account.id],
+                          onTap: () =>
+                              _viewAccountDetail(context, ref, account),
+                          onEdit: () =>
+                              _editAccount(context, ref, account, ledgerId),
                         );
-                      },
-                    );
-                  },
+                      }),
+                    ],
+                  ],
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -209,22 +269,333 @@ class AccountsPage extends ConsumerWidget {
     );
   }
 
-  void _addAccount(BuildContext context, int ledgerId) {
-    Navigator.of(context).push(
+  Future<void> _addAccount(BuildContext context, WidgetRef ref, int ledgerId) async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AccountEditPage(ledgerId: ledgerId),
       ),
     );
+
+    // 刷新统计数据
+    ref.invalidate(allAccountStatsProvider(ledgerId));
+    ref.invalidate(allAccountsTotalStatsProvider(ledgerId));
+    ref.invalidate(statsRefreshProvider);
   }
 
-  void _editAccount(BuildContext context, db.Account account, int ledgerId) {
-    Navigator.of(context).push(
+  Future<void> _editAccount(BuildContext context, WidgetRef ref,
+      db.Account account, int ledgerId) async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AccountEditPage(
           account: account,
           ledgerId: ledgerId,
         ),
       ),
+    );
+
+    // 刷新统计数据
+    ref.invalidate(allAccountStatsProvider(ledgerId));
+    ref.invalidate(allAccountsTotalStatsProvider(ledgerId));
+    ref.invalidate(statsRefreshProvider);
+  }
+
+  void _viewAccountDetail(
+      BuildContext context, WidgetRef ref, db.Account account) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AccountDetailPage(account: account),
+      ),
+    );
+  }
+}
+
+/// 统计单元格
+class _StatCell extends ConsumerWidget {
+  final String label;
+  final double value;
+  final String currencyCode;
+  final Color color;
+
+  const _StatCell({
+    required this.label,
+    required this.value,
+    required this.currencyCode,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        AmountText(
+          value: value,
+          signed: false,
+          showCurrency: true,
+          useCompactFormat: true,
+          currencyCode: currencyCode,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+        SizedBox(height: 4.0.scaled(context, ref)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+}
+
+/// 账户卡片 - 类似银行卡样式
+class _AccountCard extends ConsumerWidget {
+  final db.Account account;
+  final String currencyCode;
+  final Color primaryColor;
+  final Color typeColor;
+  final IconData icon;
+  final String typeLabel;
+  final ({double balance, double expense, double income})? stats;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+
+  const _AccountCard({
+    required this.account,
+    required this.currencyCode,
+    required this.primaryColor,
+    required this.typeColor,
+    required this.icon,
+    required this.typeLabel,
+    this.stats,
+    required this.onTap,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.0.scaled(context, ref)),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              typeColor,
+              typeColor.withValues(alpha: 0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+          boxShadow: [
+            BoxShadow(
+              color: typeColor.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+          child: Stack(
+            children: [
+              // 背景装饰圆圈
+              Positioned(
+                right: -20,
+                top: -20,
+                child: Container(
+                  width: 100.0.scaled(context, ref),
+                  height: 100.0.scaled(context, ref),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 40,
+                bottom: -30,
+                child: Container(
+                  width: 120.0.scaled(context, ref),
+                  height: 120.0.scaled(context, ref),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
+                ),
+              ),
+              // 卡片内容
+              Padding(
+                padding: EdgeInsets.all(16.0.scaled(context, ref)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 顶部：账户名称和图标
+                    Row(
+                      children: [
+                        Container(
+                          width: 40.0.scaled(context, ref),
+                          height: 40.0.scaled(context, ref),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            icon,
+                            color: Colors.white,
+                            size: 20.0.scaled(context, ref),
+                          ),
+                        ),
+                        SizedBox(width: 12.0.scaled(context, ref)),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                account.name,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 2.0.scaled(context, ref)),
+                              Text(
+                                typeLabel,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // 编辑按钮
+                        GestureDetector(
+                          onTap: () {
+                            onEdit();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8.0.scaled(context, ref)),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 16.0.scaled(context, ref),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0.scaled(context, ref)),
+                    // 统计数据
+                    if (stats != null)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _CardStatItem(
+                              label:
+                                  AppLocalizations.of(context).accountBalance,
+                              value: stats!.balance,
+                              currencyCode: currencyCode,
+                            ),
+                          ),
+                          Container(
+                            width: 1,
+                            height: 30.0.scaled(context, ref),
+                            color: Colors.white.withValues(alpha: 0.2),
+                          ),
+                          Expanded(
+                            child: _CardStatItem(
+                              label: AppLocalizations.of(context).homeIncome,
+                              value: stats!.income,
+                              currencyCode: currencyCode,
+                            ),
+                          ),
+                          Container(
+                            width: 1,
+                            height: 30.0.scaled(context, ref),
+                            color: Colors.white.withValues(alpha: 0.2),
+                          ),
+                          Expanded(
+                            child: _CardStatItem(
+                              label: AppLocalizations.of(context).homeExpense,
+                              value: stats!.expense,
+                              currencyCode: currencyCode,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.0.scaled(context, ref)),
+                          child: const CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 卡片内统计项
+class _CardStatItem extends ConsumerWidget {
+  final String label;
+  final double value;
+  final String currencyCode;
+
+  const _CardStatItem({
+    required this.label,
+    required this.value,
+    required this.currencyCode,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        AmountText(
+          value: value,
+          signed: false,
+          showCurrency: false,
+          useCompactFormat: true, // 使用增强的智能压缩格式
+          currencyCode: currencyCode,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(height: 2.0.scaled(context, ref)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

@@ -4007,4 +4007,25 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get storageClearSuccess => 'Limpieza exitosa';
+
+  @override
+  String get accountNoTransactions => 'No transactions';
+
+  @override
+  String get accountTransactionHistory => 'Transaction History';
+
+  @override
+  String get accountTotalBalance => 'Total Balance';
+
+  @override
+  String get accountTotalExpense => 'Total Expense';
+
+  @override
+  String get accountTotalIncome => 'Total Income';
+
+  @override
+  String get accountDetailTitle => 'Account Details';
+
+  @override
+  String get commonUncategorized => 'Uncategorized';
 }
