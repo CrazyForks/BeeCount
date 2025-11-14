@@ -12,6 +12,12 @@ import '../l10n/app_localizations.dart';
 /// [balance] 金额
 /// [currencyCode] 币种代码 (如 'CNY', 'USD')
 /// [isChineseLocale] 是否为中文环境，中文显示万单位，其他语言显示k/M单位
+///
+/// 智能精度规则：
+/// - 小于1万：完整显示，不压缩
+/// - 1万-10万：保留1-2位小数（智能判断）
+/// - 10万以上：保留1-2位小数（智能判断）
+/// - 如果小数部分为.0或.00，则不显示小数
 String formatBalance(double balance, String currencyCode,
     {bool isChineseLocale = true}) {
   final absBalance = balance.abs();
@@ -19,21 +25,82 @@ String formatBalance(double balance, String currencyCode,
   final sign = balance >= 0 ? currencySymbol : '-$currencySymbol';
 
   if (isChineseLocale) {
-    // 中文环境：使用万作为单位，小于10000显示具体数字
-    if (absBalance >= 10000) {
-      final wan = absBalance / 10000;
-      return '$sign${wan.toStringAsFixed(1)}万';
-    } else {
+    // 中文环境：使用万作为单位
+    if (absBalance < 10000) {
+      // 小于1万：完整显示，不压缩
       return '$sign${absBalance.toStringAsFixed(2)}';
+    } else {
+      final wan = absBalance / 10000;
+
+      // 智能决定小数位数
+      String formattedWan;
+      if (wan >= 10) {
+        // 10万以上：先尝试1位小数，如果舍入误差大则用2位
+        final rounded1 = double.parse(wan.toStringAsFixed(1));
+        final error = (rounded1 * 10000 - absBalance).abs();
+
+        if (error > 100) {
+          // 误差超过100元，使用2位小数
+          formattedWan = wan.toStringAsFixed(2);
+        } else {
+          formattedWan = wan.toStringAsFixed(1);
+        }
+      } else {
+        // 1-10万：先尝试1位小数，如果舍入误差大则用2位
+        final rounded1 = double.parse(wan.toStringAsFixed(1));
+        final error = (rounded1 * 10000 - absBalance).abs();
+
+        if (error > 50) {
+          // 误差超过50元，使用2位小数
+          formattedWan = wan.toStringAsFixed(2);
+        } else {
+          formattedWan = wan.toStringAsFixed(1);
+        }
+      }
+
+      // 移除末尾的.0或.00
+      formattedWan = formattedWan.replaceAll(RegExp(r'\.0+$'), '');
+
+      return '$sign$formattedWan万';
     }
   } else {
     // 其他语言环境：使用k、M作为单位
     if (absBalance >= 1000000) {
       final million = absBalance / 1000000;
-      return '$sign${million.toStringAsFixed(1)}M';
+
+      // 智能决定小数位数
+      final rounded1 = double.parse(million.toStringAsFixed(1));
+      final error = (rounded1 * 1000000 - absBalance).abs();
+
+      String formattedMillion;
+      if (error > 1000) {
+        formattedMillion = million.toStringAsFixed(2);
+      } else {
+        formattedMillion = million.toStringAsFixed(1);
+      }
+
+      // 移除末尾的.0或.00
+      formattedMillion = formattedMillion.replaceAll(RegExp(r'\.0+$'), '');
+
+      return '$sign${formattedMillion}M';
     } else if (absBalance >= 1000) {
       final thousand = absBalance / 1000;
-      return '$sign${thousand.toStringAsFixed(1)}k';
+
+      // 智能决定小数位数
+      final rounded1 = double.parse(thousand.toStringAsFixed(1));
+      final error = (rounded1 * 1000 - absBalance).abs();
+
+      String formattedThousand;
+      if (error > 100) {
+        formattedThousand = thousand.toStringAsFixed(2);
+      } else {
+        formattedThousand = thousand.toStringAsFixed(1);
+      }
+
+      // 移除末尾的.0或.00
+      formattedThousand = formattedThousand.replaceAll(RegExp(r'\.0+$'), '');
+
+      return '$sign${formattedThousand}k';
     } else {
       return '$sign${absBalance.toStringAsFixed(2)}';
     }

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'database_providers.dart';
+import 'ui_state_providers.dart';
 
 // 统计：账本数量
 final ledgerCountProvider = FutureProvider.autoDispose<int>((ref) async {
@@ -50,7 +51,15 @@ final currentBalanceProvider =
   ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  return repo.getCurrentBalance(ledgerId: ledgerId);
+
+  // 获取账户功能开启状态
+  final accountFeatureEnabled = await ref.watch(accountFeatureEnabledProvider.future);
+
+  final stats = await repo.getLedgerStats(
+    ledgerId: ledgerId,
+    accountFeatureEnabled: accountFeatureEnabled,
+  );
+  return stats.balance;
 });
 
 // 统计：月度汇总最近值（避免loading闪烁）
@@ -69,4 +78,40 @@ final monthlyTotalsProvider = FutureProvider.family
   // 写入最近一次成功值，供 UI 在刷新期间显示旧值
   ref.read(lastMonthlyTotalsProvider(params).notifier).state = res;
   return res;
+});
+
+// 统计：单个账户统计（余额、消费、收入）
+final accountStatsProvider = FutureProvider.family
+    .autoDispose<({double balance, double expense, double income}), int>(
+        (ref, accountId) async {
+  final repo = ref.watch(repositoryProvider);
+  // 依赖 tick 触发刷新
+  ref.watch(statsRefreshProvider);
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return repo.getAccountStats(accountId);
+});
+
+// 统计：所有账户统计（每个账户的余额、消费、收入）
+final allAccountStatsProvider = FutureProvider.family
+    .autoDispose<Map<int, ({double balance, double expense, double income})>, int>(
+        (ref, ledgerId) async {
+  final repo = ref.watch(repositoryProvider);
+  // 依赖 tick 触发刷新
+  ref.watch(statsRefreshProvider);
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return repo.getAllAccountStats(ledgerId);
+});
+
+// 统计：所有账户汇总统计（总余额、总支出、总收入）
+final allAccountsTotalStatsProvider = FutureProvider.family
+    .autoDispose<({double totalBalance, double totalExpense, double totalIncome}), int>(
+        (ref, ledgerId) async {
+  final repo = ref.watch(repositoryProvider);
+  // 依赖 tick 触发刷新
+  ref.watch(statsRefreshProvider);
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return repo.getAllAccountsTotalStats(ledgerId);
 });

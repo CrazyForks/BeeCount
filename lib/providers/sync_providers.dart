@@ -5,6 +5,7 @@ import '../cloud/sync_service.dart';
 import '../cloud/transactions_sync_manager.dart';
 import '../models/ledger_display_item.dart';
 import 'database_providers.dart';
+import 'ui_state_providers.dart';
 
 // 同步状态（根据 ledgerId 与刷新 tick 缓存），避免因 UI 重建重复拉取
 final syncStatusProvider =
@@ -143,38 +144,34 @@ final localLedgersProvider = FutureProvider<List<LedgerDisplayItem>>((ref) async
   // 使用 syncServiceProvider，TransactionsSyncManager 现在包含账本管理功能
   final syncService = ref.watch(syncServiceProvider);
 
+  // 获取账户功能开启状态
+  final accountFeatureEnabled = await ref.watch(accountFeatureEnabledProvider.future);
+
   // syncServiceProvider 是同步的，直接使用
   if (syncService is TransactionsSyncManager) {
-    return syncService.getLocalLedgers();
+    return syncService.getLocalLedgers(accountFeatureEnabled: accountFeatureEnabled);
   }
 
   // 如果是 LocalOnlySyncService，只返回本地账本
   final db = ref.watch(databaseProvider);
+  final repo = ref.watch(repositoryProvider);
   final localLedgers = await db.select(db.ledgers).get();
 
   final result = <LedgerDisplayItem>[];
   for (final ledger in localLedgers) {
-    final transactions = await (db.select(db.transactions)
-          ..where((t) => t.ledgerId.equals(ledger.id)))
-        .get();
-
-    final count = transactions.length;
-    double balance = 0.0;
-    for (final t in transactions) {
-      if (t.type == 'income') {
-        balance += t.amount;
-      } else if (t.type == 'expense') {
-        balance -= t.amount;
-      }
-    }
+    // 使用 getLedgerStats 一次性获取余额和交易数，内部会自动查询 transactions
+    final stats = await repo.getLedgerStats(
+      ledgerId: ledger.id,
+      accountFeatureEnabled: accountFeatureEnabled,
+    );
 
     result.add(LedgerDisplayItem.fromLocal(
       id: ledger.id,
       name: ledger.name,
       currency: ledger.currency,
       createdAt: ledger.createdAt,
-      transactionCount: count,
-      balance: balance,
+      transactionCount: stats.transactionCount,
+      balance: stats.balance,
     ));
   }
 

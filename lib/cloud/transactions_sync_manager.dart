@@ -432,37 +432,26 @@ class TransactionsSyncManager implements SyncService {
   }
 
   /// 获取本地账本列表
-  Future<List<LedgerDisplayItem>> getLocalLedgers() async {
+  Future<List<LedgerDisplayItem>> getLocalLedgers({bool accountFeatureEnabled = true}) async {
     await _ensureInitialized();
 
     final localLedgers = await db.select(db.ledgers).get();
     final result = <LedgerDisplayItem>[];
 
     for (final ledger in localLedgers) {
-      // 获取账单数据
-      final transactions = await (db.select(db.transactions)
-            ..where((t) => t.ledgerId.equals(ledger.id)))
-          .get();
-
-      // 计算账单数量和余额
-      final count = transactions.length;
-      double balance = 0.0;
-
-      for (final t in transactions) {
-        if (t.type == 'income') {
-          balance += t.amount;
-        } else if (t.type == 'expense') {
-          balance -= t.amount;
-        }
-      }
+      // 使用 getLedgerStats 一次性获取余额和交易数，内部会自动查询 transactions
+      final stats = await repo.getLedgerStats(
+        ledgerId: ledger.id,
+        accountFeatureEnabled: accountFeatureEnabled,
+      );
 
       result.add(LedgerDisplayItem.fromLocal(
         id: ledger.id,
         name: ledger.name,
         currency: ledger.currency,
         createdAt: ledger.createdAt,
-        transactionCount: count,
-        balance: balance,
+        transactionCount: stats.transactionCount,
+        balance: stats.balance,
       ));
     }
 

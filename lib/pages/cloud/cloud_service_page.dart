@@ -416,6 +416,10 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
       final authService = await ref.read(authServiceProvider.future);
       await authService.signOut();
 
+      // 刷新认证服务和同步服务以触发状态更新
+      ref.invalidate(authServiceProvider);
+      ref.invalidate(syncServiceProvider);
+
       // 激活新配置
       final success = await store.activate(type);
       if (!success && type != CloudBackendType.local) {

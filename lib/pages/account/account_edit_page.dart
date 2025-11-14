@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
-import '../../data/repository.dart';
 import '../../widgets/ui/ui.dart';
+import '../../widgets/biz/section_card.dart';
 import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
 import '../../utils/sync_helpers.dart';
+import '../../styles/colors.dart';
+import '../../utils/ui_scale_extensions.dart';
 
 class AccountEditPage extends ConsumerStatefulWidget {
   final db.Account? account; // null表示新建
@@ -43,7 +45,8 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
     super.initState();
     _nameController = TextEditingController(text: widget.account?.name ?? '');
     _initialBalanceController = TextEditingController(
-      text: widget.account?.initialBalance != null && widget.account!.initialBalance != 0.0
+      text: widget.account?.initialBalance != null &&
+              widget.account!.initialBalance != 0.0
           ? widget.account!.initialBalance.toStringAsFixed(2)
           : '',
     );
@@ -68,9 +71,9 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
       case 'credit_card':
         return Icons.credit_score;
       case 'alipay':
-        return Icons.currency_yuan;  // 使用￥符号代表支付宝
+        return Icons.currency_yuan; // 使用￥符号代表支付宝
       case 'wechat':
-        return Icons.chat;  // 使用聊天图标代表微信
+        return Icons.chat; // 使用聊天图标代表微信
       case 'other':
         return Icons.account_balance_outlined;
       default:
@@ -101,8 +104,10 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.watch(primaryColorProvider);
 
     return Scaffold(
+      backgroundColor: BeeColors.greyBg,
       body: Column(
         children: [
           PrimaryHeader(
@@ -113,26 +118,50 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
             child: Form(
               key: _formKey,
               child: ListView(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.0.scaled(context, ref),
+                  vertical: 8.0.scaled(context, ref),
+                ),
                 children: [
                   // 账户名称
-                  Card(
+                  SectionCard(
+                    margin: EdgeInsets.zero,
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16.0.scaled(context, ref)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             l10n.accountNameLabel,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: BeeColors.primaryText,
+                            ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 12.0.scaled(context, ref)),
                           TextFormField(
                             controller: _nameController,
                             decoration: InputDecoration(
                               hintText: l10n.accountNameHint,
-                              border: const OutlineInputBorder(),
+                              hintStyle: TextStyle(color: Colors.grey[400]),
+                              border: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[300]!),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[300]!),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: primaryColor, width: 2),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0.scaled(context, ref),
+                              ),
                             ),
+                            style: const TextStyle(fontSize: 16),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
                                 return l10n.accountNameRequired;
@@ -145,51 +174,44 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: 8.0.scaled(context, ref)),
 
                   // 账户类型
-                  Card(
+                  SectionCard(
+                    margin: EdgeInsets.zero,
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16.0.scaled(context, ref)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             l10n.accountTypeLabel,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: BeeColors.primaryText,
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
+                          SizedBox(height: 16.0.scaled(context, ref)),
+                          GridView.count(
+                            crossAxisCount: 3,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            mainAxisSpacing: 12.0.scaled(context, ref),
+                            crossAxisSpacing: 12.0.scaled(context, ref),
+                            childAspectRatio: 1.2,
                             children: accountTypes.map((type) {
                               final isSelected = _selectedType == type;
-                              final primaryColor = Theme.of(context).primaryColor;
-                              return ChoiceChip(
-                                label: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      _getIconForType(type),
-                                      size: 18,
-                                      color: isSelected ? Colors.white : primaryColor,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(_getTypeLabel(context, type)),
-                                  ],
-                                ),
-                                selected: isSelected,
-                                selectedColor: primaryColor,
-                                backgroundColor: primaryColor.withValues(alpha: 0.08),
-                                labelStyle: TextStyle(
-                                  color: isSelected ? Colors.white : primaryColor,
-                                ),
-                                onSelected: (selected) {
-                                  if (selected) {
-                                    setState(() {
-                                      _selectedType = type;
-                                    });
-                                  }
+                              return _AccountTypeCard(
+                                type: type,
+                                icon: _getIconForType(type),
+                                label: _getTypeLabel(context, type),
+                                isSelected: isSelected,
+                                primaryColor: primaryColor,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedType = type;
+                                  });
                                 },
                               );
                             }).toList(),
@@ -199,28 +221,54 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: 8.0.scaled(context, ref)),
 
                   // 初始资金
-                  Card(
+                  SectionCard(
+                    margin: EdgeInsets.zero,
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16.0.scaled(context, ref)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             l10n.accountInitialBalance,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: BeeColors.primaryText,
+                            ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 12.0.scaled(context, ref)),
                           TextFormField(
                             controller: _initialBalanceController,
                             decoration: InputDecoration(
                               hintText: l10n.accountInitialBalanceHint,
+                              hintStyle: TextStyle(color: Colors.grey[400]),
                               prefixText: '¥ ',
-                              border: const OutlineInputBorder(),
+                              prefixStyle: TextStyle(
+                                fontSize: 16,
+                                color: BeeColors.primaryText,
+                              ),
+                              border: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[300]!),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[300]!),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: primaryColor, width: 2),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0.scaled(context, ref),
+                              ),
                             ),
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            style: const TextStyle(fontSize: 16),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
                             validator: (value) {
                               if (value != null && value.trim().isNotEmpty) {
                                 final parsed = double.tryParse(value.trim());
@@ -236,41 +284,63 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.0.scaled(context, ref)),
 
                   // 保存按钮
                   SizedBox(
                     width: double.infinity,
-                    height: 48,
+                    height: 48.0.scaled(context, ref),
                     child: ElevatedButton(
                       onPressed: _saving ? null : _save,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: primaryColor,
                         foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(8.0.scaled(context, ref)),
+                        ),
                       ),
                       child: _saving
                           ? const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2, color: Colors.white),
                             )
-                          : Text(l10n.commonSave),
+                          : Text(
+                              l10n.commonSave,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ),
 
                   // 删除按钮（仅编辑时显示）
                   if (isEditing) ...[
-                    const SizedBox(height: 16),
+                    SizedBox(height: 12.0.scaled(context, ref)),
                     SizedBox(
                       width: double.infinity,
-                      height: 48,
+                      height: 48.0.scaled(context, ref),
                       child: OutlinedButton(
                         onPressed: _saving ? null : _delete,
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.red,
-                          side: const BorderSide(color: Colors.red),
+                          side: const BorderSide(color: Colors.red, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8.0.scaled(context, ref)),
+                          ),
                         ),
-                        child: Text(l10n.commonDelete),
+                        child: Text(
+                          l10n.commonDelete,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -292,7 +362,8 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
       final repo = ref.read(repositoryProvider);
       final name = _nameController.text.trim();
       final initialBalanceText = _initialBalanceController.text.trim();
-      final initialBalance = initialBalanceText.isEmpty ? 0.0 : double.parse(initialBalanceText);
+      final initialBalance =
+          initialBalanceText.isEmpty ? 0.0 : double.parse(initialBalanceText);
 
       if (isEditing) {
         await repo.updateAccount(
@@ -318,7 +389,8 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${AppLocalizations.of(context).commonError}: $e')),
+          SnackBar(
+              content: Text('${AppLocalizations.of(context).commonError}: $e')),
         );
       }
     } finally {
@@ -404,5 +476,63 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
         setState(() => _saving = false);
       }
     }
+  }
+}
+
+/// 账户类型选择卡片
+class _AccountTypeCard extends ConsumerWidget {
+  final String type;
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final Color primaryColor;
+  final VoidCallback onTap;
+
+  const _AccountTypeCard({
+    required this.type,
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.primaryColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
+      child: Container(
+        decoration: BoxDecoration(
+          color:
+              isSelected ? primaryColor.withValues(alpha: 0.12) : Colors.white,
+          border: Border.all(
+            color: isSelected ? primaryColor : Colors.grey[300]!,
+            width: isSelected ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? primaryColor : BeeColors.secondaryText,
+              size: 28.0.scaled(context, ref),
+            ),
+            SizedBox(height: 8.0.scaled(context, ref)),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: isSelected ? primaryColor : BeeColors.secondaryText,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

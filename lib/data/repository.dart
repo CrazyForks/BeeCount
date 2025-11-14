@@ -287,12 +287,30 @@ class BeeRepository {
     return q;
   }
 
-  /// 计算当前账本总余额：收入 - 支出
-  Future<double> getCurrentBalance({required int ledgerId}) async {
-    final rows = await (db.select(db.transactions)
+  /// 获取账本统计信息（余额、交易数等）
+  /// [accountFeatureEnabled] 是否已开启账户管理功能
+  /// [transactions] 可选的已查询交易列表，避免重复查询
+  ///
+  /// 返回 record: (balance: 余额, transactionCount: 交易数)
+  Future<({double balance, int transactionCount})> getLedgerStats({
+    required int ledgerId,
+    bool accountFeatureEnabled = true,
+    List<Transaction>? transactions,
+  }) async {
+    // 如果没有传入 transactions，则查询
+    final rows = transactions ?? await (db.select(db.transactions)
           ..where((t) => t.ledgerId.equals(ledgerId)))
         .get();
-    double balance = 0;
+
+    // 交易数
+    final transactionCount = rows.length;
+
+    // 先获取所有账户的初始资金总额（未开启账户功能时为0）
+    double balance = accountFeatureEnabled
+        ? await getTotalInitialBalance(ledgerId)
+        : 0.0;
+
+    // 加上所有交易的收支
     for (final t in rows) {
       if (t.type == 'income') {
         balance += t.amount;
@@ -301,7 +319,8 @@ class BeeRepository {
       }
       // transfer 不影响总余额
     }
-    return balance;
+
+    return (balance: balance, transactionCount: transactionCount);
   }
 
   Future<int> addTransaction({
@@ -1052,5 +1071,121 @@ class BeeRepository {
   Stream<Account?> watchAccount(int accountId) {
     return (db.select(db.accounts)..where((a) => a.id.equals(accountId)))
         .watchSingleOrNull();
+  }
+
+  /// 获取单个账户的消费金额（支出总额，包括转账转出）
+  Future<double> getAccountExpense(int accountId) async {
+    double expense = 0.0;
+
+    // 获取作为主账户的支出和转出
+    final normalTxs = await (db.select(db.transactions)
+          ..where((t) => t.accountId.equals(accountId)))
+        .get();
+
+    for (final t in normalTxs) {
+      if (t.type == 'expense') {
+        expense += t.amount;
+      } else if (t.type == 'transfer') {
+        // 作为转出账户
+        expense += t.amount;
+      }
+    }
+
+    return expense;
+  }
+
+  /// 获取单个账户的收入金额（收入总额，包括转账转入）
+  Future<double> getAccountIncome(int accountId) async {
+    double income = 0.0;
+
+    // 获取作为主账户的收入
+    final normalTxs = await (db.select(db.transactions)
+          ..where((t) => t.accountId.equals(accountId)))
+        .get();
+
+    for (final t in normalTxs) {
+      if (t.type == 'income') {
+        income += t.amount;
+      }
+    }
+
+    // 作为转入账户的转账
+    final transfersIn = await (db.select(db.transactions)
+          ..where((t) => t.toAccountId.equals(accountId) & t.type.equals('transfer')))
+        .get();
+
+    for (final t in transfersIn) {
+      income += t.amount;
+    }
+
+    return income;
+  }
+
+  /// 获取单个账户的统计信息（余额、消费金额、收入金额）
+  Future<({double balance, double expense, double income})> getAccountStats(int accountId) async {
+    final balance = await getAccountBalance(accountId);
+    final expense = await getAccountExpense(accountId);
+    final income = await getAccountIncome(accountId);
+    return (balance: balance, expense: expense, income: income);
+  }
+
+  /// 批量获取所有账户的统计信息
+  Future<Map<int, ({double balance, double expense, double income})>> getAllAccountStats(int ledgerId) async {
+    final accounts = await (db.select(db.accounts)
+          ..where((a) => a.ledgerId.equals(ledgerId)))
+        .get();
+
+    final Map<int, ({double balance, double expense, double income})> stats = {};
+    for (final account in accounts) {
+      stats[account.id] = await getAccountStats(account.id);
+    }
+
+    return stats;
+  }
+
+  /// 获取所有账户的汇总统计（总余额、总支出、总收入）
+  Future<({double totalBalance, double totalExpense, double totalIncome})> getAllAccountsTotalStats(int ledgerId) async {
+    final accounts = await (db.select(db.accounts)
+          ..where((a) => a.ledgerId.equals(ledgerId)))
+        .get();
+
+    double totalBalance = 0.0;
+    double totalExpense = 0.0;
+    double totalIncome = 0.0;
+
+    for (final account in accounts) {
+      final stats = await getAccountStats(account.id);
+      totalBalance += stats.balance;
+      totalExpense += stats.expense;
+      totalIncome += stats.income;
+    }
+
+    return (totalBalance: totalBalance, totalExpense: totalExpense, totalIncome: totalIncome);
+  }
+
+  /// 获取账户相关的所有交易（包括作为主账户和作为转入账户的交易）
+  Stream<List<Transaction>> watchAccountTransactions(int accountId) {
+    // 注意：这里只获取作为主账户的交易
+    // 转入交易通过 toAccountId 关联，需要在UI层额外处理
+    return (db.select(db.transactions)
+          ..where((t) => t.accountId.equals(accountId) | t.toAccountId.equals(accountId))
+          ..orderBy([
+            (t) => d.OrderingTerm(
+                expression: t.happenedAt, mode: d.OrderingMode.desc)
+          ]))
+        .watch();
+  }
+
+  /// 获取指定账本的所有账户初始资金总额
+  Future<double> getTotalInitialBalance(int ledgerId) async {
+    final accounts = await (db.select(db.accounts)
+          ..where((a) => a.ledgerId.equals(ledgerId)))
+        .get();
+
+    double total = 0.0;
+    for (final account in accounts) {
+      total += account.initialBalance;
+    }
+    return total;
   }
 }

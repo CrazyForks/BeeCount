@@ -7605,6 +7605,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cleared successfully'**
   String get storageClearSuccess;
+
+  /// No description provided for @accountNoTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get accountNoTransactions;
+
+  /// No description provided for @accountTransactionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction History'**
+  String get accountTransactionHistory;
+
+  /// No description provided for @accountTotalBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Balance'**
+  String get accountTotalBalance;
+
+  /// No description provided for @accountTotalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get accountTotalExpense;
+
+  /// No description provided for @accountTotalIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Income'**
+  String get accountTotalIncome;
+
+  /// No description provided for @accountDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Details'**
+  String get accountDetailTitle;
+
+  /// No description provided for @commonUncategorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Uncategorized'**
+  String get commonUncategorized;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

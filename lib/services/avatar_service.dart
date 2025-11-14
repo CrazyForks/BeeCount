@@ -26,6 +26,9 @@ class AvatarService {
 
     if (image == null) return null;
 
+    // 删除旧头像（如果存在）
+    await _deleteOldAvatar();
+
     // 获取应用文档目录
     final appDir = await getApplicationDocumentsDirectory();
     final avatarDir = Directory(p.join(appDir.path, 'avatars'));
@@ -33,9 +36,10 @@ class AvatarService {
       await avatarDir.create(recursive: true);
     }
 
-    // 生成新文件名
+    // 生成新文件名（使用时间戳避免缓存问题）
     final ext = p.extension(image.path);
-    final newPath = p.join(avatarDir.path, 'avatar$ext');
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final newPath = p.join(avatarDir.path, 'avatar_$timestamp$ext');
 
     // 复制文件
     final file = File(image.path);
@@ -60,6 +64,9 @@ class AvatarService {
 
     if (image == null) return null;
 
+    // 删除旧头像（如果存在）
+    await _deleteOldAvatar();
+
     // 获取应用文档目录
     final appDir = await getApplicationDocumentsDirectory();
     final avatarDir = Directory(p.join(appDir.path, 'avatars'));
@@ -67,9 +74,10 @@ class AvatarService {
       await avatarDir.create(recursive: true);
     }
 
-    // 生成新文件名
+    // 生成新文件名（使用时间戳避免缓存问题）
     final ext = p.extension(image.path);
-    final newPath = p.join(avatarDir.path, 'avatar$ext');
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final newPath = p.join(avatarDir.path, 'avatar_$timestamp$ext');
 
     // 复制文件
     final file = File(image.path);
@@ -84,6 +92,14 @@ class AvatarService {
 
   /// 删除头像
   static Future<void> deleteAvatar() async {
+    await _deleteOldAvatar();
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_avatarPathKey);
+  }
+
+  /// 删除旧头像文件（内部方法）
+  static Future<void> _deleteOldAvatar() async {
     final avatarPath = await getAvatarPath();
     if (avatarPath != null) {
       final file = File(avatarPath);
@@ -91,8 +107,5 @@ class AvatarService {
         await file.delete();
       }
     }
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_avatarPathKey);
   }
 }
