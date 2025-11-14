@@ -477,6 +477,12 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                                 email: email, password: pwd);
                                             if (!context.mounted) return;
                                             logI('auth', '登录成功：邮箱=$email');
+
+                                            // 刷新认证服务和同步服务以触发状态更新
+                                            ref.invalidate(authServiceProvider);
+                                            ref.invalidate(syncServiceProvider);
+
+                                            // 刷新同步状态
                                             ref
                                                 .read(syncStatusRefreshProvider
                                                     .notifier)
