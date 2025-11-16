@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as d;
 
 import 'db.dart';
+import '../services/logger_service.dart';
 
 class BeeRepository {
   final BeeDatabase db;
@@ -933,15 +934,28 @@ class BeeRepository {
     String currency = 'CNY',
     double initialBalance = 0.0,
   }) async {
-    return await db.into(db.accounts).insert(
-      AccountsCompanion.insert(
+    logger.info('AccountCreate', '📝 开始创建账户: name=$name, ledgerId=$ledgerId, type=$type, currency=$currency, initialBalance=$initialBalance');
+
+    try {
+      final companion = AccountsCompanion.insert(
         ledgerId: ledgerId,
         name: name,
         type: d.Value(type),
         currency: d.Value(currency),
         initialBalance: d.Value(initialBalance),
-      ),
-    );
+        createdAt: d.Value(DateTime.now()),  // v1.15.0: 显式设置创建时间
+      );
+
+      logger.info('AccountCreate', '📦 Companion 创建成功，准备插入数据库');
+
+      final id = await db.into(db.accounts).insert(companion);
+
+      logger.info('AccountCreate', '✅ 账户创建成功！ID=$id');
+      return id;
+    } catch (e, stack) {
+      logger.error('AccountCreate', '❌ 创建账户失败', e, stack);
+      rethrow;
+    }
   }
 
   /// 更新账户

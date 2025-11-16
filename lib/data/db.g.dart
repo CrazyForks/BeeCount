@@ -309,10 +309,8 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
+      'created_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   static const VerificationMeta _updatedAtMeta =
       const VerificationMeta('updatedAt');
   @override
@@ -399,7 +397,7 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       initialBalance: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}initial_balance'])!,
       createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
       updatedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
     );
@@ -418,7 +416,7 @@ class Account extends DataClass implements Insertable<Account> {
   final String type;
   final String currency;
   final double initialBalance;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
   const Account(
       {required this.id,
@@ -427,7 +425,7 @@ class Account extends DataClass implements Insertable<Account> {
       required this.type,
       required this.currency,
       required this.initialBalance,
-      required this.createdAt,
+      this.createdAt,
       this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -438,7 +436,9 @@ class Account extends DataClass implements Insertable<Account> {
     map['type'] = Variable<String>(type);
     map['currency'] = Variable<String>(currency);
     map['initial_balance'] = Variable<double>(initialBalance);
-    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
     if (!nullToAbsent || updatedAt != null) {
       map['updated_at'] = Variable<DateTime>(updatedAt);
     }
@@ -453,7 +453,9 @@ class Account extends DataClass implements Insertable<Account> {
       type: Value(type),
       currency: Value(currency),
       initialBalance: Value(initialBalance),
-      createdAt: Value(createdAt),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
       updatedAt: updatedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(updatedAt),
@@ -470,7 +472,7 @@ class Account extends DataClass implements Insertable<Account> {
       type: serializer.fromJson<String>(json['type']),
       currency: serializer.fromJson<String>(json['currency']),
       initialBalance: serializer.fromJson<double>(json['initialBalance']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
@@ -484,7 +486,7 @@ class Account extends DataClass implements Insertable<Account> {
       'type': serializer.toJson<String>(type),
       'currency': serializer.toJson<String>(currency),
       'initialBalance': serializer.toJson<double>(initialBalance),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'createdAt': serializer.toJson<DateTime?>(createdAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
@@ -496,7 +498,7 @@ class Account extends DataClass implements Insertable<Account> {
           String? type,
           String? currency,
           double? initialBalance,
-          DateTime? createdAt,
+          Value<DateTime?> createdAt = const Value.absent(),
           Value<DateTime?> updatedAt = const Value.absent()}) =>
       Account(
         id: id ?? this.id,
@@ -505,7 +507,7 @@ class Account extends DataClass implements Insertable<Account> {
         type: type ?? this.type,
         currency: currency ?? this.currency,
         initialBalance: initialBalance ?? this.initialBalance,
-        createdAt: createdAt ?? this.createdAt,
+        createdAt: createdAt.present ? createdAt.value : this.createdAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
   Account copyWithCompanion(AccountsCompanion data) {
@@ -562,7 +564,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   final Value<String> type;
   final Value<String> currency;
   final Value<double> initialBalance;
-  final Value<DateTime> createdAt;
+  final Value<DateTime?> createdAt;
   final Value<DateTime?> updatedAt;
   const AccountsCompanion({
     this.id = const Value.absent(),
@@ -614,7 +616,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       Value<String>? type,
       Value<String>? currency,
       Value<double>? initialBalance,
-      Value<DateTime>? createdAt,
+      Value<DateTime?>? createdAt,
       Value<DateTime?>? updatedAt}) {
     return AccountsCompanion(
       id: id ?? this.id,
@@ -2478,7 +2480,7 @@ typedef $$AccountsTableCreateCompanionBuilder = AccountsCompanion Function({
   Value<String> type,
   Value<String> currency,
   Value<double> initialBalance,
-  Value<DateTime> createdAt,
+  Value<DateTime?> createdAt,
   Value<DateTime?> updatedAt,
 });
 typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
@@ -2488,7 +2490,7 @@ typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
   Value<String> type,
   Value<String> currency,
   Value<double> initialBalance,
-  Value<DateTime> createdAt,
+  Value<DateTime?> createdAt,
   Value<DateTime?> updatedAt,
 });
 
@@ -2625,7 +2627,7 @@ class $$AccountsTableTableManager extends RootTableManager<
             Value<String> type = const Value.absent(),
             Value<String> currency = const Value.absent(),
             Value<double> initialBalance = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               AccountsCompanion(
@@ -2645,7 +2647,7 @@ class $$AccountsTableTableManager extends RootTableManager<
             Value<String> type = const Value.absent(),
             Value<String> currency = const Value.absent(),
             Value<double> initialBalance = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               AccountsCompanion.insert(

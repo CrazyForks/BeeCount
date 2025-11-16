@@ -24,7 +24,7 @@ class Accounts extends Table {
   TextColumn get type => text().withDefault(const Constant('cash'))();
   TextColumn get currency => text().withDefault(const Constant('CNY'))();  // v1.15.0新增：币种
   RealColumn get initialBalance => real().withDefault(const Constant(0.0))();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get createdAt => dateTime().nullable()();  // v1.15.0: 改为可空，避免迁移问题
   DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
@@ -114,8 +114,8 @@ class BeeDatabase extends _$BeeDatabase {
       }
       if (from < 5) {
         // v5: 账户独立改造
-        // 注意：实际迁移逻辑在 MigrationService 中手动触发
-        // 这里只添加必要的字段（如果不存在），不执行复杂的数据迁移
+        // 注意：数据迁移逻辑在 MigrationService 中统一处理
+        // 这里只添加必要的字段
 
         // 检查字段是否已存在，避免重复添加
         final tableInfo = await customSelect('PRAGMA table_info(accounts)').get();
@@ -137,17 +137,8 @@ class BeeDatabase extends _$BeeDatabase {
           await customStatement('ALTER TABLE accounts ADD COLUMN updated_at INTEGER;');
         }
 
-        // 从账本继承币种
-        if (hasCurrency) {
-          await customStatement('''
-            UPDATE accounts
-            SET currency = COALESCE(
-              (SELECT currency FROM ledgers WHERE ledgers.id = accounts.ledger_id),
-              'CNY'
-            )
-            WHERE ledger_id IS NOT NULL;
-          ''');
-        }
+        // 注意：不在onUpgrade中更新currency数据
+        // 数据迁移统一由 MigrationService 处理，避免重复逻辑
       }
     },
   );
