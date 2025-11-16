@@ -1394,6 +1394,7 @@
   "accountNameLabel": "Account Name",
   "accountNameHint": "e.g.: ICBC, Alipay, etc.",
   "accountNameRequired": "Please enter account name",
+  "accountNameDuplicate": "Account name already exists, please use a different name",
   "accountTypeLabel": "Account Type",
   "accountTypeCash": "Cash",
   "accountTypeBankCard": "Bank Card",
@@ -1770,5 +1771,7 @@
   "accountTotalExpense": "Total Expense",
   "accountTotalIncome": "Total Income",
   "accountDetailTitle": "Account Details",
+  "accountCurrencyLocked": "This account has transactions and cannot change currency",
+  "commonNotice": "Notice",
   "commonUncategorized": "Uncategorized"
 }

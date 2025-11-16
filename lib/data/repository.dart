@@ -288,10 +288,12 @@ class BeeRepository {
   }
 
   /// 获取账本统计信息（余额、交易数等）
-  /// [accountFeatureEnabled] 是否已开启账户管理功能
+  /// [accountFeatureEnabled] 是否已开启账户管理功能（v1.15.0已废弃，保留参数兼容）
   /// [transactions] 可选的已查询交易列表，避免重复查询
   ///
   /// 返回 record: (balance: 余额, transactionCount: 交易数)
+  ///
+  /// v1.15.0: 账户独立后，账本余额不再叠加账户初始余额
   Future<({double balance, int transactionCount})> getLedgerStats({
     required int ledgerId,
     bool accountFeatureEnabled = true,
@@ -305,10 +307,8 @@ class BeeRepository {
     // 交易数
     final transactionCount = rows.length;
 
-    // 先获取所有账户的初始资金总额（未开启账户功能时为0）
-    double balance = accountFeatureEnabled
-        ? await getTotalInitialBalance(ledgerId)
-        : 0.0;
+    // v1.15.0: 账户独立后，账本余额仅计算交易收支，不再叠加账户初始余额
+    double balance = 0.0;
 
     // 加上所有交易的收支
     for (final t in rows) {
@@ -930,6 +930,7 @@ class BeeRepository {
     required int ledgerId,
     required String name,
     String type = 'cash',
+    String currency = 'CNY',
     double initialBalance = 0.0,
   }) async {
     return await db.into(db.accounts).insert(
@@ -937,6 +938,7 @@ class BeeRepository {
         ledgerId: ledgerId,
         name: name,
         type: d.Value(type),
+        currency: d.Value(currency),
         initialBalance: d.Value(initialBalance),
       ),
     );
@@ -947,12 +949,14 @@ class BeeRepository {
     int id, {
     String? name,
     String? type,
+    String? currency,
     double? initialBalance,
   }) async {
     await (db.update(db.accounts)..where((a) => a.id.equals(id))).write(
       AccountsCompanion(
         name: name != null ? d.Value(name) : const d.Value.absent(),
         type: type != null ? d.Value(type) : const d.Value.absent(),
+        currency: currency != null ? d.Value(currency) : const d.Value.absent(),
         initialBalance: initialBalance != null ? d.Value(initialBalance) : const d.Value.absent(),
       ),
     );
@@ -1130,10 +1134,9 @@ class BeeRepository {
   }
 
   /// 批量获取所有账户的统计信息
-  Future<Map<int, ({double balance, double expense, double income})>> getAllAccountStats(int ledgerId) async {
-    final accounts = await (db.select(db.accounts)
-          ..where((a) => a.ledgerId.equals(ledgerId)))
-        .get();
+  /// v1.15.0: 不再限制账本，获取所有账户
+  Future<Map<int, ({double balance, double expense, double income})>> getAllAccountStats() async {
+    final accounts = await db.select(db.accounts).get();
 
     final Map<int, ({double balance, double expense, double income})> stats = {};
     for (final account in accounts) {
@@ -1144,10 +1147,9 @@ class BeeRepository {
   }
 
   /// 获取所有账户的汇总统计（总余额、总支出、总收入）
-  Future<({double totalBalance, double totalExpense, double totalIncome})> getAllAccountsTotalStats(int ledgerId) async {
-    final accounts = await (db.select(db.accounts)
-          ..where((a) => a.ledgerId.equals(ledgerId)))
-        .get();
+  /// v1.15.0: 不再限制账本，获取所有账户
+  Future<({double totalBalance, double totalExpense, double totalIncome})> getAllAccountsTotalStats() async {
+    final accounts = await db.select(db.accounts).get();
 
     double totalBalance = 0.0;
     double totalExpense = 0.0;
@@ -1187,5 +1189,172 @@ class BeeRepository {
       total += account.initialBalance;
     }
     return total;
+  }
+
+  // ============================================
+  // v1.15.0 账户独立相关方法
+  // ============================================
+
+  /// 获取所有账户（不限账本）
+  Future<List<Account>> getAllAccounts() async {
+    return await db.select(db.accounts).get();
+  }
+
+  /// 监听所有账户（不限账本）- Stream 版本
+  Stream<List<Account>> watchAllAccounts() {
+    return db.select(db.accounts).watch();
+  }
+
+  /// 获取账本可用的账户（通过币种过滤）
+  ///
+  /// v1.15.0: 账户独立后，根据账本币种自动过滤可用账户
+  Future<List<Account>> getAvailableAccountsForLedger(int ledgerId) async {
+    // 获取账本信息
+    final ledger = await (db.select(db.ledgers)
+          ..where((l) => l.id.equals(ledgerId)))
+        .getSingle();
+
+    // 通过币种过滤账户
+    return await (db.select(db.accounts)
+          ..where((a) => a.currency.equals(ledger.currency)))
+        .get();
+  }
+
+  /// 获取某币种的所有账户
+  Future<List<Account>> getAccountsByCurrency(String currency) async {
+    return await (db.select(db.accounts)
+          ..where((a) => a.currency.equals(currency)))
+        .get();
+  }
+
+  /// 检查账户是否有交易记录
+  ///
+  /// 用于判断账户币种是否可以修改
+  Future<bool> hasTransactions(int accountId) async {
+    final count = await db.customSelect(
+      'SELECT COUNT(*) as count FROM transactions WHERE account_id = ? OR to_account_id = ?',
+      variables: [d.Variable.withInt(accountId), d.Variable.withInt(accountId)],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    final c = count.data['count'];
+    if (c is int) return c > 0;
+    if (c is BigInt) return c > BigInt.zero;
+    if (c is num) return c > 0;
+    return false;
+  }
+
+  /// 获取账户全局余额（跨所有账本）
+  ///
+  /// v1.15.0: 账户独立后，可以查看账户在所有账本中的总余额
+  Future<double> getAccountGlobalBalance(int accountId) async {
+    final account = await (db.select(db.accounts)
+          ..where((a) => a.id.equals(accountId)))
+        .getSingle();
+
+    // 获取所有交易
+    final transactions = await (db.select(db.transactions)
+          ..where((t) => t.accountId.equals(accountId) | t.toAccountId.equals(accountId)))
+        .get();
+
+    double balance = account.initialBalance;
+
+    for (final tx in transactions) {
+      if (tx.accountId == accountId) {
+        // 作为主账户
+        if (tx.type == 'income') {
+          balance += tx.amount;
+        } else if (tx.type == 'expense') {
+          balance -= tx.amount;
+        } else if (tx.type == 'transfer') {
+          balance -= tx.amount;
+        }
+      } else if (tx.toAccountId == accountId) {
+        // 作为转入账户（转账）
+        balance += tx.amount;
+      }
+    }
+
+    return balance;
+  }
+
+  /// 获取账户在某账本的余额
+  ///
+  /// v1.15.0: 查看账户在特定账本中的余额（不包含初始余额）
+  Future<double> getAccountBalanceInLedger(int accountId, int ledgerId) async {
+    final transactions = await (db.select(db.transactions)
+          ..where((t) =>
+              (t.accountId.equals(accountId) | t.toAccountId.equals(accountId)) &
+              t.ledgerId.equals(ledgerId)))
+        .get();
+
+    double balance = 0.0;
+
+    for (final tx in transactions) {
+      if (tx.accountId == accountId) {
+        // 作为主账户
+        if (tx.type == 'income') {
+          balance += tx.amount;
+        } else if (tx.type == 'expense') {
+          balance -= tx.amount;
+        } else if (tx.type == 'transfer') {
+          balance -= tx.amount;
+        }
+      } else if (tx.toAccountId == accountId) {
+        // 作为转入账户（转账）
+        balance += tx.amount;
+      }
+    }
+
+    return balance;
+  }
+
+  /// 按币种分组获取账户统计
+  ///
+  /// 返回：Map<币种, 账户列表>
+  Future<Map<String, List<Account>>> getAccountsGroupedByCurrency() async {
+    final allAccounts = await getAllAccounts();
+    final Map<String, List<Account>> grouped = {};
+
+    for (final account in allAccounts) {
+      grouped.putIfAbsent(account.currency, () => []).add(account);
+    }
+
+    return grouped;
+  }
+
+  /// 获取账户在多个账本中的使用情况
+  ///
+  /// 返回：Map<账本ID, 交易数量>
+  Future<Map<int, int>> getAccountUsageInLedgers(int accountId) async {
+    final result = await db.customSelect(
+      '''
+      SELECT ledger_id, COUNT(*) as count
+      FROM transactions
+      WHERE account_id = ? OR to_account_id = ?
+      GROUP BY ledger_id
+      ''',
+      variables: [d.Variable.withInt(accountId), d.Variable.withInt(accountId)],
+      readsFrom: {db.transactions},
+    ).get();
+
+    final Map<int, int> usage = {};
+    for (final row in result) {
+      final ledgerId = row.data['ledger_id'] as int;
+      final count = row.data['count'];
+
+      int countInt = 0;
+      if (count is int) {
+        countInt = count;
+      } else if (count is BigInt) {
+        countInt = count.toInt();
+      } else if (count is num) {
+        countInt = count.toInt();
+      }
+
+      usage[ledgerId] = countInt;
+    }
+
+    return usage;
   }
 }

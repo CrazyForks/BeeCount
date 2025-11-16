@@ -6010,6 +6010,12 @@ abstract class AppLocalizations {
   /// **'Please enter account name'**
   String get accountNameRequired;
 
+  /// No description provided for @accountNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name already exists, please use a different name'**
+  String get accountNameDuplicate;
+
   /// No description provided for @accountTypeLabel.
   ///
   /// In en, this message translates to:
@@ -7659,6 +7665,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account Details'**
   String get accountDetailTitle;
+
+  /// No description provided for @accountCurrencyLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has transactions and cannot change currency'**
+  String get accountCurrencyLocked;
+
+  /// No description provided for @commonNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get commonNotice;
 
   /// No description provided for @commonUncategorized.
   ///

@@ -3179,6 +3179,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountNameRequired => '请输入账户名称';
 
   @override
+  String get accountNameDuplicate => '账户名称已存在，请使用其他名称';
+
+  @override
   String get accountTypeLabel => '账户类型';
 
   @override
@@ -4034,6 +4037,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountDetailTitle => '账户详情';
+
+  @override
+  String get accountCurrencyLocked => '该账户已有交易记录，不允许修改币种';
+
+  @override
+  String get commonNotice => '提示';
 
   @override
   String get commonUncategorized => '未分类';

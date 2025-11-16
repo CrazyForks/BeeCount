@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
+import '../../widgets/biz/app_list_tile.dart';
 import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
 import '../../utils/sync_helpers.dart';
+import '../../utils/currencies.dart';
 import '../../styles/colors.dart';
 import '../../utils/ui_scale_extensions.dart';
 
@@ -28,7 +30,10 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
   late final TextEditingController _nameController;
   late final TextEditingController _initialBalanceController;
   late String _selectedType;
+  late String _selectedCurrency;
   bool _saving = false;
+  bool _isNameDuplicate = false;
+  String? _nameErrorText;
 
   // 预设账户类型
   static const List<String> accountTypes = [
@@ -51,6 +56,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
           : '',
     );
     _selectedType = widget.account?.type ?? 'cash';
+    _selectedCurrency = widget.account?.currency ?? 'CNY';
   }
 
   @override
@@ -61,6 +67,36 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
   }
 
   bool get isEditing => widget.account != null;
+
+  /// v1.15.0: 检查账户名称是否重复
+  Future<void> _checkNameDuplicate(String name) async {
+    if (name.trim().isEmpty) {
+      setState(() {
+        _isNameDuplicate = false;
+        _nameErrorText = null;
+      });
+      return;
+    }
+
+    final repo = ref.read(repositoryProvider);
+    final allAccounts = await repo.getAllAccounts();
+    final isDuplicate = allAccounts.any((account) {
+      // 如果是编辑模式，排除当前账户本身
+      if (isEditing && account.id == widget.account!.id) {
+        return false;
+      }
+      return account.name == name.trim();
+    });
+
+    if (mounted) {
+      setState(() {
+        _isNameDuplicate = isDuplicate;
+        _nameErrorText = isDuplicate
+            ? AppLocalizations.of(context).accountNameDuplicate
+            : null;
+      });
+    }
+  }
 
   IconData _getIconForType(String type) {
     switch (type) {
@@ -145,23 +181,36 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                             decoration: InputDecoration(
                               hintText: l10n.accountNameHint,
                               hintStyle: TextStyle(color: Colors.grey[400]),
+                              errorText: _nameErrorText,
+                              errorStyle: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                              ),
                               border: UnderlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.grey[300]!),
                               ),
                               enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey[300]!),
+                                borderSide: BorderSide(
+                                  color: _isNameDuplicate
+                                      ? Colors.red
+                                      : Colors.grey[300]!,
+                                ),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: primaryColor, width: 2),
+                                borderSide: BorderSide(
+                                  color: _isNameDuplicate ? Colors.red : primaryColor,
+                                  width: 2,
+                                ),
                               ),
                               contentPadding: EdgeInsets.symmetric(
                                 vertical: 8.0.scaled(context, ref),
                               ),
                             ),
                             style: const TextStyle(fontSize: 16),
+                            onChanged: (value) {
+                              _checkNameDuplicate(value);
+                            },
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
                                 return l10n.accountNameRequired;
@@ -218,6 +267,41 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                           ),
                         ],
                       ),
+                    ),
+                  ),
+
+                  SizedBox(height: 8.0.scaled(context, ref)),
+
+                  // v1.15.0: 币种选择
+                  SectionCard(
+                    margin: EdgeInsets.zero,
+                    child: AppListTile(
+                      leading: Icons.monetization_on_outlined,
+                      title: l10n.ledgersCurrency,
+                      subtitle: displayCurrency(_selectedCurrency, context),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () async {
+                        // 检查是否有交易记录
+                        if (isEditing) {
+                          final repo = ref.read(repositoryProvider);
+                          final hasTransactions = await repo.hasTransactions(widget.account!.id);
+                          if (hasTransactions) {
+                            if (!mounted) return;
+                            await AppDialog.info(
+                              context,
+                              title: l10n.commonNotice,
+                              message: l10n.accountCurrencyLocked,
+                            );
+                            return;
+                          }
+                        }
+
+                        if (!mounted) return;
+                        final picked = await _showCurrencyPicker(context, initial: _selectedCurrency);
+                        if (picked != null) {
+                          setState(() => _selectedCurrency = picked);
+                        }
+                      },
                     ),
                   ),
 
@@ -291,10 +375,11 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                     width: double.infinity,
                     height: 48.0.scaled(context, ref),
                     child: ElevatedButton(
-                      onPressed: _saving ? null : _save,
+                      onPressed: (_saving || _isNameDuplicate) ? null : _save,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor,
                         foregroundColor: Colors.white,
+                        disabledBackgroundColor: Colors.grey[400],
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius:
@@ -366,10 +451,31 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
           initialBalanceText.isEmpty ? 0.0 : double.parse(initialBalanceText);
 
       if (isEditing) {
+        // 检查币种是否变化
+        String? currencyToUpdate;
+        if (_selectedCurrency != widget.account!.currency) {
+          // 币种变化了，需要再次检查是否有交易
+          final hasTransactions = await repo.hasTransactions(widget.account!.id);
+          if (hasTransactions) {
+            if (mounted) {
+              setState(() => _saving = false);
+              final l10n = AppLocalizations.of(context);
+              await AppDialog.info(
+                context,
+                title: l10n.commonNotice,
+                message: l10n.accountCurrencyLocked,
+              );
+            }
+            return;
+          }
+          currencyToUpdate = _selectedCurrency;
+        }
+
         await repo.updateAccount(
           widget.account!.id,
           name: name,
           type: _selectedType,
+          currency: currencyToUpdate,
           initialBalance: initialBalance,
         );
       } else {
@@ -377,6 +483,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
           ledgerId: widget.ledgerId,
           name: name,
           type: _selectedType,
+          currency: _selectedCurrency,
           initialBalance: initialBalance,
         );
       }
@@ -476,6 +583,84 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
         setState(() => _saving = false);
       }
     }
+  }
+
+  /// 显示币种选择器（复用账本页面的实现）
+  Future<String?> _showCurrencyPicker(BuildContext context, {String? initial}) async {
+    return showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (bctx) {
+        String query = '';
+        String? selected = initial;
+        return StatefulBuilder(builder: (sctx, setState) {
+          final filtered = getCurrencies(context).where((c) {
+            final q = query.trim();
+            if (q.isEmpty) return true;
+            final uq = q.toUpperCase();
+            return c.code.contains(uq) || c.name.contains(q);
+          }).toList();
+
+          return Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 12,
+              bottom: 16 + MediaQuery.of(bctx).viewInsets.bottom,
+            ),
+            child: SizedBox(
+              height: 420,
+              child: Column(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  Text(
+                    AppLocalizations.of(bctx).ledgersSelectCurrency,
+                    style: Theme.of(bctx).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: AppLocalizations.of(bctx).ledgersSearchCurrency,
+                    ),
+                    onChanged: (v) => setState(() => query = v),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: filtered.length,
+                      itemBuilder: (_, i) {
+                        final c = filtered[i];
+                        final sel = c.code == selected;
+                        return ListTile(
+                          title: Text('${c.name} (${c.code})'),
+                          trailing: sel
+                              ? const Icon(Icons.check, color: Colors.black)
+                              : null,
+                          onTap: () => Navigator.pop(bctx, c.code),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+      },
+    );
   }
 }
 

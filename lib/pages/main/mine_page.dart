@@ -1,11 +1,9 @@
 import 'dart:io' show Platform, File;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:beecount/widgets/biz/bee_icon.dart';
 
 import '../data/import_page.dart';
-import '../auth/login_page.dart';
 import '../data/export_page.dart';
 import '../settings/personalize_page.dart';
 import '../../providers.dart';

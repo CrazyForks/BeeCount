@@ -1181,6 +1181,7 @@
   "accountNameLabel": "账户名称",
   "accountNameHint": "例如：工商银行、支付宝等",
   "accountNameRequired": "请输入账户名称",
+  "accountNameDuplicate": "账户名称已存在，请使用其他名称",
   "accountTypeLabel": "账户类型",
   "accountTypeCash": "现金",
   "accountTypeBankCard": "银行卡",
@@ -1634,5 +1635,7 @@
   "accountTotalExpense": "总支出",
   "accountTotalIncome": "总收入",
   "accountDetailTitle": "账户详情",
+  "accountCurrencyLocked": "该账户已有交易记录，不允许修改币种",
+  "commonNotice": "提示",
   "commonUncategorized": "未分类"
 }

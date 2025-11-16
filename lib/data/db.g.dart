@@ -289,6 +289,14 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: const Constant('cash'));
+  static const VerificationMeta _currencyMeta =
+      const VerificationMeta('currency');
+  @override
+  late final GeneratedColumn<String> currency = GeneratedColumn<String>(
+      'currency', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('CNY'));
   static const VerificationMeta _initialBalanceMeta =
       const VerificationMeta('initialBalance');
   @override
@@ -297,9 +305,31 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       type: DriftSqlType.double,
       requiredDuringInsert: false,
       defaultValue: const Constant(0.0));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, ledgerId, name, type, initialBalance];
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        ledgerId,
+        name,
+        type,
+        currency,
+        initialBalance,
+        createdAt,
+        updatedAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -329,11 +359,23 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       context.handle(
           _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     }
+    if (data.containsKey('currency')) {
+      context.handle(_currencyMeta,
+          currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
+    }
     if (data.containsKey('initial_balance')) {
       context.handle(
           _initialBalanceMeta,
           initialBalance.isAcceptableOrUnknown(
               data['initial_balance']!, _initialBalanceMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     }
     return context;
   }
@@ -352,8 +394,14 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       type: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      currency: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}currency'])!,
       initialBalance: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}initial_balance'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
     );
   }
 
@@ -368,13 +416,19 @@ class Account extends DataClass implements Insertable<Account> {
   final int ledgerId;
   final String name;
   final String type;
+  final String currency;
   final double initialBalance;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
   const Account(
       {required this.id,
       required this.ledgerId,
       required this.name,
       required this.type,
-      required this.initialBalance});
+      required this.currency,
+      required this.initialBalance,
+      required this.createdAt,
+      this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -382,7 +436,12 @@ class Account extends DataClass implements Insertable<Account> {
     map['ledger_id'] = Variable<int>(ledgerId);
     map['name'] = Variable<String>(name);
     map['type'] = Variable<String>(type);
+    map['currency'] = Variable<String>(currency);
     map['initial_balance'] = Variable<double>(initialBalance);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
     return map;
   }
 
@@ -392,7 +451,12 @@ class Account extends DataClass implements Insertable<Account> {
       ledgerId: Value(ledgerId),
       name: Value(name),
       type: Value(type),
+      currency: Value(currency),
       initialBalance: Value(initialBalance),
+      createdAt: Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -404,7 +468,10 @@ class Account extends DataClass implements Insertable<Account> {
       ledgerId: serializer.fromJson<int>(json['ledgerId']),
       name: serializer.fromJson<String>(json['name']),
       type: serializer.fromJson<String>(json['type']),
+      currency: serializer.fromJson<String>(json['currency']),
       initialBalance: serializer.fromJson<double>(json['initialBalance']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -415,7 +482,10 @@ class Account extends DataClass implements Insertable<Account> {
       'ledgerId': serializer.toJson<int>(ledgerId),
       'name': serializer.toJson<String>(name),
       'type': serializer.toJson<String>(type),
+      'currency': serializer.toJson<String>(currency),
       'initialBalance': serializer.toJson<double>(initialBalance),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -424,13 +494,19 @@ class Account extends DataClass implements Insertable<Account> {
           int? ledgerId,
           String? name,
           String? type,
-          double? initialBalance}) =>
+          String? currency,
+          double? initialBalance,
+          DateTime? createdAt,
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
       Account(
         id: id ?? this.id,
         ledgerId: ledgerId ?? this.ledgerId,
         name: name ?? this.name,
         type: type ?? this.type,
+        currency: currency ?? this.currency,
         initialBalance: initialBalance ?? this.initialBalance,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
   Account copyWithCompanion(AccountsCompanion data) {
     return Account(
@@ -438,9 +514,12 @@ class Account extends DataClass implements Insertable<Account> {
       ledgerId: data.ledgerId.present ? data.ledgerId.value : this.ledgerId,
       name: data.name.present ? data.name.value : this.name,
       type: data.type.present ? data.type.value : this.type,
+      currency: data.currency.present ? data.currency.value : this.currency,
       initialBalance: data.initialBalance.present
           ? data.initialBalance.value
           : this.initialBalance,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
@@ -451,13 +530,17 @@ class Account extends DataClass implements Insertable<Account> {
           ..write('ledgerId: $ledgerId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
-          ..write('initialBalance: $initialBalance')
+          ..write('currency: $currency, ')
+          ..write('initialBalance: $initialBalance, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, ledgerId, name, type, initialBalance);
+  int get hashCode => Object.hash(
+      id, ledgerId, name, type, currency, initialBalance, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -466,7 +549,10 @@ class Account extends DataClass implements Insertable<Account> {
           other.ledgerId == this.ledgerId &&
           other.name == this.name &&
           other.type == this.type &&
-          other.initialBalance == this.initialBalance);
+          other.currency == this.currency &&
+          other.initialBalance == this.initialBalance &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class AccountsCompanion extends UpdateCompanion<Account> {
@@ -474,20 +560,29 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   final Value<int> ledgerId;
   final Value<String> name;
   final Value<String> type;
+  final Value<String> currency;
   final Value<double> initialBalance;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> updatedAt;
   const AccountsCompanion({
     this.id = const Value.absent(),
     this.ledgerId = const Value.absent(),
     this.name = const Value.absent(),
     this.type = const Value.absent(),
+    this.currency = const Value.absent(),
     this.initialBalance = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   AccountsCompanion.insert({
     this.id = const Value.absent(),
     required int ledgerId,
     required String name,
     this.type = const Value.absent(),
+    this.currency = const Value.absent(),
     this.initialBalance = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   })  : ledgerId = Value(ledgerId),
         name = Value(name);
   static Insertable<Account> custom({
@@ -495,14 +590,20 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     Expression<int>? ledgerId,
     Expression<String>? name,
     Expression<String>? type,
+    Expression<String>? currency,
     Expression<double>? initialBalance,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (ledgerId != null) 'ledger_id': ledgerId,
       if (name != null) 'name': name,
       if (type != null) 'type': type,
+      if (currency != null) 'currency': currency,
       if (initialBalance != null) 'initial_balance': initialBalance,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
 
@@ -511,13 +612,19 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       Value<int>? ledgerId,
       Value<String>? name,
       Value<String>? type,
-      Value<double>? initialBalance}) {
+      Value<String>? currency,
+      Value<double>? initialBalance,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? updatedAt}) {
     return AccountsCompanion(
       id: id ?? this.id,
       ledgerId: ledgerId ?? this.ledgerId,
       name: name ?? this.name,
       type: type ?? this.type,
+      currency: currency ?? this.currency,
       initialBalance: initialBalance ?? this.initialBalance,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -536,8 +643,17 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     if (type.present) {
       map['type'] = Variable<String>(type.value);
     }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
     if (initialBalance.present) {
       map['initial_balance'] = Variable<double>(initialBalance.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
     return map;
   }
@@ -549,7 +665,10 @@ class AccountsCompanion extends UpdateCompanion<Account> {
           ..write('ledgerId: $ledgerId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
-          ..write('initialBalance: $initialBalance')
+          ..write('currency: $currency, ')
+          ..write('initialBalance: $initialBalance, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -2357,14 +2476,20 @@ typedef $$AccountsTableCreateCompanionBuilder = AccountsCompanion Function({
   required int ledgerId,
   required String name,
   Value<String> type,
+  Value<String> currency,
   Value<double> initialBalance,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
 });
 typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
   Value<int> id,
   Value<int> ledgerId,
   Value<String> name,
   Value<String> type,
+  Value<String> currency,
   Value<double> initialBalance,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
 });
 
 class $$AccountsTableFilterComposer
@@ -2388,9 +2513,18 @@ class $$AccountsTableFilterComposer
   ColumnFilters<String> get type => $composableBuilder(
       column: $table.type, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get currency => $composableBuilder(
+      column: $table.currency, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<double> get initialBalance => $composableBuilder(
       column: $table.initialBalance,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$AccountsTableOrderingComposer
@@ -2414,9 +2548,18 @@ class $$AccountsTableOrderingComposer
   ColumnOrderings<String> get type => $composableBuilder(
       column: $table.type, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get currency => $composableBuilder(
+      column: $table.currency, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<double> get initialBalance => $composableBuilder(
       column: $table.initialBalance,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
 }
 
 class $$AccountsTableAnnotationComposer
@@ -2440,8 +2583,17 @@ class $$AccountsTableAnnotationComposer
   GeneratedColumn<String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
 
+  GeneratedColumn<String> get currency =>
+      $composableBuilder(column: $table.currency, builder: (column) => column);
+
   GeneratedColumn<double> get initialBalance => $composableBuilder(
       column: $table.initialBalance, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
 class $$AccountsTableTableManager extends RootTableManager<
@@ -2471,28 +2623,40 @@ class $$AccountsTableTableManager extends RootTableManager<
             Value<int> ledgerId = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String> type = const Value.absent(),
+            Value<String> currency = const Value.absent(),
             Value<double> initialBalance = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               AccountsCompanion(
             id: id,
             ledgerId: ledgerId,
             name: name,
             type: type,
+            currency: currency,
             initialBalance: initialBalance,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required int ledgerId,
             required String name,
             Value<String> type = const Value.absent(),
+            Value<String> currency = const Value.absent(),
             Value<double> initialBalance = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               AccountsCompanion.insert(
             id: id,
             ledgerId: ledgerId,
             name: name,
             type: type,
+            currency: currency,
             initialBalance: initialBalance,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

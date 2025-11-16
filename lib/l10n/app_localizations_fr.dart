@@ -3179,6 +3179,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accountNameRequired => 'Veuillez entrer le nom du compte';
 
   @override
+  String get accountNameDuplicate => 'Account name already exists, please use a different name';
+
+  @override
   String get accountTypeLabel => 'Type de Compte';
 
   @override
@@ -4034,6 +4037,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get accountDetailTitle => 'Account Details';
+
+  @override
+  String get accountCurrencyLocked => 'This account has transactions and cannot change currency';
+
+  @override
+  String get commonNotice => 'Notice';
 
   @override
   String get commonUncategorized => 'Uncategorized';

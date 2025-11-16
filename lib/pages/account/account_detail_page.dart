@@ -9,6 +9,7 @@ import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/transaction_edit_utils.dart';
+import '../../services/category_service.dart';
 
 /// 账户详情页面
 /// 显示账户的统计信息和相关交易
@@ -29,6 +30,7 @@ class AccountDetailPage extends ConsumerWidget {
         ref.watch(accountTransactionsProvider(account.id));
     final currentLedgerAsync = ref.watch(currentLedgerProvider);
     final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
+    final categoriesAsync = ref.watch(categoriesProvider);
 
     return Scaffold(
       backgroundColor: BeeColors.greyBg,
@@ -163,6 +165,8 @@ class AccountDetailPage extends ConsumerWidget {
                                   transaction: tx,
                                   currencyCode: currencyCode,
                                   primaryColor: primaryColor,
+                                  ledgers: ref.watch(ledgersStreamProvider).asData?.value ?? [],
+                                  categories: categoriesAsync.asData?.value ?? [],
                                   onTap: () =>
                                       _editTransaction(context, ref, tx),
                                 ),
@@ -283,12 +287,16 @@ class _TransactionTile extends ConsumerWidget {
   final db.Transaction transaction;
   final String currencyCode;
   final Color primaryColor;
+  final List<db.Ledger> ledgers;
+  final List<db.Category> categories;
   final VoidCallback onTap;
 
   const _TransactionTile({
     required this.transaction,
     required this.currencyCode,
     required this.primaryColor,
+    required this.ledgers,
+    required this.categories,
     required this.onTap,
   });
 
@@ -312,14 +320,38 @@ class _TransactionTile extends ConsumerWidget {
         amountColor = BeeColors.primaryText;
     }
 
-    // 显示交易金额或备注作为标题
-    String displayTitle = transaction.note?.isNotEmpty == true
-        ? transaction.note!
-        : (transaction.type == 'income'
-            ? l10n.homeIncome
-            : transaction.type == 'expense'
-                ? l10n.homeExpense
-                : 'Transfer');
+    // v1.15.0: 获取分类信息
+    final category = transaction.categoryId != null
+        ? categories.cast<db.Category?>().firstWhere(
+              (c) => c?.id == transaction.categoryId,
+              orElse: () => null,
+            )
+        : null;
+
+    // v1.15.0: 标题显示逻辑：备注优先，否则显示分类名称
+    String displayTitle;
+    if (transaction.note?.isNotEmpty == true) {
+      displayTitle = transaction.note!;
+    } else if (category != null) {
+      displayTitle = category.name;
+    } else {
+      displayTitle = transaction.type == 'income'
+          ? l10n.homeIncome
+          : transaction.type == 'expense'
+              ? l10n.homeExpense
+              : 'Transfer';
+    }
+
+    // v1.15.0: 获取账本名称（支持国际化）
+    final ledger = ledgers.cast<db.Ledger?>().firstWhere(
+          (l) => l?.id == transaction.ledgerId,
+          orElse: () => null,
+        );
+    String ledgerName = ledger?.name ?? '';
+    // 如果是默认账本，使用国际化名称
+    if (ledgerName == 'Default Ledger') {
+      ledgerName = l10n.ledgersDefaultLedgerName;
+    }
 
     return InkWell(
       onTap: onTap,
@@ -330,7 +362,7 @@ class _TransactionTile extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            // 图标
+            // v1.15.0: 显示分类图标
             Container(
               width: 40.0.scaled(context, ref),
               height: 40.0.scaled(context, ref),
@@ -339,7 +371,7 @@ class _TransactionTile extends ConsumerWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                _getIconForType(transaction.type),
+                CategoryService.getCategoryIcon(category?.icon),
                 color: primaryColor,
                 size: 20.0.scaled(context, ref),
               ),
@@ -350,15 +382,43 @@ class _TransactionTile extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    displayTitle,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: BeeColors.primaryText,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  // v1.15.0: 标题 + 账本标签
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          displayTitle,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: BeeColors.primaryText,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (ledgerName.isNotEmpty) ...[
+                        SizedBox(width: 6.0.scaled(context, ref)),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.0.scaled(context, ref),
+                            vertical: 2.0.scaled(context, ref),
+                          ),
+                          decoration: BoxDecoration(
+                            color: primaryColor.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4.0.scaled(context, ref)),
+                          ),
+                          child: Text(
+                            ledgerName,
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: primaryColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 2.0.scaled(context, ref)),
@@ -391,19 +451,6 @@ class _TransactionTile extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  IconData _getIconForType(String type) {
-    switch (type) {
-      case 'income':
-        return Icons.add_circle_outline;
-      case 'expense':
-        return Icons.remove_circle_outline;
-      case 'transfer':
-        return Icons.swap_horiz;
-      default:
-        return Icons.receipt_long_outlined;
-    }
   }
 
   String _formatDate(DateTime date) {
