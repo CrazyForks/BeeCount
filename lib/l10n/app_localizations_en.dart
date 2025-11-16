@@ -3370,7 +3370,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get featureDescription => 'Feature Description';
 
   @override
-  String get featureDescriptionContent => 'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 1-2 seconds\n🤖 Smart category matching\n📝 Auto-fill notes\n\nNote:\n• Without accessibility service: slightly slower (3-5s)\n• With accessibility service enabled: instant recognition';
+  String get featureDescriptionContent => 'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 2-3 seconds (may be longer on some devices)\n🤖 Smart category matching\n📝 Auto-fill notes\n\n⚠️ Note:\n• Different devices have different screenshot save speeds, delay may be 5-10 seconds\n• May not work on some devices, depending on system implementation\n• Recognized screenshots will be skipped automatically\n• Due to Android Scoped Storage restrictions (Android 10+), apps cannot delete system screenshots. Manual cleanup required';
 
   @override
   String get autoBilling => 'Auto Billing';
@@ -3380,42 +3380,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disabled => 'Disabled';
-
-  @override
-  String get accessibilityService => 'Accessibility Service';
-
-  @override
-  String get accessibilityServiceEnabled => 'Enabled - Instant Recognition';
-
-  @override
-  String get accessibilityServiceDisabled => 'Disabled - Slower Recognition';
-
-  @override
-  String get improveRecognitionSpeed => 'Improve Recognition Speed';
-
-  @override
-  String get accessibilityGuideContent => 'With accessibility service enabled, screenshots can be recognized instantly without waiting for file write.';
-
-  @override
-  String get setupSteps => 'Setup Steps:';
-
-  @override
-  String get accessibilityStep1 => 'Tap \"Open Accessibility Settings\" button below';
-
-  @override
-  String get accessibilityStep2 => 'Find \"BeeCount-Screenshot Recognition\" in the list';
-
-  @override
-  String get accessibilityStep3 => 'Enable the service switch';
-
-  @override
-  String get accessibilityStep4 => 'Return to app to use';
-
-  @override
-  String get openAccessibilitySettings => 'Open Accessibility Settings';
-
-  @override
-  String get accessibilityServiceNote => '💡 Note: Accessibility service is only used to detect screenshot actions, and will not read or modify your other data.';
 
   @override
   String get supportedPayments => 'Supported Payment Methods';

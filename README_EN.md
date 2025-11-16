@@ -75,7 +75,7 @@
 >
 > 🤖 **Android** - [Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | Supports Android 5.0+
 >
-> 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa) | Supports iOS 13.0+
+> 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa) | Supports iOS 15.5+
 >
 > 📱 **HarmonyOS** - Coming Soon | Supports HarmonyOS 5.0+ | [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 

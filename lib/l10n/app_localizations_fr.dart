@@ -3382,42 +3382,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get disabled => 'Désactivé';
 
   @override
-  String get accessibilityService => 'Service d\'Accessibilité';
-
-  @override
-  String get accessibilityServiceEnabled => 'Activé - Identification Instantanée';
-
-  @override
-  String get accessibilityServiceDisabled => 'Désactivé - Identification Plus Lente';
-
-  @override
-  String get improveRecognitionSpeed => 'Améliorer la Vitesse d\'Identification';
-
-  @override
-  String get accessibilityGuideContent => 'Avec le service d\'accessibilité activé, les captures d\'écran peuvent être identifiées instantanément sans attendre l\'écriture du fichier.';
-
-  @override
-  String get setupSteps => 'Étapes de Configuration :';
-
-  @override
-  String get accessibilityStep1 => 'Appuyer sur le bouton \"Ouvrir Paramètres d\'Accessibilité\" ci-dessous';
-
-  @override
-  String get accessibilityStep2 => 'Trouver \"Comptabilité Abeille-Identification Capture\" dans la liste';
-
-  @override
-  String get accessibilityStep3 => 'Activer l\'interrupteur de service';
-
-  @override
-  String get accessibilityStep4 => 'Retourner à l\'application pour utiliser';
-
-  @override
-  String get openAccessibilitySettings => 'Ouvrir Paramètres d\'Accessibilité';
-
-  @override
-  String get accessibilityServiceNote => '💡 Note : Le service d\'accessibilité est uniquement utilisé pour détecter les actions de capture d\'écran, et ne lira ni ne modifiera vos autres données.';
-
-  @override
   String get supportedPayments => 'Méthodes de Paiement Prises en Charge';
 
   @override

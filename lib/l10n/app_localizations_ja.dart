@@ -3382,42 +3382,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get disabled => '無効';
 
   @override
-  String get accessibilityService => 'アクセシビリティサービス';
-
-  @override
-  String get accessibilityServiceEnabled => '有効 - 瞬時に認識';
-
-  @override
-  String get accessibilityServiceDisabled => '無効 - 認識が遅い';
-
-  @override
-  String get improveRecognitionSpeed => '認識速度を向上';
-
-  @override
-  String get accessibilityGuideContent => 'アクセシビリティサービスを有効にすると、スクリーンショットを撮影した瞬間に認識でき、ファイルの書き込みを待つ必要がありません。';
-
-  @override
-  String get setupSteps => '設定手順：';
-
-  @override
-  String get accessibilityStep1 => '下の「アクセシビリティ設定を開く」ボタンをタップ';
-
-  @override
-  String get accessibilityStep2 => 'リストから「蜜蜂家計簿-スクリーンショット認識」を見つける';
-
-  @override
-  String get accessibilityStep3 => 'サービススイッチを有効にする';
-
-  @override
-  String get accessibilityStep4 => 'アプリに戻って使用';
-
-  @override
-  String get openAccessibilitySettings => 'アクセシビリティ設定を開く';
-
-  @override
-  String get accessibilityServiceNote => '💡 注意：アクセシビリティサービスはスクリーンショット動作の検出にのみ使用され、他のデータを読み取ったり変更したりすることはありません。';
-
-  @override
   String get supportedPayments => 'サポートされている支払い方法';
 
   @override

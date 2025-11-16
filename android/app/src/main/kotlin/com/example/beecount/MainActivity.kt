@@ -93,13 +93,6 @@ class MainActivity: FlutterActivity() {
                     stopScreenshotObserver()
                     result.success(true)
                 }
-                "openAccessibilitySettings" -> {
-                    openAccessibilitySettings()
-                    result.success(true)
-                }
-                "isAccessibilityServiceEnabled" -> {
-                    result.success(isAccessibilityServiceEnabled())
-                }
                 else -> result.notImplemented()
             }
         }
@@ -418,22 +411,18 @@ class MainActivity: FlutterActivity() {
 
     private fun startScreenshotObserver(flutterEngine: FlutterEngine) {
         try {
+            android.util.Log.d("MainActivity", "========== 开始启动截图监听服务 ==========")
             LoggerPlugin.info("MainActivity", "开始启动截图监听服务")
 
             // 先停止旧的监听(如果有)
             stopScreenshotObserver()
 
-            // 根据当前无障碍状态选择监听模式
-            val isAccessibilityEnabled = isAccessibilityServiceEnabled()
-            LoggerPlugin.info("MainActivity", "无障碍服务状态: ${if (isAccessibilityEnabled) "已启用" else "未启用"}")
+            // 使用 ContentObserver 监听媒体库变化
+            android.util.Log.d("MainActivity", "启动 ContentObserver 模式")
+            LoggerPlugin.info("MainActivity", "截图监听模式: ContentObserver (监听媒体库变化)")
+            startContentObserverMonitor(flutterEngine)
 
-            if (isAccessibilityEnabled) {
-                // 优先使用无障碍服务 - 可以直接截取屏幕内容,更快更准确
-                startAccessibilityScreenshotMonitor(flutterEngine)
-            } else {
-                // 降级使用 ContentObserver - 监听媒体库变化
-                startContentObserverMonitor(flutterEngine)
-            }
+            android.util.Log.d("MainActivity", "========== 截图监听服务启动完成 ==========")
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "❌ 启动截图监听失败", e)
             LoggerPlugin.error("MainActivity", "启动截图监听失败: ${e.message}")
@@ -441,40 +430,17 @@ class MainActivity: FlutterActivity() {
     }
 
     /**
-     * 启动无障碍服务截图监听
-     * 优点: 可以直接调用 takeScreenshot API 获取屏幕内容,无需等待文件写入
-     * 缺点: 需要用户授予无障碍权限
-     */
-    private fun startAccessibilityScreenshotMonitor(flutterEngine: FlutterEngine) {
-        android.util.Log.d("MainActivity", "📸 使用无障碍服务模式 (主方案)")
-        LoggerPlugin.info("MainActivity", "启动无障碍服务截图监听模式")
-
-        ScreenshotAccessibilityService.onScreenshotDetected = { screenshotPath ->
-            android.util.Log.d("MainActivity", "✅ 无障碍服务检测到截图: $screenshotPath")
-            LoggerPlugin.info("MainActivity", "无障碍服务检测到截图，通知 Flutter")
-
-            // 通知 Flutter 端
-            MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
-                .invokeMethod("onScreenshotDetected", screenshotPath)
-        }
-
-        android.util.Log.d("MainActivity", "✅ 无障碍服务监听已启动")
-        LoggerPlugin.info("MainActivity", "无障碍服务监听已启动")
-    }
-
-    /**
      * 启动 ContentObserver 截图监听
-     * 优点: 不需要特殊权限,兼容性好
-     * 缺点: 需要等待文件写入完成,有一定延迟
+     * 监听媒体库变化，检测新增的截图文件
      */
     private fun startContentObserverMonitor(flutterEngine: FlutterEngine) {
-        android.util.Log.d("MainActivity", "📸 使用 ContentObserver 模式 (降级方案)")
-        LoggerPlugin.info("MainActivity", "启动 ContentObserver 截图监听模式")
+        android.util.Log.d("MainActivity", "📸 配置 ContentObserver 模式...")
+        LoggerPlugin.info("MainActivity", "开始配置 ContentObserver 截图监听")
 
         // 创建ContentObserver
         screenshotObserver = ScreenshotObserver(this) { screenshotPath ->
             android.util.Log.d("MainActivity", "✅ ContentObserver 检测到截图: $screenshotPath")
-            LoggerPlugin.info("MainActivity", "ContentObserver 检测到截图，通知 Flutter")
+            LoggerPlugin.info("MainActivity", "ContentObserver 检测到截图，路径: ${screenshotPath.substringAfterLast('/')}")
 
             // 通知 Flutter 端
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
@@ -488,16 +454,14 @@ class MainActivity: FlutterActivity() {
             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
 
+        android.util.Log.d("MainActivity", "   监听URI: $uri")
         contentResolver.registerContentObserver(uri, true, screenshotObserver!!)
-        android.util.Log.d("MainActivity", "✅ ContentObserver 已注册")
+        android.util.Log.d("MainActivity", "✅ ContentObserver 已注册到 MediaStore")
         LoggerPlugin.info("MainActivity", "ContentObserver 已注册到 MediaStore")
     }
 
     private fun stopScreenshotObserver() {
         try {
-            // 停止无障碍服务回调
-            ScreenshotAccessibilityService.onScreenshotDetected = null
-
             // 停止ContentObserver
             screenshotObserver?.let {
                 contentResolver.unregisterContentObserver(it)
@@ -508,34 +472,6 @@ class MainActivity: FlutterActivity() {
             android.util.Log.d("MainActivity", "✅ 截图监听已停止")
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "❌ 停止截图监听失败", e)
-        }
-    }
-
-    private fun isAccessibilityServiceEnabled(): Boolean {
-        // 使用完整类名而不是简写格式
-        val service = "${packageName}/com.example.beecount.ScreenshotAccessibilityService"
-        val enabledServices = android.provider.Settings.Secure.getString(
-            contentResolver,
-            android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-        )
-        android.util.Log.d("MainActivity", "检查无障碍服务状态:")
-        android.util.Log.d("MainActivity", "  查找服务: $service")
-        android.util.Log.d("MainActivity", "  已启用服务列表: $enabledServices")
-        val isEnabled = enabledServices?.contains(service) == true
-        android.util.Log.d("MainActivity", "  检测结果: $isEnabled")
-        return isEnabled
-    }
-
-    private fun openAccessibilitySettings() {
-        try {
-            android.util.Log.w("MainActivity", "🚨 openAccessibilitySettings 被调用!")
-            android.util.Log.w("MainActivity", "调用堆栈: ${Exception().stackTraceToString()}")
-
-            val intent = Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        } catch (e: Exception) {
-            android.util.Log.e("MainActivity", "打开无障碍设置失败", e)
         }
     }
 

@@ -3382,42 +3382,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get disabled => '비활성화됨';
 
   @override
-  String get accessibilityService => '접근성 서비스';
-
-  @override
-  String get accessibilityServiceEnabled => '활성화 - 즉시 인식';
-
-  @override
-  String get accessibilityServiceDisabled => '비활성화 - 인식이 느림';
-
-  @override
-  String get improveRecognitionSpeed => '인식 속도 향상';
-
-  @override
-  String get accessibilityGuideContent => '접근성 서비스를 활성화하면 스크린샷 순간 인식이 가능하며 파일 쓰기를 기다릴 필요가 없습니다.';
-
-  @override
-  String get setupSteps => '설정 단계:';
-
-  @override
-  String get accessibilityStep1 => '아래 \"접근성 설정 열기\" 버튼을 탭하세요';
-
-  @override
-  String get accessibilityStep2 => '목록에서 \"벌꿀 가계부-스크린샷 인식\"을 찾으세요';
-
-  @override
-  String get accessibilityStep3 => '서비스 스위치를 활성화하세요';
-
-  @override
-  String get accessibilityStep4 => '앱으로 돌아가서 사용하세요';
-
-  @override
-  String get openAccessibilitySettings => '접근성 설정 열기';
-
-  @override
-  String get accessibilityServiceNote => '💡 참고: 접근성 서비스는 스크린샷 동작 감지에만 사용되며 다른 데이터를 읽거나 수정하지 않습니다.';
-
-  @override
   String get supportedPayments => '지원되는 결제 방법';
 
   @override

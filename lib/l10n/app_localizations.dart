@@ -6391,7 +6391,7 @@ abstract class AppLocalizations {
   /// No description provided for @featureDescriptionContent.
   ///
   /// In en, this message translates to:
-  /// **'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 1-2 seconds\n🤖 Smart category matching\n📝 Auto-fill notes\n\nNote:\n• Without accessibility service: slightly slower (3-5s)\n• With accessibility service enabled: instant recognition'**
+  /// **'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 2-3 seconds (may be longer on some devices)\n🤖 Smart category matching\n📝 Auto-fill notes\n\n⚠️ Note:\n• Different devices have different screenshot save speeds, delay may be 5-10 seconds\n• May not work on some devices, depending on system implementation\n• Recognized screenshots will be skipped automatically\n• Due to Android Scoped Storage restrictions (Android 10+), apps cannot delete system screenshots. Manual cleanup required'**
   String get featureDescriptionContent;
 
   /// No description provided for @autoBilling.
@@ -6411,78 +6411,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disabled'**
   String get disabled;
-
-  /// No description provided for @accessibilityService.
-  ///
-  /// In en, this message translates to:
-  /// **'Accessibility Service'**
-  String get accessibilityService;
-
-  /// No description provided for @accessibilityServiceEnabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Enabled - Instant Recognition'**
-  String get accessibilityServiceEnabled;
-
-  /// No description provided for @accessibilityServiceDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Disabled - Slower Recognition'**
-  String get accessibilityServiceDisabled;
-
-  /// No description provided for @improveRecognitionSpeed.
-  ///
-  /// In en, this message translates to:
-  /// **'Improve Recognition Speed'**
-  String get improveRecognitionSpeed;
-
-  /// No description provided for @accessibilityGuideContent.
-  ///
-  /// In en, this message translates to:
-  /// **'With accessibility service enabled, screenshots can be recognized instantly without waiting for file write.'**
-  String get accessibilityGuideContent;
-
-  /// No description provided for @setupSteps.
-  ///
-  /// In en, this message translates to:
-  /// **'Setup Steps:'**
-  String get setupSteps;
-
-  /// No description provided for @accessibilityStep1.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap \"Open Accessibility Settings\" button below'**
-  String get accessibilityStep1;
-
-  /// No description provided for @accessibilityStep2.
-  ///
-  /// In en, this message translates to:
-  /// **'Find \"BeeCount-Screenshot Recognition\" in the list'**
-  String get accessibilityStep2;
-
-  /// No description provided for @accessibilityStep3.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable the service switch'**
-  String get accessibilityStep3;
-
-  /// No description provided for @accessibilityStep4.
-  ///
-  /// In en, this message translates to:
-  /// **'Return to app to use'**
-  String get accessibilityStep4;
-
-  /// No description provided for @openAccessibilitySettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Open Accessibility Settings'**
-  String get openAccessibilitySettings;
-
-  /// No description provided for @accessibilityServiceNote.
-  ///
-  /// In en, this message translates to:
-  /// **'💡 Note: Accessibility service is only used to detect screenshot actions, and will not read or modify your other data.'**
-  String get accessibilityServiceNote;
 
   /// No description provided for @supportedPayments.
   ///

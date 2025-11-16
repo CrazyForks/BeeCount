@@ -3382,42 +3382,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get disabled => 'Deaktiviert';
 
   @override
-  String get accessibilityService => 'Barrierefreiheitsdienst';
-
-  @override
-  String get accessibilityServiceEnabled => 'Aktiviert - Sekundenschnelle Erkennung';
-
-  @override
-  String get accessibilityServiceDisabled => 'Nicht aktiviert - Etwas langsamer';
-
-  @override
-  String get improveRecognitionSpeed => 'Erkennungsgeschwindigkeit verbessern';
-
-  @override
-  String get accessibilityGuideContent => 'Mit aktiviertem Barrierefreiheitsdienst können Screenshots sofort erkannt werden, ohne auf das Schreiben der Datei zu warten.';
-
-  @override
-  String get setupSteps => 'Einrichtungsschritte:';
-
-  @override
-  String get accessibilityStep1 => 'Tippen Sie unten auf die Schaltfläche \"Barrierefreiheitseinstellungen öffnen\"';
-
-  @override
-  String get accessibilityStep2 => 'Finden Sie \"Bienen-Buchhaltung-Screenshot-Erkennung\" in der Liste';
-
-  @override
-  String get accessibilityStep3 => 'Dienstschalter aktivieren';
-
-  @override
-  String get accessibilityStep4 => 'Zur App zurückkehren, um zu verwenden';
-
-  @override
-  String get openAccessibilitySettings => 'Barrierefreiheitseinstellungen öffnen';
-
-  @override
-  String get accessibilityServiceNote => '💡 Hinweis: Der Barrierefreiheitsdienst wird nur zur Erkennung von Screenshot-Aktionen verwendet und liest oder ändert keine anderen Daten.';
-
-  @override
   String get supportedPayments => 'Unterstützte Zahlungsmethoden';
 
   @override

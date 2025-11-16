@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ocr_service.dart';
 import 'category_matcher.dart';
 import 'bill_creation_service.dart';
+import 'auto_billing_config.dart';
 import '../../providers.dart';
 import '../logger_service.dart';
 
@@ -49,11 +50,14 @@ class AutoBillingService {
     final list = prefs.getStringList(_processedScreenshotsKey) ?? [];
     _processedPaths.addAll(list);
 
-    // 只保留最近100个，避免内存占用过大
-    if (_processedPaths.length > 100) {
-      final toRemove = _processedPaths.length - 100;
+    // 只保留最近N个，避免内存占用过大
+    if (_processedPaths.length > AutoBillingConfig.maxProcessedCache) {
+      final toRemove =
+          _processedPaths.length - AutoBillingConfig.maxProcessedCache;
       _processedPaths.removeAll(_processedPaths.take(toRemove));
       await _saveProcessedScreenshots();
+      logger.debug('AutoBilling', '清理已处理缓存',
+          '移除=$toRemove, 保留=${AutoBillingConfig.maxProcessedCache}');
     }
   }
 
@@ -94,11 +98,13 @@ class AutoBillingService {
       return null;
     }
 
-    // 防重复处理: 5秒内相同路径只处理一次
+    // 防重复处理: 配置时间窗口内相同路径只处理一次
     final now = DateTime.now().millisecondsSinceEpoch;
-    if (_lastProcessedPath == imagePath && (now - _lastProcessedTime) < 5000) {
-      print('⚠️ [AutoBilling] 重复截图，跳过处理 (${now - _lastProcessedTime}ms前已处理)');
-      logger.warning('AutoBilling', '重复截图，跳过处理', '${now - _lastProcessedTime}ms前已处理');
+    if (_lastProcessedPath == imagePath &&
+        (now - _lastProcessedTime) < AutoBillingConfig.duplicateCheckWindow) {
+      final timeDiff = now - _lastProcessedTime;
+      print('⚠️ [AutoBilling] 重复截图，跳过处理 (${timeDiff}ms前已处理)');
+      logger.warning('AutoBilling', '重复截图，跳过处理', '${timeDiff}ms前已处理');
       return null;
     }
 
@@ -114,7 +120,9 @@ class AutoBillingService {
       // 如果文件不存在,可能需要短暂等待
       // (无障碍服务直接截图时文件已就绪,ContentObserver 可能需要等待)
       if (!await file.exists()) {
-        print('⏳ 文件尚未就绪,等待最多2秒...');
+        print('⏳ 文件尚未就绪,等待最多${AutoBillingConfig.fileWaitTimeout}ms...');
+        logger.info('AutoBilling', '文件尚未就绪，开始等待',
+            '路径=$imagePath, 超时=${AutoBillingConfig.fileWaitTimeout}ms');
 
         if (showNotification) {
           await _showNotification(
@@ -126,19 +134,22 @@ class AutoBillingService {
 
         final waitStartTime = DateTime.now().millisecondsSinceEpoch;
         var waitTime = 0;
-        const maxWait = 2000; // 2秒超时
+        final maxWait = AutoBillingConfig.fileWaitTimeout;
 
         while (waitTime < maxWait) {
           if (await file.exists() && await file.length() > 0) {
             print('✅ 文件已就绪，等待时间=${waitTime}ms');
+            logger.info('AutoBilling', '文件就绪', '等待时间=${waitTime}ms');
             break;
           }
-          await Future.delayed(const Duration(milliseconds: 100));
+          await Future.delayed(Duration(milliseconds: AutoBillingConfig.fileCheckInterval));
           waitTime = DateTime.now().millisecondsSinceEpoch - waitStartTime;
         }
 
         if (!await file.exists() || await file.length() == 0) {
           print('❌ 截图文件等待超时 (${waitTime}ms)');
+          logger.error('AutoBilling', '截图文件等待超时',
+              '路径=$imagePath, 等待时间=${waitTime}ms, 文件存在=${await file.exists()}');
           if (showNotification) {
             await _showNotification(
               id: notificationId,
@@ -150,6 +161,7 @@ class AutoBillingService {
         }
       } else {
         print('✅ 文件已就绪,无需等待');
+        logger.debug('AutoBilling', '文件已就绪，无需等待');
       }
 
       // 更新通知：开始识别
@@ -228,7 +240,12 @@ class AutoBillingService {
           }
         } catch (e, stackTrace) {
           print('❌ 自动记账失败: $e');
-          logger.error('AutoBilling', '自动记账失败', e, stackTrace);
+          logger.error('AutoBilling', '自动记账失败', {
+            'path': imagePath,
+            'amount': result.amount,
+            'merchant': result.merchant,
+            'error': e.toString(),
+          }, stackTrace);
           if (showNotification) {
             await _showNotification(
               id: notificationId,
@@ -265,7 +282,11 @@ class AutoBillingService {
       }
     } catch (e, stackTrace) {
       print('❌ 处理截图失败: $e');
-      logger.error('AutoBilling', '处理截图失败', e, stackTrace);
+      logger.error('AutoBilling', '处理截图失败', {
+        'path': imagePath,
+        'error': e.toString(),
+        'stage': '未知阶段',
+      }, stackTrace);
       return null;
     } finally {
       final totalElapsed =
