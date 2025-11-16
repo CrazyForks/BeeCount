@@ -3809,6 +3809,51 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => '请开发者喝杯咖啡';
 
   @override
+  String get logCenterTitle => '日志中心';
+
+  @override
+  String get logCenterSubtitle => '查看应用运行日志';
+
+  @override
+  String get logCenterSearchHint => '搜索日志内容或标签...';
+
+  @override
+  String get logCenterFilterLevel => '日志级别';
+
+  @override
+  String get logCenterFilterPlatform => '平台';
+
+  @override
+  String get logCenterTotal => '全部';
+
+  @override
+  String get logCenterFiltered => '已过滤';
+
+  @override
+  String get logCenterEmpty => '暂无日志';
+
+  @override
+  String get logCenterExport => '导出';
+
+  @override
+  String get logCenterClear => '清空';
+
+  @override
+  String get logCenterExportFailed => '导出失败';
+
+  @override
+  String get logCenterClearConfirmTitle => '清空日志';
+
+  @override
+  String get logCenterClearConfirmMessage => '确定要清空所有日志吗？此操作不可恢复。';
+
+  @override
+  String get logCenterCleared => '日志已清空';
+
+  @override
+  String get logCenterCopied => '已复制到剪贴板';
+
+  @override
   String get cloudService => '云服务';
 
   @override

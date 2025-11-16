@@ -41,6 +41,7 @@ class ScreenshotObserver(
         val startTime = System.currentTimeMillis()
         try {
             Log.d(TAG, "⏱️ [性能] onChange触发: uri=$uri, 时间=${startTime}")
+            LoggerPlugin.info(TAG, "ContentObserver检测到媒体库变化: uri=$uri")
 
             // 直接处理变化的URI，避免查询所有图片
             if (uri != null) {
@@ -52,8 +53,10 @@ class ScreenshotObserver(
 
             val elapsed = System.currentTimeMillis() - startTime
             Log.d(TAG, "⏱️ [性能] onChange处理完成, 耗时=${elapsed}ms")
+            LoggerPlugin.debug(TAG, "ContentObserver处理完成, 耗时=${elapsed}ms")
         } catch (e: Exception) {
             Log.e(TAG, "处理媒体库变化失败", e)
+            LoggerPlugin.error(TAG, "处理媒体库变化失败: ${e.message}")
         }
     }
 
@@ -95,6 +98,7 @@ class ScreenshotObserver(
                         if (isScreenshot(imagePath, imageName) && !processedPaths.contains(imagePath)) {
                             Log.d(TAG, "✅ 检测到新截图: $imagePath")
                             Log.d(TAG, "文件名: $imageName")
+                            LoggerPlugin.info(TAG, "检测到新截图: $imageName")
 
                             processedPaths.add(imagePath)
 
@@ -102,6 +106,7 @@ class ScreenshotObserver(
                             onScreenshotDetected(imagePath)
                             val callbackElapsed = System.currentTimeMillis() - callbackStartTime
                             Log.d(TAG, "⏱️ [性能] 回调执行完成, 耗时=${callbackElapsed}ms")
+                            LoggerPlugin.debug(TAG, "截图回调执行完成, 耗时=${callbackElapsed}ms")
 
                             // 限制缓存大小
                             if (processedPaths.size > 100) {
@@ -174,6 +179,7 @@ class ScreenshotObserver(
                         if (isScreenshot(imagePath, imageName) && !processedPaths.contains(imagePath)) {
                             Log.d(TAG, "✅ 检测到新截图: $imagePath")
                             Log.d(TAG, "文件名: $imageName, 添加时间: $dateAdded")
+                            LoggerPlugin.info(TAG, "检测到新截图(兜底): $imageName")
 
                             processedPaths.add(imagePath)
 
@@ -181,6 +187,7 @@ class ScreenshotObserver(
                             onScreenshotDetected(imagePath)
                             val callbackElapsed = System.currentTimeMillis() - callbackStartTime
                             Log.d(TAG, "⏱️ [性能] 回调执行完成, 耗时=${callbackElapsed}ms")
+                            LoggerPlugin.debug(TAG, "截图回调执行完成(兜底), 耗时=${callbackElapsed}ms")
 
                             // 限制缓存大小
                             if (processedPaths.size > 100) {

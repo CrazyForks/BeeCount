@@ -22,6 +22,7 @@ class MainActivity: FlutterActivity() {
     private val CHANNEL = "notification_channel"
     private val INSTALL_CHANNEL = "com.example.beecount/install"
     private val SCREENSHOT_CHANNEL = "com.example.beecount/screenshot"
+    private val LOGGER_CHANNEL = "com.beecount.logger"
 
     private var screenshotObserver: ScreenshotObserver? = null
 
@@ -59,6 +60,27 @@ class MainActivity: FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+
+        android.util.Log.e("MainActivity", "==========================================")
+        android.util.Log.e("MainActivity", "configureFlutterEngine 被调用！！！")
+        android.util.Log.e("MainActivity", "==========================================")
+
+        // 日志桥接的MethodChannel
+        val loggerChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, LOGGER_CHANNEL)
+        android.util.Log.e("MainActivity", "即将调用 LoggerPlugin.setup")
+        LoggerPlugin.setup(loggerChannel)
+        android.util.Log.e("MainActivity", "LoggerPlugin.setup 调用完成")
+
+        // 测试日志
+        LoggerPlugin.info("MainActivity", "日志系统已初始化")
+
+        // 延迟发送测试日志，确保 Flutter 端已就绪
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            LoggerPlugin.info("MainActivity", "延迟测试日志 - Flutter 端应该已就绪")
+            LoggerPlugin.debug("MainActivity", "这是一条 DEBUG 日志")
+            LoggerPlugin.warning("MainActivity", "这是一条 WARNING 日志")
+            LoggerPlugin.error("MainActivity", "这是一条 ERROR 日志")
+        }, 2000)
 
         // 截图监听的MethodChannel
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL).setMethodCallHandler { call, result ->
@@ -396,11 +418,14 @@ class MainActivity: FlutterActivity() {
 
     private fun startScreenshotObserver(flutterEngine: FlutterEngine) {
         try {
+            LoggerPlugin.info("MainActivity", "开始启动截图监听服务")
+
             // 先停止旧的监听(如果有)
             stopScreenshotObserver()
 
             // 根据当前无障碍状态选择监听模式
             val isAccessibilityEnabled = isAccessibilityServiceEnabled()
+            LoggerPlugin.info("MainActivity", "无障碍服务状态: ${if (isAccessibilityEnabled) "已启用" else "未启用"}")
 
             if (isAccessibilityEnabled) {
                 // 优先使用无障碍服务 - 可以直接截取屏幕内容,更快更准确
@@ -411,6 +436,7 @@ class MainActivity: FlutterActivity() {
             }
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "❌ 启动截图监听失败", e)
+            LoggerPlugin.error("MainActivity", "启动截图监听失败: ${e.message}")
         }
     }
 
@@ -421,9 +447,11 @@ class MainActivity: FlutterActivity() {
      */
     private fun startAccessibilityScreenshotMonitor(flutterEngine: FlutterEngine) {
         android.util.Log.d("MainActivity", "📸 使用无障碍服务模式 (主方案)")
+        LoggerPlugin.info("MainActivity", "启动无障碍服务截图监听模式")
 
         ScreenshotAccessibilityService.onScreenshotDetected = { screenshotPath ->
             android.util.Log.d("MainActivity", "✅ 无障碍服务检测到截图: $screenshotPath")
+            LoggerPlugin.info("MainActivity", "无障碍服务检测到截图，通知 Flutter")
 
             // 通知 Flutter 端
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
@@ -431,6 +459,7 @@ class MainActivity: FlutterActivity() {
         }
 
         android.util.Log.d("MainActivity", "✅ 无障碍服务监听已启动")
+        LoggerPlugin.info("MainActivity", "无障碍服务监听已启动")
     }
 
     /**
@@ -440,10 +469,12 @@ class MainActivity: FlutterActivity() {
      */
     private fun startContentObserverMonitor(flutterEngine: FlutterEngine) {
         android.util.Log.d("MainActivity", "📸 使用 ContentObserver 模式 (降级方案)")
+        LoggerPlugin.info("MainActivity", "启动 ContentObserver 截图监听模式")
 
         // 创建ContentObserver
         screenshotObserver = ScreenshotObserver(this) { screenshotPath ->
             android.util.Log.d("MainActivity", "✅ ContentObserver 检测到截图: $screenshotPath")
+            LoggerPlugin.info("MainActivity", "ContentObserver 检测到截图，通知 Flutter")
 
             // 通知 Flutter 端
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SCREENSHOT_CHANNEL)
@@ -459,6 +490,7 @@ class MainActivity: FlutterActivity() {
 
         contentResolver.registerContentObserver(uri, true, screenshotObserver!!)
         android.util.Log.d("MainActivity", "✅ ContentObserver 已注册")
+        LoggerPlugin.info("MainActivity", "ContentObserver 已注册到 MediaStore")
     }
 
     private fun stopScreenshotObserver() {

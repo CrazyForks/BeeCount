@@ -7246,6 +7246,96 @@ abstract class AppLocalizations {
   /// **'Buy me a coffee'**
   String get aboutSupportDevelopmentSubtitle;
 
+  /// No description provided for @logCenterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Center'**
+  String get logCenterTitle;
+
+  /// No description provided for @logCenterSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View app runtime logs'**
+  String get logCenterSubtitle;
+
+  /// No description provided for @logCenterSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search log content or tags...'**
+  String get logCenterSearchHint;
+
+  /// No description provided for @logCenterFilterLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Level'**
+  String get logCenterFilterLevel;
+
+  /// No description provided for @logCenterFilterPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform'**
+  String get logCenterFilterPlatform;
+
+  /// No description provided for @logCenterTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get logCenterTotal;
+
+  /// No description provided for @logCenterFiltered.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered'**
+  String get logCenterFiltered;
+
+  /// No description provided for @logCenterEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No logs'**
+  String get logCenterEmpty;
+
+  /// No description provided for @logCenterExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get logCenterExport;
+
+  /// No description provided for @logCenterClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get logCenterClear;
+
+  /// No description provided for @logCenterExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed'**
+  String get logCenterExportFailed;
+
+  /// No description provided for @logCenterClearConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Logs'**
+  String get logCenterClearConfirmTitle;
+
+  /// No description provided for @logCenterClearConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all logs? This action cannot be undone.'**
+  String get logCenterClearConfirmMessage;
+
+  /// No description provided for @logCenterCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs cleared'**
+  String get logCenterCleared;
+
+  /// No description provided for @logCenterCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get logCenterCopied;
+
   /// No description provided for @cloudService.
   ///
   /// In en, this message translates to:

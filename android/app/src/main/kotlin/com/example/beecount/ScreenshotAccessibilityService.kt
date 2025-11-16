@@ -55,6 +55,7 @@ class ScreenshotAccessibilityService : AccessibilityService() {
         serviceInfo = info
 
         Log.d(TAG, "✅ 截图监听服务已启动")
+        LoggerPlugin.info(TAG, "无障碍服务已连接并启动")
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -79,10 +80,12 @@ class ScreenshotAccessibilityService : AccessibilityService() {
                 lastScreenshotTime = currentTime
 
                 Log.d(TAG, "🔔 检测到截图: package=$packageName, class=$className")
+                LoggerPlugin.info(TAG, "检测到截图事件: package=$packageName")
                 handleScreenshotDetected()
             }
         } catch (e: Exception) {
             Log.e(TAG, "❌ 处理事件失败", e)
+            LoggerPlugin.error(TAG, "处理无障碍事件失败: ${e.message}")
         }
     }
 
@@ -129,11 +132,13 @@ class ScreenshotAccessibilityService : AccessibilityService() {
                                 }
 
                                 Log.d(TAG, "✅ 截图保存成功: ${tempFile.absolutePath}")
+                                LoggerPlugin.info(TAG, "使用API截图成功，保存到临时文件")
                                 onScreenshotDetected?.invoke(tempFile.absolutePath)
 
                                 bitmap.recycle()
                             } else {
                                 Log.e(TAG, "❌ 无法创建 Bitmap,降级到文件等待")
+                                LoggerPlugin.warning(TAG, "无法创建Bitmap，降级到文件等待模式")
                                 waitForScreenshotFile()
                             }
 
@@ -146,6 +151,7 @@ class ScreenshotAccessibilityService : AccessibilityService() {
 
                     override fun onFailure(errorCode: Int) {
                         Log.w(TAG, "⚠️ takeScreenshot 失败 (errorCode=$errorCode),降级到文件等待")
+                        LoggerPlugin.warning(TAG, "takeScreenshot API失败(errorCode=$errorCode)，降级到文件等待")
                         waitForScreenshotFile()
                     }
                 }
@@ -160,10 +166,12 @@ class ScreenshotAccessibilityService : AccessibilityService() {
             val screenshotFile = findLatestScreenshot()
             if (screenshotFile != null) {
                 Log.d(TAG, "✅ 找到最新截图: ${screenshotFile.absolutePath}")
+                LoggerPlugin.info(TAG, "找到最新截图文件: ${screenshotFile.name}")
                 onScreenshotDetected?.invoke(screenshotFile.absolutePath)
             } else {
                 // 不通知,避免Flutter端弹出"截图文件不可用"
                 Log.w(TAG, "⚠️ 未找到截图文件,跳过")
+                LoggerPlugin.warning(TAG, "未找到最新截图文件")
             }
             pendingScreenshotCheck = null
         }

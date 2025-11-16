@@ -14,6 +14,7 @@ import '../../services/update_service.dart';
 import '../../utils/logger.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
+import 'log_center_page.dart';
 
 /// 关于页面
 class AboutPage extends ConsumerStatefulWidget {
@@ -260,6 +261,20 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                             : 'https://github.com/TNT-Likely/BeeCount/blob/main/docs/donate/README_EN.md';
                           final url = Uri.parse(docUrl);
                           await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
+                        leading: Icons.bug_report_outlined,
+                        title: AppLocalizations.of(context).logCenterTitle,
+                        subtitle: AppLocalizations.of(context).logCenterSubtitle,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LogCenterPage(),
+                            ),
+                          );
                         },
                       ),
                     ],

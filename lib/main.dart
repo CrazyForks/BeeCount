@@ -16,6 +16,7 @@ import 'services/reminder_monitor_service.dart';
 import 'services/recurring_transaction_service.dart';
 import 'services/screenshot_monitor_service.dart';
 import 'services/shortcuts_handler_service.dart';
+import 'services/logger_service.dart';
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
@@ -25,6 +26,10 @@ import 'dart:io';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 初始化日志系统（确保原生日志桥接就绪）
+  logger.info('App', '应用启动，日志系统已初始化');
+  print('📱 LoggerService 已初始化');
 
   // 初始化时区（必须在通知服务之前，修复iOS通知问题）
   try {
