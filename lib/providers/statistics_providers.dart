@@ -93,25 +93,25 @@ final accountStatsProvider = FutureProvider.family
 });
 
 // 统计：所有账户统计（每个账户的余额、消费、收入）
-final allAccountStatsProvider = FutureProvider.family
-    .autoDispose<Map<int, ({double balance, double expense, double income})>, int>(
-        (ref, ledgerId) async {
+// v1.15.0: 不再限制账本，获取所有账户
+final allAccountStatsProvider = FutureProvider.autoDispose<Map<int, ({double balance, double expense, double income})>>(
+        (ref) async {
   final repo = ref.watch(repositoryProvider);
   // 依赖 tick 触发刷新
   ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  return repo.getAllAccountStats(ledgerId);
+  return repo.getAllAccountStats();
 });
 
 // 统计：所有账户汇总统计（总余额、总支出、总收入）
-final allAccountsTotalStatsProvider = FutureProvider.family
-    .autoDispose<({double totalBalance, double totalExpense, double totalIncome}), int>(
-        (ref, ledgerId) async {
+// v1.15.0: 不再限制账本，获取所有账户
+final allAccountsTotalStatsProvider = FutureProvider.autoDispose<({double totalBalance, double totalExpense, double totalIncome})>(
+        (ref) async {
   final repo = ref.watch(repositoryProvider);
   // 依赖 tick 触发刷新
   ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  return repo.getAllAccountsTotalStats(ledgerId);
+  return repo.getAllAccountsTotalStats();
 });

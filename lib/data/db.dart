@@ -19,10 +19,13 @@ class Ledgers extends Table {
 
 class Accounts extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get ledgerId => integer()();
+  IntColumn get ledgerId => integer()();  // 保留用于v2迁移，后续会移除
   TextColumn get name => text()();
   TextColumn get type => text().withDefault(const Constant('cash'))();
+  TextColumn get currency => text().withDefault(const Constant('CNY'))();  // v1.15.0新增：币种
   RealColumn get initialBalance => real().withDefault(const Constant(0.0))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
 class Categories extends Table {
@@ -79,7 +82,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;  // v5: 账户独立改造（添加currency，准备移除ledgerId）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -109,7 +112,43 @@ class BeeDatabase extends _$BeeDatabase {
         // 为 accounts 表添加 initial_balance 字段
         await customStatement('ALTER TABLE accounts ADD COLUMN initial_balance REAL NOT NULL DEFAULT 0.0;');
       }
-      // Schema version 5 was used temporarily but reverted - no migration needed
+      if (from < 5) {
+        // v5: 账户独立改造
+        // 注意：实际迁移逻辑在 MigrationService 中手动触发
+        // 这里只添加必要的字段（如果不存在），不执行复杂的数据迁移
+
+        // 检查字段是否已存在，避免重复添加
+        final tableInfo = await customSelect('PRAGMA table_info(accounts)').get();
+        final hasCurrency = tableInfo.any((row) => row.data['name'] == 'currency');
+        final hasCreatedAt = tableInfo.any((row) => row.data['name'] == 'created_at');
+        final hasUpdatedAt = tableInfo.any((row) => row.data['name'] == 'updated_at');
+
+        if (!hasCurrency) {
+          await customStatement('ALTER TABLE accounts ADD COLUMN currency TEXT NOT NULL DEFAULT \'CNY\';');
+        }
+
+        if (!hasCreatedAt) {
+          // SQLite 不支持非常量默认值，先添加可空字段，然后更新
+          await customStatement('ALTER TABLE accounts ADD COLUMN created_at INTEGER;');
+          await customStatement('UPDATE accounts SET created_at = strftime(\'%s\', \'now\') WHERE created_at IS NULL;');
+        }
+
+        if (!hasUpdatedAt) {
+          await customStatement('ALTER TABLE accounts ADD COLUMN updated_at INTEGER;');
+        }
+
+        // 从账本继承币种
+        if (hasCurrency) {
+          await customStatement('''
+            UPDATE accounts
+            SET currency = COALESCE(
+              (SELECT currency FROM ledgers WHERE ledgers.id = accounts.ledger_id),
+              'CNY'
+            )
+            WHERE ledger_id IS NOT NULL;
+          ''');
+        }
+      }
     },
   );
 

@@ -243,7 +243,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                     label = l10n.tabMine;
                 }
                 return Expanded(
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: () {
                       final now = DateTime.now();
                       // 检测双击：同一个标签在300ms内连续点击两次

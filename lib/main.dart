@@ -16,6 +16,8 @@ import 'services/reminder_monitor_service.dart';
 import 'services/recurring_transaction_service.dart';
 import 'services/screenshot_monitor_service.dart';
 import 'services/shortcuts_handler_service.dart';
+import 'services/logger_service.dart';
+import 'services/migration_service.dart';
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
@@ -25,6 +27,10 @@ import 'dart:io';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 初始化日志系统（确保原生日志桥接就绪）
+  logger.info('App', '应用启动，日志系统已初始化');
+  print('📱 LoggerService 已初始化');
 
   // 初始化时区（必须在通知服务之前，修复iOS通知问题）
   try {
@@ -62,6 +68,9 @@ Future<void> main() async {
 
   // 生成待处理的重复交易
   await _generatePendingRecurringTransactions();
+
+  // v1.15.0: 自动执行账户独立迁移
+  await _autoMigrateToV2();
 
   // 注册小组件交互回调
   try {
@@ -215,6 +224,37 @@ Future<void> _generatePendingRecurringTransactions() async {
     await db.close();
   } catch (e) {
     print('❌ 生成重复交易失败: $e');
+    // 不抛出异常，避免影响应用启动
+  }
+}
+
+/// v1.15.0: 自动执行账户独立迁移
+///
+/// 在应用启动时检测是否需要迁移，如果需要则自动执行
+Future<void> _autoMigrateToV2() async {
+  try {
+    logger.info('App', '🔍 [v1.15.0] 检查数据库迁移状态...');
+    final db = BeeDatabase();
+    final migrationService = AccountMigrationService(db);
+
+    final needsMigration = await migrationService.needsMigration();
+
+    if (needsMigration) {
+      logger.info('App', '🔄 [v1.15.0] 检测到需要迁移，开始执行账户独立改造...');
+      final result = await migrationService.migrateToV2();
+
+      if (result.success) {
+        logger.info('App', '✅ [v1.15.0] 迁移成功完成');
+      } else {
+        logger.error('App', '❌ [v1.15.0] 迁移失败: ${result.message}');
+      }
+    } else {
+      logger.info('App', '✅ [v1.15.0] 数据库已是最新版本，无需迁移');
+    }
+
+    await db.close();
+  } catch (e) {
+    logger.error('App', '❌ [v1.15.0] 迁移检测失败', e);
     // 不抛出异常，避免影响应用启动
   }
 }

@@ -6010,6 +6010,12 @@ abstract class AppLocalizations {
   /// **'Please enter account name'**
   String get accountNameRequired;
 
+  /// No description provided for @accountNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name already exists, please use a different name'**
+  String get accountNameDuplicate;
+
   /// No description provided for @accountTypeLabel.
   ///
   /// In en, this message translates to:
@@ -6391,7 +6397,7 @@ abstract class AppLocalizations {
   /// No description provided for @featureDescriptionContent.
   ///
   /// In en, this message translates to:
-  /// **'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 1-2 seconds\n🤖 Smart category matching\n📝 Auto-fill notes\n\nNote:\n• Without accessibility service: slightly slower (3-5s)\n• With accessibility service enabled: instant recognition'**
+  /// **'After taking a screenshot of payment page, the system will automatically recognize amount and merchant info, and create expense record.\n\n⚡ Recognition speed: 2-3 seconds (may be longer on some devices)\n🤖 Smart category matching\n📝 Auto-fill notes\n\n⚠️ Note:\n• Different devices have different screenshot save speeds, delay may be 5-10 seconds\n• May not work on some devices, depending on system implementation\n• Recognized screenshots will be skipped automatically\n• Due to Android Scoped Storage restrictions (Android 10+), apps cannot delete system screenshots. Manual cleanup required'**
   String get featureDescriptionContent;
 
   /// No description provided for @autoBilling.
@@ -6411,78 +6417,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disabled'**
   String get disabled;
-
-  /// No description provided for @accessibilityService.
-  ///
-  /// In en, this message translates to:
-  /// **'Accessibility Service'**
-  String get accessibilityService;
-
-  /// No description provided for @accessibilityServiceEnabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Enabled - Instant Recognition'**
-  String get accessibilityServiceEnabled;
-
-  /// No description provided for @accessibilityServiceDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Disabled - Slower Recognition'**
-  String get accessibilityServiceDisabled;
-
-  /// No description provided for @improveRecognitionSpeed.
-  ///
-  /// In en, this message translates to:
-  /// **'Improve Recognition Speed'**
-  String get improveRecognitionSpeed;
-
-  /// No description provided for @accessibilityGuideContent.
-  ///
-  /// In en, this message translates to:
-  /// **'With accessibility service enabled, screenshots can be recognized instantly without waiting for file write.'**
-  String get accessibilityGuideContent;
-
-  /// No description provided for @setupSteps.
-  ///
-  /// In en, this message translates to:
-  /// **'Setup Steps:'**
-  String get setupSteps;
-
-  /// No description provided for @accessibilityStep1.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap \"Open Accessibility Settings\" button below'**
-  String get accessibilityStep1;
-
-  /// No description provided for @accessibilityStep2.
-  ///
-  /// In en, this message translates to:
-  /// **'Find \"BeeCount-Screenshot Recognition\" in the list'**
-  String get accessibilityStep2;
-
-  /// No description provided for @accessibilityStep3.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable the service switch'**
-  String get accessibilityStep3;
-
-  /// No description provided for @accessibilityStep4.
-  ///
-  /// In en, this message translates to:
-  /// **'Return to app to use'**
-  String get accessibilityStep4;
-
-  /// No description provided for @openAccessibilitySettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Open Accessibility Settings'**
-  String get openAccessibilitySettings;
-
-  /// No description provided for @accessibilityServiceNote.
-  ///
-  /// In en, this message translates to:
-  /// **'💡 Note: Accessibility service is only used to detect screenshot actions, and will not read or modify your other data.'**
-  String get accessibilityServiceNote;
 
   /// No description provided for @supportedPayments.
   ///
@@ -7246,6 +7180,96 @@ abstract class AppLocalizations {
   /// **'Buy me a coffee'**
   String get aboutSupportDevelopmentSubtitle;
 
+  /// No description provided for @logCenterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Center'**
+  String get logCenterTitle;
+
+  /// No description provided for @logCenterSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View app runtime logs'**
+  String get logCenterSubtitle;
+
+  /// No description provided for @logCenterSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search log content or tags...'**
+  String get logCenterSearchHint;
+
+  /// No description provided for @logCenterFilterLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Level'**
+  String get logCenterFilterLevel;
+
+  /// No description provided for @logCenterFilterPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform'**
+  String get logCenterFilterPlatform;
+
+  /// No description provided for @logCenterTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get logCenterTotal;
+
+  /// No description provided for @logCenterFiltered.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered'**
+  String get logCenterFiltered;
+
+  /// No description provided for @logCenterEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No logs'**
+  String get logCenterEmpty;
+
+  /// No description provided for @logCenterExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get logCenterExport;
+
+  /// No description provided for @logCenterClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get logCenterClear;
+
+  /// No description provided for @logCenterExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed'**
+  String get logCenterExportFailed;
+
+  /// No description provided for @logCenterClearConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Logs'**
+  String get logCenterClearConfirmTitle;
+
+  /// No description provided for @logCenterClearConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all logs? This action cannot be undone.'**
+  String get logCenterClearConfirmMessage;
+
+  /// No description provided for @logCenterCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs cleared'**
+  String get logCenterCleared;
+
+  /// No description provided for @logCenterCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get logCenterCopied;
+
   /// No description provided for @cloudService.
   ///
   /// In en, this message translates to:
@@ -7641,6 +7665,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account Details'**
   String get accountDetailTitle;
+
+  /// No description provided for @accountCurrencyLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has transactions and cannot change currency'**
+  String get accountCurrencyLocked;
+
+  /// No description provided for @commonNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get commonNotice;
 
   /// No description provided for @commonUncategorized.
   ///

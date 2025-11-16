@@ -3179,6 +3179,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accountNameRequired => 'Veuillez entrer le nom du compte';
 
   @override
+  String get accountNameDuplicate => 'Account name already exists, please use a different name';
+
+  @override
   String get accountTypeLabel => 'Type de Compte';
 
   @override
@@ -3380,42 +3383,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get disabled => 'Désactivé';
-
-  @override
-  String get accessibilityService => 'Service d\'Accessibilité';
-
-  @override
-  String get accessibilityServiceEnabled => 'Activé - Identification Instantanée';
-
-  @override
-  String get accessibilityServiceDisabled => 'Désactivé - Identification Plus Lente';
-
-  @override
-  String get improveRecognitionSpeed => 'Améliorer la Vitesse d\'Identification';
-
-  @override
-  String get accessibilityGuideContent => 'Avec le service d\'accessibilité activé, les captures d\'écran peuvent être identifiées instantanément sans attendre l\'écriture du fichier.';
-
-  @override
-  String get setupSteps => 'Étapes de Configuration :';
-
-  @override
-  String get accessibilityStep1 => 'Appuyer sur le bouton \"Ouvrir Paramètres d\'Accessibilité\" ci-dessous';
-
-  @override
-  String get accessibilityStep2 => 'Trouver \"Comptabilité Abeille-Identification Capture\" dans la liste';
-
-  @override
-  String get accessibilityStep3 => 'Activer l\'interrupteur de service';
-
-  @override
-  String get accessibilityStep4 => 'Retourner à l\'application pour utiliser';
-
-  @override
-  String get openAccessibilitySettings => 'Ouvrir Paramètres d\'Accessibilité';
-
-  @override
-  String get accessibilityServiceNote => '💡 Note : Le service d\'accessibilité est uniquement utilisé pour détecter les actions de capture d\'écran, et ne lira ni ne modifiera vos autres données.';
 
   @override
   String get supportedPayments => 'Méthodes de Paiement Prises en Charge';
@@ -3809,6 +3776,51 @@ class AppLocalizationsFr extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
 
   @override
+  String get logCenterTitle => 'Log Center';
+
+  @override
+  String get logCenterSubtitle => 'View app runtime logs';
+
+  @override
+  String get logCenterSearchHint => 'Search log content or tags...';
+
+  @override
+  String get logCenterFilterLevel => 'Log Level';
+
+  @override
+  String get logCenterFilterPlatform => 'Platform';
+
+  @override
+  String get logCenterTotal => 'Total';
+
+  @override
+  String get logCenterFiltered => 'Filtered';
+
+  @override
+  String get logCenterEmpty => 'No logs';
+
+  @override
+  String get logCenterExport => 'Export';
+
+  @override
+  String get logCenterClear => 'Clear';
+
+  @override
+  String get logCenterExportFailed => 'Export failed';
+
+  @override
+  String get logCenterClearConfirmTitle => 'Clear Logs';
+
+  @override
+  String get logCenterClearConfirmMessage => 'Are you sure you want to clear all logs? This action cannot be undone.';
+
+  @override
+  String get logCenterCleared => 'Logs cleared';
+
+  @override
+  String get logCenterCopied => 'Copied to clipboard';
+
+  @override
   String get cloudService => 'Service cloud';
 
   @override
@@ -4025,6 +4037,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get accountDetailTitle => 'Account Details';
+
+  @override
+  String get accountCurrencyLocked => 'This account has transactions and cannot change currency';
+
+  @override
+  String get commonNotice => 'Notice';
 
   @override
   String get commonUncategorized => 'Uncategorized';

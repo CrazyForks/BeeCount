@@ -3179,6 +3179,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountNameRequired => '请输入账户名称';
 
   @override
+  String get accountNameDuplicate => '账户名称已存在，请使用其他名称';
+
+  @override
   String get accountTypeLabel => '账户类型';
 
   @override
@@ -3370,7 +3373,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get featureDescription => '功能说明';
 
   @override
-  String get featureDescriptionContent => '截图支付页面后，系统会自动识别金额和商家信息，并创建支出记录。\n\n⚡ 识别速度约 1-2 秒\n🤖 智能匹配分类\n📝 自动填写备注\n\n注意：\n• 未开启无障碍服务时，识别速度会稍慢（3-5秒）\n• 开启无障碍服务后，可实现秒级识别';
+  String get featureDescriptionContent => '截图支付页面后，系统会自动识别金额和商家信息，并创建支出记录。\n\n⚡ 识别速度约 2-3 秒（部分设备可能更长）\n🤖 智能匹配分类\n📝 自动填写备注\n\n⚠️ 注意：\n• 不同设备截图入库速度不同，识别延迟可能 5-10 秒\n• 部分设备可能无法正常工作，取决于系统实现\n• 识别成功后会自动跳过已处理的截图\n• 受Android分区存储限制（Android 10+），应用无法删除系统截图，需手动清理相册';
 
   @override
   String get autoBilling => '自动记账';
@@ -3380,42 +3383,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get disabled => '已禁用';
-
-  @override
-  String get accessibilityService => '无障碍服务';
-
-  @override
-  String get accessibilityServiceEnabled => '已启用 - 秒级识别';
-
-  @override
-  String get accessibilityServiceDisabled => '未启用 - 识别稍慢';
-
-  @override
-  String get improveRecognitionSpeed => '提升识别速度';
-
-  @override
-  String get accessibilityGuideContent => '开启无障碍服务后，可以实现截图瞬间识别，无需等待文件写入。';
-
-  @override
-  String get setupSteps => '设置步骤：';
-
-  @override
-  String get accessibilityStep1 => '点击下方\"打开无障碍设置\"按钮';
-
-  @override
-  String get accessibilityStep2 => '在列表中找到\"蜜蜂记账-截图识别\"';
-
-  @override
-  String get accessibilityStep3 => '开启服务开关';
-
-  @override
-  String get accessibilityStep4 => '返回应用即可使用';
-
-  @override
-  String get openAccessibilitySettings => '打开无障碍设置';
-
-  @override
-  String get accessibilityServiceNote => '💡 说明：无障碍服务仅用于检测截图动作，不会读取或修改您的其他数据。';
 
   @override
   String get supportedPayments => '支持的支付方式';
@@ -3809,6 +3776,51 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => '请开发者喝杯咖啡';
 
   @override
+  String get logCenterTitle => '日志中心';
+
+  @override
+  String get logCenterSubtitle => '查看应用运行日志';
+
+  @override
+  String get logCenterSearchHint => '搜索日志内容或标签...';
+
+  @override
+  String get logCenterFilterLevel => '日志级别';
+
+  @override
+  String get logCenterFilterPlatform => '平台';
+
+  @override
+  String get logCenterTotal => '全部';
+
+  @override
+  String get logCenterFiltered => '已过滤';
+
+  @override
+  String get logCenterEmpty => '暂无日志';
+
+  @override
+  String get logCenterExport => '导出';
+
+  @override
+  String get logCenterClear => '清空';
+
+  @override
+  String get logCenterExportFailed => '导出失败';
+
+  @override
+  String get logCenterClearConfirmTitle => '清空日志';
+
+  @override
+  String get logCenterClearConfirmMessage => '确定要清空所有日志吗？此操作不可恢复。';
+
+  @override
+  String get logCenterCleared => '日志已清空';
+
+  @override
+  String get logCenterCopied => '已复制到剪贴板';
+
+  @override
   String get cloudService => '云服务';
 
   @override
@@ -4025,6 +4037,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountDetailTitle => '账户详情';
+
+  @override
+  String get accountCurrencyLocked => '该账户已有交易记录，不允许修改币种';
+
+  @override
+  String get commonNotice => '提示';
 
   @override
   String get commonUncategorized => '未分类';
@@ -7204,7 +7222,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get featureDescription => '功能說明';
 
   @override
-  String get featureDescriptionContent => '截圖支付頁面後，系統會自動識別金額和商家資訊，並建立支出記錄。\n\n⚡ 識別速度約 1-2 秒\n🤖 智慧配對分類\n📝 自動填寫備註\n\n注意：\n• 未開啟無障礙服務時，識別速度會稍慢（3-5秒）\n• 開啟無障礙服務後，可實現秒級識別';
+  String get featureDescriptionContent => '截圖支付頁面後，系統會自動識別金額和商家資訊，並建立支出記錄。\n\n⚡ 識別速度約 2-3 秒\n🤖 智慧配對分類\n📝 自動填寫備註';
 
   @override
   String get autoBilling => '自動記帳';
@@ -7214,42 +7232,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get disabled => '已停用';
-
-  @override
-  String get accessibilityService => '無障礙服務';
-
-  @override
-  String get accessibilityServiceEnabled => '已啟用 - 秒級識別';
-
-  @override
-  String get accessibilityServiceDisabled => '未啟用 - 識別稍慢';
-
-  @override
-  String get improveRecognitionSpeed => '提升識別速度';
-
-  @override
-  String get accessibilityGuideContent => '開啟無障礙服務後，可以實現截圖瞬間識別，無需等待文件寫入。';
-
-  @override
-  String get setupSteps => '設定步驟：';
-
-  @override
-  String get accessibilityStep1 => '點擊下方「開啟無障礙設定」按鈕';
-
-  @override
-  String get accessibilityStep2 => '在清單中找到「蜜蜂記帳-截圖識別」';
-
-  @override
-  String get accessibilityStep3 => '開啟服務開關';
-
-  @override
-  String get accessibilityStep4 => '返回應用程式即可使用';
-
-  @override
-  String get openAccessibilitySettings => '開啟無障礙設定';
-
-  @override
-  String get accessibilityServiceNote => '💡 說明：無障礙服務僅用於檢測截圖動作，不會讀取或修改您的其他資料。';
 
   @override
   String get supportedPayments => '支援的支付方式';

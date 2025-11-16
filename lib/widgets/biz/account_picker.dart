@@ -145,12 +145,21 @@ class _AccountPickerState extends ConsumerState<AccountPicker> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final ledgerId = ref.watch(currentLedgerIdProvider);
-    final accountsAsync = ref.watch(accountsStreamProvider(ledgerId));
+    // v1.15.0: 获取当前账本币种
+    final currentLedgerAsync = ref.watch(currentLedgerProvider);
+    final currentCurrency = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
+
+    // v1.15.0: 获取所有账户并按币种筛选
+    final allAccountsAsync = ref.watch(allAccountsStreamProvider);
     final primaryColor = Theme.of(context).primaryColor;
 
-    return accountsAsync.when(
-      data: (accounts) {
+    return allAccountsAsync.when(
+      data: (allAccounts) {
+        // v1.15.0: 只显示与当前账本同币种的账户
+        final accounts = allAccounts.where((account) =>
+          account.currency == currentCurrency
+        ).toList();
+
         _buildOptions(accounts);
 
         return SafeArea(

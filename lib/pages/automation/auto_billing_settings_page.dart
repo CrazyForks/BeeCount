@@ -37,7 +37,6 @@ class AndroidAutoBillingPage extends ConsumerStatefulWidget {
 class _AndroidAutoBillingPageState extends ConsumerState<AndroidAutoBillingPage> with WidgetsBindingObserver {
   late final ScreenshotMonitorService _screenshotMonitor;
   bool _isMonitorEnabled = false;
-  bool _isAccessibilityEnabled = false;
   bool _isBatteryOptimizationIgnored = false;
   bool _isLoading = true;
   bool _isInitialized = false;
@@ -71,15 +70,6 @@ class _AndroidAutoBillingPageState extends ConsumerState<AndroidAutoBillingPage>
   Future<void> _loadMonitorStatus() async {
     final enabled = await _screenshotMonitor.isEnabled();
 
-    // 检查无障碍服务状态
-    bool accessibilityEnabled = false;
-    try {
-      const platform = MethodChannel('com.example.beecount/screenshot');
-      accessibilityEnabled = await platform.invokeMethod('isAccessibilityServiceEnabled');
-    } catch (e) {
-      print('检查无障碍服务状态失败: $e');
-    }
-
     // 检查电池优化状态
     bool batteryOptimizationIgnored = false;
     try {
@@ -92,7 +82,6 @@ class _AndroidAutoBillingPageState extends ConsumerState<AndroidAutoBillingPage>
 
     setState(() {
       _isMonitorEnabled = enabled;
-      _isAccessibilityEnabled = accessibilityEnabled;
       _isBatteryOptimizationIgnored = batteryOptimizationIgnored;
       _isLoading = false;
     });
@@ -162,19 +151,6 @@ class _AndroidAutoBillingPageState extends ConsumerState<AndroidAutoBillingPage>
     }
   }
 
-  Future<void> _openAccessibilitySettings() async {
-    try {
-      // 使用 MethodChannel 调用原生方法打开无障碍设置
-      const platform = MethodChannel('com.example.beecount/screenshot');
-      await platform.invokeMethod('openAccessibilitySettings');
-    } catch (e) {
-      if (mounted) {
-        final l10n = AppLocalizations.of(context);
-        showToast(context, '${l10n.openSettingsFailed}: $e', duration: const Duration(seconds: 3));
-      }
-    }
-  }
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -235,16 +211,6 @@ class _AndroidAutoBillingPageState extends ConsumerState<AndroidAutoBillingPage>
 
                 // 电池优化设置引导卡片
                 _buildBatteryOptimizationCard(context, primaryColor, l10n),
-
-                const SizedBox(height: 16),
-
-                // 无障碍服务状态卡片
-                _buildAccessibilityStatusCard(context, primaryColor, l10n),
-
-                const SizedBox(height: 16),
-
-                // 无障碍服务引导卡片
-                _buildAccessibilityGuideCard(context, primaryColor, l10n),
 
                 const SizedBox(height: 16),
 
@@ -365,162 +331,6 @@ class _AndroidAutoBillingPageState extends ConsumerState<AndroidAutoBillingPage>
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildAccessibilityStatusCard(BuildContext context, Color primaryColor, AppLocalizations l10n) {
-    final theme = Theme.of(context);
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: (_isAccessibilityEnabled ? Colors.green : Colors.grey).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                _isAccessibilityEnabled ? Icons.check_circle : Icons.info_outline,
-                color: _isAccessibilityEnabled ? Colors.green : Colors.grey,
-                size: 28,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.accessibilityService,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _isAccessibilityEnabled ? l10n.accessibilityServiceEnabled : l10n.accessibilityServiceDisabled,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: _isAccessibilityEnabled
-                          ? Colors.green
-                          : theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              _isAccessibilityEnabled ? Icons.check : Icons.close,
-              color: _isAccessibilityEnabled ? Colors.green : Colors.grey,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAccessibilityGuideCard(BuildContext context, Color primaryColor, AppLocalizations l10n) {
-    final theme = Theme.of(context);
-
-    return Card(
-      color: primaryColor.withValues(alpha: 0.05),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.speed, color: primaryColor, size: 24),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.improveRecognitionSpeed,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              l10n.accessibilityGuideContent,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.setupSteps,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            _buildStep(l10n, '1', l10n.accessibilityStep1),
-            _buildStep(l10n, '2', l10n.accessibilityStep2),
-            _buildStep(l10n, '3', l10n.accessibilityStep3),
-            _buildStep(l10n, '4', l10n.accessibilityStep4),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: _openAccessibilitySettings,
-                icon: const Icon(Icons.settings),
-                label: Text(l10n.openAccessibilitySettings),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.accessibilityServiceNote,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStep(AppLocalizations l10n, String number, String text) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                number,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

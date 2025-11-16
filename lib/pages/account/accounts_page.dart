@@ -9,6 +9,7 @@ import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
 import '../../styles/colors.dart';
 import '../../utils/ui_scale_extensions.dart';
+import '../../utils/currencies.dart';
 import 'account_edit_page.dart';
 import 'account_detail_page.dart';
 
@@ -75,13 +76,13 @@ class AccountsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final ledgerId = ref.watch(currentLedgerIdProvider);
-    final accountsAsync = ref.watch(accountsStreamProvider(ledgerId));
+    // v1.15.0: 显示所有账户，不限账本
+    final accountsAsync = ref.watch(allAccountsStreamProvider);
     final accountFeatureAsync = ref.watch(accountFeatureEnabledProvider);
     final primaryColor = ref.watch(primaryColorProvider);
-    final totalStatsAsync = ref.watch(allAccountsTotalStatsProvider(ledgerId));
-    final allStatsAsync = ref.watch(allAccountStatsProvider(ledgerId));
-    final currentLedgerAsync = ref.watch(currentLedgerProvider);
-    final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
+    // v1.15.0: 全局统计，不再限制账本
+    final totalStatsAsync = ref.watch(allAccountsTotalStatsProvider);
+    final allStatsAsync = ref.watch(allAccountStatsProvider);
 
     return Scaffold(
       backgroundColor: BeeColors.greyBg,
@@ -188,7 +189,6 @@ class AccountsPage extends ConsumerWidget {
                                   child: _StatCell(
                                     label: l10n.accountTotalBalance,
                                     value: stats.totalBalance,
-                                    currencyCode: currencyCode,
                                     color: stats.totalBalance >= 0
                                         ? BeeColors.primaryText
                                         : Colors.red,
@@ -203,7 +203,6 @@ class AccountsPage extends ConsumerWidget {
                                   child: _StatCell(
                                     label: l10n.accountTotalIncome,
                                     value: stats.totalIncome,
-                                    currencyCode: currencyCode,
                                     color: Colors.green,
                                   ),
                                 ),
@@ -216,7 +215,6 @@ class AccountsPage extends ConsumerWidget {
                                   child: _StatCell(
                                     label: l10n.accountTotalExpense,
                                     value: stats.totalExpense,
-                                    currencyCode: currencyCode,
                                     color: Colors.red,
                                   ),
                                 ),
@@ -241,7 +239,6 @@ class AccountsPage extends ConsumerWidget {
                       ...accounts.map((account) {
                         return _AccountCard(
                           account: account,
-                          currencyCode: currencyCode,
                           primaryColor: primaryColor,
                           typeColor:
                               _getColorForType(account.type, primaryColor),
@@ -276,9 +273,9 @@ class AccountsPage extends ConsumerWidget {
       ),
     );
 
-    // 刷新统计数据
-    ref.invalidate(allAccountStatsProvider(ledgerId));
-    ref.invalidate(allAccountsTotalStatsProvider(ledgerId));
+    // v1.15.0: 刷新全局统计数据
+    ref.invalidate(allAccountStatsProvider);
+    ref.invalidate(allAccountsTotalStatsProvider);
     ref.invalidate(statsRefreshProvider);
   }
 
@@ -293,9 +290,9 @@ class AccountsPage extends ConsumerWidget {
       ),
     );
 
-    // 刷新统计数据
-    ref.invalidate(allAccountStatsProvider(ledgerId));
-    ref.invalidate(allAccountsTotalStatsProvider(ledgerId));
+    // v1.15.0: 刷新全局统计数据
+    ref.invalidate(allAccountStatsProvider);
+    ref.invalidate(allAccountsTotalStatsProvider);
     ref.invalidate(statsRefreshProvider);
   }
 
@@ -313,13 +310,11 @@ class AccountsPage extends ConsumerWidget {
 class _StatCell extends ConsumerWidget {
   final String label;
   final double value;
-  final String currencyCode;
   final Color color;
 
   const _StatCell({
     required this.label,
     required this.value,
-    required this.currencyCode,
     required this.color,
   });
 
@@ -327,12 +322,12 @@ class _StatCell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
+        // v1.15.0: 全局统计可能包含多币种，暂不显示币种符号
         AmountText(
           value: value,
           signed: false,
-          showCurrency: true,
+          showCurrency: false,
           useCompactFormat: true,
-          currencyCode: currencyCode,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -356,7 +351,6 @@ class _StatCell extends ConsumerWidget {
 /// 账户卡片 - 类似银行卡样式
 class _AccountCard extends ConsumerWidget {
   final db.Account account;
-  final String currencyCode;
   final Color primaryColor;
   final Color typeColor;
   final IconData icon;
@@ -367,7 +361,6 @@ class _AccountCard extends ConsumerWidget {
 
   const _AccountCard({
     required this.account,
-    required this.currencyCode,
     required this.primaryColor,
     required this.typeColor,
     required this.icon,
@@ -457,13 +450,37 @@ class _AccountCard extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                account.name,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    account.name,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.0.scaled(context, ref)),
+                                  // v1.15.0: 显示币种名称（如：人民币、美元）
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 6.0.scaled(context, ref),
+                                      vertical: 2.0.scaled(context, ref),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(4.0.scaled(context, ref)),
+                                    ),
+                                    child: Text(
+                                      getCurrencyName(account.currency, context),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               SizedBox(height: 2.0.scaled(context, ref)),
                               Text(
@@ -506,7 +523,7 @@ class _AccountCard extends ConsumerWidget {
                               label:
                                   AppLocalizations.of(context).accountBalance,
                               value: stats!.balance,
-                              currencyCode: currencyCode,
+                              currencyCode: account.currency,
                             ),
                           ),
                           Container(
@@ -518,7 +535,7 @@ class _AccountCard extends ConsumerWidget {
                             child: _CardStatItem(
                               label: AppLocalizations.of(context).homeIncome,
                               value: stats!.income,
-                              currencyCode: currencyCode,
+                              currencyCode: account.currency,
                             ),
                           ),
                           Container(
@@ -530,7 +547,7 @@ class _AccountCard extends ConsumerWidget {
                             child: _CardStatItem(
                               label: AppLocalizations.of(context).homeExpense,
                               value: stats!.expense,
-                              currencyCode: currencyCode,
+                              currencyCode: account.currency,
                             ),
                           ),
                         ],

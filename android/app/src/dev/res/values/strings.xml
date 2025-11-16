@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Dev版本的无障碍服务名称 -->
-    <string name="accessibility_service_label">蜜蜂记账测试版-截图识别</string>
-    <string name="accessibility_service_description">【测试版】用于检测截图动作并自动进行OCR识别记账。\n\n本服务仅监听截图事件，不会读取或修改您的其他数据。\n\n⚠️ 这是测试版本，可能不稳定。</string>
-</resources>

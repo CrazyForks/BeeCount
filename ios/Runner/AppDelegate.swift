@@ -15,6 +15,17 @@ import UserNotifications
       UNUserNotificationCenter.current().delegate = self
     }
 
+    // 设置日志插件
+    let controller = window?.rootViewController as! FlutterViewController
+    let loggerChannel = FlutterMethodChannel(
+      name: "com.beecount.logger",
+      binaryMessenger: controller.binaryMessenger
+    )
+    LoggerPlugin.setup(channel: loggerChannel)
+
+    // 测试日志
+    LoggerPlugin.info(tag: "AppDelegate", message: "日志系统已初始化")
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 

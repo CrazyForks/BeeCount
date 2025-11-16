@@ -3179,6 +3179,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get accountNameRequired => '입력계정名称';
 
   @override
+  String get accountNameDuplicate => 'Account name already exists, please use a different name';
+
+  @override
   String get accountTypeLabel => '계정类型';
 
   @override
@@ -3380,42 +3383,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get disabled => '비활성화됨';
-
-  @override
-  String get accessibilityService => '접근성 서비스';
-
-  @override
-  String get accessibilityServiceEnabled => '활성화 - 즉시 인식';
-
-  @override
-  String get accessibilityServiceDisabled => '비활성화 - 인식이 느림';
-
-  @override
-  String get improveRecognitionSpeed => '인식 속도 향상';
-
-  @override
-  String get accessibilityGuideContent => '접근성 서비스를 활성화하면 스크린샷 순간 인식이 가능하며 파일 쓰기를 기다릴 필요가 없습니다.';
-
-  @override
-  String get setupSteps => '설정 단계:';
-
-  @override
-  String get accessibilityStep1 => '아래 \"접근성 설정 열기\" 버튼을 탭하세요';
-
-  @override
-  String get accessibilityStep2 => '목록에서 \"벌꿀 가계부-스크린샷 인식\"을 찾으세요';
-
-  @override
-  String get accessibilityStep3 => '서비스 스위치를 활성화하세요';
-
-  @override
-  String get accessibilityStep4 => '앱으로 돌아가서 사용하세요';
-
-  @override
-  String get openAccessibilitySettings => '접근성 설정 열기';
-
-  @override
-  String get accessibilityServiceNote => '💡 참고: 접근성 서비스는 스크린샷 동작 감지에만 사용되며 다른 데이터를 읽거나 수정하지 않습니다.';
 
   @override
   String get supportedPayments => '지원되는 결제 방법';
@@ -3809,6 +3776,51 @@ class AppLocalizationsKo extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
 
   @override
+  String get logCenterTitle => 'Log Center';
+
+  @override
+  String get logCenterSubtitle => 'View app runtime logs';
+
+  @override
+  String get logCenterSearchHint => 'Search log content or tags...';
+
+  @override
+  String get logCenterFilterLevel => 'Log Level';
+
+  @override
+  String get logCenterFilterPlatform => 'Platform';
+
+  @override
+  String get logCenterTotal => 'Total';
+
+  @override
+  String get logCenterFiltered => 'Filtered';
+
+  @override
+  String get logCenterEmpty => 'No logs';
+
+  @override
+  String get logCenterExport => 'Export';
+
+  @override
+  String get logCenterClear => 'Clear';
+
+  @override
+  String get logCenterExportFailed => 'Export failed';
+
+  @override
+  String get logCenterClearConfirmTitle => 'Clear Logs';
+
+  @override
+  String get logCenterClearConfirmMessage => 'Are you sure you want to clear all logs? This action cannot be undone.';
+
+  @override
+  String get logCenterCleared => 'Logs cleared';
+
+  @override
+  String get logCenterCopied => 'Copied to clipboard';
+
+  @override
   String get cloudService => '클라우드 서비스';
 
   @override
@@ -4025,6 +4037,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get accountDetailTitle => 'Account Details';
+
+  @override
+  String get accountCurrencyLocked => 'This account has transactions and cannot change currency';
+
+  @override
+  String get commonNotice => 'Notice';
 
   @override
   String get commonUncategorized => 'Uncategorized';

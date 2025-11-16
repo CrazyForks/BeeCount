@@ -44,6 +44,12 @@ final ledgerByIdProvider = FutureProvider.family<Ledger?, int>((ref, ledgerId) a
   return result.isNotEmpty ? result.first : null;
 });
 
+// 获取所有账本列表（Stream版本）
+final ledgersStreamProvider = StreamProvider<List<Ledger>>((ref) {
+  final repo = ref.watch(repositoryProvider);
+  return repo.ledgers();
+});
+
 final _currentLedgerPersist = Provider<void>((ref) {
   // load on first read
   () async {
@@ -105,10 +111,16 @@ final recurringTransactionsProvider = FutureProvider.family<List<RecurringTransa
       .get();
 });
 
-// 账户Provider
+// 账户Provider（按账本过滤）
 final accountsStreamProvider = StreamProvider.family<List<Account>, int>((ref, ledgerId) {
   final repo = ref.watch(repositoryProvider);
   return repo.accountsForLedger(ledgerId);
+});
+
+// v1.15.0: 所有账户Provider（不限账本）
+final allAccountsStreamProvider = StreamProvider<List<Account>>((ref) {
+  final repo = ref.watch(repositoryProvider);
+  return repo.watchAllAccounts();
 });
 
 // 获取单个账户信息

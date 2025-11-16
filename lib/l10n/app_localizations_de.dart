@@ -3179,6 +3179,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get accountNameRequired => 'Bitte Kontoname eingeben';
 
   @override
+  String get accountNameDuplicate => 'Account name already exists, please use a different name';
+
+  @override
   String get accountTypeLabel => 'Kontotyp';
 
   @override
@@ -3380,42 +3383,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get disabled => 'Deaktiviert';
-
-  @override
-  String get accessibilityService => 'Barrierefreiheitsdienst';
-
-  @override
-  String get accessibilityServiceEnabled => 'Aktiviert - Sekundenschnelle Erkennung';
-
-  @override
-  String get accessibilityServiceDisabled => 'Nicht aktiviert - Etwas langsamer';
-
-  @override
-  String get improveRecognitionSpeed => 'Erkennungsgeschwindigkeit verbessern';
-
-  @override
-  String get accessibilityGuideContent => 'Mit aktiviertem Barrierefreiheitsdienst können Screenshots sofort erkannt werden, ohne auf das Schreiben der Datei zu warten.';
-
-  @override
-  String get setupSteps => 'Einrichtungsschritte:';
-
-  @override
-  String get accessibilityStep1 => 'Tippen Sie unten auf die Schaltfläche \"Barrierefreiheitseinstellungen öffnen\"';
-
-  @override
-  String get accessibilityStep2 => 'Finden Sie \"Bienen-Buchhaltung-Screenshot-Erkennung\" in der Liste';
-
-  @override
-  String get accessibilityStep3 => 'Dienstschalter aktivieren';
-
-  @override
-  String get accessibilityStep4 => 'Zur App zurückkehren, um zu verwenden';
-
-  @override
-  String get openAccessibilitySettings => 'Barrierefreiheitseinstellungen öffnen';
-
-  @override
-  String get accessibilityServiceNote => '💡 Hinweis: Der Barrierefreiheitsdienst wird nur zur Erkennung von Screenshot-Aktionen verwendet und liest oder ändert keine anderen Daten.';
 
   @override
   String get supportedPayments => 'Unterstützte Zahlungsmethoden';
@@ -3809,6 +3776,51 @@ class AppLocalizationsDe extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
 
   @override
+  String get logCenterTitle => 'Log Center';
+
+  @override
+  String get logCenterSubtitle => 'View app runtime logs';
+
+  @override
+  String get logCenterSearchHint => 'Search log content or tags...';
+
+  @override
+  String get logCenterFilterLevel => 'Log Level';
+
+  @override
+  String get logCenterFilterPlatform => 'Platform';
+
+  @override
+  String get logCenterTotal => 'Total';
+
+  @override
+  String get logCenterFiltered => 'Filtered';
+
+  @override
+  String get logCenterEmpty => 'No logs';
+
+  @override
+  String get logCenterExport => 'Export';
+
+  @override
+  String get logCenterClear => 'Clear';
+
+  @override
+  String get logCenterExportFailed => 'Export failed';
+
+  @override
+  String get logCenterClearConfirmTitle => 'Clear Logs';
+
+  @override
+  String get logCenterClearConfirmMessage => 'Are you sure you want to clear all logs? This action cannot be undone.';
+
+  @override
+  String get logCenterCleared => 'Logs cleared';
+
+  @override
+  String get logCenterCopied => 'Copied to clipboard';
+
+  @override
   String get cloudService => 'Cloud-Dienst';
 
   @override
@@ -4025,6 +4037,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get accountDetailTitle => 'Account Details';
+
+  @override
+  String get accountCurrencyLocked => 'This account has transactions and cannot change currency';
+
+  @override
+  String get commonNotice => 'Notice';
 
   @override
   String get commonUncategorized => 'Uncategorized';

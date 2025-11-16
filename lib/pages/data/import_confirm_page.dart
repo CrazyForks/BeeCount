@@ -380,6 +380,12 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     final repo = ref.read(repositoryProvider);
     final ledgerId = ref.read(currentLedgerIdProvider);
 
+    // v1.15.0: 获取当前账本的币种信息
+    final currentLedger = await (repo.db.select(repo.db.ledgers)
+          ..where((l) => l.id.equals(ledgerId)))
+        .getSingleOrNull();
+    final ledgerCurrency = currentLedger?.currency ?? 'CNY';
+
     final dataStart = widget.hasHeader ? (headerRow + 1) : 0;
     final total = rows.length - dataStart;
     // 初始化全局进度
@@ -483,20 +489,20 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           for (final accountName in uniqueAccountNames) {
             if (_cancelled) break;
             try {
-              // 检查账户是否已存在
+              // v1.15.0: 全局按名称去重检查（不限定账本）
               final existing = await (repo.db.select(repo.db.accounts)
-                    ..where((a) => a.name.equals(accountName))
-                    ..where((a) => a.ledgerId.equals(ledgerId)))
+                    ..where((a) => a.name.equals(accountName)))
                   .getSingleOrNull();
 
               if (existing != null) {
                 accountNameToId[accountName] = existing.id;
               } else {
-                // 创建新账户
+                // v1.15.0: 创建新账户（继承账本币种，不绑定账本ID）
                 final accountId = await repo.db.into(repo.db.accounts).insert(
                       schema.AccountsCompanion.insert(
-                        ledgerId: ledgerId,
+                        ledgerId: 0, // v1.15.0: 账户独立，不绑定账本
                         name: accountName,
+                        currency: d.Value(ledgerCurrency), // v1.15.0: 从账本继承币种
                         initialBalance: const d.Value(0.0), // 初始余额为0
                       ),
                     );
@@ -587,10 +593,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           continue;
         }
 
-        // 金额解析
+        // 金额解析（过滤正负号，统一使用绝对值）
         final amountClean =
-            (amountStr ?? '0').toString().replaceAll(RegExp(r'[¥$,]'), '');
-        final amount = double.parse(amountClean);
+            (amountStr ?? '0').toString().replaceAll(RegExp(r'[¥$,+-]'), '');
+        final amount = double.parse(amountClean).abs();
 
         // 日期解析 - 使用通用日期解析工具
         final date = DateParser.parse(dateStr);

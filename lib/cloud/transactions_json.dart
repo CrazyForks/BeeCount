@@ -82,14 +82,21 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
         ..where((l) => l.id.equals(ledgerId)))
       .getSingleOrNull();
 
-  // 账户信息
-  final accounts = await (db.select(db.accounts)
-        ..where((a) => a.ledgerId.equals(ledgerId)))
-      .get();
+  // v1.15.0: 导出该账本交易中使用的账户
+  final usedAccountIds = txs.map((t) => t.accountId).whereType<int>().toSet();
+  final accounts = <Account>[];
+  for (final aid in usedAccountIds) {
+    final a = await (db.select(db.accounts)..where((a) => a.id.equals(aid)))
+        .getSingleOrNull();
+    if (a != null) {
+      accounts.add(a);
+    }
+  }
   final accountItems = accounts
       .map((a) => {
             'name': _sanitizeString(a.name),
             'type': a.type,
+            'currency': a.currency, // v1.15.0: 导出币种
             'initialBalance': a.initialBalance,
           })
       .toList();
@@ -143,22 +150,25 @@ Future<({int inserted, int skipped})> importTransactionsJson(
   final accounts = data['accounts'] as List?;
   if (accounts != null) {
     try {
-      // 获取现有账户
-      final existingAccounts = await repo.accountsForLedger(ledgerId).first;
+      // v1.15.0: 获取所有现有账户（全局去重）
+      final existingAccounts = await repo.getAllAccounts();
       final existingAccountNames =
           existingAccounts.map((a) => a.name).toSet();
 
-      // 只导入不存在的账户,避免重复
+      // v1.15.0: 只导入不存在的账户（按名称全局去重）
       for (final acc in accounts.cast<Map<String, dynamic>>()) {
         final name = acc['name'] as String;
         if (!existingAccountNames.contains(name)) {
           final type = acc['type'] as String? ?? 'cash';
           final initialBalance =
               (acc['initialBalance'] as num?)?.toDouble() ?? 0.0;
+          // v1.15.0: 优先使用账户自己的币种，否则使用账本币种
+          final accountCurrency = acc['currency'] as String? ?? currency ?? 'CNY';
           await repo.createAccount(
-            ledgerId: ledgerId,
+            ledgerId: 0, // v1.15.0: 账户独立，不绑定账本
             name: name,
             type: type,
+            currency: accountCurrency, // v1.15.0: 使用账户币种
             initialBalance: initialBalance,
           );
         }

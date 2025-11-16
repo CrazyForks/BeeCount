@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ocr_service.dart';
 import 'category_matcher.dart';
 import 'bill_creation_service.dart';
+import 'auto_billing_config.dart';
 import '../../providers.dart';
+import '../logger_service.dart';
 
 /// 自动记账服务 - 通用核心逻辑
 /// Android和iOS共用的OCR识别和自动记账逻辑
@@ -48,11 +50,14 @@ class AutoBillingService {
     final list = prefs.getStringList(_processedScreenshotsKey) ?? [];
     _processedPaths.addAll(list);
 
-    // 只保留最近100个，避免内存占用过大
-    if (_processedPaths.length > 100) {
-      final toRemove = _processedPaths.length - 100;
+    // 只保留最近N个，避免内存占用过大
+    if (_processedPaths.length > AutoBillingConfig.maxProcessedCache) {
+      final toRemove =
+          _processedPaths.length - AutoBillingConfig.maxProcessedCache;
       _processedPaths.removeAll(_processedPaths.take(toRemove));
       await _saveProcessedScreenshots();
+      logger.debug('AutoBilling', '清理已处理缓存',
+          '移除=$toRemove, 保留=${AutoBillingConfig.maxProcessedCache}');
     }
   }
 
@@ -84,17 +89,22 @@ class AutoBillingService {
   }) async {
     final totalStartTime = DateTime.now().millisecondsSinceEpoch;
     print('📸 [AutoBilling] 开始处理截图: $imagePath');
+    logger.info('AutoBilling', '开始处理截图', imagePath);
 
     // 防重复处理: 已处理过的跳过
     if (_isProcessed(imagePath)) {
       print('⚠️ [AutoBilling] 截图已处理过，跳过');
+      logger.warning('AutoBilling', '截图已处理过，跳过', imagePath);
       return null;
     }
 
-    // 防重复处理: 5秒内相同路径只处理一次
+    // 防重复处理: 配置时间窗口内相同路径只处理一次
     final now = DateTime.now().millisecondsSinceEpoch;
-    if (_lastProcessedPath == imagePath && (now - _lastProcessedTime) < 5000) {
-      print('⚠️ [AutoBilling] 重复截图，跳过处理 (${now - _lastProcessedTime}ms前已处理)');
+    if (_lastProcessedPath == imagePath &&
+        (now - _lastProcessedTime) < AutoBillingConfig.duplicateCheckWindow) {
+      final timeDiff = now - _lastProcessedTime;
+      print('⚠️ [AutoBilling] 重复截图，跳过处理 (${timeDiff}ms前已处理)');
+      logger.warning('AutoBilling', '重复截图，跳过处理', '${timeDiff}ms前已处理');
       return null;
     }
 
@@ -110,7 +120,9 @@ class AutoBillingService {
       // 如果文件不存在,可能需要短暂等待
       // (无障碍服务直接截图时文件已就绪,ContentObserver 可能需要等待)
       if (!await file.exists()) {
-        print('⏳ 文件尚未就绪,等待最多2秒...');
+        print('⏳ 文件尚未就绪,等待最多${AutoBillingConfig.fileWaitTimeout}ms...');
+        logger.info('AutoBilling', '文件尚未就绪，开始等待',
+            '路径=$imagePath, 超时=${AutoBillingConfig.fileWaitTimeout}ms');
 
         if (showNotification) {
           await _showNotification(
@@ -122,19 +134,22 @@ class AutoBillingService {
 
         final waitStartTime = DateTime.now().millisecondsSinceEpoch;
         var waitTime = 0;
-        const maxWait = 2000; // 2秒超时
+        final maxWait = AutoBillingConfig.fileWaitTimeout;
 
         while (waitTime < maxWait) {
           if (await file.exists() && await file.length() > 0) {
             print('✅ 文件已就绪，等待时间=${waitTime}ms');
+            logger.info('AutoBilling', '文件就绪', '等待时间=${waitTime}ms');
             break;
           }
-          await Future.delayed(const Duration(milliseconds: 100));
+          await Future.delayed(Duration(milliseconds: AutoBillingConfig.fileCheckInterval));
           waitTime = DateTime.now().millisecondsSinceEpoch - waitStartTime;
         }
 
         if (!await file.exists() || await file.length() == 0) {
           print('❌ 截图文件等待超时 (${waitTime}ms)');
+          logger.error('AutoBilling', '截图文件等待超时',
+              '路径=$imagePath, 等待时间=${waitTime}ms, 文件存在=${await file.exists()}');
           if (showNotification) {
             await _showNotification(
               id: notificationId,
@@ -146,6 +161,7 @@ class AutoBillingService {
         }
       } else {
         print('✅ 文件已就绪,无需等待');
+        logger.debug('AutoBilling', '文件已就绪，无需等待');
       }
 
       // 更新通知：开始识别
@@ -160,9 +176,11 @@ class AutoBillingService {
       // OCR 识别
       final ocrStartTime = DateTime.now().millisecondsSinceEpoch;
       print('⏱️ [性能] 开始OCR识别');
+      logger.info('AutoBilling', '开始OCR识别');
       final result = await _ocrService.recognizePaymentImage(file);
       final ocrElapsed = DateTime.now().millisecondsSinceEpoch - ocrStartTime;
       print('⏱️ [性能] OCR识别完成, 耗时=${ocrElapsed}ms');
+      logger.info('AutoBilling', 'OCR识别完成', '耗时=${ocrElapsed}ms');
 
       // 打印识别结果用于调试
       print('📋 OCR识别原始文本: ${result.rawText}');
@@ -170,6 +188,13 @@ class AutoBillingService {
       print('🏪 识别到的商家: ${result.merchant}');
       print('⏰ 识别到的时间: ${result.time}');
       print('🔢 所有数字: ${result.allNumbers}');
+      logger.info('AutoBilling', 'OCR识别结果', {
+        'rawText': result.rawText,
+        'amount': result.amount,
+        'merchant': result.merchant,
+        'time': result.time,
+        'allNumbers': result.allNumbers,
+      }.toString());
 
       // 标记为已处理
       await _markAsProcessed(imagePath);
@@ -198,6 +223,7 @@ class AutoBillingService {
               );
             }
             print('✅ 自动记账成功: ID=$transactionId');
+            logger.info('AutoBilling', '自动记账成功', 'ID=$transactionId, 金额=${result.amount}');
             return transactionId;
           } else {
             // 记账失败
@@ -209,10 +235,17 @@ class AutoBillingService {
               );
             }
             print('❌ 自动记账失败: 创建交易记录返回null');
+            logger.error('AutoBilling', '自动记账失败：创建交易记录返回null');
             return null;
           }
-        } catch (e) {
+        } catch (e, stackTrace) {
           print('❌ 自动记账失败: $e');
+          logger.error('AutoBilling', '自动记账失败', {
+            'path': imagePath,
+            'amount': result.amount,
+            'merchant': result.merchant,
+            'error': e.toString(),
+          }, stackTrace);
           if (showNotification) {
             await _showNotification(
               id: notificationId,
@@ -232,6 +265,7 @@ class AutoBillingService {
           );
         }
         print('⚠️ 识别到数字但未确定金额: ${result.allNumbers}');
+        logger.warning('AutoBilling', '识别到数字但未确定金额', result.allNumbers.toString());
         return null;
       } else {
         // 完全未识别到
@@ -243,10 +277,16 @@ class AutoBillingService {
           );
         }
         print('⚠️ 未识别到任何有效金额');
+        logger.warning('AutoBilling', '未识别到任何有效金额');
         return null;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('❌ 处理截图失败: $e');
+      logger.error('AutoBilling', '处理截图失败', {
+        'path': imagePath,
+        'error': e.toString(),
+        'stage': '未知阶段',
+      }, stackTrace);
       return null;
     } finally {
       final totalElapsed =
