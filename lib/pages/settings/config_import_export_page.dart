@@ -144,9 +144,9 @@ class _ConfigImportExportPageState
     setState(() => _isImporting = true);
 
     try {
+      // 使用 FileType.any 避免部分设备不支持 yaml/yml 扩展名过滤
       final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['yml', 'yaml'],
+        type: FileType.any,
       );
 
       if (result == null || result.files.isEmpty) {
@@ -160,6 +160,13 @@ class _ConfigImportExportPageState
       if (filePath == null) {
         if (!mounted) return;
         throw Exception(AppLocalizations.of(context).configImportNoFilePath);
+      }
+
+      // 手动验证文件扩展名
+      final fileName = filePath.toLowerCase();
+      if (!fileName.endsWith('.yml') && !fileName.endsWith('.yaml')) {
+        if (!mounted) return;
+        throw Exception('请选择 YAML 配置文件（.yml 或 .yaml）');
       }
 
       // 确认导入
