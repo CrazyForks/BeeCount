@@ -593,10 +593,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           continue;
         }
 
-        // 金额解析
+        // 金额解析（过滤正负号，统一使用绝对值）
         final amountClean =
-            (amountStr ?? '0').toString().replaceAll(RegExp(r'[¥$,]'), '');
-        final amount = double.parse(amountClean);
+            (amountStr ?? '0').toString().replaceAll(RegExp(r'[¥$,+-]'), '');
+        final amount = double.parse(amountClean).abs();
 
         // 日期解析 - 使用通用日期解析工具
         final date = DateParser.parse(dateStr);
