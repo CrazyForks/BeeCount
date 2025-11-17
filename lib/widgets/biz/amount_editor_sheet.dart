@@ -408,50 +408,56 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                       ),
                     ),
                   );
-              Widget doneKey() => Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Material(
-                      color: primary,
-                      borderRadius: BorderRadius.circular(12),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () async {
-                          // 计算总额（包含最后一段）
-                          final cur = parsed();
-                          double total = _acc;
-                          if (_op == '+') {
-                            total += cur;
-                          } else if (_op == '-') {
-                            total -= cur;
-                          } else {
-                            total = cur;
-                          }
+              Widget doneKey() {
+                // 计算当前总额以判断是否启用完成按钮
+                final cur = parsed();
+                double total = _acc;
+                if (_op == '+') {
+                  total += cur;
+                } else if (_op == '-') {
+                  total -= cur;
+                } else {
+                  total = cur;
+                }
+                final isEnabled = total.abs() > 0;
 
-                          HapticFeedback.lightImpact();
-                          SystemSound.play(SystemSoundType.click);
-                          widget.onSubmit((
-                            amount: total.abs(), // 始终正数
-                            note:
-                                _noteCtrl.text.isEmpty ? null : _noteCtrl.text,
-                            date: _date,
-                            accountId: _selectedAccountId,
-                          ));
-                        },
-                        child: SizedBox(
-                          height: 60,
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.of(context).commonFinish,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            ),
+                return Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Material(
+                    color: isEnabled ? primary : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(12),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: isEnabled
+                          ? () async {
+                              HapticFeedback.lightImpact();
+                              SystemSound.play(SystemSoundType.click);
+                              widget.onSubmit((
+                                amount: total.abs(), // 始终正数
+                                note: _noteCtrl.text.isEmpty
+                                    ? null
+                                    : _noteCtrl.text,
+                                date: _date,
+                                accountId: _selectedAccountId,
+                              ));
+                            }
+                          : null,
+                      child: SizedBox(
+                        height: 60,
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of(context).commonFinish,
+                            style: TextStyle(
+                                color: isEnabled ? Colors.white : Colors.grey[500],
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700),
                           ),
                         ),
                       ),
                     ),
-                  );
+                  ),
+                );
+              }
 
               return Column(
                 children: [
