@@ -98,7 +98,7 @@ final accountFeatureEnabledProvider =
   final prefs = await SharedPreferences.getInstance();
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  return prefs.getBool('account_feature_enabled') ?? false;
+  return prefs.getBool('account_feature_enabled') ?? true;
 });
 
 class AccountFeatureSetter {

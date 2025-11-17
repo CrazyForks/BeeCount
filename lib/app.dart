@@ -7,7 +7,7 @@ import 'pages/main/home_page.dart';
 import 'pages/main/analytics_page.dart';
 import 'pages/main/ledgers_page_new.dart';
 import 'pages/main/mine_page.dart';
-import 'pages/category/category_picker.dart';
+import 'pages/transaction/transaction_editor_page.dart';
 import 'pages/settings/personalize_page.dart' show headerStyleProvider;
 import 'providers.dart';
 import 'utils/ui_scale_extensions.dart';
@@ -306,7 +306,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                   // 拍照优先模式：长按打开手动记账
                   await Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const CategoryPickerPage(
+                      builder: (_) => const TransactionEditorPage(
                         initialKind: 'expense',
                         quickAdd: true,
                       ),
@@ -331,7 +331,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                     // 手动优先模式：短按打开手动记账
                     await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const CategoryPickerPage(
+                        builder: (_) => const TransactionEditorPage(
                           initialKind: 'expense',
                           quickAdd: true,
                         ),

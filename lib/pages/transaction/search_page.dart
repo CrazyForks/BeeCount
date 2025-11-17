@@ -183,6 +183,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     });
   }
 
+  /// 检查选中的交易中是否包含转账类型
+  bool _hasTransferInSelection() {
+    return _searchResults
+        .where((item) => _selectedIds.contains(item.t.id))
+        .any((item) => item.t.type == 'transfer');
+  }
+
   /// 批量操作完成后刷新
   Future<void> _refreshAfterBatchOperation(int count, String operation) async {
     if (mounted) {
@@ -770,7 +777,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: OutlinedButton.icon(
-                                    onPressed: _selectedIds.isEmpty
+                                    onPressed: _selectedIds.isEmpty || _hasTransferInSelection()
                                         ? null
                                         : _showBatchChangeCategoryDialog,
                                     icon: const Icon(Icons.category, size: 16),
@@ -815,6 +822,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                         itemCount: _searchResults.length,
                         itemBuilder: (context, index) {
                           final item = _searchResults[index];
+                          final isTransfer = item.t.type == 'transfer';
                           final isExpense = item.t.type == 'expense';
                           final categoryName = CategoryUtils.getDisplayName(
                               item.category?.name, context);
@@ -853,6 +861,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                         );
                                       },
                                 onCategoryTap: _isBatchMode ||
+                                        isTransfer ||
                                         item.category?.id == null
                                     ? null
                                     : () {

@@ -614,10 +614,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryNew => 'New Category';
 
   @override
-  String get categoryExpense => 'Expense Categories';
+  String get categoryExpense => 'Expense';
 
   @override
-  String get categoryIncome => 'Income Categories';
+  String get categoryIncome => 'Income';
 
   @override
   String get categoryEmpty => 'No categories';
@@ -2335,6 +2335,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportCsvHeaderAccount => 'Account';
 
   @override
+  String get exportCsvHeaderFromAccount => 'From Account';
+
+  @override
+  String get exportCsvHeaderToAccount => 'To Account';
+
+  @override
   String get exportCsvHeaderNote => 'Note';
 
   @override
@@ -4046,4 +4052,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonUncategorized => 'Uncategorized';
+
+  @override
+  String get transferTitle => 'Transfer';
+
+  @override
+  String get transferOut => 'Transfer Out';
+
+  @override
+  String get transferIn => 'Transfer In';
+
+  @override
+  String get transferFromAccount => 'From Account';
+
+  @override
+  String get transferToAccount => 'To Account';
+
+  @override
+  String get transferAmount => 'Amount';
+
+  @override
+  String get transferTime => 'Time';
+
+  @override
+  String get transferSelectAccount => 'Select Account';
+
+  @override
+  String get transferEnterAmount => 'Enter Amount';
+
+  @override
+  String get transferEnterNote => 'Add Note';
+
+  @override
+  String get transferCreateNew => 'Create Transfer';
+
+  @override
+  String get transferCreateSuccess => 'Transfer created successfully';
+
+  @override
+  String get transferUpdateSuccess => 'Transfer updated successfully';
+
+  @override
+  String get transferDeleteConfirm => 'Are you sure to delete this transfer?';
+
+  @override
+  String get transferDeleteSuccess => 'Transfer deleted successfully';
+
+  @override
+  String get transferSameAccountError => 'From and to accounts must be different';
+
+  @override
+  String get transferDifferentCurrencyError => 'Transfer only supports accounts with the same currency';
+
+  @override
+  String get transferToPrefix => 'To';
+
+  @override
+  String get transferFromPrefix => 'From';
 }

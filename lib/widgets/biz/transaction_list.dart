@@ -158,6 +158,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
             final list = item.$3 as List<({Transaction t, Category? category})>;
             double dayIncome = 0, dayExpense = 0;
             for (final it in list) {
+              // 转账不计入收支统计
               if (it.t.type == 'income') {
                 dayIncome += it.t.amount;
               }
@@ -196,6 +197,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
             // 渲染交易项
             final it = item.$2 as ({Transaction t, Category? category});
             final allItemsInDay = item.$3 as List<({Transaction t, Category? category})>;
+            final isTransfer = it.t.type == 'transfer';
             final isExpense = it.t.type == 'expense';
             final categoryName = CategoryUtils.getDisplayName(it.category?.name, context);
             final subtitle = it.t.note ?? '';
@@ -206,10 +208,18 @@ class TransactionListState extends ConsumerState<TransactionList> {
             // 获取账户名称（仅在账户功能启用且有账户ID时）
             final accountFeatureEnabled = ref.watch(accountFeatureEnabledProvider).value ?? false;
             String? accountName;
+            String? toAccountName; // 转账目标账户名称
+
             if (accountFeatureEnabled && it.t.accountId != null) {
               // 通过 ref.watch 获取账户名称
               final accountAsync = ref.watch(accountByIdProvider(it.t.accountId!));
               accountName = accountAsync.value?.name;
+
+              // 如果是转账，获取目标账户名称
+              if (isTransfer && it.t.toAccountId != null) {
+                final toAccountAsync = ref.watch(accountByIdProvider(it.t.toAccountId!));
+                toAccountName = toAccountAsync.value?.name;
+              }
             }
 
             return Dismissible(
@@ -248,13 +258,25 @@ class TransactionListState extends ConsumerState<TransactionList> {
               child: Column(
                 children: [
                   TransactionListItem(
-                    icon: getCategoryIconData(category: it.category, categoryName: categoryName),
-                    title: subtitle.isNotEmpty ? subtitle : categoryName,
-                    categoryName: subtitle.isNotEmpty ? null : categoryName,
+                    icon: isTransfer
+                      ? Icons.swap_horiz
+                      : getCategoryIconData(category: it.category, categoryName: categoryName),
+                    title: isTransfer
+                      ? (subtitle.isNotEmpty ? subtitle : AppLocalizations.of(context).transferTitle)
+                      : (subtitle.isNotEmpty ? subtitle : categoryName),
+                    categoryName: isTransfer
+                      ? (subtitle.isNotEmpty && accountName != null && toAccountName != null
+                          ? '$accountName → $toAccountName'
+                          : null)
+                      : (subtitle.isNotEmpty ? null : categoryName),
                     amount: it.t.amount,
                     isExpense: isExpense,
                     hide: widget.hideAmounts,
-                    accountName: accountName,
+                    accountName: isTransfer
+                      ? (subtitle.isEmpty && accountName != null && toAccountName != null
+                          ? '$accountName → $toAccountName'
+                          : null)
+                      : accountName,
                     onTap: () async {
                       await TransactionEditUtils.editTransaction(
                         context,
@@ -263,7 +285,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                         it.category,
                       );
                     },
-                    onCategoryTap: it.category?.id != null
+                    onCategoryTap: !isTransfer && it.category?.id != null
                         ? () async {
                             await Navigator.of(context).push(
                               MaterialPageRoute(

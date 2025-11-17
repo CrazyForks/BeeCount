@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
+import '../ui/ui.dart';
 
 /// 账户选择器数据模型
 class AccountOption {

@@ -614,10 +614,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryNew => '新建分类';
 
   @override
-  String get categoryExpense => '支出分类';
+  String get categoryExpense => '支出';
 
   @override
-  String get categoryIncome => '收入分类';
+  String get categoryIncome => '收入';
 
   @override
   String get categoryEmpty => '暂无分类';
@@ -2335,6 +2335,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportCsvHeaderAccount => '账户';
 
   @override
+  String get exportCsvHeaderFromAccount => '转出账户';
+
+  @override
+  String get exportCsvHeaderToAccount => '转入账户';
+
+  @override
   String get exportCsvHeaderNote => '备注';
 
   @override
@@ -4046,6 +4052,63 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get commonUncategorized => '未分类';
+
+  @override
+  String get transferTitle => '转账';
+
+  @override
+  String get transferOut => '转出';
+
+  @override
+  String get transferIn => '转入';
+
+  @override
+  String get transferFromAccount => '转出账户';
+
+  @override
+  String get transferToAccount => '转入账户';
+
+  @override
+  String get transferAmount => '转账金额';
+
+  @override
+  String get transferTime => '转账时间';
+
+  @override
+  String get transferSelectAccount => '选择账户';
+
+  @override
+  String get transferEnterAmount => '输入金额';
+
+  @override
+  String get transferEnterNote => '添加备注';
+
+  @override
+  String get transferCreateNew => '创建转账';
+
+  @override
+  String get transferCreateSuccess => '转账创建成功';
+
+  @override
+  String get transferUpdateSuccess => '转账更新成功';
+
+  @override
+  String get transferDeleteConfirm => '确定删除这笔转账吗？';
+
+  @override
+  String get transferDeleteSuccess => '转账删除成功';
+
+  @override
+  String get transferSameAccountError => '转出和转入账户不能相同';
+
+  @override
+  String get transferDifferentCurrencyError => '转账仅支持相同币种的账户';
+
+  @override
+  String get transferToPrefix => '转账至';
+
+  @override
+  String get transferFromPrefix => '来自';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
