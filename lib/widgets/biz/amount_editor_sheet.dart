@@ -7,8 +7,8 @@ import '../../l10n/app_localizations.dart';
 import '../../services/note_history_service.dart';
 import '../../data/db.dart';
 import '../../providers.dart';
-import 'account_picker.dart';
 import 'note_picker_dialog.dart';
+import 'account_selector.dart';
 
 typedef AmountEditorResult = ({
   double amount,
@@ -332,24 +332,17 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                     data: (enabled) {
                       if (!enabled) return const SizedBox.shrink();
 
-                      // 获取选中的账户信息
-                      String accountLabel =
-                          AppLocalizations.of(context).accountNone;
-                      if (_selectedAccountId != null) {
-                        // 使用FutureBuilder获取账户名称
-                        return FutureBuilder<Account?>(
-                          future: ref
-                              .read(repositoryProvider)
-                              .getAccount(_selectedAccountId!),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData && snapshot.data != null) {
-                              accountLabel = snapshot.data!.name;
-                            }
-                            return _buildAccountButton(context, accountLabel);
-                          },
-                        );
-                      }
-                      return _buildAccountButton(context, accountLabel);
+                      // 使用新的横滑账户选择器
+                      return AccountSelector(
+                        db: widget.db,
+                        selectedAccountId: _selectedAccountId,
+                        ledgerId: widget.ledgerId,
+                        onAccountSelected: (accountId) {
+                          setState(() {
+                            _selectedAccountId = accountId;
+                          });
+                        },
+                      );
                     },
                     loading: () => const SizedBox.shrink(),
                     error: (_, __) => const SizedBox.shrink(),
@@ -525,52 +518,4 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
     );
   }
 
-  Widget _buildAccountButton(BuildContext context, String accountLabel) {
-    final text = Theme.of(context).textTheme;
-    return InkWell(
-      onTap: () async {
-        final result = await AccountPicker.show(
-          context,
-          selectedAccountId: _selectedAccountId,
-          allowNull: true,
-        );
-        if (result != null || result != _selectedAccountId) {
-          setState(() {
-            _selectedAccountId = result;
-          });
-        }
-      },
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF3F4F6),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.account_balance_wallet_outlined,
-              size: 18,
-              color: BeeColors.primaryText,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                accountLabel,
-                style: text.bodyMedium?.copyWith(
-                  color: BeeColors.primaryText,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 14,
-              color: Colors.grey[400],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
