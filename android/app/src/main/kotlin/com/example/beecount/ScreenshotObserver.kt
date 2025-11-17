@@ -1,6 +1,7 @@
 package com.example.beecount
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
@@ -30,16 +31,44 @@ class ScreenshotObserver(
             "screen_shot",
             "screen shot"
         )
+
+        // 只处理最近30秒内的截图（防止处理历史图片）
+        private const val MAX_SCREENSHOT_AGE_SECONDS = 30L
+
+        // SharedPreferences相关
+        private const val PREFS_NAME = "screenshot_monitor_prefs"
+        private const val KEY_PROCESSED_PATHS = "processed_paths"
+        private const val MAX_STORED_PATHS = 200 // 最多存储200条记录
     }
 
+    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     private var lastCheckTime = System.currentTimeMillis()
     private val processedPaths = mutableSetOf<String>()
+
+    // 防抖：记录最近处理的时间
+    private var lastProcessTime = 0L
+    private val minProcessInterval = 500L // 最小处理间隔500ms
+
+    init {
+        // 从SharedPreferences加载已处理的路径
+        loadProcessedPaths()
+        LoggerPlugin.info(TAG, "ScreenshotObserver初始化完成，已加载${processedPaths.size}条历史记录")
+    }
 
     override fun onChange(selfChange: Boolean, uri: Uri?) {
         super.onChange(selfChange, uri)
 
         val startTime = System.currentTimeMillis()
         try {
+            // 防抖：避免短时间内重复触发
+            if (startTime - lastProcessTime < minProcessInterval) {
+                val interval = startTime - lastProcessTime
+                Log.d(TAG, "⏭️ 防抖跳过：距离上次处理仅 ${interval}ms")
+                LoggerPlugin.debug(TAG, "防抖跳过：距离上次处理仅 ${interval}ms")
+                return
+            }
+            lastProcessTime = startTime
+
             Log.d(TAG, "⏱️ [性能] onChange触发: uri=$uri, 时间=${startTime}")
             LoggerPlugin.info(TAG, "ContentObserver检测到媒体库变化: uri=$uri")
 
@@ -89,18 +118,30 @@ class ScreenshotObserver(
                 if (it.moveToFirst()) {
                     val dataIndex = it.getColumnIndex(MediaStore.Images.Media.DATA)
                     val nameIndex = it.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
+                    val dateIndex = it.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)
 
-                    if (dataIndex >= 0 && nameIndex >= 0) {
+                    if (dataIndex >= 0 && nameIndex >= 0 && dateIndex >= 0) {
                         val imagePath = it.getString(dataIndex) ?: return
                         val imageName = it.getString(nameIndex) ?: ""
+                        val dateAdded = it.getLong(dateIndex)
+
+                        // 检查图片年龄（防止处理历史图片）
+                        val currentTimeSeconds = System.currentTimeMillis() / 1000
+                        val imageAge = currentTimeSeconds - dateAdded
+                        if (imageAge > MAX_SCREENSHOT_AGE_SECONDS) {
+                            Log.d(TAG, "⏭️ 跳过旧图片: $imageName (年龄=${imageAge}秒)")
+                            LoggerPlugin.debug(TAG, "跳过旧图片: $imageName (年龄=${imageAge}秒，超过${MAX_SCREENSHOT_AGE_SECONDS}秒阈值)")
+                            return
+                        }
 
                         // 检查是否是截图
                         if (isScreenshot(imagePath, imageName) && !processedPaths.contains(imagePath)) {
                             Log.d(TAG, "✅ 检测到新截图: $imagePath")
-                            Log.d(TAG, "文件名: $imageName")
+                            Log.d(TAG, "文件名: $imageName, 年龄=${imageAge}秒")
                             LoggerPlugin.info(TAG, "检测到新截图: $imageName")
 
                             processedPaths.add(imagePath)
+                            saveProcessedPaths() // 持久化保存
 
                             val callbackStartTime = System.currentTimeMillis()
                             onScreenshotDetected(imagePath)
@@ -109,9 +150,11 @@ class ScreenshotObserver(
                             LoggerPlugin.debug(TAG, "截图回调执行完成, 耗时=${callbackElapsed}ms")
 
                             // 限制缓存大小
-                            if (processedPaths.size > 100) {
+                            if (processedPaths.size > MAX_STORED_PATHS) {
                                 val toRemove = processedPaths.take(50)
                                 processedPaths.removeAll(toRemove.toSet())
+                                saveProcessedPaths() // 保存修剪后的列表
+                                LoggerPlugin.info(TAG, "已处理路径缓存已修剪，当前数量: ${processedPaths.size}")
                             }
                         }
                     }
@@ -145,9 +188,10 @@ class ScreenshotObserver(
                 MediaStore.Images.Media.DISPLAY_NAME
             )
 
-            // 查询最近 3 秒内添加的图片（缩短时间窗口）
+            // 查询最近添加的图片，但会通过时间检查过滤掉旧图片
+            val currentTimeSeconds = System.currentTimeMillis() / 1000
             val selection = "${MediaStore.Images.Media.DATE_ADDED} > ?"
-            val selectionArgs = arrayOf(((lastCheckTime / 1000) - 3).toString())
+            val selectionArgs = arrayOf((currentTimeSeconds - MAX_SCREENSHOT_AGE_SECONDS).toString())
             val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
             Log.d(TAG, "⏱️ [性能] 开始查询MediaStore（兜底）")
@@ -175,13 +219,22 @@ class ScreenshotObserver(
                         val imageName = it.getString(nameIndex) ?: ""
                         val dateAdded = it.getLong(dateIndex)
 
+                        // 检查图片年龄（防止处理历史图片）
+                        val imageAge = currentTimeSeconds - dateAdded
+                        if (imageAge > MAX_SCREENSHOT_AGE_SECONDS) {
+                            Log.d(TAG, "⏭️ 跳过旧图片(兜底): $imageName (年龄=${imageAge}秒)")
+                            LoggerPlugin.debug(TAG, "跳过旧图片(兜底): $imageName (年龄=${imageAge}秒，超过${MAX_SCREENSHOT_AGE_SECONDS}秒阈值)")
+                            continue
+                        }
+
                         // 检查是否是截图
                         if (isScreenshot(imagePath, imageName) && !processedPaths.contains(imagePath)) {
                             Log.d(TAG, "✅ 检测到新截图: $imagePath")
-                            Log.d(TAG, "文件名: $imageName, 添加时间: $dateAdded")
+                            Log.d(TAG, "文件名: $imageName, 年龄=${imageAge}秒")
                             LoggerPlugin.info(TAG, "检测到新截图(兜底): $imageName")
 
                             processedPaths.add(imagePath)
+                            saveProcessedPaths() // 持久化保存
 
                             val callbackStartTime = System.currentTimeMillis()
                             onScreenshotDetected(imagePath)
@@ -190,9 +243,11 @@ class ScreenshotObserver(
                             LoggerPlugin.debug(TAG, "截图回调执行完成(兜底), 耗时=${callbackElapsed}ms")
 
                             // 限制缓存大小
-                            if (processedPaths.size > 100) {
+                            if (processedPaths.size > MAX_STORED_PATHS) {
                                 val toRemove = processedPaths.take(50)
                                 processedPaths.removeAll(toRemove.toSet())
+                                saveProcessedPaths() // 保存修剪后的列表
+                                LoggerPlugin.info(TAG, "已处理路径缓存已修剪(兜底)，当前数量: ${processedPaths.size}")
                             }
                         }
                     }
@@ -217,6 +272,7 @@ class ScreenshotObserver(
         // 过滤掉临时文件 (.pending- 前缀是小米系统写入中的临时文件)
         if (lowerName.startsWith(".pending-") || lowerPath.contains("/.pending-")) {
             Log.d(TAG, "⏭️ 跳过临时文件: $name")
+            LoggerPlugin.debug(TAG, "跳过临时文件: $name")
             return false
         }
 
@@ -226,9 +282,50 @@ class ScreenshotObserver(
     }
 
     /**
+     * 从SharedPreferences加载已处理的路径
+     */
+    private fun loadProcessedPaths() {
+        try {
+            val pathsString = prefs.getString(KEY_PROCESSED_PATHS, null)
+            if (pathsString != null) {
+                val paths = pathsString.split("|").filter { it.isNotEmpty() }
+                processedPaths.addAll(paths)
+                LoggerPlugin.info(TAG, "从SharedPreferences加载了 ${paths.size} 条已处理路径")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "加载已处理路径失败", e)
+            LoggerPlugin.error(TAG, "加载已处理路径失败: ${e.message}")
+        }
+    }
+
+    /**
+     * 保存已处理的路径到SharedPreferences
+     */
+    private fun saveProcessedPaths() {
+        try {
+            // 只保存最近的 MAX_STORED_PATHS 条记录
+            val pathsList = processedPaths.toList()
+            val pathsToSave = if (pathsList.size > MAX_STORED_PATHS) {
+                pathsList.takeLast(MAX_STORED_PATHS)
+            } else {
+                pathsList
+            }
+
+            val pathsString = pathsToSave.joinToString("|")
+            prefs.edit().putString(KEY_PROCESSED_PATHS, pathsString).apply()
+            LoggerPlugin.debug(TAG, "已保存 ${pathsToSave.size} 条已处理路径到SharedPreferences")
+        } catch (e: Exception) {
+            Log.e(TAG, "保存已处理路径失败", e)
+            LoggerPlugin.error(TAG, "保存已处理路径失败: ${e.message}")
+        }
+    }
+
+    /**
      * 清理已处理的路径缓存
      */
     fun clear() {
         processedPaths.clear()
+        prefs.edit().remove(KEY_PROCESSED_PATHS).apply()
+        LoggerPlugin.info(TAG, "已清空所有已处理路径缓存")
     }
 }
