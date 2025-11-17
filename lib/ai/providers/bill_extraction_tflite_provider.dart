@@ -80,6 +80,7 @@ class BillExtractionTFLiteProvider extends TFLiteProvider<String, BillInfo> {
       merchant: null,
       category: null,
       type: null,
+      account: null,
       confidence: 0.0,
     );
   }
@@ -142,6 +143,9 @@ enum EntityType {
   /// 类型（收入/支出）
   type,
 
+  /// 账户
+  account,
+
   /// 其他
   other,
 }
@@ -156,6 +160,8 @@ class NERTag {
   static const insideMerchant = 'I-MERCHANT';
   static const beginType = 'B-TYPE';
   static const insideType = 'I-TYPE';
+  static const beginAccount = 'B-ACCOUNT';
+  static const insideAccount = 'I-ACCOUNT';
   static const outside = 'O';
 
   static const all = [
@@ -163,6 +169,7 @@ class NERTag {
     beginTime, insideTime,
     beginMerchant, insideMerchant,
     beginType, insideType,
+    beginAccount, insideAccount,
     outside,
   ];
 }

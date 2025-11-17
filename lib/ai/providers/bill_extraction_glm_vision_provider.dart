@@ -1,27 +1,40 @@
+import 'dart:io';
+import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
+import '../tasks/bill_extraction_task.dart';
 import 'bill_extraction_glm_base_provider.dart';
 
-/// 账单提取专用GLM Provider（文本模型）
+/// 账单提取GLM Vision Provider（视觉模型）
 ///
-/// 使用GLM-4.6文本模型进行账单信息提取
-class BillExtractionGLMProvider extends BillExtractionGLMBaseProvider {
-  BillExtractionGLMProvider(
+/// 使用GLM-4V-Flash视觉模型，支持图片识别
+class BillExtractionGLMVisionProvider extends BillExtractionGLMBaseProvider {
+  final File? imageFile;
+
+  BillExtractionGLMVisionProvider(
     String apiKey, {
     super.expenseCategories,
     super.incomeCategories,
     super.accounts,
+    this.imageFile,
   }) : super(
           baseProvider: ZhipuGLMProvider(
             apiKey: apiKey,
-            model: 'glm-4.6', // 使用GLM-4.6模型
+            model: 'glm-4v-flash', // 使用免费的视觉模型
+            imageFile: imageFile,
           ),
         );
 
   @override
-  String get id => 'bill_extraction_glm';
+  String get id => 'bill_extraction_glm_vision';
 
   @override
-  String get name => '智谱GLM-账单提取';
+  String get name => '智谱GLM-4V-账单提取';
+
+  @override
+  Future<double> estimateCost(AITask<String, BillInfo> task) async {
+    // GLM-4V-Flash 完全免费
+    return 0.0;
+  }
 
   @override
   String buildPrompt(String ocrText) {
@@ -29,12 +42,9 @@ class BillExtractionGLMProvider extends BillExtractionGLMBaseProvider {
     final accountHint = buildAccountHint();
 
     return '''
-从以下支付账单文本中提取信息，返回JSON格式。
+请分析这张支付账单截图，提取关键信息并返回JSON格式。
 
-账单文本：
-$ocrText
-
-用户的分类列表：
+${ocrText.isNotEmpty ? '参考OCR文本：\n$ocrText\n\n' : ''}用户的分类列表：
 $categoryHint$accountHint
 
 要求：
@@ -74,6 +84,7 @@ $categoryHint$accountHint
 - 支出金额为负数，收入金额为正数
 - 优先使用准确的字段名称（如"收款方全称"），而不是模糊的描述
 - account字段提取支付账户名称，如"支付宝"、"微信支付"、"招商银行卡"等
+- 利用图片中的视觉信息（如logo、颜色、布局）来辅助判断
 ''';
   }
 }

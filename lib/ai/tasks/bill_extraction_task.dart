@@ -36,6 +36,9 @@ class BillInfo {
   /// 类型（收入/支出）
   final BillType? type;
 
+  /// 账户名称
+  final String? account;
+
   /// 置信度 (0.0 - 1.0)
   final double confidence;
 
@@ -45,6 +48,7 @@ class BillInfo {
     this.merchant,
     this.category,
     this.type,
+    this.account,
     this.confidence = 0.0,
   });
 
@@ -59,6 +63,7 @@ class BillInfo {
       merchant: json['merchant'],
       category: json['category'],
       type: json['type'] != null ? _parseBillType(json['type']) : null,
+      account: json['account'],
       confidence: json['confidence']?.toDouble() ?? 0.8,
     );
   }
@@ -70,6 +75,7 @@ class BillInfo {
         'merchant': merchant,
         'category': category,
         'type': type?.toString().split('.').last,
+        'account': account,
         'confidence': confidence,
       };
 
@@ -83,7 +89,7 @@ class BillInfo {
 
   @override
   String toString() {
-    return 'BillInfo(amount: $amount, time: $time, merchant: $merchant, category: $category, type: $type)';
+    return 'BillInfo(amount: $amount, time: $time, merchant: $merchant, category: $category, type: $type, account: $account)';
   }
 }
 

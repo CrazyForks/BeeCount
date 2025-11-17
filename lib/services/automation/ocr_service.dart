@@ -4,6 +4,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ai_bill_service.dart';
 import '../category_service.dart';
+import '../../data/db.dart';
+import '../../data/repository.dart';
 
 /// OCR识别结果
 class OcrResult {
@@ -15,6 +17,7 @@ class OcrResult {
   final int? suggestedCategoryId; // 推荐的分类ID
   final String? aiCategoryName; // AI识别的分类名称
   final String? aiType; // AI识别的类型 (income/expense)
+  final String? aiAccountName; // AI识别的账户名称
   final String? aiProvider; // AI提供商（用于日志）
   final bool aiEnhanced; // 是否经过AI增强
 
@@ -27,6 +30,7 @@ class OcrResult {
     this.suggestedCategoryId,
     this.aiCategoryName,
     this.aiType,
+    this.aiAccountName,
     this.aiProvider,
     this.aiEnhanced = false,
   });
@@ -39,6 +43,7 @@ class OcrResult {
     int? suggestedCategoryId,
     String? aiCategoryName,
     String? aiType,
+    String? aiAccountName,
     String? aiProvider,
   }) {
     return OcrResult(
@@ -50,6 +55,7 @@ class OcrResult {
       suggestedCategoryId: suggestedCategoryId ?? this.suggestedCategoryId,
       aiCategoryName: aiCategoryName ?? this.aiCategoryName,
       aiType: aiType ?? this.aiType,
+      aiAccountName: aiAccountName ?? this.aiAccountName,
       aiProvider: aiProvider,
       aiEnhanced: true,
     );
@@ -66,7 +72,13 @@ class OcrService {
   );
 
   /// 识别图片中的文本并提取支付信息
-  Future<OcrResult> recognizePaymentImage(File imageFile) async {
+  ///
+  /// [imageFile] 图片文件
+  /// [db] 数据库实例（可选，用于获取账户列表）
+  Future<OcrResult> recognizePaymentImage(
+    File imageFile, {
+    BeeDatabase? db,
+  }) async {
     final startTime = DateTime.now();
     print('\n🔍 ========== OCR识别开始 ==========');
 
@@ -136,7 +148,11 @@ class OcrService {
       );
 
       // 3. AI增强（如果启用）
-      final enhancedResult = await _enhanceWithAI(baseResult);
+      final enhancedResult = await _enhanceWithAI(
+        baseResult,
+        db: db,
+        imageFile: imageFile,
+      );
 
       final totalDuration = DateTime.now().difference(startTime);
       print('🏁 [总计] 识别完成，总耗时: ${totalDuration.inMilliseconds}ms');
@@ -150,7 +166,15 @@ class OcrService {
   }
 
   /// AI增强识别结果
-  Future<OcrResult> _enhanceWithAI(OcrResult baseResult) async {
+  ///
+  /// [baseResult] 基础OCR识别结果
+  /// [db] 数据库实例（可选，用于获取账户列表）
+  /// [imageFile] 图片文件（用于Vision模型）
+  Future<OcrResult> _enhanceWithAI(
+    OcrResult baseResult, {
+    BeeDatabase? db,
+    File? imageFile,
+  }) async {
     try {
       // 检查是否启用AI
       final prefs = await SharedPreferences.getInstance();
@@ -167,17 +191,36 @@ class OcrService {
       final expenseCategories = CategoryService.defaultExpenseCategories;
       final incomeCategories = CategoryService.defaultIncomeCategories;
 
+      // 获取用户账户列表（如果账户功能已启用且提供了数据库实例）
+      List<String>? accounts;
+      final accountFeatureEnabled = prefs.getBool('account_feature_enabled') ?? true; // 默认启用
+      if (accountFeatureEnabled && db != null) {
+        try {
+          final repository = BeeRepository(db);
+          final allAccounts = await repository.getAllAccounts();
+          accounts = allAccounts.map((a) => a.name).toList();
+          print('📋 [账户列表] 获取到${accounts.length}个账户: ${accounts.join('、')}');
+        } catch (e) {
+          print('⚠️ [账户列表] 获取失败: $e');
+          accounts = null;
+        }
+      }
+
       // 初始化AI服务
       final aiService = AIBillService();
       await aiService.initialize(
         expenseCategories: expenseCategories,
         incomeCategories: incomeCategories,
+        accounts: accounts,
+        imageFile: imageFile,
       );
 
       final billInfo = await aiService.extractBillInfo(
         baseResult.rawText,
         expenseCategories: expenseCategories,
         incomeCategories: incomeCategories,
+        accounts: accounts,
+        imageFile: imageFile,
       );
       final aiDuration = DateTime.now().difference(aiStartTime);
 
@@ -186,10 +229,11 @@ class OcrService {
         final mergedAmount = billInfo.amount ?? baseResult.amount;
         final mergedMerchant = billInfo.merchant ?? baseResult.merchant;
         final mergedTime = billInfo.time ?? baseResult.time;
+        final mergedAccount = billInfo.account;
 
         final typeText = billInfo.type?.toString().split('.').last ?? '未知';
         final typeEmoji = typeText == 'expense' ? '💸' : (typeText == 'income' ? '💰' : '❓');
-        print('✅ [AI增强] 成功 ${aiDuration.inMilliseconds}ms | $typeEmoji$typeText 金额:$mergedAmount 商家:$mergedMerchant 分类:${billInfo.category}');
+        print('✅ [AI增强] 成功 ${aiDuration.inMilliseconds}ms | $typeEmoji$typeText 金额:$mergedAmount 商家:$mergedMerchant 分类:${billInfo.category} 账户:${mergedAccount ?? "未识别"}');
 
         return baseResult.copyWithAI(
           amount: mergedAmount,
@@ -197,6 +241,7 @@ class OcrService {
           time: mergedTime,
           aiCategoryName: billInfo.category,
           aiType: typeText,
+          aiAccountName: mergedAccount,
           aiProvider: 'AI',
         );
       } else {
