@@ -6,8 +6,9 @@ import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/note_history_service.dart';
 import '../../data/db.dart';
-import 'account_picker.dart';
 import '../../providers.dart';
+import 'account_picker.dart';
+import 'note_picker_dialog.dart';
 
 typedef AmountEditorResult = ({
   double amount,
@@ -268,7 +269,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
               ],
             ),
             const SizedBox(height: 10),
-            // 备注单独一行
+            // 备注输入区域 - 带历史备注图标前缀
             TextField(
               focusNode: _noteFocusNode,
               controller: _noteCtrl,
@@ -283,75 +284,42 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                 fillColor: const Color(0xFFF3F4F6),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                // 历史备注图标作为前缀
+                prefixIcon: _frequentNotes.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () async {
+                          await showDialog(
+                            context: context,
+                            builder: (context) => NotePickerDialog(
+                              db: widget.db,
+                              ledgerId: widget.ledgerId,
+                              categoryId: null,
+                              onNotePicked: (note) {
+                                setState(() {
+                                  _noteCtrl.text = note;
+                                  _noteCtrl.selection = TextSelection.fromPosition(
+                                    TextPosition(offset: note.length),
+                                  );
+                                });
+                              },
+                            ),
+                          );
+                        },
+                        child: const Icon(
+                          Icons.history,
+                          color: Colors.black87,
+                          size: 20,
+                        ),
+                      )
+                    : null,
+                prefixIconConstraints: _frequentNotes.isNotEmpty
+                    ? const BoxConstraints(
+                        minWidth: 40,
+                        minHeight: 20,
+                      )
+                    : null,
               ),
             ),
-            // 高频备注推荐
-            if (_frequentNotes.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              SizedBox(
-                height: 32,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _frequentNotes.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 8),
-                  itemBuilder: (context, index) {
-                    final item = _frequentNotes[index];
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          _noteCtrl.text = item.note;
-                          _noteCtrl.selection = TextSelection.fromPosition(
-                            TextPosition(offset: item.note.length),
-                          );
-                        });
-                      },
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              item.note,
-                              style: text.labelSmall?.copyWith(
-                                color: BeeColors.primaryText,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 5,
-                                vertical: 1,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                '${item.count}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
             // 账户选择（仅在启用时显示）
             if (widget.showAccountPicker) ...[
               const SizedBox(height: 8),

@@ -244,6 +244,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                 }
                 return Expanded(
                   child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       final now = DateTime.now();
                       // 检测双击：同一个标签在300ms内连续点击两次
@@ -265,12 +266,16 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                         ref.read(bottomTabIndexProvider.notifier).state = pageIndex;
                       }
                     },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 8.0.scaled(context, ref)),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0.scaled(context, ref),
+                        horizontal: 4.0.scaled(context, ref),
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(icon, color: color),
+                          Icon(icon, color: color, size: 24),
                           SizedBox(height: 4.0.scaled(context, ref)),
                           Text(label,
                               style: TextStyle(
