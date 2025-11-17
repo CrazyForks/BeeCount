@@ -334,6 +334,12 @@ abstract class AppLocalizations {
   /// **'Configure'**
   String get commonConfigure;
 
+  /// No description provided for @commonPressAgainToExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Press again to exit'**
+  String get commonPressAgainToExit;
+
   /// No description provided for @commonWeekdayMonday.
   ///
   /// In en, this message translates to:

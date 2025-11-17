@@ -121,6 +121,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonConfigure => '配置';
 
   @override
+  String get commonPressAgainToExit => '再按一次退出应用';
+
+  @override
   String get commonWeekdayMonday => '星期一';
 
   @override

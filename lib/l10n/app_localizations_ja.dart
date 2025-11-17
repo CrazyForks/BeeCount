@@ -121,6 +121,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonConfigure => '設定';
 
   @override
+  String get commonPressAgainToExit => 'Press again to exit';
+
+  @override
   String get commonWeekdayMonday => '月曜日';
 
   @override

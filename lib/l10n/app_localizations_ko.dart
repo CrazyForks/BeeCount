@@ -121,6 +121,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get commonConfigure => '구성';
 
   @override
+  String get commonPressAgainToExit => 'Press again to exit';
+
+  @override
   String get commonWeekdayMonday => '월요일';
 
   @override
