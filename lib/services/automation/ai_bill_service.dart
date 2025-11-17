@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../ai/tasks/bill_extraction_task.dart';
 import '../../ai/providers/bill_extraction_glm_provider.dart';
+import '../../ai/providers/bill_extraction_glm_vision_provider.dart';
 import '../../ai/providers/bill_extraction_tflite_provider.dart';
 
 /// AI账单提取服务
@@ -17,9 +18,13 @@ class AIBillService {
   ///
   /// [expenseCategories] 支出分类列表（可选）
   /// [incomeCategories] 收入分类列表（可选）
+  /// [accounts] 账户列表（可选）
+  /// [imageFile] 图片文件（可选，用于Vision模型）
   Future<void> initialize({
     List<String>? expenseCategories,
     List<String>? incomeCategories,
+    List<String>? accounts,
+    File? imageFile,
   }) async {
     if (_initialized) return;
 
@@ -28,11 +33,29 @@ class AIBillService {
     // 1. 注册智谱GLM Provider（如果配置了API Key）
     final glmApiKey = prefs.getString('ai_glm_api_key');
     if (glmApiKey != null && glmApiKey.isNotEmpty) {
-      _aiKit.registerProvider(BillExtractionGLMProvider(
-        glmApiKey,
-        expenseCategories: expenseCategories,
-        incomeCategories: incomeCategories,
-      ));
+      // 检查是否启用图片上传
+      final useVision = prefs.getBool('ai_use_vision') ?? true; // 默认开启
+
+      if (useVision && imageFile != null) {
+        // 使用Vision模型
+        print('📸 [AI服务] 使用GLM-4V-Flash视觉模型');
+        _aiKit.registerProvider(BillExtractionGLMVisionProvider(
+          glmApiKey,
+          expenseCategories: expenseCategories,
+          incomeCategories: incomeCategories,
+          accounts: accounts,
+          imageFile: imageFile,
+        ));
+      } else {
+        // 使用纯文本模型
+        print('📝 [AI服务] 使用GLM-4.6文本模型');
+        _aiKit.registerProvider(BillExtractionGLMProvider(
+          glmApiKey,
+          expenseCategories: expenseCategories,
+          incomeCategories: incomeCategories,
+          accounts: accounts,
+        ));
+      }
     }
 
     // 2. 注册本地TFLite Provider（如果模型已下载）
@@ -53,16 +76,22 @@ class AIBillService {
   /// [ocrText] OCR识别的文本
   /// [expenseCategories] 支出分类列表（可选）
   /// [incomeCategories] 收入分类列表（可选）
+  /// [accounts] 账户列表（可选）
+  /// [imageFile] 图片文件（可选，用于Vision模型）
   /// 返回 [BillInfo] 或 null（提取失败）
   Future<BillInfo?> extractBillInfo(
     String ocrText, {
     List<String>? expenseCategories,
     List<String>? incomeCategories,
+    List<String>? accounts,
+    File? imageFile,
   }) async {
     if (!_initialized) {
       await initialize(
         expenseCategories: expenseCategories,
         incomeCategories: incomeCategories,
+        accounts: accounts,
+        imageFile: imageFile,
       );
     }
 

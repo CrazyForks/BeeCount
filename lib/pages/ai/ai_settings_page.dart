@@ -22,6 +22,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
   String _strategy = 'local_first';
   String _glmApiKey = '';
   bool _aiEnabled = false; // AI增强开关
+  bool _useVision = true; // 使用视觉模型开关（默认打开）
   bool _loading = true;
 
   late final TextEditingController _apiKeyController;
@@ -48,6 +49,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
       _glmApiKey = apiKey;
       _apiKeyController.text = apiKey;
       _aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
+      _useVision = prefs.getBool('ai_use_vision') ?? true; // 默认打开
       _loading = false;
     });
   }
@@ -126,25 +128,59 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
     final l10n = AppLocalizations.of(context);
 
     return SectionCard(
-      child: SwitchListTile(
-        value: _aiEnabled,
-        onChanged: (value) async {
-          setState(() => _aiEnabled = value);
+      child: Column(
+        children: [
+          SwitchListTile(
+            value: _aiEnabled,
+            onChanged: (value) async {
+              setState(() => _aiEnabled = value);
 
-          // 立即保存AI开关状态（用户体验更好）
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('ai_bill_extraction_enabled', value);
+              // 立即保存AI开关状态（用户体验更好）
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('ai_bill_extraction_enabled', value);
 
-          if (mounted) {
-            showToast(context, value ? l10n.aiEnableToastOn : l10n.aiEnableToastOff);
-          }
-        },
-        title: Text(
-          l10n.aiEnableTitle,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(l10n.aiEnableSubtitle),
-        activeColor: ref.watch(primaryColorProvider),
+              if (mounted) {
+                showToast(context, value ? l10n.aiEnableToastOn : l10n.aiEnableToastOff);
+              }
+            },
+            title: Text(
+              l10n.aiEnableTitle,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(l10n.aiEnableSubtitle),
+            activeColor: ref.watch(primaryColorProvider),
+          ),
+
+          // 上传图片到AI开关
+          const Divider(height: 1),
+          SwitchListTile(
+            value: _useVision,
+            onChanged: _aiEnabled ? (value) async {
+              setState(() => _useVision = value);
+
+              // 立即保存Vision开关状态
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('ai_use_vision', value);
+
+              if (mounted) {
+                showToast(
+                  context,
+                  value ? '已启用图片识别，识别准确率更高' : '已关闭图片识别，仅使用OCR文本',
+                );
+              }
+            } : null,
+            title: const Text(
+              '上传图片到AI',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(
+              _useVision
+                  ? '使用GLM-4V-Flash视觉模型，识别更准确（免费）'
+                  : '仅使用GLM-4.6文本模型分析OCR结果',
+            ),
+            activeColor: ref.watch(primaryColorProvider),
+          ),
+        ],
       ),
     );
   }

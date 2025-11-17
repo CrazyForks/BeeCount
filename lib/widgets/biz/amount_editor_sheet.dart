@@ -6,8 +6,9 @@ import '../../styles/colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/note_history_service.dart';
 import '../../data/db.dart';
-import 'account_picker.dart';
 import '../../providers.dart';
+import 'note_picker_dialog.dart';
+import 'account_selector.dart';
 
 typedef AmountEditorResult = ({
   double amount,
@@ -268,7 +269,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
               ],
             ),
             const SizedBox(height: 10),
-            // 备注单独一行
+            // 备注输入区域 - 带历史备注图标前缀
             TextField(
               focusNode: _noteFocusNode,
               controller: _noteCtrl,
@@ -283,75 +284,42 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                 fillColor: const Color(0xFFF3F4F6),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                // 历史备注图标作为前缀
+                prefixIcon: _frequentNotes.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () async {
+                          await showDialog(
+                            context: context,
+                            builder: (context) => NotePickerDialog(
+                              db: widget.db,
+                              ledgerId: widget.ledgerId,
+                              categoryId: null,
+                              onNotePicked: (note) {
+                                setState(() {
+                                  _noteCtrl.text = note;
+                                  _noteCtrl.selection = TextSelection.fromPosition(
+                                    TextPosition(offset: note.length),
+                                  );
+                                });
+                              },
+                            ),
+                          );
+                        },
+                        child: const Icon(
+                          Icons.history,
+                          color: Colors.black87,
+                          size: 20,
+                        ),
+                      )
+                    : null,
+                prefixIconConstraints: _frequentNotes.isNotEmpty
+                    ? const BoxConstraints(
+                        minWidth: 40,
+                        minHeight: 20,
+                      )
+                    : null,
               ),
             ),
-            // 高频备注推荐
-            if (_frequentNotes.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              SizedBox(
-                height: 32,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _frequentNotes.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 8),
-                  itemBuilder: (context, index) {
-                    final item = _frequentNotes[index];
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          _noteCtrl.text = item.note;
-                          _noteCtrl.selection = TextSelection.fromPosition(
-                            TextPosition(offset: item.note.length),
-                          );
-                        });
-                      },
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              item.note,
-                              style: text.labelSmall?.copyWith(
-                                color: BeeColors.primaryText,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 5,
-                                vertical: 1,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                '${item.count}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
             // 账户选择（仅在启用时显示）
             if (widget.showAccountPicker) ...[
               const SizedBox(height: 8),
@@ -364,24 +332,17 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                     data: (enabled) {
                       if (!enabled) return const SizedBox.shrink();
 
-                      // 获取选中的账户信息
-                      String accountLabel =
-                          AppLocalizations.of(context).accountNone;
-                      if (_selectedAccountId != null) {
-                        // 使用FutureBuilder获取账户名称
-                        return FutureBuilder<Account?>(
-                          future: ref
-                              .read(repositoryProvider)
-                              .getAccount(_selectedAccountId!),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData && snapshot.data != null) {
-                              accountLabel = snapshot.data!.name;
-                            }
-                            return _buildAccountButton(context, accountLabel);
-                          },
-                        );
-                      }
-                      return _buildAccountButton(context, accountLabel);
+                      // 使用新的横滑账户选择器
+                      return AccountSelector(
+                        db: widget.db,
+                        selectedAccountId: _selectedAccountId,
+                        ledgerId: widget.ledgerId,
+                        onAccountSelected: (accountId) {
+                          setState(() {
+                            _selectedAccountId = accountId;
+                          });
+                        },
+                      );
                     },
                     loading: () => const SizedBox.shrink(),
                     error: (_, __) => const SizedBox.shrink(),
@@ -440,50 +401,56 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                       ),
                     ),
                   );
-              Widget doneKey() => Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Material(
-                      color: primary,
-                      borderRadius: BorderRadius.circular(12),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () async {
-                          // 计算总额（包含最后一段）
-                          final cur = parsed();
-                          double total = _acc;
-                          if (_op == '+') {
-                            total += cur;
-                          } else if (_op == '-') {
-                            total -= cur;
-                          } else {
-                            total = cur;
-                          }
+              Widget doneKey() {
+                // 计算当前总额以判断是否启用完成按钮
+                final cur = parsed();
+                double total = _acc;
+                if (_op == '+') {
+                  total += cur;
+                } else if (_op == '-') {
+                  total -= cur;
+                } else {
+                  total = cur;
+                }
+                final isEnabled = total.abs() > 0;
 
-                          HapticFeedback.lightImpact();
-                          SystemSound.play(SystemSoundType.click);
-                          widget.onSubmit((
-                            amount: total.abs(), // 始终正数
-                            note:
-                                _noteCtrl.text.isEmpty ? null : _noteCtrl.text,
-                            date: _date,
-                            accountId: _selectedAccountId,
-                          ));
-                        },
-                        child: SizedBox(
-                          height: 60,
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.of(context).commonFinish,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            ),
+                return Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Material(
+                    color: isEnabled ? primary : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(12),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: isEnabled
+                          ? () async {
+                              HapticFeedback.lightImpact();
+                              SystemSound.play(SystemSoundType.click);
+                              widget.onSubmit((
+                                amount: total.abs(), // 始终正数
+                                note: _noteCtrl.text.isEmpty
+                                    ? null
+                                    : _noteCtrl.text,
+                                date: _date,
+                                accountId: _selectedAccountId,
+                              ));
+                            }
+                          : null,
+                      child: SizedBox(
+                        height: 60,
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of(context).commonFinish,
+                            style: TextStyle(
+                                color: isEnabled ? Colors.white : Colors.grey[500],
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700),
                           ),
                         ),
                       ),
                     ),
-                  );
+                  ),
+                );
+              }
 
               return Column(
                 children: [
@@ -551,52 +518,4 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
     );
   }
 
-  Widget _buildAccountButton(BuildContext context, String accountLabel) {
-    final text = Theme.of(context).textTheme;
-    return InkWell(
-      onTap: () async {
-        final result = await AccountPicker.show(
-          context,
-          selectedAccountId: _selectedAccountId,
-          allowNull: true,
-        );
-        if (result != null || result != _selectedAccountId) {
-          setState(() {
-            _selectedAccountId = result;
-          });
-        }
-      },
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF3F4F6),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.account_balance_wallet_outlined,
-              size: 18,
-              color: BeeColors.primaryText,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                accountLabel,
-                style: text.bodyMedium?.copyWith(
-                  color: BeeColors.primaryText,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 14,
-              color: Colors.grey[400],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

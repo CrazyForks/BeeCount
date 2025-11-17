@@ -334,6 +334,12 @@ abstract class AppLocalizations {
   /// **'Configure'**
   String get commonConfigure;
 
+  /// No description provided for @commonPressAgainToExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Press again to exit'**
+  String get commonPressAgainToExit;
+
   /// No description provided for @commonWeekdayMonday.
   ///
   /// In en, this message translates to:
@@ -1207,13 +1213,13 @@ abstract class AppLocalizations {
   /// No description provided for @categoryExpense.
   ///
   /// In en, this message translates to:
-  /// **'Expense Categories'**
+  /// **'Expense'**
   String get categoryExpense;
 
   /// No description provided for @categoryIncome.
   ///
   /// In en, this message translates to:
-  /// **'Income Categories'**
+  /// **'Income'**
   String get categoryIncome;
 
   /// No description provided for @categoryEmpty.
@@ -4437,6 +4443,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account'**
   String get exportCsvHeaderAccount;
+
+  /// No description provided for @exportCsvHeaderFromAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'From Account'**
+  String get exportCsvHeaderFromAccount;
+
+  /// No description provided for @exportCsvHeaderToAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'To Account'**
+  String get exportCsvHeaderToAccount;
 
   /// No description provided for @exportCsvHeaderNote.
   ///
@@ -7683,6 +7701,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Uncategorized'**
   String get commonUncategorized;
+
+  /// No description provided for @transferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferTitle;
+
+  /// No description provided for @transferOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Out'**
+  String get transferOut;
+
+  /// No description provided for @transferIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer In'**
+  String get transferIn;
+
+  /// No description provided for @transferFromAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'From Account'**
+  String get transferFromAccount;
+
+  /// No description provided for @transferToAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'To Account'**
+  String get transferToAccount;
+
+  /// No description provided for @transferAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get transferAmount;
+
+  /// No description provided for @transferTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get transferTime;
+
+  /// No description provided for @transferSelectAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Account'**
+  String get transferSelectAccount;
+
+  /// No description provided for @transferEnterAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Amount'**
+  String get transferEnterAmount;
+
+  /// No description provided for @transferEnterNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Note'**
+  String get transferEnterNote;
+
+  /// No description provided for @transferCreateNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Transfer'**
+  String get transferCreateNew;
+
+  /// No description provided for @transferCreateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer created successfully'**
+  String get transferCreateSuccess;
+
+  /// No description provided for @transferUpdateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer updated successfully'**
+  String get transferUpdateSuccess;
+
+  /// No description provided for @transferDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure to delete this transfer?'**
+  String get transferDeleteConfirm;
+
+  /// No description provided for @transferDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer deleted successfully'**
+  String get transferDeleteSuccess;
+
+  /// No description provided for @transferSameAccountError.
+  ///
+  /// In en, this message translates to:
+  /// **'From and to accounts must be different'**
+  String get transferSameAccountError;
+
+  /// No description provided for @transferDifferentCurrencyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer only supports accounts with the same currency'**
+  String get transferDifferentCurrencyError;
+
+  /// No description provided for @transferToPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get transferToPrefix;
+
+  /// No description provided for @transferFromPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get transferFromPrefix;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

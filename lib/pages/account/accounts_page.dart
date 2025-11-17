@@ -452,32 +452,43 @@ class _AccountCard extends ConsumerWidget {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    account.name,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8.0.scaled(context, ref)),
-                                  // v1.15.0: 显示币种名称（如：人民币、美元）
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 6.0.scaled(context, ref),
-                                      vertical: 2.0.scaled(context, ref),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.2),
-                                      borderRadius: BorderRadius.circular(4.0.scaled(context, ref)),
-                                    ),
-                                    child: Text(
-                                      getCurrencyName(account.currency, context),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            account.name,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.0.scaled(context, ref)),
+                                        // v1.15.0: 显示币种名称（如：人民币、美元）
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 6.0.scaled(context, ref),
+                                            vertical: 2.0.scaled(context, ref),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withValues(alpha: 0.2),
+                                            borderRadius: BorderRadius.circular(4.0.scaled(context, ref)),
+                                          ),
+                                          child: Text(
+                                            getCurrencyName(account.currency, context),
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -493,6 +504,7 @@ class _AccountCard extends ConsumerWidget {
                             ],
                           ),
                         ),
+                        SizedBox(width: 12.0.scaled(context, ref)),
                         // 编辑按钮
                         GestureDetector(
                           onTap: () {

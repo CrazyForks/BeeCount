@@ -141,6 +141,17 @@ class GenericBillParser implements BillParser {
         s, ['备注', '说明', '标题', '摘要', '附言', '商品名称', '商品说明', '交易对方', '商家'])) {
       return 'note';
     }
+    // 账户匹配：需要区分普通账户、转出账户、转入账户
+    // 注意：必须先匹配具体的转出/转入账户，再匹配通用的"账户"
+    if (_containsAny(s, ['转出账户', 'From Account', 'FromAccount'])) {
+      return 'from_account';
+    }
+    if (_containsAny(s, ['转入账户', 'To Account', 'ToAccount'])) {
+      return 'to_account';
+    }
+    if (_containsAny(s, ['账户', 'Account'])) {
+      return 'account';
+    }
 
     // 明确忽略的字段
     if (_containsAny(s, [

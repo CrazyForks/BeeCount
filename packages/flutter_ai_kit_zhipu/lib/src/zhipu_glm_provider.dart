@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 
@@ -34,12 +36,16 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
   /// 温度参数（0.0 - 1.0，越低越确定性）
   final double temperature;
 
+  /// 图片文件（可选，用于GLM-4V视觉模型）
+  final File? imageFile;
+
   final Dio _dio = Dio();
 
   ZhipuGLMProvider({
     required this.apiKey,
     this.model = 'glm-4-flash',
     this.temperature = 0.1,
+    this.imageFile,
   });
 
   @override
@@ -61,6 +67,9 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
     final startTime = DateTime.now();
 
     try {
+      // 准备消息内容
+      final messageContent = await _prepareMessageContent(task.input);
+
       final response = await _dio.post(
         'https://open.bigmodel.cn/api/paas/v4/chat/completions',
         options: Options(headers: {
@@ -70,7 +79,7 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
         data: {
           'model': model,
           'messages': [
-            {'role': 'user', 'content': task.input}
+            {'role': 'user', 'content': messageContent}
           ],
           'temperature': temperature,
         },
@@ -120,6 +129,38 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
         return estimatedTokens * 0.000005; // $0.005/1k tokens
       default:
         return 0.0;
+    }
+  }
+
+  /// 准备消息内容（支持图片上传）
+  Future<dynamic> _prepareMessageContent(String text) async {
+    // 如果没有图片，直接返回文本
+    if (imageFile == null) {
+      return text;
+    }
+
+    // 如果有图片，准备multimodal content（用于GLM-4V）
+    try {
+      // 读取图片并转换为base64
+      final imageBytes = await imageFile!.readAsBytes();
+      final base64Image = base64Encode(imageBytes);
+
+      // 返回包含文本和图片的多模态内容
+      return [
+        {
+          'type': 'image_url',
+          'image_url': {
+            'url': base64Image,
+          }
+        },
+        {
+          'type': 'text',
+          'text': text,
+        }
+      ];
+    } catch (e) {
+      print('⚠️ [GLM] 图片编码失败: $e，降级使用纯文本');
+      return text;
     }
   }
 

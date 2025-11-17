@@ -167,6 +167,7 @@ class AccountDetailPage extends ConsumerWidget {
                                   primaryColor: primaryColor,
                                   ledgers: ref.watch(ledgersStreamProvider).asData?.value ?? [],
                                   categories: categoriesAsync.asData?.value ?? [],
+                                  currentAccountId: account.id, // 传入当前账户ID
                                   onTap: () =>
                                       _editTransaction(context, ref, tx),
                                 ),
@@ -290,6 +291,7 @@ class _TransactionTile extends ConsumerWidget {
   final List<db.Ledger> ledgers;
   final List<db.Category> categories;
   final VoidCallback onTap;
+  final int? currentAccountId; // 当前账户ID，用于判断转账方向
 
   const _TransactionTile({
     required this.transaction,
@@ -298,6 +300,7 @@ class _TransactionTile extends ConsumerWidget {
     required this.ledgers,
     required this.categories,
     required this.onTap,
+    this.currentAccountId,
   });
 
   @override
@@ -305,6 +308,14 @@ class _TransactionTile extends ConsumerWidget {
     // 交易类型颜色
     Color amountColor;
     final l10n = AppLocalizations.of(context);
+
+    // 判断转账方向（在账户详情页中）
+    bool isTransferOut = false;
+    bool isTransferIn = false;
+    if (transaction.type == 'transfer' && currentAccountId != null) {
+      isTransferOut = transaction.accountId == currentAccountId;
+      isTransferIn = transaction.toAccountId == currentAccountId;
+    }
 
     switch (transaction.type) {
       case 'income':
@@ -314,7 +325,8 @@ class _TransactionTile extends ConsumerWidget {
         amountColor = Colors.red;
         break;
       case 'transfer':
-        amountColor = Colors.orange;
+        // 转出显示红色，转入显示绿色
+        amountColor = isTransferOut ? Colors.red : Colors.green;
         break;
       default:
         amountColor = BeeColors.primaryText;
@@ -328,18 +340,45 @@ class _TransactionTile extends ConsumerWidget {
             )
         : null;
 
-    // v1.15.0: 标题显示逻辑：备注优先，否则显示分类名称
+    // v1.15.0: 标题显示逻辑
     String displayTitle;
-    if (transaction.note?.isNotEmpty == true) {
-      displayTitle = transaction.note!;
-    } else if (category != null) {
-      displayTitle = category.name;
+    String? displaySubtitle; // 用于转账时显示对方账户
+
+    if (transaction.type == 'transfer') {
+      // 转账：优先显示备注，如果没有备注则显示"转账"
+      if (transaction.note?.isNotEmpty == true) {
+        displayTitle = transaction.note!;
+      } else {
+        displayTitle = l10n.transferTitle;
+      }
+
+      // 获取对方账户名称
+      if (isTransferOut && transaction.toAccountId != null) {
+        // 转出：显示目标账户
+        final toAccountAsync = ref.watch(accountByIdProvider(transaction.toAccountId!));
+        final toAccountName = toAccountAsync.value?.name;
+        if (toAccountName != null) {
+          displaySubtitle = '${l10n.transferToPrefix} $toAccountName';
+        }
+      } else if (isTransferIn && transaction.accountId != null) {
+        // 转入：显示来源账户
+        final fromAccountAsync = ref.watch(accountByIdProvider(transaction.accountId!));
+        final fromAccountName = fromAccountAsync.value?.name;
+        if (fromAccountName != null) {
+          displaySubtitle = '${l10n.transferFromPrefix} $fromAccountName';
+        }
+      }
     } else {
-      displayTitle = transaction.type == 'income'
-          ? l10n.homeIncome
-          : transaction.type == 'expense'
-              ? l10n.homeExpense
-              : 'Transfer';
+      // 收入/支出：备注优先，否则显示分类名称
+      if (transaction.note?.isNotEmpty == true) {
+        displayTitle = transaction.note!;
+      } else if (category != null) {
+        displayTitle = category.name;
+      } else {
+        displayTitle = transaction.type == 'income'
+            ? l10n.homeIncome
+            : l10n.homeExpense;
+      }
     }
 
     // v1.15.0: 获取账本名称（支持国际化）
@@ -362,7 +401,7 @@ class _TransactionTile extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            // v1.15.0: 显示分类图标
+            // v1.15.0: 显示分类图标（转账显示特殊图标）
             Container(
               width: 40.0.scaled(context, ref),
               height: 40.0.scaled(context, ref),
@@ -371,7 +410,9 @@ class _TransactionTile extends ConsumerWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                CategoryService.getCategoryIcon(category?.icon),
+                transaction.type == 'transfer'
+                    ? Icons.swap_horiz
+                    : CategoryService.getCategoryIcon(category?.icon),
                 color: primaryColor,
                 size: 20.0.scaled(context, ref),
               ),
@@ -420,6 +461,18 @@ class _TransactionTile extends ConsumerWidget {
                       ],
                     ],
                   ),
+                  // 转账时显示对方账户
+                  if (displaySubtitle != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 2.0.scaled(context, ref)),
+                      child: Text(
+                        displaySubtitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ),
                   Padding(
                     padding: EdgeInsets.only(top: 2.0.scaled(context, ref)),
                     child: Text(
@@ -435,9 +488,11 @@ class _TransactionTile extends ConsumerWidget {
             ),
             // 金额
             AmountText(
-              value: transaction.type == 'expense' || transaction.type == 'transfer'
+              value: transaction.type == 'expense'
                   ? -transaction.amount
-                  : transaction.amount,
+                  : transaction.type == 'transfer'
+                      ? (isTransferOut ? -transaction.amount : transaction.amount)
+                      : transaction.amount,
               signed: true,
               showCurrency: false,
               currencyCode: currencyCode,

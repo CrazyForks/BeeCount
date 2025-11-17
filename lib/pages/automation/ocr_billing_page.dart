@@ -65,11 +65,16 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
     });
 
     try {
+      // 获取数据库实例
+      final db = ref.read(databaseProvider);
+
       // OCR识别（包含AI增强）
-      final ocrResult = await _ocrService.recognizePaymentImage(_selectedImage!);
+      final ocrResult = await _ocrService.recognizePaymentImage(
+        _selectedImage!,
+        db: db,
+      );
 
       // 使用BillCreationService匹配分类
-      final db = ref.read(databaseProvider);
       final billCreationService = BillCreationService(db);
 
       final categoryKind = (ocrResult.aiType == 'income') ? 'income' : 'expense';

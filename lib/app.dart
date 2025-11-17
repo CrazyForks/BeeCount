@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -7,7 +8,7 @@ import 'pages/main/home_page.dart';
 import 'pages/main/analytics_page.dart';
 import 'pages/main/ledgers_page_new.dart';
 import 'pages/main/mine_page.dart';
-import 'pages/category/category_picker.dart';
+import 'pages/transaction/transaction_editor_page.dart';
 import 'pages/settings/personalize_page.dart' show headerStyleProvider;
 import 'providers.dart';
 import 'utils/ui_scale_extensions.dart';
@@ -36,6 +37,9 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   // 双击检测：记录最后一次点击的时间和索引
   DateTime? _lastTapTime;
   int? _lastTappedIndex;
+
+  // 双击返回退出：记录最后一次返回键按下时间
+  DateTime? _lastBackPressTime;
 
   @override
   void initState() {
@@ -193,8 +197,21 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) {
         // 拦截根路由的返回键，避免意外将根路由 pop 到空导致黑屏。
-        // 若需要支持"再次返回退出应用"，可在此实现双击退出逻辑。
-        // didPop will be false since canPop is false
+        // 实现双击返回退出应用逻辑
+        if (didPop) return;
+
+        final now = DateTime.now();
+        final l10n = AppLocalizations.of(context);
+
+        if (_lastBackPressTime == null ||
+            now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
+          // 第一次按返回键，显示提示并记录时间
+          _lastBackPressTime = now;
+          showToast(context, l10n.commonPressAgainToExit);
+        } else {
+          // 2秒内第二次按返回键，退出应用
+          SystemNavigator.pop();
+        }
       },
       child: Scaffold(
         body: IndexedStack(
@@ -244,6 +261,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                 }
                 return Expanded(
                   child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       final now = DateTime.now();
                       // 检测双击：同一个标签在300ms内连续点击两次
@@ -265,12 +283,16 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                         ref.read(bottomTabIndexProvider.notifier).state = pageIndex;
                       }
                     },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 8.0.scaled(context, ref)),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0.scaled(context, ref),
+                        horizontal: 4.0.scaled(context, ref),
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(icon, color: color),
+                          Icon(icon, color: color, size: 24),
                           SizedBox(height: 4.0.scaled(context, ref)),
                           Text(label,
                               style: TextStyle(
@@ -306,7 +328,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                   // 拍照优先模式：长按打开手动记账
                   await Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const CategoryPickerPage(
+                      builder: (_) => const TransactionEditorPage(
                         initialKind: 'expense',
                         quickAdd: true,
                       ),
@@ -331,7 +353,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                     // 手动优先模式：短按打开手动记账
                     await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const CategoryPickerPage(
+                        builder: (_) => const TransactionEditorPage(
                           initialKind: 'expense',
                           quickAdd: true,
                         ),

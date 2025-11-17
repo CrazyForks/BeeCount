@@ -121,9 +121,16 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         l10n.exportCsvHeaderCategory,
         l10n.exportCsvHeaderAmount,
         l10n.exportCsvHeaderAccount,
+        l10n.exportCsvHeaderFromAccount, // 转出账户
+        l10n.exportCsvHeaderToAccount,   // 转入账户
         l10n.exportCsvHeaderNote,
         l10n.exportCsvHeaderTime,
       ]);
+
+      // 缓存所有账户信息，避免重复查询
+      final allAccounts = await repo.db.select(repo.db.accounts).get();
+      final accountMap = {for (var acc in allAccounts) acc.id: acc};
+
       for (int i = 0; i < rowsJoin.length; i++) {
         final r = rowsJoin[i];
         final t = r.readTable(repo.db.transactions);
@@ -140,13 +147,36 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           }
         }();
         final typeStr = _getTypeDisplayName(t.type);
-        final categoryName = CategoryUtils.getDisplayName(c?.name, context);
-        final accountName = a?.name ?? '';
+
+        // 对于转账类型，需要特殊处理账户信息
+        String accountName;
+        String fromAccountName;
+        String toAccountName;
+        String categoryName;
+
+        if (t.type == 'transfer') {
+          // 转账记录：账户列留空，填充转出账户和转入账户
+          accountName = '';
+          final fromAccount = accountMap[t.accountId];
+          final toAccount = accountMap[t.toAccountId];
+          fromAccountName = fromAccount?.name ?? '';
+          toAccountName = toAccount?.name ?? '';
+          categoryName = ''; // 转账没有分类
+        } else {
+          // 收入或支出：正常填充账户列，转出转入账户留空
+          accountName = a?.name ?? '';
+          fromAccountName = '';
+          toAccountName = '';
+          categoryName = CategoryUtils.getDisplayName(c?.name, context);
+        }
+
         rows.add([
           typeStr,
           categoryName,
           t.amount.toStringAsFixed(2),
           accountName,
+          fromAccountName,
+          toAccountName,
           t.note ?? '',
           timeStr
         ]);

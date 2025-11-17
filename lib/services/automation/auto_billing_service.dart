@@ -177,7 +177,11 @@ class AutoBillingService {
       final ocrStartTime = DateTime.now().millisecondsSinceEpoch;
       print('⏱️ [性能] 开始OCR识别');
       logger.info('AutoBilling', '开始OCR识别');
-      final result = await _ocrService.recognizePaymentImage(file);
+
+      // 获取数据库实例用于账户识别
+      final db = _container.read(databaseProvider);
+      final result = await _ocrService.recognizePaymentImage(file, db: db);
+
       final ocrElapsed = DateTime.now().millisecondsSinceEpoch - ocrStartTime;
       print('⏱️ [性能] OCR识别完成, 耗时=${ocrElapsed}ms');
       logger.info('AutoBilling', 'OCR识别完成', '耗时=${ocrElapsed}ms');

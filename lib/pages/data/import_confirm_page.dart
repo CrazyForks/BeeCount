@@ -41,6 +41,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     'amount': null,
     'category': null,
     'account': null,
+    'from_account': null,
+    'to_account': null,
     'note': null,
   };
   bool importing = false;
@@ -168,6 +170,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                           'category', items()),
                       _mapRow(AppLocalizations.of(context)!.importFieldAccount,
                           'account', items()),
+                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderFromAccount,
+                          'from_account', items()),
+                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderToAccount,
+                          'to_account', items()),
                       _mapRow(AppLocalizations.of(context)!.importFieldNote,
                           'note', items()),
                     ],
@@ -313,11 +319,18 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                   if (step == 0)
                     FilledButton(
                       onPressed: () {
+                        // 检查是否有分类列映射
+                        // 如果没有分类列，说明可能只有转账记录，跳过分类映射步骤，直接开始导入
                         if (mapping['category'] == null) {
-                          showToast(
-                              context,
-                              AppLocalizations.of(context)!
-                                  .importSelectCategoryFirst);
+                          // 如果没有分类列但有转账相关列，则直接开始导入
+                          if (mapping['from_account'] != null || mapping['to_account'] != null) {
+                            _startImport();
+                          } else {
+                            showToast(
+                                context,
+                                AppLocalizations.of(context)!
+                                    .importSelectCategoryFirst);
+                          }
                           return;
                         }
                         _buildDistinctCategories();
@@ -459,12 +472,42 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
     // 第一步：提取所有唯一账户名并批量创建账户（在事务中）
     final accountIdx = mapping['account'];
+    final fromAccountIdx = mapping['from_account'];
+    final toAccountIdx = mapping['to_account'];
     final Set<String> uniqueAccountNames = {};
+
+    // 收集普通账户名
     if (accountIdx != null) {
       for (int i = dataStart; i < rows.length; i++) {
         final r = rows[i];
         if (accountIdx < r.length) {
           final accountName = r[accountIdx].toString().trim();
+          if (accountName.isNotEmpty) {
+            uniqueAccountNames.add(accountName);
+          }
+        }
+      }
+    }
+
+    // 收集转出账户名
+    if (fromAccountIdx != null) {
+      for (int i = dataStart; i < rows.length; i++) {
+        final r = rows[i];
+        if (fromAccountIdx < r.length) {
+          final accountName = r[fromAccountIdx].toString().trim();
+          if (accountName.isNotEmpty) {
+            uniqueAccountNames.add(accountName);
+          }
+        }
+      }
+    }
+
+    // 收集转入账户名
+    if (toAccountIdx != null) {
+      for (int i = dataStart; i < rows.length; i++) {
+        final r = rows[i];
+        if (toAccountIdx < r.length) {
+          final accountName = r[toAccountIdx].toString().trim();
           if (accountName.isNotEmpty) {
             uniqueAccountNames.add(accountName);
           }
@@ -567,9 +610,11 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         final amountStr = getBy('amount', 2);
         final categoryName = getBy('category', 3);
         final accountName = getBy('account', 999); // 使用不存在的fallback，确保只从映射列获取
+        final fromAccountName = getBy('from_account', 999); // 转出账户
+        final toAccountName = getBy('to_account', 999); // 转入账户
         final note = getBy('note', 4);
 
-        // 类型识别：精准匹配收入/支出，其他类型跳过
+        // 类型识别：精准匹配收入/支出/转账，其他类型跳过
         final typeStr = typeRaw.trim();
         final lower = typeStr.toLowerCase();
 
@@ -586,7 +631,11 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                  lower == 'expense' || lower == 'spending' || lower == 'expenditure') {
           type = 'expense';
         }
-        // 未识别的类型：跳过（转账、债务等非收支记录）
+        // 精准匹配转账
+        else if (lower == '转账' || lower == 'transfer') {
+          type = 'transfer';
+        }
+        // 未识别的类型：跳过（债务等非收支记录）
         else {
           skipped++;
           skippedTypes[typeStr] = (skippedTypes[typeStr] ?? 0) + 1;
@@ -637,10 +686,30 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           }
         }
 
-        // 获取账户ID
+        // 处理账户ID和转账逻辑
         int? accountId;
-        if (accountName != null && accountName.trim().isNotEmpty) {
-          accountId = accountNameToId[accountName.trim()];
+        int? toAccountId;
+
+        if (type == 'transfer') {
+          // 转账类型：使用 from_account 和 to_account
+          if (fromAccountName != null && fromAccountName.trim().isNotEmpty) {
+            accountId = accountNameToId[fromAccountName.trim()];
+          }
+          if (toAccountName != null && toAccountName.trim().isNotEmpty) {
+            toAccountId = accountNameToId[toAccountName.trim()];
+          }
+
+          // 转账必须有转出和转入账户，否则跳过此记录
+          if (accountId == null || toAccountId == null) {
+            fail++;
+            continue;
+          }
+        } else {
+          // 收入或支出：使用普通 account 字段
+          if (accountName != null && accountName.trim().isNotEmpty) {
+            accountId = accountNameToId[accountName.trim()];
+          }
+          toAccountId = null;
         }
 
         // 构造行
@@ -648,9 +717,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           ledgerId: ledgerId,
           type: type,
           amount: amount,
-          categoryId: d.Value(categoryId),
+          categoryId: d.Value(type == 'transfer' ? null : categoryId), // 转账没有分类
           accountId: d.Value(accountId),
-          toAccountId: const d.Value(null),
+          toAccountId: d.Value(toAccountId),
           happenedAt: d.Value(date),
           note: d.Value(note),
         );

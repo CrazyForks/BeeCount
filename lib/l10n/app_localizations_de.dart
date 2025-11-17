@@ -121,6 +121,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get commonConfigure => 'Konfigurieren';
 
   @override
+  String get commonPressAgainToExit => 'Press again to exit';
+
+  @override
   String get commonWeekdayMonday => 'Montag';
 
   @override
@@ -2335,6 +2338,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportCsvHeaderAccount => 'Konto';
 
   @override
+  String get exportCsvHeaderFromAccount => 'From Account';
+
+  @override
+  String get exportCsvHeaderToAccount => 'To Account';
+
+  @override
   String get exportCsvHeaderNote => 'Notiz';
 
   @override
@@ -4046,4 +4055,61 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get commonUncategorized => 'Uncategorized';
+
+  @override
+  String get transferTitle => 'Transfer';
+
+  @override
+  String get transferOut => 'Transfer Out';
+
+  @override
+  String get transferIn => 'Transfer In';
+
+  @override
+  String get transferFromAccount => 'From Account';
+
+  @override
+  String get transferToAccount => 'To Account';
+
+  @override
+  String get transferAmount => 'Amount';
+
+  @override
+  String get transferTime => 'Time';
+
+  @override
+  String get transferSelectAccount => 'Select Account';
+
+  @override
+  String get transferEnterAmount => 'Enter Amount';
+
+  @override
+  String get transferEnterNote => 'Add Note';
+
+  @override
+  String get transferCreateNew => 'Create Transfer';
+
+  @override
+  String get transferCreateSuccess => 'Transfer created successfully';
+
+  @override
+  String get transferUpdateSuccess => 'Transfer updated successfully';
+
+  @override
+  String get transferDeleteConfirm => 'Are you sure to delete this transfer?';
+
+  @override
+  String get transferDeleteSuccess => 'Transfer deleted successfully';
+
+  @override
+  String get transferSameAccountError => 'From and to accounts must be different';
+
+  @override
+  String get transferDifferentCurrencyError => 'Transfer only supports accounts with the same currency';
+
+  @override
+  String get transferToPrefix => 'To';
+
+  @override
+  String get transferFromPrefix => 'From';
 }

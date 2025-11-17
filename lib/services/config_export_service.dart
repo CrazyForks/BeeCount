@@ -9,11 +9,13 @@ class AppConfig {
   final SupabaseConfig? supabase;
   final WebdavConfig? webdav;
   final AIConfig? ai;
+  final AppSettingsConfig? appSettings;
 
   const AppConfig({
     this.supabase,
     this.webdav,
     this.ai,
+    this.appSettings,
   });
 
   Map<String, dynamic> toYaml() {
@@ -31,6 +33,10 @@ class AppConfig {
       map['ai'] = ai!.toMap();
     }
 
+    if (appSettings != null) {
+      map['app_settings'] = appSettings!.toMap();
+    }
+
     return map;
   }
 
@@ -46,6 +52,10 @@ class AppConfig {
           : null,
       ai: yaml.containsKey('ai')
           ? AIConfig.fromMap(Map<String, dynamic>.from(yaml['ai'] as Map))
+          : null,
+      appSettings: yaml.containsKey('app_settings')
+          ? AppSettingsConfig.fromMap(
+              Map<String, dynamic>.from(yaml['app_settings'] as Map))
           : null,
     );
   }
@@ -111,11 +121,13 @@ class AIConfig {
   final String? glmApiKey;
   final String? strategy;
   final bool? enabled;
+  final bool? useVision;
 
   const AIConfig({
     this.glmApiKey,
     this.strategy,
     this.enabled,
+    this.useVision,
   });
 
   Map<String, dynamic> toMap() {
@@ -129,6 +141,9 @@ class AIConfig {
     if (enabled != null) {
       map['enabled'] = enabled;
     }
+    if (useVision != null) {
+      map['use_vision'] = useVision;
+    }
     return map;
   }
 
@@ -136,6 +151,110 @@ class AIConfig {
         glmApiKey: map['glm_api_key'] as String?,
         strategy: map['strategy'] as String?,
         enabled: map['enabled'] as bool?,
+        useVision: map['use_vision'] as bool?,
+      );
+}
+
+/// 应用设置配置
+class AppSettingsConfig {
+  // 账户管理
+  final bool? accountFeatureEnabled;
+
+  // 记账提醒
+  final bool? reminderEnabled;
+  final int? reminderHour;
+  final int? reminderMinute;
+
+  // 语言设置
+  final String? languageCode;
+  final String? countryCode;
+
+  // 个性化设置
+  final int? primaryColor;
+  final int? fontScaleLevel;
+  final double? customFontScale;
+
+  // 云服务选择
+  final String? cloudServiceType;
+
+  // 自动记账功能
+  final bool? autoScreenshotEnabled;
+  final bool? shortcutPreferCamera;
+
+  const AppSettingsConfig({
+    this.accountFeatureEnabled,
+    this.reminderEnabled,
+    this.reminderHour,
+    this.reminderMinute,
+    this.languageCode,
+    this.countryCode,
+    this.primaryColor,
+    this.fontScaleLevel,
+    this.customFontScale,
+    this.cloudServiceType,
+    this.autoScreenshotEnabled,
+    this.shortcutPreferCamera,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{};
+
+    if (accountFeatureEnabled != null) {
+      map['account_feature_enabled'] = accountFeatureEnabled;
+    }
+    if (reminderEnabled != null) {
+      map['reminder_enabled'] = reminderEnabled;
+    }
+    if (reminderHour != null) {
+      map['reminder_hour'] = reminderHour;
+    }
+    if (reminderMinute != null) {
+      map['reminder_minute'] = reminderMinute;
+    }
+    if (languageCode != null && languageCode!.isNotEmpty) {
+      map['language_code'] = languageCode;
+    }
+    if (countryCode != null && countryCode!.isNotEmpty) {
+      map['country_code'] = countryCode;
+    }
+    if (primaryColor != null) {
+      map['primary_color'] = primaryColor;
+    }
+    if (fontScaleLevel != null) {
+      map['font_scale_level'] = fontScaleLevel;
+    }
+    if (customFontScale != null) {
+      map['custom_font_scale'] = customFontScale;
+    }
+    if (cloudServiceType != null && cloudServiceType!.isNotEmpty) {
+      map['cloud_service_type'] = cloudServiceType;
+    }
+    if (autoScreenshotEnabled != null) {
+      map['auto_screenshot_enabled'] = autoScreenshotEnabled;
+    }
+    if (shortcutPreferCamera != null) {
+      map['shortcut_prefer_camera'] = shortcutPreferCamera;
+    }
+
+    return map;
+  }
+
+  static AppSettingsConfig fromMap(Map<String, dynamic> map) =>
+      AppSettingsConfig(
+        accountFeatureEnabled: map['account_feature_enabled'] as bool?,
+        reminderEnabled: map['reminder_enabled'] as bool?,
+        reminderHour: map['reminder_hour'] as int?,
+        reminderMinute: map['reminder_minute'] as int?,
+        languageCode: map['language_code'] as String?,
+        countryCode: map['country_code'] as String?,
+        primaryColor: map['primary_color'] as int?,
+        fontScaleLevel: map['font_scale_level'] as int?,
+        customFontScale: map['custom_font_scale'] != null
+            ? (map['custom_font_scale'] as num).toDouble()
+            : null,
+        cloudServiceType: map['cloud_service_type'] as String?,
+        autoScreenshotEnabled: map['auto_screenshot_enabled'] as bool?,
+        shortcutPreferCamera: map['shortcut_prefer_camera'] as bool?,
       );
 }
 
@@ -188,12 +307,58 @@ class ConfigExportService {
     final glmApiKey = prefs.getString('ai_glm_api_key');
     final aiStrategy = prefs.getString('ai_strategy');
     final aiEnabled = prefs.getBool('ai_bill_extraction_enabled');
+    final aiUseVision = prefs.getBool('ai_use_vision');
 
-    if (glmApiKey != null || aiStrategy != null || aiEnabled != null) {
+    if (glmApiKey != null || aiStrategy != null || aiEnabled != null || aiUseVision != null) {
       aiConfig = AIConfig(
         glmApiKey: glmApiKey,
         strategy: aiStrategy,
         enabled: aiEnabled,
+        useVision: aiUseVision,
+      );
+    }
+
+    // 读取应用设置
+    AppSettingsConfig? appSettings;
+    final accountFeatureEnabled = prefs.getBool('account_feature_enabled');
+    final reminderEnabled = prefs.getBool('reminder_enabled');
+    final reminderHour = prefs.getInt('reminder_hour');
+    final reminderMinute = prefs.getInt('reminder_minute');
+    final languageCode = prefs.getString('selected_language');
+    final countryCode = prefs.getString('selected_language_country');
+    final primaryColor = prefs.getInt('primaryColor');
+    final fontScaleLevel = prefs.getInt('fontScaleLevel');
+    final customFontScale = prefs.getDouble('customFontScale');
+    final cloudServiceType = prefs.getString('selected_cloud_service');
+    final autoScreenshotEnabled = prefs.getBool('auto_screenshot_billing_enabled');
+    final shortcutPreferCamera = prefs.getBool('shortcut_prefer_camera');
+
+    // 如果有任何应用设置，就创建配置对象
+    if (accountFeatureEnabled != null ||
+        reminderEnabled != null ||
+        reminderHour != null ||
+        reminderMinute != null ||
+        languageCode != null ||
+        countryCode != null ||
+        primaryColor != null ||
+        fontScaleLevel != null ||
+        customFontScale != null ||
+        cloudServiceType != null ||
+        autoScreenshotEnabled != null ||
+        shortcutPreferCamera != null) {
+      appSettings = AppSettingsConfig(
+        accountFeatureEnabled: accountFeatureEnabled,
+        reminderEnabled: reminderEnabled,
+        reminderHour: reminderHour,
+        reminderMinute: reminderMinute,
+        languageCode: languageCode,
+        countryCode: countryCode,
+        primaryColor: primaryColor,
+        fontScaleLevel: fontScaleLevel,
+        customFontScale: customFontScale,
+        cloudServiceType: cloudServiceType,
+        autoScreenshotEnabled: autoScreenshotEnabled,
+        shortcutPreferCamera: shortcutPreferCamera,
       );
     }
 
@@ -201,6 +366,7 @@ class ConfigExportService {
       supabase: supabaseConfig,
       webdav: webdavConfig,
       ai: aiConfig,
+      appSettings: appSettings,
     );
 
     // 转换为YAML格式
@@ -243,6 +409,76 @@ class ConfigExportService {
       }
       if (ai.containsKey('enabled')) {
         buffer.writeln('  enabled: ${ai['enabled']}');
+      }
+      if (ai.containsKey('use_vision')) {
+        buffer.writeln('  use_vision: ${ai['use_vision']}');
+      }
+      buffer.writeln();
+    }
+
+    if (yamlMap.containsKey('app_settings')) {
+      buffer.writeln('app_settings:');
+      final settings = yamlMap['app_settings'] as Map<String, dynamic>;
+
+      if (settings.containsKey('account_feature_enabled')) {
+        buffer.writeln('  # 账户管理');
+        buffer.writeln('  account_feature_enabled: ${settings['account_feature_enabled']}');
+      }
+
+      if (settings.containsKey('reminder_enabled') ||
+          settings.containsKey('reminder_hour') ||
+          settings.containsKey('reminder_minute')) {
+        buffer.writeln('  # 记账提醒');
+        if (settings.containsKey('reminder_enabled')) {
+          buffer.writeln('  reminder_enabled: ${settings['reminder_enabled']}');
+        }
+        if (settings.containsKey('reminder_hour')) {
+          buffer.writeln('  reminder_hour: ${settings['reminder_hour']}');
+        }
+        if (settings.containsKey('reminder_minute')) {
+          buffer.writeln('  reminder_minute: ${settings['reminder_minute']}');
+        }
+      }
+
+      if (settings.containsKey('language_code') || settings.containsKey('country_code')) {
+        buffer.writeln('  # 语言设置');
+        if (settings.containsKey('language_code')) {
+          buffer.writeln('  language_code: "${settings['language_code']}"');
+        }
+        if (settings.containsKey('country_code')) {
+          buffer.writeln('  country_code: "${settings['country_code']}"');
+        }
+      }
+
+      if (settings.containsKey('primary_color') ||
+          settings.containsKey('font_scale_level') ||
+          settings.containsKey('custom_font_scale')) {
+        buffer.writeln('  # 个性化设置');
+        if (settings.containsKey('primary_color')) {
+          buffer.writeln('  primary_color: ${settings['primary_color']}');
+        }
+        if (settings.containsKey('font_scale_level')) {
+          buffer.writeln('  font_scale_level: ${settings['font_scale_level']}');
+        }
+        if (settings.containsKey('custom_font_scale')) {
+          buffer.writeln('  custom_font_scale: ${settings['custom_font_scale']}');
+        }
+      }
+
+      if (settings.containsKey('cloud_service_type')) {
+        buffer.writeln('  # 云服务');
+        buffer.writeln('  cloud_service_type: "${settings['cloud_service_type']}"');
+      }
+
+      if (settings.containsKey('auto_screenshot_enabled') ||
+          settings.containsKey('shortcut_prefer_camera')) {
+        buffer.writeln('  # 自动记账');
+        if (settings.containsKey('auto_screenshot_enabled')) {
+          buffer.writeln('  auto_screenshot_enabled: ${settings['auto_screenshot_enabled']}');
+        }
+        if (settings.containsKey('shortcut_prefer_camera')) {
+          buffer.writeln('  shortcut_prefer_camera: ${settings['shortcut_prefer_camera']}');
+        }
       }
     }
 
@@ -298,7 +534,65 @@ class ConfigExportService {
       if (config.ai!.enabled != null) {
         await prefs.setBool('ai_bill_extraction_enabled', config.ai!.enabled!);
       }
+      if (config.ai!.useVision != null) {
+        await prefs.setBool('ai_use_vision', config.ai!.useVision!);
+      }
       logI('ConfigImport', 'AI配置已导入');
+    }
+
+    // 导入应用设置
+    if (config.appSettings != null) {
+      final settings = config.appSettings!;
+
+      // 账户管理
+      if (settings.accountFeatureEnabled != null) {
+        await prefs.setBool('account_feature_enabled', settings.accountFeatureEnabled!);
+      }
+
+      // 记账提醒
+      if (settings.reminderEnabled != null) {
+        await prefs.setBool('reminder_enabled', settings.reminderEnabled!);
+      }
+      if (settings.reminderHour != null) {
+        await prefs.setInt('reminder_hour', settings.reminderHour!);
+      }
+      if (settings.reminderMinute != null) {
+        await prefs.setInt('reminder_minute', settings.reminderMinute!);
+      }
+
+      // 语言设置
+      if (settings.languageCode != null) {
+        await prefs.setString('selected_language', settings.languageCode!);
+      }
+      if (settings.countryCode != null) {
+        await prefs.setString('selected_language_country', settings.countryCode!);
+      }
+
+      // 个性化设置
+      if (settings.primaryColor != null) {
+        await prefs.setInt('primaryColor', settings.primaryColor!);
+      }
+      if (settings.fontScaleLevel != null) {
+        await prefs.setInt('fontScaleLevel', settings.fontScaleLevel!);
+      }
+      if (settings.customFontScale != null) {
+        await prefs.setDouble('customFontScale', settings.customFontScale!);
+      }
+
+      // 云服务
+      if (settings.cloudServiceType != null) {
+        await prefs.setString('selected_cloud_service', settings.cloudServiceType!);
+      }
+
+      // 自动记账
+      if (settings.autoScreenshotEnabled != null) {
+        await prefs.setBool('auto_screenshot_billing_enabled', settings.autoScreenshotEnabled!);
+      }
+      if (settings.shortcutPreferCamera != null) {
+        await prefs.setBool('shortcut_prefer_camera', settings.shortcutPreferCamera!);
+      }
+
+      logI('ConfigImport', '应用设置已导入');
     }
   }
 
