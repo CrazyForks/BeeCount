@@ -77,8 +77,8 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                   _buildWelcomePage(context, theme, l10n), // 第1屏：语言选择
                   _buildCurrencyPage(context, theme, l10n), // 第2屏：货币选择
                   _buildCategoryModePage(context, theme, l10n), // 第3屏：分类模式
-                  _buildPrivacyAndOpenSourcePage(context, theme, l10n), // 第4屏：隐私保护+开源透明
-                  _buildCloudSyncPage(context, theme, l10n), // 第5屏：云同步
+                  _buildCloudSyncPage(context, theme, l10n), // 第4屏：云同步
+                  _buildPrivacyAndOpenSourcePage(context, theme, l10n), // 第5屏：隐私保护+开源透明
                 ],
               ),
             ),
@@ -392,7 +392,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     );
   }
 
-  /// 第4页：隐私保护与开源透明
+  /// 第5页：隐私保护与开源透明
   Widget _buildPrivacyAndOpenSourcePage(
       BuildContext context, ThemeData theme, AppLocalizations l10n) {
     return Padding(

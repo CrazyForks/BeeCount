@@ -82,6 +82,7 @@ class SeedService {
   static String getDefaultIcon(String categoryKey) {
     // 支出分类图标
     const expenseIcons = {
+      // 一级分类
       'dining': 'restaurant',
       'transport': 'directions_car',
       'shopping': 'shopping_cart',
@@ -117,8 +118,13 @@ class SeedService {
       'snacks': 'fastfood',
       'red_packet': 'wallet',
       'fruit': 'eco',
+      'pastry': 'cake',
+      'cooking': 'kitchen',
       'game': 'sports_esports',
       'book': 'menu_book',
+      'invest_loss': 'trending_down',
+      'health_products': 'medication',
+      'subscription': 'subscriptions',
       'lover': 'favorite',
       'decoration': 'home_repair_service',
       'daily_goods': 'local_laundry_service',
@@ -127,41 +133,162 @@ class SeedService {
       'social_security': 'security',
       'express': 'local_shipping',
       'work': 'work_outline',
-      // 二级分类
-      'snacks_biscuit': 'fastfood',
-      'snacks_chips': 'fastfood',
-      'snacks_candy': 'fastfood',
-      'snacks_chocolate': 'fastfood',
-      'snacks_nuts': 'fastfood',
-      'fruit_apple': 'eco',
-      'fruit_banana': 'eco',
-      'fruit_orange': 'eco',
-      'fruit_grape': 'eco',
-      'fruit_watermelon': 'eco',
+
+      // 餐饮二级分类
+      'dining_breakfast': 'free_breakfast',
+      'dining_lunch': 'lunch_dining',
+      'dining_dinner': 'dinner_dining',
+      'dining_meituan': 'delivery_dining',
+      'dining_eleme': 'delivery_dining',
+      'dining_jd': 'delivery_dining',
+      'dining_restaurant': 'restaurant',
+      'dining_food': 'fastfood',
+
+      // 零食二级分类
+      'snacks_biscuit': 'cookie',
+      'snacks_chips': 'ramen_dining',
+      'snacks_candy': 'candy',
+      'snacks_chocolate': 'chocolate',
+      'snacks_nuts': 'grain',
+
+      // 水果二级分类
+      'fruit_apple': 'apple',
+      'fruit_banana': 'sports_cricket',
+      'fruit_orange': 'circle',
+      'fruit_grape': 'bubble_chart',
+      'fruit_watermelon': 'pie_chart',
       'fruit_other': 'eco',
+
+      // 饮品二级分类
       'beverage_milk_tea': 'local_cafe',
-      'beverage_coffee': 'local_cafe',
-      'beverage_juice': 'local_cafe',
-      'beverage_soda': 'local_cafe',
-      'beverage_water': 'local_cafe',
+      'beverage_coffee': 'coffee',
+      'beverage_juice': 'juice',
+      'beverage_soda': 'liquor',
+      'beverage_water': 'water_drop',
+
+      // 糕点二级分类
       'pastry_cake': 'cake',
       'pastry_bread': 'bakery_dining',
-      'pastry_dessert': 'cake',
-      'pastry_biscuit': 'fastfood',
-      'cooking_vegetable': 'local_grocery_store',
-      'cooking_meat': 'local_grocery_store',
-      'cooking_seafood': 'local_grocery_store',
-      'cooking_seasoning': 'local_grocery_store',
-      'cooking_grain': 'local_grocery_store',
+      'pastry_dessert': 'icecream',
+      'pastry_biscuit': 'cookie',
+
+      // 做饭食材二级分类
+      'cooking_vegetable': 'yard',
+      'cooking_meat': 'lunch_dining',
+      'cooking_seafood': 'set_meal',
+      'cooking_seasoning': 'blender',
+      'cooking_grain': 'grain',
+
+      // 购物二级分类
+      'shopping_clothing': 'checkroom',
+      'shopping_shoes': 'accessibility',
+      'shopping_bag': 'shopping_bag',
+      'shopping_accessory': 'watch',
+      'shopping_daily': 'shopping_cart',
+
+      // 宠物二级分类
+      'pets_food': 'pet_supplies',
+      'pets_supplies': 'inventory_2',
+      'pets_medical': 'medical_services',
+      'pets_grooming': 'shower',
+
+      // 交通二级分类
+      'transport_subway': 'directions_subway',
+      'transport_bus': 'directions_bus',
+      'transport_taxi': 'local_taxi',
+      'transport_ride': 'directions_bike',
+      'transport_parking': 'local_parking',
+      'transport_fuel': 'local_gas_station',
+
+      // 汽车二级分类
+      'car_maintenance': 'build',
+      'car_repair': 'handyman',
+      'car_insurance': 'security',
+      'car_wash': 'local_car_wash',
+      'car_fine': 'report_problem',
+
+      // 服饰二级分类
+      'clothing_top': 'checkroom',
+      'clothing_pants': 'diamond',
+      'clothing_skirt': 'auto_awesome',
+      'clothing_shoes': 'hiking',
+      'clothing_accessory': 'watch',
+
+      // 日用品二级分类
+      'daily_toiletries': 'shower',
+      'daily_paper': 'receipt',
+      'daily_cleaning': 'cleaning_services',
+      'daily_kitchen': 'kitchen',
+
+      // 教育二级分类
+      'education_tuition': 'school',
+      'education_training': 'model_training',
+      'education_books': 'menu_book',
+      'education_stationery': 'edit',
+      'education_office': 'business_center',
+
+      // 投资亏损二级分类
+      'invest_loss_stock': 'trending_down',
+      'invest_loss_fund': 'show_chart',
+      'invest_loss_other': 'money_off',
+
+      // 娱乐二级分类
+      'entertainment_movie': 'movie',
+      'entertainment_ktv': 'mic',
+      'entertainment_amusement': 'attractions',
+      'entertainment_bar': 'local_bar',
+      'entertainment_other': 'celebration',
+
+      // 游戏二级分类
+      'game_recharge': 'payments',
+      'game_equipment': 'sports_esports',
+      'game_membership': 'workspace_premium',
+
+      // 保健品二级分类
+      'health_vitamin': 'medication',
+      'health_food': 'biotech',
+      'health_nutrition': 'health_and_safety',
+
+      // 订阅服务二级分类
+      'subscription_video': 'play_circle',
+      'subscription_music': 'music_note',
+      'subscription_cloud': 'cloud',
+      'subscription_other': 'subscriptions',
+
+      // 运动二级分类
+      'sports_gym': 'fitness_center',
+      'sports_equipment': 'sports',
+      'sports_course': 'sports_martial_arts',
+      'sports_outdoor': 'hiking',
+
+      // 住房二级分类
+      'housing_rent': 'home',
+      'housing_property': 'home_work',
+      'housing_mortgage': 'account_balance',
+      'housing_decoration': 'construction',
+
+      // 居家二级分类
+      'home_furniture': 'weekend',
+      'home_appliance': 'devices',
+      'home_decor': 'palette',
+      'home_bedding': 'bed',
+
+      // 美容二级分类
+      'beauty_skincare': 'face',
+      'beauty_cosmetics': 'face_retouching_natural',
+      'beauty_salon': 'content_cut',
+      'beauty_nail': 'back_hand',
     };
 
     // 收入分类图标
     const incomeIcons = {
+      // 一级分类
       'salary': 'work',
       'investment': 'account_balance',
       'bonus': 'emoji_events',
       'reimbursement': 'receipt',
       'part_time': 'schedule',
+      'gift': 'card_giftcard',
       'interest': 'monetization_on',
       'refund': 'undo',
       'invest_income': 'trending_up',
@@ -169,6 +296,74 @@ class SeedService {
       'social_benefit': 'health_and_safety',
       'tax_refund': 'receipt_long',
       'provident_fund': 'account_balance_wallet',
+
+      // 工资二级分类
+      'salary_basic': 'payments',
+      'salary_performance': 'star',
+      'salary_year_end': 'card_giftcard',
+      'salary_overtime': 'access_time',
+
+      // 理财二级分类
+      'investment_fund': 'account_balance',
+      'investment_dividend': 'trending_up',
+      'investment_product': 'savings',
+      'investment_other': 'monetization_on',
+
+      // 红包二级分类
+      'red_packet_festival': 'celebration',
+      'red_packet_birthday': 'cake',
+      'red_packet_return': 'card_giftcard',
+
+      // 奖金二级分类
+      'bonus_year_end': 'emoji_events',
+      'bonus_quarterly': 'star',
+      'bonus_project': 'workspace_premium',
+      'bonus_other': 'military_tech',
+
+      // 报销二级分类
+      'reimbursement_travel': 'flight',
+      'reimbursement_meal': 'restaurant',
+      'reimbursement_other': 'receipt',
+
+      // 兼职二级分类
+      'part_time_income': 'schedule',
+      'part_time_extra': 'attach_money',
+
+      // 礼物二级分类
+      'gift_wedding': 'favorite',
+      'gift_birthday': 'cake',
+      'gift_other': 'card_giftcard',
+
+      // 利息二级分类
+      'interest_bank': 'account_balance',
+      'interest_other': 'monetization_on',
+
+      // 退款二级分类
+      'refund_shopping': 'shopping_cart',
+      'refund_service': 'build',
+      'refund_other': 'undo',
+
+      // 投资收益二级分类
+      'invest_income_stock': 'trending_up',
+      'invest_income_fund': 'account_balance',
+      'invest_income_other': 'attach_money',
+
+      // 二手交易二级分类
+      'second_hand_idle': 'sell',
+      'second_hand_goods': 'storefront',
+
+      // 社会福利二级分类
+      'social_benefit_unemployment': 'health_and_safety',
+      'social_benefit_maternity': 'child_care',
+      'social_benefit_other': 'favorite',
+
+      // 退税二级分类
+      'tax_refund_personal': 'receipt_long',
+      'tax_refund_other': 'description',
+
+      // 公积金二级分类
+      'provident_fund_withdrawal': 'account_balance_wallet',
+      'provident_fund_interest': 'savings',
     };
 
     return expenseIcons[categoryKey] ?? incomeIcons[categoryKey] ?? 'category';
@@ -378,8 +573,9 @@ class SeedService {
         : (hierarchicalIncomeCategories[parentKey] ?? []);
 
     final index = childKeys.indexOf(key);
-    if (index >= 0 && index < names.length) {
-      return names[index].trim();
+    // names[0] is parent name, child names start from names[1]
+    if (index >= 0 && index + 1 < names.length) {
+      return names[index + 1].trim();
     }
 
     return key; // fallback
