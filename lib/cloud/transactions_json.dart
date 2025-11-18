@@ -32,14 +32,15 @@ String _sanitizeString(String? input) {
 /// [ledgerId] - 账本ID
 ///
 /// 返回包含以下字段的 JSON：
-/// - version: 数据格式版本
+/// - version: 数据格式版本（当前为3）
 /// - exportedAt: 导出时间戳
 /// - ledgerId: 账本ID
 /// - ledgerName: 账本名称
 /// - currency: 货币
 /// - count: 交易条数
-/// - accounts: 账户列表
-/// - items: 交易明细
+/// - accounts: 账户列表（name, type, currency, initialBalance）
+/// - categories: 分类列表（name, kind, level, icon, parentName）
+/// - items: 交易明细（type, amount, categoryName, categoryKind, happenedAt, note）
 Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
   final txs = await (db.select(db.transactions)
         ..where((t) => t.ledgerId.equals(ledgerId)))
@@ -55,12 +56,20 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
   // Map categoryId -> name/kind for used categories
   final usedCatIds = txs.map((t) => t.categoryId).whereType<int>().toSet();
   final cats = <int, Map<String, dynamic>>{};
+  final allCategoriesSet = <int>{}; // 存储所有相关分类ID（包括父分类）
+
   for (final cid in usedCatIds) {
     final c = await (db.select(db.categories)..where((c) => c.id.equals(cid)))
         .getSingleOrNull();
     if (c != null) {
       final sanitizedName = _sanitizeString(c.name);
       cats[cid] = {"name": sanitizedName, "kind": c.kind};
+      allCategoriesSet.add(cid);
+
+      // 如果是二级分类，也需要导出其父分类
+      if (c.level == 2 && c.parentId != null) {
+        allCategoriesSet.add(c.parentId!);
+      }
     }
   }
 
@@ -101,14 +110,51 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
           })
       .toList();
 
+  // 构建 categories 数组（包含图标、层级、父分类信息）
+  final categoryItems = <Map<String, dynamic>>[];
+  final allCategoriesList = await (db.select(db.categories)
+        ..where((c) => c.id.isIn(allCategoriesSet.toList())))
+      .get();
+
+  // 先导出一级分类，再导出二级分类（便于导入时先创建父分类）
+  allCategoriesList.sort((a, b) {
+    if (a.level != b.level) return a.level.compareTo(b.level);
+    return a.id.compareTo(b.id);
+  });
+
+  for (final cat in allCategoriesList) {
+    final categoryItem = <String, dynamic>{
+      'name': _sanitizeString(cat.name),
+      'kind': cat.kind,
+      'level': cat.level,
+    };
+
+    // 添加图标信息（如果存在）
+    if (cat.icon != null && cat.icon!.isNotEmpty) {
+      categoryItem['icon'] = cat.icon;
+    }
+
+    // 添加父分类名称（如果是二级分类）
+    if (cat.level == 2 && cat.parentId != null) {
+      final parentCat = allCategoriesList.firstWhere(
+        (c) => c.id == cat.parentId,
+        orElse: () => allCategoriesList.first, // 不应该发生
+      );
+      categoryItem['parentName'] = _sanitizeString(parentCat.name);
+    }
+
+    categoryItems.add(categoryItem);
+  }
+
   final payload = {
-    'version': 2, // 版本升级,新增账户信息
+    'version': 3, // 版本升级,新增分类信息
     'exportedAt': DateTime.now().toUtc().toIso8601String(),
     'ledgerId': ledgerId,
     'ledgerName': ledger?.name,
     'currency': ledger?.currency,
     'count': items.length,
     'accounts': accountItems,
+    'categories': categoryItems, // 新增：分类信息
     'items': items,
   };
 
@@ -178,6 +224,92 @@ Future<({int inserted, int skipped})> importTransactionsJson(
     }
   }
 
+  // 导入分类信息 (version 3+)
+  final categories = data['categories'] as List?;
+  final categoryCacheForImport = <String, int>{}; // key: kind|name -> id
+
+  if (categories != null) {
+    try {
+      // 获取所有现有分类
+      final existingCategories = await repo.db.select(repo.db.categories).get();
+      final existingCategoryMap = <String, Category>{};
+      for (final cat in existingCategories) {
+        existingCategoryMap['${cat.kind}|${cat.name}'] = cat;
+      }
+
+      // 先导入一级分类，再导入二级分类
+      final level1Categories = <Map<String, dynamic>>[];
+      final level2Categories = <Map<String, dynamic>>[];
+
+      for (final cat in categories.cast<Map<String, dynamic>>()) {
+        final level = cat['level'] as int? ?? 1;
+        if (level == 1) {
+          level1Categories.add(cat);
+        } else {
+          level2Categories.add(cat);
+        }
+      }
+
+      // 导入一级分类
+      for (final cat in level1Categories) {
+        final name = cat['name'] as String;
+        final kind = cat['kind'] as String;
+        final icon = cat['icon'] as String?;
+        final key = '$kind|$name';
+
+        if (existingCategoryMap.containsKey(key)) {
+          // 分类已存在，使用现有ID
+          categoryCacheForImport[key] = existingCategoryMap[key]!.id;
+        } else {
+          // 创建新分类
+          final id = await repo.db.into(repo.db.categories).insert(
+            CategoriesCompanion.insert(
+              name: name,
+              kind: kind,
+              level: const d.Value(1),
+              icon: d.Value(icon),
+            ),
+          );
+          categoryCacheForImport[key] = id;
+        }
+      }
+
+      // 导入二级分类
+      for (final cat in level2Categories) {
+        final name = cat['name'] as String;
+        final kind = cat['kind'] as String;
+        final icon = cat['icon'] as String?;
+        final parentName = cat['parentName'] as String?;
+        final key = '$kind|$name';
+
+        if (existingCategoryMap.containsKey(key)) {
+          // 分类已存在，使用现有ID
+          categoryCacheForImport[key] = existingCategoryMap[key]!.id;
+        } else if (parentName != null) {
+          // 查找父分类ID
+          final parentKey = '$kind|$parentName';
+          final parentId = categoryCacheForImport[parentKey];
+
+          if (parentId != null) {
+            // 创建二级分类
+            final id = await repo.db.into(repo.db.categories).insert(
+              CategoriesCompanion.insert(
+                name: name,
+                kind: kind,
+                level: const d.Value(2),
+                parentId: d.Value(parentId),
+                icon: d.Value(icon),
+              ),
+            );
+            categoryCacheForImport[key] = id;
+          }
+        }
+      }
+    } catch (_) {
+      // 分类导入失败不影响交易导入
+    }
+  }
+
   int inserted = 0;
   int skipped = 0;
   int processed = 0;
@@ -191,7 +323,9 @@ Future<({int inserted, int skipped})> importTransactionsJson(
   const batchSize = 500;
 
   // 预热：用于减少 upsertCategory 的重复查询
+  // 如果有 categories 数组，优先使用其中的分类信息
   final categoryCache = <String, int>{}; // key: kind|name -> id
+  categoryCache.addAll(categoryCacheForImport); // 优先使用从 categories 导入的分类
 
   for (final it in items) {
     final type = it['type'] as String;
@@ -208,6 +342,7 @@ Future<({int inserted, int skipped})> importTransactionsJson(
       if (cached != null) {
         categoryId = cached;
       } else {
+        // 如果 categories 数组中没有，回退到 upsertCategory（兼容旧版本）
         categoryId =
             await repo.upsertCategory(name: categoryName, kind: categoryKind);
         categoryCache[key] = categoryId;

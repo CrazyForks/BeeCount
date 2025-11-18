@@ -119,6 +119,9 @@ class _ExportPageState extends ConsumerState<ExportPage> {
       rows.add([
         l10n.exportCsvHeaderType,
         l10n.exportCsvHeaderCategory,
+        l10n.exportCsvHeaderSubCategory, // 二级分类名称
+        l10n.exportCsvHeaderCategoryIcon, // 分类图标
+        l10n.exportCsvHeaderSubCategoryIcon, // 二级分类图标
         l10n.exportCsvHeaderAmount,
         l10n.exportCsvHeaderAccount,
         l10n.exportCsvHeaderFromAccount, // 转出账户
@@ -130,6 +133,10 @@ class _ExportPageState extends ConsumerState<ExportPage> {
       // 缓存所有账户信息，避免重复查询
       final allAccounts = await repo.db.select(repo.db.accounts).get();
       final accountMap = {for (var acc in allAccounts) acc.id: acc};
+
+      // 缓存所有分类信息（包括父分类）
+      final allCategories = await repo.db.select(repo.db.categories).get();
+      final categoryMap = {for (var cat in allCategories) cat.id: cat};
 
       for (int i = 0; i < rowsJoin.length; i++) {
         final r = rowsJoin[i];
@@ -153,6 +160,9 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         String fromAccountName;
         String toAccountName;
         String categoryName;
+        String subCategoryName;
+        String categoryIcon;
+        String subCategoryIcon;
 
         if (t.type == 'transfer') {
           // 转账记录：账户列留空，填充转出账户和转入账户
@@ -162,17 +172,45 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           fromAccountName = fromAccount?.name ?? '';
           toAccountName = toAccount?.name ?? '';
           categoryName = ''; // 转账没有分类
+          subCategoryName = '';
+          categoryIcon = '';
+          subCategoryIcon = '';
         } else {
           // 收入或支出：正常填充账户列，转出转入账户留空
           accountName = a?.name ?? '';
           fromAccountName = '';
           toAccountName = '';
-          categoryName = CategoryUtils.getDisplayName(c?.name, context);
+
+          // 处理分类信息
+          if (c != null) {
+            if (c.level == 2 && c.parentId != null) {
+              // 二级分类：分类列填一级分类名称，二级分类列填当前分类名称
+              final parentCategory = categoryMap[c.parentId];
+              categoryName = CategoryUtils.getDisplayName(parentCategory?.name, context);
+              subCategoryName = CategoryUtils.getDisplayName(c.name, context);
+              categoryIcon = parentCategory?.icon ?? '';
+              subCategoryIcon = c.icon ?? '';
+            } else {
+              // 一级分类：分类列填当前分类，二级分类列留空
+              categoryName = CategoryUtils.getDisplayName(c.name, context);
+              subCategoryName = '';
+              categoryIcon = c.icon ?? '';
+              subCategoryIcon = '';
+            }
+          } else {
+            categoryName = '';
+            subCategoryName = '';
+            categoryIcon = '';
+            subCategoryIcon = '';
+          }
         }
 
         rows.add([
           typeStr,
           categoryName,
+          subCategoryName,
+          categoryIcon,
+          subCategoryIcon,
           t.amount.toStringAsFixed(2),
           accountName,
           fromAccountName,

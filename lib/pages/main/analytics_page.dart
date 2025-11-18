@@ -10,8 +10,8 @@ import '../../widgets/charts/line_chart.dart';
 import '../../widgets/analytics/analytics_summary.dart';
 import '../../widgets/analytics/category_rank_row.dart';
 import '../../widgets/ui/capsule_switcher.dart';
-import '../transaction/category_detail_page.dart';
 import '../../l10n/app_localizations.dart';
+import '../../data/repository.dart';
 
 class AnalyticsPage extends ConsumerStatefulWidget {
   const AnalyticsPage({super.key});
@@ -432,24 +432,8 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
             child: FutureBuilder(
               key: ValueKey('analytics_$_type'),
               future: _type == 'balance'
-                  ? Future.wait([
-                      repo.totalsByCategory(
-                          ledgerId: ledgerId, type: 'expense', start: start, end: end),
-                      seriesFuture,
-                      repo.countByTypeInRange(
-                          ledgerId: ledgerId, type: 'expense', start: start, end: end),
-                      incomeSeriesFuture!,
-                      expenseSeriesFuture!,
-                      repo.countByTypeInRange(
-                          ledgerId: ledgerId, type: 'income', start: start, end: end),
-                    ])
-                  : Future.wait([
-                      repo.totalsByCategory(
-                          ledgerId: ledgerId, type: _type, start: start, end: end),
-                      seriesFuture,
-                      repo.countByTypeInRange(
-                          ledgerId: ledgerId, type: _type, start: start, end: end),
-                    ]),
+                  ? _loadBalanceData(repo, ledgerId, start, end, seriesFuture, incomeSeriesFuture!, expenseSeriesFuture!)
+                  : _loadCategoryData(repo, ledgerId, _type, start, end, seriesFuture),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
@@ -471,7 +455,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                   seriesRaw = _calculateBalanceSeries(incomeData, expenseData);
 
                   // 分类数据显示支出分类（但结余模式下不显示排行榜）
-                  catData = (list[0] as List<({int? id, String name, String? icon, double total})>);
+                  catData = list[0] as List<({int? id, String name, String? icon, double total})>;
 
                   // 获取收入和支出的交易数量
                   final expenseCount = list[2] as int;
@@ -483,7 +467,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                   final expenseSum = _getSumFromSeries(expenseData);
                   sum = incomeSum - expenseSum;
                 } else {
-                  catData = (list[0] as List<({int? id, String name, String? icon, double total})>);
+                  catData = list[0] as List<({int? id, String name, String? icon, double total})>;
                   seriesRaw = list[1];
                   txCount = list[2] as int;
                   sum = catData.fold<double>(0, (a, b) => a + b.total);
@@ -763,16 +747,17 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                         const SizedBox(height: 8),
                       if (_type != 'balance')
                         for (final item in catData)
-                          InkWell(
-                            onTap: () => _openCategoryDetail(
-                                context, ref, _scope, selMonth, item.id, item.name, start, end, _type),
-                            child: CategoryRankRow(
-                              name: item.name,
-                              iconName: item.icon,
-                              value: item.total,
-                              percent: sum == 0 ? 0 : item.total / sum,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                          CategoryRankRow(
+                            categoryId: item.id,
+                            name: item.name,
+                            iconName: item.icon,
+                            value: item.total,
+                            percent: sum == 0 ? 0 : item.total / sum,
+                            color: Theme.of(context).colorScheme.primary,
+                            start: start,
+                            end: end,
+                            scope: _scope,
+                            selMonth: selMonth,
                           ),
                     ],
                   ),
@@ -843,26 +828,108 @@ double _computeAverage(dynamic seriesRaw, String scope) {
   return 0;
 }
 
-// 打开分类详情页面
-void _openCategoryDetail(BuildContext context, WidgetRef ref, String scope, DateTime selMonth, int? categoryId,
-    String categoryName, DateTime start, DateTime end, String type) {
-  if (categoryId == null) return;
+// 加载分类数据并聚合
+Future<List<dynamic>> _loadCategoryData(
+  BeeRepository repo,
+  int ledgerId,
+  String type,
+  DateTime start,
+  DateTime end,
+  Future<dynamic> seriesFuture,
+) async {
+  final results = await Future.wait([
+    repo.totalsByCategoryWithHierarchy(ledgerId: ledgerId, type: type, start: start, end: end),
+    seriesFuture,
+    repo.countByTypeInRange(ledgerId: ledgerId, type: type, start: start, end: end),
+  ]);
 
-  // 生成周期标签（不包含支出/收入后缀）
-  String? periodLabel;
-  if (scope != 'all') {
-    periodLabel = _currentPeriodLabel(scope, selMonth, context);
+  final hierarchyData = results[0] as List<({int? id, String name, String? icon, int? parentId, int level, double total})>;
+  final aggregated = await _aggregateTopLevelCategories(hierarchyData, repo);
+
+  return [aggregated, results[1], results[2]];
+}
+
+// 加载结余数据并聚合
+Future<List<dynamic>> _loadBalanceData(
+  BeeRepository repo,
+  int ledgerId,
+  DateTime start,
+  DateTime end,
+  Future<dynamic> seriesFuture,
+  Future<dynamic> incomeSeriesFuture,
+  Future<dynamic> expenseSeriesFuture,
+) async {
+  final results = await Future.wait([
+    repo.totalsByCategoryWithHierarchy(ledgerId: ledgerId, type: 'expense', start: start, end: end),
+    seriesFuture,
+    repo.countByTypeInRange(ledgerId: ledgerId, type: 'expense', start: start, end: end),
+    incomeSeriesFuture,
+    expenseSeriesFuture,
+    repo.countByTypeInRange(ledgerId: ledgerId, type: 'income', start: start, end: end),
+  ]);
+
+  final hierarchyData = results[0] as List<({int? id, String name, String? icon, int? parentId, int level, double total})>;
+  final aggregated = await _aggregateTopLevelCategories(hierarchyData, repo);
+
+  return [aggregated, results[1], results[2], results[3], results[4], results[5]];
+}
+
+// 聚合一级分类数据（将二级分类金额聚合到一级分类）
+Future<List<({int? id, String name, String? icon, double total})>> _aggregateTopLevelCategories(
+    List<({int? id, String name, String? icon, int? parentId, int level, double total})> hierarchyData,
+    BeeRepository repo) async {
+  // 1. 先收集所有一级分类的基本信息
+  final topLevelInfo = <int, ({String name, String? icon})>{};
+  for (final item in hierarchyData) {
+    if (item.level == 1 && item.id != null) {
+      topLevelInfo[item.id!] = (name: item.name, icon: item.icon);
+    }
   }
 
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) => CategoryDetailPage(
-        categoryId: categoryId,
-        categoryName: categoryName,
-        startDate: scope != 'all' ? start : null,
-        endDate: scope != 'all' ? end : null,
-        periodLabel: periodLabel,
-      ),
-    ),
-  );
+  // 2. 收集所有需要查询的父分类ID（二级分类的父分类，但在topLevelInfo中不存在的）
+  final parentIdsToQuery = <int>{};
+  for (final item in hierarchyData) {
+    if (item.level == 2 && item.parentId != null && !topLevelInfo.containsKey(item.parentId!)) {
+      parentIdsToQuery.add(item.parentId!);
+    }
+  }
+
+  // 3. 查询缺失的父分类信息
+  for (final parentId in parentIdsToQuery) {
+    final category = await repo.getCategoryById(parentId);
+    if (category != null) {
+      topLevelInfo[parentId] = (name: category.name, icon: category.icon);
+    }
+  }
+
+  // 4. 聚合金额
+  final topLevelMap = <int?, double>{};
+
+  for (final item in hierarchyData) {
+    if (item.level == 1) {
+      // 一级分类：累加金额
+      topLevelMap.update(item.id, (v) => v + item.total, ifAbsent: () => item.total);
+    } else if (item.level == 2 && item.parentId != null) {
+      // 二级分类：累加到父分类
+      topLevelMap.update(item.parentId, (v) => v + item.total, ifAbsent: () => item.total);
+    }
+  }
+
+  // 5. 转换为列表并排序
+  final result = topLevelMap.entries.map((e) {
+    final id = e.key;
+    final total = e.value;
+
+    // 获取一级分类信息
+    if (id != null && topLevelInfo.containsKey(id)) {
+      final info = topLevelInfo[id]!;
+      return (id: id, name: info.name, icon: info.icon, total: total);
+    } else {
+      return (id: id, name: '未分类', icon: null, total: total);
+    }
+  }).toList()
+    ..sort((a, b) => b.total.compareTo(a.total));
+
+  return result;
 }
+

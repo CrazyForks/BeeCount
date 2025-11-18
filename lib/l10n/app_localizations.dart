@@ -2998,6 +2998,78 @@ abstract class AppLocalizations {
   /// **'Category \"{name}\" deleted'**
   String categoryDeleted(Object name);
 
+  /// No description provided for @categorySubCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory'**
+  String get categorySubCategoryTitle;
+
+  /// No description provided for @categorySubCategoryDescriptionEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This category belongs to a parent category'**
+  String get categorySubCategoryDescriptionEnabled;
+
+  /// No description provided for @categorySubCategoryDescriptionDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an independent top-level category'**
+  String get categorySubCategoryDescriptionDisabled;
+
+  /// No description provided for @categoryParentCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent Category'**
+  String get categoryParentCategoryTitle;
+
+  /// No description provided for @categoryParentCategoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select parent category'**
+  String get categoryParentCategoryHint;
+
+  /// No description provided for @categorySelectParentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Parent Category'**
+  String get categorySelectParentTitle;
+
+  /// No description provided for @categorySelectParentDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Only categories without transaction records can be selected as parent'**
+  String get categorySelectParentDescription;
+
+  /// No description provided for @categorySubCategoryCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory added: {name}'**
+  String categorySubCategoryCreated(Object name);
+
+  /// No description provided for @categoryParentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select parent category'**
+  String get categoryParentRequired;
+
+  /// No description provided for @categoryParentRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get categoryParentRequiredTitle;
+
+  /// No description provided for @categoryParentHasTransactionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot Add Subcategory'**
+  String get categoryParentHasTransactionsTitle;
+
+  /// No description provided for @categoryParentHasTransactionsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Category \"{name}\" has {count} transaction records.\n\nTo add subcategories, these transactions must be migrated to other categories first.'**
+  String categoryParentHasTransactionsMessage(Object count, Object name);
+
   /// No description provided for @personalizeTitle.
   ///
   /// In en, this message translates to:
@@ -4431,6 +4503,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category'**
   String get exportCsvHeaderCategory;
+
+  /// No description provided for @exportCsvHeaderSubCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory'**
+  String get exportCsvHeaderSubCategory;
+
+  /// No description provided for @exportCsvHeaderCategoryIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Icon'**
+  String get exportCsvHeaderCategoryIcon;
+
+  /// No description provided for @exportCsvHeaderSubCategoryIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory Icon'**
+  String get exportCsvHeaderSubCategoryIcon;
 
   /// No description provided for @exportCsvHeaderAmount.
   ///

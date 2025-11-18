@@ -34,6 +34,8 @@ class Categories extends Table {
   TextColumn get kind => text()(); // expense / income
   TextColumn get icon => text().nullable()();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))(); // 排序顺序，数字越小越靠前
+  IntColumn get parentId => integer().nullable()(); // 父分类ID，null 表示一级分类
+  IntColumn get level => integer().withDefault(const Constant(1))(); // 层级：1=一级，2=二级
 }
 
 class Transactions extends Table {
@@ -82,7 +84,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;  // v5: 账户独立改造（添加currency，准备移除ledgerId）
+  int get schemaVersion => 6;  // v6: 二级分类支持（添加parentId、level字段）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -139,6 +141,24 @@ class BeeDatabase extends _$BeeDatabase {
 
         // 注意：不在onUpgrade中更新currency数据
         // 数据迁移统一由 MigrationService 处理，避免重复逻辑
+      }
+      if (from < 6) {
+        // v6: 二级分类支持
+        // 检查字段是否已存在，避免重复添加
+        final tableInfo = await customSelect('PRAGMA table_info(categories)').get();
+        final hasParentId = tableInfo.any((row) => row.data['name'] == 'parent_id');
+        final hasLevel = tableInfo.any((row) => row.data['name'] == 'level');
+
+        if (!hasParentId) {
+          await customStatement('ALTER TABLE categories ADD COLUMN parent_id INTEGER;');
+        }
+
+        if (!hasLevel) {
+          await customStatement('ALTER TABLE categories ADD COLUMN level INTEGER NOT NULL DEFAULT 1;');
+        }
+
+        // 确保所有现有分类的 level 都为 1（一级分类）
+        await customStatement('UPDATE categories SET level = 1 WHERE level IS NULL OR level = 0;');
       }
     },
   );

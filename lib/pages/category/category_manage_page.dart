@@ -5,6 +5,7 @@ import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import '../../providers.dart';
 import '../../providers/database_providers.dart';
 import '../../widgets/ui/ui.dart';
+import '../../widgets/category/subcategory_container.dart';
 import '../../data/db.dart' as db;
 import '../../services/category_service.dart';
 import '../../l10n/app_localizations.dart';
@@ -12,8 +13,13 @@ import '../../utils/category_utils.dart';
 import 'category_edit_page.dart';
 
 class CategoryManagePage extends ConsumerStatefulWidget {
-  const CategoryManagePage({super.key});
-  
+  final int initialTabIndex; // 0: 支出, 1: 收入
+
+  const CategoryManagePage({
+    super.key,
+    this.initialTabIndex = 0,
+  });
+
   @override
   ConsumerState<CategoryManagePage> createState() => _CategoryManagePageState();
 }
@@ -24,7 +30,11 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: widget.initialTabIndex,
+    );
     _tabController.addListener(() {
       setState(() {}); // 重新构建以更新按钮状态
     });
@@ -44,27 +54,27 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
       body: Column(
         children: [
           PrimaryHeader(
-            title: AppLocalizations.of(context)!.categoryTitle,
+            title: AppLocalizations.of(context).categoryTitle,
             showBack: true,
             actions: [
               IconButton(
                 onPressed: () => _addCategory(),
                 icon: const Icon(Icons.add),
-                tooltip: AppLocalizations.of(context)!.categoryNew,
+                tooltip: AppLocalizations.of(context).categoryNew,
               ),
             ],
           ),
           TabBar(
             controller: _tabController,
             tabs: [
-              Tab(text: AppLocalizations.of(context)!.categoryExpense),
-              Tab(text: AppLocalizations.of(context)!.categoryIncome),
+              Tab(text: AppLocalizations.of(context).categoryExpense),
+              Tab(text: AppLocalizations.of(context).categoryIncome),
             ],
           ),
           Expanded(
             child: categoriesWithCountAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(child: Text(AppLocalizations.of(context)!.categoryLoadFailed(error.toString()))),
+              error: (error, stack) => Center(child: Text(AppLocalizations.of(context).categoryLoadFailed(error.toString()))),
               data: (categoriesWithCount) {
                 return Column(
                   children: [
@@ -79,7 +89,7 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              AppLocalizations.of(context)!.categoryReorderTip,
+                              AppLocalizations.of(context).categoryReorderTip,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.blue[700],
@@ -113,7 +123,7 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
       ),
     );
   }
-  
+
   void _addCategory() async {
     final kind = _tabController.index == 0 ? 'expense' : 'income';
     await Navigator.of(context).push(
@@ -121,8 +131,6 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
         builder: (_) => CategoryEditPage(kind: kind),
       ),
     );
-
-    // 响应式provider会自动更新，无需手动刷新
   }
 }
 
@@ -140,12 +148,13 @@ class _CategoryGridView extends ConsumerStatefulWidget {
 }
 
 class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
-  late List<({db.Category category, int transactionCount, bool isDefault})> _categories;
+  List<_CategoryItem> _flatList = []; // 初始化为空列表
+  int? _expandedCategoryId; // 当前展开的一级分类ID
 
   @override
   void initState() {
     super.initState();
-    _buildCategories();
+    _buildFlatList();
   }
 
   @override
@@ -153,34 +162,77 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
     super.didUpdateWidget(oldWidget);
     if (widget.categoriesWithCount != oldWidget.categoriesWithCount ||
         widget.kind != oldWidget.kind) {
-      _buildCategories();
+      _buildFlatList();
     }
   }
 
-  void _buildCategories() {
+  Future<void> _buildFlatList() async {
     // 获取默认分类名单
     final defaultNames = CategoryService.getDefaultCategoryNames(widget.kind);
 
-    // 获取当前类型的所有分类
-    final dbCategories = widget.categoriesWithCount
-        .where((item) => item.category.kind == widget.kind)
+    // 获取当前类型的一级分类
+    final topLevelCategories = widget.categoriesWithCount
+        .where((item) =>
+            item.category.kind == widget.kind &&
+            item.category.level == 1)
         .toList();
 
-    final allCategoryItems = <({db.Category category, int transactionCount, bool isDefault})>[];
+    // 按 sortOrder 排序
+    topLevelCategories.sort((a, b) => a.category.sortOrder.compareTo(b.category.sortOrder));
 
-    // 添加数据库中的分类
-    for (final item in dbCategories) {
-      allCategoryItems.add((
-        category: item.category,
-        transactionCount: item.transactionCount,
-        isDefault: defaultNames.contains(item.category.name),
+    final repo = ref.read(repositoryProvider);
+    final flatList = <_CategoryItem>[];
+
+    for (final topItem in topLevelCategories) {
+      // 检查是否有子分类
+      final subCategories = await repo.getSubCategories(topItem.category.id);
+      final hasSubCategories = subCategories.isNotEmpty;
+
+      // 添加一级分类
+      flatList.add(_CategoryItem(
+        category: topItem.category,
+        transactionCount: topItem.transactionCount,
+        isDefault: defaultNames.contains(topItem.category.name),
+        isSubCategory: false,
+        hasSubCategories: hasSubCategories,
       ));
+
+      // 如果展开，添加二级分类 + 操作按钮
+      if (_expandedCategoryId == topItem.category.id && hasSubCategories) {
+        for (final subCat in subCategories) {
+          // 查找二级分类的交易数量
+          final subCount = widget.categoriesWithCount
+              .firstWhere(
+                (item) => item.category.id == subCat.id,
+                orElse: () => (category: subCat, transactionCount: 0),
+              )
+              .transactionCount;
+
+          flatList.add(_CategoryItem(
+            category: subCat,
+            transactionCount: subCount,
+            isDefault: false,
+            isSubCategory: true,
+            parent: topItem.category,
+          ));
+        }
+
+        // 添加操作按钮项（加号和编辑按钮）
+        flatList.add(_CategoryItem(
+          category: topItem.category, // 使用父分类
+          transactionCount: 0,
+          isDefault: false,
+          isSubCategory: false,
+          isActionButtons: true, // 标记为操作按钮项
+        ));
+      }
     }
 
-    // 按 sortOrder 排序
-    allCategoryItems.sort((a, b) => a.category.sortOrder.compareTo(b.category.sortOrder));
-
-    _categories = allCategoryItems;
+    if (mounted) {
+      setState(() {
+        _flatList = flatList;
+      });
+    }
   }
 
   Future<void> _onReorder(int oldIndex, int newIndex) async {
@@ -188,16 +240,27 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
       newIndex -= 1;
     }
 
+    // 只允许一级分类之间拖拽重排
+    if (_flatList[oldIndex].isSubCategory ||
+        _flatList[newIndex].isSubCategory ||
+        _flatList[oldIndex].isActionButtons ||
+        _flatList[newIndex].isActionButtons) {
+      return;
+    }
+
     setState(() {
-      final item = _categories.removeAt(oldIndex);
-      _categories.insert(newIndex, item);
+      final item = _flatList.removeAt(oldIndex);
+      _flatList.insert(newIndex, item);
     });
 
-    // 保存新的排序到数据库（批量更新）
+    // 保存新的排序到数据库（只处理一级分类）
+    final topLevelCategories = _flatList
+        .where((item) => !item.isSubCategory && !item.isActionButtons)
+        .toList();
     final database = ref.read(databaseProvider);
     await database.transaction(() async {
-      for (var i = 0; i < _categories.length; i++) {
-        final category = _categories[i].category;
+      for (var i = 0; i < topLevelCategories.length; i++) {
+        final category = topLevelCategories[i].category;
         await (database.update(database.categories)
               ..where((c) => c.id.equals(category.id)))
             .write(db.CategoriesCompanion(sortOrder: drift.Value(i)));
@@ -207,10 +270,10 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
     // 刷新数据
     ref.invalidate(categoriesWithCountProvider);
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    if (_categories.isEmpty) {
+    if (_flatList.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +285,7 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
             ),
             const SizedBox(height: 16),
             Text(
-              AppLocalizations.of(context)!.categoryEmpty,
+              AppLocalizations.of(context).categoryEmpty,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Colors.grey[600],
               ),
@@ -232,124 +295,217 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
       );
     }
 
-    // 使用可拖拽的网格视图
-    return ReorderableGridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1,
-      ),
-      itemCount: _categories.length,
-      onReorder: _onReorder,
-      dragWidgetBuilder: (index, child) {
-        final item = _categories[index];
-        return Material(
-          elevation: 6,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+    // 使用 ListView 来混合显示 GridView 和 SubcategoryContainer
+    return FutureBuilder<Map<int, List<({db.Category category, int transactionCount})>>>(
+      future: _loadSubCategoriesMap(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final subCategoriesMap = snapshot.data!;
+        final topLevelCategories = _flatList
+            .where((item) => !item.isSubCategory && !item.isActionButtons)
+            .toList();
+
+        // 构建显示项列表：网格行 + 可能的二级分类容器
+        final displayItems = <Widget>[];
+
+        // 按每4个一组显示一级分类
+        for (int i = 0; i < topLevelCategories.length; i += 4) {
+          final endIndex = (i + 4).clamp(0, topLevelCategories.length);
+          final rowItems = topLevelCategories.sublist(i, endIndex);
+
+          // 添加网格行
+          displayItems.add(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: ReorderableGridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1,
+                ),
+                itemCount: rowItems.length,
+                onReorder: (oldIndex, newIndex) {
+                  _onReorder(i + oldIndex, i + newIndex);
+                },
+                itemBuilder: (context, index) {
+                  final item = rowItems[index];
+                  return _CategoryCard(
+                    key: ValueKey(item.category.id),
+                    item: item,
+                    isExpanded: _expandedCategoryId == item.category.id,
+                    onTap: () => _onCategoryTap(item),
+                  );
+                },
               ),
             ),
-            child: Stack(
-              children: [
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          CategoryService.getCategoryIcon(item.category.icon),
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 18,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Text(
-                          CategoryUtils.getDisplayName(item.category.name, context),
-                          style: Theme.of(context).textTheme.labelSmall,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        AppLocalizations.of(context)!.categoryMigrationTransactionLabel(item.transactionCount),
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.outline,
-                          fontSize: 10,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+          );
+
+          // 检查这一行中是否有展开的分类，如果有则添加二级分类容器
+          for (final item in rowItems) {
+            if (_expandedCategoryId == item.category.id && item.hasSubCategories) {
+              final subCategories = subCategoriesMap[item.category.id] ?? [];
+              displayItems.add(
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: SubcategoryContainer(
+                    key: ValueKey('sub_${item.category.id}'),
+                    parentCategory: item.category,
+                    subCategories: subCategories,
+                    onSubCategoryTap: (cat) => _onEditCategory(cat),
+                    onAddSubCategory: () => _onAddSubCategory(item.category),
+                    onEditParentCategory: () => _onEditCategory(item.category),
                   ),
                 ),
-              ],
-            ),
-          ),
-        );
-      },
-      itemBuilder: (context, index) {
-        final item = _categories[index];
-        return _CategoryCard(
-          key: ValueKey(item.category.id != -1 ? item.category.id : 'virtual_${item.category.name}'),
-          category: item.category,
-          transactionCount: item.transactionCount,
-          isDefault: item.isDefault,
+              );
+              break; // 每行只展开一个
+            }
+          }
+        }
+
+        return ListView(
+          padding: const EdgeInsets.all(16),
+          children: displayItems,
         );
       },
     );
   }
+
+
+  void _onCategoryTap(_CategoryItem item) async {
+    if (item.isSubCategory) {
+      // 二级分类：直接编辑
+      await _onEditCategory(item.category);
+    } else {
+      // 一级分类：检查是否有子分类
+      if (item.hasSubCategories) {
+        // 有子分类：切换展开/折叠
+        setState(() {
+          if (_expandedCategoryId == item.category.id) {
+            _expandedCategoryId = null;
+          } else {
+            _expandedCategoryId = item.category.id;
+          }
+        });
+        await _buildFlatList();
+      } else {
+        // 无子分类：直接编辑
+        await _onEditCategory(item.category);
+      }
+    }
+  }
+
+  Future<void> _onEditCategory(db.Category category) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CategoryEditPage(
+          category: category,
+          kind: category.kind,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onAddSubCategory(db.Category parent) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CategoryEditPage(
+          kind: parent.kind,
+          parentCategory: parent,
+        ),
+      ),
+    );
+    await _buildFlatList();
+  }
+
+  Future<Map<int, List<({db.Category category, int transactionCount})>>> _loadSubCategoriesMap() async {
+    final repo = ref.read(repositoryProvider);
+    final result = <int, List<({db.Category category, int transactionCount})>>{};
+
+    final topLevelCategories = _flatList
+        .where((item) => !item.isSubCategory && !item.isActionButtons)
+        .toList();
+
+    for (final topItem in topLevelCategories) {
+      final subCategories = await repo.getSubCategories(topItem.category.id);
+      if (subCategories.isNotEmpty) {
+        final subCategoriesWithCount = <({db.Category category, int transactionCount})>[];
+        for (final subCat in subCategories) {
+          // 查找二级分类的交易数量
+          final subCount = widget.categoriesWithCount
+              .firstWhere(
+                (item) => item.category.id == subCat.id,
+                orElse: () => (category: subCat, transactionCount: 0),
+              )
+              .transactionCount;
+
+          subCategoriesWithCount.add((category: subCat, transactionCount: subCount));
+        }
+        result[topItem.category.id] = subCategoriesWithCount;
+      }
+    }
+
+    return result;
+  }
 }
 
-class _CategoryCard extends ConsumerWidget {
+class _CategoryItem {
   final db.Category category;
   final int transactionCount;
   final bool isDefault;
+  final bool isSubCategory;
+  final db.Category? parent;
+  final bool hasSubCategories;
+  final bool isActionButtons; // 是否为操作按钮项
 
-  const _CategoryCard({
-    super.key,
+  _CategoryItem({
     required this.category,
     required this.transactionCount,
     required this.isDefault,
+    required this.isSubCategory,
+    this.parent,
+    this.hasSubCategories = false,
+    this.isActionButtons = false,
+  });
+}
+
+class _CategoryCard extends ConsumerWidget {
+  final _CategoryItem item;
+  final bool isExpanded;
+  final VoidCallback onTap;
+
+  const _CategoryCard({
+    super.key,
+    required this.item,
+    required this.isExpanded,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // 二级分类：使用浅色背景
+    final backgroundColor = item.isSubCategory
+        ? Colors.orange[50]
+        : Theme.of(context).colorScheme.surface;
+
     return InkWell(
-      onTap: () async {
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => CategoryEditPage(
-              category: category,
-              kind: category.kind,
-            ),
-          ),
-        );
-      },
+      onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+            color: item.isSubCategory
+                ? Colors.orange.withValues(alpha: 0.3)
+                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+            width: 1,
           ),
         ),
         child: Stack(
@@ -361,24 +517,31 @@ class _CategoryCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 32,
-                    height: 32,
+                    width: item.isSubCategory ? 28 : 32,
+                    height: item.isSubCategory ? 28 : 32,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                      color: item.isSubCategory
+                          ? Colors.orange.withValues(alpha: 0.2)
+                          : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      CategoryService.getCategoryIcon(category.icon),
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 18,
+                      CategoryService.getCategoryIcon(item.category.icon),
+                      color: item.isSubCategory
+                          ? Colors.orange[700]
+                          : Theme.of(context).colorScheme.primary,
+                      size: item.isSubCategory ? 16 : 18,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
-                      CategoryUtils.getDisplayName(category.name, context),
-                      style: Theme.of(context).textTheme.labelSmall,
+                      CategoryUtils.getDisplayName(item.category.name, context),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            fontSize: item.isSubCategory ? 10 : 12,
+                            color: item.isSubCategory ? Colors.orange[900] : null,
+                          ),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -386,19 +549,41 @@ class _CategoryCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    AppLocalizations.of(context)!.categoryMigrationTransactionLabel(transactionCount),
+                    AppLocalizations.of(context).categoryMigrationTransactionLabel(item.transactionCount),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize: 10,
-                    ),
+                          color: item.isSubCategory
+                              ? Colors.orange[700]
+                              : Theme.of(context).colorScheme.outline,
+                          fontSize: item.isSubCategory ? 9 : 10,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
+            // 有子分类的一级分类：右下角显示展开/折叠指示器
+            if (!item.isSubCategory && item.hasSubCategories)
+              Positioned(
+                right: 4,
+                bottom: 4,
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    isExpanded ? Icons.expand_less : Icons.expand_more,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 }
+

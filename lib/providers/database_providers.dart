@@ -102,6 +102,7 @@ final categoriesWithCountProvider = StreamProvider<List<({Category category, int
   return repo.watchCategoriesWithCount();
 });
 
+
 // 重复交易Provider
 final recurringTransactionsProvider = FutureProvider.family<List<RecurringTransaction>, int>((ref, ledgerId) async {
   final db = ref.watch(databaseProvider);

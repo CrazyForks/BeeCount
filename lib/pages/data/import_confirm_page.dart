@@ -40,6 +40,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     'type': null,
     'amount': null,
     'category': null,
+    'sub_category': null,       // 二级分类
+    'category_icon': null,       // 分类图标
+    'sub_category_icon': null,   // 二级分类图标
     'account': null,
     'from_account': null,
     'to_account': null,
@@ -168,6 +171,12 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                           'amount', items()),
                       _mapRow(AppLocalizations.of(context)!.importFieldCategory,
                           'category', items()),
+                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderSubCategory,
+                          'sub_category', items()),
+                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderCategoryIcon,
+                          'category_icon', items()),
+                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderSubCategoryIcon,
+                          'sub_category_icon', items()),
                       _mapRow(AppLocalizations.of(context)!.importFieldAccount,
                           'account', items()),
                       _mapRow(AppLocalizations.of(context)!.exportCsvHeaderFromAccount,
@@ -558,7 +567,173 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           }
         }
 
-        // 步骤2：批量导入记录
+        // 步骤2：批量创建分类
+        // 收集所有需要创建的分类信息（一级和二级）
+        final Map<String, ({String kind, String? icon, String? parentName})> categoriesToCreate = {};
+
+        for (int i = dataStart; i < rows.length; i++) {
+          if (_cancelled) break;
+          final r = rows[i];
+          try {
+            String? getBy(String key) {
+              final userIdx = mapping[key];
+              if (userIdx != null && userIdx >= 0 && userIdx < r.length) {
+                final val = r[userIdx].toString().trim();
+                return val.isNotEmpty ? val : null;
+              }
+              return null;
+            }
+
+            var typeRaw = getBy('type') ?? 'expense';
+            final typeStr = typeRaw.trim().toLowerCase();
+
+            String? type;
+            if (typeStr == '收入' || typeStr == '收' || typeStr == '入账' || typeStr == '进账' ||
+                typeStr == 'income' || typeStr == 'revenue' || typeStr == 'earning') {
+              type = 'income';
+            } else if (typeStr == '支出' || typeStr == '支' || typeStr == '出账' ||
+                       typeStr == '消费' || typeStr == '花费' ||
+                       typeStr == 'expense' || typeStr == 'spending' || typeStr == 'expenditure') {
+              type = 'expense';
+            } else if (typeStr == '转账' || typeStr == 'transfer') {
+              continue; // 转账没有分类
+            } else {
+              continue; // 未识别类型
+            }
+
+            final categoryName = getBy('category');
+            final subCategoryName = getBy('sub_category');
+            final categoryIcon = getBy('category_icon');
+            final subCategoryIcon = getBy('sub_category_icon');
+
+            // 如果有二级分类，说明分类列是一级分类名称
+            if (subCategoryName != null && categoryName != null) {
+              // 记录一级分类（如果还没记录）
+              final parentKey = '$categoryName:$type';
+              if (!categoriesToCreate.containsKey(parentKey)) {
+                categoriesToCreate[parentKey] = (
+                  kind: type,
+                  icon: categoryIcon,
+                  parentName: null,
+                );
+              }
+
+              // 记录二级分类
+              final subKey = '$subCategoryName:$type:$categoryName';
+              if (!categoriesToCreate.containsKey(subKey)) {
+                categoriesToCreate[subKey] = (
+                  kind: type,
+                  icon: subCategoryIcon,
+                  parentName: categoryName,
+                );
+              }
+            } else if (categoryName != null) {
+              // 只有一级分类
+              final key = '$categoryName:$type';
+              if (!categoriesToCreate.containsKey(key)) {
+                categoriesToCreate[key] = (
+                  kind: type,
+                  icon: categoryIcon,
+                  parentName: null,
+                );
+              }
+            }
+          } catch (_) {}
+        }
+
+        // 批量创建分类（先创建一级，再创建二级）
+        final Map<String, int> categoryCache = {}; // (name:kind) -> id 或 (name:kind:parent) -> id
+
+        // 第一遍：创建所有一级分类
+        for (final entry in categoriesToCreate.entries) {
+          if (_cancelled) break;
+          final info = entry.value;
+          if (info.parentName == null) {
+            // 一级分类
+            final key = entry.key;
+            final parts = key.split(':');
+            final name = parts[0];
+            final kind = parts[1];
+
+            try {
+              // 检查是否已存在
+              final existing = await (repo.db.select(repo.db.categories)
+                    ..where((c) => c.name.equals(name) & c.kind.equals(kind) & c.level.equals(1)))
+                  .getSingleOrNull();
+
+              if (existing != null) {
+                categoryCache[key] = existing.id;
+              } else {
+                // 创建新的一级分类
+                final id = await repo.db.into(repo.db.categories).insert(
+                  schema.CategoriesCompanion.insert(
+                    name: name,
+                    kind: kind,
+                    level: const d.Value(1),
+                    icon: d.Value(info.icon),
+                  ),
+                );
+                categoryCache[key] = id;
+              }
+            } catch (e) {
+              print('Failed to create category: $name, $e');
+            }
+          }
+        }
+
+        // 第二遍：创建所有二级分类
+        for (final entry in categoriesToCreate.entries) {
+          if (_cancelled) break;
+          final info = entry.value;
+          if (info.parentName != null) {
+            // 二级分类
+            final key = entry.key;
+            final parts = key.split(':');
+            final name = parts[0];
+            final kind = parts[1];
+            final parentName = parts[2];
+
+            // 查找父分类ID
+            final parentKey = '$parentName:$kind';
+            final parentId = categoryCache[parentKey];
+
+            if (parentId == null) {
+              print('Parent category not found: $parentName');
+              continue;
+            }
+
+            try {
+              // 检查是否已存在
+              final existing = await (repo.db.select(repo.db.categories)
+                    ..where((c) =>
+                      c.name.equals(name) &
+                      c.kind.equals(kind) &
+                      c.level.equals(2) &
+                      c.parentId.equals(parentId)))
+                  .getSingleOrNull();
+
+              if (existing != null) {
+                categoryCache[key] = existing.id;
+              } else {
+                // 创建新的二级分类
+                final id = await repo.db.into(repo.db.categories).insert(
+                  schema.CategoriesCompanion.insert(
+                    name: name,
+                    kind: kind,
+                    level: const d.Value(2),
+                    parentId: d.Value(parentId),
+                    icon: d.Value(info.icon),
+                  ),
+                );
+                categoryCache[key] = id;
+              }
+            } catch (e) {
+              print('Failed to create subcategory: $name, $e');
+            }
+          }
+        }
+
+        // 步骤3：批量导入记录
         // 分类缓存：当选择"保持原名"时，按 (name, kind) 维度缓存 upsert 结果，避免重复查询
         final Map<String, int> incomeCatCache = {};
         final Map<String, int> expenseCatCache = {};
@@ -609,6 +784,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         var typeRaw = getBy('type', 1) ?? 'expense';
         final amountStr = getBy('amount', 2);
         final categoryName = getBy('category', 3);
+        final subCategoryName = getBy('sub_category', 999);
         final accountName = getBy('account', 999); // 使用不存在的fallback，确保只从映射列获取
         final fromAccountName = getBy('from_account', 999); // 转出账户
         final toAccountName = getBy('to_account', 999); // 转入账户
@@ -651,36 +827,46 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         final date = DateParser.parse(dateStr);
 
         int? categoryId;
-        if (categoryName != null && categoryName.trim().isNotEmpty) {
+        // 优先使用二级分类，如果没有则使用一级分类
+        if (subCategoryName != null && subCategoryName.trim().isNotEmpty &&
+            categoryName != null && categoryName.trim().isNotEmpty) {
+          // 有二级分类：从缓存中查找
+          final key = '${subCategoryName.trim()}:$type:${categoryName.trim()}';
+          categoryId = categoryCache[key];
+        } else if (categoryName != null && categoryName.trim().isNotEmpty) {
+          // 只有一级分类
           final originalName = categoryName.trim();
           final chosen = categoryMapping[originalName];
           if (chosen != null) {
             categoryId = chosen;
           } else {
-            // 尝试将英文分类映射为中文存储名称
-            final mappedName =
-                CategoryService.mapEnglishToChinese(originalName);
-            final name = mappedName != originalName ? mappedName : originalName;
+            // 先从缓存查找
+            final key = '$originalName:$type';
+            categoryId = categoryCache[key];
 
-            if (type == 'income') {
-              final cached = incomeCatCache[name];
-              if (cached != null) {
-                categoryId = cached;
+            if (categoryId == null) {
+              // 缓存中没有，使用原有的 upsertCategory 逻辑
+              final mappedName = CategoryService.mapEnglishToChinese(originalName);
+              final name = mappedName != originalName ? mappedName : originalName;
+
+              if (type == 'income') {
+                final cached = incomeCatCache[name];
+                if (cached != null) {
+                  categoryId = cached;
+                } else {
+                  final id = await repo.upsertCategory(name: name, kind: 'income');
+                  incomeCatCache[name] = id;
+                  categoryId = id;
+                }
               } else {
-                final id =
-                    await repo.upsertCategory(name: name, kind: 'income');
-                incomeCatCache[name] = id;
-                categoryId = id;
-              }
-            } else {
-              final cached = expenseCatCache[name];
-              if (cached != null) {
-                categoryId = cached;
-              } else {
-                final id =
-                    await repo.upsertCategory(name: name, kind: 'expense');
-                expenseCatCache[name] = id;
-                categoryId = id;
+                final cached = expenseCatCache[name];
+                if (cached != null) {
+                  categoryId = cached;
+                } else {
+                  final id = await repo.upsertCategory(name: name, kind: 'expense');
+                  expenseCatCache[name] = id;
+                  categoryId = id;
+                }
               }
             }
           }

@@ -714,8 +714,22 @@ class $CategoriesTable extends Categories
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _parentIdMeta =
+      const VerificationMeta('parentId');
   @override
-  List<GeneratedColumn> get $columns => [id, name, kind, icon, sortOrder];
+  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
+      'parent_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _levelMeta = const VerificationMeta('level');
+  @override
+  late final GeneratedColumn<int> level = GeneratedColumn<int>(
+      'level', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, kind, icon, sortOrder, parentId, level];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -749,6 +763,14 @@ class $CategoriesTable extends Categories
       context.handle(_sortOrderMeta,
           sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
     }
+    if (data.containsKey('parent_id')) {
+      context.handle(_parentIdMeta,
+          parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta));
+    }
+    if (data.containsKey('level')) {
+      context.handle(
+          _levelMeta, level.isAcceptableOrUnknown(data['level']!, _levelMeta));
+    }
     return context;
   }
 
@@ -768,6 +790,10 @@ class $CategoriesTable extends Categories
           .read(DriftSqlType.string, data['${effectivePrefix}icon']),
       sortOrder: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
+      parentId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}parent_id']),
+      level: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}level'])!,
     );
   }
 
@@ -783,12 +809,16 @@ class Category extends DataClass implements Insertable<Category> {
   final String kind;
   final String? icon;
   final int sortOrder;
+  final int? parentId;
+  final int level;
   const Category(
       {required this.id,
       required this.name,
       required this.kind,
       this.icon,
-      required this.sortOrder});
+      required this.sortOrder,
+      this.parentId,
+      required this.level});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -799,6 +829,10 @@ class Category extends DataClass implements Insertable<Category> {
       map['icon'] = Variable<String>(icon);
     }
     map['sort_order'] = Variable<int>(sortOrder);
+    if (!nullToAbsent || parentId != null) {
+      map['parent_id'] = Variable<int>(parentId);
+    }
+    map['level'] = Variable<int>(level);
     return map;
   }
 
@@ -809,6 +843,10 @@ class Category extends DataClass implements Insertable<Category> {
       kind: Value(kind),
       icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
       sortOrder: Value(sortOrder),
+      parentId: parentId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentId),
+      level: Value(level),
     );
   }
 
@@ -821,6 +859,8 @@ class Category extends DataClass implements Insertable<Category> {
       kind: serializer.fromJson<String>(json['kind']),
       icon: serializer.fromJson<String?>(json['icon']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      parentId: serializer.fromJson<int?>(json['parentId']),
+      level: serializer.fromJson<int>(json['level']),
     );
   }
   @override
@@ -832,6 +872,8 @@ class Category extends DataClass implements Insertable<Category> {
       'kind': serializer.toJson<String>(kind),
       'icon': serializer.toJson<String?>(icon),
       'sortOrder': serializer.toJson<int>(sortOrder),
+      'parentId': serializer.toJson<int?>(parentId),
+      'level': serializer.toJson<int>(level),
     };
   }
 
@@ -840,13 +882,17 @@ class Category extends DataClass implements Insertable<Category> {
           String? name,
           String? kind,
           Value<String?> icon = const Value.absent(),
-          int? sortOrder}) =>
+          int? sortOrder,
+          Value<int?> parentId = const Value.absent(),
+          int? level}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
         kind: kind ?? this.kind,
         icon: icon.present ? icon.value : this.icon,
         sortOrder: sortOrder ?? this.sortOrder,
+        parentId: parentId.present ? parentId.value : this.parentId,
+        level: level ?? this.level,
       );
   Category copyWithCompanion(CategoriesCompanion data) {
     return Category(
@@ -855,6 +901,8 @@ class Category extends DataClass implements Insertable<Category> {
       kind: data.kind.present ? data.kind.value : this.kind,
       icon: data.icon.present ? data.icon.value : this.icon,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      parentId: data.parentId.present ? data.parentId.value : this.parentId,
+      level: data.level.present ? data.level.value : this.level,
     );
   }
 
@@ -865,13 +913,16 @@ class Category extends DataClass implements Insertable<Category> {
           ..write('name: $name, ')
           ..write('kind: $kind, ')
           ..write('icon: $icon, ')
-          ..write('sortOrder: $sortOrder')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('parentId: $parentId, ')
+          ..write('level: $level')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, kind, icon, sortOrder);
+  int get hashCode =>
+      Object.hash(id, name, kind, icon, sortOrder, parentId, level);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -880,7 +931,9 @@ class Category extends DataClass implements Insertable<Category> {
           other.name == this.name &&
           other.kind == this.kind &&
           other.icon == this.icon &&
-          other.sortOrder == this.sortOrder);
+          other.sortOrder == this.sortOrder &&
+          other.parentId == this.parentId &&
+          other.level == this.level);
 }
 
 class CategoriesCompanion extends UpdateCompanion<Category> {
@@ -889,12 +942,16 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<String> kind;
   final Value<String?> icon;
   final Value<int> sortOrder;
+  final Value<int?> parentId;
+  final Value<int> level;
   const CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.kind = const Value.absent(),
     this.icon = const Value.absent(),
     this.sortOrder = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.level = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
@@ -902,6 +959,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     required String kind,
     this.icon = const Value.absent(),
     this.sortOrder = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.level = const Value.absent(),
   })  : name = Value(name),
         kind = Value(kind);
   static Insertable<Category> custom({
@@ -910,6 +969,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Expression<String>? kind,
     Expression<String>? icon,
     Expression<int>? sortOrder,
+    Expression<int>? parentId,
+    Expression<int>? level,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -917,6 +978,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       if (kind != null) 'kind': kind,
       if (icon != null) 'icon': icon,
       if (sortOrder != null) 'sort_order': sortOrder,
+      if (parentId != null) 'parent_id': parentId,
+      if (level != null) 'level': level,
     });
   }
 
@@ -925,13 +988,17 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       Value<String>? name,
       Value<String>? kind,
       Value<String?>? icon,
-      Value<int>? sortOrder}) {
+      Value<int>? sortOrder,
+      Value<int?>? parentId,
+      Value<int>? level}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       kind: kind ?? this.kind,
       icon: icon ?? this.icon,
       sortOrder: sortOrder ?? this.sortOrder,
+      parentId: parentId ?? this.parentId,
+      level: level ?? this.level,
     );
   }
 
@@ -953,6 +1020,12 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
+    if (parentId.present) {
+      map['parent_id'] = Variable<int>(parentId.value);
+    }
+    if (level.present) {
+      map['level'] = Variable<int>(level.value);
+    }
     return map;
   }
 
@@ -963,7 +1036,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
           ..write('name: $name, ')
           ..write('kind: $kind, ')
           ..write('icon: $icon, ')
-          ..write('sortOrder: $sortOrder')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('parentId: $parentId, ')
+          ..write('level: $level')
           ..write(')'))
         .toString();
   }
@@ -2685,6 +2760,8 @@ typedef $$CategoriesTableCreateCompanionBuilder = CategoriesCompanion Function({
   required String kind,
   Value<String?> icon,
   Value<int> sortOrder,
+  Value<int?> parentId,
+  Value<int> level,
 });
 typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
   Value<int> id,
@@ -2692,6 +2769,8 @@ typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
   Value<String> kind,
   Value<String?> icon,
   Value<int> sortOrder,
+  Value<int?> parentId,
+  Value<int> level,
 });
 
 class $$CategoriesTableFilterComposer
@@ -2717,6 +2796,12 @@ class $$CategoriesTableFilterComposer
 
   ColumnFilters<int> get sortOrder => $composableBuilder(
       column: $table.sortOrder, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get parentId => $composableBuilder(
+      column: $table.parentId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get level => $composableBuilder(
+      column: $table.level, builder: (column) => ColumnFilters(column));
 }
 
 class $$CategoriesTableOrderingComposer
@@ -2742,6 +2827,12 @@ class $$CategoriesTableOrderingComposer
 
   ColumnOrderings<int> get sortOrder => $composableBuilder(
       column: $table.sortOrder, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get parentId => $composableBuilder(
+      column: $table.parentId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get level => $composableBuilder(
+      column: $table.level, builder: (column) => ColumnOrderings(column));
 }
 
 class $$CategoriesTableAnnotationComposer
@@ -2767,6 +2858,12 @@ class $$CategoriesTableAnnotationComposer
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<int> get parentId =>
+      $composableBuilder(column: $table.parentId, builder: (column) => column);
+
+  GeneratedColumn<int> get level =>
+      $composableBuilder(column: $table.level, builder: (column) => column);
 }
 
 class $$CategoriesTableTableManager extends RootTableManager<
@@ -2797,6 +2894,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             Value<String> kind = const Value.absent(),
             Value<String?> icon = const Value.absent(),
             Value<int> sortOrder = const Value.absent(),
+            Value<int?> parentId = const Value.absent(),
+            Value<int> level = const Value.absent(),
           }) =>
               CategoriesCompanion(
             id: id,
@@ -2804,6 +2903,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             kind: kind,
             icon: icon,
             sortOrder: sortOrder,
+            parentId: parentId,
+            level: level,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -2811,6 +2912,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             required String kind,
             Value<String?> icon = const Value.absent(),
             Value<int> sortOrder = const Value.absent(),
+            Value<int?> parentId = const Value.absent(),
+            Value<int> level = const Value.absent(),
           }) =>
               CategoriesCompanion.insert(
             id: id,
@@ -2818,6 +2921,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             kind: kind,
             icon: icon,
             sortOrder: sortOrder,
+            parentId: parentId,
+            level: level,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

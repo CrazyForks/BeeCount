@@ -199,7 +199,10 @@ class TransactionListState extends ConsumerState<TransactionList> {
             final allItemsInDay = item.$3 as List<({Transaction t, Category? category})>;
             final isTransfer = it.t.type == 'transfer';
             final isExpense = it.t.type == 'expense';
+
+            // 获取分类显示名称
             final categoryName = CategoryUtils.getDisplayName(it.category?.name, context);
+
             final subtitle = it.t.note ?? '';
 
             // 检查是否是当天最后一项

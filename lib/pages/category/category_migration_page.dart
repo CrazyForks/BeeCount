@@ -104,7 +104,20 @@ class _CategoryMigrationPageState extends ConsumerState<CategoryMigrationPage> {
           ),
           const SizedBox(height: 8),
           SearchableDropdown<({db.Category category, int transactionCount})>(
-            items: categoriesWithCount.where((item) => item.transactionCount > 0).toList(),
+            items: categoriesWithCount.where((item) {
+              // 只显示有交易记录的分类
+              if (item.transactionCount == 0) return false;
+
+              // 排除带有二级分类的一级分类
+              if (item.category.level == 1) {
+                final hasSubCategories = categoriesWithCount.any((c) =>
+                  c.category.level == 2 && c.category.parentId == item.category.id
+                );
+                if (hasSubCategories) return false;
+              }
+
+              return true;
+            }).toList(),
             value: categoriesWithCount.where((item) => item.category.id == _fromCategory?.id).firstOrNull,
             hintText: AppLocalizations.of(context).categoryMigrationFromHint,
             prefixIcon: const Icon(Icons.upload_outlined),
@@ -136,11 +149,22 @@ class _CategoryMigrationPageState extends ConsumerState<CategoryMigrationPage> {
           ),
           const SizedBox(height: 8),
           SearchableDropdown<({db.Category category, int transactionCount})>(
-            items: _fromCategory != null 
-              ? categoriesWithCount.where((item) => 
-                  item.category.kind == _fromCategory!.kind && 
-                  item.category.id != _fromCategory!.id
-                ).toList()
+            items: _fromCategory != null
+              ? categoriesWithCount.where((item) {
+                  // 必须是相同类型且不是自己
+                  if (item.category.kind != _fromCategory!.kind) return false;
+                  if (item.category.id == _fromCategory!.id) return false;
+
+                  // 排除带有二级分类的一级分类
+                  if (item.category.level == 1) {
+                    final hasSubCategories = categoriesWithCount.any((c) =>
+                      c.category.level == 2 && c.category.parentId == item.category.id
+                    );
+                    if (hasSubCategories) return false;
+                  }
+
+                  return true;
+                }).toList()
               : [],
             value: categoriesWithCount.where((item) => item.category.id == _toCategory?.id).firstOrNull,
             hintText: _fromCategory == null ? AppLocalizations.of(context).categoryMigrationToHintFirst : AppLocalizations.of(context).categoryMigrationToHint,
@@ -305,7 +329,7 @@ class _CategoryDropdownItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                category.name,
+                CategoryUtils.getDisplayName(category.name, context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),

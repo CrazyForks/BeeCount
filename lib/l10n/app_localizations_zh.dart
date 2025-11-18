@@ -1575,6 +1575,46 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get categorySubCategoryTitle => '二级分类';
+
+  @override
+  String get categorySubCategoryDescriptionEnabled => '此分类属于某个一级分类';
+
+  @override
+  String get categorySubCategoryDescriptionDisabled => '此分类为独立的一级分类';
+
+  @override
+  String get categoryParentCategoryTitle => '父分类';
+
+  @override
+  String get categoryParentCategoryHint => '请选择父分类';
+
+  @override
+  String get categorySelectParentTitle => '选择父分类';
+
+  @override
+  String get categorySelectParentDescription => '只能选择没有交易记录的分类作为父分类';
+
+  @override
+  String categorySubCategoryCreated(Object name) {
+    return '已添加二级分类：$name';
+  }
+
+  @override
+  String get categoryParentRequired => '请选择父分类';
+
+  @override
+  String get categoryParentRequiredTitle => '错误';
+
+  @override
+  String get categoryParentHasTransactionsTitle => '无法添加二级分类';
+
+  @override
+  String categoryParentHasTransactionsMessage(Object count, Object name) {
+    return '分类\"$name\"下有 $count 笔交易记录。\n\n要添加二级分类，需要先将这些交易迁移到其他分类。';
+  }
+
+  @override
   String get personalizeTitle => '个性化';
 
   @override
@@ -2330,6 +2370,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get exportCsvHeaderCategory => '分类';
+
+  @override
+  String get exportCsvHeaderSubCategory => '二级分类';
+
+  @override
+  String get exportCsvHeaderCategoryIcon => '分类图标';
+
+  @override
+  String get exportCsvHeaderSubCategoryIcon => '二级分类图标';
 
   @override
   String get exportCsvHeaderAmount => '金额';

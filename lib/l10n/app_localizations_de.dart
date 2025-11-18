@@ -1575,6 +1575,46 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get categorySubCategoryTitle => 'Subcategory';
+
+  @override
+  String get categorySubCategoryDescriptionEnabled => 'This category belongs to a parent category';
+
+  @override
+  String get categorySubCategoryDescriptionDisabled => 'This is an independent top-level category';
+
+  @override
+  String get categoryParentCategoryTitle => 'Parent Category';
+
+  @override
+  String get categoryParentCategoryHint => 'Please select parent category';
+
+  @override
+  String get categorySelectParentTitle => 'Select Parent Category';
+
+  @override
+  String get categorySelectParentDescription => 'Only categories without transaction records can be selected as parent';
+
+  @override
+  String categorySubCategoryCreated(Object name) {
+    return 'Subcategory added: $name';
+  }
+
+  @override
+  String get categoryParentRequired => 'Please select parent category';
+
+  @override
+  String get categoryParentRequiredTitle => 'Error';
+
+  @override
+  String get categoryParentHasTransactionsTitle => 'Cannot Add Subcategory';
+
+  @override
+  String categoryParentHasTransactionsMessage(Object count, Object name) {
+    return 'Category \"$name\" has $count transaction records.\n\nTo add subcategories, these transactions must be migrated to other categories first.';
+  }
+
+  @override
   String get personalizeTitle => 'Personalisierung';
 
   @override
@@ -2330,6 +2370,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get exportCsvHeaderCategory => 'Kategorie';
+
+  @override
+  String get exportCsvHeaderSubCategory => 'Subcategory';
+
+  @override
+  String get exportCsvHeaderCategoryIcon => 'Category Icon';
+
+  @override
+  String get exportCsvHeaderSubCategoryIcon => 'Subcategory Icon';
 
   @override
   String get exportCsvHeaderAmount => 'Betrag';
