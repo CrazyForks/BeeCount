@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart' as s;
 import '../../providers.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../widgets/ui/ui.dart';
-import '../../utils/logger.dart';
+import '../../services/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 
 enum AuthMode { login, signup }
@@ -386,7 +386,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                           final email = emailCtrl.text.trim();
                                           final pwd = pwdCtrl.text;
                                           final pwd2 = pwd2Ctrl.text;
-                                          logI('auth', '开始注册：邮箱=$email');
+                                          logger.info('auth', '开始注册：邮箱=$email');
                                           if (!isValidEmail(email)) {
                                             setState(
                                                 () => errorText = 'AppLocalizations.of(context).authInvalidEmail');
@@ -412,7 +412,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                             await auth.signUpWithEmail(
                                                 email: email, password: pwd);
                                             if (!context.mounted) return;
-                                            logI('auth',
+                                            logger.info('auth',
                                                 '注册成功，已发送验证邮件：邮箱=$email');
                                             Navigator.of(context)
                                                 .pushReplacement(
@@ -423,7 +423,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                           } catch (e, stSignup) {
                                             final friendlyMsg = friendlySignupError(e);
                                             final detailedMsg = 'Type: ${e.runtimeType}, Message: $e';
-                                            logE(
+                                            logger.error(
                                                 'auth',
                                                 '注册失败：邮箱=$email，用户友好信息=$friendlyMsg，详细错误=$detailedMsg',
                                                 e,
@@ -455,7 +455,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                       : () async {
                                           final email = emailCtrl.text.trim();
                                           final pwd = pwdCtrl.text;
-                                          logI('auth', '开始登录：邮箱=$email');
+                                          logger.info('auth', '开始登录：邮箱=$email');
                                           if (!isValidEmail(email)) {
                                             setState(
                                                 () => errorText = 'AppLocalizations.of(context).authInvalidEmail');
@@ -476,7 +476,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                             await auth.signInWithEmail(
                                                 email: email, password: pwd);
                                             if (!context.mounted) return;
-                                            logI('auth', '登录成功：邮箱=$email');
+                                            logger.info('auth', '登录成功：邮箱=$email');
 
                                             // 刷新认证服务和同步服务以触发状态更新
                                             ref.invalidate(authServiceProvider);
@@ -494,7 +494,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                                 .state = 3; // Mine tab index
                                             final can = Navigator.of(context)
                                                 .canPop();
-                                            logI('nav',
+                                            logger.info('nav',
                                                 'login: success -> switch tab to Mine, canPop=$can; pop login');
                                             if (can) {
                                               Navigator.of(context).pop();
@@ -502,7 +502,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                           } catch (e, st) {
                                             final msg = friendlyAuthError(e);
                                             final detailedMsg = 'Type: ${e.runtimeType}, Message: $e';
-                                            logE(
+                                            logger.error(
                                                 'auth',
                                                 '登录失败：邮箱=$email，用户友好信息=$msg，详细错误=$detailedMsg',
                                                 e,

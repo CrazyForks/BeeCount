@@ -1,5 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import '../../utils/logger.dart';
+import '../logger_service.dart';
 
 /// 更新通知管理类
 class UpdateNotifications {
@@ -33,12 +33,12 @@ class UpdateNotifications {
 
       if (androidImplementation != null) {
         await androidImplementation.createNotificationChannel(androidChannel);
-        logI('UpdateNotifications', '通知渠道创建成功: ${androidChannel.id}');
+        logger.info('UpdateNotifications', '通知渠道创建成功: ${androidChannel.id}');
 
         // 检查权限状态（Android 13+）
         final hasPermission =
             await androidImplementation.requestNotificationsPermission();
-        logI('UpdateNotifications', '通知权限状态: $hasPermission');
+        logger.info('UpdateNotifications', '通知权限状态: $hasPermission');
       }
 
       // 初始化插件
@@ -51,9 +51,9 @@ class UpdateNotifications {
       final initialized =
           await _notificationsPlugin.initialize(initializationSettings);
       _isNotificationInitialized = initialized == true;
-      logI('UpdateNotifications', '通知初始化结果: $initialized');
+      logger.info('UpdateNotifications', '通知初始化结果: $initialized');
     } catch (e) {
-      logE('UpdateNotifications', '通知初始化失败', e);
+      logger.error('UpdateNotifications', '通知初始化失败', e);
     }
   }
 
@@ -63,7 +63,7 @@ class UpdateNotifications {
     try {
       await initializeNotifications();
       if (!_isNotificationInitialized) {
-        logW('UpdateNotifications', '通知未初始化，跳过显示进度');
+        logger.warning('UpdateNotifications', '通知未初始化，跳过显示进度');
         return;
       }
 
@@ -96,7 +96,7 @@ class UpdateNotifications {
       final title = 'BeeCount Update Download';
       final body = indeterminate ? 'Downloading new version...' : 'Download progress: $progress%';
 
-      logI('UpdateNotifications',
+      logger.info('UpdateNotifications',
           '开始显示通知 - 标题: $title, 内容: $body, 进度: $progress, 不确定: $indeterminate');
 
       await _notificationsPlugin.show(
@@ -106,9 +106,9 @@ class UpdateNotifications {
         details,
       );
 
-      logI('UpdateNotifications', '通知显示完成 - ID: 0, 进度: $progress%');
+      logger.info('UpdateNotifications', '通知显示完成 - ID: 0, 进度: $progress%');
     } catch (e) {
-      logE('UpdateNotifications', '显示进度通知失败', e);
+      logger.error('UpdateNotifications', '显示进度通知失败', e);
     }
   }
 
@@ -117,7 +117,7 @@ class UpdateNotifications {
     try {
       await initializeNotifications();
       if (!_isNotificationInitialized) {
-        logW('UpdateNotifications', '通知未初始化，跳过显示完成通知');
+        logger.warning('UpdateNotifications', '通知未初始化，跳过显示完成通知');
         return;
       }
 
@@ -143,9 +143,9 @@ class UpdateNotifications {
         details,
       );
 
-      logI('UpdateNotifications', '显示下载完成通知');
+      logger.info('UpdateNotifications', '显示下载完成通知');
     } catch (e) {
-      logE('UpdateNotifications', '显示完成通知失败', e);
+      logger.error('UpdateNotifications', '显示完成通知失败', e);
     }
   }
 
@@ -153,9 +153,9 @@ class UpdateNotifications {
   static Future<void> cancelDownloadNotification() async {
     try {
       await _notificationsPlugin.cancel(0);
-      logI('UpdateNotifications', '取消下载通知');
+      logger.info('UpdateNotifications', '取消下载通知');
     } catch (e) {
-      logE('UpdateNotifications', '取消通知失败', e);
+      logger.error('UpdateNotifications', '取消通知失败', e);
     }
   }
 

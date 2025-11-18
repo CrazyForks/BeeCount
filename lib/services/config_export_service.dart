@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaml/yaml.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
-import '../utils/logger.dart';
+import 'logger_service.dart';
 
 /// 应用配置模型
 class AppConfig {
@@ -277,7 +277,7 @@ class ConfigExportService {
           );
         }
       } catch (e) {
-        logW('ConfigExport', '读取Supabase配置失败: $e');
+        logger.warning('ConfigExport', '读取Supabase配置失败: $e');
       }
     }
 
@@ -298,7 +298,7 @@ class ConfigExportService {
           );
         }
       } catch (e) {
-        logW('ConfigExport', '读取WebDAV配置失败: $e');
+        logger.warning('ConfigExport', '读取WebDAV配置失败: $e');
       }
     }
 
@@ -506,7 +506,7 @@ class ConfigExportService {
       );
       await prefs.setString(
           'cloud_supabase_cfg', encodeCloudConfig(supabaseCfg));
-      logI('ConfigImport', 'Supabase配置已导入');
+      logger.info('ConfigImport', 'Supabase配置已导入');
     }
 
     // 导入WebDAV配置
@@ -520,7 +520,7 @@ class ConfigExportService {
         webdavRemotePath: config.webdav!.remotePath,
       );
       await prefs.setString('cloud_webdav_cfg', encodeCloudConfig(webdavCfg));
-      logI('ConfigImport', 'WebDAV配置已导入');
+      logger.info('ConfigImport', 'WebDAV配置已导入');
     }
 
     // 导入AI配置
@@ -537,7 +537,7 @@ class ConfigExportService {
       if (config.ai!.useVision != null) {
         await prefs.setBool('ai_use_vision', config.ai!.useVision!);
       }
-      logI('ConfigImport', 'AI配置已导入');
+      logger.info('ConfigImport', 'AI配置已导入');
     }
 
     // 导入应用设置
@@ -592,7 +592,7 @@ class ConfigExportService {
         await prefs.setBool('shortcut_prefer_camera', settings.shortcutPreferCamera!);
       }
 
-      logI('ConfigImport', '应用设置已导入');
+      logger.info('ConfigImport', '应用设置已导入');
     }
   }
 
@@ -601,7 +601,7 @@ class ConfigExportService {
     final yamlContent = await exportToYaml();
     final file = File(filePath);
     await file.writeAsString(yamlContent);
-    logI('ConfigExport', '配置已导出到: $filePath');
+    logger.info('ConfigExport', '配置已导出到: $filePath');
   }
 
   /// 从文件导入配置
@@ -613,6 +613,6 @@ class ConfigExportService {
 
     final yamlContent = await file.readAsString();
     await importFromYaml(yamlContent);
-    logI('ConfigImport', '配置已从文件导入: $filePath');
+    logger.info('ConfigImport', '配置已从文件导入: $filePath');
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ui/ui.dart';
-import '../../utils/logger.dart';
+import '../logger_service.dart';
 
 /// 更新对话框管理类
 class UpdateDialogs {
@@ -10,15 +10,15 @@ class UpdateDialogs {
 
   /// 显示安装确认对话框
   static Future<bool> showInstallDialog(BuildContext context) async {
-    logI('UpdateDialogs', '=== 开始显示安装确认对话框 ===');
-    logI('UpdateDialogs', 'Context挂载状态: ${context.mounted}');
+    logger.info('UpdateDialogs', '=== 开始显示安装确认对话框 ===');
+    logger.info('UpdateDialogs', 'Context挂载状态: ${context.mounted}');
 
     if (!context.mounted) {
-      logW('UpdateDialogs', 'Context未挂载，无法显示安装确认对话框');
+      logger.warning('UpdateDialogs', 'Context未挂载，无法显示安装确认对话框');
       return false;
     }
 
-    logI('UpdateDialogs', '准备调用AppDialog.confirm显示安装确认对话框');
+    logger.info('UpdateDialogs', '准备调用AppDialog.confirm显示安装确认对话框');
 
     try {
       final result = await AppDialog.confirm<bool>(
@@ -27,10 +27,10 @@ class UpdateDialogs {
         message: AppLocalizations.of(context).updateInstallConfirmMessage,
       );
 
-      logI('UpdateDialogs', '安装确认对话框结果: $result');
+      logger.info('UpdateDialogs', '安装确认对话框结果: $result');
       return result ?? false;
     } catch (e) {
-      logE('UpdateDialogs', '显示安装确认对话框失败', e);
+      logger.error('UpdateDialogs', '显示安装确认对话框失败', e);
       return false;
     }
   }
@@ -271,7 +271,7 @@ class UpdateDialogs {
         throw Exception('Cannot open link');
       }
     } catch (e) {
-      logE('UpdateDialogs', '打开GitHub链接失败', e);
+      logger.error('UpdateDialogs', '打开GitHub链接失败', e);
 
       // 如果无法打开，显示提示
       if (context.mounted) {

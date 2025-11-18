@@ -7,7 +7,7 @@ import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' as fcs;
 import '../data/db.dart';
 import '../data/repository.dart';
 import '../models/ledger_display_item.dart';
-import '../utils/logger.dart';
+import '../services/logger_service.dart';
 import 'sync_service.dart';
 import 'transactions_json.dart';
 
@@ -69,16 +69,16 @@ class TransactionsSyncManager implements SyncService {
       logger: fcs.CloudSyncLogger(onLog: (level, message) {
         switch (level) {
           case fcs.LogLevel.debug:
-            logI('CloudSync', message);
+            logger.info('CloudSync', message);
             break;
           case fcs.LogLevel.info:
-            logI('CloudSync', message);
+            logger.info('CloudSync', message);
             break;
           case fcs.LogLevel.warning:
-            logW('CloudSync', message);
+            logger.warning('CloudSync', message);
             break;
           case fcs.LogLevel.error:
-            logE('CloudSync', message);
+            logger.error('CloudSync', message);
             break;
         }
       }),
@@ -107,7 +107,7 @@ class TransactionsSyncManager implements SyncService {
     await _ensureInitialized();
 
     try {
-      logI('CloudSync', '开始上传账本 $ledgerId');
+      logger.info('CloudSync', '开始上传账本 $ledgerId');
 
       // 上传前先计算本地指纹（用于记录上传快照）
       String? localFp;
@@ -118,7 +118,7 @@ class TransactionsSyncManager implements SyncService {
         localFp = _contentFingerprintFromMap(map);
         localCount = (map['count'] as num?)?.toInt();
       } catch (e) {
-        logW('CloudSync', '计算本地指纹失败: $e');
+        logger.warning('CloudSync', '计算本地指纹失败: $e');
       }
 
       await _syncManager!.upload(
@@ -155,10 +155,10 @@ class TransactionsSyncManager implements SyncService {
       // 清除本地变更标记
       _recentLocalChangeAt.remove(ledgerId);
 
-      logI('CloudSync', '上传完成: $ledgerId');
+      logger.info('CloudSync', '上传完成: $ledgerId');
     } catch (e, stack) {
-      logE('CloudSync', '上传失败: $ledgerId', e);
-      logE('CloudSync', '堆栈', stack);
+      logger.error('CloudSync', '上传失败: $ledgerId', e);
+      logger.error('CloudSync', '堆栈', stack);
       rethrow;
     }
   }
@@ -169,14 +169,14 @@ class TransactionsSyncManager implements SyncService {
     await _ensureInitialized();
 
     try {
-      logI('CloudSync', '开始下载账本 $ledgerId');
+      logger.info('CloudSync', '开始下载账本 $ledgerId');
 
       // 直接使用 storage 下载原始 JSON 字符串
       final jsonStr =
           await _provider!.storage.download(path: _pathForLedger(ledgerId));
 
       if (jsonStr == null) {
-        logW('CloudSync', '云端备份不存在');
+        logger.warning('CloudSync', '云端备份不存在');
         return (inserted: 0, skipped: 0, deletedDup: 0);
       }
 
@@ -186,7 +186,7 @@ class TransactionsSyncManager implements SyncService {
       // 二次去重
       final deletedDup = await repo.deduplicateLedgerTransactions(ledgerId);
 
-      logI('CloudSync',
+      logger.info('CloudSync',
           '下载完成: inserted=${result.inserted}, skipped=${result.skipped}, deletedDup=$deletedDup');
 
       // 清除缓存
@@ -200,8 +200,8 @@ class TransactionsSyncManager implements SyncService {
         deletedDup: deletedDup,
       );
     } catch (e, stack) {
-      logE('CloudSync', '下载失败: $ledgerId', e);
-      logE('CloudSync', '堆栈', stack);
+      logger.error('CloudSync', '下载失败: $ledgerId', e);
+      logger.error('CloudSync', '堆栈', stack);
 
       // 如果是 404,返回空结果
       if (e.toString().contains('404') || e.toString().contains('not found')) {
@@ -246,12 +246,12 @@ class TransactionsSyncManager implements SyncService {
             cloudExportedAt: ru.at,
           );
           _statusCache[ledgerId] = st;
-          logI('CloudSync', '使用近期上传缓存: $ledgerId -> 已同步');
+          logger.info('CloudSync', '使用近期上传缓存: $ledgerId -> 已同步');
           return st;
         }
       }
 
-      logI('CloudSync', '获取同步状态: $ledgerId');
+      logger.info('CloudSync', '获取同步状态: $ledgerId');
 
       // 调用包的 getStatus，传入时间戳用于方向判断
       final fcsStatus = await _syncManager!.getStatus(
@@ -264,12 +264,12 @@ class TransactionsSyncManager implements SyncService {
       final status = _convertSyncStatus(fcsStatus);
 
       _statusCache[ledgerId] = status;
-      logI('CloudSync', '同步状态: $ledgerId -> ${status.diff}');
+      logger.info('CloudSync', '同步状态: $ledgerId -> ${status.diff}');
 
       return status;
     } catch (e, stack) {
-      logE('CloudSync', '获取状态失败: $ledgerId', e);
-      logE('CloudSync', '堆栈: $stack', null);
+      logger.error('CloudSync', '获取状态失败: $ledgerId', e);
+      logger.error('CloudSync', '堆栈: $stack', null);
 
       // 返回错误状态
       final status = SyncStatus(
@@ -336,7 +336,7 @@ class TransactionsSyncManager implements SyncService {
     await _ensureInitialized();
 
     try {
-      logI('CloudSync', '刷新云端指纹: $ledgerId');
+      logger.info('CloudSync', '刷新云端指纹: $ledgerId');
 
       // 强制刷新状态
       final status = await _syncManager!.getStatus(
@@ -349,7 +349,7 @@ class TransactionsSyncManager implements SyncService {
       // 清除缓存以便下次 getStatus 重新获取
       _statusCache.remove(ledgerId);
 
-      logI('CloudSync',
+      logger.info('CloudSync',
           '云端指纹: 指纹=${status.cloudFingerprint} 条数=${status.cloudCount} 时间=${status.cloudUpdatedAt}');
 
       return (
@@ -358,7 +358,7 @@ class TransactionsSyncManager implements SyncService {
         exportedAt: status.cloudUpdatedAt,
       );
     } catch (e) {
-      logW('CloudSync', '刷新云端指纹失败: $ledgerId - $e');
+      logger.warning('CloudSync', '刷新云端指纹失败: $ledgerId - $e');
       return (fingerprint: null, count: null, exportedAt: null);
     }
   }
@@ -367,7 +367,7 @@ class TransactionsSyncManager implements SyncService {
   void markLocalChanged({required int ledgerId}) {
     _statusCache.remove(ledgerId);
     _recentLocalChangeAt[ledgerId] = DateTime.now();
-    logI('CloudSync', '标记本地变更: $ledgerId');
+    logger.info('CloudSync', '标记本地变更: $ledgerId');
   }
 
   /// 从 JSON payload 计算内容指纹（与旧实现保持一致）
@@ -409,7 +409,7 @@ class TransactionsSyncManager implements SyncService {
     await _ensureInitialized();
 
     try {
-      logI('CloudSync', '删除云端备份: $ledgerId');
+      logger.info('CloudSync', '删除云端备份: $ledgerId');
 
       await _syncManager!.deleteRemote(path: _pathForLedger(ledgerId));
 
@@ -418,15 +418,15 @@ class TransactionsSyncManager implements SyncService {
       _recentLocalChangeAt.remove(ledgerId);
       _recentUpload.remove(ledgerId);
 
-      logI('CloudSync', '删除完成: $ledgerId');
+      logger.info('CloudSync', '删除完成: $ledgerId');
     } catch (e) {
       // 忽略 404 错误
       if (e.toString().contains('404') || e.toString().contains('not found')) {
-        logW('CloudSync', '云端备份不存在（忽略）: $ledgerId');
+        logger.warning('CloudSync', '云端备份不存在（忽略）: $ledgerId');
         return;
       }
 
-      logE('CloudSync', '删除失败: $ledgerId', e);
+      logger.error('CloudSync', '删除失败: $ledgerId', e);
       rethrow;
     }
   }
@@ -455,7 +455,7 @@ class TransactionsSyncManager implements SyncService {
       ));
     }
 
-    logI('CloudSync', '已加载本地账本: ${result.length} 个');
+    logger.info('CloudSync', '已加载本地账本: ${result.length} 个');
     return result;
   }
 
@@ -472,7 +472,7 @@ class TransactionsSyncManager implements SyncService {
     // 直接从云端文件列表获取远程账本
     try {
       final files = await _provider!.storage.list(path: '');
-      logI('CloudSync', '云端文件列表: ${files.map((f) => f.name).toList()}');
+      logger.info('CloudSync', '云端文件列表: ${files.map((f) => f.name).toList()}');
       int remoteCount = 0;
 
       for (final file in files) {
@@ -493,11 +493,11 @@ class TransactionsSyncManager implements SyncService {
           if (localLedgerIds.contains(remoteId)) continue;
 
           // 下载文件获取账本元数据（使用 file.name 而非 file.path，避免路径重复）
-          logI('CloudSync',
+          logger.info('CloudSync',
               '尝试下载远程账本: file.name=${file.name}, file.path=${file.path}');
           final jsonStr = await _provider!.storage.download(path: file.name);
           if (jsonStr == null) {
-            logW('CloudSync', '下载结果为空: ${file.name}');
+            logger.warning('CloudSync', '下载结果为空: ${file.name}');
             continue;
           }
 
@@ -546,14 +546,14 @@ class TransactionsSyncManager implements SyncService {
 
           remoteCount++;
         } catch (e) {
-          logW('CloudSync', '解析远程账本文件失败: ${file.name} - $e');
+          logger.warning('CloudSync', '解析远程账本文件失败: ${file.name} - $e');
           continue;
         }
       }
 
-      logI('CloudSync', '已加载远程账本: $remoteCount 个');
+      logger.info('CloudSync', '已加载远程账本: $remoteCount 个');
     } catch (e) {
-      logW('CloudSync', '获取远程账本失败: $e');
+      logger.warning('CloudSync', '获取远程账本失败: $e');
       // 失败不影响，返回空列表
     }
 
@@ -576,7 +576,7 @@ class TransactionsSyncManager implements SyncService {
     // 组合结果
     final allLedgers = [...localLedgers, ...remoteLedgers];
 
-    logI('CloudSync', '已加载所有账本: 本地=${localLedgers.length}, 远程=${remoteLedgers.length}, 总计=${allLedgers.length}');
+    logger.info('CloudSync', '已加载所有账本: 本地=${localLedgers.length}, 远程=${remoteLedgers.length}, 总计=${allLedgers.length}');
 
     return allLedgers;
   }
@@ -592,13 +592,13 @@ class TransactionsSyncManager implements SyncService {
         try {
           await getStatus(ledgerId: ledger.id);
         } catch (e) {
-          logW('CloudSync', '刷新账本 ${ledger.id} 状态失败: $e');
+          logger.warning('CloudSync', '刷新账本 ${ledger.id} 状态失败: $e');
         }
       }
 
-      logI('CloudSync', '已刷新 ${ledgers.length} 个账本的同步状态');
+      logger.info('CloudSync', '已刷新 ${ledgers.length} 个账本的同步状态');
     } catch (e) {
-      logE('CloudSync', '刷新所有账本状态失败', e);
+      logger.error('CloudSync', '刷新所有账本状态失败', e);
     }
   }
 
@@ -614,7 +614,7 @@ class TransactionsSyncManager implements SyncService {
     await _ensureInitialized();
 
     try {
-      logI('CloudSync', '下载远程账本: $remotePath');
+      logger.info('CloudSync', '下载远程账本: $remotePath');
 
       // 从远程路径提取账本ID
       final remoteIdStr =
@@ -632,7 +632,7 @@ class TransactionsSyncManager implements SyncService {
 
       if (reuseRemoteId) {
         // 复用远程 ID
-        logI('CloudSync', '复用远程ID: $remoteId');
+        logger.info('CloudSync', '复用远程ID: $remoteId');
         await db.into(db.ledgers).insert(
               LedgersCompanion.insert(
                 id: drift.Value(remoteId),
@@ -643,7 +643,7 @@ class TransactionsSyncManager implements SyncService {
         ledgerId = remoteId;
       } else {
         // 创建新 ID（自动递增）
-        logI('CloudSync', '本地ID冲突或无效，创建新ID');
+        logger.info('CloudSync', '本地ID冲突或无效，创建新ID');
         ledgerId = await db.into(db.ledgers).insert(
               LedgersCompanion.insert(
                 name: name,
@@ -656,7 +656,7 @@ class TransactionsSyncManager implements SyncService {
       final jsonStr = await _provider!.storage.download(path: remotePath);
 
       if (jsonStr == null) {
-        logW('CloudSync', '云端账本不存在: $remotePath');
+        logger.warning('CloudSync', '云端账本不存在: $remotePath');
         // 删除刚创建的空账本
         await (db.delete(db.ledgers)..where((t) => t.id.equals(ledgerId))).go();
         return null;
@@ -665,35 +665,35 @@ class TransactionsSyncManager implements SyncService {
       // 导入数据
       final result = await importTransactionsJson(repo, ledgerId, jsonStr);
 
-      logI('CloudSync',
+      logger.info('CloudSync',
           '下载完成: ledgerId=$ledgerId, inserted=${result.inserted}, skipped=${result.skipped}');
 
       // 删除旧的远程文件（只有在 ID 改变时才需要删除旧文件并上传新文件）
       if (reuseRemoteId) {
         // 复用了远程ID，无需删除和重新上传
-        logI('CloudSync', '复用远程ID，无需更新云端文件');
+        logger.info('CloudSync', '复用远程ID，无需更新云端文件');
       } else {
         // ID 改变了，需要删除旧文件并上传新文件
         try {
           await _provider!.storage.delete(path: remotePath);
-          logI('CloudSync', '旧远程文件已删除: $remotePath');
+          logger.info('CloudSync', '旧远程文件已删除: $remotePath');
         } catch (e) {
-          logW('CloudSync', '删除旧远程文件失败（忽略）: $e');
+          logger.warning('CloudSync', '删除旧远程文件失败（忽略）: $e');
         }
       }
 
       // 上传新创建的本地账本到云端
       try {
         await uploadCurrentLedger(ledgerId: ledgerId);
-        logI('CloudSync', '新账本已上传到云端: ledger_$ledgerId.json');
+        logger.info('CloudSync', '新账本已上传到云端: ledger_$ledgerId.json');
       } catch (e) {
-        logW('CloudSync', '上传新账本失败（忽略）: $e');
+        logger.warning('CloudSync', '上传新账本失败（忽略）: $e');
       }
 
       return ledgerId;
     } catch (e, stack) {
-      logE('CloudSync', '下载远程账本失败: $remotePath', e);
-      logE('CloudSync', '堆栈', stack);
+      logger.error('CloudSync', '下载远程账本失败: $remotePath', e);
+      logger.error('CloudSync', '堆栈', stack);
       rethrow;
     }
   }
@@ -703,19 +703,19 @@ class TransactionsSyncManager implements SyncService {
     await _ensureInitialized();
 
     try {
-      logI('CloudSync', '删除远程账本: $remotePath');
+      logger.info('CloudSync', '删除远程账本: $remotePath');
 
       await _provider!.storage.delete(path: remotePath);
 
-      logI('CloudSync', '删除完成: $remotePath');
+      logger.info('CloudSync', '删除完成: $remotePath');
     } catch (e) {
       // 忽略 404 错误
       if (e.toString().contains('404') || e.toString().contains('not found')) {
-        logW('CloudSync', '远程账本不存在（忽略）: $remotePath');
+        logger.warning('CloudSync', '远程账本不存在（忽略）: $remotePath');
         return;
       }
 
-      logE('CloudSync', '删除远程账本失败: $remotePath', e);
+      logger.error('CloudSync', '删除远程账本失败: $remotePath', e);
       rethrow;
     }
   }
@@ -725,12 +725,12 @@ class TransactionsSyncManager implements SyncService {
     await _ensureInitialized();
 
     try {
-      logI('CloudSync', '开始恢复所有远程账本');
+      logger.info('CloudSync', '开始恢复所有远程账本');
 
       // 获取本地已存在的账本ID
       final localLedgers = await db.select(db.ledgers).get();
       final localLedgerIds = localLedgers.map((l) => l.id).toSet();
-      logI('CloudSync', '本地已存在账本: $localLedgerIds');
+      logger.info('CloudSync', '本地已存在账本: $localLedgerIds');
 
       // 列出所有远程账本文件
       final files = await _provider!.storage.list(path: '');
@@ -749,14 +749,14 @@ class TransactionsSyncManager implements SyncService {
 
         // 跳过本地已存在的账本
         if (remoteId != null && localLedgerIds.contains(remoteId)) {
-          logI('CloudSync', '跳过已存在的账本: $fileName (ID=$remoteId)');
+          logger.info('CloudSync', '跳过已存在的账本: $fileName (ID=$remoteId)');
           return false;
         }
 
         return true;
       }).toList();
 
-      logI('CloudSync', '找到 ${ledgerFiles.length} 个需要恢复的远程账本文件');
+      logger.info('CloudSync', '找到 ${ledgerFiles.length} 个需要恢复的远程账本文件');
 
       // 并行恢复所有账本
       final results = await Future.wait(
@@ -765,7 +765,7 @@ class TransactionsSyncManager implements SyncService {
             // 下载文件内容以获取账本信息（使用 file.name 而非 file.path）
             final jsonStr = await _provider!.storage.download(path: file.name);
             if (jsonStr == null) {
-              logW('CloudSync', '下载失败: ${file.name}');
+              logger.warning('CloudSync', '下载失败: ${file.name}');
               return false;
             }
 
@@ -783,14 +783,14 @@ class TransactionsSyncManager implements SyncService {
             );
 
             if (ledgerId != null) {
-              logI('CloudSync', '恢复成功: ${file.name} -> ledgerId=$ledgerId');
+              logger.info('CloudSync', '恢复成功: ${file.name} -> ledgerId=$ledgerId');
               return true;
             } else {
-              logW('CloudSync', '恢复失败: ${file.name}');
+              logger.warning('CloudSync', '恢复失败: ${file.name}');
               return false;
             }
           } catch (e) {
-            logW('CloudSync', '恢复账本失败: ${file.name} - $e');
+            logger.warning('CloudSync', '恢复账本失败: ${file.name} - $e');
             return false;
           }
         }),
@@ -800,11 +800,11 @@ class TransactionsSyncManager implements SyncService {
       final success = results.where((r) => r).length;
       final failed = results.where((r) => !r).length;
 
-      logI('CloudSync', '恢复完成: 成功=$success, 失败=$failed');
+      logger.info('CloudSync', '恢复完成: 成功=$success, 失败=$failed');
       return (success: success, failed: failed);
     } catch (e, stack) {
-      logE('CloudSync', '恢复所有远程账本失败', e);
-      logE('CloudSync', '堆栈', stack);
+      logger.error('CloudSync', '恢复所有远程账本失败', e);
+      logger.error('CloudSync', '堆栈', stack);
       rethrow;
     }
   }

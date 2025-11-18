@@ -16,7 +16,7 @@ import '../../cloud/sync_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../utils/currencies.dart';
-import '../../utils/logger.dart';
+import '../../services/logger_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/format_utils.dart';
 import '../../utils/sync_helpers.dart';
@@ -613,7 +613,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
       try {
         await sync.deleteRemoteBackup(ledgerId: ledger.id);
       } catch (e) {
-        logW('ledger', '删除云端备份失败（忽略）：$e');
+        logger.warning('ledger', '删除云端备份失败（忽略）：$e');
       }
 
       if (!mounted) return;

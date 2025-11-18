@@ -13,7 +13,7 @@ import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/config_export_service.dart';
-import '../../utils/logger.dart';
+import '../../services/logger_service.dart';
 
 /// 配置导入导出页面
 class ConfigImportExportPage extends ConsumerStatefulWidget {
@@ -65,7 +65,7 @@ class _ConfigImportExportPageState
         final file = File(filePath);
         await file.writeAsString(yamlContent);
 
-        logI('ConfigExport', '配置已导出到: $filePath');
+        logger.info('ConfigExport', '配置已导出到: $filePath');
 
         if (!mounted) return;
 
@@ -95,7 +95,7 @@ class _ConfigImportExportPageState
         }
       }
     } catch (e) {
-      logE('ConfigExport', '导出配置失败: $e');
+      logger.error('ConfigExport', '导出配置失败: $e');
       if (!mounted) return;
       await AppDialog.error(
         context,
@@ -134,7 +134,7 @@ class _ConfigImportExportPageState
         ),
       );
     } catch (e) {
-      logE('ConfigExport', '读取配置文件失败: $e');
+      logger.error('ConfigExport', '读取配置文件失败: $e');
       if (!mounted) return;
       showToast(context, AppLocalizations.of(context).configExportReadFileFailed);
     }
