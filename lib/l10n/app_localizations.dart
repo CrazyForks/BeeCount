@@ -5,12 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
-import 'app_localizations_es.dart';
-import 'app_localizations_fr.dart';
-import 'app_localizations_ja.dart';
-import 'app_localizations_ko.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -97,11 +92,6 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('de'),
-    Locale('es'),
-    Locale('fr'),
-    Locale('ja'),
-    Locale('ko'),
     Locale('zh'),
     Locale('zh', 'TW')
   ];
@@ -892,6 +882,12 @@ abstract class AppLocalizations {
   /// **'Are you sure to clear all transactions in ledger \"{name}\"? This action cannot be undone.\\nThe ledger will be kept, only transaction data will be deleted.'**
   String ledgersClearMessage(Object name);
 
+  /// No description provided for @ledgerDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Ledger'**
+  String get ledgerDefaultName;
+
   /// No description provided for @ledgersEdit.
   ///
   /// In en, this message translates to:
@@ -1167,6 +1163,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cloud ledger deleted'**
   String get ledgersDeleteRemoteSuccess;
+
+  /// No description provided for @ledgersCannotDeleteLastOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot delete the last ledger'**
+  String get ledgersCannotDeleteLastOne;
 
   /// No description provided for @ledgersRestoreAllTitle.
   ///
@@ -3069,6 +3071,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category \"{name}\" has {count} transaction records.\n\nTo add subcategories, these transactions must be migrated to other categories first.'**
   String categoryParentHasTransactionsMessage(Object count, Object name);
+
+  /// No description provided for @categoryExpenseList.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining-Transport-Shopping-Entertainment-Home-Family-Communication-Utilities-Housing-Medical-Education-Pets-Sports-Digital-Travel-Alcohol & Tobacco-Baby Care-Beauty-Repair-Social-Learning-Car-Taxi-Subway-Delivery-Property-Parking-Donation-Gift-Tax-Beverage-Clothing-Snacks-Red Packet-Fruit-Game-Book-Lover-Decoration-Daily Goods-Lottery-Stock-Social Security-Express-Work'**
+  String get categoryExpenseList;
+
+  /// No description provided for @categoryIncomeList.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary-Investment-Red Packet-Bonus-Reimbursement-Part-time-Gift-Interest-Refund-Investment Income-Second-hand-Social Benefit-Tax Refund-Provident Fund'**
+  String get categoryIncomeList;
+
+  /// No description provided for @categoryExpenseDining.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining-Breakfast-Lunch-Dinner-Meituan Delivery-Ele.me Delivery-JD Delivery-Restaurant-Food'**
+  String get categoryExpenseDining;
+
+  /// No description provided for @categoryExpenseSnacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies-Chips-Candy-Chocolate-Nuts'**
+  String get categoryExpenseSnacks;
+
+  /// No description provided for @categoryExpenseFruit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fruit-Apple-Banana-Orange-Grape-Watermelon-Other Fruits'**
+  String get categoryExpenseFruit;
+
+  /// No description provided for @categoryExpenseBeverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Beverage-Milk Tea-Coffee-Juice-Soda-Mineral Water'**
+  String get categoryExpenseBeverage;
+
+  /// No description provided for @categoryExpensePastry.
+  ///
+  /// In en, this message translates to:
+  /// **'Pastry-Cake-Bread-Dessert-Pastry'**
+  String get categoryExpensePastry;
+
+  /// No description provided for @categoryExpenseCooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooking Ingredients-Vegetables-Meat-Seafood-Seasoning-Grain & Oil'**
+  String get categoryExpenseCooking;
+
+  /// No description provided for @categoryExpenseShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothing-Shoes & Hats-Bags-Accessories-Daily Necessities'**
+  String get categoryExpenseShopping;
+
+  /// No description provided for @categoryExpensePets.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets-Pet Food-Pet Supplies-Pet Medical-Pet Grooming'**
+  String get categoryExpensePets;
+
+  /// No description provided for @categoryExpenseTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport-Subway-Bus-Taxi-Ride-hailing-Parking Fee-Fuel'**
+  String get categoryExpenseTransport;
+
+  /// No description provided for @categoryExpenseCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Car-Car Maintenance-Car Repair-Car Insurance-Car Wash-Traffic Fine'**
+  String get categoryExpenseCar;
+
+  /// No description provided for @categoryExpenseClothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-Pants-Dress-Shoes-Accessories'**
+  String get categoryExpenseClothing;
+
+  /// No description provided for @categoryExpenseDailyGoods.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Goods-Personal Care-Paper Products-Cleaning Supplies-Kitchen Supplies'**
+  String get categoryExpenseDailyGoods;
+
+  /// No description provided for @categoryExpenseEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuition-Training Fee-Books-Stationery-Office Supplies'**
+  String get categoryExpenseEducation;
+
+  /// No description provided for @categoryExpenseInvestLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment Loss-Stock Loss-Fund Loss-Other Investment Loss'**
+  String get categoryExpenseInvestLoss;
+
+  /// No description provided for @categoryExpenseEntertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment-Movie-KTV-Amusement Park-Bar-Other Entertainment'**
+  String get categoryExpenseEntertainment;
+
+  /// No description provided for @categoryExpenseGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Game-Game Top-up-Game Equipment-Game Membership'**
+  String get categoryExpenseGame;
+
+  /// No description provided for @categoryExpenseHealthProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Products-Vitamins-Health Food-Nutritional Supplements'**
+  String get categoryExpenseHealthProducts;
+
+  /// No description provided for @categoryExpenseSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription-Video Membership-Music Membership-Cloud Storage-Other Subscription'**
+  String get categoryExpenseSubscription;
+
+  /// No description provided for @categoryExpenseSports.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports-Gym-Sports Equipment-Sports Course-Outdoor Activity'**
+  String get categoryExpenseSports;
+
+  /// No description provided for @categoryExpenseHousing.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing-Rent-Property Fee-Mortgage-Renovation'**
+  String get categoryExpenseHousing;
+
+  /// No description provided for @categoryExpenseHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home-Furniture-Appliances-Decorations-Bedding'**
+  String get categoryExpenseHome;
+
+  /// No description provided for @categoryExpenseBeauty.
+  ///
+  /// In en, this message translates to:
+  /// **'Beauty-Skincare-Cosmetics-Beauty Salon-Nail Care'**
+  String get categoryExpenseBeauty;
+
+  /// No description provided for @categoryIncomeSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Base Salary-Performance Bonus-Year-end Bonus-Overtime Pay'**
+  String get categoryIncomeSalary;
+
+  /// No description provided for @categoryIncomeInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund Earnings-Stock Dividend-Wealth Management-Other Wealth Management'**
+  String get categoryIncomeInvestment;
+
+  /// No description provided for @categoryIncomeRedPacket.
+  ///
+  /// In en, this message translates to:
+  /// **'Red Packet-Holiday Red Packet-Birthday Red Packet-Return Gift'**
+  String get categoryIncomeRedPacket;
+
+  /// No description provided for @categoryIncomeBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus-Year-end Bonus-Quarterly Bonus-Project Bonus-Other Bonus'**
+  String get categoryIncomeBonus;
+
+  /// No description provided for @categoryIncomeReimbursement.
+  ///
+  /// In en, this message translates to:
+  /// **'Reimbursement-Travel Reimbursement-Meal Reimbursement-Other Reimbursement'**
+  String get categoryIncomeReimbursement;
+
+  /// No description provided for @categoryIncomePartTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Part-time-Part-time Income-Side Income'**
+  String get categoryIncomePartTime;
+
+  /// No description provided for @categoryIncomeGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift-Wedding Gift-Birthday Gift-Other Gift'**
+  String get categoryIncomeGift;
+
+  /// No description provided for @categoryIncomeInterest.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest-Bank Interest-Other Interest'**
+  String get categoryIncomeInterest;
+
+  /// No description provided for @categoryIncomeRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund-Shopping Refund-Service Refund-Other Refund'**
+  String get categoryIncomeRefund;
+
+  /// No description provided for @categoryIncomeInvestIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment Income-Stock Earnings-Fund Earnings-Other Investment Income'**
+  String get categoryIncomeInvestIncome;
+
+  /// No description provided for @categoryIncomeSecondHand.
+  ///
+  /// In en, this message translates to:
+  /// **'Second-hand-Idle Items-Second-hand Goods'**
+  String get categoryIncomeSecondHand;
+
+  /// No description provided for @categoryIncomeSocialBenefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Benefit-Unemployment Insurance-Maternity Subsidy-Other Subsidy'**
+  String get categoryIncomeSocialBenefit;
+
+  /// No description provided for @categoryIncomeTaxRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax Refund-Individual Tax Refund-Other Refund'**
+  String get categoryIncomeTaxRefund;
+
+  /// No description provided for @categoryIncomeProvidentFund.
+  ///
+  /// In en, this message translates to:
+  /// **'Provident Fund-Provident Fund Withdrawal-Provident Fund Interest'**
+  String get categoryIncomeProvidentFund;
 
   /// No description provided for @personalizeTitle.
   ///
@@ -6250,6 +6480,12 @@ abstract class AppLocalizations {
   /// **'An accounting app that truly respects your privacy'**
   String get welcomeDescription;
 
+  /// No description provided for @welcomeCurrencyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred currency, you can change it anytime in settings'**
+  String get welcomeCurrencyDescription;
+
   /// No description provided for @welcomePrivacyTitle.
   ///
   /// In en, this message translates to:
@@ -7905,6 +8141,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'From'**
   String get transferFromPrefix;
+
+  /// No description provided for @welcomeCategoryModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Category Mode'**
+  String get welcomeCategoryModeTitle;
+
+  /// No description provided for @welcomeCategoryModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the category structure that suits your needs'**
+  String get welcomeCategoryModeDescription;
+
+  /// No description provided for @welcomeCategoryModeFlatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat Categories'**
+  String get welcomeCategoryModeFlatTitle;
+
+  /// No description provided for @welcomeCategoryModeFlatDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple and fast'**
+  String get welcomeCategoryModeFlatDescription;
+
+  /// No description provided for @welcomeCategoryModeFlatFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat structure, easy to use'**
+  String get welcomeCategoryModeFlatFeature1;
+
+  /// No description provided for @welcomeCategoryModeFlatFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect for simple categorization'**
+  String get welcomeCategoryModeFlatFeature2;
+
+  /// No description provided for @welcomeCategoryModeFlatFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick selection, efficient tracking'**
+  String get welcomeCategoryModeFlatFeature3;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hierarchical Categories'**
+  String get welcomeCategoryModeHierarchicalTitle;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed management'**
+  String get welcomeCategoryModeHierarchicalDescription;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'Support parent-child category levels'**
+  String get welcomeCategoryModeHierarchicalFeature1;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'More detailed transaction classification'**
+  String get welcomeCategoryModeHierarchicalFeature2;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect for detailed management'**
+  String get welcomeCategoryModeHierarchicalFeature3;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -7916,7 +8224,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'ja', 'ko', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -7936,12 +8244,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return AppLocalizationsDe();
     case 'en': return AppLocalizationsEn();
-    case 'es': return AppLocalizationsEs();
-    case 'fr': return AppLocalizationsFr();
-    case 'ja': return AppLocalizationsJa();
-    case 'ko': return AppLocalizationsKo();
     case 'zh': return AppLocalizationsZh();
   }
 

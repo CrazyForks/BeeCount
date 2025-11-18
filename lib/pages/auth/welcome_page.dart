@@ -5,6 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/ui_state_providers.dart';
+import '../../providers/language_provider.dart';
+import '../../providers/database_providers.dart';
+import '../../services/logger_service.dart';
+import '../../utils/currencies.dart';
 
 /// 首次启动欢迎页面
 /// 展示应用的独特价值：隐私保护、开源透明、数据自主
@@ -18,6 +22,9 @@ class WelcomePage extends ConsumerStatefulWidget {
 class _WelcomePageState extends ConsumerState<WelcomePage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  String _selectedCurrency = 'CNY'; // 默认货币
+  bool _useHierarchicalCategories = false; // 默认使用一级分类
+  bool _isInitializing = false; // 初始化状态
 
   @override
   void dispose() {
@@ -41,7 +48,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  4,
+                  5,
                   (index) => Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4),
                     width: _currentPage == index ? 24 : 8,
@@ -67,10 +74,11 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                   });
                 },
                 children: [
-                  _buildWelcomePage(context, theme, l10n),
-                  _buildPrivacyPage(context, theme, l10n),
-                  _buildOpenSourcePage(context, theme, l10n),
-                  _buildCloudSyncPage(context, theme, l10n),
+                  _buildWelcomePage(context, theme, l10n), // 第1屏：语言选择
+                  _buildCurrencyPage(context, theme, l10n), // 第2屏：货币选择
+                  _buildCategoryModePage(context, theme, l10n), // 第3屏：分类模式
+                  _buildPrivacyAndOpenSourcePage(context, theme, l10n), // 第4屏：隐私保护+开源透明
+                  _buildCloudSyncPage(context, theme, l10n), // 第5屏：云同步
                 ],
               ),
             ),
@@ -94,7 +102,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                       child: Text(l10n.commonPrevious),
                     ),
                   const Spacer(),
-                  if (_currentPage < 3)
+                  if (_currentPage < 4)
                     FilledButton(
                       onPressed: () {
                         _pageController.nextPage(
@@ -110,12 +118,18 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                     )
                   else
                     FilledButton(
-                      onPressed: () => _finishWelcome(context),
+                      onPressed: _isInitializing ? null : () => _finishWelcome(context),
                       style: FilledButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: theme.primaryColor,
                       ),
-                      child: Text(l10n.commonFinish),
+                      child: _isInitializing
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(l10n.commonFinish),
                     ),
                 ],
               ),
@@ -129,6 +143,17 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   /// 第1页：欢迎
   Widget _buildWelcomePage(
       BuildContext context, ThemeData theme, AppLocalizations l10n) {
+    final languageNotifier = ref.read(languageProvider.notifier);
+    final currentLocale = ref.watch(languageProvider);
+
+    // 可选语言列表
+    final availableLocales = [
+      null, // 跟随系统
+      const Locale('zh'),
+      const Locale('zh', 'TW'),
+      const Locale('en'),
+    ];
+
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -171,20 +196,85 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             ),
             textAlign: TextAlign.center,
           ),
+
+          const SizedBox(height: 48),
+
+          // 语言选择
+          Text(
+            l10n.commonLanguage,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 语言选择列表
+          Container(
+            constraints: const BoxConstraints(maxHeight: 200),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: availableLocales.length,
+              separatorBuilder: (context, index) => Divider(
+                height: 1,
+                color: Colors.white.withValues(alpha: 0.2),
+              ),
+              itemBuilder: (context, index) {
+                final locale = availableLocales[index];
+                final isSelected = currentLocale == locale;
+                final displayName = languageNotifier.getLanguageDisplayName(context, locale);
+
+                return InkWell(
+                  onTap: () {
+                    languageNotifier.setLanguage(locale);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            displayName,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        if (isSelected)
+                          const Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 
-  /// 第2页：隐私保护
-  Widget _buildPrivacyPage(
+  /// 第2页：货币选择
+  Widget _buildCurrencyPage(
       BuildContext context, ThemeData theme, AppLocalizations l10n) {
+    // 从工具类获取货币列表
+    final currencies = getCurrencies(context);
+
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 隐私图标
+          // 货币图标
           Container(
             width: 120,
             height: 120,
@@ -193,7 +283,133 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.shield_outlined,
+              Icons.attach_money,
+              size: 64,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // 标题
+          Text(
+            l10n.ledgersCurrency,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+
+          // 描述
+          Text(
+            l10n.welcomeCurrencyDescription,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 32),
+
+          // 货币选择列表
+          Container(
+            constraints: const BoxConstraints(maxHeight: 300),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: currencies.length,
+              separatorBuilder: (context, index) => Divider(
+                height: 1,
+                color: Colors.white.withValues(alpha: 0.2),
+              ),
+              itemBuilder: (context, index) {
+                final currency = currencies[index];
+                final isSelected = _selectedCurrency == currency.code;
+                final symbol = getCurrencySymbol(currency.code);
+
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedCurrency = currency.code;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      children: [
+                        // 选中标记
+                        Icon(
+                          isSelected
+                              ? Icons.radio_button_checked
+                              : Icons.radio_button_unchecked,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 12),
+
+                        // 货币符号
+                        SizedBox(
+                          width: 40,
+                          child: Text(
+                            symbol,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+
+                        // 货币名称
+                        Expanded(
+                          child: Text(
+                            '${currency.name} (${currency.code})',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight:
+                                  isSelected ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 第4页：隐私保护与开源透明
+  Widget _buildPrivacyAndOpenSourcePage(
+      BuildContext context, ThemeData theme, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // 隐私与开源图标
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.verified_user_outlined,
               size: 64,
               color: Colors.white,
             ),
@@ -217,102 +433,27 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 隐私保护特性
                   _buildFeatureItem(
                     context,
-                    Icons.check_circle_outline,
+                    Icons.shield_outlined,
                     Colors.white,
                     l10n.welcomePrivacyFeature1,
                   ),
                   const SizedBox(height: 12),
                   _buildFeatureItem(
                     context,
-                    Icons.check_circle_outline,
+                    Icons.lock_outline,
                     Colors.white,
                     l10n.welcomePrivacyFeature2,
                   ),
                   const SizedBox(height: 12),
+                  // 开源透明特性
                   _buildFeatureItem(
                     context,
-                    Icons.check_circle_outline,
-                    Colors.white,
-                    l10n.welcomePrivacyFeature3,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildFeatureItem(
-                    context,
-                    Icons.check_circle_outline,
-                    Colors.white,
-                    l10n.welcomePrivacyFeature4,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 第3页：开源透明
-  Widget _buildOpenSourcePage(
-      BuildContext context, ThemeData theme, AppLocalizations l10n) {
-    return Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 开源图标
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.code_outlined,
-              size: 64,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 32),
-
-          // 标题
-          Text(
-            l10n.welcomeOpenSourceTitle,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-
-          // 特性列表
-          Center(
-            child: IntrinsicWidth(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildFeatureItem(
-                    context,
-                    Icons.check_circle_outline,
+                    Icons.code_outlined,
                     Colors.white,
                     l10n.welcomeOpenSourceFeature1,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildFeatureItem(
-                    context,
-                    Icons.check_circle_outline,
-                    Colors.white,
-                    l10n.welcomeOpenSourceFeature2,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildFeatureItem(
-                    context,
-                    Icons.check_circle_outline,
-                    Colors.white,
-                    l10n.welcomeOpenSourceFeature3,
                   ),
                 ],
               ),
@@ -473,13 +614,222 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
 
   /// 完成欢迎页面
   Future<void> _finishWelcome(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('welcome_shown', true);
+    // 设置初始化状态
+    setState(() {
+      _isInitializing = true;
+    });
 
-    if (context.mounted) {
-      // 首次启动的情况，标记欢迎页面已完成，触发重新构建
-      // 这将显示启屏页面（如果初始化未完成）或主应用（如果已完成）
-      ref.read(shouldShowWelcomeProvider.notifier).state = false;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('welcome_shown', true);
+      // 保存用户选择的分类模式
+      await prefs.setBool('use_hierarchical_categories', _useHierarchicalCategories);
+      // 保存用户选择的货币
+      await prefs.setString('selected_currency', _selectedCurrency);
+
+      // 初始化数据库（使用用户选择的语言和设置）
+      if (context.mounted) {
+        logger.info('welcome', '开始初始化数据库');
+        logger.info('welcome', '货币: $_selectedCurrency');
+        logger.info('welcome', '分类模式: ${_useHierarchicalCategories ? "二级分类" : "一级分类"}');
+
+        final l10n = AppLocalizations.of(context);
+        final db = ref.read(databaseProvider);
+
+        await db.ensureSeed(
+          l10n: l10n,
+          currency: _selectedCurrency,
+          useHierarchicalCategories: _useHierarchicalCategories,
+        );
+
+        logger.info('welcome', '数据库初始化完成');
+      }
+
+      if (context.mounted) {
+        // 首次启动的情况，标记欢迎页面已完成，触发重新构建
+        // 这将显示启屏页面（如果初始化未完成）或主应用（如果已完成）
+        ref.read(shouldShowWelcomeProvider.notifier).state = false;
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isInitializing = false;
+        });
+      }
     }
+  }
+
+  /// 第5页：分类模式选择
+  Widget _buildCategoryModePage(
+      BuildContext context, ThemeData theme, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // 图标
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.category_outlined,
+              size: 64,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // 标题
+          Text(
+            l10n.welcomeCategoryModeTitle,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+
+          // 描述
+          Text(
+            l10n.welcomeCategoryModeDescription,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 32),
+
+          // 一级分类选项
+          _buildCategoryModeOption(
+            context,
+            theme,
+            l10n,
+            isHierarchical: false,
+            title: l10n.welcomeCategoryModeFlatTitle,
+            description: l10n.welcomeCategoryModeFlatDescription,
+            features: [
+              l10n.welcomeCategoryModeFlatFeature1,
+              l10n.welcomeCategoryModeFlatFeature2,
+              l10n.welcomeCategoryModeFlatFeature3,
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // 二级分类选项
+          _buildCategoryModeOption(
+            context,
+            theme,
+            l10n,
+            isHierarchical: true,
+            title: l10n.welcomeCategoryModeHierarchicalTitle,
+            description: l10n.welcomeCategoryModeHierarchicalDescription,
+            features: [
+              l10n.welcomeCategoryModeHierarchicalFeature1,
+              l10n.welcomeCategoryModeHierarchicalFeature2,
+              l10n.welcomeCategoryModeHierarchicalFeature3,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryModeOption(
+    BuildContext context,
+    ThemeData theme,
+    AppLocalizations l10n, {
+    required bool isHierarchical,
+    required String title,
+    required String description,
+    required List<String> features,
+  }) {
+    final isSelected = _useHierarchicalCategories == isHierarchical;
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _useHierarchicalCategories = isHierarchical;
+        });
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Colors.white.withValues(alpha: 0.3)
+              : Colors.white.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.3),
+            width: 2,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        description,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ...features.map((feature) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.white.withValues(alpha: 0.8),
+                    size: 16,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      feature,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+          ],
+        ),
+      ),
+    );
   }
 }

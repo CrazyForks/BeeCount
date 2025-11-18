@@ -167,9 +167,6 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
   }
 
   Future<void> _buildFlatList() async {
-    // 获取默认分类名单
-    final defaultNames = CategoryService.getDefaultCategoryNames(widget.kind);
-
     // 获取当前类型的一级分类
     final topLevelCategories = widget.categoriesWithCount
         .where((item) =>
@@ -192,7 +189,7 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
       flatList.add(_CategoryItem(
         category: topItem.category,
         transactionCount: topItem.transactionCount,
-        isDefault: defaultNames.contains(topItem.category.name),
+        isDefault: false, // 所有分类都可删除
         isSubCategory: false,
         hasSubCategories: hasSubCategories,
       ));

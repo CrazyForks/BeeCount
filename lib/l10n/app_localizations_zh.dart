@@ -432,6 +432,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get ledgerDefaultName => '默认账本';
+
+  @override
   String get ledgersEdit => '编辑账本';
 
   @override
@@ -590,6 +593,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ledgersDeleteRemoteSuccess => '已删除云端账本';
+
+  @override
+  String get ledgersCannotDeleteLastOne => '无法删除最后一个账本';
 
   @override
   String get ledgersRestoreAllTitle => '批量恢复';
@@ -1613,6 +1619,120 @@ class AppLocalizationsZh extends AppLocalizations {
   String categoryParentHasTransactionsMessage(Object count, Object name) {
     return '分类\"$name\"下有 $count 笔交易记录。\n\n要添加二级分类，需要先将这些交易迁移到其他分类。';
   }
+
+  @override
+  String get categoryExpenseList => '餐饮-交通-购物-娱乐-居家-家庭-通讯-水电-住房-医疗-教育-宠物-运动-数码-旅行-烟酒-母婴-美容-维修-社交-学习-汽车-打车-地铁-外卖-物业-停车-捐赠-礼金-纳税-饮料-服装-零食-红包-水果-游戏-书-爱人-装修-日用品-彩票-股票-社保-快递-工作';
+
+  @override
+  String get categoryIncomeList => '工资-理财-红包-奖金-报销-兼职-礼金-利息-退款-投资收益-二手转卖-社会保障-退税退费-公积金';
+
+  @override
+  String get categoryExpenseDining => '餐饮-早餐-午餐-晚餐-美团外卖-饿了么外卖-京东外卖-餐厅-美食';
+
+  @override
+  String get categoryExpenseSnacks => '零食-饼干-薯片-糖果-巧克力-坚果';
+
+  @override
+  String get categoryExpenseFruit => '水果-苹果-香蕉-橙子-葡萄-西瓜-其他水果';
+
+  @override
+  String get categoryExpenseBeverage => '饮品-奶茶-咖啡-果汁-汽水-矿泉水';
+
+  @override
+  String get categoryExpensePastry => '糕点-蛋糕-面包-甜点-饼干';
+
+  @override
+  String get categoryExpenseCooking => '做饭食材-蔬菜-肉类-水产-调料-粮油';
+
+  @override
+  String get categoryExpenseShopping => '购物-服装-鞋帽-包包-配饰-日用百货';
+
+  @override
+  String get categoryExpensePets => '宠物-宠物食品-宠物用品-宠物医疗-宠物美容';
+
+  @override
+  String get categoryExpenseTransport => '交通-地铁-公交-出租车-网约车-停车费-加油';
+
+  @override
+  String get categoryExpenseCar => '汽车-汽车保养-汽车维修-汽车保险-洗车-违章罚款';
+
+  @override
+  String get categoryExpenseClothing => '服饰-上衣-裤子-裙子-鞋子-配饰';
+
+  @override
+  String get categoryExpenseDailyGoods => '日用品-洗护用品-纸品-清洁用品-厨房用品';
+
+  @override
+  String get categoryExpenseEducation => '教育-学费-培训费-书籍-文具-办公用品';
+
+  @override
+  String get categoryExpenseInvestLoss => '投资亏损-股票亏损-基金亏损-其他投资亏损';
+
+  @override
+  String get categoryExpenseEntertainment => '娱乐-电影-KTV-游乐场-酒吧-其他娱乐';
+
+  @override
+  String get categoryExpenseGame => '游戏-游戏充值-游戏装备-游戏会员';
+
+  @override
+  String get categoryExpenseHealthProducts => '保健品-维生素-保健食品-营养品';
+
+  @override
+  String get categoryExpenseSubscription => '订阅服务-视频会员-音乐会员-云存储-其他订阅';
+
+  @override
+  String get categoryExpenseSports => '运动-健身房-运动装备-运动课程-户外活动';
+
+  @override
+  String get categoryExpenseHousing => '住房-房租-物业费-房贷-装修';
+
+  @override
+  String get categoryExpenseHome => '居家-家具-家电-装饰品-床上用品';
+
+  @override
+  String get categoryExpenseBeauty => '美容-护肤品-化妆品-美容美发-美甲';
+
+  @override
+  String get categoryIncomeSalary => '工资-基本工资-绩效奖金-年终奖-加班费';
+
+  @override
+  String get categoryIncomeInvestment => '理财-基金收益-股票分红-理财产品-其他理财';
+
+  @override
+  String get categoryIncomeRedPacket => '红包-节日红包-生日红包-随礼回礼';
+
+  @override
+  String get categoryIncomeBonus => '奖金-年终奖-季度奖-项目奖金-其他奖金';
+
+  @override
+  String get categoryIncomeReimbursement => '报销-差旅报销-餐费报销-其他报销';
+
+  @override
+  String get categoryIncomePartTime => '兼职-兼职收入-外快';
+
+  @override
+  String get categoryIncomeGift => '结婚礼金-生日礼金-其他礼金';
+
+  @override
+  String get categoryIncomeInterest => '利息-银行利息-其他利息';
+
+  @override
+  String get categoryIncomeRefund => '退款-购物退款-服务退款-其他退款';
+
+  @override
+  String get categoryIncomeInvestIncome => '投资收益-股票收益-基金收益-其他投资收益';
+
+  @override
+  String get categoryIncomeSecondHand => '二手交易-闲置物品-二手商品';
+
+  @override
+  String get categoryIncomeSocialBenefit => '社会福利-失业保险-生育津贴-其他补贴';
+
+  @override
+  String get categoryIncomeTaxRefund => '退税-个税退税-其他退费';
+
+  @override
+  String get categoryIncomeProvidentFund => '公积金-公积金提取-公积金利息';
 
   @override
   String get personalizeTitle => '个性化';
@@ -3305,6 +3425,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeDescription => '一个真正尊重您隐私的记账应用';
 
   @override
+  String get welcomeCurrencyDescription => '选择您常用的货币，之后可以随时在设置中更改';
+
+  @override
   String get welcomePrivacyTitle => '您的数据，您做主';
 
   @override
@@ -4161,6 +4284,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get transferFromPrefix => '来自';
+
+  @override
+  String get welcomeCategoryModeTitle => '选择分类模式';
+
+  @override
+  String get welcomeCategoryModeDescription => '选择更适合您使用习惯的分类方式';
+
+  @override
+  String get welcomeCategoryModeFlatTitle => '一级分类';
+
+  @override
+  String get welcomeCategoryModeFlatDescription => '简单直观，快速记账';
+
+  @override
+  String get welcomeCategoryModeFlatFeature1 => '扁平化结构，操作简单';
+
+  @override
+  String get welcomeCategoryModeFlatFeature2 => '适合习惯简单分类的用户';
+
+  @override
+  String get welcomeCategoryModeFlatFeature3 => '快速选择，高效记账';
+
+  @override
+  String get welcomeCategoryModeHierarchicalTitle => '二级分类';
+
+  @override
+  String get welcomeCategoryModeHierarchicalDescription => '精细管理，清晰明了';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature1 => '支持父子分类层级';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature2 => '更细致的账单归类';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature3 => '适合需要精细管理的用户';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -5537,6 +5696,154 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String categoryDeleted(Object name) {
     return '分類\"$name\"已刪除';
   }
+
+  @override
+  String get categorySubCategoryDescriptionDisabled => '此分類為獨立的一級分類';
+
+  @override
+  String get categoryParentCategoryTitle => '父分類';
+
+  @override
+  String get categoryParentCategoryHint => '請選擇父分類';
+
+  @override
+  String get categorySelectParentTitle => '選擇父分類';
+
+  @override
+  String get categorySelectParentDescription => '只能選擇沒有交易記錄的分類作為父分類';
+
+  @override
+  String categorySubCategoryCreated(Object name) {
+    return '已新增二級分類：$name';
+  }
+
+  @override
+  String get categoryParentRequired => '請選擇父分類';
+
+  @override
+  String get categoryParentRequiredTitle => '錯誤';
+
+  @override
+  String get categoryParentHasTransactionsTitle => '無法新增二級分類';
+
+  @override
+  String categoryParentHasTransactionsMessage(Object count, Object name) {
+    return '分類\"$name\"下有 $count 筆交易記錄。\n\n要新增二級分類，需要先將這些交易遷移到其他分類。';
+  }
+
+  @override
+  String get categoryExpenseList => '餐飲-交通-購物-娛樂-居家-家庭-通訊-水電-住房-醫療-教育-寵物-運動-數碼-旅行-煙酒-母嬰-美容-維修-社交-學習-汽車-打車-地鐵-外賣-物業-停車-捐贈-禮金-納稅-飲料-服裝-零食-紅包-水果-遊戲-書-愛人-裝修-日用品-彩票-股票-社保-快遞-工作';
+
+  @override
+  String get categoryIncomeList => '工資-理財-紅包-獎金-報銷-兼職-禮金-利息-退款-投資收益-二手轉賣-社會保障-退稅退費-公積金';
+
+  @override
+  String get categoryExpenseDining => '餐飲-早餐-午餐-晚餐-美團外賣-餓了麼外賣-京東外賣-餐廳-美食';
+
+  @override
+  String get categoryExpenseSnacks => '零食-餅乾-薯片-糖果-巧克力-堅果';
+
+  @override
+  String get categoryExpenseFruit => '水果-蘋果-香蕉-橙子-葡萄-西瓜-其他水果';
+
+  @override
+  String get categoryExpenseBeverage => '飲品-奶茶-咖啡-果汁-汽水-礦泉水';
+
+  @override
+  String get categoryExpensePastry => '糕點-蛋糕-麵包-甜點-餅乾';
+
+  @override
+  String get categoryExpenseCooking => '做飯食材-蔬菜-肉類-水產-調料-糧油';
+
+  @override
+  String get categoryExpenseShopping => '購物-服裝-鞋帽-包包-配飾-日用百貨';
+
+  @override
+  String get categoryExpensePets => '寵物-寵物食品-寵物用品-寵物醫療-寵物美容';
+
+  @override
+  String get categoryExpenseTransport => '交通-地鐵-公交-出租車-網約車-停車費-加油';
+
+  @override
+  String get categoryExpenseCar => '汽車-汽車保養-汽車維修-汽車保險-洗車-違章罰款';
+
+  @override
+  String get categoryExpenseClothing => '服飾-上衣-褲子-裙子-鞋子-配飾';
+
+  @override
+  String get categoryExpenseDailyGoods => '日用品-洗護用品-紙品-清潔用品-廚房用品';
+
+  @override
+  String get categoryExpenseEducation => '教育-學費-培訓費-書籍-文具-辦公用品';
+
+  @override
+  String get categoryExpenseInvestLoss => '投資虧損-股票虧損-基金虧損-其他投資虧損';
+
+  @override
+  String get categoryExpenseEntertainment => '娛樂-電影-KTV-遊樂場-酒吧-其他娛樂';
+
+  @override
+  String get categoryExpenseGame => '遊戲儲值-遊戲裝備-遊戲會員';
+
+  @override
+  String get categoryExpenseHealthProducts => '保健品-維生素-保健食品-營養品';
+
+  @override
+  String get categoryExpenseSubscription => '訂閱服務-視頻會員-音樂會員-雲端儲存-其他訂閱';
+
+  @override
+  String get categoryExpenseSports => '運動-健身房-運動裝備-運動課程-戶外活動';
+
+  @override
+  String get categoryExpenseHousing => '住房-房租-物業費-房貸-裝修';
+
+  @override
+  String get categoryExpenseHome => '傢俱-家電-裝飾品-床上用品';
+
+  @override
+  String get categoryExpenseBeauty => '美容-護膚品-化妝品-美容美髮-美甲';
+
+  @override
+  String get categoryIncomeSalary => '工資-基本工資-績效獎金-年終獎-加班費';
+
+  @override
+  String get categoryIncomeInvestment => '理財-基金收益-股票分紅-理財產品-其他理財';
+
+  @override
+  String get categoryIncomeRedPacket => '紅包-節日紅包-生日紅包-隨禮回禮';
+
+  @override
+  String get categoryIncomeBonus => '獎金-年終獎-季度獎-項目獎金-其他獎金';
+
+  @override
+  String get categoryIncomeReimbursement => '報銷-差旅報銷-餐費報銷-其他報銷';
+
+  @override
+  String get categoryIncomePartTime => '兼職-兼職收入-外快';
+
+  @override
+  String get categoryIncomeGift => '結婚禮金-生日禮金-其他禮金';
+
+  @override
+  String get categoryIncomeInterest => '利息-銀行利息-其他利息';
+
+  @override
+  String get categoryIncomeRefund => '退款-購物退款-服務退款-其他退款';
+
+  @override
+  String get categoryIncomeInvestIncome => '投資收益-股票收益-基金收益-其他投資收益';
+
+  @override
+  String get categoryIncomeSecondHand => '二手交易-閒置物品-二手商品';
+
+  @override
+  String get categoryIncomeSocialBenefit => '社會福利-失業保險-生育津貼-其他補貼';
+
+  @override
+  String get categoryIncomeTaxRefund => '退稅-個稅退稅-其他退費';
+
+  @override
+  String get categoryIncomeProvidentFund => '公積金-公積金提取-公積金利息';
 
   @override
   String get personalizeTitle => '個性裝扮';

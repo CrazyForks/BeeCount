@@ -193,6 +193,9 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - **Smart Accounting**: Income/expense categories, amounts, dates, notes
 - **OCR Scan Billing**: Take photos or select payment screenshots, auto-recognize amounts and merchant info
 - **Multi-Ledger Management**: Separate management for personal, work, investment
+- **Independent Account Management**: Support for cash, bank cards, credit cards and other account types, each account tracks balance independently
+- **Account Transfer Feature**: Support inter-account transfer records, auto-update balances for both accounts
+- **Hierarchical Category System**: Support parent-child category levels for more detailed transaction classification (choose between flat or hierarchical mode)
 - **Chart Analysis**: Monthly reports, category rankings, trend analysis
 - **Data Import/Export**: CSV format, compatible with mainstream apps
 - **Home Screen Widgets**: iOS/Android widgets for quick overview of income and expenses
@@ -200,7 +203,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 ### 🎨 Personalization & Internationalization
 
 - **Theme Customization**: Multiple theme colors for personalized style
-- **9 Languages**: Simplified Chinese, Traditional Chinese, English, 日本語, 한국어, Español, Français, Deutsch
+- **3 Languages**: Simplified Chinese, Traditional Chinese, English
   - Complete UI translation + smart category mapping
   - Localized date/number formats
   - CSV import auto-recognizes multi-language categories
@@ -492,15 +495,17 @@ Progress: [██████████] 101.67% - 🎉 Goal Achieved!
 ```
 
 **Completed**:
-- ✅ Apple Developer Account registration ($99/year)
+- ✅ Apple Developer Account registration (¥688/year, ≈$95/year)
 - ✅ iOS TestFlight public beta launched
+- ✅ Lightweight cloud server (¥79/year, ≈$11/year) - For ICP filing
 
 **Ongoing Costs**:
-- 📱 Apple Developer Account renewal: $99/year
+- 📱 Apple Developer Account renewal: ¥688/year (≈$95/year)
+- ☁️ Lightweight cloud server: ¥79/year (≈$11/year)
 
-**🚀 Next Steps**:
-- Preparing to submit to Apple App Store
-- Developing HarmonyOS native version
+**Total Annual Cost**: ¥767/year (≈$106/year)
+
+All donation fund usage will be transparently disclosed here.
 
 ### 🌟 Special Thanks to Our Supporters
 
@@ -515,6 +520,8 @@ Format: Nickname - Amount - Date
 - **\*Rui** - ¥720 - 2025-10-27 (WeChat) 🎉
 - **\*Hong** - ¥50 - 2025-11-07 (Alipay)
 - **\*Shao** - ¥15 - 2025-11-09 (Alipay)
+- **\*Ge** - ¥6 - 2025-11-17 (WeChat)
+- **\*Te** - ¥15 - 2025-11-17 (WeChat)
 
 ---
 

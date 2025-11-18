@@ -82,8 +82,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   
   bool get isEditing => widget.category != null;
 
-  bool get isDefaultCategory => widget.category != null &&
-      CategoryService.isDefaultCategory(widget.category!.name, widget.category!.kind);
+  bool get isDefaultCategory => false; // 所有分类都可编辑删除
 
   bool get isCreatingSubCategory => widget.parentCategory != null;
 

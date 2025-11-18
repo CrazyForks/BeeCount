@@ -8,6 +8,7 @@ import '../../data/db.dart' as schema;
 import '../../l10n/app_localizations.dart';
 import '../../services/category_service.dart';
 import '../../services/import/csv_parser.dart';
+import '../../utils/category_utils.dart';
 import '../../services/import/bill_parser.dart';
 import '../../services/import/parsers/generic_parser.dart';
 import '../../services/import/parsers/alipay_parser.dart';
@@ -255,7 +256,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                         ...cats.map((c) => DropdownMenuItem<int?>(
                               value: c.id,
                               child: Text(
-                                  '${CategoryService.translateCategoryName(c.name, l10n)} (${c.kind == 'income' ? l10n.categoryIncome : l10n.categoryExpense})'),
+                                  '${CategoryUtils.getDisplayName(c.name, context, kind: c.kind)} (${c.kind == 'income' ? l10n.categoryIncome : l10n.categoryExpense})'),
                             )),
                       ];
                       // 为每个源分类预设自动匹配（仅在首次加载时执行）
@@ -263,19 +264,15 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                           cats.isNotEmpty) {
                         bool hasMatch = false;
                         for (final sourceName in distinctCategories) {
-                          final mappedChineseName =
-                              CategoryService.mapEnglishToChinese(sourceName);
-                          if (mappedChineseName != sourceName) {
-                            // 查找匹配的分类ID
-                            try {
-                              final matchingCategory = cats.firstWhere(
-                                (c) => c.name == mappedChineseName,
-                              );
-                              categoryMapping[sourceName] = matchingCategory.id;
-                              hasMatch = true;
-                            } catch (e) {
-                              // 没有找到匹配的分类，保持为null
-                            }
+                          // 直接使用源分类名称查找匹配
+                          try {
+                            final matchingCategory = cats.firstWhere(
+                              (c) => c.name == sourceName,
+                            );
+                            categoryMapping[sourceName] = matchingCategory.id;
+                            hasMatch = true;
+                          } catch (e) {
+                            // 没有找到匹配的分类，保持为null
                           }
                         }
                         // 如果有自动匹配，触发重建以显示预设的匹配
@@ -846,8 +843,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
             if (categoryId == null) {
               // 缓存中没有，使用原有的 upsertCategory 逻辑
-              final mappedName = CategoryService.mapEnglishToChinese(originalName);
-              final name = mappedName != originalName ? mappedName : originalName;
+              final name = originalName;
 
               if (type == 'income') {
                 final cached = incomeCatCache[name];

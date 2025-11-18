@@ -432,6 +432,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get ledgerDefaultName => 'Default Ledger';
+
+  @override
   String get ledgersEdit => 'Edit Ledger';
 
   @override
@@ -590,6 +593,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ledgersDeleteRemoteSuccess => 'Cloud ledger deleted';
+
+  @override
+  String get ledgersCannotDeleteLastOne => 'Cannot delete the last ledger';
 
   @override
   String get ledgersRestoreAllTitle => 'Batch Restore';
@@ -1613,6 +1619,120 @@ class AppLocalizationsEn extends AppLocalizations {
   String categoryParentHasTransactionsMessage(Object count, Object name) {
     return 'Category \"$name\" has $count transaction records.\n\nTo add subcategories, these transactions must be migrated to other categories first.';
   }
+
+  @override
+  String get categoryExpenseList => 'Dining-Transport-Shopping-Entertainment-Home-Family-Communication-Utilities-Housing-Medical-Education-Pets-Sports-Digital-Travel-Alcohol & Tobacco-Baby Care-Beauty-Repair-Social-Learning-Car-Taxi-Subway-Delivery-Property-Parking-Donation-Gift-Tax-Beverage-Clothing-Snacks-Red Packet-Fruit-Game-Book-Lover-Decoration-Daily Goods-Lottery-Stock-Social Security-Express-Work';
+
+  @override
+  String get categoryIncomeList => 'Salary-Investment-Red Packet-Bonus-Reimbursement-Part-time-Gift-Interest-Refund-Investment Income-Second-hand-Social Benefit-Tax Refund-Provident Fund';
+
+  @override
+  String get categoryExpenseDining => 'Dining-Breakfast-Lunch-Dinner-Meituan Delivery-Ele.me Delivery-JD Delivery-Restaurant-Food';
+
+  @override
+  String get categoryExpenseSnacks => 'Cookies-Chips-Candy-Chocolate-Nuts';
+
+  @override
+  String get categoryExpenseFruit => 'Fruit-Apple-Banana-Orange-Grape-Watermelon-Other Fruits';
+
+  @override
+  String get categoryExpenseBeverage => 'Beverage-Milk Tea-Coffee-Juice-Soda-Mineral Water';
+
+  @override
+  String get categoryExpensePastry => 'Pastry-Cake-Bread-Dessert-Pastry';
+
+  @override
+  String get categoryExpenseCooking => 'Cooking Ingredients-Vegetables-Meat-Seafood-Seasoning-Grain & Oil';
+
+  @override
+  String get categoryExpenseShopping => 'Clothing-Shoes & Hats-Bags-Accessories-Daily Necessities';
+
+  @override
+  String get categoryExpensePets => 'Pets-Pet Food-Pet Supplies-Pet Medical-Pet Grooming';
+
+  @override
+  String get categoryExpenseTransport => 'Transport-Subway-Bus-Taxi-Ride-hailing-Parking Fee-Fuel';
+
+  @override
+  String get categoryExpenseCar => 'Car-Car Maintenance-Car Repair-Car Insurance-Car Wash-Traffic Fine';
+
+  @override
+  String get categoryExpenseClothing => 'Top-Pants-Dress-Shoes-Accessories';
+
+  @override
+  String get categoryExpenseDailyGoods => 'Daily Goods-Personal Care-Paper Products-Cleaning Supplies-Kitchen Supplies';
+
+  @override
+  String get categoryExpenseEducation => 'Tuition-Training Fee-Books-Stationery-Office Supplies';
+
+  @override
+  String get categoryExpenseInvestLoss => 'Investment Loss-Stock Loss-Fund Loss-Other Investment Loss';
+
+  @override
+  String get categoryExpenseEntertainment => 'Entertainment-Movie-KTV-Amusement Park-Bar-Other Entertainment';
+
+  @override
+  String get categoryExpenseGame => 'Game-Game Top-up-Game Equipment-Game Membership';
+
+  @override
+  String get categoryExpenseHealthProducts => 'Health Products-Vitamins-Health Food-Nutritional Supplements';
+
+  @override
+  String get categoryExpenseSubscription => 'Subscription-Video Membership-Music Membership-Cloud Storage-Other Subscription';
+
+  @override
+  String get categoryExpenseSports => 'Sports-Gym-Sports Equipment-Sports Course-Outdoor Activity';
+
+  @override
+  String get categoryExpenseHousing => 'Housing-Rent-Property Fee-Mortgage-Renovation';
+
+  @override
+  String get categoryExpenseHome => 'Home-Furniture-Appliances-Decorations-Bedding';
+
+  @override
+  String get categoryExpenseBeauty => 'Beauty-Skincare-Cosmetics-Beauty Salon-Nail Care';
+
+  @override
+  String get categoryIncomeSalary => 'Base Salary-Performance Bonus-Year-end Bonus-Overtime Pay';
+
+  @override
+  String get categoryIncomeInvestment => 'Fund Earnings-Stock Dividend-Wealth Management-Other Wealth Management';
+
+  @override
+  String get categoryIncomeRedPacket => 'Red Packet-Holiday Red Packet-Birthday Red Packet-Return Gift';
+
+  @override
+  String get categoryIncomeBonus => 'Bonus-Year-end Bonus-Quarterly Bonus-Project Bonus-Other Bonus';
+
+  @override
+  String get categoryIncomeReimbursement => 'Reimbursement-Travel Reimbursement-Meal Reimbursement-Other Reimbursement';
+
+  @override
+  String get categoryIncomePartTime => 'Part-time-Part-time Income-Side Income';
+
+  @override
+  String get categoryIncomeGift => 'Gift-Wedding Gift-Birthday Gift-Other Gift';
+
+  @override
+  String get categoryIncomeInterest => 'Interest-Bank Interest-Other Interest';
+
+  @override
+  String get categoryIncomeRefund => 'Refund-Shopping Refund-Service Refund-Other Refund';
+
+  @override
+  String get categoryIncomeInvestIncome => 'Investment Income-Stock Earnings-Fund Earnings-Other Investment Income';
+
+  @override
+  String get categoryIncomeSecondHand => 'Second-hand-Idle Items-Second-hand Goods';
+
+  @override
+  String get categoryIncomeSocialBenefit => 'Social Benefit-Unemployment Insurance-Maternity Subsidy-Other Subsidy';
+
+  @override
+  String get categoryIncomeTaxRefund => 'Tax Refund-Individual Tax Refund-Other Refund';
+
+  @override
+  String get categoryIncomeProvidentFund => 'Provident Fund-Provident Fund Withdrawal-Provident Fund Interest';
 
   @override
   String get personalizeTitle => 'Personalize';
@@ -3305,6 +3425,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeDescription => 'An accounting app that truly respects your privacy';
 
   @override
+  String get welcomeCurrencyDescription => 'Choose your preferred currency, you can change it anytime in settings';
+
+  @override
   String get welcomePrivacyTitle => 'Your Data, Your Control';
 
   @override
@@ -4161,4 +4284,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get transferFromPrefix => 'From';
+
+  @override
+  String get welcomeCategoryModeTitle => 'Choose Category Mode';
+
+  @override
+  String get welcomeCategoryModeDescription => 'Select the category structure that suits your needs';
+
+  @override
+  String get welcomeCategoryModeFlatTitle => 'Flat Categories';
+
+  @override
+  String get welcomeCategoryModeFlatDescription => 'Simple and fast';
+
+  @override
+  String get welcomeCategoryModeFlatFeature1 => 'Flat structure, easy to use';
+
+  @override
+  String get welcomeCategoryModeFlatFeature2 => 'Perfect for simple categorization';
+
+  @override
+  String get welcomeCategoryModeFlatFeature3 => 'Quick selection, efficient tracking';
+
+  @override
+  String get welcomeCategoryModeHierarchicalTitle => 'Hierarchical Categories';
+
+  @override
+  String get welcomeCategoryModeHierarchicalDescription => 'Detailed management';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature1 => 'Support parent-child category levels';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature2 => 'More detailed transaction classification';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature3 => 'Perfect for detailed management';
 }
