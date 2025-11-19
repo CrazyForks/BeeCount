@@ -895,10 +895,17 @@ class BeeRepository {
         c.kind as category_kind,
         c.icon as category_icon,
         c.sort_order as category_sort_order,
-        COALESCE(COUNT(t.id), 0) as transaction_count
+        c.parent_id as category_parent_id,
+        c.level as category_level,
+        COALESCE(COUNT(DISTINCT t.id), 0) as transaction_count
       FROM categories c
-      LEFT JOIN transactions t ON c.id = t.category_id
-      GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order
+      LEFT JOIN transactions t ON (
+        t.category_id = c.id
+        OR t.category_id IN (
+          SELECT id FROM categories WHERE parent_id = c.id
+        )
+      )
+      GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order, c.parent_id, c.level
       ORDER BY c.sort_order
       ''',
       readsFrom: {db.categories, db.transactions},
@@ -910,6 +917,8 @@ class BeeRepository {
           kind: row.read<String>('category_kind'),
           icon: row.read<String?>('category_icon'),
           sortOrder: row.read<int>('category_sort_order'),
+          parentId: row.read<int?>('category_parent_id'),
+          level: row.read<int>('category_level'),
         );
         final transactionCount = row.read<int>('transaction_count');
         return (category: category, transactionCount: transactionCount);
@@ -1370,5 +1379,270 @@ class BeeRepository {
     }
 
     return usage;
+  }
+
+  // ============================================
+  // 二级分类相关方法
+  // ============================================
+
+  /// 获取所有一级分类（level=1, parentId=null）
+  Future<List<Category>> getTopLevelCategories(String kind) async {
+    return await (db.select(db.categories)
+          ..where((c) => c.kind.equals(kind) & c.level.equals(1) & c.parentId.isNull())
+          ..orderBy([(c) => d.OrderingTerm(expression: c.sortOrder)]))
+        .get();
+  }
+
+  /// 获取指定一级分类下的所有二级分类
+  Future<List<Category>> getSubCategories(int parentId) async {
+    return await (db.select(db.categories)
+          ..where((c) => c.parentId.equals(parentId) & c.level.equals(2))
+          ..orderBy([(c) => d.OrderingTerm(expression: c.sortOrder)]))
+        .get();
+  }
+
+  /// 根据ID获取分类
+  Future<Category?> getCategoryById(int categoryId) async {
+    return await (db.select(db.categories)
+          ..where((c) => c.id.equals(categoryId)))
+        .getSingleOrNull();
+  }
+
+  /// 创建二级分类
+  Future<int> createSubCategory({
+    required int parentId,
+    required String name,
+    required String kind,
+    String? icon,
+    int? sortOrder,
+  }) async {
+    return await db.into(db.categories).insert(
+      CategoriesCompanion.insert(
+        name: name,
+        kind: kind,
+        icon: d.Value(icon),
+        parentId: d.Value(parentId),
+        level: d.Value(2),
+        sortOrder: d.Value(sortOrder ?? 0),
+      ),
+    );
+  }
+
+  /// 检查分类是否有子分类
+  Future<bool> hasSubCategories(int categoryId) async {
+    final count = await db.customSelect(
+      'SELECT COUNT(*) as count FROM categories WHERE parent_id = ?',
+      variables: [d.Variable.withInt(categoryId)],
+      readsFrom: {db.categories},
+    ).getSingle();
+
+    final c = count.data['count'];
+    if (c is int) return c > 0;
+    if (c is BigInt) return c > BigInt.zero;
+    if (c is num) return c > 0;
+    return false;
+  }
+
+  /// 获取分类的子分类数量
+  Future<int> getSubCategoryCount(int categoryId) async {
+    final result = await db.customSelect(
+      'SELECT COUNT(*) as count FROM categories WHERE parent_id = ?',
+      variables: [d.Variable.withInt(categoryId)],
+      readsFrom: {db.categories},
+    ).getSingle();
+
+    final count = result.data['count'];
+    if (count is int) return count;
+    if (count is BigInt) return count.toInt();
+    if (count is num) return count.toInt();
+    return 0;
+  }
+
+  /// 迁移分类下的所有交易和子分类
+  /// 返回: (迁移的交易数, 迁移的子分类数)
+  Future<({int migratedTransactions, int migratedSubCategories})> migrateCategoryTransactions({
+    required int fromCategoryId,
+    required int toCategoryId,
+  }) async {
+    return await db.transaction(() async {
+      final fromCategory = await (db.select(db.categories)
+            ..where((c) => c.id.equals(fromCategoryId)))
+          .getSingle();
+
+      int migratedTransactions = 0;
+      int migratedSubCategories = 0;
+
+      if (fromCategory.level == 1) {
+        // 一级分类：处理子分类
+        final subCategories = await getSubCategories(fromCategoryId);
+
+        if (subCategories.isNotEmpty) {
+          for (final sub in subCategories) {
+            // 检查目标分类是否已有同名子分类
+            final existingSub = await (db.select(db.categories)
+                  ..where((c) =>
+                      c.parentId.equals(toCategoryId) &
+                      c.name.equals(sub.name) &
+                      c.kind.equals(sub.kind)))
+                .getSingleOrNull();
+
+            if (existingSub != null) {
+              // 合并到已有的同名子分类
+              final count = await (db.update(db.transactions)
+                    ..where((t) => t.categoryId.equals(sub.id)))
+                  .write(TransactionsCompanion(
+                categoryId: d.Value(existingSub.id),
+              ));
+              migratedTransactions += count;
+
+              // 删除源子分类
+              await (db.delete(db.categories)..where((c) => c.id.equals(sub.id))).go();
+            } else {
+              // 将子分类移动到新的父分类下
+              await (db.update(db.categories)..where((c) => c.id.equals(sub.id)))
+                  .write(CategoriesCompanion(
+                parentId: d.Value(toCategoryId),
+              ));
+              migratedSubCategories++;
+            }
+          }
+        }
+
+        // 迁移一级分类自身的交易
+        final directCount = await (db.update(db.transactions)
+              ..where((t) => t.categoryId.equals(fromCategoryId)))
+            .write(TransactionsCompanion(
+          categoryId: d.Value(toCategoryId),
+        ));
+        migratedTransactions += directCount;
+      } else {
+        // 二级分类：直接迁移交易
+        final count = await (db.update(db.transactions)
+              ..where((t) => t.categoryId.equals(fromCategoryId)))
+            .write(TransactionsCompanion(
+          categoryId: d.Value(toCategoryId),
+        ));
+        migratedTransactions = count;
+      }
+
+      return (
+        migratedTransactions: migratedTransactions,
+        migratedSubCategories: migratedSubCategories,
+      );
+    });
+  }
+
+  /// 批量更新分类排序
+  Future<void> updateCategorySortOrders(List<({int id, int sortOrder})> updates) async {
+    await db.transaction(() async {
+      for (final update in updates) {
+        await (db.update(db.categories)..where((c) => c.id.equals(update.id)))
+            .write(CategoriesCompanion(sortOrder: d.Value(update.sortOrder)));
+      }
+    });
+  }
+
+  /// 监听分类及其子分类的变化
+  Stream<List<Category>> watchCategoryWithSubs(int categoryId) {
+    return db.customSelect(
+      '''
+      SELECT * FROM categories
+      WHERE id = ? OR parent_id = ?
+      ORDER BY level, sort_order
+      ''',
+      variables: [d.Variable.withInt(categoryId), d.Variable.withInt(categoryId)],
+      readsFrom: {db.categories},
+    ).watch().map((rows) {
+      return rows.map((row) {
+        return Category(
+          id: row.read<int>('id'),
+          name: row.read<String>('name'),
+          kind: row.read<String>('kind'),
+          icon: row.read<String?>('icon'),
+          sortOrder: row.read<int>('sort_order'),
+          parentId: row.read<int?>('parent_id'),
+          level: row.read<int>('level'),
+        );
+      }).toList();
+    });
+  }
+
+  /// 获取分类的完整路径名称（一级/二级）
+  Future<String> getCategoryFullName(int categoryId) async {
+    final category = await (db.select(db.categories)
+          ..where((c) => c.id.equals(categoryId)))
+        .getSingle();
+
+    if (category.level == 1 || category.parentId == null) {
+      return category.name;
+    }
+
+    final parent = await (db.select(db.categories)
+          ..where((c) => c.id.equals(category.parentId!)))
+        .getSingle();
+
+    return '${parent.name} / ${category.name}';
+  }
+
+  /// 按分类统计（支持二级分类展开）
+  /// 返回: List<(分类ID, 分类名称, 图标, 父分类ID, 层级, 总额)>
+  Future<List<({int? id, String name, String? icon, int? parentId, int level, double total})>> totalsByCategoryWithHierarchy({
+    required int ledgerId,
+    required String type,
+    required DateTime start,
+    required DateTime end,
+  }) async {
+    final q = (db.select(db.transactions)
+          ..where((t) =>
+              t.ledgerId.equals(ledgerId) &
+              t.type.equals(type) &
+              t.happenedAt.isBetweenValues(start, end)))
+        .join([
+      d.leftOuterJoin(db.categories,
+          db.categories.id.equalsExp(db.transactions.categoryId)),
+    ]);
+
+    final rows = await q.get();
+    final map = <int?, double>{}; // categoryId -> total
+    final categoryInfo = <int?, ({String name, String? icon, int? parentId, int level})>{};
+
+    for (final r in rows) {
+      final t = r.readTable(db.transactions);
+      final c = r.readTableOrNull(db.categories);
+      final id = c?.id;
+
+      if (c != null) {
+        categoryInfo[id] = (
+          name: c.name,
+          icon: c.icon,
+          parentId: c.parentId,
+          level: c.level,
+        );
+      } else {
+        categoryInfo[id] = (
+          name: '未分类',
+          icon: null,
+          parentId: null,
+          level: 1,
+        );
+      }
+
+      map.update(id, (v) => v + t.amount, ifAbsent: () => t.amount);
+    }
+
+    final list = map.entries.map((e) {
+      final info = categoryInfo[e.key]!;
+      return (
+        id: e.key,
+        name: info.name,
+        icon: info.icon,
+        parentId: info.parentId,
+        level: info.level,
+        total: e.value,
+      );
+    }).toList()
+      ..sort((a, b) => b.total.compareTo(a.total));
+
+    return list;
   }
 }

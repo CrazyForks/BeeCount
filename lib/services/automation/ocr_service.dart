@@ -3,7 +3,6 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ai_bill_service.dart';
-import '../category_service.dart';
 import '../../data/db.dart';
 import '../../data/repository.dart';
 
@@ -187,9 +186,21 @@ class OcrService {
       print('🤖 [AI增强] 开始...');
       final aiStartTime = DateTime.now();
 
-      // 获取用户分类列表
-      final expenseCategories = CategoryService.defaultExpenseCategories;
-      final incomeCategories = CategoryService.defaultIncomeCategories;
+      // 获取用户分类列表(从数据库读取)
+      List<String> expenseCategories = [];
+      List<String> incomeCategories = [];
+      if (db != null) {
+        try {
+          final repository = BeeRepository(db);
+          final expenseCats = await repository.getTopLevelCategories('expense');
+          final incomeCats = await repository.getTopLevelCategories('income');
+          expenseCategories = expenseCats.map((c) => c.name).toList();
+          incomeCategories = incomeCats.map((c) => c.name).toList();
+          print('📋 [分类列表] 获取到${expenseCategories.length}个支出分类, ${incomeCategories.length}个收入分类');
+        } catch (e) {
+          print('⚠️ [分类列表] 获取失败: $e');
+        }
+      }
 
       // 获取用户账户列表（如果账户功能已启用且提供了数据库实例）
       List<String>? accounts;

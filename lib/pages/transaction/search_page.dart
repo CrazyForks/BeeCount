@@ -824,8 +824,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           final item = _searchResults[index];
                           final isTransfer = item.t.type == 'transfer';
                           final isExpense = item.t.type == 'expense';
-                          final categoryName = CategoryUtils.getDisplayName(
-                              item.category?.name, context);
+
+                          // 获取分类显示名称
+                          final categoryName = CategoryUtils.getDisplayName(item.category?.name, context);
+
                           final subtitle = item.t.note ?? '';
                           final isSelected = _selectedIds.contains(item.t.id);
 

@@ -6,6 +6,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:drift/drift.dart' hide Column;
 
 import '../../providers.dart';
 import '../../models/ledger_display_item.dart';
@@ -14,7 +16,7 @@ import '../../cloud/sync_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../utils/currencies.dart';
-import '../../utils/logger.dart';
+import '../../services/logger_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/format_utils.dart';
 import '../../utils/sync_helpers.dart';
@@ -522,9 +524,17 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
   /// 仅删除本地账本（保留云端备份）
   Future<void> _handleDeleteLocalLedgerOnly(BuildContext context, LedgerDisplayItem ledger) async {
-    
-
     final l10n = AppLocalizations.of(context);
+
+    // 检查是否只剩一个账本
+    final repo = ref.read(repositoryProvider);
+    final allLedgers = await repo.db.select(repo.db.ledgers).get();
+    if (allLedgers.length <= 1) {
+      if (!mounted) return;
+      showToast(context, l10n.ledgersCannotDeleteLastOne);
+      return;
+    }
+
     final confirmed = await AppDialog.confirm<bool>(
       context,
       title: l10n.ledgersDeleteLocalTitle,
@@ -534,23 +544,13 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
     if (confirmed != true || !mounted) return;
 
     try {
-      final repo = ref.read(repositoryProvider);
       final current = ref.read(currentLedgerIdProvider);
 
-      // 如果删除的是当前账本，需要切换
+      // 如果删除的是当前账本，需要切换到另一个账本
       if (current == ledger.id) {
-        final allLedgers = await repo.db.select(repo.db.ledgers).get();
         final remainAfterDelete = allLedgers.where((l) => l.id != ledger.id).toList();
-
-        int newId = 1;
-        if (remainAfterDelete.isNotEmpty) {
-          newId = remainAfterDelete.first.id;
-        } else {
-          await repo.db.ensureSeed();
-          final list = await repo.db.select(repo.db.ledgers).get();
-          newId = list.first.id;
-        }
-
+        // 由于已经检查过账本数量 > 1，这里一定有剩余账本
+        final newId = remainAfterDelete.first.id;
         ref.read(currentLedgerIdProvider.notifier).state = newId;
       }
 
@@ -575,35 +575,34 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
   /// 删除本地账本
   Future<void> _handleDeleteLocalLedger(BuildContext context, LedgerDisplayItem ledger) async {
-    
+    final l10n = AppLocalizations.of(context);
+
+    // 检查是否只剩一个账本
+    final repo = ref.read(repositoryProvider);
+    final allLedgers = await repo.db.select(repo.db.ledgers).get();
+    if (allLedgers.length <= 1) {
+      if (!mounted) return;
+      showToast(context, l10n.ledgersCannotDeleteLastOne);
+      return;
+    }
 
     final confirmed = await AppDialog.confirm<bool>(
       context,
-      title: AppLocalizations.of(context).ledgersDeleteConfirm,
-      message: AppLocalizations.of(context).ledgersDeleteMessage,
+      title: l10n.ledgersDeleteConfirm,
+      message: l10n.ledgersDeleteMessage,
     );
 
     if (confirmed != true || !mounted) return;
 
     try {
-      final repo = ref.read(repositoryProvider);
       final sync = ref.read(syncServiceProvider);
       final current = ref.read(currentLedgerIdProvider);
 
-      // 如果删除的是当前账本，需要切换
+      // 如果删除的是当前账本，需要切换到另一个账本
       if (current == ledger.id) {
-        final allLedgers = await repo.db.select(repo.db.ledgers).get();
         final remainAfterDelete = allLedgers.where((l) => l.id != ledger.id).toList();
-
-        int newId = 1;
-        if (remainAfterDelete.isNotEmpty) {
-          newId = remainAfterDelete.first.id;
-        } else {
-          await repo.db.ensureSeed();
-          final list = await repo.db.select(repo.db.ledgers).get();
-          newId = list.first.id;
-        }
-
+        // 由于已经检查过账本数量 > 1，这里一定有剩余账本
+        final newId = remainAfterDelete.first.id;
         ref.read(currentLedgerIdProvider.notifier).state = newId;
       }
 
@@ -614,7 +613,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
       try {
         await sync.deleteRemoteBackup(ledgerId: ledger.id);
       } catch (e) {
-        logW('ledger', '删除云端备份失败（忽略）：$e');
+        logger.warning('ledger', '删除云端备份失败（忽略）：$e');
       }
 
       if (!mounted) return;

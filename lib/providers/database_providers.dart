@@ -8,8 +8,6 @@ import 'sync_providers.dart';
 // 数据库Provider
 final databaseProvider = Provider<BeeDatabase>((ref) {
   final db = BeeDatabase();
-  // fire-and-forget seed
-  db.ensureSeed();
   ref.onDispose(() => db.close());
   return db;
 });
@@ -101,6 +99,7 @@ final categoriesWithCountProvider = StreamProvider<List<({Category category, int
   final repo = ref.watch(repositoryProvider);
   return repo.watchCategoriesWithCount();
 });
+
 
 // 重复交易Provider
 final recurringTransactionsProvider = FutureProvider.family<List<RecurringTransaction>, int>((ref, ledgerId) async {

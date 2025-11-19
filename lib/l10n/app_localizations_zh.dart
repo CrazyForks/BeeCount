@@ -37,19 +37,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonEdit => '编辑';
 
   @override
-  String get commonAdd => '添加';
-
-  @override
   String get commonOk => '确定';
 
   @override
-  String get commonYes => '是';
-
-  @override
   String get commonNo => '否';
-
-  @override
-  String get commonLoading => '加载中...';
 
   @override
   String get commonEmpty => '暂无数据';
@@ -62,9 +53,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get commonFailed => '失败';
-
-  @override
-  String get commonRetry => '重试';
 
   @override
   String get commonBack => '返回';
@@ -82,31 +70,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonClose => '关闭';
 
   @override
-  String get commonCopy => '复制';
-
-  @override
   String get commonSearch => '搜索';
 
   @override
   String get commonNoteHint => '备注…';
 
   @override
-  String get commonFilter => '筛选';
-
-  @override
-  String get commonClear => '清除';
-
-  @override
-  String get commonSelectAll => '全选';
-
-  @override
   String get commonSettings => '设置';
 
   @override
   String get commonHelp => '帮助';
-
-  @override
-  String get commonAbout => '关于';
 
   @override
   String get commonLanguage => '语言';
@@ -145,9 +118,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonWeekdaySunday => '星期日';
 
   @override
-  String get homeTitle => '蜜蜂记账';
-
-  @override
   String get homeIncome => '收入';
 
   @override
@@ -157,28 +127,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeBalance => '结余';
 
   @override
-  String get homeTotal => '总';
-
-  @override
-  String get homeAverage => '平均值';
-
-  @override
-  String get homeDailyAvg => '日均';
-
-  @override
-  String get homeMonthlyAvg => '月均';
-
-  @override
   String get homeNoRecords => '还没有记账';
-
-  @override
-  String get homeAddRecord => '点击底部加号，马上记一笔';
-
-  @override
-  String get homeHideAmounts => '隐藏金额';
-
-  @override
-  String get homeShowAmounts => '显示金额';
 
   @override
   String get homeSelectDate => '选择日期';
@@ -246,12 +195,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get searchNoResults => '未找到匹配的结果';
-
-  @override
-  String get searchResultsEmpty => '未找到匹配的结果';
-
-  @override
-  String get searchResultsEmptyHint => '请尝试其他关键词或调整筛选条件';
 
   @override
   String get searchBatchMode => '批量操作';
@@ -347,9 +290,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get analyticsTitle => '分析';
-
-  @override
   String get analyticsMonth => '月';
 
   @override
@@ -359,13 +299,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get analyticsAll => '全部';
 
   @override
-  String get analyticsSummary => '汇总';
-
-  @override
   String get analyticsCategoryRanking => '分类排行';
-
-  @override
-  String get analyticsCurrentPeriod => '当前周期';
 
   @override
   String get analyticsNoDataSubtext => '可左右滑动切换周期，或点击按钮切换收入/支出';
@@ -424,12 +358,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ledgersClear => '清空账本';
 
   @override
-  String get ledgersClearConfirm => '清空当前账本？';
-
-  @override
   String ledgersClearMessage(Object name) {
     return '确定要清空账本\"$name\"的所有账单吗？此操作不可恢复。\\n账本本身会保留，仅删除账单数据。';
   }
+
+  @override
+  String get ledgerDefaultName => '默认账本';
 
   @override
   String get ledgersEdit => '编辑账本';
@@ -470,21 +404,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ledgersDeleteLocalSuccess => '本地账本已删除';
 
   @override
-  String ledgersRecordsDeleted(int count) {
-    return '已删除 $count 条记录';
-  }
-
-  @override
   String get ledgersName => '名称';
 
   @override
   String get ledgersDefaultLedgerName => '默认账本';
-
-  @override
-  String get ledgersDefaultAccountName => '现金';
-
-  @override
-  String get accountTitle => '账户';
 
   @override
   String get ledgersCurrency => '币种';
@@ -512,31 +435,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get ledgerCardTransactions => '笔账单';
-
-  @override
-  String get ledgerCardRemoteOnly => '仅在云端';
-
-  @override
   String get ledgerCardDownloadCloud => '下载云账本';
-
-  @override
-  String get ledgerCardJustNow => '刚刚';
-
-  @override
-  String ledgerCardMinutesAgo(int minutes) {
-    return '$minutes分钟前';
-  }
-
-  @override
-  String ledgerCardHoursAgo(int hours) {
-    return '$hours小时前';
-  }
-
-  @override
-  String ledgerCardDaysAgo(int days) {
-    return '$days天前';
-  }
 
   @override
   String get ledgersLocal => '本地账本';
@@ -592,6 +491,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ledgersDeleteRemoteSuccess => '已删除云端账本';
 
   @override
+  String get ledgersCannotDeleteLastOne => '无法删除最后一个账本';
+
+  @override
   String get ledgersRestoreAllTitle => '批量恢复';
 
   @override
@@ -629,9 +531,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryDefault => '默认分类';
 
   @override
-  String get categoryCustomTag => '自定义';
-
-  @override
   String get categoryReorderTip => '长按分类可拖拽调整顺序';
 
   @override
@@ -641,9 +540,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get iconPickerTitle => '选择图标';
-
-  @override
-  String get iconCategoryFood => '餐饮';
 
   @override
   String get iconCategoryTransport => '交通';
@@ -680,9 +576,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get importTitle => '导入账单';
-
-  @override
-  String get importSelectFile => '请选择文件进行导入（支持 CSV/TSV/XLSX 格式）';
 
   @override
   String get importBillType => '账单类型';
@@ -772,19 +665,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importCompleteTitle => '导入完成';
 
   @override
-  String importCompletedCount(Object count) {
-    return '成功导入 $count 条记录';
-  }
-
-  @override
-  String get importFailed => '导入失败';
-
-  @override
-  String importFailedMessage(Object error) {
-    return '导入失败：$error';
-  }
-
-  @override
   String get importSelectCategoryFirst => '请先选择\"分类\"列再继续';
 
   @override
@@ -837,19 +717,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineTitle => '我的';
 
   @override
-  String get mineSettings => '设置';
-
-  @override
-  String get mineTheme => '主题设置';
-
-  @override
-  String get mineFont => '字体设置';
-
-  @override
   String get mineReminder => '提醒设置';
-
-  @override
-  String get mineData => '数据管理';
 
   @override
   String get mineImport => '导入数据';
@@ -861,19 +729,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineCloud => '云服务';
 
   @override
-  String get mineAbout => '关于';
-
-  @override
-  String get mineVersion => '版本';
-
-  @override
   String get mineUpdate => '检查更新';
 
   @override
   String get mineLanguageSettings => '语言设置';
-
-  @override
-  String get mineLanguageSettingsSubtitle => '切换应用语言';
 
   @override
   String get languageTitle => '语言设置';
@@ -892,31 +751,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get deleteConfirmMessage => '确定要删除这条记账吗？';
-
-  @override
-  String get logCopied => '日志已复制';
-
-  @override
-  String get waitingRestore => '等待恢复任务启动…';
-
-  @override
-  String get restoreTitle => '云端恢复';
-
-  @override
-  String get copyLog => '复制日志';
-
-  @override
-  String restoreProgress(Object current, Object total) {
-    return '恢复中 ($current/$total)';
-  }
-
-  @override
-  String get restorePreparing => '准备中…';
-
-  @override
-  String restoreLedgerProgress(String ledger, int done, int total) {
-    return '账本：$ledger  记录：$done/$total';
-  }
 
   @override
   String get mineSlogan => '蜜蜂记账，一笔一蜜';
@@ -941,12 +775,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineShareGenerating => '正在生成分享海报...';
-
-  @override
-  String get mineShareSuccess => '保存成功';
-
-  @override
-  String get mineShareSuccessMessage => '分享海报已保存到相册';
 
   @override
   String get mineShareFailed => '保存失败，请检查相册权限';
@@ -979,9 +807,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterScanText => '扫码访问开源项目';
 
   @override
-  String get sharePosterPreviewTitle => '分享海报预览';
-
-  @override
   String get sharePosterSave => '保存到相册';
 
   @override
@@ -1010,14 +835,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineCloudServiceLoading => '加载中…';
-
-  @override
-  String mineCloudServiceError(Object error) {
-    return '错误: $error';
-  }
-
-  @override
-  String get mineCloudServiceDefault => '默认云服务 (已启用)';
 
   @override
   String get mineCloudServiceOffline => '默认模式 (离线)';
@@ -1170,9 +987,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineAutoSyncNeedLogin => '需登录后可开启';
 
   @override
-  String get mineAutoSyncNeedCloudService => '仅限云服务模式可用';
-
-  @override
   String get mineImportProgressTitle => '后台导入中…';
 
   @override
@@ -1182,11 +996,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineImportCompleteTitle => '导入完成';
-
-  @override
-  String mineImportCompleteSubtitle(Object fail, Object ok) {
-    return '成功 $ok，失败 $fail';
-  }
 
   @override
   String get mineCategoryManagement => '分类管理';
@@ -1222,21 +1031,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineDisplayScaleSubtitle => '调整文字和界面元素大小';
 
   @override
-  String get mineAboutTitle => '关于';
-
-  @override
-  String mineAboutMessage(Object version) {
-    return '应用：蜜蜂记账\n版本：$version\n开源地址：https://github.com/TNT-Likely/BeeCount\n开源协议：详见仓库 LICENSE';
-  }
-
-  @override
-  String get mineAboutOpenGitHub => '打开 GitHub';
-
-  @override
   String get mineCheckUpdate => '检测更新';
-
-  @override
-  String get mineCheckUpdateInProgress => '检测更新中...';
 
   @override
   String get mineCheckUpdateSubtitle => '正在检查最新版本';
@@ -1261,18 +1056,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineSupportAuthorSubtitle => '在GitHub上为项目点赞';
-
-  @override
-  String get mineRefreshStats => '刷新统计(调试)';
-
-  @override
-  String get mineRefreshStatsSubtitle => '触发全局统计数据重新计算';
-
-  @override
-  String get mineRefreshSync => '刷新同步状态(调试)';
-
-  @override
-  String get mineRefreshSyncSubtitle => '触发同步状态刷新';
 
   @override
   String get categoryEditTitle => '编辑分类';
@@ -1335,174 +1118,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categoryDefaultMessage => '默认分类不可修改名称和图标，但可以查看详情和迁移数据';
-
-  @override
-  String get categoryNameDining => '餐饮';
-
-  @override
-  String get categoryNameTransport => '交通';
-
-  @override
-  String get categoryNameShopping => '购物';
-
-  @override
-  String get categoryNameEntertainment => '娱乐';
-
-  @override
-  String get categoryNameHome => '居家';
-
-  @override
-  String get categoryNameFamily => '家庭';
-
-  @override
-  String get categoryNameCommunication => '通讯';
-
-  @override
-  String get categoryNameUtilities => '水电';
-
-  @override
-  String get categoryNameHousing => '住房';
-
-  @override
-  String get categoryNameMedical => '医疗';
-
-  @override
-  String get categoryNameEducation => '教育';
-
-  @override
-  String get categoryNamePets => '宠物';
-
-  @override
-  String get categoryNameSports => '运动';
-
-  @override
-  String get categoryNameDigital => '数码';
-
-  @override
-  String get categoryNameTravel => '旅行';
-
-  @override
-  String get categoryNameAlcoholTobacco => '烟酒';
-
-  @override
-  String get categoryNameBabyCare => '母婴';
-
-  @override
-  String get categoryNameBeauty => '美容';
-
-  @override
-  String get categoryNameRepair => '维修';
-
-  @override
-  String get categoryNameSocial => '社交';
-
-  @override
-  String get categoryNameLearning => '学习';
-
-  @override
-  String get categoryNameCar => '汽车';
-
-  @override
-  String get categoryNameTaxi => '打车';
-
-  @override
-  String get categoryNameSubway => '地铁';
-
-  @override
-  String get categoryNameDelivery => '外卖';
-
-  @override
-  String get categoryNameProperty => '物业';
-
-  @override
-  String get categoryNameParking => '停车';
-
-  @override
-  String get categoryNameDonation => '捐赠';
-
-  @override
-  String get categoryNameGift => '礼金';
-
-  @override
-  String get categoryNameTax => '纳税';
-
-  @override
-  String get categoryNameBeverage => '饮料';
-
-  @override
-  String get categoryNameClothing => '服装';
-
-  @override
-  String get categoryNameSnacks => '零食';
-
-  @override
-  String get categoryNameRedPacket => '红包';
-
-  @override
-  String get categoryNameFruit => '水果';
-
-  @override
-  String get categoryNameGame => '游戏';
-
-  @override
-  String get categoryNameBook => '书';
-
-  @override
-  String get categoryNameLover => '爱人';
-
-  @override
-  String get categoryNameDecoration => '装修';
-
-  @override
-  String get categoryNameDailyGoods => '日用品';
-
-  @override
-  String get categoryNameLottery => '彩票';
-
-  @override
-  String get categoryNameStock => '股票';
-
-  @override
-  String get categoryNameSocialSecurity => '社保';
-
-  @override
-  String get categoryNameExpress => '快递';
-
-  @override
-  String get categoryNameWork => '工作';
-
-  @override
-  String get categoryNameSalary => '工资';
-
-  @override
-  String get categoryNameInvestment => '理财';
-
-  @override
-  String get categoryNameBonus => '奖金';
-
-  @override
-  String get categoryNameReimbursement => '报销';
-
-  @override
-  String get categoryNamePartTime => '兼职';
-
-  @override
-  String get categoryNameInterest => '利息';
-
-  @override
-  String get categoryNameRefund => '退款';
-
-  @override
-  String get categoryNameSecondHand => '二手转卖';
-
-  @override
-  String get categoryNameSocialBenefit => '社会保障';
-
-  @override
-  String get categoryNameTaxRefund => '退税退费';
-
-  @override
-  String get categoryNameProvidentFund => '公积金';
 
   @override
   String get categoryNameLabel => '分类名称';
@@ -1575,6 +1190,152 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get categorySubCategoryTitle => '二级分类';
+
+  @override
+  String get categorySubCategoryDescriptionEnabled => '此分类属于某个一级分类';
+
+  @override
+  String get categorySubCategoryDescriptionDisabled => '此分类为独立的一级分类';
+
+  @override
+  String get categoryParentCategoryTitle => '父分类';
+
+  @override
+  String get categoryParentCategoryHint => '请选择父分类';
+
+  @override
+  String get categorySelectParentTitle => '选择父分类';
+
+  @override
+  String get categorySelectParentDescription => '只能选择没有交易记录的分类作为父分类';
+
+  @override
+  String categorySubCategoryCreated(Object name) {
+    return '已添加二级分类：$name';
+  }
+
+  @override
+  String get categoryParentRequired => '请选择父分类';
+
+  @override
+  String get categoryParentRequiredTitle => '错误';
+
+  @override
+  String get categoryExpenseList => '餐饮-交通-购物-娱乐-居家-家庭-通讯-水电-住房-医疗-教育-宠物-运动-数码-旅行-烟酒-母婴-美容-维修-社交-学习-汽车-打车-地铁-外卖-物业-停车-捐赠-礼金-纳税-饮料-服装-零食-红包-水果-游戏-书-爱人-装修-日用品-彩票-股票-社保-快递-工作';
+
+  @override
+  String get categoryIncomeList => '工资-理财-红包-奖金-报销-兼职-礼金-利息-退款-投资收益-二手转卖-社会保障-退税退费-公积金';
+
+  @override
+  String get categoryExpenseDining => '餐饮-早餐-午餐-晚餐-美团外卖-饿了么外卖-京东外卖-餐厅-美食';
+
+  @override
+  String get categoryExpenseSnacks => '零食-饼干-薯片-糖果-巧克力-坚果';
+
+  @override
+  String get categoryExpenseFruit => '水果-苹果-香蕉-橙子-葡萄-西瓜-其他水果';
+
+  @override
+  String get categoryExpenseBeverage => '饮品-奶茶-咖啡-果汁-汽水-矿泉水';
+
+  @override
+  String get categoryExpensePastry => '糕点-蛋糕-面包-甜点-饼干';
+
+  @override
+  String get categoryExpenseCooking => '做饭食材-蔬菜-肉类-水产-调料-粮油';
+
+  @override
+  String get categoryExpenseShopping => '购物-服装-鞋帽-包包-配饰-日用百货';
+
+  @override
+  String get categoryExpensePets => '宠物-宠物食品-宠物用品-宠物医疗-宠物美容';
+
+  @override
+  String get categoryExpenseTransport => '交通-地铁-公交-出租车-网约车-停车费-加油';
+
+  @override
+  String get categoryExpenseCar => '汽车-汽车保养-汽车维修-汽车保险-洗车-违章罚款';
+
+  @override
+  String get categoryExpenseClothing => '服饰-上衣-裤子-裙子-鞋子-配饰';
+
+  @override
+  String get categoryExpenseDailyGoods => '日用品-洗护用品-纸品-清洁用品-厨房用品';
+
+  @override
+  String get categoryExpenseEducation => '教育-学费-培训费-书籍-文具-办公用品';
+
+  @override
+  String get categoryExpenseInvestLoss => '投资亏损-股票亏损-基金亏损-其他投资亏损';
+
+  @override
+  String get categoryExpenseEntertainment => '娱乐-电影-KTV-游乐场-酒吧-其他娱乐';
+
+  @override
+  String get categoryExpenseGame => '游戏-游戏充值-游戏装备-游戏会员';
+
+  @override
+  String get categoryExpenseHealthProducts => '保健品-维生素-保健食品-营养品';
+
+  @override
+  String get categoryExpenseSubscription => '订阅服务-视频会员-音乐会员-云存储-其他订阅';
+
+  @override
+  String get categoryExpenseSports => '运动-健身房-运动装备-运动课程-户外活动';
+
+  @override
+  String get categoryExpenseHousing => '住房-房租-物业费-房贷-装修';
+
+  @override
+  String get categoryExpenseHome => '居家-家具-家电-装饰品-床上用品';
+
+  @override
+  String get categoryExpenseBeauty => '美容-护肤品-化妆品-美容美发-美甲';
+
+  @override
+  String get categoryIncomeSalary => '工资-基本工资-绩效奖金-年终奖-加班费';
+
+  @override
+  String get categoryIncomeInvestment => '理财-基金收益-股票分红-理财产品-其他理财';
+
+  @override
+  String get categoryIncomeRedPacket => '红包-节日红包-生日红包-随礼回礼';
+
+  @override
+  String get categoryIncomeBonus => '奖金-年终奖-季度奖-项目奖金-其他奖金';
+
+  @override
+  String get categoryIncomeReimbursement => '报销-差旅报销-餐费报销-其他报销';
+
+  @override
+  String get categoryIncomePartTime => '兼职-兼职收入-外快';
+
+  @override
+  String get categoryIncomeGift => '结婚礼金-生日礼金-其他礼金';
+
+  @override
+  String get categoryIncomeInterest => '利息-银行利息-其他利息';
+
+  @override
+  String get categoryIncomeRefund => '退款-购物退款-服务退款-其他退款';
+
+  @override
+  String get categoryIncomeInvestIncome => '投资收益-股票收益-基金收益-其他投资收益';
+
+  @override
+  String get categoryIncomeSecondHand => '二手交易-闲置物品-二手商品';
+
+  @override
+  String get categoryIncomeSocialBenefit => '社会福利-失业保险-生育津贴-其他补贴';
+
+  @override
+  String get categoryIncomeTaxRefund => '退税-个税退税-其他退费';
+
+  @override
+  String get categoryIncomeProvidentFund => '公积金-公积金提取-公积金利息';
+
+  @override
   String get personalizeTitle => '个性化';
 
   @override
@@ -1600,9 +1361,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get personalizeSelectColor => '选择此颜色';
-
-  @override
-  String get fontSettingsTitle => '显示缩放';
 
   @override
   String fontSettingsCurrentScale(Object scale) {
@@ -1747,47 +1505,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reminderTestBody => '这是一条测试通知，点击查看效果';
 
   @override
-  String get reminderTestDelayBody => '这是一条15秒延迟的测试通知';
-
-  @override
-  String get reminderQuickTest => '快速测试 (15秒后)';
-
-  @override
-  String get reminderQuickTestMessage => '已设置15秒后的快速测试，请保持应用在后台';
-
-  @override
-  String get reminderFlutterTest => '🔧 测试Flutter通知点击（开发）';
-
-  @override
-  String get reminderFlutterTestMessage => '已发送Flutter测试通知，点击查看是否能打开应用';
-
-  @override
-  String get reminderAlarmTest => '🔧 测试AlarmManager通知点击（开发）';
-
-  @override
-  String get reminderAlarmTestMessage => '已设置AlarmManager测试通知（1秒后），点击查看是否能打开应用';
-
-  @override
-  String get reminderDirectTest => '🔧 直接测试NotificationReceiver（开发）';
-
-  @override
-  String get reminderDirectTestMessage => '已直接调用NotificationReceiver创建通知，查看点击是否有效';
-
-  @override
-  String get reminderCheckStatus => '🔧 检查通知状态（开发）';
-
-  @override
-  String get reminderNotificationStatus => '通知状态';
-
-  @override
-  String reminderPendingCount(Object count) {
-    return '待处理通知数量: $count';
-  }
-
-  @override
-  String get reminderNoPending => '当前没有待处理的通知';
-
-  @override
   String get reminderCheckBattery => '检查电池优化状态';
 
   @override
@@ -1816,9 +1533,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reminderBatteryAdvice => '建议关闭电池优化以确保通知正常工作';
-
-  @override
-  String get reminderGoToSettings => '去设置';
 
   @override
   String get reminderCheckChannel => '检查通知渠道设置';
@@ -1878,15 +1592,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reminderAppSettingsMessage => '请在设置中允许通知、关闭电池优化';
-
-  @override
-  String get reminderIOSTest => '🍎 iOS通知调试测试';
-
-  @override
-  String get reminderIOSTestTitle => 'iOS通知测试';
-
-  @override
-  String get reminderIOSTestMessage => '已发送测试通知。\n\n🍎 iOS模拟器限制：\n• 通知可能不会在通知中心显示\n• 横幅提醒可能不工作\n• 但Xcode控制台会显示日志\n\n💡 调试方法：\n• 查看Xcode控制台输出\n• 检查Flutter日志信息\n• 使用真机测试获得完整体验';
 
   @override
   String get reminderDescription => '提示：开启记账提醒后，系统会在每天指定时间发送通知提醒您记录收支。';
@@ -1969,54 +1674,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get categoryPickerExpenseTab => '支出';
-
-  @override
-  String get categoryPickerIncomeTab => '收入';
-
-  @override
-  String get categoryPickerCancel => '取消';
-
-  @override
-  String get categoryPickerEmpty => '暂无分类';
-
-  @override
-  String get cloudBackupFound => '发现云端备份';
-
-  @override
-  String get cloudBackupRestoreMessage => '检测到云端与本地账本不一致，是否恢复到本地？\n(将进入恢复进度页)';
-
-  @override
-  String get cloudBackupRestoreFailed => '恢复失败';
-
-  @override
-  String get mineCloudBackupRestoreTitle => '发现云端备份';
-
-  @override
-  String get mineAutoSyncRemoteDesc => '记账后自动上传到云端';
-
-  @override
-  String get mineAutoSyncLoginRequired => '需登录后可开启';
-
-  @override
   String get mineImportCompleteAllSuccess => '全部成功';
-
-  @override
-  String get mineImportCompleteTitleShort => '导入完成';
-
-  @override
-  String get mineAboutAppName => '应用：蜜蜂记账';
-
-  @override
-  String mineAboutVersion(Object version) {
-    return '版本：$version';
-  }
-
-  @override
-  String get mineAboutRepo => '开源地址：https://github.com/TNT-Likely/BeeCount';
-
-  @override
-  String get mineAboutLicense => '开源协议：详见仓库 LICENSE';
 
   @override
   String get mineCheckUpdateDetecting => '检测更新中...';
@@ -2028,94 +1686,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineUpdateDownloadTitle => '下载更新';
 
   @override
-  String get mineDebugRefreshStats => '刷新统计信息（临时）';
-
-  @override
-  String get mineDebugRefreshStatsSubtitle => '触发全局统计 Provider 重新计算';
-
-  @override
-  String get mineDebugRefreshSync => '刷新同步状态（临时）';
-
-  @override
-  String get mineDebugRefreshSyncSubtitle => '触发同步状态 Provider 重新获取';
-
-  @override
-  String get cloudCurrentService => '当前云服务';
-
-  @override
-  String get cloudConnected => '已连接';
-
-  @override
-  String get cloudOfflineMode => '离线模式';
-
-  @override
-  String get cloudAvailableServices => '可用云服务';
-
-  @override
-  String get cloudReadCustomConfigFailed => '读取自定义配置失败';
-
-  @override
-  String get cloudNotConfigured => '未配置';
-
-  @override
-  String get cloudNotTested => '未测试';
-
-  @override
-  String get cloudConnectionNormal => '连接正常';
-
-  @override
-  String get cloudConnectionFailed => '连接失败';
-
-  @override
-  String get cloudAddCustomService => '添加自定义云服务';
-
-  @override
-  String get cloudCustomServiceName => '自定义云服务';
-
-  @override
-  String get cloudDefaultServiceName => '默认云服务';
-
-  @override
-  String get cloudUseYourSupabase => '使用你自己的 Supabase';
-
-  @override
   String get cloudTest => '测试';
-
-  @override
-  String get cloudSwitchService => '切换云服务';
-
-  @override
-  String get cloudSwitchToBuiltinConfirm => '确定要切换到默认云服务吗？这将退出当前登录状态。';
-
-  @override
-  String get cloudSwitchToCustomConfirm => '确定要切换到自定义云服务吗？这将退出当前登录状态。';
 
   @override
   String get cloudSwitched => '已切换';
 
   @override
-  String get cloudSwitchedToBuiltin => '已切换到默认云服务并已退出登录';
-
-  @override
   String get cloudSwitchFailed => '切换失败';
-
-  @override
-  String get cloudActivateFailed => '启用失败';
-
-  @override
-  String get cloudActivateFailedMessage => '已保存的配置无效';
-
-  @override
-  String get cloudActivated => '已启用';
-
-  @override
-  String get cloudActivatedMessage => '已切换到自定义云服务并已退出登录，请重新登录';
-
-  @override
-  String get cloudEditCustomService => '编辑自定义云服务';
-
-  @override
-  String get cloudAddCustomServiceTitle => '添加自定义云服务';
 
   @override
   String get cloudSupabaseUrlLabel => 'Supabase URL';
@@ -2125,27 +1702,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudAnonKeyLabel => 'Anon Key';
-
-  @override
-  String get cloudAnonKeyHint => '提示：不要填写 service_role Key；Anon Key 为公开可用。';
-
-  @override
-  String get cloudInvalidInput => '无效输入';
-
-  @override
-  String get cloudValidationEmptyFields => 'URL 与 Key 均不能为空';
-
-  @override
-  String get cloudValidationHttpsRequired => 'URL 需以 https:// 开头';
-
-  @override
-  String get cloudValidationKeyTooShort => 'Key 长度过短，可能无效';
-
-  @override
-  String get cloudValidationServiceRoleKey => '禁止使用 service_role Key';
-
-  @override
-  String get cloudValidationHttpRequired => 'URL 需以 http:// 或 https:// 开头';
 
   @override
   String get cloudSelectServiceType => '选择云服务类型';
@@ -2163,22 +1719,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudWebdavPasswordLabel => '密码';
 
   @override
-  String get cloudWebdavPathLabel => '远程路径';
-
-  @override
   String get cloudWebdavPathHint => '/BeeCount';
 
   @override
-  String get cloudWebdavHint => '支持坚果云、Nextcloud、群晖等';
-
-  @override
-  String get cloudConfigUpdated => '配置已更新';
-
-  @override
   String get cloudConfigSaved => '配置已保存';
-
-  @override
-  String get cloudTestComplete => '测试完成';
 
   @override
   String get cloudTestSuccess => '连接测试成功！';
@@ -2190,36 +1734,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudTestError => '测试失败';
 
   @override
-  String get cloudClearConfig => '清空配置';
-
-  @override
-  String get cloudClearConfigConfirm => '确定要清空自定义云服务配置吗？（仅开发环境可用）';
-
-  @override
-  String get cloudConfigCleared => '自定义云服务配置已清空';
-
-  @override
-  String get cloudClearFailed => '清空失败';
-
-  @override
-  String get cloudServiceDescription => '应用内置的云端服务（免费但可能不稳定，建议使用自己的或定期备份）';
-
-  @override
-  String get cloudServiceDescriptionNotConfigured => '当前构建未内置云服务配置';
-
-  @override
-  String cloudServiceDescriptionCustom(String url) {
-    return '服务器: $url';
-  }
-
-  @override
   String get authLogin => '登录';
 
   @override
   String get authSignup => '注册';
-
-  @override
-  String get authRegister => '注册';
 
   @override
   String get authEmail => '邮箱';
@@ -2309,7 +1827,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportTitle => '导出';
 
   @override
-  String get exportDescription => '点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
+  String get exportDescription => '支持导出的数据类型：\n• 交易记录（收入/支出/转账）\n• 周期账单\n• 分类信息\n• 账户信息\n\n点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
 
   @override
   String get exportButtonIOS => '导出并分享';
@@ -2323,13 +1841,19 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get exportSelectFolder => '选择导出文件夹';
-
-  @override
   String get exportCsvHeaderType => '类型';
 
   @override
   String get exportCsvHeaderCategory => '分类';
+
+  @override
+  String get exportCsvHeaderSubCategory => '二级分类';
+
+  @override
+  String get exportCsvHeaderCategoryIcon => '分类图标';
+
+  @override
+  String get exportCsvHeaderSubCategoryIcon => '二级分类图标';
 
   @override
   String get exportCsvHeaderAmount => '金额';
@@ -2506,9 +2030,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateCheckTitle => '检查更新';
 
   @override
-  String get updateNewVersionFound => '发现新版本';
-
-  @override
   String updateNewVersionTitle(String version) {
     return '发现新版本 $version';
   }
@@ -2552,14 +2073,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateDownloadButton => '下载';
 
   @override
-  String get updateFoundCachedTitle => '发现已下载版本';
-
-  @override
-  String updateFoundCachedMessage(String path) {
-    return '已找到之前下载的安装包，是否直接安装？\\n\\n点击\\\"确定\\\"立即安装，点击\\\"取消\\\"关闭此弹窗。\\n\\n文件路径: $path';
-  }
-
-  @override
   String get updateInstallingCachedApk => '正在安装缓存的APK';
 
   @override
@@ -2572,67 +2085,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateInstallFailed => '安装失败';
 
   @override
-  String get updateDownloadCompleteManual => '下载完成，可以手动安装';
-
-  @override
-  String get updateDownloadCompleteException => '下载完成，请手动安装（弹窗异常）';
-
-  @override
-  String get updateDownloadCompleteManualContext => '下载完成，请手动安装';
-
-  @override
   String get updateDownloadFailed => '下载失败';
-
-  @override
-  String get updateInstallTitle => '下载完成';
-
-  @override
-  String get updateInstallMessage => 'APK文件下载完成，是否立即安装？\\n\\n注意：安装时应用会暂时退到后台，这是正常现象。';
 
   @override
   String get updateInstallNow => '立即安装';
 
   @override
-  String get updateInstallLater => '稍后安装';
-
-  @override
-  String get updateNotificationTitle => '蜜蜂记账更新下载';
-
-  @override
-  String get updateNotificationBody => '正在下载新版本...';
-
-  @override
-  String get updateNotificationComplete => '下载完成，点击安装';
-
-  @override
   String get updateNotificationPermissionTitle => '通知权限被拒绝';
-
-  @override
-  String get updateNotificationPermissionMessage => '无法获得通知权限，下载进度将不会在通知栏显示，但下载功能正常。';
-
-  @override
-  String get updateNotificationGuideTitle => '如需开启通知，请按以下步骤操作：';
-
-  @override
-  String get updateNotificationStep1 => '打开系统设置';
-
-  @override
-  String get updateNotificationStep2 => '找到「应用管理」或「应用设置」';
-
-  @override
-  String get updateNotificationStep3 => '找到「蜜蜂记账」应用';
-
-  @override
-  String get updateNotificationStep4 => '点击「权限管理」或「通知管理」';
-
-  @override
-  String get updateNotificationStep5 => '开启「通知权限」';
-
-  @override
-  String get updateNotificationMiuiHint => 'MIUI用户：小米系统对通知权限管控较严，可能需要在安全中心中额外设置';
-
-  @override
-  String get updateNotificationGotIt => '知道了';
 
   @override
   String get updateCheckFailedTitle => '检测更新失败';
@@ -2653,34 +2112,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateNoLocalApkTitle => '未找到更新包';
 
   @override
-  String get updateNoLocalApkMessage => '没有找到已下载的更新包文件。\\n\\n请先通过\\\"检查更新\\\"下载新版本。';
-
-  @override
   String get updateInstallPackageTitle => '安装更新包';
 
   @override
   String get updateMultiplePackagesTitle => '找到多个更新包';
 
   @override
-  String updateMultiplePackagesMessage(int count, String path) {
-    return '找到 $count 个更新包文件。\\n\\n建议使用最新下载的版本，或手动到文件管理器中安装。\\n\\n文件位置：$path';
-  }
-
-  @override
   String get updateSearchFailedTitle => '查找失败';
 
   @override
-  String updateSearchFailedMessage(String error) {
-    return '查找本地更新包时发生错误：$error';
-  }
-
-  @override
   String get updateFoundCachedPackageTitle => '发现已下载的更新包';
-
-  @override
-  String updateFoundCachedPackageMessage(String fileName, String fileSize) {
-    return '检测到之前下载的更新包：\\n\\n文件名：$fileName\\n大小：${fileSize}MB\\n\\n是否立即安装？';
-  }
 
   @override
   String get updateIgnoreButton => '忽略';
@@ -2693,11 +2134,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updateErrorTitle => '错误';
-
-  @override
-  String updateReadCacheFailedMessage(String error) {
-    return '读取缓存更新包失败：$error';
-  }
 
   @override
   String get updateCheckingPermissions => '检查权限...';
@@ -2750,35 +2186,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get updateNoApkFoundError => '未找到APK下载链接';
-
-  @override
   String updateCheckingUpdateError(String error) {
     return '检查更新失败: $error';
   }
-
-  @override
-  String get updateNotificationChannelName => '更新下载';
-
-  @override
-  String get updateNotificationDownloadingIndeterminate => '正在下载新版本...';
-
-  @override
-  String updateNotificationDownloadingProgress(String progress) {
-    return '下载进度: $progress%';
-  }
-
-  @override
-  String get updateNotificationDownloadCompleteTitle => '下载完成';
-
-  @override
-  String get updateNotificationDownloadCompleteMessage => '新版本已下载完成，点击安装';
-
-  @override
-  String get updateUserCancelledDownloadDialog => '用户取消下载';
-
-  @override
-  String get updateCannotOpenLinkError => '无法打开链接';
 
   @override
   String get updateNoLocalApkFoundMessage => '没有找到已下载的更新包文件。\n\n请先通过\"检查更新\"下载新版本。';
@@ -2807,15 +2217,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String updateReadCachedPackageError(String error) {
     return '读取缓存更新包失败：$error';
   }
-
-  @override
-  String get reminderQuickTestSent => '已设置15秒后的快速测试，请保持应用在后台';
-
-  @override
-  String get reminderFlutterTestSent => '已发送Flutter测试通知，点击查看是否能打开应用';
-
-  @override
-  String get reminderAlarmTestSent => '已设置AlarmManager测试通知（1秒后），点击查看是否能打开应用';
 
   @override
   String get updateOk => '知道了';
@@ -3013,12 +2414,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String recurringTransactionEveryNYears(int n) {
     return '每 $n 年';
   }
-
-  @override
-  String get cloudDefaultServiceDisplayName => '默认云服务';
-
-  @override
-  String get cloudNotConfiguredDisplay => '未配置';
 
   @override
   String get syncNotConfiguredMessage => '未配置云端';
@@ -3256,34 +2651,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeDescription => '一个真正尊重您隐私的记账应用';
 
   @override
-  String get welcomePrivacyTitle => '您的数据，您做主';
+  String get welcomeCurrencyDescription => '选择您常用的货币，之后可以随时在设置中更改';
 
   @override
-  String get welcomePrivacyFeature1 => '数据存储在您的设备本地';
+  String get welcomePrivacyTitle => '开源透明 · 社群驱动';
 
   @override
-  String get welcomePrivacyFeature2 => '不会上传到任何第三方服务器';
+  String get welcomePrivacyFeature1 => '100% 开源代码，接受社区监督';
 
   @override
-  String get welcomePrivacyFeature3 => '无广告，无数据收集';
+  String get welcomePrivacyFeature2 => '无隐私顾虑，数据完全本地存储';
 
   @override
-  String get welcomePrivacyFeature4 => '无需注册账号';
+  String get welcomeOpenSourceFeature1 => '活跃的开发者社群，持续改进';
 
   @override
-  String get welcomeOpenSourceTitle => '开源 & 透明';
-
-  @override
-  String get welcomeOpenSourceFeature1 => '100%开源代码';
-
-  @override
-  String get welcomeOpenSourceFeature2 => '社区监督，无后门';
-
-  @override
-  String get welcomeOpenSourceFeature3 => '个人用户免费使用';
-
-  @override
-  String get welcomeViewGitHub => '在GitHub查看源代码';
+  String get welcomeViewGitHub => '访问 GitHub 仓库';
 
   @override
   String get welcomeCloudSyncTitle => '可选的云同步';
@@ -3299,12 +2682,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeCloudSyncFeature3 => '自建Supabase服务';
-
-  @override
-  String get lab => '实验室';
-
-  @override
-  String get labDesc => '体验实验性功能';
 
   @override
   String get widgetManagement => '桌面小组件';
@@ -3439,9 +2816,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get disableFailed => '禁用失败';
 
   @override
-  String get openSettingsFailed => '打开设置失败';
-
-  @override
   String get reselectImage => '重新选择';
 
   @override
@@ -3455,9 +2829,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ocrBillingDesc => '扫描支付截图自动识别金额';
-
-  @override
-  String get quickActions => '快捷功能';
 
   @override
   String get iosAutoFeatureDesc => '通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。';
@@ -3674,12 +3045,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ocrTime => '时间';
 
   @override
-  String get cloudSyncAndBackup => '云同步与备份';
-
-  @override
-  String get cloudSyncAndBackupDesc => '云服务配置、数据同步管理';
-
-  @override
   String get cloudSyncPageTitle => '云同步与备份';
 
   @override
@@ -3776,9 +3141,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutTelegramGroup => 'Telegram 群';
 
   @override
-  String get aboutCopied => '已复制到剪贴板';
-
-  @override
   String get aboutSupportDevelopment => '支持开发';
 
   @override
@@ -3830,24 +3192,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get logCenterCopied => '已复制到剪贴板';
 
   @override
-  String get cloudService => '云服务';
-
-  @override
-  String get cloudServiceDesc => '配置云存储提供商';
-
-  @override
-  String get syncManagement => '同步管理';
-
-  @override
-  String get syncManagementDesc => '数据同步与备份';
-
-  @override
-  String get moreSettings => '更多设置';
-
-  @override
-  String get moreSettingsDesc => '高级云同步选项';
-
-  @override
   String get configImportExportTitle => '配置导入导出';
 
   @override
@@ -3887,9 +3231,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configImportConfirmTitle => '确认导入';
 
   @override
-  String get configImportConfirmMessage => '导入配置将覆盖当前设置，是否继续？';
-
-  @override
   String get configImportSuccess => '配置导入成功';
 
   @override
@@ -3908,12 +3249,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String configExportSavedTo(String path) {
     return '已保存至: $path';
   }
-
-  @override
-  String get configExportOpenFile => '打开文件夹';
-
-  @override
-  String get configExportOpenFileFailed => '无法打开文件夹';
 
   @override
   String get configExportViewContent => '查看内容';
@@ -3937,6 +3272,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configIncludeAI => 'AI 智能识别配置';
 
   @override
+  String get configIncludeAppSettings => '应用设置（语言、主题、提醒等）';
+
+  @override
+  String get configIncludeRecurringTransactions => '周期账单';
+
+  @override
   String get ledgersConflictTitle => '同步冲突';
 
   @override
@@ -3950,11 +3291,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String ledgersConflictRemoteInfo(int count) {
     return '云端：$count 笔账单';
-  }
-
-  @override
-  String ledgersConflictLocalUpdated(String time) {
-    return '本地更新：$time';
   }
 
   @override
@@ -4045,25 +3381,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountTotalIncome => '总收入';
 
   @override
-  String get accountDetailTitle => '账户详情';
-
-  @override
   String get accountCurrencyLocked => '该账户已有交易记录，不允许修改币种';
 
   @override
   String get commonNotice => '提示';
 
   @override
-  String get commonUncategorized => '未分类';
-
-  @override
   String get transferTitle => '转账';
-
-  @override
-  String get transferOut => '转出';
-
-  @override
-  String get transferIn => '转入';
 
   @override
   String get transferFromAccount => '转出账户';
@@ -4072,37 +3396,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get transferToAccount => '转入账户';
 
   @override
-  String get transferAmount => '转账金额';
-
-  @override
-  String get transferTime => '转账时间';
-
-  @override
   String get transferSelectAccount => '选择账户';
-
-  @override
-  String get transferEnterAmount => '输入金额';
-
-  @override
-  String get transferEnterNote => '添加备注';
-
-  @override
-  String get transferCreateNew => '创建转账';
 
   @override
   String get transferCreateSuccess => '转账创建成功';
 
   @override
   String get transferUpdateSuccess => '转账更新成功';
-
-  @override
-  String get transferDeleteConfirm => '确定删除这笔转账吗？';
-
-  @override
-  String get transferDeleteSuccess => '转账删除成功';
-
-  @override
-  String get transferSameAccountError => '转出和转入账户不能相同';
 
   @override
   String get transferDifferentCurrencyError => '转账仅支持相同币种的账户';
@@ -4112,6 +3412,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get transferFromPrefix => '来自';
+
+  @override
+  String get welcomeCategoryModeTitle => '选择分类模式';
+
+  @override
+  String get welcomeCategoryModeDescription => '选择更适合您使用习惯的分类方式';
+
+  @override
+  String get welcomeCategoryModeFlatTitle => '一级分类';
+
+  @override
+  String get welcomeCategoryModeFlatDescription => '简单直观，快速记账';
+
+  @override
+  String get welcomeCategoryModeFlatFeature1 => '扁平化结构，操作简单';
+
+  @override
+  String get welcomeCategoryModeFlatFeature2 => '适合习惯简单分类的用户';
+
+  @override
+  String get welcomeCategoryModeFlatFeature3 => '快速选择，高效记账';
+
+  @override
+  String get welcomeCategoryModeHierarchicalTitle => '二级分类';
+
+  @override
+  String get welcomeCategoryModeHierarchicalDescription => '精细管理，清晰明了';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature1 => '支持父子分类层级';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature2 => '更细致的账单归类';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature3 => '适合需要精细管理的用户';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4149,19 +3485,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonEdit => '編輯';
 
   @override
-  String get commonAdd => '新增';
-
-  @override
   String get commonOk => '確定';
 
   @override
-  String get commonYes => '是';
-
-  @override
   String get commonNo => '否';
-
-  @override
-  String get commonLoading => '載入中...';
 
   @override
   String get commonEmpty => '暫無資料';
@@ -4174,9 +3501,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonFailed => '失敗';
-
-  @override
-  String get commonRetry => '重試';
 
   @override
   String get commonBack => '返回';
@@ -4194,31 +3518,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonClose => '關閉';
 
   @override
-  String get commonCopy => '複製';
-
-  @override
   String get commonSearch => '搜尋';
 
   @override
   String get commonNoteHint => '備註…';
 
   @override
-  String get commonFilter => '篩選';
-
-  @override
-  String get commonClear => '清除';
-
-  @override
-  String get commonSelectAll => '全選';
-
-  @override
   String get commonSettings => '設定';
 
   @override
   String get commonHelp => '說明';
-
-  @override
-  String get commonAbout => '關於';
 
   @override
   String get commonLanguage => '語言';
@@ -4231,6 +3540,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonConfigure => '配置';
+
+  @override
+  String get commonPressAgainToExit => '再按一次退出應用程式';
 
   @override
   String get commonWeekdayMonday => '星期一';
@@ -4254,9 +3566,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonWeekdaySunday => '星期日';
 
   @override
-  String get homeTitle => '蜜蜂記帳';
-
-  @override
   String get homeIncome => '收入';
 
   @override
@@ -4266,28 +3575,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get homeBalance => '結餘';
 
   @override
-  String get homeTotal => '總';
-
-  @override
-  String get homeAverage => '平均值';
-
-  @override
-  String get homeDailyAvg => '日均';
-
-  @override
-  String get homeMonthlyAvg => '月均';
-
-  @override
   String get homeNoRecords => '還沒有記帳';
-
-  @override
-  String get homeAddRecord => '點擊底部加號，馬上記一筆';
-
-  @override
-  String get homeHideAmounts => '隱藏金額';
-
-  @override
-  String get homeShowAmounts => '顯示金額';
 
   @override
   String get homeSelectDate => '選擇日期';
@@ -4355,12 +3643,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchNoResults => '未找到符合的結果';
-
-  @override
-  String get searchResultsEmpty => '未找到符合的結果';
-
-  @override
-  String get searchResultsEmptyHint => '請嘗試其他關鍵詞或調整篩選條件';
 
   @override
   String get searchBatchMode => '批次操作';
@@ -4456,9 +3738,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get analyticsTitle => '分析';
-
-  @override
   String get analyticsMonth => '月';
 
   @override
@@ -4468,13 +3747,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get analyticsAll => '全部';
 
   @override
-  String get analyticsSummary => '匯總';
-
-  @override
   String get analyticsCategoryRanking => '分類排行';
-
-  @override
-  String get analyticsCurrentPeriod => '當前週期';
 
   @override
   String get analyticsNoDataSubtext => '可左右滑動切換週期，或點擊按鈕切換收入/支出';
@@ -4533,12 +3806,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get ledgersClear => '清空當前帳本';
 
   @override
-  String get ledgersClearConfirm => '清空當前帳本？';
-
-  @override
   String ledgersClearMessage(Object name) {
     return '將刪除該帳本下所有交易記錄，且不可復原。';
   }
+
+  @override
+  String get ledgerDefaultName => '預設帳本';
 
   @override
   String get ledgersEdit => '編輯帳本';
@@ -4559,21 +3832,30 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get ledgersDeleteFailed => '刪除失敗';
 
   @override
-  String ledgersRecordsDeleted(int count) {
-    return '已刪除 $count 條記錄';
+  String get ledgersClearTitle => '清空帳本';
+
+  @override
+  String get ledgersClearSuccess => '帳本已清空';
+
+  @override
+  String get ledgersDeleteLocal => '僅刪除本地帳本';
+
+  @override
+  String get ledgersDeleteLocalTitle => '刪除本地帳本';
+
+  @override
+  String ledgersDeleteLocalMessage(Object name) {
+    return '確定要刪除本地帳本「$name」嗎？\n雲端備份會保留，您可以隨時恢復。';
   }
+
+  @override
+  String get ledgersDeleteLocalSuccess => '本地帳本已刪除';
 
   @override
   String get ledgersName => '名稱';
 
   @override
   String get ledgersDefaultLedgerName => '預設帳本';
-
-  @override
-  String get ledgersDefaultAccountName => '現金';
-
-  @override
-  String get accountTitle => '帳戶';
 
   @override
   String get ledgersCurrency => '幣種';
@@ -4601,6 +3883,84 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get ledgerCardDownloadCloud => '下載雲帳本';
+
+  @override
+  String get ledgersLocal => '本地帳本';
+
+  @override
+  String get ledgersRemote => '雲端帳本';
+
+  @override
+  String get ledgersEmpty => '暫無帳本';
+
+  @override
+  String get ledgersRestoreAll => '全部恢復';
+
+  @override
+  String ledgersSwitched(String name) {
+    return '已切換到帳本「$name」';
+  }
+
+  @override
+  String get ledgersDownloadTitle => '下載帳本';
+
+  @override
+  String ledgersDownloadMessage(String name) {
+    return '確認下載帳本「$name」到本地？';
+  }
+
+  @override
+  String get ledgersDownloading => '下載中...';
+
+  @override
+  String ledgersDownloadSuccess(String name) {
+    return '帳本「$name」下載成功';
+  }
+
+  @override
+  String get ledgersDownload => '下載';
+
+  @override
+  String get ledgersDeleteRemote => '刪除雲端帳本';
+
+  @override
+  String get ledgersDeleteRemoteConfirm => '刪除雲端帳本';
+
+  @override
+  String ledgersDeleteRemoteMessage(String name) {
+    return '確認刪除雲端帳本「$name」？此操作無法復原。';
+  }
+
+  @override
+  String get ledgersDeleting => '刪除中...';
+
+  @override
+  String get ledgersDeleteRemoteSuccess => '已刪除雲端帳本';
+
+  @override
+  String get ledgersCannotDeleteLastOne => '無法刪除最後一個帳本';
+
+  @override
+  String get ledgersRestoreAllTitle => '批次恢復';
+
+  @override
+  String ledgersRestoreAllMessage(int count) {
+    return '確認恢復所有雲端帳本？共 $count 個。';
+  }
+
+  @override
+  String get ledgersRestoring => '恢復中...';
+
+  @override
+  String get ledgersRestoreComplete => '恢復完成';
+
+  @override
+  String ledgersRestoreResult(int success, int failed) {
+    return '成功: $success，失敗: $failed';
+  }
+
+  @override
   String get categoryTitle => '分類管理';
 
   @override
@@ -4619,9 +3979,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get categoryDefault => '預設分類';
 
   @override
-  String get categoryCustomTag => '自訂';
-
-  @override
   String get categoryReorderTip => '長按分類可拖曳調整順序';
 
   @override
@@ -4631,9 +3988,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get iconPickerTitle => '選擇圖示';
-
-  @override
-  String get iconCategoryFood => '餐飲';
 
   @override
   String get iconCategoryTransport => '交通';
@@ -4670,9 +4024,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get importTitle => '匯入帳單';
-
-  @override
-  String get importSelectFile => '請選擇檔案進行匯入（支援 CSV/TSV/XLSX 格式）';
 
   @override
   String get importBillType => '帳單類型';
@@ -4762,19 +4113,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get importCompleteTitle => '匯入完成';
 
   @override
-  String importCompletedCount(Object count) {
-    return '成功匯入 $count 條記錄';
-  }
-
-  @override
-  String get importFailed => '匯入失敗';
-
-  @override
-  String importFailedMessage(Object error) {
-    return '匯入失敗：$error';
-  }
-
-  @override
   String get importSelectCategoryFirst => '請先選擇\"分類\"列再繼續';
 
   @override
@@ -4827,19 +4165,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineTitle => '我的';
 
   @override
-  String get mineSettings => '設定';
-
-  @override
-  String get mineTheme => '主題設定';
-
-  @override
-  String get mineFont => '字體設定';
-
-  @override
   String get mineReminder => '提醒設定';
-
-  @override
-  String get mineData => '資料管理';
 
   @override
   String get mineImport => '匯入資料';
@@ -4851,19 +4177,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineCloud => '雲服務';
 
   @override
-  String get mineAbout => '關於';
-
-  @override
-  String get mineVersion => '版本';
-
-  @override
   String get mineUpdate => '檢查更新';
 
   @override
   String get mineLanguageSettings => '語言設定';
-
-  @override
-  String get mineLanguageSettingsSubtitle => '切換應用程式語言';
 
   @override
   String get languageTitle => '語言設定';
@@ -4884,32 +4201,73 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get deleteConfirmMessage => '確定要刪除這條記帳嗎？';
 
   @override
-  String get logCopied => '日誌已複製';
-
-  @override
-  String get waitingRestore => '等待恢復任務啟動…';
-
-  @override
-  String get restoreTitle => '雲端恢復';
-
-  @override
-  String get copyLog => '複製日誌';
-
-  @override
-  String restoreProgress(Object current, Object total) {
-    return '恢復中 ($current/$total)';
-  }
-
-  @override
-  String get restorePreparing => '準備中…';
-
-  @override
-  String restoreLedgerProgress(String ledger, int done, int total) {
-    return '帳本：$ledger  記錄：$done/$total';
-  }
-
-  @override
   String get mineSlogan => '蜜蜂記帳，一筆一蜜';
+
+  @override
+  String get mineAvatarTitle => '頭像設定';
+
+  @override
+  String get mineAvatarFromGallery => '從相簿選擇';
+
+  @override
+  String get mineAvatarFromCamera => '拍照';
+
+  @override
+  String get mineAvatarDelete => '刪除頭像';
+
+  @override
+  String get mineShareApp => '分享應用程式';
+
+  @override
+  String get mineShareAppSubtitle => '生成分享海報並儲存到相簿';
+
+  @override
+  String get mineShareGenerating => '正在生成分享海報...';
+
+  @override
+  String get mineShareFailed => '儲存失敗，請檢查相簿權限';
+
+  @override
+  String get sharePosterAppName => '蜜蜂記帳';
+
+  @override
+  String get sharePosterSlogan => '一筆一蜜，記錄美好生活';
+
+  @override
+  String get sharePosterFeature1 => '✨ 完全開源免費';
+
+  @override
+  String get sharePosterFeature2 => '🤖 AI智能識別帳單';
+
+  @override
+  String get sharePosterFeature3 => '⚡ 自動化記帳';
+
+  @override
+  String get sharePosterFeature4 => '🔒 資料隱私安全';
+
+  @override
+  String get sharePosterFeature5 => '☁️ 雲端同步備份';
+
+  @override
+  String get sharePosterFeature6 => '📊 多帳本管理';
+
+  @override
+  String get sharePosterScanText => '掃碼訪問開源專案';
+
+  @override
+  String get sharePosterSave => '儲存到相簿';
+
+  @override
+  String get sharePosterShare => '分享';
+
+  @override
+  String get sharePosterSaveSuccess => '已儲存到相簿';
+
+  @override
+  String get sharePosterSaveFailed => '儲存失敗';
+
+  @override
+  String get sharePosterPermissionDenied => '相簿權限被拒絕，請在設定中開啟';
 
   @override
   String get mineDaysCount => '記帳天數';
@@ -4925,14 +4283,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineCloudServiceLoading => '載入中…';
-
-  @override
-  String mineCloudServiceError(Object error) {
-    return '錯誤: $error';
-  }
-
-  @override
-  String get mineCloudServiceDefault => '預設雲服務 (已啟用)';
 
   @override
   String get mineCloudServiceOffline => '預設模式 (離線)';
@@ -5085,9 +4435,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineAutoSyncNeedLogin => '需登入後可開啟';
 
   @override
-  String get mineAutoSyncNeedCloudService => '僅限雲端服務模式可用';
-
-  @override
   String get mineImportProgressTitle => '後台匯入中…';
 
   @override
@@ -5097,11 +4444,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineImportCompleteTitle => '匯入完成';
-
-  @override
-  String mineImportCompleteSubtitle(Object fail, Object ok) {
-    return '成功 $ok，失敗 $fail';
-  }
 
   @override
   String get mineCategoryManagement => '分類管理';
@@ -5137,21 +4479,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineDisplayScaleSubtitle => '調整文字和介面元素大小';
 
   @override
-  String get mineAboutTitle => '關於';
-
-  @override
-  String mineAboutMessage(Object version) {
-    return '應用程式：蜜蜂記帳\n版本：$version\n開源地址：https://github.com/TNT-Likely/BeeCount\n開源協議：詳見儲存庫 LICENSE';
-  }
-
-  @override
-  String get mineAboutOpenGitHub => '開啟 GitHub';
-
-  @override
   String get mineCheckUpdate => '檢測更新';
-
-  @override
-  String get mineCheckUpdateInProgress => '檢測更新中...';
 
   @override
   String get mineCheckUpdateSubtitle => '正在檢查最新版本';
@@ -5176,18 +4504,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineSupportAuthorSubtitle => '在GitHub上為專案點讚';
-
-  @override
-  String get mineRefreshStats => '重新整理統計資訊（臨時）';
-
-  @override
-  String get mineRefreshStatsSubtitle => '觸發全域統計 Provider 重新計算';
-
-  @override
-  String get mineRefreshSync => '重新整理同步狀態（臨時）';
-
-  @override
-  String get mineRefreshSyncSubtitle => '觸發同步狀態 Provider 重新取得';
 
   @override
   String get categoryEditTitle => '編輯分類';
@@ -5250,174 +4566,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryDefaultMessage => '預設分類不可修改名稱和圖示，但可以檢視詳情和遷移資料';
-
-  @override
-  String get categoryNameDining => '餐飲';
-
-  @override
-  String get categoryNameTransport => '交通';
-
-  @override
-  String get categoryNameShopping => '購物';
-
-  @override
-  String get categoryNameEntertainment => '娛樂';
-
-  @override
-  String get categoryNameHome => '居家';
-
-  @override
-  String get categoryNameFamily => '家庭';
-
-  @override
-  String get categoryNameCommunication => '通訊';
-
-  @override
-  String get categoryNameUtilities => '水電';
-
-  @override
-  String get categoryNameHousing => '住房';
-
-  @override
-  String get categoryNameMedical => '醫療';
-
-  @override
-  String get categoryNameEducation => '教育';
-
-  @override
-  String get categoryNamePets => '寵物';
-
-  @override
-  String get categoryNameSports => '運動';
-
-  @override
-  String get categoryNameDigital => '數位';
-
-  @override
-  String get categoryNameTravel => '旅行';
-
-  @override
-  String get categoryNameAlcoholTobacco => '菸酒';
-
-  @override
-  String get categoryNameBabyCare => '母嬰';
-
-  @override
-  String get categoryNameBeauty => '美容';
-
-  @override
-  String get categoryNameRepair => '維修';
-
-  @override
-  String get categoryNameSocial => '社交';
-
-  @override
-  String get categoryNameLearning => '學習';
-
-  @override
-  String get categoryNameCar => '汽車';
-
-  @override
-  String get categoryNameTaxi => '計程車';
-
-  @override
-  String get categoryNameSubway => '地鐵';
-
-  @override
-  String get categoryNameDelivery => '外送';
-
-  @override
-  String get categoryNameProperty => '物業';
-
-  @override
-  String get categoryNameParking => '停車';
-
-  @override
-  String get categoryNameDonation => '捐贈';
-
-  @override
-  String get categoryNameGift => '禮金';
-
-  @override
-  String get categoryNameTax => '納稅';
-
-  @override
-  String get categoryNameBeverage => '飲料';
-
-  @override
-  String get categoryNameClothing => '服裝';
-
-  @override
-  String get categoryNameSnacks => '零食';
-
-  @override
-  String get categoryNameRedPacket => '紅包';
-
-  @override
-  String get categoryNameFruit => '水果';
-
-  @override
-  String get categoryNameGame => '遊戲';
-
-  @override
-  String get categoryNameBook => '書';
-
-  @override
-  String get categoryNameLover => '愛人';
-
-  @override
-  String get categoryNameDecoration => '裝修';
-
-  @override
-  String get categoryNameDailyGoods => '日用品';
-
-  @override
-  String get categoryNameLottery => '彩票';
-
-  @override
-  String get categoryNameStock => '股票';
-
-  @override
-  String get categoryNameSocialSecurity => '社保';
-
-  @override
-  String get categoryNameExpress => '快遞';
-
-  @override
-  String get categoryNameWork => '工作';
-
-  @override
-  String get categoryNameSalary => '工資';
-
-  @override
-  String get categoryNameInvestment => '理財';
-
-  @override
-  String get categoryNameBonus => '獎金';
-
-  @override
-  String get categoryNameReimbursement => '報銷';
-
-  @override
-  String get categoryNamePartTime => '兼職';
-
-  @override
-  String get categoryNameInterest => '利息';
-
-  @override
-  String get categoryNameRefund => '退款';
-
-  @override
-  String get categoryNameSecondHand => '二手轉賣';
-
-  @override
-  String get categoryNameSocialBenefit => '社會保障';
-
-  @override
-  String get categoryNameTaxRefund => '退稅退費';
-
-  @override
-  String get categoryNameProvidentFund => '公積金';
 
   @override
   String get categoryNameLabel => '分類名稱';
@@ -5490,6 +4638,152 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get categorySubCategoryTitle => '二級分類';
+
+  @override
+  String get categorySubCategoryDescriptionEnabled => '此分類屬於某個一級分類';
+
+  @override
+  String get categorySubCategoryDescriptionDisabled => '此分類為獨立的一級分類';
+
+  @override
+  String get categoryParentCategoryTitle => '父分類';
+
+  @override
+  String get categoryParentCategoryHint => '請選擇父分類';
+
+  @override
+  String get categorySelectParentTitle => '選擇父分類';
+
+  @override
+  String get categorySelectParentDescription => '只能選擇沒有交易記錄的分類作為父分類';
+
+  @override
+  String categorySubCategoryCreated(Object name) {
+    return '已新增二級分類：$name';
+  }
+
+  @override
+  String get categoryParentRequired => '請選擇父分類';
+
+  @override
+  String get categoryParentRequiredTitle => '錯誤';
+
+  @override
+  String get categoryExpenseList => '餐飲-交通-購物-娛樂-居家-家庭-通訊-水電-住房-醫療-教育-寵物-運動-數碼-旅行-煙酒-母嬰-美容-維修-社交-學習-汽車-打車-地鐵-外賣-物業-停車-捐贈-禮金-納稅-飲料-服裝-零食-紅包-水果-遊戲-書-愛人-裝修-日用品-彩票-股票-社保-快遞-工作';
+
+  @override
+  String get categoryIncomeList => '工資-理財-紅包-獎金-報銷-兼職-禮金-利息-退款-投資收益-二手轉賣-社會保障-退稅退費-公積金';
+
+  @override
+  String get categoryExpenseDining => '餐飲-早餐-午餐-晚餐-美團外賣-餓了麼外賣-京東外賣-餐廳-美食';
+
+  @override
+  String get categoryExpenseSnacks => '零食-餅乾-薯片-糖果-巧克力-堅果';
+
+  @override
+  String get categoryExpenseFruit => '水果-蘋果-香蕉-橙子-葡萄-西瓜-其他水果';
+
+  @override
+  String get categoryExpenseBeverage => '飲品-奶茶-咖啡-果汁-汽水-礦泉水';
+
+  @override
+  String get categoryExpensePastry => '糕點-蛋糕-麵包-甜點-餅乾';
+
+  @override
+  String get categoryExpenseCooking => '做飯食材-蔬菜-肉類-水產-調料-糧油';
+
+  @override
+  String get categoryExpenseShopping => '購物-服裝-鞋帽-包包-配飾-日用百貨';
+
+  @override
+  String get categoryExpensePets => '寵物-寵物食品-寵物用品-寵物醫療-寵物美容';
+
+  @override
+  String get categoryExpenseTransport => '交通-地鐵-公交-出租車-網約車-停車費-加油';
+
+  @override
+  String get categoryExpenseCar => '汽車-汽車保養-汽車維修-汽車保險-洗車-違章罰款';
+
+  @override
+  String get categoryExpenseClothing => '服飾-上衣-褲子-裙子-鞋子-配飾';
+
+  @override
+  String get categoryExpenseDailyGoods => '日用品-洗護用品-紙品-清潔用品-廚房用品';
+
+  @override
+  String get categoryExpenseEducation => '教育-學費-培訓費-書籍-文具-辦公用品';
+
+  @override
+  String get categoryExpenseInvestLoss => '投資虧損-股票虧損-基金虧損-其他投資虧損';
+
+  @override
+  String get categoryExpenseEntertainment => '娛樂-電影-KTV-遊樂場-酒吧-其他娛樂';
+
+  @override
+  String get categoryExpenseGame => '遊戲儲值-遊戲裝備-遊戲會員';
+
+  @override
+  String get categoryExpenseHealthProducts => '保健品-維生素-保健食品-營養品';
+
+  @override
+  String get categoryExpenseSubscription => '訂閱服務-視頻會員-音樂會員-雲端儲存-其他訂閱';
+
+  @override
+  String get categoryExpenseSports => '運動-健身房-運動裝備-運動課程-戶外活動';
+
+  @override
+  String get categoryExpenseHousing => '住房-房租-物業費-房貸-裝修';
+
+  @override
+  String get categoryExpenseHome => '傢俱-家電-裝飾品-床上用品';
+
+  @override
+  String get categoryExpenseBeauty => '美容-護膚品-化妝品-美容美髮-美甲';
+
+  @override
+  String get categoryIncomeSalary => '工資-基本工資-績效獎金-年終獎-加班費';
+
+  @override
+  String get categoryIncomeInvestment => '理財-基金收益-股票分紅-理財產品-其他理財';
+
+  @override
+  String get categoryIncomeRedPacket => '紅包-節日紅包-生日紅包-隨禮回禮';
+
+  @override
+  String get categoryIncomeBonus => '獎金-年終獎-季度獎-項目獎金-其他獎金';
+
+  @override
+  String get categoryIncomeReimbursement => '報銷-差旅報銷-餐費報銷-其他報銷';
+
+  @override
+  String get categoryIncomePartTime => '兼職-兼職收入-外快';
+
+  @override
+  String get categoryIncomeGift => '結婚禮金-生日禮金-其他禮金';
+
+  @override
+  String get categoryIncomeInterest => '利息-銀行利息-其他利息';
+
+  @override
+  String get categoryIncomeRefund => '退款-購物退款-服務退款-其他退款';
+
+  @override
+  String get categoryIncomeInvestIncome => '投資收益-股票收益-基金收益-其他投資收益';
+
+  @override
+  String get categoryIncomeSecondHand => '二手交易-閒置物品-二手商品';
+
+  @override
+  String get categoryIncomeSocialBenefit => '社會福利-失業保險-生育津貼-其他補貼';
+
+  @override
+  String get categoryIncomeTaxRefund => '退稅-個稅退稅-其他退費';
+
+  @override
+  String get categoryIncomeProvidentFund => '公積金-公積金提取-公積金利息';
+
+  @override
   String get personalizeTitle => '個性裝扮';
 
   @override
@@ -5515,9 +4809,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get personalizeSelectColor => '選擇此顏色';
-
-  @override
-  String get fontSettingsTitle => '顯示縮放';
 
   @override
   String fontSettingsCurrentScale(Object scale) {
@@ -5662,47 +4953,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get reminderTestBody => '這是一條測試通知，點擊檢視效果';
 
   @override
-  String get reminderTestDelayBody => '這是一條15秒延遲的測試通知';
-
-  @override
-  String get reminderQuickTest => '快速測試 (15秒後)';
-
-  @override
-  String get reminderQuickTestMessage => '已設定15秒後的快速測試，請保持應用程式在背景';
-
-  @override
-  String get reminderFlutterTest => '🔧 測試Flutter通知點擊（開發）';
-
-  @override
-  String get reminderFlutterTestMessage => '已發送Flutter測試通知，點擊檢視是否能開啟應用程式';
-
-  @override
-  String get reminderAlarmTest => '🔧 測試AlarmManager通知點擊（開發）';
-
-  @override
-  String get reminderAlarmTestMessage => '已設定AlarmManager測試通知（1秒後），點擊檢視是否能開啟應用程式';
-
-  @override
-  String get reminderDirectTest => '🔧 直接測試NotificationReceiver（開發）';
-
-  @override
-  String get reminderDirectTestMessage => '已直接呼叫NotificationReceiver建立通知，檢視點擊是否有效';
-
-  @override
-  String get reminderCheckStatus => '🔧 檢查通知狀態（開發）';
-
-  @override
-  String get reminderNotificationStatus => '通知狀態';
-
-  @override
-  String reminderPendingCount(Object count) {
-    return '待處理通知數量: $count';
-  }
-
-  @override
-  String get reminderNoPending => '當前沒有待處理的通知';
-
-  @override
   String get reminderCheckBattery => '檢查電池最佳化狀態';
 
   @override
@@ -5731,9 +4981,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderBatteryAdvice => '建議關閉電池最佳化以確保通知正常工作';
-
-  @override
-  String get reminderGoToSettings => '去設定';
 
   @override
   String get reminderCheckChannel => '檢查通知頻道設定';
@@ -5793,15 +5040,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderAppSettingsMessage => '請在設定中允許通知、關閉電池最佳化';
-
-  @override
-  String get reminderIOSTest => '🍎 iOS通知除錯測試';
-
-  @override
-  String get reminderIOSTestTitle => 'iOS通知測試';
-
-  @override
-  String get reminderIOSTestMessage => '已發送測試通知。\n\n🍎 iOS模擬器限制：\n• 通知可能不會在通知中心顯示\n• 橫幅提醒可能不工作\n• 但Xcode控制台會顯示日誌\n\n💡 除錯方法：\n• 檢視Xcode控制台輸出\n• 檢查Flutter日誌資訊\n• 使用真機測試獲得完整體驗';
 
   @override
   String get reminderDescription => '提示：開啟記帳提醒後，系統會在每天指定時間發送通知提醒您記錄收支。';
@@ -5884,54 +5122,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get categoryPickerExpenseTab => '支出';
-
-  @override
-  String get categoryPickerIncomeTab => '收入';
-
-  @override
-  String get categoryPickerCancel => '取消';
-
-  @override
-  String get categoryPickerEmpty => '暫無分類';
-
-  @override
-  String get cloudBackupFound => '發現雲端備份';
-
-  @override
-  String get cloudBackupRestoreMessage => '檢測到雲端與本地帳本不一致，是否恢復到本地？\n(將進入恢復進度頁)';
-
-  @override
-  String get cloudBackupRestoreFailed => '恢復失敗';
-
-  @override
-  String get mineCloudBackupRestoreTitle => '發現雲端備份';
-
-  @override
-  String get mineAutoSyncRemoteDesc => '記帳後自動上傳到雲端';
-
-  @override
-  String get mineAutoSyncLoginRequired => '需登入後可開啟';
-
-  @override
   String get mineImportCompleteAllSuccess => '全部成功';
-
-  @override
-  String get mineImportCompleteTitleShort => '匯入完成';
-
-  @override
-  String get mineAboutAppName => '應用程式：蜜蜂記帳';
-
-  @override
-  String mineAboutVersion(Object version) {
-    return '版本：$version';
-  }
-
-  @override
-  String get mineAboutRepo => '開源地址：https://github.com/TNT-Likely/BeeCount';
-
-  @override
-  String get mineAboutLicense => '開源協議：詳見儲存庫 LICENSE';
 
   @override
   String get mineCheckUpdateDetecting => '檢測更新中...';
@@ -5943,94 +5134,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineUpdateDownloadTitle => '下載更新';
 
   @override
-  String get mineDebugRefreshStats => '重新整理統計資訊（臨時）';
-
-  @override
-  String get mineDebugRefreshStatsSubtitle => '觸發全域統計 Provider 重新計算';
-
-  @override
-  String get mineDebugRefreshSync => '重新整理同步狀態（臨時）';
-
-  @override
-  String get mineDebugRefreshSyncSubtitle => '觸發同步狀態 Provider 重新取得';
-
-  @override
-  String get cloudCurrentService => '當前雲服務';
-
-  @override
-  String get cloudConnected => '已連接';
-
-  @override
-  String get cloudOfflineMode => '離線模式';
-
-  @override
-  String get cloudAvailableServices => '可用雲服務';
-
-  @override
-  String get cloudReadCustomConfigFailed => '讀取自訂設定失敗';
-
-  @override
-  String get cloudNotConfigured => '未設定';
-
-  @override
-  String get cloudNotTested => '未測試';
-
-  @override
-  String get cloudConnectionNormal => '連接正常';
-
-  @override
-  String get cloudConnectionFailed => '連接失敗';
-
-  @override
-  String get cloudAddCustomService => '新增自訂雲服務';
-
-  @override
-  String get cloudCustomServiceName => '自訂雲服務';
-
-  @override
-  String get cloudDefaultServiceName => '預設雲服務';
-
-  @override
-  String get cloudUseYourSupabase => '使用你自己的 Supabase';
-
-  @override
   String get cloudTest => '測試';
-
-  @override
-  String get cloudSwitchService => '切換雲服務';
-
-  @override
-  String get cloudSwitchToBuiltinConfirm => '確定要切換到預設雲服務嗎？這將退出當前登入狀態。';
-
-  @override
-  String get cloudSwitchToCustomConfirm => '確定要切換到自訂雲服務嗎？這將退出當前登入狀態。';
 
   @override
   String get cloudSwitched => '已切換';
 
   @override
-  String get cloudSwitchedToBuiltin => '已切換到預設雲服務並已退出登入';
-
-  @override
   String get cloudSwitchFailed => '切換失敗';
-
-  @override
-  String get cloudActivateFailed => '啟用失敗';
-
-  @override
-  String get cloudActivateFailedMessage => '已儲存的設定無效';
-
-  @override
-  String get cloudActivated => '已啟用';
-
-  @override
-  String get cloudActivatedMessage => '已切換到自訂雲服務並已退出登入，請重新登入';
-
-  @override
-  String get cloudEditCustomService => '編輯自訂雲服務';
-
-  @override
-  String get cloudAddCustomServiceTitle => '新增自訂雲服務';
 
   @override
   String get cloudSupabaseUrlLabel => 'Supabase URL';
@@ -6040,27 +5150,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudAnonKeyLabel => 'Anon Key';
-
-  @override
-  String get cloudAnonKeyHint => '提示：不要填寫 service_role Key；Anon Key 為公開可用。';
-
-  @override
-  String get cloudInvalidInput => '無效輸入';
-
-  @override
-  String get cloudValidationEmptyFields => 'URL 與 Key 均不能為空';
-
-  @override
-  String get cloudValidationHttpsRequired => 'URL 需以 https:// 開頭';
-
-  @override
-  String get cloudValidationKeyTooShort => 'Key 長度過短，可能無效';
-
-  @override
-  String get cloudValidationServiceRoleKey => '禁止使用 service_role Key';
-
-  @override
-  String get cloudValidationHttpRequired => 'URL 需以 http:// 或 https:// 開頭';
 
   @override
   String get cloudSelectServiceType => '選擇雲端服務類型';
@@ -6078,22 +5167,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudWebdavPasswordLabel => '密碼';
 
   @override
-  String get cloudWebdavPathLabel => '遠端路徑';
-
-  @override
   String get cloudWebdavPathHint => '/BeeCount';
 
   @override
-  String get cloudWebdavHint => '支援堅果雲、Nextcloud、群暉等';
-
-  @override
-  String get cloudConfigUpdated => '設定已更新';
-
-  @override
   String get cloudConfigSaved => '設定已儲存';
-
-  @override
-  String get cloudTestComplete => '測試完成';
 
   @override
   String get cloudTestSuccess => '連接測試成功！';
@@ -6105,36 +5182,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudTestError => '測試失敗';
 
   @override
-  String get cloudClearConfig => '清空設定';
-
-  @override
-  String get cloudClearConfigConfirm => '確定要清空自訂雲服務設定嗎？（僅開發環境可用）';
-
-  @override
-  String get cloudConfigCleared => '自訂雲服務設定已清空';
-
-  @override
-  String get cloudClearFailed => '清空失敗';
-
-  @override
-  String get cloudServiceDescription => '應用程式內建的雲端服務（免費但可能不穩定，建議使用自己的或定期備份）';
-
-  @override
-  String get cloudServiceDescriptionNotConfigured => '當前建置未內建雲服務設定';
-
-  @override
-  String cloudServiceDescriptionCustom(String url) {
-    return '伺服器: $url';
-  }
-
-  @override
   String get authLogin => '登入';
 
   @override
   String get authSignup => '註冊';
-
-  @override
-  String get authRegister => '註冊';
 
   @override
   String get authEmail => '電子郵件';
@@ -6238,19 +5289,31 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get exportSelectFolder => '選擇匯出資料夾';
-
-  @override
   String get exportCsvHeaderType => '類型';
 
   @override
   String get exportCsvHeaderCategory => '分類';
 
   @override
+  String get exportCsvHeaderSubCategory => '二級分類';
+
+  @override
+  String get exportCsvHeaderCategoryIcon => '分類圖示';
+
+  @override
+  String get exportCsvHeaderSubCategoryIcon => '二級分類圖示';
+
+  @override
   String get exportCsvHeaderAmount => '金額';
 
   @override
   String get exportCsvHeaderAccount => '帳戶';
+
+  @override
+  String get exportCsvHeaderFromAccount => '轉出帳戶';
+
+  @override
+  String get exportCsvHeaderToAccount => '轉入帳戶';
 
   @override
   String get exportCsvHeaderNote => '備註';
@@ -6415,9 +5478,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateCheckTitle => '檢查更新';
 
   @override
-  String get updateNewVersionFound => '發現新版本';
-
-  @override
   String updateNewVersionTitle(String version) {
     return '發現新版本 $version';
   }
@@ -6461,14 +5521,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateDownloadButton => '下載';
 
   @override
-  String get updateFoundCachedTitle => '發現已下載版本';
-
-  @override
-  String updateFoundCachedMessage(String path) {
-    return '已找到之前下載的安裝包，是否直接安裝？\\n\\n點擊\\\"確定\\\"立即安裝，點擊\\\"取消\\\"關閉此彈窗。\\n\\n檔案路徑: $path';
-  }
-
-  @override
   String get updateInstallingCachedApk => '正在安裝快取的APK';
 
   @override
@@ -6481,67 +5533,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateInstallFailed => '安裝失敗';
 
   @override
-  String get updateDownloadCompleteManual => '下載完成，可以手動安裝';
-
-  @override
-  String get updateDownloadCompleteException => '下載完成，請手動安裝（彈窗異常）';
-
-  @override
-  String get updateDownloadCompleteManualContext => '下載完成，請手動安裝';
-
-  @override
   String get updateDownloadFailed => '下載失敗';
-
-  @override
-  String get updateInstallTitle => '下載完成';
-
-  @override
-  String get updateInstallMessage => 'APK檔案下載完成，是否立即安裝？\\n\\n注意：安裝時應用程式會暫時退到背景，這是正常現象。';
 
   @override
   String get updateInstallNow => '立即安裝';
 
   @override
-  String get updateInstallLater => '稍後安裝';
-
-  @override
-  String get updateNotificationTitle => '蜜蜂記帳更新下載';
-
-  @override
-  String get updateNotificationBody => '正在下載新版本...';
-
-  @override
-  String get updateNotificationComplete => '下載完成，點擊安裝';
-
-  @override
   String get updateNotificationPermissionTitle => '通知權限被拒絕';
-
-  @override
-  String get updateNotificationPermissionMessage => '無法獲得通知權限，下載進度將不會在通知欄顯示，但下載功能正常。';
-
-  @override
-  String get updateNotificationGuideTitle => '如需開啟通知，請按以下步驟操作：';
-
-  @override
-  String get updateNotificationStep1 => '開啟系統設定';
-
-  @override
-  String get updateNotificationStep2 => '找到「應用程式管理」或「應用程式設定」';
-
-  @override
-  String get updateNotificationStep3 => '找到「蜜蜂記帳」應用程式';
-
-  @override
-  String get updateNotificationStep4 => '點擊「權限管理」或「通知管理」';
-
-  @override
-  String get updateNotificationStep5 => '開啟「通知權限」';
-
-  @override
-  String get updateNotificationMiuiHint => 'MIUI使用者：小米系統對通知權限管控較嚴，可能需要在安全中心中額外設定';
-
-  @override
-  String get updateNotificationGotIt => '知道了';
 
   @override
   String get updateCheckFailedTitle => '檢測更新失敗';
@@ -6562,34 +5560,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateNoLocalApkTitle => '未找到更新包';
 
   @override
-  String get updateNoLocalApkMessage => '沒有找到已下載的更新包檔案。\\n\\n請先透過\\\"檢查更新\\\"下載新版本。';
-
-  @override
   String get updateInstallPackageTitle => '安裝更新包';
 
   @override
   String get updateMultiplePackagesTitle => '找到多個更新包';
 
   @override
-  String updateMultiplePackagesMessage(int count, String path) {
-    return '找到 $count 個更新包檔案。\\n\\n建議使用最新下載的版本，或手動到檔案管理器中安裝。\\n\\n檔案位置：$path';
-  }
-
-  @override
   String get updateSearchFailedTitle => '查找失敗';
 
   @override
-  String updateSearchFailedMessage(String error) {
-    return '查找本地更新包時發生錯誤：$error';
-  }
-
-  @override
   String get updateFoundCachedPackageTitle => '發現已下載的更新包';
-
-  @override
-  String updateFoundCachedPackageMessage(String fileName, String fileSize) {
-    return '檢測到之前下載的更新包：\\n\\n檔案名：$fileName\\n大小：${fileSize}MB\\n\\n是否立即安裝？';
-  }
 
   @override
   String get updateIgnoreButton => '忽略';
@@ -6602,11 +5582,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get updateErrorTitle => '錯誤';
-
-  @override
-  String updateReadCacheFailedMessage(String error) {
-    return '讀取快取更新包失敗：$error';
-  }
 
   @override
   String get updateCheckingPermissions => '檢查權限...';
@@ -6659,35 +5634,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get updateNoApkFoundError => '未找到APK下載連結';
-
-  @override
   String updateCheckingUpdateError(String error) {
     return '檢查更新失敗: $error';
   }
-
-  @override
-  String get updateNotificationChannelName => '更新下載';
-
-  @override
-  String get updateNotificationDownloadingIndeterminate => '正在下載新版本...';
-
-  @override
-  String updateNotificationDownloadingProgress(String progress) {
-    return '下載進度: $progress%';
-  }
-
-  @override
-  String get updateNotificationDownloadCompleteTitle => '下載完成';
-
-  @override
-  String get updateNotificationDownloadCompleteMessage => '新版本已下載完成，點擊安裝';
-
-  @override
-  String get updateUserCancelledDownloadDialog => '使用者取消下載';
-
-  @override
-  String get updateCannotOpenLinkError => '無法開啟連結';
 
   @override
   String get updateNoLocalApkFoundMessage => '沒有找到已下載的更新包檔案。\n\n請先透過\"檢查更新\"下載新版本。';
@@ -6716,15 +5665,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String updateReadCachedPackageError(String error) {
     return '讀取快取更新包失敗：$error';
   }
-
-  @override
-  String get reminderQuickTestSent => '已設定15秒後的快速測試，請保持應用程式在背景';
-
-  @override
-  String get reminderFlutterTestSent => '已發送Flutter測試通知，點擊檢視是否能開啟應用程式';
-
-  @override
-  String get reminderAlarmTestSent => '已設定AlarmManager測試通知（1秒後），點擊檢視是否能開啟應用程式';
 
   @override
   String get updateOk => '知道了';
@@ -6924,12 +5864,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get cloudDefaultServiceDisplayName => '預設雲服務';
-
-  @override
-  String get cloudNotConfiguredDisplay => '未設定';
-
-  @override
   String get syncNotConfiguredMessage => '未設定雲端';
 
   @override
@@ -7097,6 +6031,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountNameRequired => '請輸入帳戶名称';
 
   @override
+  String get accountNameDuplicate => '帳戶名稱已存在，請使用其他名稱';
+
+  @override
   String get accountTypeLabel => '帳戶類型';
 
   @override
@@ -7162,34 +6099,22 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get welcomeDescription => '一个真正尊重您隐私的记帳應用';
 
   @override
-  String get welcomePrivacyTitle => '您的數據，您做主';
+  String get welcomeCurrencyDescription => '選擇您常用的貨幣，之後可以隨時在設定中更改';
 
   @override
-  String get welcomePrivacyFeature1 => '數據存储在您的設備本地';
+  String get welcomePrivacyTitle => '開源透明 · 社群驅動';
 
   @override
-  String get welcomePrivacyFeature2 => '不会上傳到任何第三方服務器';
+  String get welcomePrivacyFeature1 => '100% 開源代碼，接受社區監督';
 
   @override
-  String get welcomePrivacyFeature3 => '無广告，無數據收集';
+  String get welcomePrivacyFeature2 => '無隱私顧慮，資料完全本地儲存';
 
   @override
-  String get welcomePrivacyFeature4 => '無需注冊帳號';
+  String get welcomeOpenSourceFeature1 => '活躍的開發者社群，持續改進';
 
   @override
-  String get welcomeOpenSourceTitle => '開源 & 透明';
-
-  @override
-  String get welcomeOpenSourceFeature1 => '100%開源代碼';
-
-  @override
-  String get welcomeOpenSourceFeature2 => '社區监督，無后门';
-
-  @override
-  String get welcomeOpenSourceFeature3 => '个人用戶免費使用';
-
-  @override
-  String get welcomeViewGitHub => '在GitHub查看源代碼';
+  String get welcomeViewGitHub => '訪問 GitHub 倉庫';
 
   @override
   String get welcomeCloudSyncTitle => '可選的云同步';
@@ -7205,12 +6130,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeCloudSyncFeature3 => '自建Supabase服務';
-
-  @override
-  String get lab => '實驗室';
-
-  @override
-  String get labDesc => '體驗實驗性功能';
 
   @override
   String get widgetManagement => '桌面小組件';
@@ -7345,9 +6264,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get disableFailed => '停用失敗';
 
   @override
-  String get openSettingsFailed => '開啟設定失敗';
-
-  @override
   String get reselectImage => '重新選擇';
 
   @override
@@ -7361,9 +6277,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get ocrBillingDesc => '掃描支付截圖自動識別金額';
-
-  @override
-  String get quickActions => '快捷功能';
 
   @override
   String get iosAutoFeatureDesc => '透過 iOS「捷徑」應用程式，實現截圖後自動識別支付資訊並記帳。設定後，每次截圖都會自動觸發識別。';
@@ -7580,12 +6493,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get ocrTime => '時間';
 
   @override
-  String get cloudSyncAndBackup => '雲同步與備份';
-
-  @override
-  String get cloudSyncAndBackupDesc => '雲端服務設定、資料同步管理';
-
-  @override
   String get cloudSyncPageTitle => '雲同步與備份';
 
   @override
@@ -7682,25 +6589,192 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aboutTelegramGroup => 'Telegram 群';
 
   @override
-  String get aboutCopied => '已複製到剪貼簿';
+  String get aboutSupportDevelopment => '支持開發';
 
   @override
-  String get cloudService => '雲端服務';
+  String get aboutSupportDevelopmentSubtitle => '請開發者喝杯咖啡';
 
   @override
-  String get cloudServiceDesc => '設定雲端儲存提供商';
+  String get logCenterTitle => '日誌中心';
 
   @override
-  String get syncManagement => '同步管理';
+  String get logCenterSubtitle => '查看應用程式執行日誌';
 
   @override
-  String get syncManagementDesc => '資料同步與備份';
+  String get logCenterSearchHint => '搜尋日誌內容或標籤...';
 
   @override
-  String get moreSettings => '更多設定';
+  String get logCenterFilterLevel => '日誌級別';
 
   @override
-  String get moreSettingsDesc => '進階雲同步選項';
+  String get logCenterFilterPlatform => '平台';
+
+  @override
+  String get logCenterTotal => '全部';
+
+  @override
+  String get logCenterFiltered => '已過濾';
+
+  @override
+  String get logCenterEmpty => '暫無日誌';
+
+  @override
+  String get logCenterExport => '匯出';
+
+  @override
+  String get logCenterClear => '清空';
+
+  @override
+  String get logCenterExportFailed => '匯出失敗';
+
+  @override
+  String get logCenterClearConfirmTitle => '清空日誌';
+
+  @override
+  String get logCenterClearConfirmMessage => '確定要清空所有日誌嗎？此操作無法復原。';
+
+  @override
+  String get logCenterCleared => '日誌已清空';
+
+  @override
+  String get logCenterCopied => '已複製到剪貼簿';
+
+  @override
+  String get configImportExportTitle => '配置匯入匯出';
+
+  @override
+  String get configImportExportSubtitle => '備份和恢復應用配置';
+
+  @override
+  String get configImportExportInfoTitle => '功能說明';
+
+  @override
+  String get configImportExportInfoMessage => '此功能用於匯出和匯入應用配置，包括雲端服務配置、AI配置等。配置檔案採用YAML格式，方便檢視和編輯。\\n\\n⚠️ 配置檔案包含敏感資訊（如API金鑰、密碼等），請妥善保管。';
+
+  @override
+  String get configExportTitle => '匯出配置';
+
+  @override
+  String get configExportSubtitle => '將目前配置匯出為YAML檔案';
+
+  @override
+  String get configExportShareSubject => 'BeeCount 配置檔案';
+
+  @override
+  String get configExportSuccess => '配置匯出成功';
+
+  @override
+  String get configExportFailed => '配置匯出失敗';
+
+  @override
+  String get configImportTitle => '匯入配置';
+
+  @override
+  String get configImportSubtitle => '從YAML檔案恢復配置';
+
+  @override
+  String get configImportNoFilePath => '未選擇檔案';
+
+  @override
+  String get configImportConfirmTitle => '確認匯入';
+
+  @override
+  String get configImportSuccess => '配置匯入成功';
+
+  @override
+  String get configImportFailed => '配置匯入失敗';
+
+  @override
+  String get configImportRestartTitle => '需要重新啟動';
+
+  @override
+  String get configImportRestartMessage => '配置已匯入，部分配置需要重新啟動應用程式後生效。';
+
+  @override
+  String get configImportExportIncludesTitle => '包含的配置項';
+
+  @override
+  String configExportSavedTo(String path) {
+    return '已儲存至: $path';
+  }
+
+  @override
+  String get configExportViewContent => '檢視內容';
+
+  @override
+  String get configExportCopyContent => '複製內容';
+
+  @override
+  String get configExportContentCopied => '已複製到剪貼簿';
+
+  @override
+  String get configExportReadFileFailed => '讀取檔案失敗';
+
+  @override
+  String get configIncludeSupabase => 'Supabase 雲端服務配置';
+
+  @override
+  String get configIncludeWebdav => 'WebDAV 雲端服務配置';
+
+  @override
+  String get configIncludeAI => 'AI 智慧識別配置';
+
+  @override
+  String get configIncludeAppSettings => '應用程式設定（語言、主題、提醒等）';
+
+  @override
+  String get configIncludeRecurringTransactions => '週期帳單';
+
+  @override
+  String get ledgersConflictTitle => '同步衝突';
+
+  @override
+  String get ledgersConflictMessage => '本地和雲端帳本資料不一致，請選擇操作：';
+
+  @override
+  String ledgersConflictLocalInfo(int count) {
+    return '本地：$count 筆帳單';
+  }
+
+  @override
+  String ledgersConflictRemoteInfo(int count) {
+    return '雲端：$count 筆帳單';
+  }
+
+  @override
+  String ledgersConflictRemoteUpdated(String time) {
+    return '雲端更新：$time';
+  }
+
+  @override
+  String ledgersConflictLocalFingerprint(String fp) {
+    return '本地指紋：$fp';
+  }
+
+  @override
+  String ledgersConflictRemoteFingerprint(String fp) {
+    return '雲端指紋：$fp';
+  }
+
+  @override
+  String get ledgersConflictUpload => '上傳到雲端';
+
+  @override
+  String get ledgersConflictDownload => '下載到本地';
+
+  @override
+  String get ledgersConflictUploading => '正在上傳...';
+
+  @override
+  String get ledgersConflictDownloading => '正在下載...';
+
+  @override
+  String get ledgersConflictUploadSuccess => '上傳成功';
+
+  @override
+  String ledgersConflictDownloadSuccess(int inserted) {
+    return '下載成功，已合併 $inserted 筆帳單';
+  }
 
   @override
   String get storageManagementTitle => '儲存空間管理';
@@ -7738,4 +6812,88 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get storageClearSuccess => '清理成功';
+
+  @override
+  String get accountNoTransactions => '無交易記錄';
+
+  @override
+  String get accountTransactionHistory => '交易歷史';
+
+  @override
+  String get accountTotalBalance => '總餘額';
+
+  @override
+  String get accountTotalExpense => '總支出';
+
+  @override
+  String get accountTotalIncome => '總收入';
+
+  @override
+  String get accountCurrencyLocked => '該帳戶已有交易記錄，無法變更幣別';
+
+  @override
+  String get commonNotice => '提示';
+
+  @override
+  String get transferTitle => '轉帳';
+
+  @override
+  String get transferFromAccount => '轉出帳戶';
+
+  @override
+  String get transferToAccount => '轉入帳戶';
+
+  @override
+  String get transferSelectAccount => '選擇帳戶';
+
+  @override
+  String get transferCreateSuccess => '轉帳記錄建立成功';
+
+  @override
+  String get transferUpdateSuccess => '轉帳記錄更新成功';
+
+  @override
+  String get transferDifferentCurrencyError => '轉帳只支援相同幣別的帳戶';
+
+  @override
+  String get transferToPrefix => '轉入';
+
+  @override
+  String get transferFromPrefix => '轉出';
+
+  @override
+  String get welcomeCategoryModeTitle => '選擇分類模式';
+
+  @override
+  String get welcomeCategoryModeDescription => '選擇適合您需求的分類結構';
+
+  @override
+  String get welcomeCategoryModeFlatTitle => '扁平分類';
+
+  @override
+  String get welcomeCategoryModeFlatDescription => '簡單快捷';
+
+  @override
+  String get welcomeCategoryModeFlatFeature1 => '扁平化結構，簡單易用';
+
+  @override
+  String get welcomeCategoryModeFlatFeature2 => '適合簡單分類需求';
+
+  @override
+  String get welcomeCategoryModeFlatFeature3 => '快速選擇，高效記帳';
+
+  @override
+  String get welcomeCategoryModeHierarchicalTitle => '階層分類';
+
+  @override
+  String get welcomeCategoryModeHierarchicalDescription => '精細管理';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature1 => '支援父子分類層級';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature2 => '更精細的交易分類';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature3 => '適合精細化管理';
 }

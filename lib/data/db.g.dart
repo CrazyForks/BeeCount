@@ -714,8 +714,22 @@ class $CategoriesTable extends Categories
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _parentIdMeta =
+      const VerificationMeta('parentId');
   @override
-  List<GeneratedColumn> get $columns => [id, name, kind, icon, sortOrder];
+  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
+      'parent_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _levelMeta = const VerificationMeta('level');
+  @override
+  late final GeneratedColumn<int> level = GeneratedColumn<int>(
+      'level', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, kind, icon, sortOrder, parentId, level];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -749,6 +763,14 @@ class $CategoriesTable extends Categories
       context.handle(_sortOrderMeta,
           sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
     }
+    if (data.containsKey('parent_id')) {
+      context.handle(_parentIdMeta,
+          parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta));
+    }
+    if (data.containsKey('level')) {
+      context.handle(
+          _levelMeta, level.isAcceptableOrUnknown(data['level']!, _levelMeta));
+    }
     return context;
   }
 
@@ -768,6 +790,10 @@ class $CategoriesTable extends Categories
           .read(DriftSqlType.string, data['${effectivePrefix}icon']),
       sortOrder: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
+      parentId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}parent_id']),
+      level: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}level'])!,
     );
   }
 
@@ -783,12 +809,16 @@ class Category extends DataClass implements Insertable<Category> {
   final String kind;
   final String? icon;
   final int sortOrder;
+  final int? parentId;
+  final int level;
   const Category(
       {required this.id,
       required this.name,
       required this.kind,
       this.icon,
-      required this.sortOrder});
+      required this.sortOrder,
+      this.parentId,
+      required this.level});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -799,6 +829,10 @@ class Category extends DataClass implements Insertable<Category> {
       map['icon'] = Variable<String>(icon);
     }
     map['sort_order'] = Variable<int>(sortOrder);
+    if (!nullToAbsent || parentId != null) {
+      map['parent_id'] = Variable<int>(parentId);
+    }
+    map['level'] = Variable<int>(level);
     return map;
   }
 
@@ -809,6 +843,10 @@ class Category extends DataClass implements Insertable<Category> {
       kind: Value(kind),
       icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
       sortOrder: Value(sortOrder),
+      parentId: parentId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentId),
+      level: Value(level),
     );
   }
 
@@ -821,6 +859,8 @@ class Category extends DataClass implements Insertable<Category> {
       kind: serializer.fromJson<String>(json['kind']),
       icon: serializer.fromJson<String?>(json['icon']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      parentId: serializer.fromJson<int?>(json['parentId']),
+      level: serializer.fromJson<int>(json['level']),
     );
   }
   @override
@@ -832,6 +872,8 @@ class Category extends DataClass implements Insertable<Category> {
       'kind': serializer.toJson<String>(kind),
       'icon': serializer.toJson<String?>(icon),
       'sortOrder': serializer.toJson<int>(sortOrder),
+      'parentId': serializer.toJson<int?>(parentId),
+      'level': serializer.toJson<int>(level),
     };
   }
 
@@ -840,13 +882,17 @@ class Category extends DataClass implements Insertable<Category> {
           String? name,
           String? kind,
           Value<String?> icon = const Value.absent(),
-          int? sortOrder}) =>
+          int? sortOrder,
+          Value<int?> parentId = const Value.absent(),
+          int? level}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
         kind: kind ?? this.kind,
         icon: icon.present ? icon.value : this.icon,
         sortOrder: sortOrder ?? this.sortOrder,
+        parentId: parentId.present ? parentId.value : this.parentId,
+        level: level ?? this.level,
       );
   Category copyWithCompanion(CategoriesCompanion data) {
     return Category(
@@ -855,6 +901,8 @@ class Category extends DataClass implements Insertable<Category> {
       kind: data.kind.present ? data.kind.value : this.kind,
       icon: data.icon.present ? data.icon.value : this.icon,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      parentId: data.parentId.present ? data.parentId.value : this.parentId,
+      level: data.level.present ? data.level.value : this.level,
     );
   }
 
@@ -865,13 +913,16 @@ class Category extends DataClass implements Insertable<Category> {
           ..write('name: $name, ')
           ..write('kind: $kind, ')
           ..write('icon: $icon, ')
-          ..write('sortOrder: $sortOrder')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('parentId: $parentId, ')
+          ..write('level: $level')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, kind, icon, sortOrder);
+  int get hashCode =>
+      Object.hash(id, name, kind, icon, sortOrder, parentId, level);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -880,7 +931,9 @@ class Category extends DataClass implements Insertable<Category> {
           other.name == this.name &&
           other.kind == this.kind &&
           other.icon == this.icon &&
-          other.sortOrder == this.sortOrder);
+          other.sortOrder == this.sortOrder &&
+          other.parentId == this.parentId &&
+          other.level == this.level);
 }
 
 class CategoriesCompanion extends UpdateCompanion<Category> {
@@ -889,12 +942,16 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<String> kind;
   final Value<String?> icon;
   final Value<int> sortOrder;
+  final Value<int?> parentId;
+  final Value<int> level;
   const CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.kind = const Value.absent(),
     this.icon = const Value.absent(),
     this.sortOrder = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.level = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
@@ -902,6 +959,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     required String kind,
     this.icon = const Value.absent(),
     this.sortOrder = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.level = const Value.absent(),
   })  : name = Value(name),
         kind = Value(kind);
   static Insertable<Category> custom({
@@ -910,6 +969,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Expression<String>? kind,
     Expression<String>? icon,
     Expression<int>? sortOrder,
+    Expression<int>? parentId,
+    Expression<int>? level,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -917,6 +978,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       if (kind != null) 'kind': kind,
       if (icon != null) 'icon': icon,
       if (sortOrder != null) 'sort_order': sortOrder,
+      if (parentId != null) 'parent_id': parentId,
+      if (level != null) 'level': level,
     });
   }
 
@@ -925,13 +988,17 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       Value<String>? name,
       Value<String>? kind,
       Value<String?>? icon,
-      Value<int>? sortOrder}) {
+      Value<int>? sortOrder,
+      Value<int?>? parentId,
+      Value<int>? level}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       kind: kind ?? this.kind,
       icon: icon ?? this.icon,
       sortOrder: sortOrder ?? this.sortOrder,
+      parentId: parentId ?? this.parentId,
+      level: level ?? this.level,
     );
   }
 
@@ -953,6 +1020,12 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
+    if (parentId.present) {
+      map['parent_id'] = Variable<int>(parentId.value);
+    }
+    if (level.present) {
+      map['level'] = Variable<int>(level.value);
+    }
     return map;
   }
 
@@ -963,7 +1036,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
           ..write('name: $name, ')
           ..write('kind: $kind, ')
           ..write('icon: $icon, ')
-          ..write('sortOrder: $sortOrder')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('parentId: $parentId, ')
+          ..write('level: $level')
           ..write(')'))
         .toString();
   }
@@ -1510,13 +1585,19 @@ class $RecurringTransactionsTable extends RecurringTransactions
       const VerificationMeta('categoryId');
   @override
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-      'category_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      'category_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _accountIdMeta =
       const VerificationMeta('accountId');
   @override
   late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
       'account_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _toAccountIdMeta =
+      const VerificationMeta('toAccountId');
+  @override
+  late final GeneratedColumn<int> toAccountId = GeneratedColumn<int>(
+      'to_account_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
@@ -1607,6 +1688,7 @@ class $RecurringTransactionsTable extends RecurringTransactions
         amount,
         categoryId,
         accountId,
+        toAccountId,
         note,
         frequency,
         interval,
@@ -1657,12 +1739,16 @@ class $RecurringTransactionsTable extends RecurringTransactions
           _categoryIdMeta,
           categoryId.isAcceptableOrUnknown(
               data['category_id']!, _categoryIdMeta));
-    } else if (isInserting) {
-      context.missing(_categoryIdMeta);
     }
     if (data.containsKey('account_id')) {
       context.handle(_accountIdMeta,
           accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta));
+    }
+    if (data.containsKey('to_account_id')) {
+      context.handle(
+          _toAccountIdMeta,
+          toAccountId.isAcceptableOrUnknown(
+              data['to_account_id']!, _toAccountIdMeta));
     }
     if (data.containsKey('note')) {
       context.handle(
@@ -1742,9 +1828,11 @@ class $RecurringTransactionsTable extends RecurringTransactions
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
       categoryId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}category_id']),
       accountId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}account_id']),
+      toAccountId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}to_account_id']),
       note: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}note']),
       frequency: attachedDatabase.typeMapping
@@ -1784,8 +1872,9 @@ class RecurringTransaction extends DataClass
   final int ledgerId;
   final String type;
   final double amount;
-  final int categoryId;
+  final int? categoryId;
   final int? accountId;
+  final int? toAccountId;
   final String? note;
   final String frequency;
   final int interval;
@@ -1803,8 +1892,9 @@ class RecurringTransaction extends DataClass
       required this.ledgerId,
       required this.type,
       required this.amount,
-      required this.categoryId,
+      this.categoryId,
       this.accountId,
+      this.toAccountId,
       this.note,
       required this.frequency,
       required this.interval,
@@ -1824,9 +1914,14 @@ class RecurringTransaction extends DataClass
     map['ledger_id'] = Variable<int>(ledgerId);
     map['type'] = Variable<String>(type);
     map['amount'] = Variable<double>(amount);
-    map['category_id'] = Variable<int>(categoryId);
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<int>(categoryId);
+    }
     if (!nullToAbsent || accountId != null) {
       map['account_id'] = Variable<int>(accountId);
+    }
+    if (!nullToAbsent || toAccountId != null) {
+      map['to_account_id'] = Variable<int>(toAccountId);
     }
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String>(note);
@@ -1861,10 +1956,15 @@ class RecurringTransaction extends DataClass
       ledgerId: Value(ledgerId),
       type: Value(type),
       amount: Value(amount),
-      categoryId: Value(categoryId),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
       accountId: accountId == null && nullToAbsent
           ? const Value.absent()
           : Value(accountId),
+      toAccountId: toAccountId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(toAccountId),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       frequency: Value(frequency),
       interval: Value(interval),
@@ -1898,8 +1998,9 @@ class RecurringTransaction extends DataClass
       ledgerId: serializer.fromJson<int>(json['ledgerId']),
       type: serializer.fromJson<String>(json['type']),
       amount: serializer.fromJson<double>(json['amount']),
-      categoryId: serializer.fromJson<int>(json['categoryId']),
+      categoryId: serializer.fromJson<int?>(json['categoryId']),
       accountId: serializer.fromJson<int?>(json['accountId']),
+      toAccountId: serializer.fromJson<int?>(json['toAccountId']),
       note: serializer.fromJson<String?>(json['note']),
       frequency: serializer.fromJson<String>(json['frequency']),
       interval: serializer.fromJson<int>(json['interval']),
@@ -1923,8 +2024,9 @@ class RecurringTransaction extends DataClass
       'ledgerId': serializer.toJson<int>(ledgerId),
       'type': serializer.toJson<String>(type),
       'amount': serializer.toJson<double>(amount),
-      'categoryId': serializer.toJson<int>(categoryId),
+      'categoryId': serializer.toJson<int?>(categoryId),
       'accountId': serializer.toJson<int?>(accountId),
+      'toAccountId': serializer.toJson<int?>(toAccountId),
       'note': serializer.toJson<String?>(note),
       'frequency': serializer.toJson<String>(frequency),
       'interval': serializer.toJson<int>(interval),
@@ -1945,8 +2047,9 @@ class RecurringTransaction extends DataClass
           int? ledgerId,
           String? type,
           double? amount,
-          int? categoryId,
+          Value<int?> categoryId = const Value.absent(),
           Value<int?> accountId = const Value.absent(),
+          Value<int?> toAccountId = const Value.absent(),
           Value<String?> note = const Value.absent(),
           String? frequency,
           int? interval,
@@ -1964,8 +2067,9 @@ class RecurringTransaction extends DataClass
         ledgerId: ledgerId ?? this.ledgerId,
         type: type ?? this.type,
         amount: amount ?? this.amount,
-        categoryId: categoryId ?? this.categoryId,
+        categoryId: categoryId.present ? categoryId.value : this.categoryId,
         accountId: accountId.present ? accountId.value : this.accountId,
+        toAccountId: toAccountId.present ? toAccountId.value : this.toAccountId,
         note: note.present ? note.value : this.note,
         frequency: frequency ?? this.frequency,
         interval: interval ?? this.interval,
@@ -1990,6 +2094,8 @@ class RecurringTransaction extends DataClass
       categoryId:
           data.categoryId.present ? data.categoryId.value : this.categoryId,
       accountId: data.accountId.present ? data.accountId.value : this.accountId,
+      toAccountId:
+          data.toAccountId.present ? data.toAccountId.value : this.toAccountId,
       note: data.note.present ? data.note.value : this.note,
       frequency: data.frequency.present ? data.frequency.value : this.frequency,
       interval: data.interval.present ? data.interval.value : this.interval,
@@ -2018,6 +2124,7 @@ class RecurringTransaction extends DataClass
           ..write('amount: $amount, ')
           ..write('categoryId: $categoryId, ')
           ..write('accountId: $accountId, ')
+          ..write('toAccountId: $toAccountId, ')
           ..write('note: $note, ')
           ..write('frequency: $frequency, ')
           ..write('interval: $interval, ')
@@ -2042,6 +2149,7 @@ class RecurringTransaction extends DataClass
       amount,
       categoryId,
       accountId,
+      toAccountId,
       note,
       frequency,
       interval,
@@ -2064,6 +2172,7 @@ class RecurringTransaction extends DataClass
           other.amount == this.amount &&
           other.categoryId == this.categoryId &&
           other.accountId == this.accountId &&
+          other.toAccountId == this.toAccountId &&
           other.note == this.note &&
           other.frequency == this.frequency &&
           other.interval == this.interval &&
@@ -2084,8 +2193,9 @@ class RecurringTransactionsCompanion
   final Value<int> ledgerId;
   final Value<String> type;
   final Value<double> amount;
-  final Value<int> categoryId;
+  final Value<int?> categoryId;
   final Value<int?> accountId;
+  final Value<int?> toAccountId;
   final Value<String?> note;
   final Value<String> frequency;
   final Value<int> interval;
@@ -2105,6 +2215,7 @@ class RecurringTransactionsCompanion
     this.amount = const Value.absent(),
     this.categoryId = const Value.absent(),
     this.accountId = const Value.absent(),
+    this.toAccountId = const Value.absent(),
     this.note = const Value.absent(),
     this.frequency = const Value.absent(),
     this.interval = const Value.absent(),
@@ -2123,8 +2234,9 @@ class RecurringTransactionsCompanion
     required int ledgerId,
     required String type,
     required double amount,
-    required int categoryId,
+    this.categoryId = const Value.absent(),
     this.accountId = const Value.absent(),
+    this.toAccountId = const Value.absent(),
     this.note = const Value.absent(),
     required String frequency,
     this.interval = const Value.absent(),
@@ -2140,7 +2252,6 @@ class RecurringTransactionsCompanion
   })  : ledgerId = Value(ledgerId),
         type = Value(type),
         amount = Value(amount),
-        categoryId = Value(categoryId),
         frequency = Value(frequency),
         startDate = Value(startDate);
   static Insertable<RecurringTransaction> custom({
@@ -2150,6 +2261,7 @@ class RecurringTransactionsCompanion
     Expression<double>? amount,
     Expression<int>? categoryId,
     Expression<int>? accountId,
+    Expression<int>? toAccountId,
     Expression<String>? note,
     Expression<String>? frequency,
     Expression<int>? interval,
@@ -2170,6 +2282,7 @@ class RecurringTransactionsCompanion
       if (amount != null) 'amount': amount,
       if (categoryId != null) 'category_id': categoryId,
       if (accountId != null) 'account_id': accountId,
+      if (toAccountId != null) 'to_account_id': toAccountId,
       if (note != null) 'note': note,
       if (frequency != null) 'frequency': frequency,
       if (interval != null) 'interval': interval,
@@ -2190,8 +2303,9 @@ class RecurringTransactionsCompanion
       Value<int>? ledgerId,
       Value<String>? type,
       Value<double>? amount,
-      Value<int>? categoryId,
+      Value<int?>? categoryId,
       Value<int?>? accountId,
+      Value<int?>? toAccountId,
       Value<String?>? note,
       Value<String>? frequency,
       Value<int>? interval,
@@ -2211,6 +2325,7 @@ class RecurringTransactionsCompanion
       amount: amount ?? this.amount,
       categoryId: categoryId ?? this.categoryId,
       accountId: accountId ?? this.accountId,
+      toAccountId: toAccountId ?? this.toAccountId,
       note: note ?? this.note,
       frequency: frequency ?? this.frequency,
       interval: interval ?? this.interval,
@@ -2246,6 +2361,9 @@ class RecurringTransactionsCompanion
     }
     if (accountId.present) {
       map['account_id'] = Variable<int>(accountId.value);
+    }
+    if (toAccountId.present) {
+      map['to_account_id'] = Variable<int>(toAccountId.value);
     }
     if (note.present) {
       map['note'] = Variable<String>(note.value);
@@ -2295,6 +2413,7 @@ class RecurringTransactionsCompanion
           ..write('amount: $amount, ')
           ..write('categoryId: $categoryId, ')
           ..write('accountId: $accountId, ')
+          ..write('toAccountId: $toAccountId, ')
           ..write('note: $note, ')
           ..write('frequency: $frequency, ')
           ..write('interval: $interval, ')
@@ -2685,6 +2804,8 @@ typedef $$CategoriesTableCreateCompanionBuilder = CategoriesCompanion Function({
   required String kind,
   Value<String?> icon,
   Value<int> sortOrder,
+  Value<int?> parentId,
+  Value<int> level,
 });
 typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
   Value<int> id,
@@ -2692,6 +2813,8 @@ typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
   Value<String> kind,
   Value<String?> icon,
   Value<int> sortOrder,
+  Value<int?> parentId,
+  Value<int> level,
 });
 
 class $$CategoriesTableFilterComposer
@@ -2717,6 +2840,12 @@ class $$CategoriesTableFilterComposer
 
   ColumnFilters<int> get sortOrder => $composableBuilder(
       column: $table.sortOrder, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get parentId => $composableBuilder(
+      column: $table.parentId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get level => $composableBuilder(
+      column: $table.level, builder: (column) => ColumnFilters(column));
 }
 
 class $$CategoriesTableOrderingComposer
@@ -2742,6 +2871,12 @@ class $$CategoriesTableOrderingComposer
 
   ColumnOrderings<int> get sortOrder => $composableBuilder(
       column: $table.sortOrder, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get parentId => $composableBuilder(
+      column: $table.parentId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get level => $composableBuilder(
+      column: $table.level, builder: (column) => ColumnOrderings(column));
 }
 
 class $$CategoriesTableAnnotationComposer
@@ -2767,6 +2902,12 @@ class $$CategoriesTableAnnotationComposer
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<int> get parentId =>
+      $composableBuilder(column: $table.parentId, builder: (column) => column);
+
+  GeneratedColumn<int> get level =>
+      $composableBuilder(column: $table.level, builder: (column) => column);
 }
 
 class $$CategoriesTableTableManager extends RootTableManager<
@@ -2797,6 +2938,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             Value<String> kind = const Value.absent(),
             Value<String?> icon = const Value.absent(),
             Value<int> sortOrder = const Value.absent(),
+            Value<int?> parentId = const Value.absent(),
+            Value<int> level = const Value.absent(),
           }) =>
               CategoriesCompanion(
             id: id,
@@ -2804,6 +2947,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             kind: kind,
             icon: icon,
             sortOrder: sortOrder,
+            parentId: parentId,
+            level: level,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -2811,6 +2956,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             required String kind,
             Value<String?> icon = const Value.absent(),
             Value<int> sortOrder = const Value.absent(),
+            Value<int?> parentId = const Value.absent(),
+            Value<int> level = const Value.absent(),
           }) =>
               CategoriesCompanion.insert(
             id: id,
@@ -2818,6 +2965,8 @@ class $$CategoriesTableTableManager extends RootTableManager<
             kind: kind,
             icon: icon,
             sortOrder: sortOrder,
+            parentId: parentId,
+            level: level,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -3086,8 +3235,9 @@ typedef $$RecurringTransactionsTableCreateCompanionBuilder
   required int ledgerId,
   required String type,
   required double amount,
-  required int categoryId,
+  Value<int?> categoryId,
   Value<int?> accountId,
+  Value<int?> toAccountId,
   Value<String?> note,
   required String frequency,
   Value<int> interval,
@@ -3107,8 +3257,9 @@ typedef $$RecurringTransactionsTableUpdateCompanionBuilder
   Value<int> ledgerId,
   Value<String> type,
   Value<double> amount,
-  Value<int> categoryId,
+  Value<int?> categoryId,
   Value<int?> accountId,
+  Value<int?> toAccountId,
   Value<String?> note,
   Value<String> frequency,
   Value<int> interval,
@@ -3149,6 +3300,9 @@ class $$RecurringTransactionsTableFilterComposer
 
   ColumnFilters<int> get accountId => $composableBuilder(
       column: $table.accountId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get toAccountId => $composableBuilder(
+      column: $table.toAccountId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get note => $composableBuilder(
       column: $table.note, builder: (column) => ColumnFilters(column));
@@ -3215,6 +3369,9 @@ class $$RecurringTransactionsTableOrderingComposer
   ColumnOrderings<int> get accountId => $composableBuilder(
       column: $table.accountId, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get toAccountId => $composableBuilder(
+      column: $table.toAccountId, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get note => $composableBuilder(
       column: $table.note, builder: (column) => ColumnOrderings(column));
 
@@ -3279,6 +3436,9 @@ class $$RecurringTransactionsTableAnnotationComposer
 
   GeneratedColumn<int> get accountId =>
       $composableBuilder(column: $table.accountId, builder: (column) => column);
+
+  GeneratedColumn<int> get toAccountId => $composableBuilder(
+      column: $table.toAccountId, builder: (column) => column);
 
   GeneratedColumn<String> get note =>
       $composableBuilder(column: $table.note, builder: (column) => column);
@@ -3352,8 +3512,9 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             Value<int> ledgerId = const Value.absent(),
             Value<String> type = const Value.absent(),
             Value<double> amount = const Value.absent(),
-            Value<int> categoryId = const Value.absent(),
+            Value<int?> categoryId = const Value.absent(),
             Value<int?> accountId = const Value.absent(),
+            Value<int?> toAccountId = const Value.absent(),
             Value<String?> note = const Value.absent(),
             Value<String> frequency = const Value.absent(),
             Value<int> interval = const Value.absent(),
@@ -3374,6 +3535,7 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             amount: amount,
             categoryId: categoryId,
             accountId: accountId,
+            toAccountId: toAccountId,
             note: note,
             frequency: frequency,
             interval: interval,
@@ -3392,8 +3554,9 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             required int ledgerId,
             required String type,
             required double amount,
-            required int categoryId,
+            Value<int?> categoryId = const Value.absent(),
             Value<int?> accountId = const Value.absent(),
+            Value<int?> toAccountId = const Value.absent(),
             Value<String?> note = const Value.absent(),
             required String frequency,
             Value<int> interval = const Value.absent(),
@@ -3414,6 +3577,7 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             amount: amount,
             categoryId: categoryId,
             accountId: accountId,
+            toAccountId: toAccountId,
             note: note,
             frequency: frequency,
             interval: interval,

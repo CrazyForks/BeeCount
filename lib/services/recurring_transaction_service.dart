@@ -158,6 +158,7 @@ class RecurringTransactionService {
                   amount: currentRecurring.amount,
                   categoryId: Value(currentRecurring.categoryId),
                   accountId: Value(currentRecurring.accountId),
+                  toAccountId: Value(currentRecurring.toAccountId),
                   happenedAt: Value(nextDate),
                   note: Value(currentRecurring.note),
                   recurringId: Value(currentRecurring.id),

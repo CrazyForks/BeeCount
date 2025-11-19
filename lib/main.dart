@@ -8,7 +8,6 @@ import 'theme.dart';
 import 'providers.dart';
 import 'styles/colors.dart';
 import 'providers/font_scale_provider.dart';
-import 'utils/route_logger.dart';
 import 'utils/notification_factory.dart';
 import 'pages/auth/splash_page.dart';
 import 'pages/auth/welcome_page.dart';
@@ -411,7 +410,6 @@ class MainApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: theme,
         themeMode: ThemeMode.light,
-        navigatorObservers: [LoggingNavigatorObserver()],
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -422,11 +420,6 @@ class MainApp extends ConsumerWidget {
           Locale('en'),
           Locale('zh'),
           Locale('zh', 'TW'),
-          Locale('ja'),
-          Locale('ko'),
-          Locale('es'),
-          Locale('fr'),
-          Locale('de'),
         ],
         locale: selectedLanguage,
         // 显式命名根路由，便于路由日志与 popUntil 精确识别

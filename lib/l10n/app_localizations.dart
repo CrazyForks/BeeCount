@@ -5,12 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
-import 'app_localizations_es.dart';
-import 'app_localizations_fr.dart';
-import 'app_localizations_ja.dart';
-import 'app_localizations_ko.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -97,11 +92,6 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('de'),
-    Locale('es'),
-    Locale('fr'),
-    Locale('ja'),
-    Locale('ko'),
     Locale('zh'),
     Locale('zh', 'TW')
   ];
@@ -166,35 +156,17 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get commonEdit;
 
-  /// No description provided for @commonAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get commonAdd;
-
   /// No description provided for @commonOk.
   ///
   /// In en, this message translates to:
   /// **'OK'**
   String get commonOk;
 
-  /// No description provided for @commonYes.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes'**
-  String get commonYes;
-
   /// No description provided for @commonNo.
   ///
   /// In en, this message translates to:
   /// **'No'**
   String get commonNo;
-
-  /// No description provided for @commonLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
-  String get commonLoading;
 
   /// No description provided for @commonEmpty.
   ///
@@ -219,12 +191,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed'**
   String get commonFailed;
-
-  /// No description provided for @commonRetry.
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get commonRetry;
 
   /// No description provided for @commonBack.
   ///
@@ -256,12 +222,6 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get commonClose;
 
-  /// No description provided for @commonCopy.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy'**
-  String get commonCopy;
-
   /// No description provided for @commonSearch.
   ///
   /// In en, this message translates to:
@@ -274,24 +234,6 @@ abstract class AppLocalizations {
   /// **'Note...'**
   String get commonNoteHint;
 
-  /// No description provided for @commonFilter.
-  ///
-  /// In en, this message translates to:
-  /// **'Filter'**
-  String get commonFilter;
-
-  /// No description provided for @commonClear.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear'**
-  String get commonClear;
-
-  /// No description provided for @commonSelectAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Select All'**
-  String get commonSelectAll;
-
   /// No description provided for @commonSettings.
   ///
   /// In en, this message translates to:
@@ -303,12 +245,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Help'**
   String get commonHelp;
-
-  /// No description provided for @commonAbout.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get commonAbout;
 
   /// No description provided for @commonLanguage.
   ///
@@ -382,12 +318,6 @@ abstract class AppLocalizations {
   /// **'Sunday'**
   String get commonWeekdaySunday;
 
-  /// No description provided for @homeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Bee Accounting'**
-  String get homeTitle;
-
   /// No description provided for @homeIncome.
   ///
   /// In en, this message translates to:
@@ -406,53 +336,11 @@ abstract class AppLocalizations {
   /// **'Balance'**
   String get homeBalance;
 
-  /// No description provided for @homeTotal.
-  ///
-  /// In en, this message translates to:
-  /// **'Total'**
-  String get homeTotal;
-
-  /// No description provided for @homeAverage.
-  ///
-  /// In en, this message translates to:
-  /// **'Average'**
-  String get homeAverage;
-
-  /// No description provided for @homeDailyAvg.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Avg'**
-  String get homeDailyAvg;
-
-  /// No description provided for @homeMonthlyAvg.
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly Avg'**
-  String get homeMonthlyAvg;
-
   /// No description provided for @homeNoRecords.
   ///
   /// In en, this message translates to:
   /// **'No records yet'**
   String get homeNoRecords;
-
-  /// No description provided for @homeAddRecord.
-  ///
-  /// In en, this message translates to:
-  /// **'Add record by tapping the plus button'**
-  String get homeAddRecord;
-
-  /// No description provided for @homeHideAmounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide amounts'**
-  String get homeHideAmounts;
-
-  /// No description provided for @homeShowAmounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Show amounts'**
-  String get homeShowAmounts;
 
   /// No description provided for @homeSelectDate.
   ///
@@ -579,18 +467,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No matching results found'**
   String get searchNoResults;
-
-  /// No description provided for @searchResultsEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No matching results found'**
-  String get searchResultsEmpty;
-
-  /// No description provided for @searchResultsEmptyHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Try other keywords or adjust filter conditions'**
-  String get searchResultsEmptyHint;
 
   /// No description provided for @searchBatchMode.
   ///
@@ -730,12 +606,6 @@ abstract class AppLocalizations {
   /// **'{count} results'**
   String searchResultsCount(Object count);
 
-  /// No description provided for @analyticsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Analytics'**
-  String get analyticsTitle;
-
   /// No description provided for @analyticsMonth.
   ///
   /// In en, this message translates to:
@@ -754,23 +624,11 @@ abstract class AppLocalizations {
   /// **'All'**
   String get analyticsAll;
 
-  /// No description provided for @analyticsSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'Summary'**
-  String get analyticsSummary;
-
   /// No description provided for @analyticsCategoryRanking.
   ///
   /// In en, this message translates to:
   /// **'Category Ranking'**
   String get analyticsCategoryRanking;
-
-  /// No description provided for @analyticsCurrentPeriod.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Period'**
-  String get analyticsCurrentPeriod;
 
   /// No description provided for @analyticsNoDataSubtext.
   ///
@@ -880,17 +738,17 @@ abstract class AppLocalizations {
   /// **'Clear Ledger'**
   String get ledgersClear;
 
-  /// No description provided for @ledgersClearConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear current ledger?'**
-  String get ledgersClearConfirm;
-
   /// No description provided for @ledgersClearMessage.
   ///
   /// In en, this message translates to:
   /// **'Are you sure to clear all transactions in ledger \"{name}\"? This action cannot be undone.\\nThe ledger will be kept, only transaction data will be deleted.'**
   String ledgersClearMessage(Object name);
+
+  /// No description provided for @ledgerDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Ledger'**
+  String get ledgerDefaultName;
 
   /// No description provided for @ledgersEdit.
   ///
@@ -964,12 +822,6 @@ abstract class AppLocalizations {
   /// **'Local ledger deleted'**
   String get ledgersDeleteLocalSuccess;
 
-  /// No description provided for @ledgersRecordsDeleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Deleted {count} records'**
-  String ledgersRecordsDeleted(int count);
-
   /// No description provided for @ledgersName.
   ///
   /// In en, this message translates to:
@@ -981,18 +833,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default Ledger'**
   String get ledgersDefaultLedgerName;
-
-  /// No description provided for @ledgersDefaultAccountName.
-  ///
-  /// In en, this message translates to:
-  /// **'Cash'**
-  String get ledgersDefaultAccountName;
-
-  /// No description provided for @accountTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Account'**
-  String get accountTitle;
 
   /// No description provided for @ledgersCurrency.
   ///
@@ -1036,47 +876,11 @@ abstract class AppLocalizations {
   /// **'Balance: {balance}'**
   String ledgersBalance(String balance);
 
-  /// No description provided for @ledgerCardTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'transactions'**
-  String get ledgerCardTransactions;
-
-  /// No description provided for @ledgerCardRemoteOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud only'**
-  String get ledgerCardRemoteOnly;
-
   /// No description provided for @ledgerCardDownloadCloud.
   ///
   /// In en, this message translates to:
   /// **'Download from Cloud'**
   String get ledgerCardDownloadCloud;
-
-  /// No description provided for @ledgerCardJustNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Just now'**
-  String get ledgerCardJustNow;
-
-  /// No description provided for @ledgerCardMinutesAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{minutes} minutes ago'**
-  String ledgerCardMinutesAgo(int minutes);
-
-  /// No description provided for @ledgerCardHoursAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{hours} hours ago'**
-  String ledgerCardHoursAgo(int hours);
-
-  /// No description provided for @ledgerCardDaysAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{days} days ago'**
-  String ledgerCardDaysAgo(int days);
 
   /// No description provided for @ledgersLocal.
   ///
@@ -1168,6 +972,12 @@ abstract class AppLocalizations {
   /// **'Cloud ledger deleted'**
   String get ledgersDeleteRemoteSuccess;
 
+  /// No description provided for @ledgersCannotDeleteLastOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot delete the last ledger'**
+  String get ledgersCannotDeleteLastOne;
+
   /// No description provided for @ledgersRestoreAllTitle.
   ///
   /// In en, this message translates to:
@@ -1234,12 +1044,6 @@ abstract class AppLocalizations {
   /// **'Default Category'**
   String get categoryDefault;
 
-  /// No description provided for @categoryCustomTag.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom'**
-  String get categoryCustomTag;
-
   /// No description provided for @categoryReorderTip.
   ///
   /// In en, this message translates to:
@@ -1257,12 +1061,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Icon'**
   String get iconPickerTitle;
-
-  /// No description provided for @iconCategoryFood.
-  ///
-  /// In en, this message translates to:
-  /// **'Food'**
-  String get iconCategoryFood;
 
   /// No description provided for @iconCategoryTransport.
   ///
@@ -1335,12 +1133,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Import Bills'**
   String get importTitle;
-
-  /// No description provided for @importSelectFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select a file to import (CSV/TSV/XLSX supported)'**
-  String get importSelectFile;
 
   /// No description provided for @importBillType.
   ///
@@ -1504,24 +1296,6 @@ abstract class AppLocalizations {
   /// **'Import Complete'**
   String get importCompleteTitle;
 
-  /// No description provided for @importCompletedCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Successfully imported {count} records'**
-  String importCompletedCount(Object count);
-
-  /// No description provided for @importFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Import Failed'**
-  String get importFailed;
-
-  /// No description provided for @importFailedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Import failed: {error}'**
-  String importFailedMessage(Object error);
-
   /// No description provided for @importSelectCategoryFirst.
   ///
   /// In en, this message translates to:
@@ -1606,35 +1380,11 @@ abstract class AppLocalizations {
   /// **'Mine'**
   String get mineTitle;
 
-  /// No description provided for @mineSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get mineSettings;
-
-  /// No description provided for @mineTheme.
-  ///
-  /// In en, this message translates to:
-  /// **'Theme Settings'**
-  String get mineTheme;
-
-  /// No description provided for @mineFont.
-  ///
-  /// In en, this message translates to:
-  /// **'Font Settings'**
-  String get mineFont;
-
   /// No description provided for @mineReminder.
   ///
   /// In en, this message translates to:
   /// **'Reminder Settings'**
   String get mineReminder;
-
-  /// No description provided for @mineData.
-  ///
-  /// In en, this message translates to:
-  /// **'Data Management'**
-  String get mineData;
 
   /// No description provided for @mineImport.
   ///
@@ -1654,18 +1404,6 @@ abstract class AppLocalizations {
   /// **'Cloud Service'**
   String get mineCloud;
 
-  /// No description provided for @mineAbout.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get mineAbout;
-
-  /// No description provided for @mineVersion.
-  ///
-  /// In en, this message translates to:
-  /// **'Version'**
-  String get mineVersion;
-
   /// No description provided for @mineUpdate.
   ///
   /// In en, this message translates to:
@@ -1677,12 +1415,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language Settings'**
   String get mineLanguageSettings;
-
-  /// No description provided for @mineLanguageSettingsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch application language'**
-  String get mineLanguageSettingsSubtitle;
 
   /// No description provided for @languageTitle.
   ///
@@ -1719,48 +1451,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this record?'**
   String get deleteConfirmMessage;
-
-  /// No description provided for @logCopied.
-  ///
-  /// In en, this message translates to:
-  /// **'Log copied'**
-  String get logCopied;
-
-  /// No description provided for @waitingRestore.
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting for restore task to start...'**
-  String get waitingRestore;
-
-  /// No description provided for @restoreTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud Restore'**
-  String get restoreTitle;
-
-  /// No description provided for @copyLog.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy Log'**
-  String get copyLog;
-
-  /// No description provided for @restoreProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Restoring ({current}/{total})'**
-  String restoreProgress(Object current, Object total);
-
-  /// No description provided for @restorePreparing.
-  ///
-  /// In en, this message translates to:
-  /// **'Preparing...'**
-  String get restorePreparing;
-
-  /// No description provided for @restoreLedgerProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Ledger: {ledger}  Records: {done}/{total}'**
-  String restoreLedgerProgress(String ledger, int done, int total);
 
   /// No description provided for @mineSlogan.
   ///
@@ -1809,18 +1499,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Generating share poster...'**
   String get mineShareGenerating;
-
-  /// No description provided for @mineShareSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved Successfully'**
-  String get mineShareSuccess;
-
-  /// No description provided for @mineShareSuccessMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Share poster has been saved to gallery'**
-  String get mineShareSuccessMessage;
 
   /// No description provided for @mineShareFailed.
   ///
@@ -1882,12 +1560,6 @@ abstract class AppLocalizations {
   /// **'Scan to visit open source project'**
   String get sharePosterScanText;
 
-  /// No description provided for @sharePosterPreviewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Share Poster Preview'**
-  String get sharePosterPreviewTitle;
-
   /// No description provided for @sharePosterSave.
   ///
   /// In en, this message translates to:
@@ -1947,18 +1619,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading...'**
   String get mineCloudServiceLoading;
-
-  /// No description provided for @mineCloudServiceError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error: {error}'**
-  String mineCloudServiceError(Object error);
-
-  /// No description provided for @mineCloudServiceDefault.
-  ///
-  /// In en, this message translates to:
-  /// **'Default Cloud (Enabled)'**
-  String get mineCloudServiceDefault;
 
   /// No description provided for @mineCloudServiceOffline.
   ///
@@ -2224,12 +1884,6 @@ abstract class AppLocalizations {
   /// **'Login required to enable'**
   String get mineAutoSyncNeedLogin;
 
-  /// No description provided for @mineAutoSyncNeedCloudService.
-  ///
-  /// In en, this message translates to:
-  /// **'Available in cloud service mode only'**
-  String get mineAutoSyncNeedCloudService;
-
   /// No description provided for @mineImportProgressTitle.
   ///
   /// In en, this message translates to:
@@ -2247,12 +1901,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Import complete'**
   String get mineImportCompleteTitle;
-
-  /// No description provided for @mineImportCompleteSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Success {ok}, Failed {fail}'**
-  String mineImportCompleteSubtitle(Object fail, Object ok);
 
   /// No description provided for @mineCategoryManagement.
   ///
@@ -2320,35 +1968,11 @@ abstract class AppLocalizations {
   /// **'Adjust text and UI element sizes'**
   String get mineDisplayScaleSubtitle;
 
-  /// No description provided for @mineAboutTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get mineAboutTitle;
-
-  /// No description provided for @mineAboutMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'App: Bee Accounting\nVersion: {version}\nSource: https://github.com/TNT-Likely/BeeCount\nLicense: See LICENSE in repository'**
-  String mineAboutMessage(Object version);
-
-  /// No description provided for @mineAboutOpenGitHub.
-  ///
-  /// In en, this message translates to:
-  /// **'Open GitHub'**
-  String get mineAboutOpenGitHub;
-
   /// No description provided for @mineCheckUpdate.
   ///
   /// In en, this message translates to:
   /// **'Check Update'**
   String get mineCheckUpdate;
-
-  /// No description provided for @mineCheckUpdateInProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Checking update...'**
-  String get mineCheckUpdateInProgress;
 
   /// No description provided for @mineCheckUpdateSubtitle.
   ///
@@ -2397,30 +2021,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Star the project on GitHub'**
   String get mineSupportAuthorSubtitle;
-
-  /// No description provided for @mineRefreshStats.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh Stats (Debug)'**
-  String get mineRefreshStats;
-
-  /// No description provided for @mineRefreshStatsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Trigger global stats provider recalculation'**
-  String get mineRefreshStatsSubtitle;
-
-  /// No description provided for @mineRefreshSync.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh Sync Status (Debug)'**
-  String get mineRefreshSync;
-
-  /// No description provided for @mineRefreshSyncSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Trigger sync status provider refresh'**
-  String get mineRefreshSyncSubtitle;
 
   /// No description provided for @categoryEditTitle.
   ///
@@ -2542,342 +2142,6 @@ abstract class AppLocalizations {
   /// **'Default categories cannot be modified, but you can view details and migrate data'**
   String get categoryDefaultMessage;
 
-  /// No description provided for @categoryNameDining.
-  ///
-  /// In en, this message translates to:
-  /// **'Dining'**
-  String get categoryNameDining;
-
-  /// No description provided for @categoryNameTransport.
-  ///
-  /// In en, this message translates to:
-  /// **'Transport'**
-  String get categoryNameTransport;
-
-  /// No description provided for @categoryNameShopping.
-  ///
-  /// In en, this message translates to:
-  /// **'Shopping'**
-  String get categoryNameShopping;
-
-  /// No description provided for @categoryNameEntertainment.
-  ///
-  /// In en, this message translates to:
-  /// **'Entertainment'**
-  String get categoryNameEntertainment;
-
-  /// No description provided for @categoryNameHome.
-  ///
-  /// In en, this message translates to:
-  /// **'Home'**
-  String get categoryNameHome;
-
-  /// No description provided for @categoryNameFamily.
-  ///
-  /// In en, this message translates to:
-  /// **'Family'**
-  String get categoryNameFamily;
-
-  /// No description provided for @categoryNameCommunication.
-  ///
-  /// In en, this message translates to:
-  /// **'Communication'**
-  String get categoryNameCommunication;
-
-  /// No description provided for @categoryNameUtilities.
-  ///
-  /// In en, this message translates to:
-  /// **'Utilities'**
-  String get categoryNameUtilities;
-
-  /// No description provided for @categoryNameHousing.
-  ///
-  /// In en, this message translates to:
-  /// **'Housing'**
-  String get categoryNameHousing;
-
-  /// No description provided for @categoryNameMedical.
-  ///
-  /// In en, this message translates to:
-  /// **'Medical'**
-  String get categoryNameMedical;
-
-  /// No description provided for @categoryNameEducation.
-  ///
-  /// In en, this message translates to:
-  /// **'Education'**
-  String get categoryNameEducation;
-
-  /// No description provided for @categoryNamePets.
-  ///
-  /// In en, this message translates to:
-  /// **'Pets'**
-  String get categoryNamePets;
-
-  /// No description provided for @categoryNameSports.
-  ///
-  /// In en, this message translates to:
-  /// **'Sports'**
-  String get categoryNameSports;
-
-  /// No description provided for @categoryNameDigital.
-  ///
-  /// In en, this message translates to:
-  /// **'Digital'**
-  String get categoryNameDigital;
-
-  /// No description provided for @categoryNameTravel.
-  ///
-  /// In en, this message translates to:
-  /// **'Travel'**
-  String get categoryNameTravel;
-
-  /// No description provided for @categoryNameAlcoholTobacco.
-  ///
-  /// In en, this message translates to:
-  /// **'Alcohol & Tobacco'**
-  String get categoryNameAlcoholTobacco;
-
-  /// No description provided for @categoryNameBabyCare.
-  ///
-  /// In en, this message translates to:
-  /// **'Baby Care'**
-  String get categoryNameBabyCare;
-
-  /// No description provided for @categoryNameBeauty.
-  ///
-  /// In en, this message translates to:
-  /// **'Beauty'**
-  String get categoryNameBeauty;
-
-  /// No description provided for @categoryNameRepair.
-  ///
-  /// In en, this message translates to:
-  /// **'Repair'**
-  String get categoryNameRepair;
-
-  /// No description provided for @categoryNameSocial.
-  ///
-  /// In en, this message translates to:
-  /// **'Social'**
-  String get categoryNameSocial;
-
-  /// No description provided for @categoryNameLearning.
-  ///
-  /// In en, this message translates to:
-  /// **'Learning'**
-  String get categoryNameLearning;
-
-  /// No description provided for @categoryNameCar.
-  ///
-  /// In en, this message translates to:
-  /// **'Car'**
-  String get categoryNameCar;
-
-  /// No description provided for @categoryNameTaxi.
-  ///
-  /// In en, this message translates to:
-  /// **'Taxi'**
-  String get categoryNameTaxi;
-
-  /// No description provided for @categoryNameSubway.
-  ///
-  /// In en, this message translates to:
-  /// **'Subway'**
-  String get categoryNameSubway;
-
-  /// No description provided for @categoryNameDelivery.
-  ///
-  /// In en, this message translates to:
-  /// **'Delivery'**
-  String get categoryNameDelivery;
-
-  /// No description provided for @categoryNameProperty.
-  ///
-  /// In en, this message translates to:
-  /// **'Property'**
-  String get categoryNameProperty;
-
-  /// No description provided for @categoryNameParking.
-  ///
-  /// In en, this message translates to:
-  /// **'Parking'**
-  String get categoryNameParking;
-
-  /// No description provided for @categoryNameDonation.
-  ///
-  /// In en, this message translates to:
-  /// **'Donation'**
-  String get categoryNameDonation;
-
-  /// No description provided for @categoryNameGift.
-  ///
-  /// In en, this message translates to:
-  /// **'Gift'**
-  String get categoryNameGift;
-
-  /// No description provided for @categoryNameTax.
-  ///
-  /// In en, this message translates to:
-  /// **'Tax'**
-  String get categoryNameTax;
-
-  /// No description provided for @categoryNameBeverage.
-  ///
-  /// In en, this message translates to:
-  /// **'Beverage'**
-  String get categoryNameBeverage;
-
-  /// No description provided for @categoryNameClothing.
-  ///
-  /// In en, this message translates to:
-  /// **'Clothing'**
-  String get categoryNameClothing;
-
-  /// No description provided for @categoryNameSnacks.
-  ///
-  /// In en, this message translates to:
-  /// **'Snacks'**
-  String get categoryNameSnacks;
-
-  /// No description provided for @categoryNameRedPacket.
-  ///
-  /// In en, this message translates to:
-  /// **'Red Packet'**
-  String get categoryNameRedPacket;
-
-  /// No description provided for @categoryNameFruit.
-  ///
-  /// In en, this message translates to:
-  /// **'Fruit'**
-  String get categoryNameFruit;
-
-  /// No description provided for @categoryNameGame.
-  ///
-  /// In en, this message translates to:
-  /// **'Game'**
-  String get categoryNameGame;
-
-  /// No description provided for @categoryNameBook.
-  ///
-  /// In en, this message translates to:
-  /// **'Book'**
-  String get categoryNameBook;
-
-  /// No description provided for @categoryNameLover.
-  ///
-  /// In en, this message translates to:
-  /// **'Lover'**
-  String get categoryNameLover;
-
-  /// No description provided for @categoryNameDecoration.
-  ///
-  /// In en, this message translates to:
-  /// **'Decoration'**
-  String get categoryNameDecoration;
-
-  /// No description provided for @categoryNameDailyGoods.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Goods'**
-  String get categoryNameDailyGoods;
-
-  /// No description provided for @categoryNameLottery.
-  ///
-  /// In en, this message translates to:
-  /// **'Lottery'**
-  String get categoryNameLottery;
-
-  /// No description provided for @categoryNameStock.
-  ///
-  /// In en, this message translates to:
-  /// **'Stock'**
-  String get categoryNameStock;
-
-  /// No description provided for @categoryNameSocialSecurity.
-  ///
-  /// In en, this message translates to:
-  /// **'Social Security'**
-  String get categoryNameSocialSecurity;
-
-  /// No description provided for @categoryNameExpress.
-  ///
-  /// In en, this message translates to:
-  /// **'Express'**
-  String get categoryNameExpress;
-
-  /// No description provided for @categoryNameWork.
-  ///
-  /// In en, this message translates to:
-  /// **'Work'**
-  String get categoryNameWork;
-
-  /// No description provided for @categoryNameSalary.
-  ///
-  /// In en, this message translates to:
-  /// **'Salary'**
-  String get categoryNameSalary;
-
-  /// No description provided for @categoryNameInvestment.
-  ///
-  /// In en, this message translates to:
-  /// **'Investment'**
-  String get categoryNameInvestment;
-
-  /// No description provided for @categoryNameBonus.
-  ///
-  /// In en, this message translates to:
-  /// **'Bonus'**
-  String get categoryNameBonus;
-
-  /// No description provided for @categoryNameReimbursement.
-  ///
-  /// In en, this message translates to:
-  /// **'Reimbursement'**
-  String get categoryNameReimbursement;
-
-  /// No description provided for @categoryNamePartTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Part-time'**
-  String get categoryNamePartTime;
-
-  /// No description provided for @categoryNameInterest.
-  ///
-  /// In en, this message translates to:
-  /// **'Interest'**
-  String get categoryNameInterest;
-
-  /// No description provided for @categoryNameRefund.
-  ///
-  /// In en, this message translates to:
-  /// **'Refund'**
-  String get categoryNameRefund;
-
-  /// No description provided for @categoryNameSecondHand.
-  ///
-  /// In en, this message translates to:
-  /// **'Second-hand Sale'**
-  String get categoryNameSecondHand;
-
-  /// No description provided for @categoryNameSocialBenefit.
-  ///
-  /// In en, this message translates to:
-  /// **'Social Benefit'**
-  String get categoryNameSocialBenefit;
-
-  /// No description provided for @categoryNameTaxRefund.
-  ///
-  /// In en, this message translates to:
-  /// **'Tax Refund'**
-  String get categoryNameTaxRefund;
-
-  /// No description provided for @categoryNameProvidentFund.
-  ///
-  /// In en, this message translates to:
-  /// **'Provident Fund'**
-  String get categoryNameProvidentFund;
-
   /// No description provided for @categoryNameLabel.
   ///
   /// In en, this message translates to:
@@ -2998,6 +2262,294 @@ abstract class AppLocalizations {
   /// **'Category \"{name}\" deleted'**
   String categoryDeleted(Object name);
 
+  /// No description provided for @categorySubCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory'**
+  String get categorySubCategoryTitle;
+
+  /// No description provided for @categorySubCategoryDescriptionEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This category belongs to a parent category'**
+  String get categorySubCategoryDescriptionEnabled;
+
+  /// No description provided for @categorySubCategoryDescriptionDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an independent top-level category'**
+  String get categorySubCategoryDescriptionDisabled;
+
+  /// No description provided for @categoryParentCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent Category'**
+  String get categoryParentCategoryTitle;
+
+  /// No description provided for @categoryParentCategoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select parent category'**
+  String get categoryParentCategoryHint;
+
+  /// No description provided for @categorySelectParentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Parent Category'**
+  String get categorySelectParentTitle;
+
+  /// No description provided for @categorySelectParentDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Only categories without transaction records can be selected as parent'**
+  String get categorySelectParentDescription;
+
+  /// No description provided for @categorySubCategoryCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory added: {name}'**
+  String categorySubCategoryCreated(Object name);
+
+  /// No description provided for @categoryParentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select parent category'**
+  String get categoryParentRequired;
+
+  /// No description provided for @categoryParentRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get categoryParentRequiredTitle;
+
+  /// No description provided for @categoryExpenseList.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining-Transport-Shopping-Entertainment-Home-Family-Communication-Utilities-Housing-Medical-Education-Pets-Sports-Digital-Travel-Alcohol & Tobacco-Baby Care-Beauty-Repair-Social-Learning-Car-Taxi-Subway-Delivery-Property-Parking-Donation-Gift-Tax-Beverage-Clothing-Snacks-Red Packet-Fruit-Game-Book-Lover-Decoration-Daily Goods-Lottery-Stock-Social Security-Express-Work'**
+  String get categoryExpenseList;
+
+  /// No description provided for @categoryIncomeList.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary-Investment-Red Packet-Bonus-Reimbursement-Part-time-Gift-Interest-Refund-Investment Income-Second-hand-Social Benefit-Tax Refund-Provident Fund'**
+  String get categoryIncomeList;
+
+  /// No description provided for @categoryExpenseDining.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining-Breakfast-Lunch-Dinner-Meituan Delivery-Ele.me Delivery-JD Delivery-Restaurant-Food'**
+  String get categoryExpenseDining;
+
+  /// No description provided for @categoryExpenseSnacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies-Chips-Candy-Chocolate-Nuts'**
+  String get categoryExpenseSnacks;
+
+  /// No description provided for @categoryExpenseFruit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fruit-Apple-Banana-Orange-Grape-Watermelon-Other Fruits'**
+  String get categoryExpenseFruit;
+
+  /// No description provided for @categoryExpenseBeverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Beverage-Milk Tea-Coffee-Juice-Soda-Mineral Water'**
+  String get categoryExpenseBeverage;
+
+  /// No description provided for @categoryExpensePastry.
+  ///
+  /// In en, this message translates to:
+  /// **'Pastry-Cake-Bread-Dessert-Pastry'**
+  String get categoryExpensePastry;
+
+  /// No description provided for @categoryExpenseCooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooking Ingredients-Vegetables-Meat-Seafood-Seasoning-Grain & Oil'**
+  String get categoryExpenseCooking;
+
+  /// No description provided for @categoryExpenseShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothing-Shoes & Hats-Bags-Accessories-Daily Necessities'**
+  String get categoryExpenseShopping;
+
+  /// No description provided for @categoryExpensePets.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets-Pet Food-Pet Supplies-Pet Medical-Pet Grooming'**
+  String get categoryExpensePets;
+
+  /// No description provided for @categoryExpenseTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport-Subway-Bus-Taxi-Ride-hailing-Parking Fee-Fuel'**
+  String get categoryExpenseTransport;
+
+  /// No description provided for @categoryExpenseCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Car-Car Maintenance-Car Repair-Car Insurance-Car Wash-Traffic Fine'**
+  String get categoryExpenseCar;
+
+  /// No description provided for @categoryExpenseClothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-Pants-Dress-Shoes-Accessories'**
+  String get categoryExpenseClothing;
+
+  /// No description provided for @categoryExpenseDailyGoods.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Goods-Personal Care-Paper Products-Cleaning Supplies-Kitchen Supplies'**
+  String get categoryExpenseDailyGoods;
+
+  /// No description provided for @categoryExpenseEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuition-Training Fee-Books-Stationery-Office Supplies'**
+  String get categoryExpenseEducation;
+
+  /// No description provided for @categoryExpenseInvestLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment Loss-Stock Loss-Fund Loss-Other Investment Loss'**
+  String get categoryExpenseInvestLoss;
+
+  /// No description provided for @categoryExpenseEntertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment-Movie-KTV-Amusement Park-Bar-Other Entertainment'**
+  String get categoryExpenseEntertainment;
+
+  /// No description provided for @categoryExpenseGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Game-Game Top-up-Game Equipment-Game Membership'**
+  String get categoryExpenseGame;
+
+  /// No description provided for @categoryExpenseHealthProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Products-Vitamins-Health Food-Nutritional Supplements'**
+  String get categoryExpenseHealthProducts;
+
+  /// No description provided for @categoryExpenseSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription-Video Membership-Music Membership-Cloud Storage-Other Subscription'**
+  String get categoryExpenseSubscription;
+
+  /// No description provided for @categoryExpenseSports.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports-Gym-Sports Equipment-Sports Course-Outdoor Activity'**
+  String get categoryExpenseSports;
+
+  /// No description provided for @categoryExpenseHousing.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing-Rent-Property Fee-Mortgage-Renovation'**
+  String get categoryExpenseHousing;
+
+  /// No description provided for @categoryExpenseHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home-Furniture-Appliances-Decorations-Bedding'**
+  String get categoryExpenseHome;
+
+  /// No description provided for @categoryExpenseBeauty.
+  ///
+  /// In en, this message translates to:
+  /// **'Beauty-Skincare-Cosmetics-Beauty Salon-Nail Care'**
+  String get categoryExpenseBeauty;
+
+  /// No description provided for @categoryIncomeSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Base Salary-Performance Bonus-Year-end Bonus-Overtime Pay'**
+  String get categoryIncomeSalary;
+
+  /// No description provided for @categoryIncomeInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund Earnings-Stock Dividend-Wealth Management-Other Wealth Management'**
+  String get categoryIncomeInvestment;
+
+  /// No description provided for @categoryIncomeRedPacket.
+  ///
+  /// In en, this message translates to:
+  /// **'Red Packet-Holiday Red Packet-Birthday Red Packet-Return Gift'**
+  String get categoryIncomeRedPacket;
+
+  /// No description provided for @categoryIncomeBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus-Year-end Bonus-Quarterly Bonus-Project Bonus-Other Bonus'**
+  String get categoryIncomeBonus;
+
+  /// No description provided for @categoryIncomeReimbursement.
+  ///
+  /// In en, this message translates to:
+  /// **'Reimbursement-Travel Reimbursement-Meal Reimbursement-Other Reimbursement'**
+  String get categoryIncomeReimbursement;
+
+  /// No description provided for @categoryIncomePartTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Part-time-Part-time Income-Side Income'**
+  String get categoryIncomePartTime;
+
+  /// No description provided for @categoryIncomeGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift-Wedding Gift-Birthday Gift-Other Gift'**
+  String get categoryIncomeGift;
+
+  /// No description provided for @categoryIncomeInterest.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest-Bank Interest-Other Interest'**
+  String get categoryIncomeInterest;
+
+  /// No description provided for @categoryIncomeRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund-Shopping Refund-Service Refund-Other Refund'**
+  String get categoryIncomeRefund;
+
+  /// No description provided for @categoryIncomeInvestIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment Income-Stock Earnings-Fund Earnings-Other Investment Income'**
+  String get categoryIncomeInvestIncome;
+
+  /// No description provided for @categoryIncomeSecondHand.
+  ///
+  /// In en, this message translates to:
+  /// **'Second-hand-Idle Items-Second-hand Goods'**
+  String get categoryIncomeSecondHand;
+
+  /// No description provided for @categoryIncomeSocialBenefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Benefit-Unemployment Insurance-Maternity Subsidy-Other Subsidy'**
+  String get categoryIncomeSocialBenefit;
+
+  /// No description provided for @categoryIncomeTaxRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax Refund-Individual Tax Refund-Other Refund'**
+  String get categoryIncomeTaxRefund;
+
+  /// No description provided for @categoryIncomeProvidentFund.
+  ///
+  /// In en, this message translates to:
+  /// **'Provident Fund-Provident Fund Withdrawal-Provident Fund Interest'**
+  String get categoryIncomeProvidentFund;
+
   /// No description provided for @personalizeTitle.
   ///
   /// In en, this message translates to:
@@ -3039,12 +2591,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select this color'**
   String get personalizeSelectColor;
-
-  /// No description provided for @fontSettingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Display Scale'**
-  String get fontSettingsTitle;
 
   /// No description provided for @fontSettingsCurrentScale.
   ///
@@ -3322,84 +2868,6 @@ abstract class AppLocalizations {
   /// **'This is a test notification, tap to see the effect'**
   String get reminderTestBody;
 
-  /// No description provided for @reminderTestDelayBody.
-  ///
-  /// In en, this message translates to:
-  /// **'This is a 15-second delayed test notification'**
-  String get reminderTestDelayBody;
-
-  /// No description provided for @reminderQuickTest.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Test (15s later)'**
-  String get reminderQuickTest;
-
-  /// No description provided for @reminderQuickTestMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick test set for 15 seconds later, keep app in background'**
-  String get reminderQuickTestMessage;
-
-  /// No description provided for @reminderFlutterTest.
-  ///
-  /// In en, this message translates to:
-  /// **'🔧 Test Flutter Notification Click (Dev)'**
-  String get reminderFlutterTest;
-
-  /// No description provided for @reminderFlutterTestMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Flutter test notification sent, tap to see if app opens'**
-  String get reminderFlutterTestMessage;
-
-  /// No description provided for @reminderAlarmTest.
-  ///
-  /// In en, this message translates to:
-  /// **'🔧 Test AlarmManager Notification Click (Dev)'**
-  String get reminderAlarmTest;
-
-  /// No description provided for @reminderAlarmTestMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'AlarmManager test notification set (1s later), tap to see if app opens'**
-  String get reminderAlarmTestMessage;
-
-  /// No description provided for @reminderDirectTest.
-  ///
-  /// In en, this message translates to:
-  /// **'🔧 Direct Test NotificationReceiver (Dev)'**
-  String get reminderDirectTest;
-
-  /// No description provided for @reminderDirectTestMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Directly called NotificationReceiver to create notification, check if tap works'**
-  String get reminderDirectTestMessage;
-
-  /// No description provided for @reminderCheckStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'🔧 Check Notification Status (Dev)'**
-  String get reminderCheckStatus;
-
-  /// No description provided for @reminderNotificationStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification Status'**
-  String get reminderNotificationStatus;
-
-  /// No description provided for @reminderPendingCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Pending notifications: {count}'**
-  String reminderPendingCount(Object count);
-
-  /// No description provided for @reminderNoPending.
-  ///
-  /// In en, this message translates to:
-  /// **'No pending notifications'**
-  String get reminderNoPending;
-
   /// No description provided for @reminderCheckBattery.
   ///
   /// In en, this message translates to:
@@ -3447,12 +2915,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recommend disabling battery optimization for proper notifications'**
   String get reminderBatteryAdvice;
-
-  /// No description provided for @reminderGoToSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Go to Settings'**
-  String get reminderGoToSettings;
 
   /// No description provided for @reminderCheckChannel.
   ///
@@ -3567,24 +3029,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please allow notifications and disable battery optimization in settings'**
   String get reminderAppSettingsMessage;
-
-  /// No description provided for @reminderIOSTest.
-  ///
-  /// In en, this message translates to:
-  /// **'🍎 iOS Notification Debug Test'**
-  String get reminderIOSTest;
-
-  /// No description provided for @reminderIOSTestTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'iOS Notification Test'**
-  String get reminderIOSTestTitle;
-
-  /// No description provided for @reminderIOSTestMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Test notification sent.\n\n🍎 iOS Simulator limitations:\n• Notifications may not show in notification center\n• Banner alerts may not work\n• But Xcode console will show logs\n\n💡 Debug methods:\n• Check Xcode console output\n• Check Flutter log info\n• Use real device for full experience'**
-  String get reminderIOSTestMessage;
 
   /// No description provided for @reminderDescription.
   ///
@@ -3730,101 +3174,11 @@ abstract class AppLocalizations {
   /// **'{count} records'**
   String categoryMigrationTransactionLabel(int count);
 
-  /// No description provided for @categoryPickerExpenseTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Expense'**
-  String get categoryPickerExpenseTab;
-
-  /// No description provided for @categoryPickerIncomeTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Income'**
-  String get categoryPickerIncomeTab;
-
-  /// No description provided for @categoryPickerCancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get categoryPickerCancel;
-
-  /// No description provided for @categoryPickerEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No categories'**
-  String get categoryPickerEmpty;
-
-  /// No description provided for @cloudBackupFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud Backup Found'**
-  String get cloudBackupFound;
-
-  /// No description provided for @cloudBackupRestoreMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud and local ledgers are inconsistent. Restore from cloud?\n(Will enter restore progress page)'**
-  String get cloudBackupRestoreMessage;
-
-  /// No description provided for @cloudBackupRestoreFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Restore Failed'**
-  String get cloudBackupRestoreFailed;
-
-  /// No description provided for @mineCloudBackupRestoreTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud Backup Found'**
-  String get mineCloudBackupRestoreTitle;
-
-  /// No description provided for @mineAutoSyncRemoteDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto upload to cloud after recording'**
-  String get mineAutoSyncRemoteDesc;
-
-  /// No description provided for @mineAutoSyncLoginRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Login required to enable'**
-  String get mineAutoSyncLoginRequired;
-
   /// No description provided for @mineImportCompleteAllSuccess.
   ///
   /// In en, this message translates to:
   /// **'All Success'**
   String get mineImportCompleteAllSuccess;
-
-  /// No description provided for @mineImportCompleteTitleShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Import Complete'**
-  String get mineImportCompleteTitleShort;
-
-  /// No description provided for @mineAboutAppName.
-  ///
-  /// In en, this message translates to:
-  /// **'App: Bee Accounting'**
-  String get mineAboutAppName;
-
-  /// No description provided for @mineAboutVersion.
-  ///
-  /// In en, this message translates to:
-  /// **'Version: {version}'**
-  String mineAboutVersion(Object version);
-
-  /// No description provided for @mineAboutRepo.
-  ///
-  /// In en, this message translates to:
-  /// **'Source: https://github.com/TNT-Likely/BeeCount'**
-  String get mineAboutRepo;
-
-  /// No description provided for @mineAboutLicense.
-  ///
-  /// In en, this message translates to:
-  /// **'License: See LICENSE in repository'**
-  String get mineAboutLicense;
 
   /// No description provided for @mineCheckUpdateDetecting.
   ///
@@ -3844,131 +3198,11 @@ abstract class AppLocalizations {
   /// **'Download Update'**
   String get mineUpdateDownloadTitle;
 
-  /// No description provided for @mineDebugRefreshStats.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh Stats (Debug)'**
-  String get mineDebugRefreshStats;
-
-  /// No description provided for @mineDebugRefreshStatsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Trigger global stats provider recalculation'**
-  String get mineDebugRefreshStatsSubtitle;
-
-  /// No description provided for @mineDebugRefreshSync.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh Sync Status (Debug)'**
-  String get mineDebugRefreshSync;
-
-  /// No description provided for @mineDebugRefreshSyncSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Trigger sync status provider refresh'**
-  String get mineDebugRefreshSyncSubtitle;
-
-  /// No description provided for @cloudCurrentService.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Cloud Service'**
-  String get cloudCurrentService;
-
-  /// No description provided for @cloudConnected.
-  ///
-  /// In en, this message translates to:
-  /// **'Connected'**
-  String get cloudConnected;
-
-  /// No description provided for @cloudOfflineMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline Mode'**
-  String get cloudOfflineMode;
-
-  /// No description provided for @cloudAvailableServices.
-  ///
-  /// In en, this message translates to:
-  /// **'Available Cloud Services'**
-  String get cloudAvailableServices;
-
-  /// No description provided for @cloudReadCustomConfigFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to read custom configuration'**
-  String get cloudReadCustomConfigFailed;
-
-  /// No description provided for @cloudNotConfigured.
-  ///
-  /// In en, this message translates to:
-  /// **'Not configured'**
-  String get cloudNotConfigured;
-
-  /// No description provided for @cloudNotTested.
-  ///
-  /// In en, this message translates to:
-  /// **'Not tested'**
-  String get cloudNotTested;
-
-  /// No description provided for @cloudConnectionNormal.
-  ///
-  /// In en, this message translates to:
-  /// **'Connection normal'**
-  String get cloudConnectionNormal;
-
-  /// No description provided for @cloudConnectionFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Connection failed'**
-  String get cloudConnectionFailed;
-
-  /// No description provided for @cloudAddCustomService.
-  ///
-  /// In en, this message translates to:
-  /// **'Add custom cloud service'**
-  String get cloudAddCustomService;
-
-  /// No description provided for @cloudCustomServiceName.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom Cloud Service'**
-  String get cloudCustomServiceName;
-
-  /// No description provided for @cloudDefaultServiceName.
-  ///
-  /// In en, this message translates to:
-  /// **'Default Cloud Service'**
-  String get cloudDefaultServiceName;
-
-  /// No description provided for @cloudUseYourSupabase.
-  ///
-  /// In en, this message translates to:
-  /// **'Use your own Supabase'**
-  String get cloudUseYourSupabase;
-
   /// No description provided for @cloudTest.
   ///
   /// In en, this message translates to:
   /// **'Test'**
   String get cloudTest;
-
-  /// No description provided for @cloudSwitchService.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch Cloud Service'**
-  String get cloudSwitchService;
-
-  /// No description provided for @cloudSwitchToBuiltinConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to switch to the default cloud service? This will log out the current session.'**
-  String get cloudSwitchToBuiltinConfirm;
-
-  /// No description provided for @cloudSwitchToCustomConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to switch to the custom cloud service? This will log out the current session.'**
-  String get cloudSwitchToCustomConfirm;
 
   /// No description provided for @cloudSwitched.
   ///
@@ -3976,53 +3210,11 @@ abstract class AppLocalizations {
   /// **'Switched'**
   String get cloudSwitched;
 
-  /// No description provided for @cloudSwitchedToBuiltin.
-  ///
-  /// In en, this message translates to:
-  /// **'Switched to default cloud service and logged out'**
-  String get cloudSwitchedToBuiltin;
-
   /// No description provided for @cloudSwitchFailed.
   ///
   /// In en, this message translates to:
   /// **'Switch failed'**
   String get cloudSwitchFailed;
-
-  /// No description provided for @cloudActivateFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Activation failed'**
-  String get cloudActivateFailed;
-
-  /// No description provided for @cloudActivateFailedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved configuration is invalid'**
-  String get cloudActivateFailedMessage;
-
-  /// No description provided for @cloudActivated.
-  ///
-  /// In en, this message translates to:
-  /// **'Activated'**
-  String get cloudActivated;
-
-  /// No description provided for @cloudActivatedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Switched to custom cloud service and logged out, please log in again'**
-  String get cloudActivatedMessage;
-
-  /// No description provided for @cloudEditCustomService.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit custom cloud service'**
-  String get cloudEditCustomService;
-
-  /// No description provided for @cloudAddCustomServiceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add custom cloud service'**
-  String get cloudAddCustomServiceTitle;
 
   /// No description provided for @cloudSupabaseUrlLabel.
   ///
@@ -4041,48 +3233,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Anon Key'**
   String get cloudAnonKeyLabel;
-
-  /// No description provided for @cloudAnonKeyHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Note: Do not fill in service_role Key; Anon Key is publicly available.'**
-  String get cloudAnonKeyHint;
-
-  /// No description provided for @cloudInvalidInput.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid input'**
-  String get cloudInvalidInput;
-
-  /// No description provided for @cloudValidationEmptyFields.
-  ///
-  /// In en, this message translates to:
-  /// **'URL and Key cannot be empty'**
-  String get cloudValidationEmptyFields;
-
-  /// No description provided for @cloudValidationHttpsRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'URL must start with https://'**
-  String get cloudValidationHttpsRequired;
-
-  /// No description provided for @cloudValidationKeyTooShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Key length is too short, may be invalid'**
-  String get cloudValidationKeyTooShort;
-
-  /// No description provided for @cloudValidationServiceRoleKey.
-  ///
-  /// In en, this message translates to:
-  /// **'service_role Key is not allowed'**
-  String get cloudValidationServiceRoleKey;
-
-  /// No description provided for @cloudValidationHttpRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'URL must start with http:// or https://'**
-  String get cloudValidationHttpRequired;
 
   /// No description provided for @cloudSelectServiceType.
   ///
@@ -4114,41 +3264,17 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get cloudWebdavPasswordLabel;
 
-  /// No description provided for @cloudWebdavPathLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Remote Path'**
-  String get cloudWebdavPathLabel;
-
   /// No description provided for @cloudWebdavPathHint.
   ///
   /// In en, this message translates to:
   /// **'/BeeCount'**
   String get cloudWebdavPathHint;
 
-  /// No description provided for @cloudWebdavHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Supports Nutstore, Nextcloud, Synology, etc.'**
-  String get cloudWebdavHint;
-
-  /// No description provided for @cloudConfigUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Configuration updated'**
-  String get cloudConfigUpdated;
-
   /// No description provided for @cloudConfigSaved.
   ///
   /// In en, this message translates to:
   /// **'Configuration saved'**
   String get cloudConfigSaved;
-
-  /// No description provided for @cloudTestComplete.
-  ///
-  /// In en, this message translates to:
-  /// **'Test complete'**
-  String get cloudTestComplete;
 
   /// No description provided for @cloudTestSuccess.
   ///
@@ -4168,48 +3294,6 @@ abstract class AppLocalizations {
   /// **'Test failed'**
   String get cloudTestError;
 
-  /// No description provided for @cloudClearConfig.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear configuration'**
-  String get cloudClearConfig;
-
-  /// No description provided for @cloudClearConfigConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to clear the custom cloud service configuration? (Development environment only)'**
-  String get cloudClearConfigConfirm;
-
-  /// No description provided for @cloudConfigCleared.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom cloud service configuration cleared'**
-  String get cloudConfigCleared;
-
-  /// No description provided for @cloudClearFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear failed'**
-  String get cloudClearFailed;
-
-  /// No description provided for @cloudServiceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Built-in cloud service (free but may be unstable, recommend using your own or regular backup)'**
-  String get cloudServiceDescription;
-
-  /// No description provided for @cloudServiceDescriptionNotConfigured.
-  ///
-  /// In en, this message translates to:
-  /// **'Current build does not have built-in cloud service configuration'**
-  String get cloudServiceDescriptionNotConfigured;
-
-  /// No description provided for @cloudServiceDescriptionCustom.
-  ///
-  /// In en, this message translates to:
-  /// **'Server: {url}'**
-  String cloudServiceDescriptionCustom(String url);
-
   /// No description provided for @authLogin.
   ///
   /// In en, this message translates to:
@@ -4221,12 +3305,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign Up'**
   String get authSignup;
-
-  /// No description provided for @authRegister.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get authRegister;
 
   /// No description provided for @authEmail.
   ///
@@ -4393,7 +3471,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportDescription.
   ///
   /// In en, this message translates to:
-  /// **'Click the button below to select save location and export current ledger to CSV file.'**
+  /// **'Supported export types:\n• Transactions (Income/Expense/Transfer)\n• Recurring Bills\n• Categories\n• Accounts\n\nClick the button below to select save location and export current ledger to CSV file.'**
   String get exportDescription;
 
   /// No description provided for @exportButtonIOS.
@@ -4414,12 +3492,6 @@ abstract class AppLocalizations {
   /// **'Saved to: {path}'**
   String exportSavedTo(String path);
 
-  /// No description provided for @exportSelectFolder.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Export Folder'**
-  String get exportSelectFolder;
-
   /// No description provided for @exportCsvHeaderType.
   ///
   /// In en, this message translates to:
@@ -4431,6 +3503,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category'**
   String get exportCsvHeaderCategory;
+
+  /// No description provided for @exportCsvHeaderSubCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory'**
+  String get exportCsvHeaderSubCategory;
+
+  /// No description provided for @exportCsvHeaderCategoryIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Icon'**
+  String get exportCsvHeaderCategoryIcon;
+
+  /// No description provided for @exportCsvHeaderSubCategoryIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory Icon'**
+  String get exportCsvHeaderSubCategoryIcon;
 
   /// No description provided for @exportCsvHeaderAmount.
   ///
@@ -4756,12 +3846,6 @@ abstract class AppLocalizations {
   /// **'Check Update'**
   String get updateCheckTitle;
 
-  /// No description provided for @updateNewVersionFound.
-  ///
-  /// In en, this message translates to:
-  /// **'New Version Found'**
-  String get updateNewVersionFound;
-
   /// No description provided for @updateNewVersionTitle.
   ///
   /// In en, this message translates to:
@@ -4840,18 +3924,6 @@ abstract class AppLocalizations {
   /// **'Download'**
   String get updateDownloadButton;
 
-  /// No description provided for @updateFoundCachedTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Found Downloaded Version'**
-  String get updateFoundCachedTitle;
-
-  /// No description provided for @updateFoundCachedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Found a previously downloaded installer, install directly?\\n\\nClick \"OK\" to install immediately, click \"Cancel\" to close this dialog.\\n\\nFile path: {path}'**
-  String updateFoundCachedMessage(String path);
-
   /// No description provided for @updateInstallingCachedApk.
   ///
   /// In en, this message translates to:
@@ -4876,41 +3948,11 @@ abstract class AppLocalizations {
   /// **'Installation failed'**
   String get updateInstallFailed;
 
-  /// No description provided for @updateDownloadCompleteManual.
-  ///
-  /// In en, this message translates to:
-  /// **'Download complete, can install manually'**
-  String get updateDownloadCompleteManual;
-
-  /// No description provided for @updateDownloadCompleteException.
-  ///
-  /// In en, this message translates to:
-  /// **'Download complete, please install manually (dialog exception)'**
-  String get updateDownloadCompleteException;
-
-  /// No description provided for @updateDownloadCompleteManualContext.
-  ///
-  /// In en, this message translates to:
-  /// **'Download complete, please install manually'**
-  String get updateDownloadCompleteManualContext;
-
   /// No description provided for @updateDownloadFailed.
   ///
   /// In en, this message translates to:
   /// **'Download failed'**
   String get updateDownloadFailed;
-
-  /// No description provided for @updateInstallTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Download Complete'**
-  String get updateInstallTitle;
-
-  /// No description provided for @updateInstallMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'APK file download complete, install immediately?\\n\\nNote: The app will temporarily go to background during installation, this is normal.'**
-  String get updateInstallMessage;
 
   /// No description provided for @updateInstallNow.
   ///
@@ -4918,89 +3960,11 @@ abstract class AppLocalizations {
   /// **'Install Now'**
   String get updateInstallNow;
 
-  /// No description provided for @updateInstallLater.
-  ///
-  /// In en, this message translates to:
-  /// **'Install Later'**
-  String get updateInstallLater;
-
-  /// No description provided for @updateNotificationTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'BeeCount Update Download'**
-  String get updateNotificationTitle;
-
-  /// No description provided for @updateNotificationBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloading new version...'**
-  String get updateNotificationBody;
-
-  /// No description provided for @updateNotificationComplete.
-  ///
-  /// In en, this message translates to:
-  /// **'Download complete, tap to install'**
-  String get updateNotificationComplete;
-
   /// No description provided for @updateNotificationPermissionTitle.
   ///
   /// In en, this message translates to:
   /// **'Notification Permission Denied'**
   String get updateNotificationPermissionTitle;
-
-  /// No description provided for @updateNotificationPermissionMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot get notification permission, download progress will not show in notification bar, but download function works normally.'**
-  String get updateNotificationPermissionMessage;
-
-  /// No description provided for @updateNotificationGuideTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'If you need to enable notifications, follow these steps:'**
-  String get updateNotificationGuideTitle;
-
-  /// No description provided for @updateNotificationStep1.
-  ///
-  /// In en, this message translates to:
-  /// **'Open system settings'**
-  String get updateNotificationStep1;
-
-  /// No description provided for @updateNotificationStep2.
-  ///
-  /// In en, this message translates to:
-  /// **'Find \"App Management\" or \"App Settings\"'**
-  String get updateNotificationStep2;
-
-  /// No description provided for @updateNotificationStep3.
-  ///
-  /// In en, this message translates to:
-  /// **'Find \"BeeCount\" app'**
-  String get updateNotificationStep3;
-
-  /// No description provided for @updateNotificationStep4.
-  ///
-  /// In en, this message translates to:
-  /// **'Click \"Permission Management\" or \"Notification Management\"'**
-  String get updateNotificationStep4;
-
-  /// No description provided for @updateNotificationStep5.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable \"Notification Permission\"'**
-  String get updateNotificationStep5;
-
-  /// No description provided for @updateNotificationMiuiHint.
-  ///
-  /// In en, this message translates to:
-  /// **'MIUI users: Xiaomi system has strict notification permission control, may need additional settings in Security Center'**
-  String get updateNotificationMiuiHint;
-
-  /// No description provided for @updateNotificationGotIt.
-  ///
-  /// In en, this message translates to:
-  /// **'Got it'**
-  String get updateNotificationGotIt;
 
   /// No description provided for @updateCheckFailedTitle.
   ///
@@ -5038,12 +4002,6 @@ abstract class AppLocalizations {
   /// **'No Update Package Found'**
   String get updateNoLocalApkTitle;
 
-  /// No description provided for @updateNoLocalApkMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'No downloaded update package file found.\\n\\nPlease first download new version through \"Check Update\".'**
-  String get updateNoLocalApkMessage;
-
   /// No description provided for @updateInstallPackageTitle.
   ///
   /// In en, this message translates to:
@@ -5056,35 +4014,17 @@ abstract class AppLocalizations {
   /// **'Found Multiple Update Packages'**
   String get updateMultiplePackagesTitle;
 
-  /// No description provided for @updateMultiplePackagesMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Found {count} update package files.\\n\\nRecommend using the latest downloaded version, or manually install in file manager.\\n\\nFile location: {path}'**
-  String updateMultiplePackagesMessage(int count, String path);
-
   /// No description provided for @updateSearchFailedTitle.
   ///
   /// In en, this message translates to:
   /// **'Search Failed'**
   String get updateSearchFailedTitle;
 
-  /// No description provided for @updateSearchFailedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Error occurred while searching for local update packages: {error}'**
-  String updateSearchFailedMessage(String error);
-
   /// No description provided for @updateFoundCachedPackageTitle.
   ///
   /// In en, this message translates to:
   /// **'Found Downloaded Update Package'**
   String get updateFoundCachedPackageTitle;
-
-  /// No description provided for @updateFoundCachedPackageMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Detected previously downloaded update package:\\n\\nFile name: {fileName}\\nSize: {fileSize}MB\\n\\nInstall immediately?'**
-  String updateFoundCachedPackageMessage(String fileName, String fileSize);
 
   /// No description provided for @updateIgnoreButton.
   ///
@@ -5109,12 +4049,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error'**
   String get updateErrorTitle;
-
-  /// No description provided for @updateReadCacheFailedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to read cached update package: {error}'**
-  String updateReadCacheFailedMessage(String error);
 
   /// No description provided for @updateCheckingPermissions.
   ///
@@ -5212,59 +4146,11 @@ abstract class AppLocalizations {
   /// **'Downloading: {percent}%'**
   String updateDownloadProgress(String percent);
 
-  /// No description provided for @updateNoApkFoundError.
-  ///
-  /// In en, this message translates to:
-  /// **'APK download link not found'**
-  String get updateNoApkFoundError;
-
   /// No description provided for @updateCheckingUpdateError.
   ///
   /// In en, this message translates to:
   /// **'Update check failed: {error}'**
   String updateCheckingUpdateError(String error);
-
-  /// No description provided for @updateNotificationChannelName.
-  ///
-  /// In en, this message translates to:
-  /// **'Update Download'**
-  String get updateNotificationChannelName;
-
-  /// No description provided for @updateNotificationDownloadingIndeterminate.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloading new version...'**
-  String get updateNotificationDownloadingIndeterminate;
-
-  /// No description provided for @updateNotificationDownloadingProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Download progress: {progress}%'**
-  String updateNotificationDownloadingProgress(String progress);
-
-  /// No description provided for @updateNotificationDownloadCompleteTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Download Complete'**
-  String get updateNotificationDownloadCompleteTitle;
-
-  /// No description provided for @updateNotificationDownloadCompleteMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'New version downloaded, tap to install'**
-  String get updateNotificationDownloadCompleteMessage;
-
-  /// No description provided for @updateUserCancelledDownloadDialog.
-  ///
-  /// In en, this message translates to:
-  /// **'User cancelled download'**
-  String get updateUserCancelledDownloadDialog;
-
-  /// No description provided for @updateCannotOpenLinkError.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot open link'**
-  String get updateCannotOpenLinkError;
 
   /// No description provided for @updateNoLocalApkFoundMessage.
   ///
@@ -5301,24 +4187,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to read cached update package: {error}'**
   String updateReadCachedPackageError(String error);
-
-  /// No description provided for @reminderQuickTestSent.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick test set for 15 seconds later, please keep app in background'**
-  String get reminderQuickTestSent;
-
-  /// No description provided for @reminderFlutterTestSent.
-  ///
-  /// In en, this message translates to:
-  /// **'Flutter test notification sent, click to see if it opens the app'**
-  String get reminderFlutterTestSent;
-
-  /// No description provided for @reminderAlarmTestSent.
-  ///
-  /// In en, this message translates to:
-  /// **'AlarmManager test notification set (1 second later), click to see if it opens the app'**
-  String get reminderAlarmTestSent;
 
   /// No description provided for @updateOk.
   ///
@@ -5697,18 +4565,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Every {n} year(s)'**
   String recurringTransactionEveryNYears(int n);
-
-  /// No description provided for @cloudDefaultServiceDisplayName.
-  ///
-  /// In en, this message translates to:
-  /// **'Default Cloud Service'**
-  String get cloudDefaultServiceDisplayName;
-
-  /// No description provided for @cloudNotConfiguredDisplay.
-  ///
-  /// In en, this message translates to:
-  /// **'Not Configured'**
-  String get cloudNotConfiguredDisplay;
 
   /// No description provided for @syncNotConfiguredMessage.
   ///
@@ -6160,64 +5016,40 @@ abstract class AppLocalizations {
   /// **'An accounting app that truly respects your privacy'**
   String get welcomeDescription;
 
+  /// No description provided for @welcomeCurrencyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred currency, you can change it anytime in settings'**
+  String get welcomeCurrencyDescription;
+
   /// No description provided for @welcomePrivacyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your Data, Your Control'**
+  /// **'Open Source · Community Driven'**
   String get welcomePrivacyTitle;
 
   /// No description provided for @welcomePrivacyFeature1.
   ///
   /// In en, this message translates to:
-  /// **'Data stored locally on your device'**
+  /// **'100% open source code, supervised by community'**
   String get welcomePrivacyFeature1;
 
   /// No description provided for @welcomePrivacyFeature2.
   ///
   /// In en, this message translates to:
-  /// **'Never uploaded to any third-party servers'**
+  /// **'No privacy concerns, data stored locally'**
   String get welcomePrivacyFeature2;
-
-  /// No description provided for @welcomePrivacyFeature3.
-  ///
-  /// In en, this message translates to:
-  /// **'No ads, no data collection'**
-  String get welcomePrivacyFeature3;
-
-  /// No description provided for @welcomePrivacyFeature4.
-  ///
-  /// In en, this message translates to:
-  /// **'No account registration required'**
-  String get welcomePrivacyFeature4;
-
-  /// No description provided for @welcomeOpenSourceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Open Source & Transparent'**
-  String get welcomeOpenSourceTitle;
 
   /// No description provided for @welcomeOpenSourceFeature1.
   ///
   /// In en, this message translates to:
-  /// **'100% open source code'**
+  /// **'Active developer community, continuous improvement'**
   String get welcomeOpenSourceFeature1;
-
-  /// No description provided for @welcomeOpenSourceFeature2.
-  ///
-  /// In en, this message translates to:
-  /// **'Community supervision, no backdoors'**
-  String get welcomeOpenSourceFeature2;
-
-  /// No description provided for @welcomeOpenSourceFeature3.
-  ///
-  /// In en, this message translates to:
-  /// **'Free for Personal Use'**
-  String get welcomeOpenSourceFeature3;
 
   /// No description provided for @welcomeViewGitHub.
   ///
   /// In en, this message translates to:
-  /// **'View Source Code on GitHub'**
+  /// **'Visit GitHub Repository'**
   String get welcomeViewGitHub;
 
   /// No description provided for @welcomeCloudSyncTitle.
@@ -6249,18 +5081,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Self-hosted Supabase service'**
   String get welcomeCloudSyncFeature3;
-
-  /// No description provided for @lab.
-  ///
-  /// In en, this message translates to:
-  /// **'Lab'**
-  String get lab;
-
-  /// No description provided for @labDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Try experimental features'**
-  String get labDesc;
 
   /// No description provided for @widgetManagement.
   ///
@@ -6526,12 +5346,6 @@ abstract class AppLocalizations {
   /// **'Disable failed'**
   String get disableFailed;
 
-  /// No description provided for @openSettingsFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to open settings'**
-  String get openSettingsFailed;
-
   /// No description provided for @reselectImage.
   ///
   /// In en, this message translates to:
@@ -6561,12 +5375,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Auto-recognize payment screenshots'**
   String get ocrBillingDesc;
-
-  /// No description provided for @quickActions.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Actions'**
-  String get quickActions;
 
   /// No description provided for @iosAutoFeatureDesc.
   ///
@@ -6976,18 +5784,6 @@ abstract class AppLocalizations {
   /// **'Time'**
   String get ocrTime;
 
-  /// No description provided for @cloudSyncAndBackup.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud Sync & Backup'**
-  String get cloudSyncAndBackup;
-
-  /// No description provided for @cloudSyncAndBackupDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud service config and data sync'**
-  String get cloudSyncAndBackupDesc;
-
   /// No description provided for @cloudSyncPageTitle.
   ///
   /// In en, this message translates to:
@@ -7180,12 +5976,6 @@ abstract class AppLocalizations {
   /// **'Telegram Group'**
   String get aboutTelegramGroup;
 
-  /// No description provided for @aboutCopied.
-  ///
-  /// In en, this message translates to:
-  /// **'Copied to clipboard'**
-  String get aboutCopied;
-
   /// No description provided for @aboutSupportDevelopment.
   ///
   /// In en, this message translates to:
@@ -7288,42 +6078,6 @@ abstract class AppLocalizations {
   /// **'Copied to clipboard'**
   String get logCenterCopied;
 
-  /// No description provided for @cloudService.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud Service'**
-  String get cloudService;
-
-  /// No description provided for @cloudServiceDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Configure cloud storage provider'**
-  String get cloudServiceDesc;
-
-  /// No description provided for @syncManagement.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync Management'**
-  String get syncManagement;
-
-  /// No description provided for @syncManagementDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Data sync and backup'**
-  String get syncManagementDesc;
-
-  /// No description provided for @moreSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'More Settings'**
-  String get moreSettings;
-
-  /// No description provided for @moreSettingsDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Advanced cloud sync options'**
-  String get moreSettingsDesc;
-
   /// No description provided for @configImportExportTitle.
   ///
   /// In en, this message translates to:
@@ -7402,12 +6156,6 @@ abstract class AppLocalizations {
   /// **'Confirm Import'**
   String get configImportConfirmTitle;
 
-  /// No description provided for @configImportConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Importing config will overwrite current settings, continue?'**
-  String get configImportConfirmMessage;
-
   /// No description provided for @configImportSuccess.
   ///
   /// In en, this message translates to:
@@ -7443,18 +6191,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saved to: {path}'**
   String configExportSavedTo(String path);
-
-  /// No description provided for @configExportOpenFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Open Folder'**
-  String get configExportOpenFile;
-
-  /// No description provided for @configExportOpenFileFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to open folder'**
-  String get configExportOpenFileFailed;
 
   /// No description provided for @configExportViewContent.
   ///
@@ -7498,6 +6234,18 @@ abstract class AppLocalizations {
   /// **'AI smart recognition config'**
   String get configIncludeAI;
 
+  /// No description provided for @configIncludeAppSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'App settings (language, theme, reminder, etc.)'**
+  String get configIncludeAppSettings;
+
+  /// No description provided for @configIncludeRecurringTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions'**
+  String get configIncludeRecurringTransactions;
+
   /// No description provided for @ledgersConflictTitle.
   ///
   /// In en, this message translates to:
@@ -7521,12 +6269,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cloud: {count} transactions'**
   String ledgersConflictRemoteInfo(int count);
-
-  /// No description provided for @ledgersConflictLocalUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Local updated: {time}'**
-  String ledgersConflictLocalUpdated(String time);
 
   /// No description provided for @ledgersConflictRemoteUpdated.
   ///
@@ -7678,12 +6420,6 @@ abstract class AppLocalizations {
   /// **'Total Income'**
   String get accountTotalIncome;
 
-  /// No description provided for @accountDetailTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Account Details'**
-  String get accountDetailTitle;
-
   /// No description provided for @accountCurrencyLocked.
   ///
   /// In en, this message translates to:
@@ -7696,29 +6432,11 @@ abstract class AppLocalizations {
   /// **'Notice'**
   String get commonNotice;
 
-  /// No description provided for @commonUncategorized.
-  ///
-  /// In en, this message translates to:
-  /// **'Uncategorized'**
-  String get commonUncategorized;
-
   /// No description provided for @transferTitle.
   ///
   /// In en, this message translates to:
   /// **'Transfer'**
   String get transferTitle;
-
-  /// No description provided for @transferOut.
-  ///
-  /// In en, this message translates to:
-  /// **'Transfer Out'**
-  String get transferOut;
-
-  /// No description provided for @transferIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Transfer In'**
-  String get transferIn;
 
   /// No description provided for @transferFromAccount.
   ///
@@ -7732,41 +6450,11 @@ abstract class AppLocalizations {
   /// **'To Account'**
   String get transferToAccount;
 
-  /// No description provided for @transferAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Amount'**
-  String get transferAmount;
-
-  /// No description provided for @transferTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Time'**
-  String get transferTime;
-
   /// No description provided for @transferSelectAccount.
   ///
   /// In en, this message translates to:
   /// **'Select Account'**
   String get transferSelectAccount;
-
-  /// No description provided for @transferEnterAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter Amount'**
-  String get transferEnterAmount;
-
-  /// No description provided for @transferEnterNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Note'**
-  String get transferEnterNote;
-
-  /// No description provided for @transferCreateNew.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Transfer'**
-  String get transferCreateNew;
 
   /// No description provided for @transferCreateSuccess.
   ///
@@ -7779,24 +6467,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transfer updated successfully'**
   String get transferUpdateSuccess;
-
-  /// No description provided for @transferDeleteConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure to delete this transfer?'**
-  String get transferDeleteConfirm;
-
-  /// No description provided for @transferDeleteSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Transfer deleted successfully'**
-  String get transferDeleteSuccess;
-
-  /// No description provided for @transferSameAccountError.
-  ///
-  /// In en, this message translates to:
-  /// **'From and to accounts must be different'**
-  String get transferSameAccountError;
 
   /// No description provided for @transferDifferentCurrencyError.
   ///
@@ -7815,6 +6485,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'From'**
   String get transferFromPrefix;
+
+  /// No description provided for @welcomeCategoryModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Category Mode'**
+  String get welcomeCategoryModeTitle;
+
+  /// No description provided for @welcomeCategoryModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the category structure that suits your needs'**
+  String get welcomeCategoryModeDescription;
+
+  /// No description provided for @welcomeCategoryModeFlatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat Categories'**
+  String get welcomeCategoryModeFlatTitle;
+
+  /// No description provided for @welcomeCategoryModeFlatDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple and fast'**
+  String get welcomeCategoryModeFlatDescription;
+
+  /// No description provided for @welcomeCategoryModeFlatFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat structure, easy to use'**
+  String get welcomeCategoryModeFlatFeature1;
+
+  /// No description provided for @welcomeCategoryModeFlatFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect for simple categorization'**
+  String get welcomeCategoryModeFlatFeature2;
+
+  /// No description provided for @welcomeCategoryModeFlatFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick selection, efficient tracking'**
+  String get welcomeCategoryModeFlatFeature3;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hierarchical Categories'**
+  String get welcomeCategoryModeHierarchicalTitle;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed management'**
+  String get welcomeCategoryModeHierarchicalDescription;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'Support parent-child category levels'**
+  String get welcomeCategoryModeHierarchicalFeature1;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'More detailed transaction classification'**
+  String get welcomeCategoryModeHierarchicalFeature2;
+
+  /// No description provided for @welcomeCategoryModeHierarchicalFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect for detailed management'**
+  String get welcomeCategoryModeHierarchicalFeature3;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -7826,7 +6568,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'ja', 'ko', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -7846,12 +6588,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return AppLocalizationsDe();
     case 'en': return AppLocalizationsEn();
-    case 'es': return AppLocalizationsEs();
-    case 'fr': return AppLocalizationsFr();
-    case 'ja': return AppLocalizationsJa();
-    case 'ko': return AppLocalizationsKo();
     case 'zh': return AppLocalizationsZh();
   }
 

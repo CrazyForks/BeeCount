@@ -14,7 +14,7 @@ import '../../styles/colors.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
-import '../../utils/logger.dart';
+import '../../services/logger_service.dart';
 import '../../services/avatar_service.dart';
 import '../../services/share_poster_service.dart';
 import '../../l10n/app_localizations.dart';
@@ -961,10 +961,10 @@ Future<bool> _tryOpenUrl(Uri url) async {
       return true;
     }
 
-    logE('MinePage', '无法打开URL: $url');
+    logger.error('MinePage', '无法打开URL: $url');
     return false;
   } catch (e) {
-    logE('MinePage', '打开URL失败: $url', e);
+    logger.error('MinePage', '打开URL失败: $url', e);
     return false;
   }
 }
@@ -986,14 +986,14 @@ Future<void> _rateApp(BuildContext context) async {
       await inAppReview.openStoreListing(
         appStoreId: '6754611670', // BeeCount的App Store ID
       );
-      logI('MinePage', '已打开App Store评分页面');
+      logger.info('MinePage', '已打开App Store评分页面');
     } else {
       // Android会自动打开Google Play（如果已上架）
       await inAppReview.openStoreListing();
-      logI('MinePage', '已打开Google Play评分页面');
+      logger.info('MinePage', '已打开Google Play评分页面');
     }
   } catch (e) {
-    logE('MinePage', '打开评分失败', e);
+    logger.error('MinePage', '打开评分失败', e);
     // 失败时不显示错误提示，静默失败
   }
 }

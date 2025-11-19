@@ -54,18 +54,21 @@
 > **We're looking for talented UI/UX designers to join the BeeCount project!**
 >
 > 📐 **What You'll Work On:**
+>
 > - Redesign app UI and interaction experience
 > - Create theme skins and illustration elements
 > - Optimize visual consistency across the interface
 > - Develop a modern, clean design language
 >
 > 🎁 **What You'll Get:**
+>
 > - Portfolio pieces for open-source work
 > - Credit in README and app
 > - Close collaboration with dev team
 > - Satisfaction of creating great UX for thousands of users
 >
 > 💌 **Contact:**
+>
 > - GitHub Issues: [Submit design proposals](https://github.com/TNT-Likely/BeeCount/issues)
 > - Telegram Group: [Join discussion](https://t.me/beecount)
 
@@ -88,6 +91,7 @@
 <td width="50%">
 
 ### 🔒 Problems with Traditional Apps
+
 - ❌ Data stored on third-party servers
 - ❌ Privacy risks, data may be analyzed
 - ❌ Data loss if service shuts down
@@ -99,6 +103,7 @@
 <td width="50%">
 
 ### ✅ BeeCount Advantages
+
 - ✅ **Self-hosted**, complete data control
 - ✅ **Open source**, auditable code
 - ✅ **Offline-first**, works without network
@@ -125,6 +130,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 <summary>📸 View More Screenshots</summary>
 
 ### Data Management
+
 <div align="center">
   <img src="demo/preview/en/02-search.png" alt="Smart Search" width="200" />
   <img src="demo/preview/en/03-edit-transaction.png" alt="Edit Transaction" width="200" />
@@ -133,6 +139,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 </div>
 
 ### Personalization & Management
+
 <div align="center">
   <img src="demo/preview/en/06-profile.png" alt="Profile" width="200" />
   <img src="demo/preview/en/08-category-migration.png" alt="Category Migration" width="200" />
@@ -141,6 +148,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 </div>
 
 ### Data Import & Export
+
 <div align="center">
   <img src="demo/preview/en/12-import-confirm.png" alt="Import Confirmation" width="200" />
 </div>
@@ -159,6 +167,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 | **WebDAV** | Users with NAS | Fully localized data, supports Synology/UGREEN/Nextcloud |
 
 **Why Self-Hosted?**
+
 - 🔐 **Privacy First**: Developers cannot access your data
 - 💰 **Cost Effective**: Supabase free tier sufficient, WebDAV one-time investment
 - 🛡️ **Data Security**: No worries about service shutdowns or data breaches
@@ -178,21 +187,25 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 > **🌟 Core Feature Highlight: Screenshot and bill automatically, payment info auto-recognized!**
 
 **Android Auto-Billing**:
+
 - 📸 **Accessibility Service Auto-Billing**: Once enabled, automatically recognizes payment info and creates bills with each screenshot
 - 🎯 **Smart Recognition**: Auto-recognizes Alipay, WeChat Pay, UnionPay and other mainstream payment methods
 - ⚡ **Real-time Recording**: Screenshot after payment, transaction info recorded immediately
 
 **iOS Auto-Billing**:
+
 - 🔗 **Shortcuts Integration**: Automate through iOS "Shortcuts" app
 - 👆 **Double Tap Back Trigger**: After setup, double tap phone back during payment for auto-billing
 - 🎨 **Flexible Configuration**: Supports auto-trigger on screenshot or manual trigger, adapts to different usage scenarios
-
 
 ### 📊 Complete Accounting Features
 
 - **Smart Accounting**: Income/expense categories, amounts, dates, notes
 - **OCR Scan Billing**: Take photos or select payment screenshots, auto-recognize amounts and merchant info
 - **Multi-Ledger Management**: Separate management for personal, work, investment
+- **Independent Account Management**: Support for cash, bank cards, credit cards and other account types, each account tracks balance independently
+- **Account Transfer Feature**: Support inter-account transfer records, auto-update balances for both accounts
+- **Hierarchical Category System**: Support parent-child category levels for more detailed transaction classification (choose between flat or hierarchical mode)
 - **Chart Analysis**: Monthly reports, category rankings, trend analysis
 - **Data Import/Export**: CSV format, compatible with mainstream apps
 - **Home Screen Widgets**: iOS/Android widgets for quick overview of income and expenses
@@ -200,7 +213,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 ### 🎨 Personalization & Internationalization
 
 - **Theme Customization**: Multiple theme colors for personalized style
-- **9 Languages**: Simplified Chinese, Traditional Chinese, English, 日本語, 한국어, Español, Français, Deutsch
+- **3 Languages**: Simplified Chinese, Traditional Chinese, English
   - Complete UI translation + smart category mapping
   - Localized date/number formats
   - CSV import auto-recognizes multi-language categories
@@ -259,9 +272,11 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
        - **Policy name**: Customizable (e.g., `Allow user access to own backups`)
        - **Target roles**: Select `authenticated`
        - **Policy definition**: Enter the following expression
+
          ```sql
          ((bucket_id = 'beecount-backups'::text) AND ((storage.foldername(name))[1] = 'users'::text) AND ((storage.foldername(name))[2] = (auth.uid())::text))
          ```
+
        - This policy ensures users can only access files under `beecount-backups/users/<their-user-id>/` path
 
 3. **App Configuration**
@@ -277,6 +292,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 **Use Case**: For users with NAS devices or private cloud storage
 
 **Supported Services**:
+
 - ✅ UGREEN Cloud NAS
 - ✅ Synology NAS
 - ✅ Nextcloud
@@ -327,6 +343,7 @@ Nutstore:
 ### Future Plans
 
 We will continue expanding cloud service support, planning to add:
+
 - 📦 Alibaba Cloud OSS
 - 📦 Tencent Cloud COS
 - 📦 AWS S3
@@ -411,12 +428,14 @@ A: Absolutely! The app uses local storage by default, and all features work norm
 
 **Q: Should I choose Supabase or WebDAV?**
 A:
+
 - If you have a NAS device or private cloud, we recommend WebDAV (fully localized data)
 - If you don't have a NAS, we recommend Supabase (free, stable, easy to configure)
 - Both support complete sync functionality, choose based on your needs
 
 **Q: Why can't I upload after configuring WebDAV?**
 A:
+
 - Check if WebDAV service is enabled and port is correct
 - Verify username and password are correct
 - Some NAS WebDAV requires specific paths for write access (e.g., UGREEN Cloud requires `/home/` path)
@@ -427,6 +446,7 @@ A: Yes, you can switch anytime. The saved custom configuration won't be lost and
 
 **Q: How to ensure data security?**
 A:
+
 - Use your own Supabase project or WebDAV server
 - Regularly export CSV backups to local storage
 - Use strong passwords and enable two-factor authentication (if supported)
@@ -437,6 +457,7 @@ A: Currently supports CSV format for import/export, compatible with data formats
 
 **Q: How to sync data across multiple devices?**
 A:
+
 - **Supabase**: Configure same URL and anon key on all devices, log in with same account
 - **WebDAV**: Configure same WebDAV server address and credentials on all devices
 
@@ -449,6 +470,7 @@ A:
 BeeCount is a **completely free and open-source** project with no ads or paid features. However, to make it available for iOS users, we need an **Apple Developer Account** ($99/year) to sign the app.
 
 Your donation will be used for:
+
 - 📱 **Renew Apple Developer Account** - Keep iOS TestFlight beta accessible ($99/year)
 - 🔧 **Support continuous development and maintenance** - Keep the project actively developed
 
@@ -456,7 +478,7 @@ Your donation will be used for:
 
 #### 🌍 International
 
-- **PayPal**: https://paypal.me/sunxiaoyes
+- **PayPal**: <https://paypal.me/sunxiaoyes>
 
 #### 🇨🇳 China
 
@@ -492,15 +514,19 @@ Progress: [██████████] 101.67% - 🎉 Goal Achieved!
 ```
 
 **Completed**:
-- ✅ Apple Developer Account registration ($99/year)
+
+- ✅ Apple Developer Account registration (¥688/year, ≈$95/year)
 - ✅ iOS TestFlight public beta launched
+- ✅ Lightweight cloud server (¥79/year, ≈$11/year) - For ICP filing
 
 **Ongoing Costs**:
-- 📱 Apple Developer Account renewal: $99/year
 
-**🚀 Next Steps**:
-- Preparing to submit to Apple App Store
-- Developing HarmonyOS native version
+- 📱 Apple Developer Account renewal: ¥688/year (≈$95/year)
+- ☁️ Lightweight cloud server: ¥79/year (≈$11/year)
+
+**Total Annual Cost**: ¥767/year (≈$106/year)
+
+All donation fund usage will be transparently disclosed here.
 
 ### 🌟 Special Thanks to Our Supporters
 
@@ -512,9 +538,11 @@ Format: Nickname - Amount - Date
 -->
 
 - **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
-- **\*Rui** - ¥720 - 2025-10-27 (WeChat) 🎉
+- **\*Rui** - ¥720 - 2025-10-27 (WeChat)
 - **\*Hong** - ¥50 - 2025-11-07 (Alipay)
 - **\*Shao** - ¥15 - 2025-11-09 (Alipay)
+- **\*Ge** - ¥6 - 2025-11-17 (WeChat)
+- **\*Te** - ¥15 - 2025-11-17 (WeChat)
 
 ---
 
@@ -530,6 +558,7 @@ This project is licensed under the **Business Source License**:
 ### What is Commercial Use?
 
 Commercial license is required for:
+
 - Providing this software as part of commercial products or services
 - Using this software in for-profit organizations
 - Developing commercial products based on this software
@@ -538,6 +567,7 @@ Commercial license is required for:
 ### How to Obtain a Commercial License?
 
 For commercial use, please contact us via:
+
 - 📧 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues)
 - 💬 [Telegram Group](https://t.me/beecount)
 

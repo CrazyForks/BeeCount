@@ -11,7 +11,7 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/colors.dart';
 import '../../services/update_service.dart';
-import '../../utils/logger.dart';
+import '../../services/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import 'log_center_page.dart';
@@ -335,10 +335,10 @@ Future<bool> _tryOpenUrl(Uri url) async {
       return true;
     }
 
-    logE('AboutPage', '无法打开URL: $url');
+    logger.error('AboutPage', '无法打开URL: $url');
     return false;
   } catch (e) {
-    logE('AboutPage', '打开URL失败: $url', e);
+    logger.error('AboutPage', '打开URL失败: $url', e);
     return false;
   }
 }

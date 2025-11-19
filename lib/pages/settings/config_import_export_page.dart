@@ -11,9 +11,10 @@ import '../../widgets/biz/biz.dart';
 import '../../styles/colors.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
+import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/config_export_service.dart';
-import '../../utils/logger.dart';
+import '../../services/logger_service.dart';
 
 /// 配置导入导出页面
 class ConfigImportExportPage extends ConsumerStatefulWidget {
@@ -53,7 +54,14 @@ class _ConfigImportExportPageState
     });
 
     try {
-      final yamlContent = await ConfigExportService.exportToYaml();
+      // 获取数据库和当前账本ID
+      final db = ref.read(databaseProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+
+      final yamlContent = await ConfigExportService.exportToYaml(
+        db: db,
+        ledgerId: ledgerId,
+      );
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
       final fileName = 'beecount_config_$timestamp.yml';
 
@@ -65,7 +73,7 @@ class _ConfigImportExportPageState
         final file = File(filePath);
         await file.writeAsString(yamlContent);
 
-        logI('ConfigExport', '配置已导出到: $filePath');
+        logger.info('ConfigExport', '配置已导出到: $filePath');
 
         if (!mounted) return;
 
@@ -95,7 +103,7 @@ class _ConfigImportExportPageState
         }
       }
     } catch (e) {
-      logE('ConfigExport', '导出配置失败: $e');
+      logger.error('ConfigExport', '导出配置失败: $e');
       if (!mounted) return;
       await AppDialog.error(
         context,
@@ -134,7 +142,7 @@ class _ConfigImportExportPageState
         ),
       );
     } catch (e) {
-      logE('ConfigExport', '读取配置文件失败: $e');
+      logger.error('ConfigExport', '读取配置文件失败: $e');
       if (!mounted) return;
       showToast(context, AppLocalizations.of(context).configExportReadFileFailed);
     }
@@ -169,24 +177,35 @@ class _ConfigImportExportPageState
         throw Exception('请选择 YAML 配置文件（.yml 或 .yaml）');
       }
 
-      // 确认导入
+      // 读取并预览配置
       if (!mounted) return;
-      final confirm = await AppDialog.confirm<bool>(
-            context,
-            title: AppLocalizations.of(context).configImportConfirmTitle,
-            message: AppLocalizations.of(context).configImportConfirmMessage,
-          ) ??
-          false;
+      final file = File(filePath);
+      final yamlContent = await file.readAsString();
 
-      if (!confirm) {
+      // 显示预览对话框
+      if (!mounted) return;
+      final confirm = await showDialog<bool>(
+        context: context,
+        builder: (context) => _ConfigPreviewDialog(yamlContent: yamlContent),
+      );
+
+      if (confirm != true) {
         if (mounted) {
           setState(() => _isImporting = false);
         }
         return;
       }
 
+      // 获取数据库和当前账本ID
+      final db = ref.read(databaseProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+
       // 执行导入
-      await ConfigExportService.importFromFile(filePath);
+      await ConfigExportService.importFromFile(
+        filePath,
+        db: db,
+        ledgerId: ledgerId,
+      );
 
       if (!mounted) return;
       showToast(context, AppLocalizations.of(context).configImportSuccess);
@@ -399,6 +418,20 @@ class _ConfigImportExportPageState
                           Icons.smart_toy_outlined,
                           l10n.configIncludeAI,
                         ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.settings_outlined,
+                          l10n.configIncludeAppSettings,
+                        ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.repeat,
+                          l10n.configIncludeRecurringTransactions,
+                        ),
                       ],
                     ),
                   ),
@@ -520,6 +553,147 @@ class _ConfigContentDialog extends StatelessWidget {
                   onPressed: onCopy,
                   icon: const Icon(Icons.copy, size: 18),
                   label: Text(l10n.configExportCopyContent),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 配置预览对话框
+class _ConfigPreviewDialog extends StatefulWidget {
+  final String yamlContent;
+
+  const _ConfigPreviewDialog({required this.yamlContent});
+
+  @override
+  State<_ConfigPreviewDialog> createState() => _ConfigPreviewDialogState();
+}
+
+class _ConfigPreviewDialogState extends State<_ConfigPreviewDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      child: Column(
+        children: [
+          // 标题栏
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeColors.greyBg,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(4),
+                topRight: Radius.circular(4),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.preview_outlined),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    '配置预览',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context, false),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          // 内容区域 - 直接展示YAML内容
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.orange.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.orange[700],
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            '导入将覆盖现有配置，建议先备份当前配置。',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.orange[900],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: SelectableText(
+                      widget.yamlContent,
+                      style: const TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 12,
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // 底部按钮
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeColors.greyBg,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(4),
+                bottomRight: Radius.circular(4),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(l10n.commonCancel),
+                ),
+                const SizedBox(width: 12),
+                FilledButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(l10n.configImportConfirmTitle),
                 ),
               ],
             ),

@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
-import '../../data/repository.dart';
 import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as db;
 import '../../services/category_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/category_utils.dart';
 import '../transaction/category_detail_page.dart';
 import 'category_migration_page.dart';
 
 class CategoryEditPage extends ConsumerStatefulWidget {
   final db.Category? category; // null表示新建
   final String kind; // expense 或 income
-  
+  final db.Category? parentCategory; // 父分类（用于创建二级分类）
+
   const CategoryEditPage({
     super.key,
     this.category,
     required this.kind,
+    this.parentCategory,
   });
-  
+
   @override
   ConsumerState<CategoryEditPage> createState() => _CategoryEditPageState();
 }
@@ -28,18 +30,47 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   late final TextEditingController _nameController;
   String? _selectedIcon;
   bool _saving = false;
-  
+
+  // 二级分类相关状态
+  bool _isSubCategory = false;
+  db.Category? _selectedParentCategory;
+
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.category?.name ?? '');
-    
+
     // 确保选中的图标在可用的图标组中存在
     final categoryIcon = widget.category?.icon;
     if (categoryIcon != null && categoryIcon.isNotEmpty && _isValidIcon(categoryIcon)) {
       _selectedIcon = categoryIcon;
     } else {
       _selectedIcon = 'category'; // 默认图标
+    }
+
+    // 初始化二级分类状态
+    if (widget.category != null) {
+      // 编辑模式：根据现有分类设置
+      _isSubCategory = widget.category!.level == 2;
+      if (_isSubCategory && widget.category!.parentId != null) {
+        _loadParentCategory(widget.category!.parentId!);
+      }
+    } else if (widget.parentCategory != null) {
+      // 创建二级分类模式：预设父分类
+      _isSubCategory = true;
+      _selectedParentCategory = widget.parentCategory;
+    }
+  }
+
+  Future<void> _loadParentCategory(int parentId) async {
+    final database = ref.read(databaseProvider);
+    final parent = await (database.select(database.categories)
+          ..where((c) => c.id.equals(parentId)))
+        .getSingleOrNull();
+    if (mounted && parent != null) {
+      setState(() {
+        _selectedParentCategory = parent;
+      });
     }
   }
   
@@ -51,16 +82,31 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   
   bool get isEditing => widget.category != null;
 
-  bool get isDefaultCategory => widget.category != null &&
-      CategoryService.isDefaultCategory(widget.category!.name, widget.category!.kind);
-  
+  bool get isDefaultCategory => false; // 所有分类都可编辑删除
+
+  bool get isCreatingSubCategory => widget.parentCategory != null;
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    String headerTitle;
+    if (isEditing) {
+      headerTitle = l10n.categoryEditTitle;
+    } else {
+      headerTitle = l10n.categoryNewTitle;
+    }
+
+    return _buildScaffold(context, headerTitle, null);
+  }
+
+  Widget _buildScaffold(BuildContext context, String headerTitle, String? headerSubtitle) {
     return Scaffold(
       body: Column(
         children: [
           PrimaryHeader(
-            title: isEditing ? AppLocalizations.of(context).categoryEditTitle : AppLocalizations.of(context).categoryNewTitle,
+            title: headerTitle,
+            subtitle: headerSubtitle,
             showBack: true,
             actions: isEditing && widget.category != null ? [
               // 分类详情按钮
@@ -110,6 +156,51 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                       title: Text(widget.kind == 'expense' ? AppLocalizations.of(context).categoryExpenseType : AppLocalizations.of(context).categoryIncomeType),
                     ),
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // 二级分类开关
+                  Card(
+                    child: SwitchListTile(
+                      title: Text(AppLocalizations.of(context).categorySubCategoryTitle),
+                      subtitle: _isSubCategory
+                          ? Text(AppLocalizations.of(context).categorySubCategoryDescriptionEnabled)
+                          : Text(AppLocalizations.of(context).categorySubCategoryDescriptionDisabled),
+                      value: _isSubCategory,
+                      // 如果是从添加二级分类入口进来的，或者正在编辑二级分类，不允许修改
+                      onChanged: (widget.parentCategory != null || (isEditing && widget.category!.level == 2))
+                          ? null
+                          : (value) {
+                              setState(() {
+                                _isSubCategory = value;
+                                if (!value) {
+                                  _selectedParentCategory = null;
+                                }
+                              });
+                            },
+                    ),
+                  ),
+
+                  // 父分类选择器
+                  if (_isSubCategory) ...[
+                    const SizedBox(height: 16),
+                    Card(
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.arrow_upward,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        title: Text(AppLocalizations.of(context).categoryParentCategoryTitle),
+                        subtitle: _selectedParentCategory != null
+                            ? Text(CategoryUtils.getDisplayName(_selectedParentCategory!.name, context))
+                            : Text(AppLocalizations.of(context).categoryParentCategoryHint),
+                        trailing: const Icon(Icons.chevron_right),
+                        // 如果预设了父分类（从添加二级分类入口进来），不允许修改
+                        enabled: widget.parentCategory == null && !isEditing,
+                        onTap: () => _selectParentCategory(),
+                      ),
+                    ),
+                  ],
 
                   // 默认分类警告
                   if (isDefaultCategory) ...[
@@ -279,13 +370,23 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   
   void _saveCategory() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
+    // 如果是二级分类，必须选择父分类
+    if (_isSubCategory && _selectedParentCategory == null) {
+      await AppDialog.error(
+        context,
+        title: AppLocalizations.of(context).categoryParentRequiredTitle,
+        message: AppLocalizations.of(context).categoryParentRequired,
+      );
+      return;
+    }
+
     setState(() => _saving = true);
-    
+
     try {
       final repo = ref.read(repositoryProvider);
       final name = _nameController.text.trim();
-      
+
       if (isEditing) {
         // 编辑现有分类
         await repo.updateCategory(
@@ -297,18 +398,31 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
         showToast(context, AppLocalizations.of(context).categoryUpdated(name));
       } else {
         // 新建分类
-        await repo.createCategory(
-          name: name,
-          kind: widget.kind,
-          icon: _selectedIcon,
-        );
-        if (!mounted) return;
-        showToast(context, AppLocalizations.of(context).categoryCreated(name));
+        if (_isSubCategory) {
+          // 新建二级分类
+          await repo.createSubCategory(
+            parentId: _selectedParentCategory!.id,
+            name: name,
+            kind: widget.kind,
+            icon: _selectedIcon,
+          );
+          if (!mounted) return;
+          showToast(context, AppLocalizations.of(context).categorySubCategoryCreated(name));
+        } else {
+          // 新建一级分类
+          await repo.createCategory(
+            name: name,
+            kind: widget.kind,
+            icon: _selectedIcon,
+          );
+          if (!mounted) return;
+          showToast(context, AppLocalizations.of(context).categoryCreated(name));
+        }
       }
-      
+
       // 刷新分类列表
       ref.invalidate(categoriesProvider);
-      
+
       if (!mounted) return;
       Navigator.of(context).pop(true); // 返回true表示有更新
     } catch (e) {
@@ -325,18 +439,27 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   
   void _deleteCategory() async {
     if (!isEditing) return;
-    
+
     final repo = ref.read(repositoryProvider);
-    
+
     // 检查是否有交易记录使用此分类
-    final transactionCount = await repo.getTransactionCountByCategory(widget.category!.id);
-    
-    if (transactionCount > 0) {
+    int totalTransactionCount = await repo.getTransactionCountByCategory(widget.category!.id);
+
+    // 如果是一级分类，还需要检查所有子分类的交易数量
+    if (widget.category!.level == 1) {
+      final subCategories = await repo.getSubCategories(widget.category!.id);
+      for (final subCat in subCategories) {
+        final subCount = await repo.getTransactionCountByCategory(subCat.id);
+        totalTransactionCount += subCount;
+      }
+    }
+
+    if (totalTransactionCount > 0) {
       if (!mounted) return;
       await AppDialog.info(
         context,
         title: AppLocalizations.of(context).categoryCannotDelete,
-        message: AppLocalizations.of(context).categoryCannotDeleteMessage(transactionCount),
+        message: AppLocalizations.of(context).categoryCannotDeleteMessage(totalTransactionCount),
       );
       return;
     }
@@ -381,6 +504,90 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       return iconData != Icons.category || iconName == 'category';
     } catch (e) {
       return false;
+    }
+  }
+
+  void _selectParentCategory() async {
+    final repo = ref.read(repositoryProvider);
+    final topLevelCategories = await repo.getTopLevelCategories(widget.kind);
+
+    // 预先加载所有分类的交易数量
+    final transactionCounts = <int, int>{};
+    for (final category in topLevelCategories) {
+      transactionCounts[category.id] = await repo.getTransactionCountByCategory(category.id);
+    }
+
+    // 排序：没有交易记录的放在前面
+    topLevelCategories.sort((a, b) {
+      final aHasTransactions = (transactionCounts[a.id] ?? 0) > 0;
+      final bHasTransactions = (transactionCounts[b.id] ?? 0) > 0;
+
+      if (aHasTransactions == bHasTransactions) {
+        return 0; // 保持原有顺序
+      }
+      return aHasTransactions ? 1 : -1; // 没有交易的排前面
+    });
+
+    if (!mounted) return;
+
+    final selected = await showDialog<db.Category>(
+      context: context,
+      builder: (context) {
+        final primaryColor = ref.read(primaryColorProvider);
+        return AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(AppLocalizations.of(context).categorySelectParentTitle),
+              const SizedBox(height: 8),
+              Text(
+                AppLocalizations.of(context).categorySelectParentDescription,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: topLevelCategories.length,
+              itemBuilder: (context, index) {
+                final category = topLevelCategories[index];
+                final hasTransactions = (transactionCounts[category.id] ?? 0) > 0;
+
+                return ListTile(
+                  leading: Icon(
+                    CategoryService.getCategoryIcon(category.icon),
+                    color: hasTransactions ? Colors.grey[400] : primaryColor,
+                  ),
+                  title: Text(
+                    CategoryUtils.getDisplayName(category.name, context),
+                    style: TextStyle(
+                      color: hasTransactions ? Colors.grey[400] : null,
+                    ),
+                  ),
+                  enabled: !hasTransactions,
+                  onTap: hasTransactions ? null : () => Navigator.of(context).pop(category),
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(AppLocalizations.of(context).commonCancel),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (selected != null) {
+      setState(() {
+        _selectedParentCategory = selected;
+      });
     }
   }
 
