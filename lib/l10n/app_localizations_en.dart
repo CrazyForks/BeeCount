@@ -1827,7 +1827,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportTitle => 'Export';
 
   @override
-  String get exportDescription => 'Click the button below to select save location and export current ledger to CSV file.';
+  String get exportDescription => 'Supported export types:\n• Transactions (Income/Expense/Transfer)\n• Recurring Bills\n• Categories\n• Accounts\n\nClick the button below to select save location and export current ledger to CSV file.';
 
   @override
   String get exportButtonIOS => 'Export and Share';
@@ -2654,19 +2654,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeCurrencyDescription => 'Choose your preferred currency, you can change it anytime in settings';
 
   @override
-  String get welcomePrivacyTitle => 'Your Data, Your Control';
+  String get welcomePrivacyTitle => 'Open Source · Community Driven';
 
   @override
-  String get welcomePrivacyFeature1 => 'Data stored locally on your device';
+  String get welcomePrivacyFeature1 => '100% open source code, supervised by community';
 
   @override
-  String get welcomePrivacyFeature2 => 'Never uploaded to any third-party servers';
+  String get welcomePrivacyFeature2 => 'No privacy concerns, data stored locally';
 
   @override
-  String get welcomeOpenSourceFeature1 => '100% open source code';
+  String get welcomeOpenSourceFeature1 => 'Active developer community, continuous improvement';
 
   @override
-  String get welcomeViewGitHub => 'View Source Code on GitHub';
+  String get welcomeViewGitHub => 'Visit GitHub Repository';
 
   @override
   String get welcomeCloudSyncTitle => 'Optional Cloud Sync';
@@ -3231,9 +3231,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get configImportConfirmTitle => 'Confirm Import';
 
   @override
-  String get configImportConfirmMessage => 'Importing config will overwrite current settings, continue?';
-
-  @override
   String get configImportSuccess => 'Config imported successfully';
 
   @override
@@ -3273,6 +3270,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI smart recognition config';
+
+  @override
+  String get configIncludeAppSettings => 'App settings (language, theme, reminder, etc.)';
+
+  @override
+  String get configIncludeRecurringTransactions => 'Recurring transactions';
 
   @override
   String get ledgersConflictTitle => 'Sync Conflict';

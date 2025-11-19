@@ -392,7 +392,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     );
   }
 
-  /// 第5页：隐私保护与开源透明
+  /// 第5页：开源透明与社群驱动
   Widget _buildPrivacyAndOpenSourcePage(
       BuildContext context, ThemeData theme, AppLocalizations l10n) {
     return Padding(
@@ -400,7 +400,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 隐私与开源图标
+          // 开源与社群图标
           Container(
             width: 120,
             height: 120,
@@ -409,7 +409,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.verified_user_outlined,
+              Icons.favorite_outline,
               size: 64,
               color: Colors.white,
             ),
@@ -433,25 +433,26 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 隐私保护特性
+                  // 开源代码
                   _buildFeatureItem(
                     context,
-                    Icons.shield_outlined,
+                    Icons.code_outlined,
                     Colors.white,
                     l10n.welcomePrivacyFeature1,
                   ),
                   const SizedBox(height: 12),
+                  // 隐私保护
                   _buildFeatureItem(
                     context,
-                    Icons.lock_outline,
+                    Icons.shield_outlined,
                     Colors.white,
                     l10n.welcomePrivacyFeature2,
                   ),
                   const SizedBox(height: 12),
-                  // 开源透明特性
+                  // 社群驱动
                   _buildFeatureItem(
                     context,
-                    Icons.code_outlined,
+                    Icons.groups_outlined,
                     Colors.white,
                     l10n.welcomeOpenSourceFeature1,
                   ),

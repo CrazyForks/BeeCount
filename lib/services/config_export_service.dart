@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaml/yaml.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
+import 'package:drift/drift.dart' as d;
+import '../data/db.dart';
+import '../providers.dart';
 import 'logger_service.dart';
 
 /// 应用配置模型
@@ -10,12 +13,14 @@ class AppConfig {
   final WebdavConfig? webdav;
   final AIConfig? ai;
   final AppSettingsConfig? appSettings;
+  final RecurringTransactionsConfig? recurringTransactions;
 
   const AppConfig({
     this.supabase,
     this.webdav,
     this.ai,
     this.appSettings,
+    this.recurringTransactions,
   });
 
   Map<String, dynamic> toYaml() {
@@ -37,6 +42,10 @@ class AppConfig {
       map['app_settings'] = appSettings!.toMap();
     }
 
+    if (recurringTransactions != null) {
+      map['recurring_transactions'] = recurringTransactions!.toMap();
+    }
+
     return map;
   }
 
@@ -56,6 +65,10 @@ class AppConfig {
       appSettings: yaml.containsKey('app_settings')
           ? AppSettingsConfig.fromMap(
               Map<String, dynamic>.from(yaml['app_settings'] as Map))
+          : null,
+      recurringTransactions: yaml.containsKey('recurring_transactions')
+          ? RecurringTransactionsConfig.fromMap(
+              Map<String, dynamic>.from(yaml['recurring_transactions'] as Map))
           : null,
     );
   }
@@ -258,10 +271,128 @@ class AppSettingsConfig {
       );
 }
 
+/// 周期账单配置
+class RecurringTransactionsConfig {
+  final List<RecurringTransactionItem> items;
+
+  const RecurringTransactionsConfig({required this.items});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'items': items.map((item) => item.toMap()).toList(),
+    };
+  }
+
+  static RecurringTransactionsConfig fromMap(Map<String, dynamic> map) {
+    final itemsList = map['items'] as List<dynamic>? ?? [];
+    return RecurringTransactionsConfig(
+      items: itemsList
+          .map((item) =>
+              RecurringTransactionItem.fromMap(Map<String, dynamic>.from(item as Map)))
+          .toList(),
+    );
+  }
+}
+
+/// 周期账单项
+class RecurringTransactionItem {
+  final String type; // expense / income / transfer
+  final double amount;
+  final int? categoryId;
+  final int? accountId;
+  final int? toAccountId;
+  final String? note;
+  final String frequency; // daily / weekly / monthly / yearly
+  final int interval;
+  final int? dayOfMonth;
+  final int? dayOfWeek;
+  final int? monthOfYear;
+  final String startDate; // ISO 8601 format
+  final String? endDate;
+  final bool enabled;
+
+  const RecurringTransactionItem({
+    required this.type,
+    required this.amount,
+    this.categoryId,
+    this.accountId,
+    this.toAccountId,
+    this.note,
+    required this.frequency,
+    required this.interval,
+    this.dayOfMonth,
+    this.dayOfWeek,
+    this.monthOfYear,
+    required this.startDate,
+    this.endDate,
+    required this.enabled,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'type': type,
+      'amount': amount,
+      'frequency': frequency,
+      'interval': interval,
+      'start_date': startDate,
+      'enabled': enabled,
+    };
+    if (categoryId != null) map['category_id'] = categoryId;
+    if (accountId != null) map['account_id'] = accountId;
+    if (toAccountId != null) map['to_account_id'] = toAccountId;
+    if (note != null && note!.isNotEmpty) map['note'] = note;
+    if (dayOfMonth != null) map['day_of_month'] = dayOfMonth;
+    if (dayOfWeek != null) map['day_of_week'] = dayOfWeek;
+    if (monthOfYear != null) map['month_of_year'] = monthOfYear;
+    if (endDate != null) map['end_date'] = endDate;
+    return map;
+  }
+
+  static RecurringTransactionItem fromMap(Map<String, dynamic> map) {
+    return RecurringTransactionItem(
+      type: map['type'] as String,
+      amount: (map['amount'] as num).toDouble(),
+      categoryId: map['category_id'] as int?,
+      accountId: map['account_id'] as int?,
+      toAccountId: map['to_account_id'] as int?,
+      note: map['note'] as String?,
+      frequency: map['frequency'] as String,
+      interval: map['interval'] as int,
+      dayOfMonth: map['day_of_month'] as int?,
+      dayOfWeek: map['day_of_week'] as int?,
+      monthOfYear: map['month_of_year'] as int?,
+      startDate: map['start_date'] as String,
+      endDate: map['end_date'] as String?,
+      enabled: map['enabled'] as bool,
+    );
+  }
+
+  factory RecurringTransactionItem.fromDb(RecurringTransaction rt) {
+    return RecurringTransactionItem(
+      type: rt.type,
+      amount: rt.amount,
+      categoryId: rt.categoryId,
+      accountId: rt.accountId,
+      toAccountId: rt.toAccountId,
+      note: rt.note,
+      frequency: rt.frequency,
+      interval: rt.interval,
+      dayOfMonth: rt.dayOfMonth,
+      dayOfWeek: rt.dayOfWeek,
+      monthOfYear: rt.monthOfYear,
+      startDate: rt.startDate.toIso8601String(),
+      endDate: rt.endDate?.toIso8601String(),
+      enabled: rt.enabled,
+    );
+  }
+}
+
 /// 配置导入导出服务
 class ConfigExportService {
   /// 导出配置到YAML字符串
-  static Future<String> exportToYaml() async {
+  /// [db] 数据库实例，用于导出周期账单等数据
+  /// [ledgerId] 账本ID，用于过滤导出的周期账单
+  static Future<String> exportToYaml({BeeDatabase? db, int? ledgerId}) async {
     final prefs = await SharedPreferences.getInstance();
 
     // 读取Supabase配置
@@ -362,11 +493,32 @@ class ConfigExportService {
       );
     }
 
+    // 读取周期账单配置
+    RecurringTransactionsConfig? recurringConfig;
+    if (db != null && ledgerId != null) {
+      try {
+        final recurringList = await (db.select(db.recurringTransactions)
+              ..where((t) => t.ledgerId.equals(ledgerId)))
+            .get();
+
+        if (recurringList.isNotEmpty) {
+          recurringConfig = RecurringTransactionsConfig(
+            items: recurringList
+                .map((rt) => RecurringTransactionItem.fromDb(rt))
+                .toList(),
+          );
+        }
+      } catch (e) {
+        logger.warning('ConfigExport', '读取周期账单配置失败: $e');
+      }
+    }
+
     final config = AppConfig(
       supabase: supabaseConfig,
       webdav: webdavConfig,
       ai: aiConfig,
       appSettings: appSettings,
+      recurringTransactions: recurringConfig,
     );
 
     // 转换为YAML格式
@@ -482,11 +634,68 @@ class ConfigExportService {
       }
     }
 
+    // 周期账单
+    if (yamlMap.containsKey('recurring_transactions')) {
+      buffer.writeln('# 周期账单');
+      buffer.writeln('recurring_transactions:');
+      final recurring = yamlMap['recurring_transactions'] as Map<String, dynamic>;
+      final items = recurring['items'] as List;
+
+      if (items.isNotEmpty) {
+        buffer.writeln('  items:');
+        for (final item in items) {
+          final itemMap = item as Map<String, dynamic>;
+          buffer.writeln('    - type: "${itemMap['type']}"');
+          buffer.writeln('      amount: ${itemMap['amount']}');
+
+          if (itemMap.containsKey('category_id')) {
+            buffer.writeln('      category_id: ${itemMap['category_id']}');
+          }
+          if (itemMap.containsKey('account_id')) {
+            buffer.writeln('      account_id: ${itemMap['account_id']}');
+          }
+          if (itemMap.containsKey('to_account_id')) {
+            buffer.writeln('      to_account_id: ${itemMap['to_account_id']}');
+          }
+          if (itemMap.containsKey('note') && itemMap['note'] != null) {
+            buffer.writeln('      note: "${itemMap['note']}"');
+          }
+
+          buffer.writeln('      frequency: "${itemMap['frequency']}"');
+          buffer.writeln('      interval: ${itemMap['interval']}');
+
+          if (itemMap.containsKey('day_of_month')) {
+            buffer.writeln('      day_of_month: ${itemMap['day_of_month']}');
+          }
+          if (itemMap.containsKey('day_of_week')) {
+            buffer.writeln('      day_of_week: ${itemMap['day_of_week']}');
+          }
+          if (itemMap.containsKey('month_of_year')) {
+            buffer.writeln('      month_of_year: ${itemMap['month_of_year']}');
+          }
+
+          buffer.writeln('      start_date: "${itemMap['start_date']}"');
+          if (itemMap.containsKey('end_date') && itemMap['end_date'] != null) {
+            buffer.writeln('      end_date: "${itemMap['end_date']}"');
+          }
+          buffer.writeln('      enabled: ${itemMap['enabled']}');
+        }
+      }
+      buffer.writeln();
+    }
+
     return buffer.toString();
   }
 
   /// 从YAML字符串导入配置
-  static Future<void> importFromYaml(String yamlContent) async {
+  /// [yamlContent] YAML内容
+  /// [db] 数据库实例，用于导入周期账单等数据
+  /// [ledgerId] 账本ID，用于导入周期账单到指定账本
+  static Future<void> importFromYaml(
+    String yamlContent, {
+    BeeDatabase? db,
+    int? ledgerId,
+  }) async {
     final doc = loadYaml(yamlContent);
 
     if (doc is! Map) {
@@ -594,25 +803,73 @@ class ConfigExportService {
 
       logger.info('ConfigImport', '应用设置已导入');
     }
+
+    // 导入周期账单
+    if (config.recurringTransactions != null && db != null && ledgerId != null) {
+      try {
+        final items = config.recurringTransactions!.items;
+        int importedCount = 0;
+
+        for (final item in items) {
+          try {
+            await db.into(db.recurringTransactions).insert(
+              RecurringTransactionsCompanion.insert(
+                ledgerId: ledgerId,
+                type: item.type,
+                amount: item.amount,
+                categoryId: d.Value(item.categoryId),
+                accountId: d.Value(item.accountId),
+                toAccountId: d.Value(item.toAccountId),
+                note: d.Value(item.note),
+                frequency: item.frequency,
+                interval: d.Value(item.interval),
+                dayOfMonth: d.Value(item.dayOfMonth),
+                dayOfWeek: d.Value(item.dayOfWeek),
+                monthOfYear: d.Value(item.monthOfYear),
+                startDate: DateTime.parse(item.startDate),
+                endDate: d.Value(
+                    item.endDate != null ? DateTime.parse(item.endDate!) : null),
+                enabled: d.Value(item.enabled),
+              ),
+            );
+            importedCount++;
+          } catch (e) {
+            logger.warning('ConfigImport', '导入周期账单项失败: $e');
+          }
+        }
+
+        logger.info('ConfigImport', '周期账单已导入: $importedCount/${items.length}');
+      } catch (e) {
+        logger.error('ConfigImport', '导入周期账单失败: $e');
+      }
+    }
   }
 
   /// 导出配置到文件
-  static Future<void> exportToFile(String filePath) async {
-    final yamlContent = await exportToYaml();
+  static Future<void> exportToFile(
+    String filePath, {
+    BeeDatabase? db,
+    int? ledgerId,
+  }) async {
+    final yamlContent = await exportToYaml(db: db, ledgerId: ledgerId);
     final file = File(filePath);
     await file.writeAsString(yamlContent);
     logger.info('ConfigExport', '配置已导出到: $filePath');
   }
 
   /// 从文件导入配置
-  static Future<void> importFromFile(String filePath) async {
+  static Future<void> importFromFile(
+    String filePath, {
+    BeeDatabase? db,
+    int? ledgerId,
+  }) async {
     final file = File(filePath);
     if (!await file.exists()) {
       throw Exception('文件不存在: $filePath');
     }
 
     final yamlContent = await file.readAsString();
-    await importFromYaml(yamlContent);
+    await importFromYaml(yamlContent, db: db, ledgerId: ledgerId);
     logger.info('ConfigImport', '配置已从文件导入: $filePath');
   }
 }

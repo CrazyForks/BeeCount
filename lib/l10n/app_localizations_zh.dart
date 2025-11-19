@@ -1827,7 +1827,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportTitle => '导出';
 
   @override
-  String get exportDescription => '点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
+  String get exportDescription => '支持导出的数据类型：\n• 交易记录（收入/支出/转账）\n• 周期账单\n• 分类信息\n• 账户信息\n\n点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
 
   @override
   String get exportButtonIOS => '导出并分享';
@@ -2654,19 +2654,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeCurrencyDescription => '选择您常用的货币，之后可以随时在设置中更改';
 
   @override
-  String get welcomePrivacyTitle => '您的数据，您做主';
+  String get welcomePrivacyTitle => '开源透明 · 社群驱动';
 
   @override
-  String get welcomePrivacyFeature1 => '数据存储在您的设备本地';
+  String get welcomePrivacyFeature1 => '100% 开源代码，接受社区监督';
 
   @override
-  String get welcomePrivacyFeature2 => '不会上传到任何第三方服务器';
+  String get welcomePrivacyFeature2 => '无隐私顾虑，数据完全本地存储';
 
   @override
-  String get welcomeOpenSourceFeature1 => '100%开源代码';
+  String get welcomeOpenSourceFeature1 => '活跃的开发者社群，持续改进';
 
   @override
-  String get welcomeViewGitHub => '在GitHub查看源代码';
+  String get welcomeViewGitHub => '访问 GitHub 仓库';
 
   @override
   String get welcomeCloudSyncTitle => '可选的云同步';
@@ -3231,9 +3231,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configImportConfirmTitle => '确认导入';
 
   @override
-  String get configImportConfirmMessage => '导入配置将覆盖当前设置，是否继续？';
-
-  @override
   String get configImportSuccess => '配置导入成功';
 
   @override
@@ -3273,6 +3270,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI 智能识别配置';
+
+  @override
+  String get configIncludeAppSettings => '应用设置（语言、主题、提醒等）';
+
+  @override
+  String get configIncludeRecurringTransactions => '周期账单';
 
   @override
   String get ledgersConflictTitle => '同步冲突';
@@ -3537,6 +3540,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonConfigure => '配置';
+
+  @override
+  String get commonPressAgainToExit => '再按一次退出應用程式';
 
   @override
   String get commonWeekdayMonday => '星期一';
@@ -3805,6 +3811,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get ledgerDefaultName => '預設帳本';
+
+  @override
   String get ledgersEdit => '編輯帳本';
 
   @override
@@ -3821,6 +3830,26 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get ledgersDeleteFailed => '刪除失敗';
+
+  @override
+  String get ledgersClearTitle => '清空帳本';
+
+  @override
+  String get ledgersClearSuccess => '帳本已清空';
+
+  @override
+  String get ledgersDeleteLocal => '僅刪除本地帳本';
+
+  @override
+  String get ledgersDeleteLocalTitle => '刪除本地帳本';
+
+  @override
+  String ledgersDeleteLocalMessage(Object name) {
+    return '確定要刪除本地帳本「$name」嗎？\n雲端備份會保留，您可以隨時恢復。';
+  }
+
+  @override
+  String get ledgersDeleteLocalSuccess => '本地帳本已刪除';
 
   @override
   String get ledgersName => '名稱';
@@ -3851,6 +3880,84 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String ledgersBalance(String balance) {
     return '餘額：$balance';
+  }
+
+  @override
+  String get ledgerCardDownloadCloud => '下載雲帳本';
+
+  @override
+  String get ledgersLocal => '本地帳本';
+
+  @override
+  String get ledgersRemote => '雲端帳本';
+
+  @override
+  String get ledgersEmpty => '暫無帳本';
+
+  @override
+  String get ledgersRestoreAll => '全部恢復';
+
+  @override
+  String ledgersSwitched(String name) {
+    return '已切換到帳本「$name」';
+  }
+
+  @override
+  String get ledgersDownloadTitle => '下載帳本';
+
+  @override
+  String ledgersDownloadMessage(String name) {
+    return '確認下載帳本「$name」到本地？';
+  }
+
+  @override
+  String get ledgersDownloading => '下載中...';
+
+  @override
+  String ledgersDownloadSuccess(String name) {
+    return '帳本「$name」下載成功';
+  }
+
+  @override
+  String get ledgersDownload => '下載';
+
+  @override
+  String get ledgersDeleteRemote => '刪除雲端帳本';
+
+  @override
+  String get ledgersDeleteRemoteConfirm => '刪除雲端帳本';
+
+  @override
+  String ledgersDeleteRemoteMessage(String name) {
+    return '確認刪除雲端帳本「$name」？此操作無法復原。';
+  }
+
+  @override
+  String get ledgersDeleting => '刪除中...';
+
+  @override
+  String get ledgersDeleteRemoteSuccess => '已刪除雲端帳本';
+
+  @override
+  String get ledgersCannotDeleteLastOne => '無法刪除最後一個帳本';
+
+  @override
+  String get ledgersRestoreAllTitle => '批次恢復';
+
+  @override
+  String ledgersRestoreAllMessage(int count) {
+    return '確認恢復所有雲端帳本？共 $count 個。';
+  }
+
+  @override
+  String get ledgersRestoring => '恢復中...';
+
+  @override
+  String get ledgersRestoreComplete => '恢復完成';
+
+  @override
+  String ledgersRestoreResult(int success, int failed) {
+    return '成功: $success，失敗: $failed';
   }
 
   @override
@@ -4095,6 +4202,72 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineSlogan => '蜜蜂記帳，一筆一蜜';
+
+  @override
+  String get mineAvatarTitle => '頭像設定';
+
+  @override
+  String get mineAvatarFromGallery => '從相簿選擇';
+
+  @override
+  String get mineAvatarFromCamera => '拍照';
+
+  @override
+  String get mineAvatarDelete => '刪除頭像';
+
+  @override
+  String get mineShareApp => '分享應用程式';
+
+  @override
+  String get mineShareAppSubtitle => '生成分享海報並儲存到相簿';
+
+  @override
+  String get mineShareGenerating => '正在生成分享海報...';
+
+  @override
+  String get mineShareFailed => '儲存失敗，請檢查相簿權限';
+
+  @override
+  String get sharePosterAppName => '蜜蜂記帳';
+
+  @override
+  String get sharePosterSlogan => '一筆一蜜，記錄美好生活';
+
+  @override
+  String get sharePosterFeature1 => '✨ 完全開源免費';
+
+  @override
+  String get sharePosterFeature2 => '🤖 AI智能識別帳單';
+
+  @override
+  String get sharePosterFeature3 => '⚡ 自動化記帳';
+
+  @override
+  String get sharePosterFeature4 => '🔒 資料隱私安全';
+
+  @override
+  String get sharePosterFeature5 => '☁️ 雲端同步備份';
+
+  @override
+  String get sharePosterFeature6 => '📊 多帳本管理';
+
+  @override
+  String get sharePosterScanText => '掃碼訪問開源專案';
+
+  @override
+  String get sharePosterSave => '儲存到相簿';
+
+  @override
+  String get sharePosterShare => '分享';
+
+  @override
+  String get sharePosterSaveSuccess => '已儲存到相簿';
+
+  @override
+  String get sharePosterSaveFailed => '儲存失敗';
+
+  @override
+  String get sharePosterPermissionDenied => '相簿權限被拒絕，請在設定中開啟';
 
   @override
   String get mineDaysCount => '記帳天數';
@@ -4463,6 +4636,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String categoryDeleted(Object name) {
     return '分類\"$name\"已刪除';
   }
+
+  @override
+  String get categorySubCategoryTitle => '二級分類';
+
+  @override
+  String get categorySubCategoryDescriptionEnabled => '此分類屬於某個一級分類';
 
   @override
   String get categorySubCategoryDescriptionDisabled => '此分類為獨立的一級分類';
@@ -5116,10 +5295,25 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportCsvHeaderCategory => '分類';
 
   @override
+  String get exportCsvHeaderSubCategory => '二級分類';
+
+  @override
+  String get exportCsvHeaderCategoryIcon => '分類圖示';
+
+  @override
+  String get exportCsvHeaderSubCategoryIcon => '二級分類圖示';
+
+  @override
   String get exportCsvHeaderAmount => '金額';
 
   @override
   String get exportCsvHeaderAccount => '帳戶';
+
+  @override
+  String get exportCsvHeaderFromAccount => '轉出帳戶';
+
+  @override
+  String get exportCsvHeaderToAccount => '轉入帳戶';
 
   @override
   String get exportCsvHeaderNote => '備註';
@@ -5837,6 +6031,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountNameRequired => '請輸入帳戶名称';
 
   @override
+  String get accountNameDuplicate => '帳戶名稱已存在，請使用其他名稱';
+
+  @override
   String get accountTypeLabel => '帳戶類型';
 
   @override
@@ -5902,19 +6099,22 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get welcomeDescription => '一个真正尊重您隐私的记帳應用';
 
   @override
-  String get welcomePrivacyTitle => '您的數據，您做主';
+  String get welcomeCurrencyDescription => '選擇您常用的貨幣，之後可以隨時在設定中更改';
 
   @override
-  String get welcomePrivacyFeature1 => '數據存储在您的設備本地';
+  String get welcomePrivacyTitle => '開源透明 · 社群驅動';
 
   @override
-  String get welcomePrivacyFeature2 => '不会上傳到任何第三方服務器';
+  String get welcomePrivacyFeature1 => '100% 開源代碼，接受社區監督';
 
   @override
-  String get welcomeOpenSourceFeature1 => '100%開源代碼';
+  String get welcomePrivacyFeature2 => '無隱私顧慮，資料完全本地儲存';
 
   @override
-  String get welcomeViewGitHub => '在GitHub查看源代碼';
+  String get welcomeOpenSourceFeature1 => '活躍的開發者社群，持續改進';
+
+  @override
+  String get welcomeViewGitHub => '訪問 GitHub 倉庫';
 
   @override
   String get welcomeCloudSyncTitle => '可選的云同步';
@@ -6389,6 +6589,194 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aboutTelegramGroup => 'Telegram 群';
 
   @override
+  String get aboutSupportDevelopment => '支持開發';
+
+  @override
+  String get aboutSupportDevelopmentSubtitle => '請開發者喝杯咖啡';
+
+  @override
+  String get logCenterTitle => '日誌中心';
+
+  @override
+  String get logCenterSubtitle => '查看應用程式執行日誌';
+
+  @override
+  String get logCenterSearchHint => '搜尋日誌內容或標籤...';
+
+  @override
+  String get logCenterFilterLevel => '日誌級別';
+
+  @override
+  String get logCenterFilterPlatform => '平台';
+
+  @override
+  String get logCenterTotal => '全部';
+
+  @override
+  String get logCenterFiltered => '已過濾';
+
+  @override
+  String get logCenterEmpty => '暫無日誌';
+
+  @override
+  String get logCenterExport => '匯出';
+
+  @override
+  String get logCenterClear => '清空';
+
+  @override
+  String get logCenterExportFailed => '匯出失敗';
+
+  @override
+  String get logCenterClearConfirmTitle => '清空日誌';
+
+  @override
+  String get logCenterClearConfirmMessage => '確定要清空所有日誌嗎？此操作無法復原。';
+
+  @override
+  String get logCenterCleared => '日誌已清空';
+
+  @override
+  String get logCenterCopied => '已複製到剪貼簿';
+
+  @override
+  String get configImportExportTitle => '配置匯入匯出';
+
+  @override
+  String get configImportExportSubtitle => '備份和恢復應用配置';
+
+  @override
+  String get configImportExportInfoTitle => '功能說明';
+
+  @override
+  String get configImportExportInfoMessage => '此功能用於匯出和匯入應用配置，包括雲端服務配置、AI配置等。配置檔案採用YAML格式，方便檢視和編輯。\\n\\n⚠️ 配置檔案包含敏感資訊（如API金鑰、密碼等），請妥善保管。';
+
+  @override
+  String get configExportTitle => '匯出配置';
+
+  @override
+  String get configExportSubtitle => '將目前配置匯出為YAML檔案';
+
+  @override
+  String get configExportShareSubject => 'BeeCount 配置檔案';
+
+  @override
+  String get configExportSuccess => '配置匯出成功';
+
+  @override
+  String get configExportFailed => '配置匯出失敗';
+
+  @override
+  String get configImportTitle => '匯入配置';
+
+  @override
+  String get configImportSubtitle => '從YAML檔案恢復配置';
+
+  @override
+  String get configImportNoFilePath => '未選擇檔案';
+
+  @override
+  String get configImportConfirmTitle => '確認匯入';
+
+  @override
+  String get configImportSuccess => '配置匯入成功';
+
+  @override
+  String get configImportFailed => '配置匯入失敗';
+
+  @override
+  String get configImportRestartTitle => '需要重新啟動';
+
+  @override
+  String get configImportRestartMessage => '配置已匯入，部分配置需要重新啟動應用程式後生效。';
+
+  @override
+  String get configImportExportIncludesTitle => '包含的配置項';
+
+  @override
+  String configExportSavedTo(String path) {
+    return '已儲存至: $path';
+  }
+
+  @override
+  String get configExportViewContent => '檢視內容';
+
+  @override
+  String get configExportCopyContent => '複製內容';
+
+  @override
+  String get configExportContentCopied => '已複製到剪貼簿';
+
+  @override
+  String get configExportReadFileFailed => '讀取檔案失敗';
+
+  @override
+  String get configIncludeSupabase => 'Supabase 雲端服務配置';
+
+  @override
+  String get configIncludeWebdav => 'WebDAV 雲端服務配置';
+
+  @override
+  String get configIncludeAI => 'AI 智慧識別配置';
+
+  @override
+  String get configIncludeAppSettings => '應用程式設定（語言、主題、提醒等）';
+
+  @override
+  String get configIncludeRecurringTransactions => '週期帳單';
+
+  @override
+  String get ledgersConflictTitle => '同步衝突';
+
+  @override
+  String get ledgersConflictMessage => '本地和雲端帳本資料不一致，請選擇操作：';
+
+  @override
+  String ledgersConflictLocalInfo(int count) {
+    return '本地：$count 筆帳單';
+  }
+
+  @override
+  String ledgersConflictRemoteInfo(int count) {
+    return '雲端：$count 筆帳單';
+  }
+
+  @override
+  String ledgersConflictRemoteUpdated(String time) {
+    return '雲端更新：$time';
+  }
+
+  @override
+  String ledgersConflictLocalFingerprint(String fp) {
+    return '本地指紋：$fp';
+  }
+
+  @override
+  String ledgersConflictRemoteFingerprint(String fp) {
+    return '雲端指紋：$fp';
+  }
+
+  @override
+  String get ledgersConflictUpload => '上傳到雲端';
+
+  @override
+  String get ledgersConflictDownload => '下載到本地';
+
+  @override
+  String get ledgersConflictUploading => '正在上傳...';
+
+  @override
+  String get ledgersConflictDownloading => '正在下載...';
+
+  @override
+  String get ledgersConflictUploadSuccess => '上傳成功';
+
+  @override
+  String ledgersConflictDownloadSuccess(int inserted) {
+    return '下載成功，已合併 $inserted 筆帳單';
+  }
+
+  @override
   String get storageManagementTitle => '儲存空間管理';
 
   @override
@@ -6424,4 +6812,88 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get storageClearSuccess => '清理成功';
+
+  @override
+  String get accountNoTransactions => '無交易記錄';
+
+  @override
+  String get accountTransactionHistory => '交易歷史';
+
+  @override
+  String get accountTotalBalance => '總餘額';
+
+  @override
+  String get accountTotalExpense => '總支出';
+
+  @override
+  String get accountTotalIncome => '總收入';
+
+  @override
+  String get accountCurrencyLocked => '該帳戶已有交易記錄，無法變更幣別';
+
+  @override
+  String get commonNotice => '提示';
+
+  @override
+  String get transferTitle => '轉帳';
+
+  @override
+  String get transferFromAccount => '轉出帳戶';
+
+  @override
+  String get transferToAccount => '轉入帳戶';
+
+  @override
+  String get transferSelectAccount => '選擇帳戶';
+
+  @override
+  String get transferCreateSuccess => '轉帳記錄建立成功';
+
+  @override
+  String get transferUpdateSuccess => '轉帳記錄更新成功';
+
+  @override
+  String get transferDifferentCurrencyError => '轉帳只支援相同幣別的帳戶';
+
+  @override
+  String get transferToPrefix => '轉入';
+
+  @override
+  String get transferFromPrefix => '轉出';
+
+  @override
+  String get welcomeCategoryModeTitle => '選擇分類模式';
+
+  @override
+  String get welcomeCategoryModeDescription => '選擇適合您需求的分類結構';
+
+  @override
+  String get welcomeCategoryModeFlatTitle => '扁平分類';
+
+  @override
+  String get welcomeCategoryModeFlatDescription => '簡單快捷';
+
+  @override
+  String get welcomeCategoryModeFlatFeature1 => '扁平化結構，簡單易用';
+
+  @override
+  String get welcomeCategoryModeFlatFeature2 => '適合簡單分類需求';
+
+  @override
+  String get welcomeCategoryModeFlatFeature3 => '快速選擇，高效記帳';
+
+  @override
+  String get welcomeCategoryModeHierarchicalTitle => '階層分類';
+
+  @override
+  String get welcomeCategoryModeHierarchicalDescription => '精細管理';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature1 => '支援父子分類層級';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature2 => '更精細的交易分類';
+
+  @override
+  String get welcomeCategoryModeHierarchicalFeature3 => '適合精細化管理';
 }

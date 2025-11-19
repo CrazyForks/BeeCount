@@ -3471,7 +3471,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportDescription.
   ///
   /// In en, this message translates to:
-  /// **'Click the button below to select save location and export current ledger to CSV file.'**
+  /// **'Supported export types:\n• Transactions (Income/Expense/Transfer)\n• Recurring Bills\n• Categories\n• Accounts\n\nClick the button below to select save location and export current ledger to CSV file.'**
   String get exportDescription;
 
   /// No description provided for @exportButtonIOS.
@@ -5025,31 +5025,31 @@ abstract class AppLocalizations {
   /// No description provided for @welcomePrivacyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your Data, Your Control'**
+  /// **'Open Source · Community Driven'**
   String get welcomePrivacyTitle;
 
   /// No description provided for @welcomePrivacyFeature1.
   ///
   /// In en, this message translates to:
-  /// **'Data stored locally on your device'**
+  /// **'100% open source code, supervised by community'**
   String get welcomePrivacyFeature1;
 
   /// No description provided for @welcomePrivacyFeature2.
   ///
   /// In en, this message translates to:
-  /// **'Never uploaded to any third-party servers'**
+  /// **'No privacy concerns, data stored locally'**
   String get welcomePrivacyFeature2;
 
   /// No description provided for @welcomeOpenSourceFeature1.
   ///
   /// In en, this message translates to:
-  /// **'100% open source code'**
+  /// **'Active developer community, continuous improvement'**
   String get welcomeOpenSourceFeature1;
 
   /// No description provided for @welcomeViewGitHub.
   ///
   /// In en, this message translates to:
-  /// **'View Source Code on GitHub'**
+  /// **'Visit GitHub Repository'**
   String get welcomeViewGitHub;
 
   /// No description provided for @welcomeCloudSyncTitle.
@@ -6156,12 +6156,6 @@ abstract class AppLocalizations {
   /// **'Confirm Import'**
   String get configImportConfirmTitle;
 
-  /// No description provided for @configImportConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Importing config will overwrite current settings, continue?'**
-  String get configImportConfirmMessage;
-
   /// No description provided for @configImportSuccess.
   ///
   /// In en, this message translates to:
@@ -6239,6 +6233,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI smart recognition config'**
   String get configIncludeAI;
+
+  /// No description provided for @configIncludeAppSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'App settings (language, theme, reminder, etc.)'**
+  String get configIncludeAppSettings;
+
+  /// No description provided for @configIncludeRecurringTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions'**
+  String get configIncludeRecurringTransactions;
 
   /// No description provided for @ledgersConflictTitle.
   ///
