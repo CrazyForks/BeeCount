@@ -62,10 +62,11 @@ class Transactions extends Table {
 class RecurringTransactions extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get ledgerId => integer()();
-  TextColumn get type => text()(); // expense / income
+  TextColumn get type => text()(); // expense / income / transfer
   RealColumn get amount => real()();
-  IntColumn get categoryId => integer()();
+  IntColumn get categoryId => integer().nullable()(); // 转账时为null
   IntColumn get accountId => integer().nullable()();
+  IntColumn get toAccountId => integer().nullable()(); // 转账的目标账户
   TextColumn get note => text().nullable()();
 
   // 重复规则
@@ -100,7 +101,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6; // v6: 二级分类支持（添加parentId、level字段）
+  int get schemaVersion => 7; // v7: 周期账单支持转账（添加toAccountId字段，categoryId改为可空）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -192,6 +193,61 @@ class BeeDatabase extends _$BeeDatabase {
             // 确保所有现有分类的 level 都为 1（一级分类）
             await customStatement(
                 'UPDATE categories SET level = 1 WHERE level IS NULL OR level = 0;');
+          }
+          if (from < 7) {
+            print('[DB Migration] 开始迁移到 v7: 周期账单支持转账');
+            // v7: 周期账单支持转账
+            // 需要将 category_id 改为可空，并添加 to_account_id 字段
+            // SQLite 不支持修改列约束，所以需要重建表
+
+            // 1. 创建新表
+            print('[DB Migration] 步骤1: 创建新表');
+            await customStatement('''
+              CREATE TABLE IF NOT EXISTS recurring_transactions_new (
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                ledger_id INTEGER NOT NULL,
+                type TEXT NOT NULL,
+                amount REAL NOT NULL,
+                category_id INTEGER,
+                account_id INTEGER,
+                to_account_id INTEGER,
+                note TEXT,
+                frequency TEXT NOT NULL,
+                interval INTEGER NOT NULL DEFAULT 1,
+                day_of_month INTEGER,
+                day_of_week INTEGER,
+                month_of_year INTEGER,
+                start_date INTEGER NOT NULL,
+                end_date INTEGER,
+                last_generated_date INTEGER,
+                enabled INTEGER NOT NULL DEFAULT 1,
+                created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+                updated_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now'))
+              );
+            ''');
+
+            // 2. 复制数据
+            print('[DB Migration] 步骤2: 复制数据');
+            await customStatement('''
+              INSERT INTO recurring_transactions_new
+              (id, ledger_id, type, amount, category_id, account_id, to_account_id, note,
+               frequency, interval, day_of_month, day_of_week, month_of_year,
+               start_date, end_date, last_generated_date, enabled, created_at, updated_at)
+              SELECT id, ledger_id, type, amount, category_id, account_id,
+                     NULL as to_account_id, note,
+                     frequency, interval, day_of_month, day_of_week, month_of_year,
+                     start_date, end_date, last_generated_date, enabled, created_at, updated_at
+              FROM recurring_transactions;
+            ''');
+
+            // 3. 删除旧表
+            print('[DB Migration] 步骤3: 删除旧表');
+            await customStatement('DROP TABLE recurring_transactions;');
+
+            // 4. 重命名新表
+            print('[DB Migration] 步骤4: 重命名新表');
+            await customStatement('ALTER TABLE recurring_transactions_new RENAME TO recurring_transactions;');
+            print('[DB Migration] v7 迁移完成');
           }
         },
       );

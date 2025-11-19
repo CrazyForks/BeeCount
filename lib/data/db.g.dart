@@ -1585,13 +1585,19 @@ class $RecurringTransactionsTable extends RecurringTransactions
       const VerificationMeta('categoryId');
   @override
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-      'category_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      'category_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _accountIdMeta =
       const VerificationMeta('accountId');
   @override
   late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
       'account_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _toAccountIdMeta =
+      const VerificationMeta('toAccountId');
+  @override
+  late final GeneratedColumn<int> toAccountId = GeneratedColumn<int>(
+      'to_account_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
@@ -1682,6 +1688,7 @@ class $RecurringTransactionsTable extends RecurringTransactions
         amount,
         categoryId,
         accountId,
+        toAccountId,
         note,
         frequency,
         interval,
@@ -1732,12 +1739,16 @@ class $RecurringTransactionsTable extends RecurringTransactions
           _categoryIdMeta,
           categoryId.isAcceptableOrUnknown(
               data['category_id']!, _categoryIdMeta));
-    } else if (isInserting) {
-      context.missing(_categoryIdMeta);
     }
     if (data.containsKey('account_id')) {
       context.handle(_accountIdMeta,
           accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta));
+    }
+    if (data.containsKey('to_account_id')) {
+      context.handle(
+          _toAccountIdMeta,
+          toAccountId.isAcceptableOrUnknown(
+              data['to_account_id']!, _toAccountIdMeta));
     }
     if (data.containsKey('note')) {
       context.handle(
@@ -1817,9 +1828,11 @@ class $RecurringTransactionsTable extends RecurringTransactions
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
       categoryId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}category_id']),
       accountId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}account_id']),
+      toAccountId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}to_account_id']),
       note: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}note']),
       frequency: attachedDatabase.typeMapping
@@ -1859,8 +1872,9 @@ class RecurringTransaction extends DataClass
   final int ledgerId;
   final String type;
   final double amount;
-  final int categoryId;
+  final int? categoryId;
   final int? accountId;
+  final int? toAccountId;
   final String? note;
   final String frequency;
   final int interval;
@@ -1878,8 +1892,9 @@ class RecurringTransaction extends DataClass
       required this.ledgerId,
       required this.type,
       required this.amount,
-      required this.categoryId,
+      this.categoryId,
       this.accountId,
+      this.toAccountId,
       this.note,
       required this.frequency,
       required this.interval,
@@ -1899,9 +1914,14 @@ class RecurringTransaction extends DataClass
     map['ledger_id'] = Variable<int>(ledgerId);
     map['type'] = Variable<String>(type);
     map['amount'] = Variable<double>(amount);
-    map['category_id'] = Variable<int>(categoryId);
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<int>(categoryId);
+    }
     if (!nullToAbsent || accountId != null) {
       map['account_id'] = Variable<int>(accountId);
+    }
+    if (!nullToAbsent || toAccountId != null) {
+      map['to_account_id'] = Variable<int>(toAccountId);
     }
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String>(note);
@@ -1936,10 +1956,15 @@ class RecurringTransaction extends DataClass
       ledgerId: Value(ledgerId),
       type: Value(type),
       amount: Value(amount),
-      categoryId: Value(categoryId),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
       accountId: accountId == null && nullToAbsent
           ? const Value.absent()
           : Value(accountId),
+      toAccountId: toAccountId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(toAccountId),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       frequency: Value(frequency),
       interval: Value(interval),
@@ -1973,8 +1998,9 @@ class RecurringTransaction extends DataClass
       ledgerId: serializer.fromJson<int>(json['ledgerId']),
       type: serializer.fromJson<String>(json['type']),
       amount: serializer.fromJson<double>(json['amount']),
-      categoryId: serializer.fromJson<int>(json['categoryId']),
+      categoryId: serializer.fromJson<int?>(json['categoryId']),
       accountId: serializer.fromJson<int?>(json['accountId']),
+      toAccountId: serializer.fromJson<int?>(json['toAccountId']),
       note: serializer.fromJson<String?>(json['note']),
       frequency: serializer.fromJson<String>(json['frequency']),
       interval: serializer.fromJson<int>(json['interval']),
@@ -1998,8 +2024,9 @@ class RecurringTransaction extends DataClass
       'ledgerId': serializer.toJson<int>(ledgerId),
       'type': serializer.toJson<String>(type),
       'amount': serializer.toJson<double>(amount),
-      'categoryId': serializer.toJson<int>(categoryId),
+      'categoryId': serializer.toJson<int?>(categoryId),
       'accountId': serializer.toJson<int?>(accountId),
+      'toAccountId': serializer.toJson<int?>(toAccountId),
       'note': serializer.toJson<String?>(note),
       'frequency': serializer.toJson<String>(frequency),
       'interval': serializer.toJson<int>(interval),
@@ -2020,8 +2047,9 @@ class RecurringTransaction extends DataClass
           int? ledgerId,
           String? type,
           double? amount,
-          int? categoryId,
+          Value<int?> categoryId = const Value.absent(),
           Value<int?> accountId = const Value.absent(),
+          Value<int?> toAccountId = const Value.absent(),
           Value<String?> note = const Value.absent(),
           String? frequency,
           int? interval,
@@ -2039,8 +2067,9 @@ class RecurringTransaction extends DataClass
         ledgerId: ledgerId ?? this.ledgerId,
         type: type ?? this.type,
         amount: amount ?? this.amount,
-        categoryId: categoryId ?? this.categoryId,
+        categoryId: categoryId.present ? categoryId.value : this.categoryId,
         accountId: accountId.present ? accountId.value : this.accountId,
+        toAccountId: toAccountId.present ? toAccountId.value : this.toAccountId,
         note: note.present ? note.value : this.note,
         frequency: frequency ?? this.frequency,
         interval: interval ?? this.interval,
@@ -2065,6 +2094,8 @@ class RecurringTransaction extends DataClass
       categoryId:
           data.categoryId.present ? data.categoryId.value : this.categoryId,
       accountId: data.accountId.present ? data.accountId.value : this.accountId,
+      toAccountId:
+          data.toAccountId.present ? data.toAccountId.value : this.toAccountId,
       note: data.note.present ? data.note.value : this.note,
       frequency: data.frequency.present ? data.frequency.value : this.frequency,
       interval: data.interval.present ? data.interval.value : this.interval,
@@ -2093,6 +2124,7 @@ class RecurringTransaction extends DataClass
           ..write('amount: $amount, ')
           ..write('categoryId: $categoryId, ')
           ..write('accountId: $accountId, ')
+          ..write('toAccountId: $toAccountId, ')
           ..write('note: $note, ')
           ..write('frequency: $frequency, ')
           ..write('interval: $interval, ')
@@ -2117,6 +2149,7 @@ class RecurringTransaction extends DataClass
       amount,
       categoryId,
       accountId,
+      toAccountId,
       note,
       frequency,
       interval,
@@ -2139,6 +2172,7 @@ class RecurringTransaction extends DataClass
           other.amount == this.amount &&
           other.categoryId == this.categoryId &&
           other.accountId == this.accountId &&
+          other.toAccountId == this.toAccountId &&
           other.note == this.note &&
           other.frequency == this.frequency &&
           other.interval == this.interval &&
@@ -2159,8 +2193,9 @@ class RecurringTransactionsCompanion
   final Value<int> ledgerId;
   final Value<String> type;
   final Value<double> amount;
-  final Value<int> categoryId;
+  final Value<int?> categoryId;
   final Value<int?> accountId;
+  final Value<int?> toAccountId;
   final Value<String?> note;
   final Value<String> frequency;
   final Value<int> interval;
@@ -2180,6 +2215,7 @@ class RecurringTransactionsCompanion
     this.amount = const Value.absent(),
     this.categoryId = const Value.absent(),
     this.accountId = const Value.absent(),
+    this.toAccountId = const Value.absent(),
     this.note = const Value.absent(),
     this.frequency = const Value.absent(),
     this.interval = const Value.absent(),
@@ -2198,8 +2234,9 @@ class RecurringTransactionsCompanion
     required int ledgerId,
     required String type,
     required double amount,
-    required int categoryId,
+    this.categoryId = const Value.absent(),
     this.accountId = const Value.absent(),
+    this.toAccountId = const Value.absent(),
     this.note = const Value.absent(),
     required String frequency,
     this.interval = const Value.absent(),
@@ -2215,7 +2252,6 @@ class RecurringTransactionsCompanion
   })  : ledgerId = Value(ledgerId),
         type = Value(type),
         amount = Value(amount),
-        categoryId = Value(categoryId),
         frequency = Value(frequency),
         startDate = Value(startDate);
   static Insertable<RecurringTransaction> custom({
@@ -2225,6 +2261,7 @@ class RecurringTransactionsCompanion
     Expression<double>? amount,
     Expression<int>? categoryId,
     Expression<int>? accountId,
+    Expression<int>? toAccountId,
     Expression<String>? note,
     Expression<String>? frequency,
     Expression<int>? interval,
@@ -2245,6 +2282,7 @@ class RecurringTransactionsCompanion
       if (amount != null) 'amount': amount,
       if (categoryId != null) 'category_id': categoryId,
       if (accountId != null) 'account_id': accountId,
+      if (toAccountId != null) 'to_account_id': toAccountId,
       if (note != null) 'note': note,
       if (frequency != null) 'frequency': frequency,
       if (interval != null) 'interval': interval,
@@ -2265,8 +2303,9 @@ class RecurringTransactionsCompanion
       Value<int>? ledgerId,
       Value<String>? type,
       Value<double>? amount,
-      Value<int>? categoryId,
+      Value<int?>? categoryId,
       Value<int?>? accountId,
+      Value<int?>? toAccountId,
       Value<String?>? note,
       Value<String>? frequency,
       Value<int>? interval,
@@ -2286,6 +2325,7 @@ class RecurringTransactionsCompanion
       amount: amount ?? this.amount,
       categoryId: categoryId ?? this.categoryId,
       accountId: accountId ?? this.accountId,
+      toAccountId: toAccountId ?? this.toAccountId,
       note: note ?? this.note,
       frequency: frequency ?? this.frequency,
       interval: interval ?? this.interval,
@@ -2321,6 +2361,9 @@ class RecurringTransactionsCompanion
     }
     if (accountId.present) {
       map['account_id'] = Variable<int>(accountId.value);
+    }
+    if (toAccountId.present) {
+      map['to_account_id'] = Variable<int>(toAccountId.value);
     }
     if (note.present) {
       map['note'] = Variable<String>(note.value);
@@ -2370,6 +2413,7 @@ class RecurringTransactionsCompanion
           ..write('amount: $amount, ')
           ..write('categoryId: $categoryId, ')
           ..write('accountId: $accountId, ')
+          ..write('toAccountId: $toAccountId, ')
           ..write('note: $note, ')
           ..write('frequency: $frequency, ')
           ..write('interval: $interval, ')
@@ -3191,8 +3235,9 @@ typedef $$RecurringTransactionsTableCreateCompanionBuilder
   required int ledgerId,
   required String type,
   required double amount,
-  required int categoryId,
+  Value<int?> categoryId,
   Value<int?> accountId,
+  Value<int?> toAccountId,
   Value<String?> note,
   required String frequency,
   Value<int> interval,
@@ -3212,8 +3257,9 @@ typedef $$RecurringTransactionsTableUpdateCompanionBuilder
   Value<int> ledgerId,
   Value<String> type,
   Value<double> amount,
-  Value<int> categoryId,
+  Value<int?> categoryId,
   Value<int?> accountId,
+  Value<int?> toAccountId,
   Value<String?> note,
   Value<String> frequency,
   Value<int> interval,
@@ -3254,6 +3300,9 @@ class $$RecurringTransactionsTableFilterComposer
 
   ColumnFilters<int> get accountId => $composableBuilder(
       column: $table.accountId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get toAccountId => $composableBuilder(
+      column: $table.toAccountId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get note => $composableBuilder(
       column: $table.note, builder: (column) => ColumnFilters(column));
@@ -3320,6 +3369,9 @@ class $$RecurringTransactionsTableOrderingComposer
   ColumnOrderings<int> get accountId => $composableBuilder(
       column: $table.accountId, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get toAccountId => $composableBuilder(
+      column: $table.toAccountId, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get note => $composableBuilder(
       column: $table.note, builder: (column) => ColumnOrderings(column));
 
@@ -3384,6 +3436,9 @@ class $$RecurringTransactionsTableAnnotationComposer
 
   GeneratedColumn<int> get accountId =>
       $composableBuilder(column: $table.accountId, builder: (column) => column);
+
+  GeneratedColumn<int> get toAccountId => $composableBuilder(
+      column: $table.toAccountId, builder: (column) => column);
 
   GeneratedColumn<String> get note =>
       $composableBuilder(column: $table.note, builder: (column) => column);
@@ -3457,8 +3512,9 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             Value<int> ledgerId = const Value.absent(),
             Value<String> type = const Value.absent(),
             Value<double> amount = const Value.absent(),
-            Value<int> categoryId = const Value.absent(),
+            Value<int?> categoryId = const Value.absent(),
             Value<int?> accountId = const Value.absent(),
+            Value<int?> toAccountId = const Value.absent(),
             Value<String?> note = const Value.absent(),
             Value<String> frequency = const Value.absent(),
             Value<int> interval = const Value.absent(),
@@ -3479,6 +3535,7 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             amount: amount,
             categoryId: categoryId,
             accountId: accountId,
+            toAccountId: toAccountId,
             note: note,
             frequency: frequency,
             interval: interval,
@@ -3497,8 +3554,9 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             required int ledgerId,
             required String type,
             required double amount,
-            required int categoryId,
+            Value<int?> categoryId = const Value.absent(),
             Value<int?> accountId = const Value.absent(),
+            Value<int?> toAccountId = const Value.absent(),
             Value<String?> note = const Value.absent(),
             required String frequency,
             Value<int> interval = const Value.absent(),
@@ -3519,6 +3577,7 @@ class $$RecurringTransactionsTableTableManager extends RootTableManager<
             amount: amount,
             categoryId: categoryId,
             accountId: accountId,
+            toAccountId: toAccountId,
             note: note,
             frequency: frequency,
             interval: interval,

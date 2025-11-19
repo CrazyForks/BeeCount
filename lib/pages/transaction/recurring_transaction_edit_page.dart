@@ -7,6 +7,7 @@ import '../../widgets/ui/ui.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/recurring_transaction_service.dart';
+import '../../services/logger_service.dart';
 import '../../utils/category_utils.dart';
 
 class RecurringTransactionEditPage extends ConsumerStatefulWidget {
@@ -30,7 +31,10 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
   DateTime? _endDate;
   int? _dayOfMonth;
   Category? _selectedCategory;
+  int? _selectedAccountId;
+  int? _selectedToAccountId; // 转账的目标账户
   late bool _enabled;
+  bool _hasAttemptedSave = false; // 是否已尝试保存
 
   bool get _isEditing => widget.recurring != null;
 
@@ -44,6 +48,8 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       _startDate = widget.recurring!.startDate;
       _endDate = widget.recurring!.endDate;
       _dayOfMonth = widget.recurring!.dayOfMonth;
+      _selectedAccountId = widget.recurring!.accountId;
+      _selectedToAccountId = widget.recurring!.toAccountId;
       _enabled = widget.recurring!.enabled;
       _amountController.text = widget.recurring!.amount.toStringAsFixed(2);
       _noteController.text = widget.recurring!.note ?? '';
@@ -56,14 +62,19 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       _dayOfMonth = DateTime.now().day;
       _enabled = true;
     }
+
+    // 监听金额输入变化，更新按钮状态
+    _amountController.addListener(() {
+      setState(() {});
+    });
   }
 
   Future<void> _loadCategoryAndAccount() async {
-    if (_isEditing) {
+    if (_isEditing && widget.recurring!.categoryId != null) {
       final db = ref.read(databaseProvider);
 
       final category = await (db.select(db.categories)
-            ..where((c) => c.id.equals(widget.recurring!.categoryId)))
+            ..where((c) => c.id.equals(widget.recurring!.categoryId!)))
           .getSingleOrNull();
 
       setState(() {
@@ -112,7 +123,7 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
                   TextFormField(
                     controller: _amountController,
                     decoration: InputDecoration(
-                      labelText: l10n.homeExpense,
+                      labelText: l10n.importFieldAmount,
                       border: const OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -128,9 +139,21 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
                   ),
                   const SizedBox(height: 16),
 
-                  // Category selection
-                  _buildCategorySelector(l10n),
+                  // Category selection (not for transfer)
+                  if (_type != 'transfer') ...[
+                    _buildCategorySelector(l10n),
+                    const SizedBox(height: 16),
+                  ],
+
+                  // Account selection (from account)
+                  _buildAccountSelector(l10n, isFromAccount: true),
                   const SizedBox(height: 16),
+
+                  // To account selection (only for transfer)
+                  if (_type == 'transfer') ...[
+                    _buildAccountSelector(l10n, isFromAccount: false),
+                    const SizedBox(height: 16),
+                  ],
 
                   // Frequency
                   _buildFrequencySelector(l10n),
@@ -202,7 +225,7 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             child: FilledButton(
-              onPressed: _saveRecurringTransaction,
+              onPressed: _isFormValid() ? _saveRecurringTransaction : null,
               child: Text(l10n.commonSave),
             ),
           ),
@@ -216,22 +239,43 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       children: [
         Expanded(
           child: RadioListTile<String>(
-            title: Text(l10n.categoryExpense),
+            title: Text(l10n.categoryExpense, style: const TextStyle(fontSize: 14)),
             value: 'expense',
             groupValue: _type,
+            contentPadding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
             onChanged: (value) {
               setState(() {
                 _type = value!;
                 _selectedCategory = null; // Reset category when type changes
+                _selectedToAccountId = null; // Reset transfer account
               });
             },
           ),
         ),
         Expanded(
           child: RadioListTile<String>(
-            title: Text(l10n.categoryIncome),
+            title: Text(l10n.categoryIncome, style: const TextStyle(fontSize: 14)),
             value: 'income',
             groupValue: _type,
+            contentPadding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
+            onChanged: (value) {
+              setState(() {
+                _type = value!;
+                _selectedCategory = null; // Reset category when type changes
+                _selectedToAccountId = null; // Reset transfer account
+              });
+            },
+          ),
+        ),
+        Expanded(
+          child: RadioListTile<String>(
+            title: Text(l10n.transferTitle, style: const TextStyle(fontSize: 14)),
+            value: 'transfer',
+            groupValue: _type,
+            contentPadding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
             onChanged: (value) {
               setState(() {
                 _type = value!;
@@ -251,6 +295,7 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
         decoration: InputDecoration(
           labelText: l10n.categoryTitle,
           border: const OutlineInputBorder(),
+          errorText: _getCategoryErrorText(),
         ),
         child: Text(
           _selectedCategory != null
@@ -259,6 +304,89 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
         ),
       ),
     );
+  }
+
+  Widget _buildAccountSelector(AppLocalizations l10n, {required bool isFromAccount}) {
+    final accountId = isFromAccount ? _selectedAccountId : _selectedToAccountId;
+    final label = isFromAccount
+        ? (_type == 'transfer' ? l10n.transferFromAccount : l10n.accountSelectTitle)
+        : l10n.transferToAccount;
+
+    return InkWell(
+      onTap: () => _selectAccount(isFromAccount: isFromAccount),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+          errorText: _getAccountErrorText(isFromAccount),
+        ),
+        child: FutureBuilder<Account?>(
+          future: accountId != null
+              ? ref.read(repositoryProvider).getAccount(accountId)
+              : Future.value(null),
+          builder: (context, snapshot) {
+            final accountName = snapshot.data?.name ?? l10n.accountNone;
+            return Text(accountName);
+          },
+        ),
+      ),
+    );
+  }
+
+  String? _getAccountErrorText(bool isFromAccount) {
+    if (!_hasAttemptedSave) return null;
+
+    final l10n = AppLocalizations.of(context);
+
+    if (isFromAccount) {
+      if (_type == 'transfer' && _selectedAccountId == null) {
+        return '请选择转出账户';
+      }
+    } else {
+      if (_type == 'transfer' && _selectedToAccountId == null) {
+        return '请选择转入账户';
+      }
+      if (_type == 'transfer' &&
+          _selectedAccountId != null &&
+          _selectedToAccountId != null &&
+          _selectedAccountId == _selectedToAccountId) {
+        return '转出账户和转入账户不能相同';
+      }
+    }
+
+    return null;
+  }
+
+  String? _getCategoryErrorText() {
+    if (!_hasAttemptedSave) return null;
+    if (_type != 'transfer' && _selectedCategory == null) {
+      return '请选择分类';
+    }
+    return null;
+  }
+
+  bool _isFormValid() {
+    // 检查金额
+    if (_amountController.text.isEmpty || double.tryParse(_amountController.text) == null) {
+      return false;
+    }
+
+    // 检查分类（非转账）
+    if (_type != 'transfer' && _selectedCategory == null) {
+      return false;
+    }
+
+    // 检查转账账户
+    if (_type == 'transfer') {
+      if (_selectedAccountId == null || _selectedToAccountId == null) {
+        return false;
+      }
+      if (_selectedAccountId == _selectedToAccountId) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   Widget _buildFrequencySelector(AppLocalizations l10n) {
@@ -501,15 +629,83 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
     }
   }
 
+  Future<void> _selectAccount({required bool isFromAccount}) async {
+    final repo = ref.read(repositoryProvider);
+    final ledgerId = ref.read(currentLedgerIdProvider);
+    final ledger = await ref.read(ledgerByIdProvider(ledgerId).future);
+
+    if (ledger == null) return;
+
+    // 获取所有账户，然后过滤与当前账本币种相同的账户
+    final allAccounts = await repo.getAllAccounts();
+    var accounts = allAccounts.where((a) => a.currency == ledger.currency).toList();
+
+    // 如果是选择转入账户，排除已选择的转出账户
+    if (!isFromAccount && _selectedAccountId != null) {
+      accounts = accounts.where((a) => a.id != _selectedAccountId).toList();
+    }
+
+    if (!mounted) return;
+
+    final title = isFromAccount
+        ? (_type == 'transfer' ? AppLocalizations.of(context)!.transferFromAccount : AppLocalizations.of(context)!.accountSelectTitle)
+        : AppLocalizations.of(context)!.transferToAccount;
+
+    final selected = await showDialog<int?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: accounts.length + (_type == 'transfer' && !isFromAccount ? 0 : 1), // 转入账户不显示"无账户"
+            itemBuilder: (context, index) {
+              if (index == 0 && (_type != 'transfer' || isFromAccount)) {
+                return ListTile(
+                  title: Text(AppLocalizations.of(context)!.accountNone),
+                  onTap: () => Navigator.of(context).pop(null),
+                );
+              }
+              final accountIndex = _type == 'transfer' && !isFromAccount ? index : index - 1;
+              final account = accounts[accountIndex];
+              return ListTile(
+                title: Text(account.name),
+                onTap: () => Navigator.of(context).pop(account.id),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    // 用户点击了选项或取消
+    setState(() {
+      if (isFromAccount) {
+        _selectedAccountId = selected;
+        // 如果转出账户与转入账户相同，清空转入账户
+        if (_type == 'transfer' && selected == _selectedToAccountId) {
+          _selectedToAccountId = null;
+        }
+      } else {
+        _selectedToAccountId = selected;
+      }
+    });
+  }
+
   Future<void> _saveRecurringTransaction() async {
+    final l10n = AppLocalizations.of(context)!;
+
+    // 标记为已尝试保存，触发错误提示显示
+    setState(() {
+      _hasAttemptedSave = true;
+    });
+
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    if (_selectedCategory == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.commonError)),
-      );
+    if (!_isFormValid()) {
       return;
     }
 
@@ -521,8 +717,9 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       ledgerId: drift.Value(ledgerId),
       type: drift.Value(_type),
       amount: drift.Value(double.parse(_amountController.text)),
-      categoryId: drift.Value(_selectedCategory!.id),
-      accountId: const drift.Value(null),
+      categoryId: drift.Value(_type == 'transfer' ? null : _selectedCategory!.id),
+      accountId: drift.Value(_selectedAccountId),
+      toAccountId: drift.Value(_selectedToAccountId),
       note: drift.Value(_noteController.text.isEmpty ? null : _noteController.text),
       frequency: drift.Value(_frequency.value),
       interval: drift.Value(_interval),
@@ -543,11 +740,11 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       if (mounted) {
         Navigator.of(context).pop();
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // 使用 logger 记录详细错误信息
+      logger.error('周期账单保存', '保存失败', e, stackTrace);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${AppLocalizations.of(context)!.commonError}: $e')),
-        );
+        showToast(context, '${l10n.commonError}: $e');
       }
     }
   }

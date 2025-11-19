@@ -149,16 +149,22 @@ class _RecurringTransactionCard extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        FutureBuilder<Category?>(
-                          future: _getCategory(ref, recurring.categoryId),
-                          builder: (context, snapshot) {
-                            final categoryName = snapshot.data?.name ?? '';
-                            return Text(
-                              CategoryUtils.getDisplayName(categoryName, context),
-                              style: Theme.of(context).textTheme.titleMedium,
-                            );
-                          },
-                        ),
+                        // 显示分类或转账
+                        recurring.type == 'transfer'
+                            ? Text(
+                                AppLocalizations.of(context)!.transferTitle,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              )
+                            : FutureBuilder<Category?>(
+                                future: _getCategory(ref, recurring.categoryId),
+                                builder: (context, snapshot) {
+                                  final categoryName = snapshot.data?.name ?? '';
+                                  return Text(
+                                    CategoryUtils.getDisplayName(categoryName, context),
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  );
+                                },
+                              ),
                         const SizedBox(height: 4),
                         Text(
                           _getFrequencyDescription(context, service),
@@ -288,7 +294,8 @@ class _RecurringTransactionCard extends ConsumerWidget {
     }
   }
 
-  Future<Category?> _getCategory(WidgetRef ref, int categoryId) async {
+  Future<Category?> _getCategory(WidgetRef ref, int? categoryId) async {
+    if (categoryId == null) return null;
     final db = ref.read(databaseProvider);
     final result = await (db.select(db.categories)
           ..where((c) => c.id.equals(categoryId)))
