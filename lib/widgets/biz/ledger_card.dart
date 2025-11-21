@@ -176,13 +176,17 @@ class LedgerCard extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(height: 4.0.scaled(context, ref)),
-                        // 余额（使用万/k/M格式）
+                        // 余额（根据设置使用简洁或完整格式）
                         Text(
-                          l10n.ledgersBalance(formatBalance(
-                            ledger.balance,
-                            ledger.currency,
-                            isChineseLocale: Localizations.localeOf(context).languageCode == 'zh',
-                          )),
+                          l10n.ledgersBalance(
+                            ref.watch(compactAmountProvider)
+                              ? formatBalance(
+                                  ledger.balance,
+                                  ledger.currency,
+                                  isChineseLocale: Localizations.localeOf(context).languageCode == 'zh',
+                                )
+                              : formatBalanceFull(ledger.balance, ledger.currency),
+                          ),
                           style: TextStyle(
                             fontSize: 14.0.scaled(context, ref),
                             fontWeight: FontWeight.w500,

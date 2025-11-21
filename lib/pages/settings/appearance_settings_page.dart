@@ -104,6 +104,16 @@ class AppearanceSettingsPage extends ConsumerWidget {
                         enabled: isDark,
                         onTap: isDark ? () => _showPatternStyleDialog(context, ref, l10n) : null,
                       ),
+                      BeeTokens.cardDivider(context),
+                      // 金额显示格式
+                      AppListTile(
+                        leading: Icons.money_outlined,
+                        title: l10n.appearanceAmountFormat,
+                        subtitle: ref.watch(compactAmountProvider)
+                            ? l10n.appearanceAmountFormatCompact
+                            : l10n.appearanceAmountFormatFull,
+                        onTap: () => _showAmountFormatDialog(context, ref, l10n),
+                      ),
                     ],
                   ),
                 ),
@@ -336,6 +346,84 @@ class AppearanceSettingsPage extends ConsumerWidget {
           : null,
       onTap: () {
         ref.read(darkModePatternStyleProvider.notifier).state = value;
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  /// 显示金额显示格式选择对话框
+  void _showAmountFormatDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    final isCompact = ref.read(compactAmountProvider);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: BeeTokens.surfaceElevated(context),
+        title: Text(
+          l10n.appearanceAmountFormat,
+          style: TextStyle(color: BeeTokens.textPrimary(context)),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildAmountFormatOption(
+              context, ref,
+              title: l10n.appearanceAmountFormatFull,
+              subtitle: l10n.appearanceAmountFormatFullDesc,
+              value: false,
+              currentValue: isCompact,
+              icon: Icons.format_list_numbered_outlined,
+            ),
+            _buildAmountFormatOption(
+              context, ref,
+              title: l10n.appearanceAmountFormatCompact,
+              subtitle: l10n.appearanceAmountFormatCompactDesc,
+              value: true,
+              currentValue: isCompact,
+              icon: Icons.compress_outlined,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAmountFormatOption(
+    BuildContext context,
+    WidgetRef ref, {
+    required String title,
+    required String subtitle,
+    required bool value,
+    required bool currentValue,
+    required IconData icon,
+  }) {
+    final isSelected = value == currentValue;
+    final primaryColor = ref.watch(primaryColorProvider);
+
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: isSelected ? primaryColor : BeeTokens.iconSecondary(context),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isSelected ? primaryColor : BeeTokens.textPrimary(context),
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: BeeTokens.textSecondary(context),
+          fontSize: 12,
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(Icons.check, color: primaryColor)
+          : null,
+      onTap: () {
+        ref.read(compactAmountProvider.notifier).state = value;
         Navigator.pop(context);
       },
     );

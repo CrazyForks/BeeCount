@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers.dart';
+import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/amount_text.dart';
 import '../../widgets/biz/section_card.dart';
@@ -327,7 +328,7 @@ class _StatCell extends ConsumerWidget {
           value: value,
           signed: false,
           showCurrency: false,
-          useCompactFormat: true,
+          useCompactFormat: ref.watch(compactAmountProvider),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -607,7 +608,7 @@ class _CardStatItem extends ConsumerWidget {
           value: value,
           signed: false,
           showCurrency: false,
-          useCompactFormat: true, // 使用增强的智能压缩格式
+          useCompactFormat: ref.watch(compactAmountProvider),
           currencyCode: currencyCode,
           style: const TextStyle(
             fontSize: 16,

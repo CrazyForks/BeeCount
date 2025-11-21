@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/db.dart' as db;
 import '../../providers.dart';
+import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
@@ -262,7 +263,7 @@ class _StatCell extends ConsumerWidget {
           value: value,
           signed: false,
           showCurrency: true,
-          useCompactFormat: true,
+          useCompactFormat: ref.watch(compactAmountProvider),
           currencyCode: currencyCode,
           style: TextStyle(
             fontSize: 18,

@@ -7,6 +7,7 @@ import '../data/import_page.dart';
 import '../data/export_page.dart';
 import '../settings/personalize_page.dart';
 import '../../providers.dart';
+import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
@@ -474,7 +475,7 @@ class _StatCell extends ConsumerWidget {
         value: value as double,
         signed: false,
         showCurrency: true,
-        useCompactFormat: true,
+        useCompactFormat: ref.watch(compactAmountProvider),
         currencyCode: currencyCode,
         style: numStyle,
       );

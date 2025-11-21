@@ -1393,6 +1393,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appearancePatternHoneycomb => '蜂巢六边形';
 
   @override
+  String get appearanceAmountFormat => '余额显示格式';
+
+  @override
+  String get appearanceAmountFormatFull => '完整金额';
+
+  @override
+  String get appearanceAmountFormatFullDesc => '显示完整金额，如 123,456.78';
+
+  @override
+  String get appearanceAmountFormatCompact => '简洁显示';
+
+  @override
+  String get appearanceAmountFormatCompactDesc => '大金额缩写，如 12.3万（仅对账户余额生效）';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '当前缩放：x$scale';
   }
@@ -4875,6 +4890,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get appearancePatternHoneycomb => '蜂巢六邊形';
+
+  @override
+  String get appearanceAmountFormat => '餘額顯示格式';
+
+  @override
+  String get appearanceAmountFormatFull => '完整金額';
+
+  @override
+  String get appearanceAmountFormatFullDesc => '顯示完整金額，如 123,456.78';
+
+  @override
+  String get appearanceAmountFormatCompact => '簡潔顯示';
+
+  @override
+  String get appearanceAmountFormatCompactDesc => '大金額縮寫，如 12.3萬（僅對帳戶餘額生效）';
 
   @override
   String fontSettingsCurrentScale(Object scale) {

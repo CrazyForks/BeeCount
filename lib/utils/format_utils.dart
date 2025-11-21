@@ -107,6 +107,34 @@ String formatBalance(double balance, String currencyCode,
   }
 }
 
+/// 格式化完整余额显示（带千分号）
+///
+/// [balance] 金额
+/// [currencyCode] 币种代码 (如 'CNY', 'USD')
+///
+/// 始终显示完整金额，使用千分号分隔
+String formatBalanceFull(double balance, String currencyCode) {
+  final absBalance = balance.abs();
+  final currencySymbol = getCurrencySymbol(currencyCode);
+  final sign = balance >= 0 ? currencySymbol : '-$currencySymbol';
+
+  // 格式化为带千分号的字符串
+  final parts = absBalance.toStringAsFixed(2).split('.');
+  final intPart = parts[0];
+  final decPart = parts[1];
+
+  // 添加千分号
+  final buffer = StringBuffer();
+  for (int i = 0; i < intPart.length; i++) {
+    if (i > 0 && (intPart.length - i) % 3 == 0) {
+      buffer.write(',');
+    }
+    buffer.write(intPart[i]);
+  }
+
+  return '$sign${buffer.toString()}.$decPart';
+}
+
 /// 翻译账本名称
 ///
 /// 如果账本名称是 "Default Ledger"，则返回国际化后的名称

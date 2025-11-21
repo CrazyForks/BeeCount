@@ -2652,6 +2652,36 @@ abstract class AppLocalizations {
   /// **'Honeycomb'**
   String get appearancePatternHoneycomb;
 
+  /// No description provided for @appearanceAmountFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance Display Format'**
+  String get appearanceAmountFormat;
+
+  /// No description provided for @appearanceAmountFormatFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Amount'**
+  String get appearanceAmountFormatFull;
+
+  /// No description provided for @appearanceAmountFormatFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Show full amount, e.g. 123,456.78'**
+  String get appearanceAmountFormatFullDesc;
+
+  /// No description provided for @appearanceAmountFormatCompact.
+  ///
+  /// In en, this message translates to:
+  /// **'Compact'**
+  String get appearanceAmountFormatCompact;
+
+  /// No description provided for @appearanceAmountFormatCompactDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Abbreviate large amounts, e.g. 12.3K (only affects account balance)'**
+  String get appearanceAmountFormatCompactDesc;
+
   /// No description provided for @fontSettingsCurrentScale.
   ///
   /// In en, this message translates to:

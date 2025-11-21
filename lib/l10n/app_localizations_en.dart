@@ -1393,6 +1393,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appearancePatternHoneycomb => 'Honeycomb';
 
   @override
+  String get appearanceAmountFormat => 'Balance Display Format';
+
+  @override
+  String get appearanceAmountFormatFull => 'Full Amount';
+
+  @override
+  String get appearanceAmountFormatFullDesc => 'Show full amount, e.g. 123,456.78';
+
+  @override
+  String get appearanceAmountFormatCompact => 'Compact';
+
+  @override
+  String get appearanceAmountFormatCompactDesc => 'Abbreviate large amounts, e.g. 12.3K (only affects account balance)';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return 'Current scale: x$scale';
   }

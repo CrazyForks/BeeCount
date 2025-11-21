@@ -108,6 +108,23 @@ final hideAmountsInitProvider = FutureProvider<void>((ref) async {
 // 可选值：'icons'（图标平铺）、'particles'（粒子星星）、'honeycomb'（蜂巢六边形）
 final headerDecorationStyleProvider = StateProvider<String>((ref) => 'icons');
 
+// 金额显示格式Provider（默认显示完整金额）
+// false = 完整金额（如 123,456.78）
+// true = 简洁显示（如 12.3万）
+final compactAmountProvider = StateProvider<bool>((ref) => false);
+
+// 金额显示格式持久化初始化
+final compactAmountInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getBool('compactAmount');
+  if (saved != null) {
+    ref.read(compactAmountProvider.notifier).state = saved;
+  }
+  ref.listen<bool>(compactAmountProvider, (prev, next) async {
+    await prefs.setBool('compactAmount', next);
+  });
+});
+
 // Header装饰样式持久化初始化
 final headerDecorationStyleInitProvider = FutureProvider<void>((ref) async {
   final prefs = await SharedPreferences.getInstance();
