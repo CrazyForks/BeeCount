@@ -1070,7 +1070,7 @@
   "storageClearSuccess": "清理成功",
   "accountNoTransactions": "無交易記錄",
   "accountTransactionHistory": "交易歷史",
-  "accountTotalBalance": "總餘額",
+  "accountTotalBalance": "淨資產",
   "accountTotalExpense": "總支出",
   "accountTotalIncome": "總收入",
   "accountCurrencyLocked": "該帳戶已有交易記錄，無法變更幣別",

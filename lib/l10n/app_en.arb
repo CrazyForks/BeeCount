@@ -1476,7 +1476,7 @@
   "storageClearSuccess": "Cleared successfully",
   "accountNoTransactions": "No transactions",
   "accountTransactionHistory": "Transaction History",
-  "accountTotalBalance": "Total Balance",
+  "accountTotalBalance": "Net Assets",
   "accountTotalExpense": "Total Expense",
   "accountTotalIncome": "Total Income",
   "accountCurrencyLocked": "This account has transactions and cannot change currency",

@@ -1429,7 +1429,7 @@
   "storageClearSuccess": "清理成功",
   "accountNoTransactions": "暂无交易记录",
   "accountTransactionHistory": "交易记录",
-  "accountTotalBalance": "总余额",
+  "accountTotalBalance": "净资产",
   "accountTotalExpense": "总支出",
   "accountTotalIncome": "总收入",
   "accountCurrencyLocked": "该账户已有交易记录，不允许修改币种",

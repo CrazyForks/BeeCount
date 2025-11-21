@@ -3429,7 +3429,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountTransactionHistory => '交易记录';
 
   @override
-  String get accountTotalBalance => '总余额';
+  String get accountTotalBalance => '净资产';
 
   @override
   String get accountTotalExpense => '总支出';
@@ -6934,7 +6934,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountTransactionHistory => '交易歷史';
 
   @override
-  String get accountTotalBalance => '總餘額';
+  String get accountTotalBalance => '淨資產';
 
   @override
   String get accountTotalExpense => '總支出';

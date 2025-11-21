@@ -10,7 +10,6 @@ import '../../models/ledger_display_item.dart';
 import '../../cloud/sync_service.dart';
 import '../../providers/theme_providers.dart';
 import '../../providers/sync_providers.dart';
-import '../../utils/ui_scale_extensions.dart';
 import '../../utils/format_utils.dart';
 import '../../utils/currencies.dart';
 import '../../l10n/app_localizations.dart';
@@ -58,13 +57,13 @@ class LedgerCard extends ConsumerWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: 12.0.scaled(context, ref),
-          vertical: 4.0.scaled(context, ref),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 4,
         ),
         decoration: BoxDecoration(
           color: BeeTokens.surface(context),
-          borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+          borderRadius: BorderRadius.circular(12),
           border: BeeTokens.isDark(context)
               ? Border.all(color: BeeTokens.border(context), width: 1)
               : null,
@@ -79,7 +78,7 @@ class LedgerCard extends ConsumerWidget {
                 ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+          borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
               // 左侧色条：仅选中时显示
@@ -89,12 +88,12 @@ class LedgerCard extends ConsumerWidget {
                   top: 0,
                   bottom: 0,
                   child: Container(
-                    width: 4.0.scaled(context, ref),
+                    width: 4,
                     decoration: BoxDecoration(
                       color: primaryColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0.scaled(context, ref)),
-                        bottomLeft: Radius.circular(12.0.scaled(context, ref)),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomLeft: Radius.circular(12),
                       ),
                     ),
                   ),
@@ -102,7 +101,7 @@ class LedgerCard extends ConsumerWidget {
 
               // 底层：账本信息（始终显示）
               Padding(
-                padding: EdgeInsets.all(16.0.scaled(context, ref)),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -117,7 +116,7 @@ class LedgerCard extends ConsumerWidget {
                                 TextSpan(
                                   text: translateLedgerName(context, ledger.name),
                                   style: TextStyle(
-                                    fontSize: 18.0.scaled(context, ref),
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                     color: BeeTokens.textPrimary(context),
                                   ),
@@ -125,7 +124,7 @@ class LedgerCard extends ConsumerWidget {
                                 TextSpan(
                                   text: ' (ID:${ledger.id})',
                                   style: TextStyle(
-                                    fontSize: 14.0.scaled(context, ref),
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: isRemote
                                         ? primaryColor.withValues(alpha: 0.8)
@@ -137,7 +136,7 @@ class LedgerCard extends ConsumerWidget {
                           ),
                         ),
 
-                        SizedBox(width: 8.0.scaled(context, ref)),
+                        const SizedBox(width: 8),
 
                         // 状态图标
                         _buildStatusIcon(
@@ -152,7 +151,7 @@ class LedgerCard extends ConsumerWidget {
                       ],
                     ),
 
-                    SizedBox(height: 12.0.scaled(context, ref)),
+                    const SizedBox(height: 12),
 
                     // 统计数据（本地和远程都显示）
                     Column(
@@ -162,20 +161,20 @@ class LedgerCard extends ConsumerWidget {
                         Text(
                           '${l10n.ledgersCurrency}：${getCurrencyName(ledger.currency, context)}（${ledger.currency}）',
                           style: TextStyle(
-                            fontSize: 14.0.scaled(context, ref),
+                            fontSize: 14,
                             color: BeeTokens.textSecondary(context),
                           ),
                         ),
-                        SizedBox(height: 4.0.scaled(context, ref)),
+                        const SizedBox(height: 4),
                         // 记账笔数
                         Text(
                           l10n.ledgersRecords('${ledger.transactionCount}'),
                           style: TextStyle(
-                            fontSize: 14.0.scaled(context, ref),
+                            fontSize: 14,
                             color: BeeTokens.textSecondary(context),
                           ),
                         ),
-                        SizedBox(height: 4.0.scaled(context, ref)),
+                        const SizedBox(height: 4),
                         // 余额（根据设置使用简洁或完整格式）
                         Text(
                           l10n.ledgersBalance(
@@ -188,7 +187,7 @@ class LedgerCard extends ConsumerWidget {
                               : formatBalanceFull(ledger.balance, ledger.currency),
                           ),
                           style: TextStyle(
-                            fontSize: 14.0.scaled(context, ref),
+                            fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: ledger.balance >= 0 ? BeeTokens.success(context) : BeeTokens.error(context),
                           ),
@@ -205,21 +204,21 @@ class LedgerCard extends ConsumerWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       color: BeeTokens.surface(context).withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.cloud_download,
-                          size: 48.0.scaled(context, ref),
+                          size: 48,
                           color: primaryColor,
                         ),
-                        SizedBox(height: 8.0.scaled(context, ref)),
+                        const SizedBox(height: 8),
                         Text(
                           l10n.ledgerCardDownloadCloud,
                           style: TextStyle(
-                            fontSize: 16.0.scaled(context, ref),
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: primaryColor,
                           ),
@@ -247,12 +246,11 @@ class LedgerCard extends ConsumerWidget {
   ) {
     // 优先显示上传中状态
     if (isUploading) {
-      return SizedBox(
-        width: 20.0.scaled(context, ref),
-        height: 20.0.scaled(context, ref),
+      return const SizedBox(
+        width: 20,
+        height: 20,
         child: CircularProgressIndicator(
           strokeWidth: 2.0,
-          valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
         ),
       );
     }
@@ -262,28 +260,28 @@ class LedgerCard extends ConsumerWidget {
       return Icon(
         Icons.cloud_download,
         color: primaryColor,
-        size: 20.0.scaled(context, ref),
+        size: 20,
       );
     } else if (isSynced) {
       // 已同步：绿色云勾选图标
-      return Icon(
+      return const Icon(
         Icons.cloud_done,
         color: Colors.green,
-        size: 20.0.scaled(context, ref),
+        size: 20,
       );
     } else if (isNotSynced) {
       // 未同步（包括：localNewer、cloudNewer、different、error、notLoggedIn）：红色云图标
-      return Icon(
+      return const Icon(
         Icons.cloud_off,
         color: Colors.red,
-        size: 20.0.scaled(context, ref),
+        size: 20,
       );
     } else {
       // 纯本地账本（离线模式/未配置）：灰色云关闭图标
-      return Icon(
+      return const Icon(
         Icons.cloud_off,
         color: Colors.grey,
-        size: 20.0.scaled(context, ref),
+        size: 20,
       );
     }
   }

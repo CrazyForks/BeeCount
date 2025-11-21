@@ -3429,7 +3429,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountTransactionHistory => 'Transaction History';
 
   @override
-  String get accountTotalBalance => 'Total Balance';
+  String get accountTotalBalance => 'Net Assets';
 
   @override
   String get accountTotalExpense => 'Total Expense';

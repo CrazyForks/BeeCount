@@ -6519,7 +6519,7 @@ abstract class AppLocalizations {
   /// No description provided for @accountTotalBalance.
   ///
   /// In en, this message translates to:
-  /// **'Total Balance'**
+  /// **'Net Assets'**
   String get accountTotalBalance;
 
   /// No description provided for @accountTotalExpense.
