@@ -579,7 +579,7 @@ A:
 
 ## 🙏 致谢
 
-感谢 [果核剥壳 - 互联网的净土](https://www.ghxi.com/) 对本项目的宣传
+感谢 [果核剥壳 - 互联网的净土](https://www.ghxi.com/)、[星之墨辰](https://mp.weixin.qq.com/s/HieVbKzpdUvnoaCa_9xjkA) 对本项目的宣传
 
 感谢所有为蜜蜂记账项目贡献代码、提出建议和反馈问题的朋友们！
 
