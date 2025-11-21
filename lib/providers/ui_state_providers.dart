@@ -127,6 +127,10 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
     await Future.wait([
       // 等待主题色初始化
       ref.watch(primaryColorInitProvider.future),
+      // 等待主题模式初始化
+      ref.watch(themeModeInitProvider.future),
+      // 等待暗黑模式图案样式初始化
+      ref.watch(darkModePatternStyleInitProvider.future),
       // 等待应用配置初始化
       ref.watch(appInitProvider.future),
       // 等待字体缩放初始化

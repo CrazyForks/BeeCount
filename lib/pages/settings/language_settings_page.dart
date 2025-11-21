@@ -4,6 +4,7 @@ import '../../providers/language_provider.dart';
 import '../../providers/widget_provider.dart';
 import '../../widgets/ui/ui.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 
 class LanguageSettingsPage extends ConsumerWidget {
   const LanguageSettingsPage({super.key});
@@ -14,6 +15,7 @@ class LanguageSettingsPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -108,22 +110,21 @@ class _LanguageOption extends StatelessWidget {
          locale!.languageCode == currentLanguage!.languageCode &&
          locale!.countryCode == currentLanguage!.countryCode);
 
-    return Card(
-      child: ListTile(
-        title: Text(
-          title,
-          style: TextStyle(
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-          ),
+    return ListTile(
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+          color: BeeTokens.textPrimary(context),
         ),
-        trailing: isSelected
-            ? Icon(
-                Icons.check_circle,
-                color: Theme.of(context).colorScheme.primary,
-              )
-            : null,
-        onTap: onTap,
       ),
+      trailing: isSelected
+          ? Icon(
+              Icons.check_circle,
+              color: Theme.of(context).colorScheme.primary,
+            )
+          : null,
+      onTap: onTap,
     );
   }
 }

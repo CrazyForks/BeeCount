@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../ai/ai_settings_page.dart';
 import '../automation/ocr_billing_page.dart';
 import '../automation/auto_billing_settings_page.dart';
@@ -22,7 +22,7 @@ class SmartBillingPage extends ConsumerWidget {
     final cameraFirst = ref.watch(fabCameraFirstProvider).value ?? false;
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -64,7 +64,7 @@ class SmartBillingPage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // OCR扫描记账
                       AppListTile(
                         leading: Icons.document_scanner_outlined,
@@ -91,7 +91,7 @@ class SmartBillingPage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 截图自动记账
                       AppListTile(
                         leading: Icons.auto_fix_high,
@@ -120,7 +120,7 @@ class SmartBillingPage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // FAB行为切换
                       InkWell(
                         onTap: () async {
@@ -152,17 +152,17 @@ class SmartBillingPage extends ConsumerWidget {
                                   children: [
                                     Text(
                                       l10n.aiFabSettingTitle,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w400,
-                                        color: Color(0xFF333333),
+                                        color: BeeTokens.textPrimary(context),
                                       ),
                                     ),
                                     Text(
                                       cameraFirst ? l10n.aiFabSettingDescCamera : l10n.aiFabSettingDescManual,
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: Colors.grey[600],
+                                        color: BeeTokens.textSecondary(context),
                                       ),
                                     ),
                                   ],

@@ -9,7 +9,7 @@ import 'package:beecount/widgets/biz/bee_icon.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../services/update_service.dart';
 import '../../services/logger_service.dart';
 import '../../l10n/app_localizations.dart';
@@ -48,7 +48,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -76,7 +76,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                         AppLocalizations.of(context).appName,
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: BeeColors.primaryText,
+                              color: BeeTokens.textPrimary(context),
                             ),
                       ),
                       SizedBox(height: 8.0.scaled(context, ref)),
@@ -85,7 +85,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                             ? AppLocalizations.of(context).aboutPageLoadingVersion
                             : _versionDisplay,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: BeeColors.secondaryText,
+                              color: BeeTokens.textSecondary(context),
                             ),
                       ),
                     ],

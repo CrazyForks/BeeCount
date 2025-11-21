@@ -49,31 +49,6 @@
 
 ---
 
-> ## 🎨 Recruiting Designers
->
-> **We're looking for talented UI/UX designers to join the BeeCount project!**
->
-> 📐 **What You'll Work On:**
->
-> - Redesign app UI and interaction experience
-> - Create theme skins and illustration elements
-> - Optimize visual consistency across the interface
-> - Develop a modern, clean design language
->
-> 🎁 **What You'll Get:**
->
-> - Portfolio pieces for open-source work
-> - Credit in README and app
-> - Close collaboration with dev team
-> - Satisfaction of creating great UX for thousands of users
->
-> 💌 **Contact:**
->
-> - GitHub Issues: [Submit design proposals](https://github.com/TNT-Likely/BeeCount/issues)
-> - Telegram Group: [Join discussion](https://t.me/beecount)
-
----
-
 > ## 📱 Platform Support
 >
 > 🤖 **Android** - [Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | Supports Android 5.0+
@@ -115,7 +90,7 @@
 </tr>
 </table>
 
-A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **screenshot auto-billing**, category statistics, **chart analysis**, data import/export, and self-hosted Supabase/WebDAV cloud sync. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
+A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **screenshot auto-billing**, **account transfers**, **hierarchical categories**, category statistics, **chart analysis**, data import/export, and self-hosted Supabase/WebDAV cloud sync. Supports **multiple languages** (Simplified/Traditional Chinese, English) and **dark mode**. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
 
 ## 📱 Core Features Showcase
 
@@ -212,6 +187,10 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 ### 🎨 Personalization & Internationalization
 
+- **Dark Mode**: Complete dark theme support, eye-friendly and OLED-optimized
+  - Pure black background + theme color accents for minimalist aesthetics
+  - All pages, dialogs, and keyboards fully adapted
+  - Auto-switch with system or manual setting
 - **Theme Customization**: Multiple theme colors for personalized style
 - **3 Languages**: Simplified Chinese, Traditional Chinese, English
   - Complete UI translation + smart category mapping
@@ -400,6 +379,7 @@ We welcome all forms of contributions! Please see our detailed [Contributing Gui
 - 💻 [Contribute Code](docs/contributing/CONTRIBUTING_EN.md#code-contribution-workflow)
 - 🌍 [Contribute Translations](docs/contributing/CONTRIBUTING_EN.md#translation-contributions)
 - 📝 [Improve Documentation](docs/contributing/CONTRIBUTING_EN.md#documentation-contributions)
+- 🎨 [Designer Recruitment](docs/contributing/CONTRIBUTING_EN.md#designer-recruitment) - We're looking for UI/UX designers!
 
 **Quick Start**:
 

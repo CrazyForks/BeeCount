@@ -10,6 +10,7 @@ import '../../data/db.dart' as db;
 import '../../services/category_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
+import '../../styles/tokens.dart';
 import 'category_edit_page.dart';
 
 class CategoryManagePage extends ConsumerStatefulWidget {
@@ -66,6 +67,8 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
           ),
           TabBar(
             controller: _tabController,
+            labelColor: BeeTokens.textPrimary(context),
+            unselectedLabelColor: BeeTokens.textSecondary(context),
             tabs: [
               Tab(text: AppLocalizations.of(context).categoryExpense),
               Tab(text: AppLocalizations.of(context).categoryIncome),
@@ -82,17 +85,17 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      color: Colors.blue[50],
+                      color: BeeTokens.isDark(context) ? Colors.blue[900]!.withValues(alpha: 0.3) : Colors.blue[50],
                       child: Row(
                         children: [
-                          Icon(Icons.info_outline, size: 16, color: Colors.blue[700]),
+                          Icon(Icons.info_outline, size: 16, color: BeeTokens.isDark(context) ? Colors.blue[300] : Colors.blue[700]),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               AppLocalizations.of(context).categoryReorderTip,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.blue[700],
+                                color: BeeTokens.isDark(context) ? Colors.blue[300] : Colors.blue[700],
                               ),
                             ),
                           ),
@@ -278,13 +281,13 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
             Icon(
               Icons.category_outlined,
               size: 64,
-              color: Colors.grey[400],
+              color: BeeTokens.textTertiary(context),
             ),
             const SizedBox(height: 16),
             Text(
               AppLocalizations.of(context).categoryEmpty,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.grey[600],
+                color: BeeTokens.textSecondary(context),
               ),
             ),
           ],

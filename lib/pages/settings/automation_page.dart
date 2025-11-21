@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../transaction/recurring_transaction_page.dart';
 import '../settings/reminder_settings_page.dart';
 import '../../l10n/app_localizations.dart';
@@ -16,7 +16,7 @@ class AutomationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -43,7 +43,7 @@ class AutomationPage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 记账提醒
                       AppListTile(
                         leading: Icons.notifications_outlined,

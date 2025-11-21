@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beecount/widgets/ui/wheel_date_picker.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/note_history_service.dart';
 import '../../data/db.dart';
@@ -188,7 +188,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
       return Padding(
         padding: const EdgeInsets.all(6),
         child: Material(
-          color: bg ?? Colors.white,
+          color: bg ?? BeeTokens.surfaceKey(context),
           borderRadius: BorderRadius.circular(12),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
@@ -199,7 +199,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
               child: Text(
                 label,
                 style: text.titleMedium?.copyWith(
-                  color: fg ?? BeeColors.primaryText,
+                  color: fg ?? BeeTokens.textPrimary(context),
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
@@ -237,7 +237,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                     _op == '-' ? '−' : '+',
                     style: text.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: BeeColors.primaryText,
+                      color: BeeTokens.textPrimary(context),
                     ),
                   ),
                 ),
@@ -264,6 +264,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                   style: text.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.0,
+                    color: BeeTokens.textPrimary(context),
                   ),
                 ),
               ],
@@ -273,15 +274,17 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
             TextField(
               focusNode: _noteFocusNode,
               controller: _noteCtrl,
+              style: TextStyle(color: BeeTokens.textPrimary(context)),
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context).commonNoteHint,
+                hintStyle: TextStyle(color: BeeTokens.textTertiary(context)),
                 isDense: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: const Color(0xFFF3F4F6),
+                fillColor: BeeTokens.surfaceInput(context),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 // 历史备注图标作为前缀
@@ -305,9 +308,9 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                             ),
                           );
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.history,
-                          color: Colors.black87,
+                          color: BeeTokens.iconSecondary(context),
                           size: 20,
                         ),
                       )
@@ -357,7 +360,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
               Widget dateKey() => Padding(
                     padding: const EdgeInsets.all(6),
                     child: Material(
-                      color: Colors.grey[100],
+                      color: BeeTokens.surfaceKeySecondary(context),
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
@@ -374,7 +377,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                                 Text(
                                   fmtDate(_date),
                                   style: text.labelMedium?.copyWith(
-                                      color: BeeColors.primaryText,
+                                      color: BeeTokens.textPrimary(context),
                                       fontWeight: FontWeight.w600),
                                 ),
                               ],
@@ -387,16 +390,16 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
               Widget closeKey() => Padding(
                     padding: const EdgeInsets.all(6),
                     child: Material(
-                      color: Colors.white,
+                      color: BeeTokens.surfaceKey(context),
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
                         onTap: _backspace,
-                        child: const SizedBox(
+                        child: SizedBox(
                           height: 60,
                           child: Center(
                               child: Icon(Icons.backspace_outlined,
-                                  color: BeeColors.primaryText)),
+                                  color: BeeTokens.textPrimary(context))),
                         ),
                       ),
                     ),
@@ -417,7 +420,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                 return Padding(
                   padding: const EdgeInsets.all(6),
                   child: Material(
-                    color: isEnabled ? primary : Colors.grey[300],
+                    color: isEnabled ? primary : BeeTokens.surfaceDisabled(context),
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
@@ -441,7 +444,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                           child: Text(
                             AppLocalizations.of(context).commonFinish,
                             style: TextStyle(
-                                color: isEnabled ? Colors.white : Colors.grey[500],
+                                color: isEnabled ? Colors.white : BeeTokens.textTertiary(context),
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700),
                           ),
@@ -480,7 +483,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                     SizedBox(
                         width: w,
                         child: keyBtn('+',
-                            bg: Colors.grey[100], onTap: () => applyOp('+'))),
+                            bg: BeeTokens.surfaceKeySecondary(context), onTap: () => applyOp('+'))),
                   ]),
                   const SizedBox(height: 2),
                   Row(children: [
@@ -496,7 +499,7 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                     SizedBox(
                         width: w,
                         child: keyBtn('-',
-                            bg: Colors.grey[100], onTap: () => applyOp('-'))),
+                            bg: BeeTokens.surfaceKeySecondary(context), onTap: () => applyOp('-'))),
                   ]),
                   const SizedBox(height: 2),
                   Row(children: [

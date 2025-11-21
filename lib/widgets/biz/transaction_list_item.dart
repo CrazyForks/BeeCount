@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 import '../../widgets/ui/ui.dart';
 import 'amount_text.dart';
 
@@ -44,7 +44,7 @@ class TransactionListItem extends ConsumerWidget {
       onTap: isSelectionMode ? onSelectionChanged : onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-            horizontal: 12, vertical: AppDimens.listRowVertical),
+            horizontal: 12, vertical: BeeDimens.listRowVertical),
         child: Row(
           children: [
             // 选择模式下显示复选框，否则显示分类图标
@@ -81,7 +81,7 @@ class TransactionListItem extends ConsumerWidget {
                   Text(title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextTokens.title(context)),
+                      style: BeeTextTokens.title(context)),
                   // 如果有分类名称且与标题不同，则显示分类名称
                   if (categoryName != null && categoryName != title)
                     GestureDetector(
@@ -126,7 +126,7 @@ class TransactionListItem extends ConsumerWidget {
                 hide: hide,
                 signed: true,
                 decimals: 2,
-                style: AppTextTokens.title(context)),
+                style: BeeTextTokens.title(context)),
           ],
         ),
       ),

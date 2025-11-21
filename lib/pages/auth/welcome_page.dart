@@ -9,6 +9,7 @@ import '../../providers/language_provider.dart';
 import '../../providers/database_providers.dart';
 import '../../services/logger_service.dart';
 import '../../utils/currencies.dart';
+import '../../widgets/ui/ui.dart';
 
 /// 首次启动欢迎页面
 /// 展示应用的独特价值：隐私保护、开源透明、数据自主
@@ -593,22 +594,12 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
         await launchUrl(url, mode: LaunchMode.externalApplication);
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-                  Text(AppLocalizations.of(context).privacyOpenSourceUrlError),
-            ),
-          );
+          showToast(context, AppLocalizations.of(context).privacyOpenSourceUrlError);
         }
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text(AppLocalizations.of(context).privacyOpenSourceUrlError),
-          ),
-        );
+        showToast(context, AppLocalizations.of(context).privacyOpenSourceUrlError);
       }
     }
   }

@@ -5,8 +5,7 @@ import '../../data/db.dart';
 import '../../providers.dart';
 import '../../widgets/biz/biz.dart';
 import '../../widgets/ui/ui.dart';
-import '../../styles/colors.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 import '../../utils/category_utils.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/transaction_edit_utils.dart';
@@ -456,7 +455,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           // 使用PrimaryHeader
@@ -491,8 +490,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
               decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
+                color: BeeTokens.surfaceElevated(context),
+                boxShadow: BeeTokens.isDark(context) ? null : [
                   BoxShadow(
                     color: Colors.grey.withValues(alpha: 0.1),
                     blurRadius: 4,
@@ -508,14 +507,14 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).searchHint,
                       prefixIcon:
-                          const Icon(Icons.search, color: BeeColors.black54),
+                          Icon(Icons.search, color: BeeTokens.textTertiary(context)),
                       suffixIcon: _searchController.text.isNotEmpty
                           ? IconButton(
                               onPressed: () {
                                 _searchController.clear();
                               },
-                              icon: const Icon(Icons.clear,
-                                  color: BeeColors.black54),
+                              icon: Icon(Icons.clear,
+                                  color: BeeTokens.textTertiary(context)),
                             )
                           : null,
                       border: OutlineInputBorder(
@@ -541,7 +540,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           AppLocalizations.of(context).searchAmountRange,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: BeeColors.primaryText,
+                                    color: BeeTokens.textPrimary(context),
                                   ),
                         ),
                       ),
@@ -651,13 +650,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.search,
-                            size: 64, color: BeeColors.black54),
+                        Icon(Icons.search,
+                            size: 64, color: BeeTokens.textTertiary(context)),
                         const SizedBox(height: 16),
                         Text(
                           AppLocalizations.of(context).searchNoInput,
-                          style: const TextStyle(
-                              color: BeeColors.black54, fontSize: 16),
+                          style: TextStyle(
+                              color: BeeTokens.textTertiary(context), fontSize: 16),
                         ),
                       ],
                     ),
@@ -669,13 +668,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.search_off,
-                            size: 64, color: BeeColors.black54),
+                        Icon(Icons.search_off,
+                            size: 64, color: BeeTokens.textTertiary(context)),
                         const SizedBox(height: 16),
                         Text(
                           AppLocalizations.of(context).searchNoResults,
-                          style: const TextStyle(
-                              color: BeeColors.black54, fontSize: 16),
+                          style: TextStyle(
+                              color: BeeTokens.textTertiary(context), fontSize: 16),
                         ),
                       ],
                     ),
@@ -689,8 +688,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     if (!_isBatchMode)
                       Container(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: BeeTokens.surfaceElevated(context),
                         ),
                         child: Row(
                           children: [
@@ -700,7 +699,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                    color: BeeColors.black54,
+                                    color: BeeTokens.textTertiary(context),
                                   ),
                             ),
                             const Spacer(),
@@ -718,8 +717,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     if (_isBatchMode)
                       Container(
                         padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: BeeTokens.surfaceElevated(context),
                         ),
                         child: Column(
                           children: [
@@ -732,7 +731,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                       .textTheme
                                       .bodyMedium
                                       ?.copyWith(
-                                        color: BeeColors.black54,
+                                        color: BeeTokens.textTertiary(context),
                                       ),
                                 ),
                                 const Spacer(),
@@ -878,7 +877,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                       },
                               ),
                               if (index < _searchResults.length - 1)
-                                AppDivider.short(
+                                BeeDivider.short(
                                     indent: 56 + 16, endIndent: 16),
                             ],
                           );

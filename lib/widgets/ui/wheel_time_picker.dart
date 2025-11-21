@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 
 class WheelTimePicker extends StatefulWidget {
   final TimeOfDay initial;
@@ -20,12 +21,12 @@ Future<TimeOfDay?> showWheelTimePicker(
 }) {
   return showModalBottomSheet<TimeOfDay>(
     context: context,
-    backgroundColor: Colors.white,
+    backgroundColor: BeeTokens.surfaceElevated(context),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     isScrollControlled: true,
-    builder: (_) => WheelTimePicker(
+    builder: (ctx) => WheelTimePicker(
       initial: initial,
     ),
   );
@@ -55,10 +56,11 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = BeeTokens.isDark(context);
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      decoration: BoxDecoration(
+        color: BeeTokens.surfaceElevated(context),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: SafeArea(
         child: Column(
@@ -67,9 +69,12 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
             // 标题栏
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: Color(0xFFE5E5E5), width: 0.5),
+                  bottom: BorderSide(
+                    color: isDark ? BeeTokens.border(context) : const Color(0xFFE5E5E5),
+                    width: 0.5,
+                  ),
                 ),
               ),
               child: Row(
@@ -79,18 +84,18 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
                       AppLocalizations.of(context)!.commonCancel,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
-                        color: Color(0xFF999999),
+                        color: BeeTokens.textTertiary(context),
                       ),
                     ),
                   ),
-                  const Text(
-                    '选择时间',
+                  Text(
+                    AppLocalizations.of(context)!.commonSelectTime,
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF333333),
+                      color: BeeTokens.textPrimary(context),
                     ),
                   ),
                   TextButton(
@@ -129,26 +134,26 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                         return Center(
                           child: Text(
                             index.toString().padLeft(2, '0'),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
-                              color: Color(0xFF333333),
+                              color: BeeTokens.textPrimary(context),
                             ),
                           ),
                         );
                       }),
                     ),
                   ),
-                  
+
                   // 分隔符
-                  const Text(
+                  Text(
                     ':',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF333333),
+                      color: BeeTokens.textPrimary(context),
                     ),
                   ),
-                  
+
                   // 分钟选择器
                   Expanded(
                     child: CupertinoPicker(
@@ -163,9 +168,9 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                         return Center(
                           child: Text(
                             index.toString().padLeft(2, '0'),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
-                              color: Color(0xFF333333),
+                              color: BeeTokens.textPrimary(context),
                             ),
                           ),
                         );

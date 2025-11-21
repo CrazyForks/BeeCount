@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/note_history_service.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 
 /// 备注选择弹窗
 /// 支持可选的分类ID和账本ID参数,用于筛选历史备注
@@ -57,6 +57,7 @@ class _NotePickerDialogState extends State<NotePickerDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
+      backgroundColor: BeeTokens.surfaceElevated(context),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       content: ConstrainedBox(
@@ -72,7 +73,7 @@ class _NotePickerDialogState extends State<NotePickerDialog> {
               '历史备注',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600, color: Colors.black87),
+                  fontWeight: FontWeight.w600, color: BeeTokens.textPrimary(context)),
             ),
             const SizedBox(height: 12),
             // 备注列表
@@ -86,7 +87,7 @@ class _NotePickerDialogState extends State<NotePickerDialog> {
                 padding: const EdgeInsets.all(32),
                 child: Text(
                   l10n.commonEmpty,
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: TextStyle(color: BeeTokens.textSecondary(context)),
                 ),
               )
             else
@@ -108,17 +109,20 @@ class _NotePickerDialogState extends State<NotePickerDialog> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: BeeTokens.surfaceChip(context),
                             borderRadius: BorderRadius.circular(16),
+                            border: BeeTokens.isDark(context)
+                                ? Border.all(color: BeeTokens.border(context))
+                                : null,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 item.note,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 13,
-                                  color: BeeColors.primaryText,
+                                  color: BeeTokens.textSecondary(context),
                                 ),
                               ),
                               const SizedBox(width: 4),

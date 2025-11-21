@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/ui/ui.dart';
 import '../providers/theme_providers.dart';
+import '../styles/tokens.dart';
 
 /// 保存海报结果
 enum SavePosterResult {
@@ -179,6 +180,11 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
     return Consumer(
       builder: (context, ref, child) {
         final primaryColor = ref.watch(primaryColorProvider);
+        final isDark = BeeTokens.isDark(context);
+
+        // 按钮背景色：暗黑模式用深灰卡片色，亮色模式用白色
+        final secondaryButtonBg = isDark ? BeeTokens.surface(context) : Colors.white;
+        final secondaryButtonFg = isDark ? BeeTokens.textPrimary(context) : primaryColor;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -209,14 +215,17 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: _isSaving ? null : _sharePoster,
-                    icon: Icon(Icons.share_outlined, color: primaryColor),
+                    icon: Icon(Icons.share_outlined, color: secondaryButtonFg),
                     label: Text(widget.l10n.sharePosterShare),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: primaryColor,
-                      backgroundColor: Colors.white,
+                      foregroundColor: secondaryButtonFg,
+                      backgroundColor: secondaryButtonBg,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
+                        side: isDark
+                            ? BorderSide(color: BeeTokens.border(context))
+                            : BorderSide.none,
                       ),
                       elevation: 0,
                     ),

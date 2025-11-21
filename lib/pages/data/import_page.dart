@@ -6,6 +6,7 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/ui/capsule_switcher.dart';
 import '../../utils/xlsx_reader.dart';
 import '../../services/import/file_reader.dart';
+import '../../styles/tokens.dart';
 import 'import_confirm_page.dart';
 
 /// 账单类型
@@ -59,7 +60,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
                       // 账单类型选择器
                       Text(AppLocalizations.of(context)!.importBillType,
                           style:
-                              TextStyle(fontSize: 14, color: Colors.grey[700])),
+                              TextStyle(fontSize: 14, color: BeeTokens.textSecondary(context))),
                       const SizedBox(height: 8),
                       CapsuleSwitcher<BillSourceType>(
                         selectedValue: _billType,
@@ -110,7 +111,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
                       const Spacer(),
                       if (_picked == null)
                         Text(AppLocalizations.of(context)!.importHint,
-                            style: TextStyle(color: Colors.grey)),
+                            style: TextStyle(color: BeeTokens.textTertiary(context))),
                     ],
                   ),
                 ),
@@ -122,7 +123,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: BeeTokens.surfaceElevated(context),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           width: 320,

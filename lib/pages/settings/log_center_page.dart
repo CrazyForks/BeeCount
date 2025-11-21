@@ -7,7 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../services/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../l10n/app_localizations.dart';
@@ -81,7 +81,7 @@ class _LogCenterPageState extends ConsumerState<LogCenterPage> {
     final filteredLogs = _filteredLogs;
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -153,7 +153,7 @@ class _LogCenterPageState extends ConsumerState<LogCenterPage> {
                     child: Text(
                       l10n.logCenterFilterLevel,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: BeeColors.secondaryText,
+                            color: BeeTokens.textSecondary(context),
                           ),
                     ),
                   ),
@@ -185,7 +185,7 @@ class _LogCenterPageState extends ConsumerState<LogCenterPage> {
                     child: Text(
                       l10n.logCenterFilterPlatform,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: BeeColors.secondaryText,
+                            color: BeeTokens.textSecondary(context),
                           ),
                     ),
                   ),
@@ -234,14 +234,14 @@ class _LogCenterPageState extends ConsumerState<LogCenterPage> {
                 Text(
                   '${l10n.logCenterTotal}: ${logger.logs.length}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: BeeColors.secondaryText,
+                        color: BeeTokens.textSecondary(context),
                       ),
                 ),
                 SizedBox(width: 16.0.scaled(context, ref)),
                 Text(
                   '${l10n.logCenterFiltered}: ${filteredLogs.length}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: BeeColors.secondaryText,
+                        color: BeeTokens.textSecondary(context),
                       ),
                 ),
               ],
@@ -257,14 +257,14 @@ class _LogCenterPageState extends ConsumerState<LogCenterPage> {
                         Icon(
                           Icons.inbox_outlined,
                           size: 64.0.scaled(context, ref),
-                          color: BeeColors.secondaryText,
+                          color: BeeTokens.textSecondary(context),
                         ),
                         SizedBox(height: 16.0.scaled(context, ref)),
                         Text(
                           l10n.logCenterEmpty,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: BeeColors.secondaryText,
+                                    color: BeeTokens.textSecondary(context),
                                   ),
                         ),
                       ],
@@ -391,14 +391,14 @@ class _LogEntryCard extends ConsumerWidget {
                       vertical: 2.0.scaled(context, ref),
                     ),
                     decoration: BoxDecoration(
-                      color: BeeColors.greyBg,
+                      color: BeeTokens.surfaceSecondary(context),
                       borderRadius:
                           BorderRadius.circular(4.0.scaled(context, ref)),
                     ),
                     child: Text(
                       log.platform.displayName,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: BeeColors.secondaryText,
+                            color: BeeTokens.textSecondary(context),
                           ),
                     ),
                   ),
@@ -407,7 +407,7 @@ class _LogEntryCard extends ConsumerWidget {
                   Text(
                     _formatTime(log.timestamp),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: BeeColors.secondaryText,
+                          color: BeeTokens.textSecondary(context),
                         ),
                   ),
                 ],
@@ -417,7 +417,7 @@ class _LogEntryCard extends ConsumerWidget {
               Text(
                 '[${log.tag}]',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: BeeColors.secondaryText,
+                      color: BeeTokens.textSecondary(context),
                       fontWeight: FontWeight.w500,
                     ),
               ),
@@ -426,7 +426,7 @@ class _LogEntryCard extends ConsumerWidget {
               Text(
                 log.message,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: BeeColors.primaryText,
+                      color: BeeTokens.textPrimary(context),
                     ),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,

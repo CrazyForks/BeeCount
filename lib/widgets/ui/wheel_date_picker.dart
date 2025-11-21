@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 
 enum WheelDatePickerMode { y, ym, ymd }
 
@@ -30,7 +31,7 @@ Future<DateTime?> showWheelDatePicker(
 }) {
   return showModalBottomSheet<DateTime>(
     context: context,
-    backgroundColor: Colors.white,
+    backgroundColor: BeeTokens.surfaceElevated(context),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
@@ -45,6 +46,8 @@ Future<DateTime?> showWheelDatePicker(
 }
 
 class _WheelDatePickerState extends State<WheelDatePicker> {
+  Color _textPrimary(BuildContext context) => BeeTokens.textPrimary(context);
+  Color _textTertiary(BuildContext context) => BeeTokens.textTertiary(context);
   late int year;
   late int month;
   late int day;
@@ -115,9 +118,9 @@ class _WheelDatePickerState extends State<WheelDatePicker> {
               children: [
                 TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text(AppLocalizations.of(context)!.commonCancel, style: const TextStyle(fontSize: 16))),
+                    child: Text(AppLocalizations.of(context)!.commonCancel, style: TextStyle(fontSize: 16, color: _textTertiary(context)))),
                 const Spacer(),
-                Text(AppLocalizations.of(context)!.homeSelectDate, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                Text(AppLocalizations.of(context)!.homeSelectDate, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: _textPrimary(context))),
                 const Spacer(),
                 TextButton(
                     onPressed: () {
@@ -135,7 +138,7 @@ class _WheelDatePickerState extends State<WheelDatePicker> {
                       }
                       Navigator.pop(context, result);
                     },
-                    child: Text(AppLocalizations.of(context)!.commonOk, style: const TextStyle(fontSize: 16))),
+                    child: Text(AppLocalizations.of(context)!.commonOk, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor))),
               ],
             ),
           ),
@@ -187,7 +190,7 @@ class _WheelDatePickerState extends State<WheelDatePicker> {
                       for (final y in years)
                         Center(
                             child: Text('$y',
-                                style: const TextStyle(fontSize: 18))),
+                                style: TextStyle(fontSize: 18, color: _textPrimary(context)))),
                     ],
                   ),
                 ),
@@ -225,7 +228,7 @@ class _WheelDatePickerState extends State<WheelDatePicker> {
                         for (final m in months)
                           Center(
                               child: Text('$m',
-                                  style: const TextStyle(fontSize: 18))),
+                                  style: TextStyle(fontSize: 18, color: _textPrimary(context)))),
                       ],
                     ),
                   ),
@@ -241,7 +244,7 @@ class _WheelDatePickerState extends State<WheelDatePicker> {
                         for (final d in days)
                           Center(
                               child: Text('$d',
-                                  style: const TextStyle(fontSize: 18))),
+                                  style: TextStyle(fontSize: 18, color: _textPrimary(context)))),
                       ],
                     ),
                   ),

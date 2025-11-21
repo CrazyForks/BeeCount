@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../styles/colors.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../biz/amount_text.dart';
 
@@ -39,7 +38,7 @@ class AnalyticsSummary extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grey = BeeColors.secondaryText;
+    final grey = BeeTokens.textSecondary(context);
     final l10n = AppLocalizations.of(context);
     String avgLabel;
     switch (scope) {
@@ -170,7 +169,7 @@ class AnalyticsSummary extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 8),
-          AppDivider.thin(),
+          BeeDivider.thin(),
         ],
       );
     } else {
@@ -220,7 +219,7 @@ class AnalyticsSummary extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 8),
-          AppDivider.thin(),
+          BeeDivider.thin(),
         ],
       );
     }

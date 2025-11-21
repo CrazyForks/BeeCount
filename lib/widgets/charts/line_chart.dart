@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 
 class LineChart extends StatelessWidget {
@@ -103,7 +103,7 @@ class LineChart extends StatelessWidget {
               top: 8,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: BeeColors.divider,
+                  color: BeeTokens.dividerStatic,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Padding(
@@ -112,20 +112,20 @@ class LineChart extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(Icons.swipe,
-                          size: 14, color: BeeColors.secondaryText),
+                          size: 14, color: BeeTokens.textSecondary(context)),
                       const SizedBox(width: 4),
                       Text(
                         hintText ?? AppLocalizations.of(context)!.analyticsSwipeHint,
                         style: Theme.of(context)
                             .textTheme
                             .labelSmall
-                            ?.copyWith(color: BeeColors.secondaryText),
+                            ?.copyWith(color: BeeTokens.textSecondary(context)),
                       ),
                       const SizedBox(width: 4),
                       InkWell(
                         onTap: onCloseHint,
                         child: Icon(Icons.close,
-                            size: 14, color: BeeColors.hintText),
+                            size: 14, color: BeeTokens.textTertiary(context)),
                       ),
                     ],
                   ),
@@ -247,7 +247,7 @@ class _LinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
-    final bgPaint = Paint()..color = whiteBg ? Colors.white : BeeColors.divider;
+    final bgPaint = Paint()..color = whiteBg ? Colors.white : BeeTokens.dividerStatic;
     // 背景
     canvas.drawRRect(
         RRect.fromRectAndRadius(rect, Radius.circular(cornerRadius)), bgPaint);
@@ -255,7 +255,7 @@ class _LinePainter extends CustomPainter {
     // 网格（可选）
     if (showGrid) {
       final gridPaint = Paint()
-        ..color = BeeColors.divider
+        ..color = BeeTokens.dividerStatic
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1;
       const rows = 4;
@@ -379,7 +379,7 @@ class _LinePainter extends CustomPainter {
 
     // 左侧Y轴线
     final axisPaint = Paint()
-      ..color = BeeColors.divider
+      ..color = BeeTokens.dividerStatic
       ..strokeWidth = 1.0;
     canvas.drawLine(Offset(8, topPadding),
         Offset(8, size.height - bottomPadding), axisPaint);
@@ -387,7 +387,7 @@ class _LinePainter extends CustomPainter {
     // 主线平均线（虚线）
     final avgY = yFor(avgV);
     final avgLinePaint = Paint()
-      ..color = BeeColors.secondaryText.withValues(alpha: 0.55)
+      ..color = BeeTokens.secondaryTextStatic.withValues(alpha: 0.55)
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
     _drawDashedLine(
@@ -420,7 +420,7 @@ class _LinePainter extends CustomPainter {
     if (annotate) {
       // 主线标注
       final textStyle =
-          TextStyle(fontSize: yLabelFontSize - 1, color: BeeColors.primaryText);
+          TextStyle(fontSize: yLabelFontSize - 1, color: BeeTokens.primaryTextStatic);
       for (final i in nzIndices) {
         final displayText = hideAmounts ? '**' : _fmt(values[i]);
         final tp = TextPainter(
@@ -464,10 +464,10 @@ class _LinePainter extends CustomPainter {
     // X 轴标签（保持原始标签与索引）
     if (xLabels.isNotEmpty) {
       final baseStyle =
-          TextStyle(fontSize: xLabelFontSize, color: BeeColors.secondaryText);
+          TextStyle(fontSize: xLabelFontSize, color: BeeTokens.secondaryTextStatic);
       final hiStyle = TextStyle(
           fontSize: xLabelFontSize,
-          color: BeeColors.primaryText,
+          color: BeeTokens.primaryTextStatic,
           fontWeight: FontWeight.w600);
       final n = xLabels.length;
       int step = (n / 8).ceil();

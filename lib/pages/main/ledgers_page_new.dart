@@ -21,6 +21,7 @@ import '../../utils/ui_scale_extensions.dart';
 import '../../utils/format_utils.dart';
 import '../../utils/sync_helpers.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 
 class LedgersPageNew extends ConsumerStatefulWidget {
   const LedgersPageNew({super.key});
@@ -59,14 +60,14 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
               // 新建账本
               IconButton(
                 onPressed: () => _showCreateLedgerDialog(context),
-                icon: const Icon(Icons.add, color: Colors.black),
+                icon: Icon(Icons.add, color: BeeTokens.textPrimary(context)),
               ),
               // 刷新
               IconButton(
                 onPressed: () {
                   ref.read(ledgerListRefreshProvider.notifier).state++;
                 },
-                icon: const Icon(Icons.refresh, color: Colors.black),
+                icon: Icon(Icons.refresh, color: BeeTokens.textPrimary(context)),
               ),
             ],
           ),
@@ -269,7 +270,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
         if (showLoadingOverlay)
           Positioned.fill(
             child: Container(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: BeeTokens.surfaceElevated(context).withValues(alpha: 0.7),
               child: const Center(
                 child: CircularProgressIndicator(),
               ),
@@ -834,7 +835,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
     return showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: BeeTokens.surfaceElevated(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -865,7 +866,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
                     height: 4,
                     margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
-                      color: Colors.black12,
+                      color: BeeTokens.textTertiary(context).withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -891,7 +892,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
                         return ListTile(
                           title: Text('${c.name} (${c.code})'),
                           trailing: sel
-                              ? const Icon(Icons.check, color: Colors.black)
+                              ? Icon(Icons.check, color: BeeTokens.textPrimary(context))
                               : null,
                           onTap: () => Navigator.pop(bctx, c.code),
                         );
@@ -1147,7 +1148,7 @@ class _SectionHeader extends ConsumerWidget {
             style: TextStyle(
               fontSize: 16.0.scaled(context, ref),
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF666666),
+              color: BeeTokens.textSecondary(context),
             ),
           ),
           if (trailing != null) ...[
@@ -1158,14 +1159,14 @@ class _SectionHeader extends ConsumerWidget {
                 vertical: 2.0.scaled(context, ref),
               ),
               decoration: BoxDecoration(
-                color: const Color(0xFFEEEEEE),
+                color: BeeTokens.surfaceSecondary(context),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 trailing!,
                 style: TextStyle(
                   fontSize: 12.0.scaled(context, ref),
-                  color: const Color(0xFF999999),
+                  color: BeeTokens.textTertiary(context),
                 ),
               ),
             ),

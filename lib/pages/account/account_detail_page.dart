@@ -5,7 +5,7 @@ import '../../data/db.dart' as db;
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/transaction_edit_utils.dart';
@@ -33,7 +33,7 @@ class AccountDetailPage extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider);
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -61,34 +61,34 @@ class AccountDetailPage extends ConsumerWidget {
                               value: stats.balance,
                               currencyCode: currencyCode,
                               color: stats.balance >= 0
-                                  ? BeeColors.primaryText
-                                  : Colors.red,
+                                  ? BeeTokens.textPrimary(context)
+                                  : BeeTokens.error(context),
                             ),
                           ),
                           Container(
                             width: 1,
                             height: 40.0.scaled(context, ref),
-                            color: Colors.grey[300],
+                            color: BeeTokens.border(context),
                           ),
                           Expanded(
                             child: _StatCell(
                               label: l10n.homeIncome,
                               value: stats.income,
                               currencyCode: currencyCode,
-                              color: Colors.green,
+                              color: BeeTokens.success(context),
                             ),
                           ),
                           Container(
                             width: 1,
                             height: 40.0.scaled(context, ref),
-                            color: Colors.grey[300],
+                            color: BeeTokens.border(context),
                           ),
                           Expanded(
                             child: _StatCell(
                               label: l10n.homeExpense,
                               value: stats.expense,
                               currencyCode: currencyCode,
-                              color: Colors.red,
+                              color: BeeTokens.error(context),
                             ),
                           ),
                         ],
@@ -123,14 +123,14 @@ class AccountDetailPage extends ConsumerWidget {
                                 Icon(
                                   Icons.receipt_long_outlined,
                                   size: 48.0.scaled(context, ref),
-                                  color: Colors.grey[400],
+                                  color: BeeTokens.textTertiary(context),
                                 ),
                                 SizedBox(height: 8.0.scaled(context, ref)),
                                 Text(
                                   l10n.accountNoTransactions,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey[600],
+                                    color: BeeTokens.textSecondary(context),
                                   ),
                                 ),
                               ],
@@ -149,7 +149,7 @@ class AccountDetailPage extends ConsumerWidget {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: BeeColors.primaryText,
+                                color: BeeTokens.textPrimary(context),
                               ),
                             ),
                           ),
@@ -160,7 +160,7 @@ class AccountDetailPage extends ConsumerWidget {
                             return Column(
                               children: [
                                 if (index > 0)
-                                  const Divider(height: 1, thickness: 0.5),
+                                  BeeTokens.cardDivider(context),
                                 _TransactionTile(
                                   transaction: tx,
                                   currencyCode: currencyCode,
@@ -275,7 +275,7 @@ class _StatCell extends ConsumerWidget {
           label,
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey[600],
+            color: BeeTokens.textSecondary(context),
           ),
         ),
       ],
@@ -319,17 +319,17 @@ class _TransactionTile extends ConsumerWidget {
 
     switch (transaction.type) {
       case 'income':
-        amountColor = Colors.green;
+        amountColor = BeeTokens.success(context);
         break;
       case 'expense':
-        amountColor = Colors.red;
+        amountColor = BeeTokens.error(context);
         break;
       case 'transfer':
         // 转出显示红色，转入显示绿色
-        amountColor = isTransferOut ? Colors.red : Colors.green;
+        amountColor = isTransferOut ? BeeTokens.error(context) : BeeTokens.success(context);
         break;
       default:
-        amountColor = BeeColors.primaryText;
+        amountColor = BeeTokens.textPrimary(context);
     }
 
     // v1.15.0: 获取分类信息
@@ -432,7 +432,7 @@ class _TransactionTile extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
-                            color: BeeColors.primaryText,
+                            color: BeeTokens.textPrimary(context),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -469,7 +469,7 @@ class _TransactionTile extends ConsumerWidget {
                         displaySubtitle,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey[600],
+                          color: BeeTokens.textSecondary(context),
                         ),
                       ),
                     ),
@@ -479,7 +479,7 @@ class _TransactionTile extends ConsumerWidget {
                       _formatDate(transaction.happenedAt),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[500],
+                        color: BeeTokens.textTertiary(context),
                       ),
                     ),
                   ),

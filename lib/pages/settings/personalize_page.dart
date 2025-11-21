@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
+import '../../styles/tokens.dart';
 
 // 兼容旧引用
 final headerStyleProvider = StateProvider<String>((ref) => 'primary');
@@ -18,7 +19,8 @@ class _PersonalizePageState extends ConsumerState<PersonalizePage> {
   @override
   Widget build(BuildContext context) {
     final primary = ref.watch(primaryColorProvider);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
+
     final options = <_ThemeOption>[
       _ThemeOption(l10n.personalizeThemeHoney, const Color(0xFFF8C91C)),
       _ThemeOption(l10n.personalizeThemeOrange, const Color(0xFFFF7043)),
@@ -51,6 +53,7 @@ class _PersonalizePageState extends ConsumerState<PersonalizePage> {
     ];
 
     return Scaffold(
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -126,20 +129,24 @@ class _ThemeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = BeeTokens.isDark(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Ink(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: BeeTokens.surface(context),
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            )
-          ],
+          border: isDark ? Border.all(color: BeeTokens.border(context)) : null,
+          boxShadow: isDark
+              ? null
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  )
+                ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -168,7 +175,9 @@ class _ThemeCard extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               alignment: Alignment.center,
               child: Text(option.name,
-                  style: Theme.of(context).textTheme.titleMedium),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: BeeTokens.textPrimary(context),
+                      )),
             ),
           ],
         ),
@@ -184,21 +193,27 @@ class _CustomColorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = BeeTokens.isDark(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Ink(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: BeeTokens.surface(context),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[300]!, width: 2, style: BorderStyle.solid),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            )
-          ],
+          border: Border.all(
+            color: isDark ? BeeTokens.border(context) : Colors.grey[300]!,
+            width: isDark ? 1 : 2,
+          ),
+          boxShadow: isDark
+              ? null
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  )
+                ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -211,10 +226,10 @@ class _CustomColorCard extends StatelessWidget {
                     topRight: Radius.circular(12),
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.palette_outlined,
                   size: 48,
-                  color: Colors.grey,
+                  color: BeeTokens.iconSecondary(context),
                 ),
               ),
             ),
@@ -224,8 +239,8 @@ class _CustomColorCard extends StatelessWidget {
               child: Text(
                 AppLocalizations.of(context)!.personalizeCustomColor,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.grey[700],
-                ),
+                      color: BeeTokens.textSecondary(context),
+                    ),
               ),
             ),
           ],
@@ -261,7 +276,7 @@ class _ColorPickerState extends State<_ColorPicker> {
             decoration: BoxDecoration(
               color: currentColor.toColor(),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey[300]!, width: 1),
+              border: Border.all(color: BeeTokens.borderStrong(context), width: 1),
             ),
             child: Center(
               child: Text(
@@ -277,7 +292,7 @@ class _ColorPickerState extends State<_ColorPicker> {
           const SizedBox(height: 20),
 
           // 色相滑块
-          Text(AppLocalizations.of(context)!.personalizeHue(currentColor.hue.round()), style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text(AppLocalizations.of(context)!.personalizeHue(currentColor.hue.round()), style: TextStyle(fontWeight: FontWeight.w500, color: BeeTokens.textPrimary(context))),
           Container(
             height: 40,
             decoration: BoxDecoration(
@@ -309,7 +324,7 @@ class _ColorPickerState extends State<_ColorPicker> {
           const SizedBox(height: 10),
 
           // 饱和度滑块
-          Text(AppLocalizations.of(context)!.personalizeSaturation((currentColor.saturation * 100).round()), style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text(AppLocalizations.of(context)!.personalizeSaturation((currentColor.saturation * 100).round()), style: TextStyle(fontWeight: FontWeight.w500, color: BeeTokens.textPrimary(context))),
           Container(
             height: 40,
             decoration: BoxDecoration(
@@ -344,7 +359,7 @@ class _ColorPickerState extends State<_ColorPicker> {
           const SizedBox(height: 10),
 
           // 亮度滑块
-          Text(AppLocalizations.of(context)!.personalizeBrightness((currentColor.value * 100).round()), style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text(AppLocalizations.of(context)!.personalizeBrightness((currentColor.value * 100).round()), style: TextStyle(fontWeight: FontWeight.w500, color: BeeTokens.textPrimary(context))),
           Container(
             height: 40,
             decoration: BoxDecoration(

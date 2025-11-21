@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 
 class InfoTag extends StatelessWidget {
   final String text;
@@ -17,7 +17,7 @@ class InfoTag extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .labelSmall
-            ?.copyWith(color: BeeColors.black54),
+            ?.copyWith(color: BeeTokens.textSecondary(context)),
       ),
     );
   }

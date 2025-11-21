@@ -5,6 +5,7 @@ import 'package:drift/drift.dart' as drift show Value;
 import '../../data/db.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 import '../biz/amount_editor_sheet.dart';
 import '../ui/ui.dart';
 
@@ -106,7 +107,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: BeeTokens.surfaceSheet(context),
       builder: (context) => AmountEditorSheet(
         categoryName: l10n.transferTitle,
         initialDate: widget.initialDate ?? DateTime.now(),

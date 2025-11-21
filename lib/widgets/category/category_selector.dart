@@ -5,6 +5,7 @@ import '../../data/db.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
+import '../../styles/tokens.dart';
 import '../category_icon.dart';
 import '../../pages/category/category_manage_page.dart';
 
@@ -297,19 +298,23 @@ class _SubcategorySelectorCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final primaryColor = Theme.of(context).colorScheme.primary;
+    final isDark = BeeTokens.isDark(context);
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: BeeTokens.surfacePopoverCard(context),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: primaryColor.withValues(alpha: 0.15),
-            blurRadius: 8,
-            spreadRadius: 1,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: primaryColor.withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+        border: isDark ? Border.all(color: BeeTokens.border(context)) : null,
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -365,6 +370,7 @@ class _CategoryItem extends StatelessWidget {
     // 二级分类使用较小的图标和缩进
     final iconSize = isSubCategory ? 48.0 : 56.0;
     final fontSize = isSubCategory ? 11.0 : 12.0;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return InkWell(
       onTap: onTap,
@@ -380,21 +386,18 @@ class _CategoryItem extends StatelessWidget {
                 height: iconSize,
                 decoration: BoxDecoration(
                   color: selected
-                      ? Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withValues(alpha: 0.25)
+                      ? primaryColor.withValues(alpha: 0.25)
                       : isSubCategory
-                          ? Colors.grey[100]
-                          : Colors.grey[200],
+                          ? BeeTokens.surfaceCategoryIconLight(context)
+                          : BeeTokens.surfaceCategoryIcon(context),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   _iconFor(category),
                   size: isSubCategory ? 20 : 24,
                   color: selected
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.grey[700],
+                      ? primaryColor
+                      : BeeTokens.iconCategory(context),
                 ),
               ),
               // 有子分类时在图标右下角显示三个点（完全分开，不重叠）
@@ -407,14 +410,11 @@ class _CategoryItem extends StatelessWidget {
                     height: 20,
                     decoration: BoxDecoration(
                       color: selected
-                          ? Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withValues(alpha: 0.25)
-                          : Colors.grey[200],
+                          ? primaryColor.withValues(alpha: 0.25)
+                          : BeeTokens.surfaceCategoryIcon(context),
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.white,
+                        color: BeeTokens.surface(context),
                         width: 2,
                       ),
                     ),
@@ -423,8 +423,8 @@ class _CategoryItem extends StatelessWidget {
                         Icons.more_horiz,
                         size: 14,
                         color: selected
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.grey[700],
+                            ? primaryColor
+                            : BeeTokens.iconCategory(context),
                       ),
                     ),
                   ),
@@ -438,7 +438,9 @@ class _CategoryItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: fontSize,
-                  color: isSubCategory ? Colors.grey[600] : null,
+                  color: isSubCategory
+                      ? BeeTokens.textSecondary(context)
+                      : BeeTokens.textPrimary(context),
                 ),
           ),
         ],

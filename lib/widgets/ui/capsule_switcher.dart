@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 
 /// 胶囊选项配置
 class CapsuleOption<T> {
@@ -43,10 +43,11 @@ class CapsuleSwitcher<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? BeeColors.divider;
-    final selectedBg = selectedBackgroundColor ?? Colors.black;
+    final isDark = BeeTokens.isDark(context);
+    final bg = backgroundColor ?? BeeTokens.surfaceCapsule(context);
+    final selectedBg = selectedBackgroundColor ?? (isDark ? BeeTokens.primary(context) : Colors.black);
     final selectedFg = selectedTextColor ?? Colors.white;
-    final unselectedFg = unselectedTextColor ?? BeeColors.primaryText;
+    final unselectedFg = unselectedTextColor ?? BeeTokens.textPrimary(context);
     final radius = borderRadius ?? BorderRadius.circular(20);
 
     Widget buildSegment(CapsuleOption<T> option) {

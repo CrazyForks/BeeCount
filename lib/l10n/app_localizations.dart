@@ -2592,6 +2592,66 @@ abstract class AppLocalizations {
   /// **'Select this color'**
   String get personalizeSelectColor;
 
+  /// No description provided for @appearanceDisplaySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Settings'**
+  String get appearanceDisplaySettings;
+
+  /// No description provided for @appearanceThemeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceThemeMode;
+
+  /// No description provided for @appearanceThemeModeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow System'**
+  String get appearanceThemeModeSystem;
+
+  /// No description provided for @appearanceThemeModeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Mode'**
+  String get appearanceThemeModeLight;
+
+  /// No description provided for @appearanceThemeModeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get appearanceThemeModeDark;
+
+  /// No description provided for @appearanceDarkModePattern.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode Header Pattern'**
+  String get appearanceDarkModePattern;
+
+  /// No description provided for @appearancePatternNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get appearancePatternNone;
+
+  /// No description provided for @appearancePatternIcons.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon Tiling'**
+  String get appearancePatternIcons;
+
+  /// No description provided for @appearancePatternParticles.
+  ///
+  /// In en, this message translates to:
+  /// **'Particles'**
+  String get appearancePatternParticles;
+
+  /// No description provided for @appearancePatternHoneycomb.
+  ///
+  /// In en, this message translates to:
+  /// **'Honeycomb'**
+  String get appearancePatternHoneycomb;
+
   /// No description provided for @fontSettingsCurrentScale.
   ///
   /// In en, this message translates to:
@@ -2843,6 +2903,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder Time'**
   String get reminderTimeTitle;
+
+  /// No description provided for @commonSelectTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Time'**
+  String get commonSelectTime;
+
+  /// No description provided for @commonSelectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Date'**
+  String get commonSelectDate;
 
   /// No description provided for @reminderTestNotification.
   ///

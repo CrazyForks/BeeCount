@@ -8,7 +8,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../providers.dart';
@@ -236,7 +236,7 @@ class _ConfigImportExportPageState
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -271,7 +271,7 @@ class _ConfigImportExportPageState
                               style: TextStyle(
                                 fontSize: 16.0.scaled(context, ref),
                                 fontWeight: FontWeight.w600,
-                                color: BeeColors.primaryText,
+                                color: BeeTokens.textPrimary(context),
                               ),
                             ),
                           ],
@@ -281,7 +281,7 @@ class _ConfigImportExportPageState
                           l10n.configImportExportInfoMessage,
                           style: TextStyle(
                             fontSize: 14.0.scaled(context, ref),
-                            color: BeeColors.secondaryText,
+                            color: BeeTokens.textSecondary(context),
                             height: 1.5,
                           ),
                         ),
@@ -335,7 +335,7 @@ class _ConfigImportExportPageState
                                       l10n.configExportSavedTo(_lastExportedFilePath!.replaceAll('/storage/emulated/0/', '')),
                                       style: TextStyle(
                                         fontSize: 13.0.scaled(context, ref),
-                                        color: BeeColors.secondaryText,
+                                        color: BeeTokens.textSecondary(context),
                                       ),
                                     ),
                                   ),
@@ -394,7 +394,7 @@ class _ConfigImportExportPageState
                           style: TextStyle(
                             fontSize: 16.0.scaled(context, ref),
                             fontWeight: FontWeight.w600,
-                            color: BeeColors.primaryText,
+                            color: BeeTokens.textPrimary(context),
                           ),
                         ),
                         SizedBox(height: 12.0.scaled(context, ref)),
@@ -462,7 +462,7 @@ class _ConfigImportExportPageState
           text,
           style: TextStyle(
             fontSize: 14.0.scaled(context, ref),
-            color: BeeColors.primaryText,
+            color: BeeTokens.textPrimary(context),
           ),
         ),
       ],
@@ -492,7 +492,7 @@ class _ConfigContentDialog extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeColors.greyBg,
+              color: BeeTokens.scaffoldBackground(context),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
@@ -540,7 +540,7 @@ class _ConfigContentDialog extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeColors.greyBg,
+              color: BeeTokens.scaffoldBackground(context),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(4),
                 bottomRight: Radius.circular(4),
@@ -586,7 +586,7 @@ class _ConfigPreviewDialogState extends State<_ConfigPreviewDialog> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeColors.greyBg,
+              color: BeeTokens.scaffoldBackground(context),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
@@ -677,7 +677,7 @@ class _ConfigPreviewDialogState extends State<_ConfigPreviewDialog> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeColors.greyBg,
+              color: BeeTokens.scaffoldBackground(context),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(4),
                 bottomRight: Radius.circular(4),

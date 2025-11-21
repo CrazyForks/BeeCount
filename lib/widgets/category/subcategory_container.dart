@@ -5,6 +5,7 @@ import '../../data/db.dart' as db;
 import '../../services/category_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
+import '../../styles/tokens.dart';
 
 /// 二级分类容器组件
 /// 用于展示一个一级分类下的所有二级分类，以及操作按钮
@@ -110,10 +111,10 @@ class _ActionButton extends ConsumerWidget {
       borderRadius: BorderRadius.circular(12),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: BeeTokens.surfacePopoverCard(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+            color: BeeTokens.border(context),
             width: 1,
           ),
         ),
@@ -162,10 +163,10 @@ class _SubCategoryCard extends ConsumerWidget {
       borderRadius: BorderRadius.circular(12),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: BeeTokens.surfacePopoverCard(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+            color: BeeTokens.border(context),
             width: 1,
           ),
         ),

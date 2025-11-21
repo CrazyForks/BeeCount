@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 import 'pages/main/home_page.dart';
+import 'providers/theme_providers.dart';
 import 'pages/main/analytics_page.dart';
 import 'pages/main/ledgers_page_new.dart';
 import 'pages/main/mine_page.dart';
@@ -213,16 +215,20 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
           SystemNavigator.pop();
         }
       },
-      child: Scaffold(
-        body: IndexedStack(
-          index: idx,
-          children: _pages,
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 8.0.scaled(context, ref),
-          elevation: 8,
+      child: Stack(
+        children: [
+          Scaffold(
+            body: IndexedStack(
+              index: idx,
+              children: _pages,
+            ),
+            bottomNavigationBar: BottomAppBar(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF1C1C1E)  // ⭐ 暗黑模式：深灰（与卡片同色）
+              : Colors.white,             // 亮色模式：白色
+          shape: null,  // ⭐ 去掉凹口设计
+          notchMargin: 0,
+          elevation: 8,  // ⭐ 保持阴影，让Tab栏突起
           child: SizedBox(
             height: 60.0.scaled(context, ref),
             child: Row(
@@ -236,9 +242,10 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                 final pageIndex = i > 2 ? i - 1 : i;
                 final activeVisualIndex = idx >= 2 ? idx + 1 : idx;
                 final active = activeVisualIndex == i;
+                final isDark = Theme.of(context).brightness == Brightness.dark;
                 Color color = active
                     ? Theme.of(context).colorScheme.primary
-                    : Colors.black54;
+                    : (isDark ? Colors.white70 : Colors.black54); // ⭐ 自适应未选中颜色
                 IconData icon;
                 String label;
                 final l10n = AppLocalizations.of(context);
@@ -341,9 +348,9 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
               },
               child: FloatingActionButton(
                 heroTag: 'addFab',
-                elevation: 8,
+                elevation: 8,  // ⭐ 保持阴影
                 shape: const CircleBorder(),
-                backgroundColor: style == 'primary' ? color : color,
+                backgroundColor: style == 'primary' ? color : color,  // ⭐ 主题色背景
                 onPressed: () async {
                   // 短按行为：根据设置决定
                   if (cameraFirst) {
@@ -366,7 +373,36 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
             ),
           );
         }),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          ),
+          // 开发模式下的主题切换按钮
+          if (kDebugMode)
+            Positioned(
+              right: 16,
+              bottom: 100,
+              child: FloatingActionButton.small(
+                heroTag: 'themeSwitcher',
+                backgroundColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
+                onPressed: () {
+                  final current = ref.read(themeModeProvider);
+                  final next = current == ThemeMode.dark
+                      ? ThemeMode.light
+                      : ThemeMode.dark;
+                  ref.read(themeModeProvider.notifier).state = next;
+                },
+                child: Icon(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Icons.light_mode
+                      : Icons.dark_mode,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

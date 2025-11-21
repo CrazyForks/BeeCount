@@ -1363,6 +1363,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalizeSelectColor => 'Select this color';
 
   @override
+  String get appearanceDisplaySettings => 'Display Settings';
+
+  @override
+  String get appearanceThemeMode => 'Appearance';
+
+  @override
+  String get appearanceThemeModeSystem => 'Follow System';
+
+  @override
+  String get appearanceThemeModeLight => 'Light Mode';
+
+  @override
+  String get appearanceThemeModeDark => 'Dark Mode';
+
+  @override
+  String get appearanceDarkModePattern => 'Dark Mode Header Pattern';
+
+  @override
+  String get appearancePatternNone => 'None';
+
+  @override
+  String get appearancePatternIcons => 'Icon Tiling';
+
+  @override
+  String get appearancePatternParticles => 'Particles';
+
+  @override
+  String get appearancePatternHoneycomb => 'Honeycomb';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return 'Current scale: x$scale';
   }
@@ -1491,6 +1521,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderTimeTitle => 'Reminder Time';
+
+  @override
+  String get commonSelectTime => 'Select Time';
+
+  @override
+  String get commonSelectDate => 'Select Date';
 
   @override
   String get reminderTestNotification => 'Send Test Notification';

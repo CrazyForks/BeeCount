@@ -14,6 +14,7 @@ import '../../utils/ui_scale_extensions.dart';
 import '../../utils/format_utils.dart';
 import '../../utils/currencies.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 
 /// 账本卡片
 class LedgerCard extends ConsumerWidget {
@@ -62,15 +63,20 @@ class LedgerCard extends ConsumerWidget {
           vertical: 4.0.scaled(context, ref),
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: BeeTokens.surface(context),
           borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          border: BeeTokens.isDark(context)
+              ? Border.all(color: BeeTokens.border(context), width: 1)
+              : null,
+          boxShadow: BeeTokens.isDark(context)
+              ? null
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
@@ -113,7 +119,7 @@ class LedgerCard extends ConsumerWidget {
                                   style: TextStyle(
                                     fontSize: 18.0.scaled(context, ref),
                                     fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF333333),
+                                    color: BeeTokens.textPrimary(context),
                                   ),
                                 ),
                                 TextSpan(
@@ -123,7 +129,7 @@ class LedgerCard extends ConsumerWidget {
                                     fontWeight: FontWeight.w500,
                                     color: isRemote
                                         ? primaryColor.withValues(alpha: 0.8)
-                                        : Colors.grey[600],
+                                        : BeeTokens.textSecondary(context),
                                   ),
                                 ),
                               ],
@@ -157,7 +163,7 @@ class LedgerCard extends ConsumerWidget {
                           '${l10n.ledgersCurrency}：${getCurrencyName(ledger.currency, context)}（${ledger.currency}）',
                           style: TextStyle(
                             fontSize: 14.0.scaled(context, ref),
-                            color: Colors.grey[700],
+                            color: BeeTokens.textSecondary(context),
                           ),
                         ),
                         SizedBox(height: 4.0.scaled(context, ref)),
@@ -166,7 +172,7 @@ class LedgerCard extends ConsumerWidget {
                           l10n.ledgersRecords('${ledger.transactionCount}'),
                           style: TextStyle(
                             fontSize: 14.0.scaled(context, ref),
-                            color: Colors.grey[700],
+                            color: BeeTokens.textSecondary(context),
                           ),
                         ),
                         SizedBox(height: 4.0.scaled(context, ref)),
@@ -180,7 +186,7 @@ class LedgerCard extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 14.0.scaled(context, ref),
                             fontWeight: FontWeight.w500,
-                            color: ledger.balance >= 0 ? Colors.green[700] : Colors.red[700],
+                            color: ledger.balance >= 0 ? BeeTokens.success(context) : BeeTokens.error(context),
                           ),
                         ),
                       ],
@@ -194,7 +200,7 @@ class LedgerCard extends ConsumerWidget {
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.85),
+                      color: BeeTokens.surface(context).withValues(alpha: 0.85),
                       borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
                     ),
                     child: Column(

@@ -73,6 +73,29 @@ Help us translate the app into more languages so more people can use it.
 - Icon design
 - Screenshots and promotional materials
 
+#### 🎨 Designer Recruitment {#designer-recruitment}
+
+**We're looking for talented UI/UX designers to join the BeeCount project!**
+
+📐 **What You'll Work On:**
+
+- Redesign app UI and interaction experience
+- Create theme skins and illustration elements
+- Optimize visual consistency across the interface
+- Develop a modern, clean design language
+
+🎁 **What You'll Get:**
+
+- Portfolio pieces for open-source work
+- Credit in README and app
+- Close collaboration with dev team
+- Satisfaction of creating great UX for thousands of users
+
+💌 **Contact:**
+
+- GitHub Issues: [Submit design proposals](https://github.com/TNT-Likely/BeeCount/issues)
+- Telegram Group: [Join discussion](https://t.me/beecount)
+
 ## Reporting Bugs
 
 ### Before Submitting

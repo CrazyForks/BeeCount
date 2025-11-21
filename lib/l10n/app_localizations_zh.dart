@@ -1363,6 +1363,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get personalizeSelectColor => '选择此颜色';
 
   @override
+  String get appearanceDisplaySettings => '显示设置';
+
+  @override
+  String get appearanceThemeMode => '外观模式';
+
+  @override
+  String get appearanceThemeModeSystem => '跟随系统';
+
+  @override
+  String get appearanceThemeModeLight => '亮色模式';
+
+  @override
+  String get appearanceThemeModeDark => '暗黑模式';
+
+  @override
+  String get appearanceDarkModePattern => '暗黑模式头部图案';
+
+  @override
+  String get appearancePatternNone => '无';
+
+  @override
+  String get appearancePatternIcons => '图标平铺';
+
+  @override
+  String get appearancePatternParticles => '粒子星星';
+
+  @override
+  String get appearancePatternHoneycomb => '蜂巢六边形';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '当前缩放：x$scale';
   }
@@ -1491,6 +1521,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reminderTimeTitle => '提醒时间';
+
+  @override
+  String get commonSelectTime => '选择时间';
+
+  @override
+  String get commonSelectDate => '选择日期';
 
   @override
   String get reminderTestNotification => '发送测试通知';
@@ -4811,6 +4847,36 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get personalizeSelectColor => '選擇此顏色';
 
   @override
+  String get appearanceDisplaySettings => '顯示設定';
+
+  @override
+  String get appearanceThemeMode => '外觀模式';
+
+  @override
+  String get appearanceThemeModeSystem => '跟隨系統';
+
+  @override
+  String get appearanceThemeModeLight => '亮色模式';
+
+  @override
+  String get appearanceThemeModeDark => '暗黑模式';
+
+  @override
+  String get appearanceDarkModePattern => '暗黑模式頂部圖案';
+
+  @override
+  String get appearancePatternNone => '無';
+
+  @override
+  String get appearancePatternIcons => '圖標平鋪';
+
+  @override
+  String get appearancePatternParticles => '粒子星星';
+
+  @override
+  String get appearancePatternHoneycomb => '蜂巢六邊形';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '當前縮放：x$scale';
   }
@@ -4939,6 +5005,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderTimeTitle => '提醒時間';
+
+  @override
+  String get commonSelectTime => '選擇時間';
+
+  @override
+  String get commonSelectDate => '選擇日期';
 
   @override
   String get reminderTestNotification => '發送測試通知';

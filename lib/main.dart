@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'theme.dart';
 import 'providers.dart';
-import 'styles/colors.dart';
 import 'providers/font_scale_provider.dart';
 import 'utils/notification_factory.dart';
 import 'pages/auth/splash_page.dart';
@@ -343,24 +342,25 @@ class MainApp extends ConsumerWidget {
     final base = BeeTheme.lightTheme(platform: platform);
     final baseTextTheme = base.textTheme;
 
+    // ⭐ 亮色主题
     final theme = base.copyWith(
       textTheme: baseTextTheme,
       colorScheme: base.colorScheme.copyWith(primary: primary),
       primaryColor: primary,
       scaffoldBackgroundColor: Colors.white,
-      dividerColor: BeeColors.divider,
-      listTileTheme: const ListTileThemeData(
+      dividerColor: Colors.black.withOpacity(0.06),
+      listTileTheme: ListTileThemeData(
         dense: true,
-        contentPadding: EdgeInsets.symmetric(horizontal: 12),
-        iconColor: BeeColors.primaryText,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        iconColor: const Color(0xFF111827),
       ),
       dialogTheme: base.dialogTheme.copyWith(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         titleTextStyle: baseTextTheme.titleMedium?.copyWith(
-            color: BeeColors.primaryText, fontWeight: FontWeight.w600),
+            color: const Color(0xFF111827), fontWeight: FontWeight.w600),
         contentTextStyle:
-            baseTextTheme.bodyMedium?.copyWith(color: BeeColors.secondaryText),
+            baseTextTheme.bodyMedium?.copyWith(color: const Color(0xFF6B7280)),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -409,7 +409,11 @@ class MainApp extends ConsumerWidget {
         scrollBehavior: const NoGlowScrollBehavior(),
         debugShowCheckedModeBanner: false,
         theme: theme,
-        themeMode: ThemeMode.light,
+        darkTheme: BeeTheme.darkTheme(platform: platform).copyWith(
+          colorScheme: BeeTheme.darkTheme(platform: platform).colorScheme.copyWith(primary: primary),
+          primaryColor: primary,
+        ),                                                // ⭐ 暗黑主题（使用动态主题色）
+        themeMode: ref.watch(themeModeProvider),         // ⭐ 使用 provider 支持手动切换
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

@@ -8,8 +8,7 @@ import '../settings/personalize_page.dart' show headerStyleProvider;
 import '../../data/db.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/design.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../transaction/search_page.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -149,7 +148,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // ⭐ 自适应背景色
       body: Column(
         children: [
           Consumer(builder: (context, ref, _) {
@@ -176,7 +175,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
                           size: 20,
-                          color: BeeColors.primaryText,
+                          color: Theme.of(context).iconTheme.color, // ⭐ 自适应图标颜色
                         ),
                       ),
                       Expanded(
@@ -193,7 +192,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     .textTheme
                                     .titleLarge
                                     ?.copyWith(
-                                      color: BeeColors.primaryText,
+                                      color: Theme.of(context).textTheme.bodyLarge?.color, // ⭐ 自适应文字颜色
                                       fontSize: 22,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -212,10 +211,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           );
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.search,
                           size: 20,
-                          color: BeeColors.primaryText,
+                          color: Theme.of(context).iconTheme.color, // ⭐ 自适应图标颜色
                         ),
                       ),
                     ],
@@ -236,7 +235,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     .textTheme
                                     .labelLarge
                                     ?.copyWith(
-                                        color: BeeColors.black54,
+                                        color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6), // ⭐ 自适应次要文字颜色
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500)),
                             const SizedBox(height: 2),
@@ -249,25 +248,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       .textTheme
                                       .titleMedium
                                       ?.copyWith(
-                                          color: BeeColors.primaryText,
+                                          color: Theme.of(context).textTheme.bodyLarge?.color, // ⭐ 自适应主文字颜色
                                           fontSize: 20,
                                           fontWeight: FontWeight.w500),
                                 ),
                                 const SizedBox(width: 4),
                                 // 月份旁边的向下三角形（日期选择）
                                 _isJumping
-                                    ? const SizedBox(
+                                    ? SizedBox(
                                         width: 12,
                                         height: 12,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 1.5,
-                                          color: BeeColors.primaryText,
+                                          color: Theme.of(context).textTheme.bodyLarge?.color, // ⭐ 自适应颜色
                                         ),
                                       )
-                                    : const Icon(
+                                    : Icon(
                                         Icons.keyboard_arrow_down,
                                         size: 16,
-                                        color: BeeColors.black54,
+                                        color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6), // ⭐ 自适应次要颜色
                                       ),
                               ],
                             ),
@@ -278,7 +277,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         margin: const EdgeInsets.symmetric(horizontal: 12),
                         width: 1,
                         height: 36,
-                        color: BeeColors.divider,
+                        color: Theme.of(context).dividerTheme.color ?? Theme.of(context).dividerColor, // ⭐ 自适应分割线颜色
                       ),
                       const Expanded(child: _HeaderCenterSummary()),
                     ],
@@ -337,21 +336,21 @@ class _HeaderCenterSummary extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title,
-                textAlign: TextAlign.left, style: AppTextTokens.label(context)),
+                textAlign: TextAlign.left, style: BeeTextTokens.label(context)),
             const SizedBox(height: 2),
             AmountText(
               value: value,
               signed: false,
               decimals: 2,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: BeeColors.primaryText,
+                        color: Theme.of(context).textTheme.bodyLarge?.color, // ⭐ 自适应主文字颜色
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ) ??
-                  const TextStyle(
+                  TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
-                    color: BeeColors.primaryText,
+                    color: Theme.of(context).textTheme.bodyLarge?.color, // ⭐ 自适应主文字颜色
                   ),
             ),
           ],
