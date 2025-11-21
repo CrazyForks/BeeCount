@@ -846,6 +846,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                 amount: item.t.amount,
                                 isExpense: isExpense,
                                 hide: hide,
+                                happenedAt: item.t.happenedAt,
                                 isSelectionMode: _isBatchMode,
                                 isSelected: isSelected,
                                 onSelectionChanged: () =>

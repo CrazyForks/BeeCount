@@ -279,6 +279,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                     amount: it.t.amount,
                     isExpense: isExpense,
                     hide: widget.hideAmounts,
+                    happenedAt: it.t.happenedAt,
                     accountName: isTransfer
                       ? (subtitle.isEmpty && accountName != null && toAccountName != null
                           ? '$accountName → $toAccountName'

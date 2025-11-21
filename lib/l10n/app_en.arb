@@ -300,7 +300,7 @@
   "importBackgroundImport": "Background Import",
   "importCancelled": "Import Cancelled",
   "importCompleted": "Import Completed{cancelled}, success {ok}, failed {fail}",
-  "importSkippedNonTransactionTypes": "Skipped {count} non-transaction records (transfers, debts, etc.)",
+  "importSkippedNonTransactionTypes": "Skipped {count} non-transaction records (debts, etc.)",
   "importTransactionFailed": "Import failed, all changes have been rolled back: {error}",
   "importFileOpenError": "Unable to open file picker: {error}",
   "@importFileOpenError": {
@@ -535,6 +535,8 @@
   "appearanceAmountFormatFullDesc": "Show full amount, e.g. 123,456.78",
   "appearanceAmountFormatCompact": "Compact",
   "appearanceAmountFormatCompactDesc": "Abbreviate large amounts, e.g. 12.3K (only affects account balance)",
+  "appearanceShowTransactionTime": "Show Transaction Time",
+  "appearanceShowTransactionTimeDesc": "Display time in transaction list, allow time selection when editing",
   "fontSettingsCurrentScale": "Current scale: x{scale}",
   "fontSettingsPreview": "Live Preview",
   "fontSettingsPreviewText": "Spent 23.50 on lunch today, record it;\nRecorded for 45 days this month, 320 entries;\nPersistence is victory!",

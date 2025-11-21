@@ -700,7 +700,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String importSkippedNonTransactionTypes(Object count) {
-    return 'Skipped $count non-transaction records (transfers, debts, etc.)';
+    return 'Skipped $count non-transaction records (debts, etc.)';
   }
 
   @override
@@ -1406,6 +1406,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appearanceAmountFormatCompactDesc => 'Abbreviate large amounts, e.g. 12.3K (only affects account balance)';
+
+  @override
+  String get appearanceShowTransactionTime => 'Show Transaction Time';
+
+  @override
+  String get appearanceShowTransactionTimeDesc => 'Display time in transaction list, allow time selection when editing';
 
   @override
   String fontSettingsCurrentScale(Object scale) {

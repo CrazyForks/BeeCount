@@ -17,7 +17,7 @@ typedef AmountEditorResult = ({
   int? accountId
 });
 
-class AmountEditorSheet extends StatefulWidget {
+class AmountEditorSheet extends ConsumerStatefulWidget {
   final String categoryName; // 仅用于上层提交，不在UI展示
   final DateTime initialDate;
   final double? initialAmount;
@@ -42,10 +42,10 @@ class AmountEditorSheet extends StatefulWidget {
   });
 
   @override
-  State<AmountEditorSheet> createState() => _AmountEditorSheetState();
+  ConsumerState<AmountEditorSheet> createState() => _AmountEditorSheetState();
 }
 
-class _AmountEditorSheetState extends State<AmountEditorSheet> {
+class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
   late String _amountStr;
   late DateTime _date;
   int? _selectedAccountId;
@@ -150,13 +150,26 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
 
     if (!mounted) return;
 
-    final res = await showWheelDatePicker(
-      context,
-      initial: _date,
-      mode: WheelDatePickerMode.ymd,
-      maxDate: DateTime.now(),
-    );
-    if (res != null) setState(() => _date = res);
+    final showTime = ref.read(showTransactionTimeProvider);
+
+    if (showTime) {
+      // 显示时间功能开启时，使用两步选择器（先日期后时间）
+      final res = await showWheelDateTimePicker(
+        context,
+        initial: _date,
+        maxDate: DateTime.now(),
+      );
+      if (res != null) setState(() => _date = res);
+    } else {
+      // 普通模式，只选择日期
+      final res = await showWheelDatePicker(
+        context,
+        initial: _date,
+        mode: WheelDatePickerMode.ymd,
+        maxDate: DateTime.now(),
+      );
+      if (res != null) setState(() => _date = res);
+    }
   }
 
   @override
@@ -211,6 +224,8 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
     }
 
     String fmtDate(DateTime d) => '${d.year}/${d.month}/${d.day}';
+    String fmtDateTime(DateTime d) => '${d.month}/${d.day} ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}:${d.second.toString().padLeft(2, '0')}';
+    final showTime = ref.watch(showTransactionTimeProvider);
 
     return SafeArea(
       top: false,
@@ -371,16 +386,11 @@ class _AmountEditorSheetState extends State<AmountEditorSheet> {
                         child: SizedBox(
                           height: 60,
                           child: Center(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  fmtDate(_date),
-                                  style: text.labelMedium?.copyWith(
-                                      color: BeeTokens.textPrimary(context),
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
+                            child: Text(
+                              showTime ? fmtDateTime(_date) : fmtDate(_date),
+                              style: text.labelMedium?.copyWith(
+                                  color: BeeTokens.textPrimary(context),
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),

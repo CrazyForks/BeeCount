@@ -368,6 +368,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
               title: _getTransactionTitle(transaction),
               amount: transaction.amount,
               isExpense: transaction.type == 'expense',
+              happenedAt: transaction.happenedAt,
               onTap: () async {
                 final categoryData = ref.read(_categoryStreamProvider(widget.categoryId));
                 await TransactionEditUtils.editTransaction(
@@ -443,6 +444,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
               title: _getTransactionTitle(transaction),
               amount: transaction.amount,
               isExpense: transaction.type == 'expense',
+              happenedAt: transaction.happenedAt,
               onTap: () async {
                 final categoryData = ref.read(_categoryStreamProvider(widget.categoryId));
                 await TransactionEditUtils.editTransaction(

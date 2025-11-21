@@ -700,7 +700,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String importSkippedNonTransactionTypes(Object count) {
-    return '跳过 $count 条非收支记录（转账、债务等）';
+    return '跳过 $count 条非收支记录（债务等）';
   }
 
   @override
@@ -1406,6 +1406,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appearanceAmountFormatCompactDesc => '大金额缩写，如 12.3万（仅对账户余额生效）';
+
+  @override
+  String get appearanceShowTransactionTime => '显示交易时间';
+
+  @override
+  String get appearanceShowTransactionTimeDesc => '在账单列表显示时分，编辑时可选择时间';
 
   @override
   String fontSettingsCurrentScale(Object scale) {
@@ -4199,7 +4205,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String importSkippedNonTransactionTypes(Object count) {
-    return '跳過 $count 條非收支記錄（轉帳、債務等）';
+    return '跳過 $count 條非收支記錄（債務等）';
   }
 
   @override
@@ -4905,6 +4911,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get appearanceAmountFormatCompactDesc => '大金額縮寫，如 12.3萬（僅對帳戶餘額生效）';
+
+  @override
+  String get appearanceShowTransactionTime => '顯示交易時間';
+
+  @override
+  String get appearanceShowTransactionTimeDesc => '在帳單列表顯示時分，編輯時可選擇時間';
 
   @override
   String fontSettingsCurrentScale(Object scale) {

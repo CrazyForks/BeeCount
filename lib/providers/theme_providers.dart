@@ -125,6 +125,23 @@ final compactAmountInitProvider = FutureProvider<void>((ref) async {
   });
 });
 
+// 显示交易时间Provider（默认不显示）
+// false = 只显示日期
+// true = 显示日期和时间（时:分）
+final showTransactionTimeProvider = StateProvider<bool>((ref) => false);
+
+// 显示交易时间持久化初始化
+final showTransactionTimeInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getBool('showTransactionTime');
+  if (saved != null) {
+    ref.read(showTransactionTimeProvider.notifier).state = saved;
+  }
+  ref.listen<bool>(showTransactionTimeProvider, (prev, next) async {
+    await prefs.setBool('showTransactionTime', next);
+  });
+});
+
 // Header装饰样式持久化初始化
 final headerDecorationStyleInitProvider = FutureProvider<void>((ref) async {
   final prefs = await SharedPreferences.getInstance();

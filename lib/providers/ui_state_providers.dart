@@ -139,6 +139,8 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
       ref.watch(hideAmountsInitProvider.future),
       // 等待金额显示格式初始化
       ref.watch(compactAmountInitProvider.future),
+      // 等待交易时间显示初始化
+      ref.watch(showTransactionTimeInitProvider.future),
     ]);
     print('✅ 基础配置初始化完成');
 

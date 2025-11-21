@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers.dart';
-import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
@@ -11,7 +10,6 @@ import './font_settings_page.dart';
 import './language_settings_page.dart';
 import './widget_management_page.dart';
 import '../../l10n/app_localizations.dart';
-import '../../utils/ui_scale_extensions.dart';
 
 /// 外观设置二级页面
 class AppearanceSettingsPage extends ConsumerWidget {
@@ -113,6 +111,24 @@ class AppearanceSettingsPage extends ConsumerWidget {
                             ? l10n.appearanceAmountFormatCompact
                             : l10n.appearanceAmountFormatFull,
                         onTap: () => _showAmountFormatDialog(context, ref, l10n),
+                      ),
+                      BeeTokens.cardDivider(context),
+                      // 显示交易时间
+                      AppListTile(
+                        leading: Icons.schedule_outlined,
+                        title: l10n.appearanceShowTransactionTime,
+                        subtitle: l10n.appearanceShowTransactionTimeDesc,
+                        trailing: Switch.adaptive(
+                          value: ref.watch(showTransactionTimeProvider),
+                          onChanged: (value) {
+                            ref.read(showTransactionTimeProvider.notifier).state = value;
+                          },
+                          activeColor: ref.watch(primaryColorProvider),
+                        ),
+                        onTap: () {
+                          final current = ref.read(showTransactionTimeProvider);
+                          ref.read(showTransactionTimeProvider.notifier).state = !current;
+                        },
                       ),
                     ],
                   ),

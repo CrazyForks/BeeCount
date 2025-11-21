@@ -1359,7 +1359,7 @@ abstract class AppLocalizations {
   /// No description provided for @importSkippedNonTransactionTypes.
   ///
   /// In en, this message translates to:
-  /// **'Skipped {count} non-transaction records (transfers, debts, etc.)'**
+  /// **'Skipped {count} non-transaction records (debts, etc.)'**
   String importSkippedNonTransactionTypes(Object count);
 
   /// No description provided for @importTransactionFailed.
@@ -2681,6 +2681,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Abbreviate large amounts, e.g. 12.3K (only affects account balance)'**
   String get appearanceAmountFormatCompactDesc;
+
+  /// No description provided for @appearanceShowTransactionTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Transaction Time'**
+  String get appearanceShowTransactionTime;
+
+  /// No description provided for @appearanceShowTransactionTimeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Display time in transaction list, allow time selection when editing'**
+  String get appearanceShowTransactionTimeDesc;
 
   /// No description provided for @fontSettingsCurrentScale.
   ///
