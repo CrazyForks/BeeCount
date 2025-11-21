@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/db.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/lru_cache.dart';
-import '../../l10n/app_localizations.dart';
 import '../../providers.dart';
 
 /// 账户选择器组件
@@ -189,7 +188,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          color: isSelected ? primaryColor : Colors.grey[200],
+          color: isSelected ? primaryColor : BeeTokens.surfaceChip(context),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Center(
@@ -198,7 +197,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-              color: isSelected ? Colors.white : BeeColors.primaryText,
+              color: isSelected ? Colors.white : BeeTokens.textSecondary(context),
               height: 1.2,
             ),
           ),

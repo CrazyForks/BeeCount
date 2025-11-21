@@ -5,8 +5,56 @@ import '../theme.dart';
 import '../widget/widget_manager.dart';
 import '../providers.dart';
 
-// 主题模式Provider
+// 主题模式Provider（默认跟随系统）
 final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
+
+// 主题模式持久化初始化
+final themeModeInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getString('themeMode');
+  if (saved != null) {
+    switch (saved) {
+      case 'light':
+        ref.read(themeModeProvider.notifier).state = ThemeMode.light;
+        break;
+      case 'dark':
+        ref.read(themeModeProvider.notifier).state = ThemeMode.dark;
+        break;
+      default:
+        ref.read(themeModeProvider.notifier).state = ThemeMode.system;
+    }
+  }
+  ref.listen<ThemeMode>(themeModeProvider, (prev, next) async {
+    String value;
+    switch (next) {
+      case ThemeMode.light:
+        value = 'light';
+        break;
+      case ThemeMode.dark:
+        value = 'dark';
+        break;
+      default:
+        value = 'system';
+    }
+    await prefs.setString('themeMode', value);
+  });
+});
+
+// 暗黑模式下头部图案样式Provider
+// 可选值：'none'（无图案）、'icons'（图标平铺）、'particles'（粒子星星）、'honeycomb'（蜂巢六边形）
+final darkModePatternStyleProvider = StateProvider<String>((ref) => 'icons');
+
+// 暗黑模式图案样式持久化初始化
+final darkModePatternStyleInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getString('darkModePatternStyle');
+  if (saved != null) {
+    ref.read(darkModePatternStyleProvider.notifier).state = saved;
+  }
+  ref.listen<String>(darkModePatternStyleProvider, (prev, next) async {
+    await prefs.setString('darkModePatternStyle', next);
+  });
+});
 
 // 可变主色（个性化换装使用）
 final primaryColorProvider = StateProvider<Color>((ref) => BeeTheme.honeyGold);
@@ -55,3 +103,53 @@ final hideAmountsInitProvider = FutureProvider<void>((ref) async {
 });
 
 // 字体持久化初始化 - 已移除，仅使用系统默认字体
+
+// Header装饰样式Provider
+// 可选值：'icons'（图标平铺）、'particles'（粒子星星）、'honeycomb'（蜂巢六边形）
+final headerDecorationStyleProvider = StateProvider<String>((ref) => 'icons');
+
+// 金额显示格式Provider（默认显示完整金额）
+// false = 完整金额（如 123,456.78）
+// true = 简洁显示（如 12.3万）
+final compactAmountProvider = StateProvider<bool>((ref) => false);
+
+// 金额显示格式持久化初始化
+final compactAmountInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getBool('compactAmount');
+  if (saved != null) {
+    ref.read(compactAmountProvider.notifier).state = saved;
+  }
+  ref.listen<bool>(compactAmountProvider, (prev, next) async {
+    await prefs.setBool('compactAmount', next);
+  });
+});
+
+// 显示交易时间Provider（默认不显示）
+// false = 只显示日期
+// true = 显示日期和时间（时:分）
+final showTransactionTimeProvider = StateProvider<bool>((ref) => false);
+
+// 显示交易时间持久化初始化
+final showTransactionTimeInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getBool('showTransactionTime');
+  if (saved != null) {
+    ref.read(showTransactionTimeProvider.notifier).state = saved;
+  }
+  ref.listen<bool>(showTransactionTimeProvider, (prev, next) async {
+    await prefs.setBool('showTransactionTime', next);
+  });
+});
+
+// Header装饰样式持久化初始化
+final headerDecorationStyleInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getString('headerDecorationStyle');
+  if (saved != null) {
+    ref.read(headerDecorationStyleProvider.notifier).state = saved;
+  }
+  ref.listen<String>(headerDecorationStyleProvider, (prev, next) async {
+    await prefs.setString('headerDecorationStyle', next);
+  });
+});

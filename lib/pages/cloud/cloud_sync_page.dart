@@ -6,7 +6,7 @@ import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/sync_helpers.dart';
@@ -33,7 +33,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
 
     if (ledgerId == 0) {
       return Scaffold(
-        backgroundColor: BeeColors.greyBg,
+        backgroundColor: BeeTokens.scaffoldBackground(context),
         body: Column(
           children: [
             PrimaryHeader(
@@ -46,7 +46,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                 child: Text(
                   AppLocalizations.of(context).aiOcrNoLedger,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: BeeColors.secondaryText,
+                        color: BeeTokens.textSecondary(context),
                       ),
                 ),
               ),
@@ -57,7 +57,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
     }
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -239,7 +239,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                         message: lines.join('\n'));
                                   },
                           ),
-                          const Divider(height: 1, thickness: 0.5),
+                          BeeTokens.cardDivider(context),
                           // 上传
                           AppListTile(
                             leading: Icons.cloud_upload_outlined,
@@ -341,7 +341,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                               }
                             },
                           ),
-                          const Divider(height: 1, thickness: 0.5),
+                          BeeTokens.cardDivider(context),
                           // 下载
                           AppListTile(
                             leading: Icons.cloud_download_outlined,
@@ -433,7 +433,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
 
                               return Column(
                                 children: [
-                                  const Divider(height: 1, thickness: 0.5),
+                                  BeeTokens.cardDivider(context),
                                   AppListTile(
                                     leading: userNow == null
                                         ? Icons.login
@@ -512,7 +512,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
 
                               return Column(
                                 children: [
-                                  const Divider(height: 1, thickness: 0.5),
+                                  BeeTokens.cardDivider(context),
                                   SwitchListTile(
                                     title: Text(AppLocalizations.of(context)
                                         .mineAutoSyncTitle),

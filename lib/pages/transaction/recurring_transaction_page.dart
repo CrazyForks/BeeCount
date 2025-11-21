@@ -8,6 +8,7 @@ import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/recurring_transaction_service.dart';
 import '../../utils/category_utils.dart';
+import '../../styles/tokens.dart';
 import 'recurring_transaction_edit_page.dart';
 
 class RecurringTransactionPage extends ConsumerWidget {
@@ -47,20 +48,20 @@ class RecurringTransactionPage extends ConsumerWidget {
                         Icon(
                           Icons.repeat,
                           size: 64,
-                          color: Colors.grey[400],
+                          color: BeeTokens.textTertiary(context),
                         ),
                         const SizedBox(height: 16),
                         Text(
                           AppLocalizations.of(context)!.recurringTransactionEmpty,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.grey[600],
+                            color: BeeTokens.textSecondary(context),
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           AppLocalizations.of(context)!.recurringTransactionEmptyHint,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[500],
+                            color: BeeTokens.textTertiary(context),
                           ),
                         ),
                       ],
@@ -131,15 +132,15 @@ class _RecurringTransactionCard extends ConsumerWidget {
                     height: 40,
                     decoration: BoxDecoration(
                       color: recurring.type == 'expense'
-                          ? Colors.red.withValues(alpha: 0.1)
-                          : Colors.green.withValues(alpha: 0.1),
+                          ? BeeTokens.error(context).withValues(alpha: 0.1)
+                          : BeeTokens.success(context).withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       recurring.type == 'expense'
                           ? Icons.arrow_upward
                           : Icons.arrow_downward,
-                      color: recurring.type == 'expense' ? Colors.red : Colors.green,
+                      color: recurring.type == 'expense' ? BeeTokens.error(context) : BeeTokens.success(context),
                       size: 20,
                     ),
                   ),
@@ -169,7 +170,7 @@ class _RecurringTransactionCard extends ConsumerWidget {
                         Text(
                           _getFrequencyDescription(context, service),
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
+                            color: BeeTokens.textSecondary(context),
                           ),
                         ),
                       ],
@@ -184,7 +185,7 @@ class _RecurringTransactionCard extends ConsumerWidget {
                         signed: true,
                         decimals: 2,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: recurring.type == 'expense' ? Colors.red : Colors.green,
+                          color: recurring.type == 'expense' ? BeeTokens.error(context) : BeeTokens.success(context),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -193,8 +194,8 @@ class _RecurringTransactionCard extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: recurring.enabled
-                              ? Colors.green.withValues(alpha: 0.1)
-                              : Colors.grey.withValues(alpha: 0.1),
+                              ? BeeTokens.success(context).withValues(alpha: 0.1)
+                              : BeeTokens.textTertiary(context).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -203,7 +204,7 @@ class _RecurringTransactionCard extends ConsumerWidget {
                               : AppLocalizations.of(context)!.recurringTransactionDisabled,
                           style: TextStyle(
                             fontSize: 10,
-                            color: recurring.enabled ? Colors.green[700] : Colors.grey[600],
+                            color: recurring.enabled ? BeeTokens.success(context) : BeeTokens.textSecondary(context),
                           ),
                         ),
                       ),
@@ -216,19 +217,19 @@ class _RecurringTransactionCard extends ConsumerWidget {
                 Text(
                   recurring.note!,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey[600],
+                    color: BeeTokens.textSecondary(context),
                   ),
                 ),
               ],
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(Icons.calendar_today, size: 14, color: Colors.grey[600]),
+                  Icon(Icons.calendar_today, size: 14, color: BeeTokens.textSecondary(context)),
                   const SizedBox(width: 4),
                   Text(
                     '${AppLocalizations.of(context)!.recurringTransactionStartDate}: ${DateFormat.yMd().format(recurring.startDate)}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
+                      color: BeeTokens.textSecondary(context),
                     ),
                   ),
                   if (recurring.endDate != null) ...[
@@ -236,7 +237,7 @@ class _RecurringTransactionCard extends ConsumerWidget {
                     Text(
                       '→ ${DateFormat.yMd().format(recurring.endDate!)}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[600],
+                        color: BeeTokens.textSecondary(context),
                       ),
                     ),
                   ],
@@ -246,12 +247,12 @@ class _RecurringTransactionCard extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.history, size: 14, color: Colors.grey[600]),
+                    Icon(Icons.history, size: 14, color: BeeTokens.textSecondary(context)),
                     const SizedBox(width: 4),
                     Text(
                       '${AppLocalizations.of(context)!.recurringTransactionNextGeneration}: ${DateFormat.yMd().format(recurring.lastGeneratedDate!)}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[600],
+                        color: BeeTokens.textSecondary(context),
                       ),
                     ),
                   ],

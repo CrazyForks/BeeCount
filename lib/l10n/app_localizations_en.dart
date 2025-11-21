@@ -700,7 +700,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String importSkippedNonTransactionTypes(Object count) {
-    return 'Skipped $count non-transaction records (transfers, debts, etc.)';
+    return 'Skipped $count non-transaction records (debts, etc.)';
   }
 
   @override
@@ -1363,6 +1363,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalizeSelectColor => 'Select this color';
 
   @override
+  String get appearanceDisplaySettings => 'Display Settings';
+
+  @override
+  String get appearanceThemeMode => 'Appearance';
+
+  @override
+  String get appearanceThemeModeSystem => 'Follow System';
+
+  @override
+  String get appearanceThemeModeLight => 'Light Mode';
+
+  @override
+  String get appearanceThemeModeDark => 'Dark Mode';
+
+  @override
+  String get appearanceDarkModePattern => 'Dark Mode Header Pattern';
+
+  @override
+  String get appearancePatternNone => 'None';
+
+  @override
+  String get appearancePatternIcons => 'Icon Tiling';
+
+  @override
+  String get appearancePatternParticles => 'Particles';
+
+  @override
+  String get appearancePatternHoneycomb => 'Honeycomb';
+
+  @override
+  String get appearanceAmountFormat => 'Balance Display Format';
+
+  @override
+  String get appearanceAmountFormatFull => 'Full Amount';
+
+  @override
+  String get appearanceAmountFormatFullDesc => 'Show full amount, e.g. 123,456.78';
+
+  @override
+  String get appearanceAmountFormatCompact => 'Compact';
+
+  @override
+  String get appearanceAmountFormatCompactDesc => 'Abbreviate large amounts, e.g. 12.3K (only affects account balance)';
+
+  @override
+  String get appearanceShowTransactionTime => 'Show Transaction Time';
+
+  @override
+  String get appearanceShowTransactionTimeDesc => 'Display time in transaction list, allow time selection when editing';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return 'Current scale: x$scale';
   }
@@ -1491,6 +1542,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderTimeTitle => 'Reminder Time';
+
+  @override
+  String get commonSelectTime => 'Select Time';
+
+  @override
+  String get commonSelectDate => 'Select Date';
 
   @override
   String get reminderTestNotification => 'Send Test Notification';
@@ -3372,7 +3429,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountTransactionHistory => 'Transaction History';
 
   @override
-  String get accountTotalBalance => 'Total Balance';
+  String get accountTotalBalance => 'Net Assets';
 
   @override
   String get accountTotalExpense => 'Total Expense';

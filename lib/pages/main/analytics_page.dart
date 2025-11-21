@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // wheel_date_picker exported via ui barrel
 import '../../widgets/biz/biz.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 import '../../providers.dart';
-import '../../styles/colors.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/charts/line_chart.dart';
 import '../../widgets/analytics/analytics_summary.dart';
@@ -336,7 +335,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Row(
                 children: [
-                  Icon(Icons.bar_chart_outlined, color: Colors.black87),
+                  Icon(Icons.bar_chart_outlined, color: BeeTokens.textPrimary(context)),
                   const SizedBox(width: 8),
                   InkWell(
                     onTap: _scope != 'all' ? _showPeriodPicker : null,
@@ -345,13 +344,13 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                       children: [
                         Text(
                           _currentPeriodLabel(_scope, selMonth, context),
-                          style: AppTextTokens.title(context),
+                          style: BeeTextTokens.title(context),
                         ),
                         if (_scope != 'all')
                           Icon(
                             Icons.arrow_drop_down,
                             size: 20,
-                            color: Colors.black87,
+                            color: BeeTokens.textPrimary(context),
                           ),
                       ],
                     ),
@@ -368,19 +367,19 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                               : _type == 'income'
                                   ? AppLocalizations.of(context).homeIncome
                                   : AppLocalizations.of(context).homeBalance,
-                          style: AppTextTokens.title(context),
+                          style: BeeTextTokens.title(context),
                         ),
                         Icon(
                           Icons.arrow_drop_down,
                           size: 20,
-                          color: Colors.black87,
+                          color: BeeTokens.textPrimary(context),
                         ),
                       ],
                     ),
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: const Icon(Icons.info_outline, color: Colors.black87),
+                    icon: Icon(Icons.info_outline, color: BeeTokens.textPrimary(context)),
                     onPressed: () async {
                       await showDialog(
                         context: context,
@@ -532,14 +531,14 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.info_outline,
-                                  size: 14, color: BeeColors.secondaryText),
+                                  size: 14, color: BeeTokens.textSecondary(context)),
                               const SizedBox(width: 6),
                               Text(AppLocalizations.of(context).analyticsTipHeader,
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelSmall
                                       ?.copyWith(
-                                          color: BeeColors.secondaryText)),
+                                          color: BeeTokens.textSecondary(context))),
                             ],
                           ),
                       ],
@@ -673,11 +672,11 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           hideAmounts: hide,
                           themeColor: Theme.of(context).colorScheme.primary,
                           // 使用统一图表令牌
-                          lineWidth: AppChartTokens.lineWidth,
-                          dotRadius: AppChartTokens.dotRadius,
-                          cornerRadius: AppChartTokens.cornerRadius,
-                          xLabelFontSize: AppChartTokens.xLabelFontSize,
-                          yLabelFontSize: AppChartTokens.yLabelFontSize,
+                          lineWidth: BeeChartTokens.lineWidth,
+                          dotRadius: BeeChartTokens.dotRadius,
+                          cornerRadius: BeeChartTokens.cornerRadius,
+                          xLabelFontSize: BeeChartTokens.xLabelFontSize,
+                          yLabelFontSize: BeeChartTokens.yLabelFontSize,
                           onSwipeLeft: () {
                             // 根据scope切换周期
                             _onChartSwipeLeft();
@@ -698,7 +697,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                               setState(() => _localChartDismissed = true);
                             }
                           },
-                          whiteBg: true,
+                          whiteBg: !BeeTokens.isDark(context),
                           showGrid: false,
                           showDots: true,
                           annotate: true,
@@ -711,7 +710,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           children: [
                             Text(
                               AppLocalizations.of(context).analyticsCategoryRanking,
-                              style: AppTextTokens.title(context),
+                              style: BeeTextTokens.title(context),
                             ),
                             const Spacer(),
                             if (!headerDismissed)
@@ -727,17 +726,17 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                                 child: Row(
                                   children: [
                                     Icon(Icons.swipe,
-                                        size: 14, color: BeeColors.secondaryText),
+                                        size: 14, color: BeeTokens.textSecondary(context)),
                                     const SizedBox(width: 4),
                                     Text(AppLocalizations.of(context).analyticsSwipeToSwitch,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelSmall
                                             ?.copyWith(
-                                                color: BeeColors.secondaryText)),
+                                                color: BeeTokens.textSecondary(context))),
                                     const SizedBox(width: 4),
                                     Icon(Icons.close,
-                                        size: 14, color: BeeColors.hintText),
+                                        size: 14, color: BeeTokens.textTertiary(context)),
                                   ],
                                 ),
                               ),

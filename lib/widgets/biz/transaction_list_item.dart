@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 import '../../widgets/ui/ui.dart';
+import '../../providers/theme_providers.dart';
 import 'amount_text.dart';
 
 class TransactionListItem extends ConsumerWidget {
@@ -15,6 +16,7 @@ class TransactionListItem extends ConsumerWidget {
   final String? categoryName; // 分类名称，用于显示
   final VoidCallback? onDelete; // 删除回调
   final String? accountName; // 账户名称，用于显示
+  final DateTime? happenedAt; // 交易时间，用于显示时分
 
   // 批量选择模式相关
   final bool isSelectionMode; // 是否处于选择模式
@@ -33,6 +35,7 @@ class TransactionListItem extends ConsumerWidget {
       this.categoryName,
       this.onDelete,
       this.accountName,
+      this.happenedAt,
       this.isSelectionMode = false,
       this.isSelected = false,
       this.onSelectionChanged,
@@ -44,7 +47,7 @@ class TransactionListItem extends ConsumerWidget {
       onTap: isSelectionMode ? onSelectionChanged : onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-            horizontal: 12, vertical: AppDimens.listRowVertical),
+            horizontal: 12, vertical: BeeDimens.listRowVertical),
         child: Row(
           children: [
             // 选择模式下显示复选框，否则显示分类图标
@@ -78,10 +81,26 @@ class TransactionListItem extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextTokens.title(context)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: BeeTextTokens.title(context)),
+                      ),
+                      // 显示时间（如果设置开启且有时间数据）
+                      if (ref.watch(showTransactionTimeProvider) && happenedAt != null) ...[
+                        const SizedBox(width: 6),
+                        Text(
+                          '${happenedAt!.hour.toString().padLeft(2, '0')}:${happenedAt!.minute.toString().padLeft(2, '0')}:${happenedAt!.second.toString().padLeft(2, '0')}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: BeeTokens.textTertiary(context),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                   // 如果有分类名称且与标题不同，则显示分类名称
                   if (categoryName != null && categoryName != title)
                     GestureDetector(
@@ -126,7 +145,7 @@ class TransactionListItem extends ConsumerWidget {
                 hide: hide,
                 signed: true,
                 decimals: 2,
-                style: AppTextTokens.title(context)),
+                style: BeeTextTokens.title(context)),
           ],
         ),
       ),

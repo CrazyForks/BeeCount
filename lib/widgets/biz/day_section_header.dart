@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../styles/colors.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/theme_providers.dart';
 import 'format_money.dart';
@@ -50,13 +49,13 @@ class DaySectionHeader extends ConsumerWidget {
     // 优先使用传入的hide,否则使用全局状态
     final shouldHide = hide ?? ref.watch(hideAmountsProvider);
     String fmt(double v) => v == 0 ? '' : formatMoneyCompact(v, maxDecimals: 2);
-    final grey = BeeColors.black54;
+    final grey = BeeTokens.textSecondary(context);
     final week = getWeekday(dateText);
     final l10n = AppLocalizations.of(context);
     return Container(
-      color: Colors.white,
+      color: BeeTokens.surface(context),
       padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: AppDimens.listHeaderVertical),
+          horizontal: 12, vertical: BeeDimens.listHeaderVertical),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -5,6 +5,7 @@ import '../../data/db.dart' as db;
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../widgets/category_icon.dart';
+import '../../styles/tokens.dart';
 import 'package:intl/intl.dart';
 import '../category/category_edit_page.dart';
 import '../category/category_migration_page.dart';
@@ -233,8 +234,8 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                       value: summary.totalAmount,
                       isAmount: true,
                       color: summary.totalAmount >= 0
-                        ? Colors.green
-                        : Colors.red,
+                        ? BeeTokens.success(context)
+                        : BeeTokens.error(context),
                     ),
                   ),
                   Expanded(
@@ -367,6 +368,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
               title: _getTransactionTitle(transaction),
               amount: transaction.amount,
               isExpense: transaction.type == 'expense',
+              happenedAt: transaction.happenedAt,
               onTap: () async {
                 final categoryData = ref.read(_categoryStreamProvider(widget.categoryId));
                 await TransactionEditUtils.editTransaction(
@@ -442,6 +444,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
               title: _getTransactionTitle(transaction),
               amount: transaction.amount,
               isExpense: transaction.type == 'expense',
+              happenedAt: transaction.happenedAt,
               onTap: () async {
                 final categoryData = ref.read(_categoryStreamProvider(widget.categoryId));
                 await TransactionEditUtils.editTransaction(

@@ -7,7 +7,7 @@ import '../../data/db.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 import '../../utils/sync_helpers.dart';
 import '../../utils/transaction_edit_utils.dart';
 import '../../utils/category_utils.dart';
@@ -170,7 +170,11 @@ class TransactionListState extends ConsumerState<TransactionList> {
 
             Widget header = Column(
               children: [
-                if (!isFirst) Divider(height: 1, color: Colors.grey[200]),
+                if (!isFirst && BeeTokens.cardInnerDividerHeight(context) > 0)
+                  Divider(
+                    height: BeeTokens.cardInnerDividerHeight(context),
+                    color: BeeTokens.cardInnerDividerColor(context),
+                  ),
                 DaySectionHeader(
                   dateText: dateKey,
                   income: dayIncome,
@@ -275,6 +279,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                     amount: it.t.amount,
                     isExpense: isExpense,
                     hide: widget.hideAmounts,
+                    happenedAt: it.t.happenedAt,
                     accountName: isTransfer
                       ? (subtitle.isEmpty && accountName != null && toAccountName != null
                           ? '$accountName → $toAccountName'
@@ -302,7 +307,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                         : null,
                   ),
                   if (!isLastInGroup)
-                    AppDivider.short(indent: 56 + 16, endIndent: 16),
+                    BeeDivider.short(indent: 56 + 16, endIndent: 16),
                 ],
               ),
             );

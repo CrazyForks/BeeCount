@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/ui/ui.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 
 class IconPickerPage extends StatefulWidget {
   final String? currentIcon;
@@ -55,6 +56,8 @@ class _IconPickerPageState extends State<IconPickerPage> with TickerProviderStat
             bottom: TabBar(
               controller: _tabController,
               isScrollable: true,
+              labelColor: BeeTokens.textPrimary(context),
+              unselectedLabelColor: BeeTokens.textSecondary(context),
               tabs: categories.map((category) => Tab(text: category.name)).toList(),
             ),
           ),
@@ -282,9 +285,9 @@ class _IconGrid extends StatelessWidget {
                   ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
                   : null,
               border: Border.all(
-                color: isSelected 
+                color: isSelected
                     ? Theme.of(context).colorScheme.primary
-                    : Colors.grey.withOpacity(0.3),
+                    : BeeTokens.border(context),
                 width: isSelected ? 2 : 1,
               ),
               borderRadius: BorderRadius.circular(8),

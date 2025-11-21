@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../styles/design.dart';
+import '../../styles/tokens.dart';
 
 class SectionCard extends StatelessWidget {
   final Widget child;
@@ -9,18 +9,28 @@ class SectionCard extends StatelessWidget {
   const SectionCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(AppDimens.p12),
-    this.margin = const EdgeInsets.symmetric(horizontal: AppDimens.p12), // 默认值
+    this.padding = const EdgeInsets.all(BeeDimens.p12),
+    this.margin = const EdgeInsets.symmetric(horizontal: BeeDimens.p12), // 默认值
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = BeeTokens.isDark(context);
+    final borderWidth = BeeTokens.cardOuterBorderWidth(context);
+    final borderColor = BeeTokens.cardOuterBorderColor(context);
+
     return Container(
       margin: margin, // 使用传入的 margin
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppDimens.radius12),
-        boxShadow: AppShadows.card,
+        color: BeeTokens.surface(context), // ⭐ 使用 Token
+        borderRadius: BorderRadius.circular(BeeDimens.radius12),
+        border: borderWidth > 0
+            ? Border.all(
+                color: borderColor, // ⭐ 使用卡片边框 Token
+                width: borderWidth,
+              )
+            : null,
+        boxShadow: isDark ? null : BeeShadows.card,  // ⭐ 暗黑模式：无阴影，亮色模式：有阴影
       ),
       child: Padding(
         padding: padding,

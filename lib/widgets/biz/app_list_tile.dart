@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../styles/design.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 
 class AppListTile extends StatelessWidget {
   final IconData leading;
@@ -22,9 +21,10 @@ class AppListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = AppTextTokens.title(context)
-        .copyWith(color: BeeColors.primaryText); // 已下调为 400
-    final subStyle = AppTextTokens.label(context);
+    final titleStyle = BeeTextTokens.title(context)
+        .copyWith(color: BeeTokens.textPrimary(context)); // ⭐ 使用 Token
+    final subStyle = BeeTextTokens.label(context)
+        .copyWith(color: BeeTokens.textSecondary(context)); // ⭐ 使用 Token
     final tile = Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -65,7 +65,7 @@ class AppListTile extends StatelessWidget {
           if (trailing != null)
             trailing!
           else if (enabled)
-            const Icon(Icons.chevron_right, color: Colors.black38),
+            Icon(Icons.chevron_right, color: BeeTokens.iconTertiary(context)), // ⭐ 使用 Token
         ],
       ),
     );

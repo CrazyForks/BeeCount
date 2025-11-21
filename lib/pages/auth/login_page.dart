@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart' as s;
 import '../../providers.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../widgets/ui/ui.dart';
+import '../../styles/tokens.dart';
 import '../../services/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -178,6 +179,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
     if (cloudConfig.hasValue && cloudConfig.value!.type == CloudBackendType.webdav) {
       // WebDAV 不需要登录页面
       return Scaffold(
+        backgroundColor: BeeTokens.scaffoldBackground(context),
         body: Column(
           children: [
             PrimaryHeader(title: AppLocalizations.of(context).authLogin, showBack: true),
@@ -190,9 +192,9 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: BeeTokens.surface(context),
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
+                      boxShadow: BeeTokens.isDark(context) ? null : [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 10,
@@ -211,14 +213,16 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                         const SizedBox(height: 24),
                         Text(
                           AppLocalizations.of(context).webdavConfiguredTitle,
-                          style: theme.textTheme.titleLarge,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: BeeTokens.textPrimary(context),
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 12),
                         Text(
                           AppLocalizations.of(context).webdavConfiguredMessage,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[600],
+                            color: BeeTokens.textSecondary(context),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -239,6 +243,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
     }
 
     return Scaffold(
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(title: isSignup ? AppLocalizations.of(context).authSignup : AppLocalizations.of(context).authLogin, showBack: true),
@@ -252,9 +257,9 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: BeeTokens.surface(context),
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
+                      boxShadow: BeeTokens.isDark(context) ? null : [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 10,
@@ -272,7 +277,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                               selected: !isSignup,
                               label: Text(AppLocalizations.of(context).authLogin),
                               selectedColor: theme.colorScheme.primary,
-                              backgroundColor: Colors.white,
+                              backgroundColor: BeeTokens.surface(context),
                               side: BorderSide(
                                 color: theme.colorScheme.primary,
                                 width: (!isSignup) ? 0 : 1,
@@ -293,7 +298,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                               selected: isSignup,
                               label: Text(AppLocalizations.of(context).authSignup),
                               selectedColor: theme.colorScheme.primary,
-                              backgroundColor: Colors.white,
+                              backgroundColor: BeeTokens.surface(context),
                               side: BorderSide(
                                 color: theme.colorScheme.primary,
                                 width: (isSignup) ? 0 : 1,
@@ -355,7 +360,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Text(
                               errorText!,
-                              style: const TextStyle(color: Colors.red),
+                              style: TextStyle(color: BeeTokens.error(context)),
                             ),
                           ),
                         if (infoText != null)
@@ -363,7 +368,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Text(
                               infoText!,
-                              style: const TextStyle(color: Colors.green),
+                              style: TextStyle(color: BeeTokens.success(context)),
                             ),
                           ),
                         SizedBox(
@@ -599,6 +604,7 @@ class SignupSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(title: AppLocalizations.of(context).authSignupSuccess, showBack: false),
@@ -609,10 +615,13 @@ class SignupSuccessPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.mark_email_read_outlined,
-                        size: 72, color: Colors.green),
+                    Icon(Icons.mark_email_read_outlined,
+                        size: 72, color: BeeTokens.success(context)),
                     const SizedBox(height: 12),
-                    Text(AppLocalizations.of(context).authVerificationEmailSent),
+                    Text(
+                      AppLocalizations.of(context).authVerificationEmailSent,
+                      style: TextStyle(color: BeeTokens.textPrimary(context)),
+                    ),
                     const SizedBox(height: 16),
                     FilledButton(
                       onPressed: () =>

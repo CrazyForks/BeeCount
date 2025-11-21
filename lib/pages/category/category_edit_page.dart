@@ -6,6 +6,7 @@ import '../../data/db.dart' as db;
 import '../../services/category_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
+import '../../styles/tokens.dart';
 import '../transaction/category_detail_page.dart';
 import 'category_migration_page.dart';
 
@@ -151,7 +152,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                     child: ListTile(
                       leading: Icon(
                         widget.kind == 'expense' ? Icons.trending_down : Icons.trending_up,
-                        color: widget.kind == 'expense' ? Colors.red : Colors.green,
+                        color: widget.kind == 'expense' ? BeeTokens.error(context) : BeeTokens.success(context),
                       ),
                       title: Text(widget.kind == 'expense' ? AppLocalizations.of(context).categoryExpenseType : AppLocalizations.of(context).categoryIncomeType),
                     ),
@@ -206,22 +207,22 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                   if (isDefaultCategory) ...[
                     const SizedBox(height: 16),
                     Card(
-                      color: Colors.orange[50],
+                      color: BeeTokens.isDark(context) ? Colors.orange[900]!.withValues(alpha: 0.3) : Colors.orange[50],
                       child: ListTile(
                         leading: Icon(
                           Icons.info_outline,
-                          color: Colors.orange[700],
+                          color: BeeTokens.isDark(context) ? Colors.orange[300] : Colors.orange[700],
                         ),
                         title: Text(
                           AppLocalizations.of(context).categoryDefaultTitle,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.orange[700],
+                            color: BeeTokens.isDark(context) ? Colors.orange[300] : Colors.orange[700],
                           ),
                         ),
                         subtitle: Text(
                           AppLocalizations.of(context).categoryDefaultMessage,
-                          style: TextStyle(color: Colors.orange[600]),
+                          style: TextStyle(color: BeeTokens.isDark(context) ? Colors.orange[400] : Colors.orange[600]),
                         ),
                       ),
                     ),
@@ -247,7 +248,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                             decoration: InputDecoration(
                               hintText: isDefaultCategory ? AppLocalizations.of(context).categoryNameHintDefault : AppLocalizations.of(context).categoryNameHint,
                               border: const OutlineInputBorder(),
-                              fillColor: isDefaultCategory ? Colors.grey[100] : null,
+                              fillColor: isDefaultCategory ? BeeTokens.surfaceSecondary(context) : null,
                               filled: isDefaultCategory,
                             ),
                             maxLength: 4,
@@ -277,7 +278,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                           Text(
                             AppLocalizations.of(context).categoryIconLabel,
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: isDefaultCategory ? Colors.grey[600] : null,
+                              color: isDefaultCategory ? BeeTokens.textTertiary(context) : null,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -285,21 +286,21 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.grey[100],
+                                color: BeeTokens.surfaceSecondary(context),
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey[300]!),
+                                border: Border.all(color: BeeTokens.border(context)),
                               ),
                               child: Row(
                                 children: [
                                   Icon(
                                     CategoryService.getCategoryIcon(_selectedIcon),
                                     size: 24,
-                                    color: Colors.grey[600],
+                                    color: BeeTokens.textSecondary(context),
                                   ),
                                   const SizedBox(width: 12),
                                   Text(
                                     AppLocalizations.of(context).categoryIconDefaultMessage,
-                                    style: TextStyle(color: Colors.grey[600]),
+                                    style: TextStyle(color: BeeTokens.textSecondary(context)),
                                   ),
                                 ],
                               ),
@@ -543,7 +544,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
               Text(
                 AppLocalizations.of(context).categorySelectParentDescription,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey[600],
+                  color: BeeTokens.textSecondary(context),
                 ),
               ),
             ],
@@ -560,12 +561,12 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                 return ListTile(
                   leading: Icon(
                     CategoryService.getCategoryIcon(category.icon),
-                    color: hasTransactions ? Colors.grey[400] : primaryColor,
+                    color: hasTransactions ? BeeTokens.textTertiary(context) : primaryColor,
                   ),
                   title: Text(
                     CategoryUtils.getDisplayName(category.name, context),
                     style: TextStyle(
-                      color: hasTransactions ? Colors.grey[400] : null,
+                      color: hasTransactions ? BeeTokens.textTertiary(context) : null,
                     ),
                   ),
                   enabled: !hasTransactions,

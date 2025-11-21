@@ -10,7 +10,7 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/amount_editor_sheet.dart';
 import '../../widgets/category/category_selector.dart';
 import '../../widgets/transaction/transfer_form.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/sync_helpers.dart';
 
 /// 交易编辑器页面
@@ -106,12 +106,12 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
                           child: TabBar(
                             controller: _tab,
                             isScrollable: false,
-                            labelColor: Colors.black,
-                            unselectedLabelColor: BeeColors.black54,
-                            indicator: const UnderlineTabIndicator(
+                            labelColor: BeeTokens.textPrimary(context),
+                            unselectedLabelColor: BeeTokens.textSecondary(context),
+                            indicator: UnderlineTabIndicator(
                               borderSide:
-                                  BorderSide(width: 2, color: Colors.black),
-                              insets: EdgeInsets.symmetric(horizontal: 0),
+                                  BorderSide(width: 2, color: BeeTokens.textPrimary(context)),
+                              insets: const EdgeInsets.symmetric(horizontal: 0),
                             ),
                             tabs: [
                               Tab(text: AppLocalizations.of(context)!.categoryExpense),
@@ -124,7 +124,7 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
                       TextButton(
                         onPressed: () => Navigator.pop(context),
                         child: Text(AppLocalizations.of(context)!.commonCancel,
-                            style: const TextStyle(color: Colors.black)),
+                            style: TextStyle(color: BeeTokens.textPrimary(context))),
                       )
                     ],
                   ),
@@ -177,7 +177,7 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: BeeTokens.surfaceSheet(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),

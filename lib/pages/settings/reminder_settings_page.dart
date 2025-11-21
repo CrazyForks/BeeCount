@@ -5,7 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/reminder_providers.dart';
 import '../../utils/notification_factory.dart';
 import '../../utils/notification_android.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../widgets/ui/ui.dart';
 
 class ReminderSettingsPage extends ConsumerWidget {
@@ -15,8 +15,10 @@ class ReminderSettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final reminderSettings = ref.watch(reminderSettingsProvider);
 
+    final isDark = BeeTokens.isDark(context);
+
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -34,23 +36,24 @@ class ReminderSettingsPage extends ConsumerWidget {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: BeeTokens.surface(context),
               borderRadius: BorderRadius.circular(12),
+              border: isDark ? Border.all(color: BeeTokens.border(context)) : null,
             ),
             child: SwitchListTile(
               title: Text(
                 AppLocalizations.of(context)!.reminderDailyTitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF333333),
+                  color: BeeTokens.textPrimary(context),
                 ),
               ),
               subtitle: Text(
                 AppLocalizations.of(context)!.reminderDailySubtitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF999999),
+                  color: BeeTokens.textSecondary(context),
                 ),
               ),
               value: reminderSettings.isEnabled,
@@ -67,28 +70,29 @@ class ReminderSettingsPage extends ConsumerWidget {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: BeeTokens.surface(context),
               borderRadius: BorderRadius.circular(12),
+              border: isDark ? Border.all(color: BeeTokens.border(context)) : null,
             ),
             child: ListTile(
               title: Text(
                 AppLocalizations.of(context)!.reminderTimeTitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF333333),
+                  color: BeeTokens.textPrimary(context),
                 ),
               ),
               subtitle: Text(
                 reminderSettings.timeString,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF999999),
+                  color: BeeTokens.textSecondary(context),
                 ),
               ),
-              trailing: const Icon(
+              trailing: Icon(
                 Icons.chevron_right,
-                color: Color(0xFFCCCCCC),
+                color: BeeTokens.iconTertiary(context),
               ),
               onTap: () async {
                 final selectedTime = await showWheelTimePicker(
@@ -350,10 +354,10 @@ class ReminderSettingsPage extends ConsumerWidget {
             margin: const EdgeInsets.symmetric(horizontal: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8F9FA),
+              color: BeeTokens.surfaceSecondary(context),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: const Color(0xFFE5E5E5),
+              border: isDark ? null : Border.all(
+                color: BeeTokens.borderStrong(context),
                 width: 0.5,
               ),
             ),
@@ -362,9 +366,9 @@ class ReminderSettingsPage extends ConsumerWidget {
               children: [
                 Text(
                   AppLocalizations.of(context)!.reminderDescription,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF666666),
+                    color: BeeTokens.textSecondary(context),
                     height: 1.4,
                   ),
                 ),
@@ -373,9 +377,9 @@ class ReminderSettingsPage extends ConsumerWidget {
                   Platform.isIOS
                       ? AppLocalizations.of(context)!.reminderIOSInstructions
                       : AppLocalizations.of(context)!.reminderAndroidInstructions,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: Color(0xFF888888),
+                    color: BeeTokens.textTertiary(context),
                     height: 1.4,
                   ),
                 ),

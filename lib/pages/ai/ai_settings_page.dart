@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../l10n/app_localizations.dart';
@@ -68,7 +68,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
     if (_loading) {
       return Scaffold(
-        backgroundColor: BeeColors.greyBg,
+        backgroundColor: BeeTokens.scaffoldBackground(context),
         body: Column(
           children: [
             PrimaryHeader(
@@ -84,7 +84,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
     }
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -152,7 +152,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
           ),
 
           // 上传图片到AI开关
-          const Divider(height: 1),
+          BeeTokens.cardDivider(context),
           SwitchListTile(
             value: _useVision,
             onChanged: _aiEnabled ? (value) async {
@@ -277,7 +277,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                 size: 24,
                 color: enabled && isSelected
                     ? ref.watch(primaryColorProvider)
-                    : Colors.grey[400],
+                    : BeeTokens.textTertiary(context),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -289,7 +289,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: enabled && isSelected ? ref.watch(primaryColorProvider) : null,
+                        color: enabled && isSelected ? ref.watch(primaryColorProvider) : BeeTokens.textPrimary(context),
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -297,7 +297,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                       displaySubtitle,
                       style: TextStyle(
                         fontSize: 13,
-                        color: enabled ? Colors.grey[600] : Colors.orange[700],
+                        color: enabled ? BeeTokens.textSecondary(context) : Colors.orange[700],
                         fontStyle: enabled ? FontStyle.normal : FontStyle.italic,
                       ),
                     ),
@@ -432,7 +432,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                 Icon(
                   Icons.storage,
                   size: 20,
-                  color: Colors.grey[400],
+                  color: BeeTokens.textTertiary(context),
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -464,7 +464,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
           Opacity(
             opacity: 0.5,
             child: ListTile(
-              leading: Icon(Icons.download_outlined, color: Colors.grey[400]),
+              leading: Icon(Icons.download_outlined, color: BeeTokens.textTertiary(context)),
               title: Text(l10n.aiLocalModelManagement),
               subtitle: Text(l10n.aiLocalModelUnavailable),
               trailing: const Icon(Icons.chevron_right),

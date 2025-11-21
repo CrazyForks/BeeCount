@@ -37,8 +37,12 @@ class BeeRepository {
         'SELECT COUNT(*) AS c FROM transactions WHERE ledger_id = ?1',
         variables: [d.Variable.withInt(ledgerId)],
         readsFrom: {db.transactions}).getSingle();
+    // 计算记账天数：今天 - 第一笔记账日期 + 1
     final dayRow = await db.customSelect("""
-      SELECT COUNT(DISTINCT strftime('%Y-%m-%d', happened_at, 'unixepoch', 'localtime')) AS c
+      SELECT CASE
+        WHEN MIN(happened_at) IS NULL THEN 0
+        ELSE CAST(julianday('now', 'localtime') - julianday(MIN(happened_at), 'unixepoch', 'localtime') + 1 AS INTEGER)
+      END AS c
       FROM transactions WHERE ledger_id = ?1
       """,
         variables: [d.Variable.withInt(ledgerId)],
@@ -60,9 +64,13 @@ class BeeRepository {
       'SELECT COUNT(*) AS c FROM transactions',
       readsFrom: {db.transactions},
     ).getSingle();
+    // 计算记账天数：今天 - 第一笔记账日期 + 1
     final dayRow = await db.customSelect(
       """
-      SELECT COUNT(DISTINCT strftime('%Y-%m-%d', happened_at, 'unixepoch', 'localtime')) AS c
+      SELECT CASE
+        WHEN MIN(happened_at) IS NULL THEN 0
+        ELSE CAST(julianday('now', 'localtime') - julianday(MIN(happened_at), 'unixepoch', 'localtime') + 1 AS INTEGER)
+      END AS c
       FROM transactions
       """,
       readsFrom: {db.transactions},
@@ -1171,18 +1179,38 @@ class BeeRepository {
 
   /// 获取所有账户的汇总统计（总余额、总支出、总收入）
   /// v1.15.0: 不再限制账本，获取所有账户
+  /// 注意：总收入/支出不包含转账（转账是内部资金流转，不是真实收支）
   Future<({double totalBalance, double totalExpense, double totalIncome})> getAllAccountsTotalStats() async {
     final accounts = await db.select(db.accounts).get();
 
+    // 总余额 = 所有账户余额之和（这个是正确的，转账不影响总余额）
     double totalBalance = 0.0;
-    double totalExpense = 0.0;
-    double totalIncome = 0.0;
-
     for (final account in accounts) {
-      final stats = await getAccountStats(account.id);
-      totalBalance += stats.balance;
-      totalExpense += stats.expense;
-      totalIncome += stats.income;
+      final balance = await getAccountBalance(account.id);
+      totalBalance += balance;
+    }
+
+    // 总收入/支出：直接从交易表查询，排除转账类型
+    // 只统计有账户关联的交易（账户功能范围内）
+    final accountIds = accounts.map((a) => a.id).toSet();
+
+    final allTxs = await (db.select(db.transactions)
+          ..where((t) => t.accountId.isNotNull()))
+        .get();
+
+    double totalIncome = 0.0;
+    double totalExpense = 0.0;
+
+    for (final t in allTxs) {
+      // 只统计属于已有账户的交易
+      if (t.accountId != null && accountIds.contains(t.accountId)) {
+        if (t.type == 'income') {
+          totalIncome += t.amount;
+        } else if (t.type == 'expense') {
+          totalExpense += t.amount;
+        }
+        // 转账类型不计入总收入/支出
+      }
     }
 
     return (totalBalance: totalBalance, totalExpense: totalExpense, totalIncome: totalIncome);

@@ -6,6 +6,7 @@ import '../../services/automation/ocr_service.dart';
 import '../../services/automation/bill_creation_service.dart';
 import '../../widgets/ui/primary_header.dart';
 import '../../widgets/ui/ui.dart';
+import '../../styles/tokens.dart';
 import '../../providers.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
@@ -121,12 +122,7 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
+    showToast(context, message);
   }
 
   Future<Category?> _getCategory(int categoryId) async {
@@ -408,8 +404,8 @@ class _OcrBillingPageState extends ConsumerState<OcrBillingPage> {
                     selected: isSelected,
                     showCheckmark: isSelected,
                     selectedColor: primaryColor,
-                    backgroundColor: Colors.white,
-                    disabledColor: Colors.white,
+                    backgroundColor: BeeTokens.surfaceElevated(context),
+                    disabledColor: BeeTokens.surfaceElevated(context),
                     checkmarkColor: theme.colorScheme.onSurface,
                     labelStyle: TextStyle(
                       color: theme.colorScheme.onSurface,

@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 
@@ -192,7 +192,7 @@ class _StorageManagementPageState extends ConsumerState<StorageManagementPage> {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -224,7 +224,7 @@ class _StorageManagementPageState extends ConsumerState<StorageManagementPage> {
                               fontWeight: FontWeight.w600,
                               color: _aiModelsSize > 0
                                   ? ref.watch(primaryColorProvider)
-                                  : BeeColors.black54,
+                                  : BeeTokens.textSecondary(context),
                             ),
                           ),
                           onTap: _aiModelsSize > 0 ? _clearAIModels : null,
@@ -248,7 +248,7 @@ class _StorageManagementPageState extends ConsumerState<StorageManagementPage> {
                                 fontWeight: FontWeight.w600,
                                 color: _apkFilesSize > 0
                                     ? ref.watch(primaryColorProvider)
-                                    : BeeColors.black54,
+                                    : BeeTokens.textSecondary(context),
                               ),
                             ),
                             onTap: _apkFilesSize > 0 ? _clearAPKFiles : null,
@@ -266,7 +266,7 @@ class _StorageManagementPageState extends ConsumerState<StorageManagementPage> {
                           l10n.storageHint,
                           style: TextStyle(
                             fontSize: 12,
-                            color: BeeColors.black54,
+                            color: BeeTokens.textSecondary(context),
                           ),
                         ),
                       ),

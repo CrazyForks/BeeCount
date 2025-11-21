@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ui/ui.dart';
 import '../../providers/font_scale_provider.dart';
-import '../../styles/design.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../services/ui_scale_service.dart';
 
@@ -27,6 +26,7 @@ class FontSettingsPage extends ConsumerWidget {
     ];
 
     return Scaffold(
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(title: AppLocalizations.of(context)!.mineDisplayScale, showBack: true, compact: true),
@@ -71,7 +71,7 @@ class FontSettingsPage extends ConsumerWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
-                        ?.copyWith(color: Colors.black54)),
+                        ?.copyWith(color: BeeTokens.textSecondary(context))),
               ],
             ),
           ),
@@ -83,16 +83,23 @@ class FontSettingsPage extends ConsumerWidget {
   Widget _buildOption(
       BuildContext context, WidgetRef ref, _FontOption o, int current) {
     final active = o.value == current;
+    final isDark = BeeTokens.isDark(context);
     final style = Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontWeight: active ? FontWeight.w600 : FontWeight.w400,
+          color: BeeTokens.textPrimary(context),
         );
     return Card(
-      elevation: 0,
+      elevation: isDark ? 0 : 1,
+      color: BeeTokens.surface(context),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: isDark ? BorderSide(color: BeeTokens.border(context)) : BorderSide.none,
+      ),
       child: ListTile(
         title: Text(o.label, style: style),
-        subtitle: Text(o.preview, style: Theme.of(context).textTheme.bodySmall),
+        subtitle: Text(o.preview, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: BeeTokens.textSecondary(context))),
         trailing:
-            active ? const Icon(Icons.check_circle, color: Colors.green) : null,
+            active ? Icon(Icons.check_circle, color: BeeTokens.success(context)) : null,
         onTap: () => ref.read(fontScaleLevelProvider.notifier).state = o.value,
       ),
     );
@@ -133,7 +140,7 @@ class _PreviewParagraph extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(AppLocalizations.of(context)!.fontSettingsCurrentLevel(_levelName(context, level), scale.toStringAsFixed(2)),
-                style: theme.bodySmall?.copyWith(color: Colors.black54)),
+                style: theme.bodySmall?.copyWith(color: BeeTokens.textSecondary(context))),
           ],
         ),
       ),
@@ -176,16 +183,16 @@ class _MultiStylePreview extends ConsumerWidget {
           children: [
             Text(AppLocalizations.of(context)!.fontSettingsMoreStyles, style: theme.titleMedium),
             const SizedBox(height: 10),
-            _kv(AppLocalizations.of(context)!.fontSettingsPageTitle, '月度统计与分析', theme.titleLarge),
+            _kv(context, AppLocalizations.of(context)!.fontSettingsPageTitle, '月度统计与分析', theme.titleLarge),
             const SizedBox(height: 6),
-            _kv(AppLocalizations.of(context)!.fontSettingsBlockTitle, '最近记账', theme.titleMedium),
+            _kv(context, AppLocalizations.of(context)!.fontSettingsBlockTitle, '最近记账', theme.titleMedium),
             const SizedBox(height: 6),
-            _kv(AppLocalizations.of(context)!.fontSettingsBodyExample, '今天早餐：豆浆 + 包子 6.50 元', theme.bodyMedium),
+            _kv(context, AppLocalizations.of(context)!.fontSettingsBodyExample, '今天早餐：豆浆 + 包子 6.50 元', theme.bodyMedium),
             const SizedBox(height: 6),
-            _kv(AppLocalizations.of(context)!.fontSettingsLabelExample, '隐藏金额已开启', theme.labelMedium),
+            _kv(context, AppLocalizations.of(context)!.fontSettingsLabelExample, '隐藏金额已开启', theme.labelMedium),
             const SizedBox(height: 6),
-            _kv(AppLocalizations.of(context)!.fontSettingsStrongNumber, '1234.56',
-                AppTextTokens.strongTitle(context).copyWith(fontSize: 18)),
+            _kv(context, AppLocalizations.of(context)!.fontSettingsStrongNumber, '1234.56',
+                BeeTextTokens.strongTitle(context).copyWith(fontSize: 18)),
             const Divider(height: 20),
             _ListTileMock(),
           ],
@@ -194,7 +201,7 @@ class _MultiStylePreview extends ConsumerWidget {
     );
   }
 
-  Widget _kv(String k, String v, TextStyle? style) {
+  Widget _kv(BuildContext context, String k, String v, TextStyle? style) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -204,17 +211,17 @@ class _MultiStylePreview extends ConsumerWidget {
               style: style != null
                   ? style.copyWith(
                       fontSize: (style.fontSize ?? 14) - 1,
-                      color: Colors.black54,
+                      color: BeeTokens.textSecondary(context),
                     )
-                  : const TextStyle(fontSize: 12, color: Colors.black54)),
+                  : TextStyle(fontSize: 12, color: BeeTokens.textSecondary(context))),
         ),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
             v,
             style: style != null
-                ? style.copyWith(color: BeeColors.primaryText)
-                : const TextStyle(fontSize: 14, color: BeeColors.primaryText),
+                ? style.copyWith(color: BeeTokens.textPrimary(context))
+                : TextStyle(fontSize: 14, color: BeeTokens.textPrimary(context)),
           ),
         )
       ],
@@ -225,8 +232,8 @@ class _MultiStylePreview extends ConsumerWidget {
 class _ListTileMock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final title = AppTextTokens.title(context);
-    final label = AppTextTokens.label(context);
+    final title = BeeTextTokens.title(context);
+    final label = BeeTextTokens.label(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       child: Row(
@@ -255,7 +262,7 @@ class _ListTileMock extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Text('123.45', style: AppTextTokens.strongTitle(context)),
+          Text('123.45', style: BeeTextTokens.strongTitle(context)),
         ],
       ),
     );
@@ -278,13 +285,13 @@ class _UIScaleInfo extends ConsumerWidget {
           children: [
             Text(AppLocalizations.of(context)!.fontSettingsScreenInfo, style: theme.titleMedium),
             SizedBox(height: 8.0.scaled(context, ref)),
-            _infoRow(AppLocalizations.of(context)!.fontSettingsScreenDensity, debugInfo['devicePixelRatio']!.toStringAsFixed(2)),
-            _infoRow(AppLocalizations.of(context)!.fontSettingsScreenWidth, '${debugInfo['screenWidth']!.toStringAsFixed(0)}dp'),
-            _infoRow(AppLocalizations.of(context)!.fontSettingsDeviceScale, 'x${debugInfo['deviceScaleFactor']!.toStringAsFixed(2)}'),
-            _infoRow(AppLocalizations.of(context)!.fontSettingsUserScale, 'x${debugInfo['userScaleFactor']!.toStringAsFixed(2)}'),
-            _infoRow(AppLocalizations.of(context)!.fontSettingsFinalScale, 'x${debugInfo['finalScaleFactor']!.toStringAsFixed(2)}'),
-            _infoRow(AppLocalizations.of(context)!.fontSettingsBaseDevice, debugInfo['isBaseDevice']! > 0.5 ? AppLocalizations.of(context)!.fontSettingsYes : AppLocalizations.of(context)!.fontSettingsNo),
-            _infoRow(AppLocalizations.of(context)!.fontSettingsRecommendedScale, 'x${debugInfo['recommendedUserScale']!.toStringAsFixed(2)}'),
+            _infoRow(context, AppLocalizations.of(context)!.fontSettingsScreenDensity, debugInfo['devicePixelRatio']!.toStringAsFixed(2)),
+            _infoRow(context, AppLocalizations.of(context)!.fontSettingsScreenWidth, '${debugInfo['screenWidth']!.toStringAsFixed(0)}dp'),
+            _infoRow(context, AppLocalizations.of(context)!.fontSettingsDeviceScale, 'x${debugInfo['deviceScaleFactor']!.toStringAsFixed(2)}'),
+            _infoRow(context, AppLocalizations.of(context)!.fontSettingsUserScale, 'x${debugInfo['userScaleFactor']!.toStringAsFixed(2)}'),
+            _infoRow(context, AppLocalizations.of(context)!.fontSettingsFinalScale, 'x${debugInfo['finalScaleFactor']!.toStringAsFixed(2)}'),
+            _infoRow(context, AppLocalizations.of(context)!.fontSettingsBaseDevice, debugInfo['isBaseDevice']! > 0.5 ? AppLocalizations.of(context)!.fontSettingsYes : AppLocalizations.of(context)!.fontSettingsNo),
+            _infoRow(context, AppLocalizations.of(context)!.fontSettingsRecommendedScale, 'x${debugInfo['recommendedUserScale']!.toStringAsFixed(2)}'),
             SizedBox(height: 8.0.scaled(context, ref)),
             Container(
               padding: EdgeInsets.all(8.0.scaled(context, ref)),
@@ -318,14 +325,14 @@ class _UIScaleInfo extends ConsumerWidget {
     );
   }
 
-  Widget _infoRow(String label, String value) {
+  Widget _infoRow(BuildContext context, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-          Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+          Text(label, style: TextStyle(fontSize: 12, color: BeeTokens.textTertiary(context))),
+          Text(value, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: BeeTokens.textPrimary(context))),
         ],
       ),
     );

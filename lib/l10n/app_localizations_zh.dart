@@ -700,7 +700,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String importSkippedNonTransactionTypes(Object count) {
-    return '跳过 $count 条非收支记录（转账、债务等）';
+    return '跳过 $count 条非收支记录（债务等）';
   }
 
   @override
@@ -1363,6 +1363,57 @@ class AppLocalizationsZh extends AppLocalizations {
   String get personalizeSelectColor => '选择此颜色';
 
   @override
+  String get appearanceDisplaySettings => '显示设置';
+
+  @override
+  String get appearanceThemeMode => '外观模式';
+
+  @override
+  String get appearanceThemeModeSystem => '跟随系统';
+
+  @override
+  String get appearanceThemeModeLight => '亮色模式';
+
+  @override
+  String get appearanceThemeModeDark => '暗黑模式';
+
+  @override
+  String get appearanceDarkModePattern => '暗黑模式头部图案';
+
+  @override
+  String get appearancePatternNone => '无';
+
+  @override
+  String get appearancePatternIcons => '图标平铺';
+
+  @override
+  String get appearancePatternParticles => '粒子星星';
+
+  @override
+  String get appearancePatternHoneycomb => '蜂巢六边形';
+
+  @override
+  String get appearanceAmountFormat => '余额显示格式';
+
+  @override
+  String get appearanceAmountFormatFull => '完整金额';
+
+  @override
+  String get appearanceAmountFormatFullDesc => '显示完整金额，如 123,456.78';
+
+  @override
+  String get appearanceAmountFormatCompact => '简洁显示';
+
+  @override
+  String get appearanceAmountFormatCompactDesc => '大金额缩写，如 12.3万（仅对账户余额生效）';
+
+  @override
+  String get appearanceShowTransactionTime => '显示交易时间';
+
+  @override
+  String get appearanceShowTransactionTimeDesc => '在账单列表显示时分，编辑时可选择时间';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '当前缩放：x$scale';
   }
@@ -1491,6 +1542,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reminderTimeTitle => '提醒时间';
+
+  @override
+  String get commonSelectTime => '选择时间';
+
+  @override
+  String get commonSelectDate => '选择日期';
 
   @override
   String get reminderTestNotification => '发送测试通知';
@@ -3372,7 +3429,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountTransactionHistory => '交易记录';
 
   @override
-  String get accountTotalBalance => '总余额';
+  String get accountTotalBalance => '净资产';
 
   @override
   String get accountTotalExpense => '总支出';
@@ -4148,7 +4205,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String importSkippedNonTransactionTypes(Object count) {
-    return '跳過 $count 條非收支記錄（轉帳、債務等）';
+    return '跳過 $count 條非收支記錄（債務等）';
   }
 
   @override
@@ -4811,6 +4868,57 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get personalizeSelectColor => '選擇此顏色';
 
   @override
+  String get appearanceDisplaySettings => '顯示設定';
+
+  @override
+  String get appearanceThemeMode => '外觀模式';
+
+  @override
+  String get appearanceThemeModeSystem => '跟隨系統';
+
+  @override
+  String get appearanceThemeModeLight => '亮色模式';
+
+  @override
+  String get appearanceThemeModeDark => '暗黑模式';
+
+  @override
+  String get appearanceDarkModePattern => '暗黑模式頂部圖案';
+
+  @override
+  String get appearancePatternNone => '無';
+
+  @override
+  String get appearancePatternIcons => '圖標平鋪';
+
+  @override
+  String get appearancePatternParticles => '粒子星星';
+
+  @override
+  String get appearancePatternHoneycomb => '蜂巢六邊形';
+
+  @override
+  String get appearanceAmountFormat => '餘額顯示格式';
+
+  @override
+  String get appearanceAmountFormatFull => '完整金額';
+
+  @override
+  String get appearanceAmountFormatFullDesc => '顯示完整金額，如 123,456.78';
+
+  @override
+  String get appearanceAmountFormatCompact => '簡潔顯示';
+
+  @override
+  String get appearanceAmountFormatCompactDesc => '大金額縮寫，如 12.3萬（僅對帳戶餘額生效）';
+
+  @override
+  String get appearanceShowTransactionTime => '顯示交易時間';
+
+  @override
+  String get appearanceShowTransactionTimeDesc => '在帳單列表顯示時分，編輯時可選擇時間';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '當前縮放：x$scale';
   }
@@ -4939,6 +5047,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderTimeTitle => '提醒時間';
+
+  @override
+  String get commonSelectTime => '選擇時間';
+
+  @override
+  String get commonSelectDate => '選擇日期';
 
   @override
   String get reminderTestNotification => '發送測試通知';
@@ -6820,7 +6934,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountTransactionHistory => '交易歷史';
 
   @override
-  String get accountTotalBalance => '總餘額';
+  String get accountTotalBalance => '淨資產';
 
   @override
   String get accountTotalExpense => '總支出';

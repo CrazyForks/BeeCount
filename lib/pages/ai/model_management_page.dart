@@ -4,7 +4,7 @@ import 'package:flutter_ai_kit_tflite/flutter_ai_kit_tflite.dart';
 
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 
@@ -134,7 +134,7 @@ class _ModelManagementPageState extends ConsumerState<ModelManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -167,7 +167,7 @@ class _ModelManagementPageState extends ConsumerState<ModelManagementPage> {
                           Icon(
                             Icons.info_outline,
                             size: 16,
-                            color: Colors.grey[600],
+                            color: BeeTokens.textSecondary(context),
                           ),
                           const SizedBox(width: 8),
                           Text(
@@ -175,7 +175,7 @@ class _ModelManagementPageState extends ConsumerState<ModelManagementPage> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: Colors.grey[700],
+                              color: BeeTokens.textSecondary(context),
                             ),
                           ),
                         ],
@@ -188,7 +188,7 @@ class _ModelManagementPageState extends ConsumerState<ModelManagementPage> {
                         '• 模型仅用于辅助账单信息提取',
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[600],
+                          color: BeeTokens.textTertiary(context),
                           height: 1.5,
                         ),
                       ),
@@ -245,7 +245,7 @@ class _ModelManagementPageState extends ConsumerState<ModelManagementPage> {
                         '${_formatBytes(model.size)} · ${model.version}',
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[600],
+                          color: BeeTokens.textSecondary(context),
                         ),
                       ),
                     ],
@@ -294,7 +294,7 @@ class _ModelManagementPageState extends ConsumerState<ModelManagementPage> {
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
                       value: progress,
-                      backgroundColor: Colors.grey[200],
+                      backgroundColor: BeeTokens.border(context),
                       valueColor: AlwaysStoppedAnimation<Color>(
                         ref.watch(primaryColorProvider),
                       ),
@@ -321,8 +321,8 @@ class _ModelManagementPageState extends ConsumerState<ModelManagementPage> {
                 icon: const Icon(Icons.close, size: 18),
                 label: const Text('取消下载'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.grey[700],
-                  side: BorderSide(color: Colors.grey[300]!),
+                  foregroundColor: BeeTokens.textSecondary(context),
+                  side: BorderSide(color: BeeTokens.border(context)),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

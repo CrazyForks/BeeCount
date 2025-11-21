@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
+import '../../styles/tokens.dart';
 
 /// 通用滚轮选择器
 class WheelPicker<T> extends StatefulWidget {
@@ -22,6 +23,9 @@ class WheelPicker<T> extends StatefulWidget {
 }
 
 class _WheelPickerState<T> extends State<WheelPicker<T>> {
+  Color _textPrimary(BuildContext context) => BeeTokens.textPrimary(context);
+  Color _textTertiary(BuildContext context) => BeeTokens.textTertiary(context);
+
   late T selected;
   late FixedExtentScrollController _controller;
 
@@ -51,20 +55,20 @@ class _WheelPickerState<T> extends State<WheelPicker<T>> {
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     AppLocalizations.of(context)!.commonCancel,
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: _textTertiary(context)),
                   ),
                 ),
                 const Spacer(),
                 Text(
                   widget.title,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: _textPrimary(context)),
                 ),
                 const Spacer(),
                 TextButton(
                   onPressed: () => Navigator.pop(context, selected),
                   child: Text(
                     AppLocalizations.of(context)!.commonOk,
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor),
                   ),
                 ),
               ],
@@ -83,7 +87,7 @@ class _WheelPickerState<T> extends State<WheelPicker<T>> {
                   Center(
                     child: Text(
                       widget.labelBuilder(item),
-                      style: const TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: _textPrimary(context)),
                     ),
                   ),
               ],
@@ -105,7 +109,7 @@ Future<T?> showWheelPicker<T>(
 }) {
   return showModalBottomSheet<T>(
     context: context,
-    backgroundColor: Colors.white,
+    backgroundColor: BeeTokens.surfaceElevated(context),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),

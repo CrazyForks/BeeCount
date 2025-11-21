@@ -8,7 +8,7 @@ import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
 import '../../utils/sync_helpers.dart';
 import '../../utils/currencies.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 
 class AccountEditPage extends ConsumerStatefulWidget {
@@ -143,7 +143,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
     final primaryColor = ref.watch(primaryColorProvider);
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -172,7 +172,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: BeeColors.primaryText,
+                              color: BeeTokens.textPrimary(context),
                             ),
                           ),
                           SizedBox(height: 12.0.scaled(context, ref)),
@@ -238,7 +238,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: BeeColors.primaryText,
+                              color: BeeTokens.textPrimary(context),
                             ),
                           ),
                           SizedBox(height: 16.0.scaled(context, ref)),
@@ -320,7 +320,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: BeeColors.primaryText,
+                              color: BeeTokens.textPrimary(context),
                             ),
                           ),
                           SizedBox(height: 12.0.scaled(context, ref)),
@@ -332,7 +332,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                               prefixText: '¥ ',
                               prefixStyle: TextStyle(
                                 fontSize: 16,
-                                color: BeeColors.primaryText,
+                                color: BeeTokens.textPrimary(context),
                               ),
                               border: UnderlineInputBorder(
                                 borderSide:
@@ -495,10 +495,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('${AppLocalizations.of(context).commonError}: $e')),
-        );
+        showToast(context, '${AppLocalizations.of(context).commonError}: $e');
       }
     } finally {
       if (mounted) {
@@ -574,9 +571,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${l10n.commonError}: $e')),
-        );
+        showToast(context, '${l10n.commonError}: $e');
       }
     } finally {
       if (mounted) {
@@ -590,7 +585,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
     return showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: BeeTokens.surfaceElevated(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -690,9 +685,9 @@ class _AccountTypeCard extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           color:
-              isSelected ? primaryColor.withValues(alpha: 0.12) : Colors.white,
+              isSelected ? primaryColor.withValues(alpha: 0.12) : BeeTokens.surfaceElevated(context),
           border: Border.all(
-            color: isSelected ? primaryColor : Colors.grey[300]!,
+            color: isSelected ? primaryColor : BeeTokens.border(context),
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
@@ -702,7 +697,7 @@ class _AccountTypeCard extends ConsumerWidget {
           children: [
             Icon(
               icon,
-              color: isSelected ? primaryColor : BeeColors.secondaryText,
+              color: isSelected ? primaryColor : BeeTokens.textSecondary(context),
               size: 28.0.scaled(context, ref),
             ),
             SizedBox(height: 8.0.scaled(context, ref)),
@@ -711,7 +706,7 @@ class _AccountTypeCard extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? primaryColor : BeeColors.secondaryText,
+                color: isSelected ? primaryColor : BeeTokens.textSecondary(context),
               ),
               textAlign: TextAlign.center,
             ),

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers.dart';
+import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/amount_text.dart';
 import '../../widgets/biz/section_card.dart';
 import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/currencies.dart';
 import 'account_edit_page.dart';
@@ -85,7 +86,7 @@ class AccountsPage extends ConsumerWidget {
     final allStatsAsync = ref.watch(allAccountStatsProvider);
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -148,14 +149,14 @@ class AccountsPage extends ConsumerWidget {
                               Icon(
                                 Icons.account_balance_wallet_outlined,
                                 size: 64.0.scaled(context, ref),
-                                color: Colors.grey[400],
+                                color: BeeTokens.textTertiary(context),
                               ),
                               SizedBox(height: 16.0.scaled(context, ref)),
                               Text(
                                 l10n.accountsEmptyMessage,
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: Colors.grey[600],
+                                  color: BeeTokens.textSecondary(context),
                                 ),
                               ),
                               SizedBox(height: 24.0.scaled(context, ref)),
@@ -190,32 +191,32 @@ class AccountsPage extends ConsumerWidget {
                                     label: l10n.accountTotalBalance,
                                     value: stats.totalBalance,
                                     color: stats.totalBalance >= 0
-                                        ? BeeColors.primaryText
+                                        ? BeeTokens.textPrimary(context)
                                         : Colors.red,
                                   ),
                                 ),
                                 Container(
                                   width: 1,
                                   height: 40.0.scaled(context, ref),
-                                  color: Colors.grey[300],
+                                  color: BeeTokens.border(context),
                                 ),
                                 Expanded(
                                   child: _StatCell(
                                     label: l10n.accountTotalIncome,
                                     value: stats.totalIncome,
-                                    color: Colors.green,
+                                    color: BeeTokens.success(context),
                                   ),
                                 ),
                                 Container(
                                   width: 1,
                                   height: 40.0.scaled(context, ref),
-                                  color: Colors.grey[300],
+                                  color: BeeTokens.border(context),
                                 ),
                                 Expanded(
                                   child: _StatCell(
                                     label: l10n.accountTotalExpense,
                                     value: stats.totalExpense,
-                                    color: Colors.red,
+                                    color: BeeTokens.error(context),
                                   ),
                                 ),
                               ],
@@ -327,7 +328,7 @@ class _StatCell extends ConsumerWidget {
           value: value,
           signed: false,
           showCurrency: false,
-          useCompactFormat: true,
+          useCompactFormat: ref.watch(compactAmountProvider),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -339,7 +340,7 @@ class _StatCell extends ConsumerWidget {
           label,
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey[600],
+            color: BeeTokens.textSecondary(context),
           ),
           textAlign: TextAlign.center,
         ),
@@ -607,7 +608,7 @@ class _CardStatItem extends ConsumerWidget {
           value: value,
           signed: false,
           showCurrency: false,
-          useCompactFormat: true, // 使用增强的智能压缩格式
+          useCompactFormat: ref.watch(compactAmountProvider),
           currencyCode: currencyCode,
           style: const TextStyle(
             fontSize: 16,

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../data/import_page.dart';
 import '../data/export_page.dart';
 import '../category/category_manage_page.dart';
@@ -21,7 +21,7 @@ class DataManagementPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           PrimaryHeader(
@@ -75,7 +75,7 @@ class DataManagementPage extends ConsumerWidget {
                           onTap: null,
                         );
                       }),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 导出数据
                       AppListTile(
                         leading: Icons.file_download_outlined,
@@ -106,7 +106,7 @@ class DataManagementPage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 分类迁移
                       AppListTile(
                         leading: Icons.swap_horiz,
@@ -138,7 +138,7 @@ class DataManagementPage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 存储空间管理
                       AppListTile(
                         leading: Icons.storage_outlined,

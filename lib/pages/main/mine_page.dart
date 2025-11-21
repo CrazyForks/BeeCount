@@ -7,10 +7,10 @@ import '../data/import_page.dart';
 import '../data/export_page.dart';
 import '../settings/personalize_page.dart';
 import '../../providers.dart';
+import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../styles/design.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
@@ -50,7 +50,7 @@ class MinePage extends ConsumerWidget {
     final ledgerId = ref.watch(currentLedgerIdProvider);
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context), // ⭐ 使用 Token
       body: Column(
         children: [
           PrimaryHeader(
@@ -65,7 +65,7 @@ class MinePage extends ConsumerWidget {
               padding: EdgeInsets.zero,
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
-                const Divider(height: 1),
+                BeeTokens.cardDivider(context),
                 SizedBox(height: 8.0.scaled(context, ref)),
                 // 云同步与备份
                 Consumer(builder: (sectionContext, sectionRef, _) {
@@ -209,7 +209,7 @@ class MinePage extends ConsumerWidget {
 
                                   return Column(
                                     children: [
-                                      const Divider(height: 1, thickness: 0.5),
+                                      BeeTokens.cardDivider(sectionContext),
                                       AppListTile(
                                         leading: Icons.cloud_sync_outlined,
                                         title:
@@ -230,9 +230,9 @@ class MinePage extends ConsumerWidget {
                                                     color: sectionRef.watch(
                                                         primaryColorProvider),
                                                     size: 20)
-                                                : const Icon(
+                                                : Icon(
                                                     Icons.chevron_right,
-                                                    color: Colors.black38,
+                                                    color: BeeTokens.iconTertiary(context), // ⭐ 使用 Token
                                                     size: 20),
                                         onTap: () async {
                                           await Navigator.of(sectionContext)
@@ -266,8 +266,8 @@ class MinePage extends ConsumerWidget {
                         leading: Icons.auto_awesome_outlined,
                         title: AppLocalizations.of(context).smartBilling,
                         subtitle: AppLocalizations.of(context).smartBillingDesc,
-                        trailing: const Icon(Icons.chevron_right,
-                            color: Colors.black38, size: 20),
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -275,15 +275,15 @@ class MinePage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 数据管理
                       AppListTile(
                         leading: Icons.storage_outlined,
                         title: AppLocalizations.of(context).dataManagement,
                         subtitle:
                             AppLocalizations.of(context).dataManagementDesc,
-                        trailing: const Icon(Icons.chevron_right,
-                            color: Colors.black38, size: 20),
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -291,15 +291,15 @@ class MinePage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 账户管理
                       AppListTile(
                         leading: Icons.account_balance_wallet_outlined,
                         title: AppLocalizations.of(context).accountsTitle,
                         subtitle:
                             AppLocalizations.of(context).accountsManageDesc,
-                        trailing: const Icon(Icons.chevron_right,
-                            color: Colors.black38, size: 20),
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -307,14 +307,14 @@ class MinePage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 自动化功能
                       AppListTile(
                         leading: Icons.schedule_outlined,
                         title: AppLocalizations.of(context).automation,
                         subtitle: AppLocalizations.of(context).automationDesc,
-                        trailing: const Icon(Icons.chevron_right,
-                            color: Colors.black38, size: 20),
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -322,15 +322,15 @@ class MinePage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       // 外观设置
                       AppListTile(
                         leading: Icons.palette_outlined,
                         title: AppLocalizations.of(context).appearanceSettings,
                         subtitle:
                             AppLocalizations.of(context).appearanceSettingsDesc,
-                        trailing: const Icon(Icons.chevron_right,
-                            color: Colors.black38, size: 20),
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -352,8 +352,8 @@ class MinePage extends ConsumerWidget {
                         leading: Icons.info_outline,
                         title: AppLocalizations.of(context).about,
                         subtitle: AppLocalizations.of(context).aboutDesc,
-                        trailing: const Icon(Icons.chevron_right,
-                            color: Colors.black38, size: 20),
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -361,7 +361,7 @@ class MinePage extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       AppListTile(
                         leading: Icons.feedback_outlined,
                         title: AppLocalizations.of(context).mineFeedback,
@@ -373,7 +373,7 @@ class MinePage extends ConsumerWidget {
                           await _tryOpenUrl(url);
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       AppListTile(
                         leading: Icons.star_outline,
                         title: AppLocalizations.of(context).mineSupportAuthor,
@@ -385,7 +385,7 @@ class MinePage extends ConsumerWidget {
                           await _tryOpenUrl(url);
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
+                      BeeTokens.cardDivider(context),
                       AppListTile(
                         leading: Icons.share_outlined,
                         title: AppLocalizations.of(context).mineShareApp,
@@ -426,7 +426,7 @@ class MinePage extends ConsumerWidget {
                       ),
                       // 只在iOS上显示评分入口（Android还未上架）
                       if (Platform.isIOS) ...[
-                        const Divider(height: 1, thickness: 0.5),
+                        BeeTokens.cardDivider(context),
                         AppListTile(
                           leading: Icons.star_border_rounded,
                           title: AppLocalizations.of(context).mineRateApp,
@@ -437,7 +437,7 @@ class MinePage extends ConsumerWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: AppDimens.p16.scaled(context, ref)),
+                SizedBox(height: BeeDimens.p16.scaled(context, ref)),
               ],
             ),
           ),
@@ -475,7 +475,7 @@ class _StatCell extends ConsumerWidget {
         value: value as double,
         signed: false,
         showCurrency: true,
-        useCompactFormat: true,
+        useCompactFormat: ref.watch(compactAmountProvider),
         currencyCode: currencyCode,
         style: numStyle,
       );
@@ -571,7 +571,7 @@ Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
             onTap: null,
           );
         }),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 导出数据
         AppListTile(
           leading: Icons.file_download_outlined,
@@ -582,7 +582,7 @@ Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 分类管理
         AppListTile(
           leading: Icons.category_outlined,
@@ -594,7 +594,7 @@ Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 分类迁移
         AppListTile(
           leading: Icons.swap_horiz,
@@ -606,7 +606,7 @@ Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 账户管理
         AppListTile(
           leading: Icons.account_balance_wallet_outlined,
@@ -658,7 +658,7 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // OCR扫描记账
         AppListTile(
           leading: Icons.document_scanner_outlined,
@@ -685,7 +685,7 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 截图自动记账
         AppListTile(
           leading: Icons.auto_fix_high,
@@ -715,7 +715,7 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        Divider(height: 1, thickness: 0.5, color: Colors.grey[300]),
+        BeeTokens.cardDivider(context),
         // FAB行为切换
         InkWell(
           onTap: () async {
@@ -750,10 +750,10 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
                     children: [
                       Text(
                         l10n.aiFabSettingTitle,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xFF333333),
+                          color: BeeTokens.textPrimary(context), // ⭐ 使用 Token
                         ),
                       ),
                       Text(
@@ -762,7 +762,7 @@ Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
                             : l10n.aiFabSettingDescManual,
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[600],
+                          color: BeeTokens.textSecondary(context), // ⭐ 使用 Token
                         ),
                       ),
                     ],
@@ -806,7 +806,7 @@ Widget _buildAutomationSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 记账提醒
         AppListTile(
           leading: Icons.notifications_outlined,
@@ -875,7 +875,7 @@ Widget _buildAppearanceSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 个性化
         AppListTile(
           leading: Icons.brush_outlined,
@@ -886,7 +886,7 @@ Widget _buildAppearanceSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 显示缩放
         AppListTile(
           leading: Icons.zoom_out_map_outlined,
@@ -898,7 +898,7 @@ Widget _buildAppearanceSection(BuildContext context, WidgetRef ref) {
             );
           },
         ),
-        AppDivider.thin(),
+        BeeDivider.thin(),
         // 语言设置
         AppListTile(
           leading: Icons.language_outlined,
@@ -1104,12 +1104,13 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
     final balance = balanceAsync.asData?.value ?? 0.0;
     final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
 
+    // 统计信息文字颜色
     final labelStyle = Theme.of(context)
         .textTheme
         .labelMedium
-        ?.copyWith(color: BeeColors.black54);
-    final numStyle = AppTextTokens.strongTitle(context)
-        .copyWith(fontSize: 20, color: BeeColors.primaryText);
+        ?.copyWith(color: BeeTokens.textSecondary(context));
+    final numStyle = BeeTextTokens.strongTitle(context)
+        .copyWith(fontSize: 20, color: BeeTokens.textPrimary(context));
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
@@ -1199,7 +1200,7 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
           Text(
             AppLocalizations.of(context).mineSlogan,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: BeeColors.primaryText,
+                  color: BeeTokens.textPrimary(context), // ⭐ 使用 Token
                   fontWeight: FontWeight.w600,
                 ),
             textAlign: TextAlign.center,
@@ -1235,7 +1236,9 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
                   currencyCode: currencyCode,
                   labelStyle: labelStyle,
                   numStyle: numStyle.copyWith(
-                    color: balance >= 0 ? BeeColors.primaryText : Colors.red,
+                    color: balance >= 0
+                        ? BeeTokens.textPrimary(context)
+                        : BeeTokens.error(context),
                   ),
                   centered: true,
                 ),

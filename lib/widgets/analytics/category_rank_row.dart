@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../widgets/category_icon.dart';
 import '../biz/biz.dart';
 import '../../utils/category_utils.dart';
@@ -247,7 +247,7 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
                       Text(
                         '${(percent * 100).toStringAsFixed(1)}%',
                         style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: BeeColors.hintText,
+                          color: BeeTokens.textTertiary(context),
                           fontSize: isTopLevel ? 12 : 11,
                         ),
                       ),

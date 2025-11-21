@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../providers.dart';
 import '../../utils/format_utils.dart';
 import 'format_money.dart';
@@ -38,7 +38,7 @@ class AmountText extends ConsumerWidget {
               Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(color: BeeColors.primaryText));
+                  ?.copyWith(color: BeeTokens.textPrimary(context)));
     }
 
     String displayText;
@@ -96,7 +96,7 @@ class AmountText extends ConsumerWidget {
           Theme.of(context)
               .textTheme
               .bodyMedium
-              ?.copyWith(color: BeeColors.primaryText),
+              ?.copyWith(color: BeeTokens.textPrimary(context)),
     );
   }
 

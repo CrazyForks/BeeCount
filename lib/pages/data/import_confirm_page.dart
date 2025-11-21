@@ -14,6 +14,7 @@ import '../../services/import/parsers/generic_parser.dart';
 import '../../services/import/parsers/alipay_parser.dart';
 import '../../services/import/parsers/wechat_parser.dart';
 import '../../utils/date_parser.dart';
+import '../../styles/tokens.dart';
 import 'import_page.dart';
 
 class ImportConfirmPage extends ConsumerStatefulWidget {
@@ -229,7 +230,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
-                                      ?.copyWith(color: Colors.black54),
+                                      ?.copyWith(color: BeeTokens.textTertiary(context)),
                                 ),
                               ),
                           ],
@@ -444,7 +445,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                     style: Theme.of(dctx)
                         .textTheme
                         .bodySmall
-                        ?.copyWith(color: Colors.black54)),
+                        ?.copyWith(color: BeeTokens.textTertiary(context))),
               ],
             ),
             actions: [
@@ -1080,18 +1081,21 @@ class _PreviewTable extends StatelessWidget {
   Widget build(BuildContext context) {
     if (rows.isEmpty) return const SizedBox.shrink();
     const double cellWidth = 140;
+    final isDark = BeeTokens.isDark(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(color: BeeTokens.border(context)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
           children: [
             for (int r = 0; r < rows.length; r++)
               Container(
-                color: r == 0 ? Colors.grey.shade100 : Colors.white,
+                color: r == 0
+                    ? (isDark ? Colors.grey.shade800 : Colors.grey.shade100)
+                    : BeeTokens.surfaceElevated(context),
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                 child: Row(
                   children: [
@@ -1103,7 +1107,7 @@ class _PreviewTable extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.grey.shade800,
+                            color: BeeTokens.textPrimary(context),
                             fontWeight: r == 0 ? FontWeight.w600 : null,
                           ),
                         ),

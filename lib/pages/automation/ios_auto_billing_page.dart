@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/ui/primary_header.dart';
+import '../../widgets/ui/toast.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -157,17 +158,13 @@ class _IOSAutoBillingPageState extends ConsumerState<IOSAutoBillingPage> {
         );
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).iosAutoCannotOpenLink)),
-          );
+          showToast(context, AppLocalizations.of(context).iosAutoCannotOpenLink);
         }
       }
     } catch (e) {
       if (context.mounted) {
         final l10n = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.iosAutoImportFailed(e.toString()))),
-        );
+        showToast(context, l10n.iosAutoImportFailed(e.toString()));
       }
     }
   }
@@ -180,17 +177,13 @@ class _IOSAutoBillingPageState extends ConsumerState<IOSAutoBillingPage> {
         await launchUrl(url);
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).iosAutoCannotOpenShortcuts)),
-          );
+          showToast(context, AppLocalizations.of(context).iosAutoCannotOpenShortcuts);
         }
       }
     } catch (e) {
       if (context.mounted) {
         final l10n = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.iosAutoOpenAppFailed(e.toString()))),
-        );
+        showToast(context, l10n.iosAutoOpenAppFailed(e.toString()));
       }
     }
   }

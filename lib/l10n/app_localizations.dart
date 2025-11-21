@@ -1359,7 +1359,7 @@ abstract class AppLocalizations {
   /// No description provided for @importSkippedNonTransactionTypes.
   ///
   /// In en, this message translates to:
-  /// **'Skipped {count} non-transaction records (transfers, debts, etc.)'**
+  /// **'Skipped {count} non-transaction records (debts, etc.)'**
   String importSkippedNonTransactionTypes(Object count);
 
   /// No description provided for @importTransactionFailed.
@@ -2592,6 +2592,108 @@ abstract class AppLocalizations {
   /// **'Select this color'**
   String get personalizeSelectColor;
 
+  /// No description provided for @appearanceDisplaySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Settings'**
+  String get appearanceDisplaySettings;
+
+  /// No description provided for @appearanceThemeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceThemeMode;
+
+  /// No description provided for @appearanceThemeModeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow System'**
+  String get appearanceThemeModeSystem;
+
+  /// No description provided for @appearanceThemeModeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Mode'**
+  String get appearanceThemeModeLight;
+
+  /// No description provided for @appearanceThemeModeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get appearanceThemeModeDark;
+
+  /// No description provided for @appearanceDarkModePattern.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode Header Pattern'**
+  String get appearanceDarkModePattern;
+
+  /// No description provided for @appearancePatternNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get appearancePatternNone;
+
+  /// No description provided for @appearancePatternIcons.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon Tiling'**
+  String get appearancePatternIcons;
+
+  /// No description provided for @appearancePatternParticles.
+  ///
+  /// In en, this message translates to:
+  /// **'Particles'**
+  String get appearancePatternParticles;
+
+  /// No description provided for @appearancePatternHoneycomb.
+  ///
+  /// In en, this message translates to:
+  /// **'Honeycomb'**
+  String get appearancePatternHoneycomb;
+
+  /// No description provided for @appearanceAmountFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance Display Format'**
+  String get appearanceAmountFormat;
+
+  /// No description provided for @appearanceAmountFormatFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Amount'**
+  String get appearanceAmountFormatFull;
+
+  /// No description provided for @appearanceAmountFormatFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Show full amount, e.g. 123,456.78'**
+  String get appearanceAmountFormatFullDesc;
+
+  /// No description provided for @appearanceAmountFormatCompact.
+  ///
+  /// In en, this message translates to:
+  /// **'Compact'**
+  String get appearanceAmountFormatCompact;
+
+  /// No description provided for @appearanceAmountFormatCompactDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Abbreviate large amounts, e.g. 12.3K (only affects account balance)'**
+  String get appearanceAmountFormatCompactDesc;
+
+  /// No description provided for @appearanceShowTransactionTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Transaction Time'**
+  String get appearanceShowTransactionTime;
+
+  /// No description provided for @appearanceShowTransactionTimeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Display time in transaction list, allow time selection when editing'**
+  String get appearanceShowTransactionTimeDesc;
+
   /// No description provided for @fontSettingsCurrentScale.
   ///
   /// In en, this message translates to:
@@ -2843,6 +2945,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder Time'**
   String get reminderTimeTitle;
+
+  /// No description provided for @commonSelectTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Time'**
+  String get commonSelectTime;
+
+  /// No description provided for @commonSelectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Date'**
+  String get commonSelectDate;
 
   /// No description provided for @reminderTestNotification.
   ///
@@ -6405,7 +6519,7 @@ abstract class AppLocalizations {
   /// No description provided for @accountTotalBalance.
   ///
   /// In en, this message translates to:
-  /// **'Total Balance'**
+  /// **'Net Assets'**
   String get accountTotalBalance;
 
   /// No description provided for @accountTotalExpense.

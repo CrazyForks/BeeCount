@@ -8,7 +8,7 @@ import '../../cloud/sync_service.dart';
 import '../../providers/sync_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
-import '../../styles/colors.dart';
+import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 
 // GitHub配置教程链接
@@ -56,7 +56,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     final webdavAsync = ref.watch(webdavConfigProvider);
 
     return Scaffold(
-      backgroundColor: BeeColors.greyBg,
+      backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
           activeAsync.when(
@@ -106,7 +106,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                       AppLocalizations.of(context).cloudSelectServiceType,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: BeeColors.secondaryText,
+                        color: BeeTokens.textSecondary(context),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -115,7 +115,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                     _buildServiceCard(
                       context: context,
                       icon: Icons.phone_android,
-                      iconColor: Colors.grey,
+                      iconColor: BeeTokens.brandLocal,
                       title: AppLocalizations.of(context).cloudLocalStorageTitle,
                       subtitle: AppLocalizations.of(context).cloudLocalStorageSubtitle,
                       isSelected: active.type == CloudBackendType.local,
@@ -132,7 +132,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                       data: (supabaseCfg) => _buildServiceCard(
                         context: context,
                         icon: Icons.cloud,
-                        iconColor: Colors.blue,
+                        iconColor: BeeTokens.brandSupabase,
                         title: AppLocalizations.of(context).cloudCustomSupabaseTitle,
                         subtitle: supabaseCfg?.valid == true
                             ? supabaseCfg!.obfuscatedUrl()
@@ -159,7 +159,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                       data: (webdavCfg) => _buildServiceCard(
                         context: context,
                         icon: Icons.folder_shared,
-                        iconColor: Colors.orange,
+                        iconColor: BeeTokens.brandWebdav,
                         title: AppLocalizations.of(context).cloudCustomWebdavTitle,
                         subtitle: webdavCfg?.valid == true
                             ? webdavCfg!.obfuscatedUrl()
@@ -194,17 +194,17 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
     if (testResult == null) {
       // 未测试
-      statusColor = Colors.orange;
+      statusColor = BeeTokens.warning(context);
       statusIcon = Icons.help_outline;
       statusText = AppLocalizations.of(context).cloudStatusNotTested;
     } else if (testResult) {
       // 测试成功
-      statusColor = BeeColors.success;
+      statusColor = BeeTokens.success(context);
       statusIcon = Icons.check_circle_outline;
       statusText = AppLocalizations.of(context).cloudStatusNormal;
     } else {
       // 测试失败
-      statusColor = BeeColors.danger;
+      statusColor = BeeTokens.error(context);
       statusIcon = Icons.error_outline;
       statusText = AppLocalizations.of(context).cloudStatusFailed;
     }
@@ -257,7 +257,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         Text(
           config.obfuscatedUrl(),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: BeeColors.secondaryText,
+            color: BeeTokens.textSecondary(context),
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -281,7 +281,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        border: isSelected ? Border.all(color: BeeColors.success, width: 2) : null,
+        border: isSelected ? Border.all(color: BeeTokens.success(context), width: 2) : null,
         borderRadius: BorderRadius.circular(12),
       ),
       child: SectionCard(
@@ -322,7 +322,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                           Text(
                             subtitle,
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: BeeColors.secondaryText,
+                              color: BeeTokens.textSecondary(context),
                             ),
                           ),
                         ],
@@ -335,10 +335,10 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                         width: 28,
                         height: 28,
                         decoration: BoxDecoration(
-                          color: BeeColors.success,
+                          color: BeeTokens.success(context),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.check, color: Colors.white, size: 18),
+                        child: Icon(Icons.check, color: BeeTokens.textOnPrimary(context), size: 18),
                       ),
                   ],
                 ),
