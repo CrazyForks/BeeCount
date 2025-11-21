@@ -37,8 +37,12 @@ class BeeRepository {
         'SELECT COUNT(*) AS c FROM transactions WHERE ledger_id = ?1',
         variables: [d.Variable.withInt(ledgerId)],
         readsFrom: {db.transactions}).getSingle();
+    // 计算记账天数：今天 - 第一笔记账日期 + 1
     final dayRow = await db.customSelect("""
-      SELECT COUNT(DISTINCT strftime('%Y-%m-%d', happened_at, 'unixepoch', 'localtime')) AS c
+      SELECT CASE
+        WHEN MIN(happened_at) IS NULL THEN 0
+        ELSE CAST(julianday('now', 'localtime') - julianday(MIN(happened_at), 'unixepoch', 'localtime') + 1 AS INTEGER)
+      END AS c
       FROM transactions WHERE ledger_id = ?1
       """,
         variables: [d.Variable.withInt(ledgerId)],
@@ -60,9 +64,13 @@ class BeeRepository {
       'SELECT COUNT(*) AS c FROM transactions',
       readsFrom: {db.transactions},
     ).getSingle();
+    // 计算记账天数：今天 - 第一笔记账日期 + 1
     final dayRow = await db.customSelect(
       """
-      SELECT COUNT(DISTINCT strftime('%Y-%m-%d', happened_at, 'unixepoch', 'localtime')) AS c
+      SELECT CASE
+        WHEN MIN(happened_at) IS NULL THEN 0
+        ELSE CAST(julianday('now', 'localtime') - julianday(MIN(happened_at), 'unixepoch', 'localtime') + 1 AS INTEGER)
+      END AS c
       FROM transactions
       """,
       readsFrom: {db.transactions},
