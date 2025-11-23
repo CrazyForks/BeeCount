@@ -21,6 +21,7 @@
   "commonFailed": "Failed",
   "commonBack": "Back",
   "commonNext": "Next",
+  "fabLongPressTip": "Long press to scan receipt",
   "commonPrevious": "Previous",
   "commonFinish": "Finish",
   "commonClose": "Close",

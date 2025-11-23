@@ -61,6 +61,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonNext => '下一步';
 
   @override
+  String get fabLongPressTip => '长按可拍照记账';
+
+  @override
   String get commonPrevious => '上一步';
 
   @override
@@ -3584,6 +3587,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonNext => '下一步';
+
+  @override
+  String get fabLongPressTip => '長按可拍照記帳';
 
   @override
   String get commonPrevious => '上一步';

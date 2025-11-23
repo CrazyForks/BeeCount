@@ -57,6 +57,26 @@ class AnalyticsHintsSetter {
   }
 }
 
+// ---------- FAB 长按提示持久化 ----------
+final fabLongPressTipDismissedProvider =
+    FutureProvider.autoDispose<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return prefs.getBool('fab_long_press_tip_dismissed') ?? false;
+});
+
+class FabTipSetter {
+  Future<void> dismiss() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('fab_long_press_tip_dismissed', true);
+  }
+}
+
+final fabTipSetterProvider = Provider<FabTipSetter>((ref) {
+  return FabTipSetter();
+});
+
 final analyticsHintsSetterProvider = Provider<AnalyticsHintsSetter>((ref) {
   return AnalyticsHintsSetter();
 });

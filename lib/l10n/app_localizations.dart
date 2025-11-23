@@ -204,6 +204,12 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get commonNext;
 
+  /// No description provided for @fabLongPressTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press to scan receipt'**
+  String get fabLongPressTip;
+
   /// No description provided for @commonPrevious.
   ///
   /// In en, this message translates to:

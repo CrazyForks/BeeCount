@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonNext => 'Next';
 
   @override
+  String get fabLongPressTip => 'Long press to scan receipt';
+
+  @override
   String get commonPrevious => 'Previous';
 
   @override
