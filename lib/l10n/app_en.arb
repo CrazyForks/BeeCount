@@ -1392,7 +1392,7 @@
   "configIncludeSupabase": "Supabase cloud service config",
   "configIncludeWebdav": "WebDAV cloud service config",
   "configIncludeAI": "AI smart recognition config",
-  "configIncludeAppSettings": "App settings (language, theme, reminder, etc.)",
+  "configIncludeAppSettings": "App settings (language, appearance, reminder, default account, etc.)",
   "configIncludeRecurringTransactions": "Recurring transactions",
   "ledgersConflictTitle": "Sync Conflict",
   "ledgersConflictMessage": "Local and cloud ledger data are inconsistent, please choose an action:",

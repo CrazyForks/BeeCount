@@ -3329,7 +3329,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configIncludeAI => 'AI 智能识别配置';
 
   @override
-  String get configIncludeAppSettings => '应用设置（语言、主题、提醒等）';
+  String get configIncludeAppSettings => '应用设置（语言、外观、提醒、默认账户等）';
 
   @override
   String get configIncludeRecurringTransactions => '周期账单';
@@ -6854,7 +6854,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get configIncludeAI => 'AI 智慧識別配置';
 
   @override
-  String get configIncludeAppSettings => '應用程式設定（語言、主題、提醒等）';
+  String get configIncludeAppSettings => '應用程式設定（語言、外觀、提醒、預設帳戶等）';
 
   @override
   String get configIncludeRecurringTransactions => '週期帳單';

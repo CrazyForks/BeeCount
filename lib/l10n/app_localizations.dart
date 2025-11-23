@@ -6351,7 +6351,7 @@ abstract class AppLocalizations {
   /// No description provided for @configIncludeAppSettings.
   ///
   /// In en, this message translates to:
-  /// **'App settings (language, theme, reminder, etc.)'**
+  /// **'App settings (language, appearance, reminder, default account, etc.)'**
   String get configIncludeAppSettings;
 
   /// No description provided for @configIncludeRecurringTransactions.

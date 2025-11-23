@@ -3329,7 +3329,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get configIncludeAI => 'AI smart recognition config';
 
   @override
-  String get configIncludeAppSettings => 'App settings (language, theme, reminder, etc.)';
+  String get configIncludeAppSettings => 'App settings (language, appearance, reminder, default account, etc.)';
 
   @override
   String get configIncludeRecurringTransactions => 'Recurring transactions';

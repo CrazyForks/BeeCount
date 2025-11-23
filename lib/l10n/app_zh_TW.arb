@@ -1129,7 +1129,7 @@
   "configIncludeSupabase": "Supabase 雲端服務配置",
   "configIncludeWebdav": "WebDAV 雲端服務配置",
   "configIncludeAI": "AI 智慧識別配置",
-  "configIncludeAppSettings": "應用程式設定（語言、主題、提醒等）",
+  "configIncludeAppSettings": "應用程式設定（語言、外觀、提醒、預設帳戶等）",
   "configIncludeRecurringTransactions": "週期帳單",
   "commonPressAgainToExit": "再按一次退出應用程式",
   "ledgerDefaultName": "預設帳本",
