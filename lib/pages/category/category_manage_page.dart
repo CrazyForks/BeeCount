@@ -235,42 +235,6 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
     }
   }
 
-  Future<void> _onReorder(int oldIndex, int newIndex) async {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-
-    // 只允许一级分类之间拖拽重排
-    if (_flatList[oldIndex].isSubCategory ||
-        _flatList[newIndex].isSubCategory ||
-        _flatList[oldIndex].isActionButtons ||
-        _flatList[newIndex].isActionButtons) {
-      return;
-    }
-
-    setState(() {
-      final item = _flatList.removeAt(oldIndex);
-      _flatList.insert(newIndex, item);
-    });
-
-    // 保存新的排序到数据库（只处理一级分类）
-    final topLevelCategories = _flatList
-        .where((item) => !item.isSubCategory && !item.isActionButtons)
-        .toList();
-    final database = ref.read(databaseProvider);
-    await database.transaction(() async {
-      for (var i = 0; i < topLevelCategories.length; i++) {
-        final category = topLevelCategories[i].category;
-        await (database.update(database.categories)
-              ..where((c) => c.id.equals(category.id)))
-            .write(db.CategoriesCompanion(sortOrder: drift.Value(i)));
-      }
-    });
-
-    // 刷新数据
-    ref.invalidate(categoriesWithCountProvider);
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_flatList.isEmpty) {
@@ -308,65 +272,66 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
             .where((item) => !item.isSubCategory && !item.isActionButtons)
             .toList();
 
-        // 构建显示项列表：网格行 + 可能的二级分类容器
+        // 查找展开的分类
+        _CategoryItem? expandedItem;
+        if (_expandedCategoryId != null) {
+          for (int i = 0; i < topLevelCategories.length; i++) {
+            if (topLevelCategories[i].category.id == _expandedCategoryId &&
+                topLevelCategories[i].hasSubCategories) {
+              expandedItem = topLevelCategories[i];
+              break;
+            }
+          }
+        }
+
+        // 构建显示项列表
         final displayItems = <Widget>[];
 
-        // 按每4个一组显示一级分类
-        for (int i = 0; i < topLevelCategories.length; i += 4) {
-          final endIndex = (i + 4).clamp(0, topLevelCategories.length);
-          final rowItems = topLevelCategories.sublist(i, endIndex);
+        // 使用单一的 ReorderableGridView 来支持跨行拖拽
+        displayItems.add(
+          ReorderableGridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1,
+            ),
+            itemCount: topLevelCategories.length,
+            onReorder: (oldIndex, newIndex) {
+              // 直接使用一级分类列表的索引进行重排
+              _onReorderTopLevel(oldIndex, newIndex, topLevelCategories);
+            },
+            itemBuilder: (context, index) {
+              final item = topLevelCategories[index];
+              return _CategoryCard(
+                key: ValueKey(item.category.id),
+                item: item,
+                isExpanded: _expandedCategoryId == item.category.id,
+                onTap: () => _onCategoryTap(item),
+              );
+            },
+          ),
+        );
 
-          // 添加网格行
+        // 如果有展开的分类，在网格下方添加二级分类容器
+        if (expandedItem != null) {
+          final subCategories = subCategoriesMap[expandedItem.category.id] ?? [];
           displayItems.add(
             Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: ReorderableGridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 1,
-                ),
-                itemCount: rowItems.length,
-                onReorder: (oldIndex, newIndex) {
-                  _onReorder(i + oldIndex, i + newIndex);
-                },
-                itemBuilder: (context, index) {
-                  final item = rowItems[index];
-                  return _CategoryCard(
-                    key: ValueKey(item.category.id),
-                    item: item,
-                    isExpanded: _expandedCategoryId == item.category.id,
-                    onTap: () => _onCategoryTap(item),
-                  );
-                },
+              padding: const EdgeInsets.only(top: 12),
+              child: SubcategoryContainer(
+                key: ValueKey('sub_${expandedItem.category.id}'),
+                parentCategory: expandedItem.category,
+                subCategories: subCategories,
+                onSubCategoryTap: (cat) => _onEditCategory(cat),
+                onAddSubCategory: () => _onAddSubCategory(expandedItem!.category),
+                onEditParentCategory: () => _onEditCategory(expandedItem!.category),
               ),
             ),
           );
-
-          // 检查这一行中是否有展开的分类，如果有则添加二级分类容器
-          for (final item in rowItems) {
-            if (_expandedCategoryId == item.category.id && item.hasSubCategories) {
-              final subCategories = subCategoriesMap[item.category.id] ?? [];
-              displayItems.add(
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: SubcategoryContainer(
-                    key: ValueKey('sub_${item.category.id}'),
-                    parentCategory: item.category,
-                    subCategories: subCategories,
-                    onSubCategoryTap: (cat) => _onEditCategory(cat),
-                    onAddSubCategory: () => _onAddSubCategory(item.category),
-                    onEditParentCategory: () => _onEditCategory(item.category),
-                  ),
-                ),
-              );
-              break; // 每行只展开一个
-            }
-          }
         }
 
         return ListView(
@@ -375,6 +340,38 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
         );
       },
     );
+  }
+
+  Future<void> _onReorderTopLevel(int oldIndex, int newIndex, List<_CategoryItem> topLevelCategories) async {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    // 1. 立即更新本地状态（乐观更新），避免UI闪回
+    final reorderedItems = List<_CategoryItem>.from(topLevelCategories);
+    final movedItem = reorderedItems.removeAt(oldIndex);
+    reorderedItems.insert(newIndex, movedItem);
+
+    // 重建 _flatList，保持一级分类的新顺序
+    setState(() {
+      _flatList = reorderedItems;
+    });
+
+    // 2. 批量保存到数据库
+    final database = ref.read(databaseProvider);
+    await database.batch((batch) {
+      for (var i = 0; i < reorderedItems.length; i++) {
+        final category = reorderedItems[i].category;
+        batch.update(
+          database.categories,
+          db.CategoriesCompanion(sortOrder: drift.Value(i)),
+          where: (c) => c.id.equals(category.id),
+        );
+      }
+    });
+
+    // 3. 刷新 provider 以同步其他地方的数据
+    ref.invalidate(categoriesWithCountProvider);
   }
 
 
