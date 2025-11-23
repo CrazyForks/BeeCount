@@ -551,7 +551,7 @@
     }
   },
   "exportTitle": "匯出",
-  "exportDescription": "點擊下方按鈕選擇儲存位置，開始匯出當前帳本為 CSV 檔案。",
+  "exportDescription": "支援匯出的資料類型：\n• 交易記錄（收入／支出／轉帳）\n• 分類資訊\n• 帳戶資訊\n\n點擊下方按鈕選擇儲存位置，開始匯出目前帳本為 CSV 檔案。",
   "exportButtonIOS": "匯出並分享",
   "exportButtonAndroid": "匯出資料",
   "exportSavedTo": "已儲存到：{path}",

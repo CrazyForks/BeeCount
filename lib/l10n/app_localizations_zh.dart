@@ -1884,7 +1884,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportTitle => '导出';
 
   @override
-  String get exportDescription => '支持导出的数据类型：\n• 交易记录（收入/支出/转账）\n• 周期账单\n• 分类信息\n• 账户信息\n\n点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
+  String get exportDescription => '支持导出的数据类型：\n• 交易记录（收入/支出/转账）\n• 分类信息\n• 账户信息\n\n点击下方按钮选择保存位置，开始导出当前账本为 CSV 文件。';
 
   @override
   String get exportButtonIOS => '导出并分享';
@@ -3439,6 +3439,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountCurrencyLocked => '该账户已有交易记录，不允许修改币种';
+
+  @override
+  String get accountDefaultIncomeTitle => '默认收入账户';
+
+  @override
+  String get accountDefaultIncomeDescription => '新建收入时自动选中此账户';
+
+  @override
+  String get accountDefaultExpenseTitle => '默认支出账户';
+
+  @override
+  String get accountDefaultExpenseDescription => '新建支出时自动选中此账户';
+
+  @override
+  String get accountDefaultNone => '不设置';
+
+  @override
+  String accountDefaultSet(String name) {
+    return '已设置: $name';
+  }
 
   @override
   String get commonNotice => '提示';
@@ -5389,7 +5409,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportTitle => '匯出';
 
   @override
-  String get exportDescription => '點擊下方按鈕選擇儲存位置，開始匯出當前帳本為 CSV 檔案。';
+  String get exportDescription => '支援匯出的資料類型：\n• 交易記錄（收入／支出／轉帳）\n• 分類資訊\n• 帳戶資訊\n\n點擊下方按鈕選擇儲存位置，開始匯出目前帳本為 CSV 檔案。';
 
   @override
   String get exportButtonIOS => '匯出並分享';

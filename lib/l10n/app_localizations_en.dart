@@ -1884,7 +1884,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportTitle => 'Export';
 
   @override
-  String get exportDescription => 'Supported export types:\n• Transactions (Income/Expense/Transfer)\n• Recurring Bills\n• Categories\n• Accounts\n\nClick the button below to select save location and export current ledger to CSV file.';
+  String get exportDescription => 'Supported export types:\n• Transactions (Income/Expense/Transfer)\n• Categories\n• Accounts\n\nClick the button below to select save location and export current ledger to CSV file.';
 
   @override
   String get exportButtonIOS => 'Export and Share';
@@ -3439,6 +3439,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountCurrencyLocked => 'This account has transactions and cannot change currency';
+
+  @override
+  String get accountDefaultIncomeTitle => 'Default Income Account';
+
+  @override
+  String get accountDefaultIncomeDescription => 'Auto-select this account when creating income';
+
+  @override
+  String get accountDefaultExpenseTitle => 'Default Expense Account';
+
+  @override
+  String get accountDefaultExpenseDescription => 'Auto-select this account when creating expense';
+
+  @override
+  String get accountDefaultNone => 'Not Set';
+
+  @override
+  String accountDefaultSet(String name) {
+    return 'Set: $name';
+  }
 
   @override
   String get commonNotice => 'Notice';
