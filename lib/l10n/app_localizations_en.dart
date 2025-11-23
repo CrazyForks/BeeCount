@@ -34,6 +34,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonDelete => 'Delete';
 
   @override
+  String get commonAdd => 'Add';
+
+  @override
   String get commonEdit => 'Edit';
 
   @override

@@ -150,6 +150,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get commonDelete;
 
+  /// No description provided for @commonAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get commonAdd;
+
   /// No description provided for @commonEdit.
   ///
   /// In en, this message translates to:

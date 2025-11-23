@@ -34,6 +34,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonDelete => '删除';
 
   @override
+  String get commonAdd => '添加';
+
+  @override
   String get commonEdit => '编辑';
 
   @override
@@ -3560,6 +3563,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonDelete => '刪除';
+
+  @override
+  String get commonAdd => '新增';
 
   @override
   String get commonEdit => '編輯';
