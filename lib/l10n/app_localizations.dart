@@ -2148,12 +2148,6 @@ abstract class AppLocalizations {
   /// **'Default Category'**
   String get categoryDefaultTitle;
 
-  /// No description provided for @categoryDefaultMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Default categories cannot be modified, but you can view details and migrate data'**
-  String get categoryDefaultMessage;
-
   /// No description provided for @categoryNameLabel.
   ///
   /// In en, this message translates to:
@@ -2165,12 +2159,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter category name'**
   String get categoryNameHint;
-
-  /// No description provided for @categoryNameHintDefault.
-  ///
-  /// In en, this message translates to:
-  /// **'Default category name cannot be modified'**
-  String get categoryNameHintDefault;
 
   /// No description provided for @categoryNameRequired.
   ///
@@ -2190,12 +2178,6 @@ abstract class AppLocalizations {
   /// **'Category Icon'**
   String get categoryIconLabel;
 
-  /// No description provided for @categoryIconDefaultMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Default category icon cannot be modified'**
-  String get categoryIconDefaultMessage;
-
   /// No description provided for @categoryDangerousOperations.
   ///
   /// In en, this message translates to:
@@ -2213,12 +2195,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cannot be recovered after deletion'**
   String get categoryDeleteSubtitle;
-
-  /// No description provided for @categoryDefaultCannotSave.
-  ///
-  /// In en, this message translates to:
-  /// **'Default category cannot be saved'**
-  String get categoryDefaultCannotSave;
 
   /// No description provided for @categorySaveError.
   ///
@@ -2604,12 +2580,6 @@ abstract class AppLocalizations {
   /// **'Select this color'**
   String get personalizeSelectColor;
 
-  /// No description provided for @appearanceDisplaySettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Display Settings'**
-  String get appearanceDisplaySettings;
-
   /// No description provided for @appearanceThemeMode.
   ///
   /// In en, this message translates to:
@@ -2963,12 +2933,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Time'**
   String get commonSelectTime;
-
-  /// No description provided for @commonSelectDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Date'**
-  String get commonSelectDate;
 
   /// No description provided for @reminderTestNotification.
   ///
@@ -4764,6 +4728,324 @@ abstract class AppLocalizations {
   /// **'Click to configure Nutstore/Nextcloud etc.'**
   String get cloudCustomWebdavSubtitle;
 
+  /// No description provided for @cloudIcloudSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto sync with Apple ID'**
+  String get cloudIcloudSubtitle;
+
+  /// No description provided for @cloudIcloudNotAvailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'iCloud Not Available'**
+  String get cloudIcloudNotAvailableTitle;
+
+  /// No description provided for @cloudIcloudNotAvailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in to iCloud in Settings and try again'**
+  String get cloudIcloudNotAvailableMessage;
+
+  /// No description provided for @cloudIcloudHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'iCloud Instructions'**
+  String get cloudIcloudHelpTitle;
+
+  /// No description provided for @cloudIcloudHelpPrerequisites.
+  ///
+  /// In en, this message translates to:
+  /// **'Prerequisites'**
+  String get cloudIcloudHelpPrerequisites;
+
+  /// No description provided for @cloudIcloudHelpPrereq1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Device is signed in with Apple ID'**
+  String get cloudIcloudHelpPrereq1;
+
+  /// No description provided for @cloudIcloudHelpPrereq2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. iCloud Drive is enabled'**
+  String get cloudIcloudHelpPrereq2;
+
+  /// No description provided for @cloudIcloudHelpPrereq3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Device is connected to internet'**
+  String get cloudIcloudHelpPrereq3;
+
+  /// No description provided for @cloudIcloudHelpCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Check iCloud Drive'**
+  String get cloudIcloudHelpCheckTitle;
+
+  /// No description provided for @cloudIcloudHelpCheck1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Open Settings'**
+  String get cloudIcloudHelpCheck1;
+
+  /// No description provided for @cloudIcloudHelpCheck2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Tap your Apple ID at the top'**
+  String get cloudIcloudHelpCheck2;
+
+  /// No description provided for @cloudIcloudHelpCheck3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Tap iCloud'**
+  String get cloudIcloudHelpCheck3;
+
+  /// No description provided for @cloudIcloudHelpCheck4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Make sure iCloud Drive is enabled'**
+  String get cloudIcloudHelpCheck4;
+
+  /// No description provided for @cloudIcloudHelpFaqTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get cloudIcloudHelpFaqTitle;
+
+  /// No description provided for @cloudIcloudHelpFaq1.
+  ///
+  /// In en, this message translates to:
+  /// **'If not available, check if iCloud Drive is enabled'**
+  String get cloudIcloudHelpFaq1;
+
+  /// No description provided for @cloudIcloudHelpFaq2.
+  ///
+  /// In en, this message translates to:
+  /// **'First time use may take a few seconds to initialize'**
+  String get cloudIcloudHelpFaq2;
+
+  /// No description provided for @cloudIcloudHelpFaq3.
+  ///
+  /// In en, this message translates to:
+  /// **'Data is stored in your private iCloud space'**
+  String get cloudIcloudHelpFaq3;
+
+  /// No description provided for @cloudIcloudHelpFaq4.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices with same Apple ID sync automatically'**
+  String get cloudIcloudHelpFaq4;
+
+  /// No description provided for @cloudIcloudHelpNote.
+  ///
+  /// In en, this message translates to:
+  /// **'iCloud sync uses your Apple ID, no extra configuration needed'**
+  String get cloudIcloudHelpNote;
+
+  /// No description provided for @cloudSupabaseHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Supabase Setup Guide'**
+  String get cloudSupabaseHelpTitle;
+
+  /// No description provided for @cloudSupabaseHelpIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'What is Supabase'**
+  String get cloudSupabaseHelpIntro;
+
+  /// No description provided for @cloudSupabaseHelpIntro1.
+  ///
+  /// In en, this message translates to:
+  /// **'Supabase is an open-source backend-as-a-service platform'**
+  String get cloudSupabaseHelpIntro1;
+
+  /// No description provided for @cloudSupabaseHelpIntro2.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers a free tier, sufficient for personal use'**
+  String get cloudSupabaseHelpIntro2;
+
+  /// No description provided for @cloudSupabaseHelpIntro3.
+  ///
+  /// In en, this message translates to:
+  /// **'You have full control over your data'**
+  String get cloudSupabaseHelpIntro3;
+
+  /// No description provided for @cloudSupabaseHelpSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Steps'**
+  String get cloudSupabaseHelpSteps;
+
+  /// No description provided for @cloudSupabaseHelpStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Visit supabase.com to create an account'**
+  String get cloudSupabaseHelpStep1;
+
+  /// No description provided for @cloudSupabaseHelpStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Create a new project (select free tier)'**
+  String get cloudSupabaseHelpStep2;
+
+  /// No description provided for @cloudSupabaseHelpStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Go to Project Settings > API'**
+  String get cloudSupabaseHelpStep3;
+
+  /// No description provided for @cloudSupabaseHelpStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Copy Project URL and anon key'**
+  String get cloudSupabaseHelpStep4;
+
+  /// No description provided for @cloudSupabaseHelpStep5.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Paste them into the app configuration'**
+  String get cloudSupabaseHelpStep5;
+
+  /// No description provided for @cloudSupabaseHelpFaq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get cloudSupabaseHelpFaq;
+
+  /// No description provided for @cloudSupabaseHelpFaq1.
+  ///
+  /// In en, this message translates to:
+  /// **'Free tier includes 500MB storage'**
+  String get cloudSupabaseHelpFaq1;
+
+  /// No description provided for @cloudSupabaseHelpFaq2.
+  ///
+  /// In en, this message translates to:
+  /// **'Data is encrypted and secure'**
+  String get cloudSupabaseHelpFaq2;
+
+  /// No description provided for @cloudSupabaseHelpFaq3.
+  ///
+  /// In en, this message translates to:
+  /// **'Supports multi-device sync'**
+  String get cloudSupabaseHelpFaq3;
+
+  /// No description provided for @cloudSupabaseHelpNote.
+  ///
+  /// In en, this message translates to:
+  /// **'After configuration, you need to register/login to use sync'**
+  String get cloudSupabaseHelpNote;
+
+  /// No description provided for @cloudDetailedTutorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed Tutorial'**
+  String get cloudDetailedTutorial;
+
+  /// No description provided for @cloudWebdavHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'WebDAV Setup Guide'**
+  String get cloudWebdavHelpTitle;
+
+  /// No description provided for @cloudWebdavHelpIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'What is WebDAV'**
+  String get cloudWebdavHelpIntro;
+
+  /// No description provided for @cloudWebdavHelpIntro1.
+  ///
+  /// In en, this message translates to:
+  /// **'WebDAV is a network file protocol'**
+  String get cloudWebdavHelpIntro1;
+
+  /// No description provided for @cloudWebdavHelpIntro2.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported by many cloud storage and NAS devices'**
+  String get cloudWebdavHelpIntro2;
+
+  /// No description provided for @cloudWebdavHelpIntro3.
+  ///
+  /// In en, this message translates to:
+  /// **'Data is stored on your own server'**
+  String get cloudWebdavHelpIntro3;
+
+  /// No description provided for @cloudWebdavHelpProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported Providers'**
+  String get cloudWebdavHelpProviders;
+
+  /// No description provided for @cloudWebdavHelpProvider1.
+  ///
+  /// In en, this message translates to:
+  /// **'- Nutstore (recommended for China users)'**
+  String get cloudWebdavHelpProvider1;
+
+  /// No description provided for @cloudWebdavHelpProvider2.
+  ///
+  /// In en, this message translates to:
+  /// **'- Nextcloud / ownCloud'**
+  String get cloudWebdavHelpProvider2;
+
+  /// No description provided for @cloudWebdavHelpProvider3.
+  ///
+  /// In en, this message translates to:
+  /// **'- Synology / QNAP NAS'**
+  String get cloudWebdavHelpProvider3;
+
+  /// No description provided for @cloudWebdavHelpProvider4.
+  ///
+  /// In en, this message translates to:
+  /// **'- Other WebDAV-compatible services'**
+  String get cloudWebdavHelpProvider4;
+
+  /// No description provided for @cloudWebdavHelpSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Steps (Nutstore example)'**
+  String get cloudWebdavHelpSteps;
+
+  /// No description provided for @cloudWebdavHelpStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Login to Nutstore web version'**
+  String get cloudWebdavHelpStep1;
+
+  /// No description provided for @cloudWebdavHelpStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Click account name > Account Info'**
+  String get cloudWebdavHelpStep2;
+
+  /// No description provided for @cloudWebdavHelpStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Select Security Options tab'**
+  String get cloudWebdavHelpStep3;
+
+  /// No description provided for @cloudWebdavHelpStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Add application password (for third-party apps)'**
+  String get cloudWebdavHelpStep4;
+
+  /// No description provided for @cloudWebdavHelpStep5.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Copy server address, account, and app password'**
+  String get cloudWebdavHelpStep5;
+
+  /// No description provided for @cloudWebdavHelpNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Use an app-specific password instead of your account password'**
+  String get cloudWebdavHelpNote;
+
   /// No description provided for @cloudStatusNotTested.
   ///
   /// In en, this message translates to:
@@ -5187,25 +5469,25 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeCloudSyncDescription.
   ///
   /// In en, this message translates to:
-  /// **'Don\'t want to use commercial cloud services? BeeCount supports multiple sync methods'**
+  /// **'BeeCount supports multiple sync methods - your data, your control'**
   String get welcomeCloudSyncDescription;
 
   /// No description provided for @welcomeCloudSyncFeature1.
   ///
   /// In en, this message translates to:
-  /// **'Completely offline usage'**
+  /// **'Completely offline usage, no cloud needed'**
   String get welcomeCloudSyncFeature1;
 
   /// No description provided for @welcomeCloudSyncFeature2.
   ///
   /// In en, this message translates to:
-  /// **'Self-hosted WebDAV sync'**
+  /// **'iCloud sync (zero config for iOS users)'**
   String get welcomeCloudSyncFeature2;
 
   /// No description provided for @welcomeCloudSyncFeature3.
   ///
   /// In en, this message translates to:
-  /// **'Self-hosted Supabase service'**
+  /// **'Self-hosted WebDAV/Supabase service'**
   String get welcomeCloudSyncFeature3;
 
   /// No description provided for @widgetManagement.

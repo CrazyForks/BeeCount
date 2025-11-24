@@ -80,5 +80,18 @@
 			</array>
 		</dict>
 	</array>
+	<!-- iCloud Document Storage Configuration -->
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.com.tntlikely.beecount</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>BeeCount</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>Any</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -5,6 +5,7 @@ enum CloudBackendType {
   local,     // 本地存储(不同步)
   supabase,  // Supabase (自建)
   webdav,    // WebDAV (坚果云、Nextcloud、群晖等)
+  icloud,    // iCloud (iOS only)
 }
 
 class CloudServiceConfig {
@@ -47,6 +48,8 @@ class CloudServiceConfig {
         return (webdavUrl?.isNotEmpty ?? false) &&
                (webdavUsername?.isNotEmpty ?? false) &&
                (webdavPassword?.isNotEmpty ?? false);
+      case CloudBackendType.icloud:
+        return true; // iCloud 无需配置，始终有效
     }
   }
 
@@ -113,6 +116,9 @@ class CloudServiceConfig {
         } catch (_) {
           return webdavUrl!; // 解析失败，返回原始URL
         }
+
+      case CloudBackendType.icloud:
+        return 'iCloud Drive';
     }
   }
 }

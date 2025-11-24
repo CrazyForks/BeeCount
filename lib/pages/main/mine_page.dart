@@ -90,17 +90,18 @@ class MinePage extends ConsumerWidget {
                             error: (e, _) =>
                                 '${AppLocalizations.of(sectionContext).commonError}: $e',
                             data: (cfg) {
-                              if (cfg.type == CloudBackendType.local) {
-                                return AppLocalizations.of(sectionContext)
-                                    .mineCloudServiceOffline;
-                              } else {
-                                if (cfg.type == CloudBackendType.webdav) {
+                              switch (cfg.type) {
+                                case CloudBackendType.local:
+                                  return AppLocalizations.of(sectionContext)
+                                      .mineCloudServiceOffline;
+                                case CloudBackendType.webdav:
                                   return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceWebDAV;
-                                } else {
+                                case CloudBackendType.icloud:
+                                  return 'iCloud';
+                                case CloudBackendType.supabase:
                                   return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceCustom;
-                                }
                               }
                             },
                           ),
@@ -147,8 +148,12 @@ class MinePage extends ConsumerWidget {
                                   final isLocalMode = cloudConfig.hasValue &&
                                       cloudConfig.value!.type ==
                                           CloudBackendType.local;
+                                  final isICloudMode = cloudConfig.hasValue &&
+                                      cloudConfig.value!.type ==
+                                          CloudBackendType.icloud;
+                                  // iCloud 使用系统账号，不需要登录；其他云服务需要登录
                                   final canUseCloud =
-                                      user != null && !isLocalMode;
+                                      !isLocalMode && (isICloudMode || user != null);
                                   final asyncSt = sectionRef
                                       .watch(syncStatusProvider(ledgerId));
                                   final cached = sectionRef

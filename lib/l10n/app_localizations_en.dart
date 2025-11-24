@@ -1123,16 +1123,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryDefaultTitle => 'Default Category';
 
   @override
-  String get categoryDefaultMessage => 'Default categories cannot be modified, but you can view details and migrate data';
-
-  @override
   String get categoryNameLabel => 'Category Name';
 
   @override
   String get categoryNameHint => 'Enter category name';
-
-  @override
-  String get categoryNameHintDefault => 'Default category name cannot be modified';
 
   @override
   String get categoryNameRequired => 'Please enter category name';
@@ -1144,9 +1138,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryIconLabel => 'Category Icon';
 
   @override
-  String get categoryIconDefaultMessage => 'Default category icon cannot be modified';
-
-  @override
   String get categoryDangerousOperations => 'Dangerous Operations';
 
   @override
@@ -1154,9 +1145,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryDeleteSubtitle => 'Cannot be recovered after deletion';
-
-  @override
-  String get categoryDefaultCannotSave => 'Default category cannot be saved';
 
   @override
   String get categorySaveError => 'Save failed';
@@ -1369,9 +1357,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalizeSelectColor => 'Select this color';
 
   @override
-  String get appearanceDisplaySettings => 'Display Settings';
-
-  @override
   String get appearanceThemeMode => 'Appearance';
 
   @override
@@ -1551,9 +1536,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonSelectTime => 'Select Time';
-
-  @override
-  String get commonSelectDate => 'Select Date';
 
   @override
   String get reminderTestNotification => 'Send Test Notification';
@@ -2515,6 +2497,165 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudCustomWebdavSubtitle => 'Click to configure Nutstore/Nextcloud etc.';
 
   @override
+  String get cloudIcloudSubtitle => 'Auto sync with Apple ID';
+
+  @override
+  String get cloudIcloudNotAvailableTitle => 'iCloud Not Available';
+
+  @override
+  String get cloudIcloudNotAvailableMessage => 'Please sign in to iCloud in Settings and try again';
+
+  @override
+  String get cloudIcloudHelpTitle => 'iCloud Instructions';
+
+  @override
+  String get cloudIcloudHelpPrerequisites => 'Prerequisites';
+
+  @override
+  String get cloudIcloudHelpPrereq1 => '1. Device is signed in with Apple ID';
+
+  @override
+  String get cloudIcloudHelpPrereq2 => '2. iCloud Drive is enabled';
+
+  @override
+  String get cloudIcloudHelpPrereq3 => '3. Device is connected to internet';
+
+  @override
+  String get cloudIcloudHelpCheckTitle => 'How to Check iCloud Drive';
+
+  @override
+  String get cloudIcloudHelpCheck1 => '1. Open Settings';
+
+  @override
+  String get cloudIcloudHelpCheck2 => '2. Tap your Apple ID at the top';
+
+  @override
+  String get cloudIcloudHelpCheck3 => '3. Tap iCloud';
+
+  @override
+  String get cloudIcloudHelpCheck4 => '4. Make sure iCloud Drive is enabled';
+
+  @override
+  String get cloudIcloudHelpFaqTitle => 'FAQ';
+
+  @override
+  String get cloudIcloudHelpFaq1 => 'If not available, check if iCloud Drive is enabled';
+
+  @override
+  String get cloudIcloudHelpFaq2 => 'First time use may take a few seconds to initialize';
+
+  @override
+  String get cloudIcloudHelpFaq3 => 'Data is stored in your private iCloud space';
+
+  @override
+  String get cloudIcloudHelpFaq4 => 'Devices with same Apple ID sync automatically';
+
+  @override
+  String get cloudIcloudHelpNote => 'iCloud sync uses your Apple ID, no extra configuration needed';
+
+  @override
+  String get cloudSupabaseHelpTitle => 'Supabase Setup Guide';
+
+  @override
+  String get cloudSupabaseHelpIntro => 'What is Supabase';
+
+  @override
+  String get cloudSupabaseHelpIntro1 => 'Supabase is an open-source backend-as-a-service platform';
+
+  @override
+  String get cloudSupabaseHelpIntro2 => 'Offers a free tier, sufficient for personal use';
+
+  @override
+  String get cloudSupabaseHelpIntro3 => 'You have full control over your data';
+
+  @override
+  String get cloudSupabaseHelpSteps => 'Setup Steps';
+
+  @override
+  String get cloudSupabaseHelpStep1 => '1. Visit supabase.com to create an account';
+
+  @override
+  String get cloudSupabaseHelpStep2 => '2. Create a new project (select free tier)';
+
+  @override
+  String get cloudSupabaseHelpStep3 => '3. Go to Project Settings > API';
+
+  @override
+  String get cloudSupabaseHelpStep4 => '4. Copy Project URL and anon key';
+
+  @override
+  String get cloudSupabaseHelpStep5 => '5. Paste them into the app configuration';
+
+  @override
+  String get cloudSupabaseHelpFaq => 'FAQ';
+
+  @override
+  String get cloudSupabaseHelpFaq1 => 'Free tier includes 500MB storage';
+
+  @override
+  String get cloudSupabaseHelpFaq2 => 'Data is encrypted and secure';
+
+  @override
+  String get cloudSupabaseHelpFaq3 => 'Supports multi-device sync';
+
+  @override
+  String get cloudSupabaseHelpNote => 'After configuration, you need to register/login to use sync';
+
+  @override
+  String get cloudDetailedTutorial => 'Detailed Tutorial';
+
+  @override
+  String get cloudWebdavHelpTitle => 'WebDAV Setup Guide';
+
+  @override
+  String get cloudWebdavHelpIntro => 'What is WebDAV';
+
+  @override
+  String get cloudWebdavHelpIntro1 => 'WebDAV is a network file protocol';
+
+  @override
+  String get cloudWebdavHelpIntro2 => 'Supported by many cloud storage and NAS devices';
+
+  @override
+  String get cloudWebdavHelpIntro3 => 'Data is stored on your own server';
+
+  @override
+  String get cloudWebdavHelpProviders => 'Supported Providers';
+
+  @override
+  String get cloudWebdavHelpProvider1 => '- Nutstore (recommended for China users)';
+
+  @override
+  String get cloudWebdavHelpProvider2 => '- Nextcloud / ownCloud';
+
+  @override
+  String get cloudWebdavHelpProvider3 => '- Synology / QNAP NAS';
+
+  @override
+  String get cloudWebdavHelpProvider4 => '- Other WebDAV-compatible services';
+
+  @override
+  String get cloudWebdavHelpSteps => 'Setup Steps (Nutstore example)';
+
+  @override
+  String get cloudWebdavHelpStep1 => '1. Login to Nutstore web version';
+
+  @override
+  String get cloudWebdavHelpStep2 => '2. Click account name > Account Info';
+
+  @override
+  String get cloudWebdavHelpStep3 => '3. Select Security Options tab';
+
+  @override
+  String get cloudWebdavHelpStep4 => '4. Add application password (for third-party apps)';
+
+  @override
+  String get cloudWebdavHelpStep5 => '5. Copy server address, account, and app password';
+
+  @override
+  String get cloudWebdavHelpNote => 'Use an app-specific password instead of your account password';
+
+  @override
   String get cloudStatusNotTested => 'Not tested';
 
   @override
@@ -2735,16 +2876,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeCloudSyncTitle => 'Optional Cloud Sync';
 
   @override
-  String get welcomeCloudSyncDescription => 'Don\'t want to use commercial cloud services? BeeCount supports multiple sync methods';
+  String get welcomeCloudSyncDescription => 'BeeCount supports multiple sync methods - your data, your control';
 
   @override
-  String get welcomeCloudSyncFeature1 => 'Completely offline usage';
+  String get welcomeCloudSyncFeature1 => 'Completely offline usage, no cloud needed';
 
   @override
-  String get welcomeCloudSyncFeature2 => 'Self-hosted WebDAV sync';
+  String get welcomeCloudSyncFeature2 => 'iCloud sync (zero config for iOS users)';
 
   @override
-  String get welcomeCloudSyncFeature3 => 'Self-hosted Supabase service';
+  String get welcomeCloudSyncFeature3 => 'Self-hosted WebDAV/Supabase service';
 
   @override
   String get widgetManagement => 'Home Screen Widget';

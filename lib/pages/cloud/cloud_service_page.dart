@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
+import 'package:flutter_cloud_sync_icloud/flutter_cloud_sync_icloud.dart';
 import '../../cloud/sync_service.dart';
 import '../../providers/sync_providers.dart';
+import '../../services/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
 import '../../styles/tokens.dart';
@@ -120,35 +124,13 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                       subtitle: AppLocalizations.of(context).cloudLocalStorageSubtitle,
                       isSelected: active.type == CloudBackendType.local,
                       onTap: () => _switchService(CloudBackendType.local),
-                      showGuide: false,
                     ),
 
-                    const SizedBox(height: 12),
-
-                    // 2. 自定义 Supabase Card
-                    supabaseAsync.when(
-                      loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
-                      error: (e, _) => const SizedBox.shrink(),
-                      data: (supabaseCfg) => _buildServiceCard(
-                        context: context,
-                        icon: Icons.cloud,
-                        iconColor: BeeTokens.brandSupabase,
-                        title: AppLocalizations.of(context).cloudCustomSupabaseTitle,
-                        subtitle: supabaseCfg?.valid == true
-                            ? supabaseCfg!.obfuscatedUrl()
-                            : AppLocalizations.of(context).cloudCustomSupabaseSubtitle,
-                        isSelected: active.type == CloudBackendType.supabase,
-                        isConfigured: supabaseCfg?.valid == true,
-                        onTap: () => supabaseCfg?.valid == true
-                            ? _switchService(CloudBackendType.supabase)
-                            : _configureService(CloudBackendType.supabase),
-                        onConfigure: supabaseCfg?.valid == true
-                            ? () => _configureService(CloudBackendType.supabase)
-                            : null,
-                        showGuide: true,
-                        guideUrl: _kSupabaseGuideUrl,
-                      ),
-                    ),
+                    // 2. iCloud Card (仅 iOS)
+                    if (!kIsWeb && Platform.isIOS) ...[
+                      const SizedBox(height: 12),
+                      _buildICloudCard(context, active),
+                    ],
 
                     const SizedBox(height: 12),
 
@@ -172,8 +154,33 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                         onConfigure: webdavCfg?.valid == true
                             ? () => _configureService(CloudBackendType.webdav)
                             : null,
-                        showGuide: true,
-                        guideUrl: _kWebdavGuideUrl,
+                        onShowGuide: _showWebdavHelpDialog,
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // 4. 自定义 Supabase Card
+                    supabaseAsync.when(
+                      loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                      error: (e, _) => const SizedBox.shrink(),
+                      data: (supabaseCfg) => _buildServiceCard(
+                        context: context,
+                        icon: Icons.cloud,
+                        iconColor: BeeTokens.brandSupabase,
+                        title: AppLocalizations.of(context).cloudCustomSupabaseTitle,
+                        subtitle: supabaseCfg?.valid == true
+                            ? supabaseCfg!.obfuscatedUrl()
+                            : AppLocalizations.of(context).cloudCustomSupabaseSubtitle,
+                        isSelected: active.type == CloudBackendType.supabase,
+                        isConfigured: supabaseCfg?.valid == true,
+                        onTap: () => supabaseCfg?.valid == true
+                            ? _switchService(CloudBackendType.supabase)
+                            : _configureService(CloudBackendType.supabase),
+                        onConfigure: supabaseCfg?.valid == true
+                            ? () => _configureService(CloudBackendType.supabase)
+                            : null,
+                        onShowGuide: _showSupabaseHelpDialog,
                       ),
                     ),
                   ],
@@ -276,8 +283,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     bool isConfigured = true,
     required VoidCallback onTap,
     VoidCallback? onConfigure,
-    required bool showGuide,
-    String? guideUrl,
+    VoidCallback? onShowGuide,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -344,15 +350,15 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                 ),
 
                 // 底部按钮行
-                if ((isConfigured && onConfigure != null) || (showGuide && guideUrl != null))
+                if ((isConfigured && onConfigure != null) || onShowGuide != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        if (showGuide && guideUrl != null)
+                        if (onShowGuide != null)
                           TextButton.icon(
-                            onPressed: () => _openGuide(guideUrl),
+                            onPressed: onShowGuide,
                             icon: const Icon(Icons.help_outline, size: 16),
                             label: Text(AppLocalizations.of(context).commonTutorial, style: const TextStyle(fontSize: 12)),
                             style: TextButton.styleFrom(
@@ -362,7 +368,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                             ),
                           ),
                         if (isConfigured && onConfigure != null) ...[
-                          if (showGuide) const SizedBox(width: 8),
+                          if (onShowGuide != null) const SizedBox(width: 8),
                           TextButton.icon(
                             onPressed: onConfigure,
                             icon: const Icon(Icons.settings, size: 16),
@@ -385,6 +391,377 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     );
   }
 
+  Widget _buildICloudCard(BuildContext context, CloudServiceConfig active) {
+    final isSelected = active.type == CloudBackendType.icloud;
+
+    return Container(
+      decoration: BoxDecoration(
+        border: isSelected ? Border.all(color: BeeTokens.success(context), width: 2) : null,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SectionCard(
+        margin: EdgeInsets.zero,
+        child: InkWell(
+          onTap: () => _switchService(CloudBackendType.icloud),
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    // 图标
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: BeeTokens.brandIcloud.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(Icons.cloud, color: BeeTokens.brandIcloud, size: 24),
+                    ),
+                    const SizedBox(width: 16),
+
+                    // 文字信息
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'iCloud',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            isSelected
+                                ? 'iCloud Drive'
+                                : AppLocalizations.of(context).cloudIcloudSubtitle,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: BeeTokens.textSecondary(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 选中标记
+                    if (isSelected)
+                      Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: BeeTokens.success(context),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.check, color: BeeTokens.textOnPrimary(context), size: 18),
+                      ),
+                  ],
+                ),
+
+                // 底部帮助按钮
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton.icon(
+                        onPressed: _showICloudHelpDialog,
+                        icon: const Icon(Icons.help_outline, size: 16),
+                        label: Text(AppLocalizations.of(context).commonTutorial, style: const TextStyle(fontSize: 12)),
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showSupabaseHelpDialog() {
+    final l10n = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.cloud, color: BeeTokens.brandSupabase),
+            const SizedBox(width: 8),
+            Text(l10n.cloudSupabaseHelpTitle),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildHelpSection(
+                l10n.cloudSupabaseHelpIntro,
+                [
+                  l10n.cloudSupabaseHelpIntro1,
+                  l10n.cloudSupabaseHelpIntro2,
+                  l10n.cloudSupabaseHelpIntro3,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudSupabaseHelpSteps,
+                [
+                  l10n.cloudSupabaseHelpStep1,
+                  l10n.cloudSupabaseHelpStep2,
+                  l10n.cloudSupabaseHelpStep3,
+                  l10n.cloudSupabaseHelpStep4,
+                  l10n.cloudSupabaseHelpStep5,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudSupabaseHelpFaq,
+                [
+                  '• ${l10n.cloudSupabaseHelpFaq1}',
+                  '• ${l10n.cloudSupabaseHelpFaq2}',
+                  '• ${l10n.cloudSupabaseHelpFaq3}',
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: BeeTokens.brandSupabase.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, color: BeeTokens.brandSupabase, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.cloudSupabaseHelpNote,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => _openGuide(_kSupabaseGuideUrl),
+            child: Text(l10n.cloudDetailedTutorial),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.commonConfirm),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showWebdavHelpDialog() {
+    final l10n = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.folder_shared, color: BeeTokens.brandWebdav),
+            const SizedBox(width: 8),
+            Text(l10n.cloudWebdavHelpTitle),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildHelpSection(
+                l10n.cloudWebdavHelpIntro,
+                [
+                  l10n.cloudWebdavHelpIntro1,
+                  l10n.cloudWebdavHelpIntro2,
+                  l10n.cloudWebdavHelpIntro3,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudWebdavHelpProviders,
+                [
+                  l10n.cloudWebdavHelpProvider1,
+                  l10n.cloudWebdavHelpProvider2,
+                  l10n.cloudWebdavHelpProvider3,
+                  l10n.cloudWebdavHelpProvider4,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudWebdavHelpSteps,
+                [
+                  l10n.cloudWebdavHelpStep1,
+                  l10n.cloudWebdavHelpStep2,
+                  l10n.cloudWebdavHelpStep3,
+                  l10n.cloudWebdavHelpStep4,
+                  l10n.cloudWebdavHelpStep5,
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: BeeTokens.brandWebdav.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, color: BeeTokens.brandWebdav, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.cloudWebdavHelpNote,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.commonConfirm),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showICloudHelpDialog() {
+    final l10n = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.cloud, color: BeeTokens.brandIcloud),
+            const SizedBox(width: 8),
+            Text(l10n.cloudIcloudHelpTitle),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildHelpSection(
+                l10n.cloudIcloudHelpPrerequisites,
+                [
+                  l10n.cloudIcloudHelpPrereq1,
+                  l10n.cloudIcloudHelpPrereq2,
+                  l10n.cloudIcloudHelpPrereq3,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudIcloudHelpCheckTitle,
+                [
+                  l10n.cloudIcloudHelpCheck1,
+                  l10n.cloudIcloudHelpCheck2,
+                  l10n.cloudIcloudHelpCheck3,
+                  l10n.cloudIcloudHelpCheck4,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudIcloudHelpFaqTitle,
+                [
+                  '• ${l10n.cloudIcloudHelpFaq1}',
+                  '• ${l10n.cloudIcloudHelpFaq2}',
+                  '• ${l10n.cloudIcloudHelpFaq3}',
+                  '• ${l10n.cloudIcloudHelpFaq4}',
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: BeeTokens.brandIcloud.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, color: BeeTokens.brandIcloud, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.cloudIcloudHelpNote,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.commonConfirm),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHelpSection(String title, List<String> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            color: BeeTokens.textPrimary(context),
+          ),
+        ),
+        const SizedBox(height: 8),
+        ...items.map((item) => Padding(
+          padding: const EdgeInsets.only(left: 8, bottom: 4),
+          child: Text(
+            item,
+            style: TextStyle(
+              fontSize: 13,
+              color: BeeTokens.textSecondary(context),
+            ),
+          ),
+        )),
+      ],
+    );
+  }
+
   Future<void> _openGuide(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -402,6 +779,54 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
     if (active.type == type) return; // 已经是当前类型
 
+    // iCloud: 先检查可用性
+    if (type == CloudBackendType.icloud) {
+      logger.info('CloudService', '========== 开始 iCloud 诊断 ==========');
+      final icloudProvider = ICloudProvider();
+      try {
+        // 获取详细诊断信息
+        final diagnostics = await icloudProvider.getDiagnostics();
+        logger.info('CloudService', 'iCloud 诊断信息:');
+        diagnostics.forEach((key, value) {
+          logger.info('CloudService', '  $key: $value');
+        });
+
+        final isAvailable = await icloudProvider.isAvailable();
+        logger.info('CloudService', 'iCloud 可用性: $isAvailable');
+        logger.info('CloudService', '========== iCloud 诊断结束 ==========');
+
+        if (!isAvailable) {
+          if (mounted) {
+            // 显示更详细的错误信息
+            final cloudKitStatus = diagnostics['cloudKitStatus'] ?? 'unknown';
+            final containerAvailable = diagnostics['containerAvailable'] ?? false;
+            var detailMessage = AppLocalizations.of(context).cloudIcloudNotAvailableMessage;
+            if (cloudKitStatus == 'noAccount') {
+              detailMessage = '请在设置中登录 iCloud 账号';
+            } else if (!containerAvailable) {
+              detailMessage = 'iCloud 容器不可用，请确保 iCloud Drive 已开启';
+            }
+            await AppDialog.error(
+              context,
+              title: AppLocalizations.of(context).cloudIcloudNotAvailableTitle,
+              message: detailMessage,
+            );
+          }
+          return;
+        }
+      } catch (e, stack) {
+        logger.error('CloudService', 'iCloud 可用性检查失败', e, stack);
+        if (mounted) {
+          await AppDialog.error(
+            context,
+            title: AppLocalizations.of(context).cloudIcloudNotAvailableTitle,
+            message: 'iCloud 检查失败: $e',
+          );
+        }
+        return;
+      }
+    }
+
     // 确认切换
     if (!mounted) return;
     final confirmed = await AppDialog.confirm(
@@ -412,28 +837,34 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     if (!confirmed || !mounted) return;
 
     try {
-      // 登出
-      final authService = await ref.read(authServiceProvider.future);
-      await authService.signOut();
-
-      // 刷新认证服务和同步服务以触发状态更新
-      ref.invalidate(authServiceProvider);
-      ref.invalidate(syncServiceProvider);
+      // 登出（iCloud 使用系统账号，跳过登出）
+      if (active.type != CloudBackendType.icloud && active.type != CloudBackendType.local) {
+        try {
+          final authService = await ref.read(authServiceProvider.future);
+          await authService.signOut();
+        } catch (_) {
+          // 忽略登出错误
+        }
+      }
 
       // 激活新配置
       final success = await store.activate(type);
-      if (!success && type != CloudBackendType.local) {
+      if (!success && type != CloudBackendType.local && type != CloudBackendType.icloud) {
         if (mounted) {
           await AppDialog.error(context, title: AppLocalizations.of(context).cloudSwitchFailedTitle, message: AppLocalizations.of(context).cloudSwitchFailedConfigMissing);
         }
         return;
       }
 
-      // 刷新 providers，下次使用时会自动初始化对应的服务
-      ref.invalidate(activeCloudConfigProvider);
-      ref.invalidate(supabaseConfigProvider);
-      ref.invalidate(webdavConfigProvider);
-      ref.invalidate(authServiceProvider);
+      // 延迟刷新 providers，避免在 build 阶段触发 setState
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref.invalidate(activeCloudConfigProvider);
+        ref.invalidate(supabaseConfigProvider);
+        ref.invalidate(webdavConfigProvider);
+        ref.invalidate(authServiceProvider);
+        ref.invalidate(syncServiceProvider);
+      });
 
       if (mounted) {
         showToast(context, AppLocalizations.of(context).cloudSwitchedTo(_getTypeName(type)));
@@ -572,6 +1003,8 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         return 'Supabase';
       case CloudBackendType.webdav:
         return 'WebDAV';
+      case CloudBackendType.icloud:
+        return 'iCloud';
     }
   }
 
@@ -637,6 +1070,23 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
               throw Exception(AppLocalizations.of(context).cloudErrorPathNotFound(testUrl.path));
             } else {
               throw Exception(AppLocalizations.of(context).cloudErrorServerStatus('${response.statusCode}'));
+            }
+            break;
+
+          case CloudBackendType.icloud:
+            // iCloud 连接测试
+            final icloudProvider = ICloudProvider();
+            final isAvailable = await icloudProvider.isAvailable();
+            if (isAvailable) {
+              // 尝试初始化容器
+              try {
+                await icloudProvider.initialize({});
+                connectionSuccess = true;
+              } catch (e) {
+                throw Exception('iCloud 容器初始化失败: $e');
+              }
+            } else {
+              throw Exception('iCloud 不可用，请检查设备是否已登录 iCloud 并开启 iCloud Drive');
             }
             break;
         }

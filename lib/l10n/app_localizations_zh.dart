@@ -1123,16 +1123,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryDefaultTitle => '默认分类';
 
   @override
-  String get categoryDefaultMessage => '默认分类不可修改名称和图标，但可以查看详情和迁移数据';
-
-  @override
   String get categoryNameLabel => '分类名称';
 
   @override
   String get categoryNameHint => '请输入分类名称';
-
-  @override
-  String get categoryNameHintDefault => '默认分类名称不可修改';
 
   @override
   String get categoryNameRequired => '请输入分类名称';
@@ -1144,9 +1138,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryIconLabel => '分类图标';
 
   @override
-  String get categoryIconDefaultMessage => '默认分类图标不可修改';
-
-  @override
   String get categoryDangerousOperations => '危险操作';
 
   @override
@@ -1154,9 +1145,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categoryDeleteSubtitle => '删除后无法恢复';
-
-  @override
-  String get categoryDefaultCannotSave => '默认分类不可保存';
 
   @override
   String get categorySaveError => '保存失败';
@@ -1369,9 +1357,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get personalizeSelectColor => '选择此颜色';
 
   @override
-  String get appearanceDisplaySettings => '显示设置';
-
-  @override
   String get appearanceThemeMode => '外观模式';
 
   @override
@@ -1551,9 +1536,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get commonSelectTime => '选择时间';
-
-  @override
-  String get commonSelectDate => '选择日期';
 
   @override
   String get reminderTestNotification => '发送测试通知';
@@ -2515,6 +2497,165 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudCustomWebdavSubtitle => '点击配置坚果云/Nextcloud等';
 
   @override
+  String get cloudIcloudSubtitle => '使用 Apple ID 自动同步';
+
+  @override
+  String get cloudIcloudNotAvailableTitle => 'iCloud 不可用';
+
+  @override
+  String get cloudIcloudNotAvailableMessage => '请在系统设置中登录 iCloud 账户后再试';
+
+  @override
+  String get cloudIcloudHelpTitle => 'iCloud 使用说明';
+
+  @override
+  String get cloudIcloudHelpPrerequisites => '前提条件';
+
+  @override
+  String get cloudIcloudHelpPrereq1 => '1. 设备已登录 Apple ID';
+
+  @override
+  String get cloudIcloudHelpPrereq2 => '2. 已开启 iCloud Drive';
+
+  @override
+  String get cloudIcloudHelpPrereq3 => '3. 设备已联网';
+
+  @override
+  String get cloudIcloudHelpCheckTitle => '如何检查 iCloud Drive';
+
+  @override
+  String get cloudIcloudHelpCheck1 => '1. 打开「设置」';
+
+  @override
+  String get cloudIcloudHelpCheck2 => '2. 点击顶部的 Apple ID';
+
+  @override
+  String get cloudIcloudHelpCheck3 => '3. 点击「iCloud」';
+
+  @override
+  String get cloudIcloudHelpCheck4 => '4. 确保「iCloud 云盘」已开启';
+
+  @override
+  String get cloudIcloudHelpFaqTitle => '常见问题';
+
+  @override
+  String get cloudIcloudHelpFaq1 => '如果提示不可用，请检查 iCloud Drive 是否开启';
+
+  @override
+  String get cloudIcloudHelpFaq2 => '首次使用可能需要等待几秒钟初始化';
+
+  @override
+  String get cloudIcloudHelpFaq3 => '数据存储在您的私人 iCloud 空间中';
+
+  @override
+  String get cloudIcloudHelpFaq4 => '同一 Apple ID 的设备可自动同步';
+
+  @override
+  String get cloudIcloudHelpNote => 'iCloud 同步使用您的 Apple ID，无需额外配置';
+
+  @override
+  String get cloudSupabaseHelpTitle => 'Supabase 配置说明';
+
+  @override
+  String get cloudSupabaseHelpIntro => '什么是 Supabase';
+
+  @override
+  String get cloudSupabaseHelpIntro1 => 'Supabase 是一个开源的后端即服务平台';
+
+  @override
+  String get cloudSupabaseHelpIntro2 => '提供免费套餐，足够个人使用';
+
+  @override
+  String get cloudSupabaseHelpIntro3 => '数据完全由您掌控';
+
+  @override
+  String get cloudSupabaseHelpSteps => '配置步骤';
+
+  @override
+  String get cloudSupabaseHelpStep1 => '1. 访问 supabase.com 注册账号';
+
+  @override
+  String get cloudSupabaseHelpStep2 => '2. 创建新项目（选择免费套餐）';
+
+  @override
+  String get cloudSupabaseHelpStep3 => '3. 进入项目设置 > API';
+
+  @override
+  String get cloudSupabaseHelpStep4 => '4. 复制 Project URL 和 anon key';
+
+  @override
+  String get cloudSupabaseHelpStep5 => '5. 粘贴到应用的配置中';
+
+  @override
+  String get cloudSupabaseHelpFaq => '常见问题';
+
+  @override
+  String get cloudSupabaseHelpFaq1 => '免费套餐有 500MB 存储空间';
+
+  @override
+  String get cloudSupabaseHelpFaq2 => '数据加密存储，安全可靠';
+
+  @override
+  String get cloudSupabaseHelpFaq3 => '支持多设备同步';
+
+  @override
+  String get cloudSupabaseHelpNote => '配置完成后需要注册/登录账号才能使用同步功能';
+
+  @override
+  String get cloudDetailedTutorial => '详细教程';
+
+  @override
+  String get cloudWebdavHelpTitle => 'WebDAV 配置说明';
+
+  @override
+  String get cloudWebdavHelpIntro => '什么是 WebDAV';
+
+  @override
+  String get cloudWebdavHelpIntro1 => 'WebDAV 是一种网络文件协议';
+
+  @override
+  String get cloudWebdavHelpIntro2 => '支持多种云盘和NAS设备';
+
+  @override
+  String get cloudWebdavHelpIntro3 => '数据存储在您自己的服务器上';
+
+  @override
+  String get cloudWebdavHelpProviders => '支持的服务商';
+
+  @override
+  String get cloudWebdavHelpProvider1 => '• 坚果云（推荐国内用户）';
+
+  @override
+  String get cloudWebdavHelpProvider2 => '• Nextcloud / ownCloud';
+
+  @override
+  String get cloudWebdavHelpProvider3 => '• 群晖 / 威联通 NAS';
+
+  @override
+  String get cloudWebdavHelpProvider4 => '• 其他支持 WebDAV 的服务';
+
+  @override
+  String get cloudWebdavHelpSteps => '配置步骤（以坚果云为例）';
+
+  @override
+  String get cloudWebdavHelpStep1 => '1. 登录坚果云网页版';
+
+  @override
+  String get cloudWebdavHelpStep2 => '2. 点击右上角账户名 > 账户信息';
+
+  @override
+  String get cloudWebdavHelpStep3 => '3. 选择「安全选项」标签';
+
+  @override
+  String get cloudWebdavHelpStep4 => '4. 添加应用密码（用于第三方应用）';
+
+  @override
+  String get cloudWebdavHelpStep5 => '5. 复制服务器地址、账号、应用密码';
+
+  @override
+  String get cloudWebdavHelpNote => '建议使用应用专用密码，而非账号密码';
+
+  @override
   String get cloudStatusNotTested => '未测试';
 
   @override
@@ -2735,16 +2876,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeCloudSyncTitle => '可选的云同步';
 
   @override
-  String get welcomeCloudSyncDescription => '不想使用商业云服务？BeeCount支持多种同步方式';
+  String get welcomeCloudSyncDescription => 'BeeCount 支持多种同步方式，数据完全由你掌控';
 
   @override
-  String get welcomeCloudSyncFeature1 => '完全离线使用';
+  String get welcomeCloudSyncFeature1 => '完全离线使用，无需云服务';
 
   @override
-  String get welcomeCloudSyncFeature2 => '自建WebDAV同步';
+  String get welcomeCloudSyncFeature2 => 'iCloud 同步（iOS 用户零配置）';
 
   @override
-  String get welcomeCloudSyncFeature3 => '自建Supabase服务';
+  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase 服务';
 
   @override
   String get widgetManagement => '桌面小组件';
@@ -4654,16 +4795,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get categoryDefaultTitle => '預設分類';
 
   @override
-  String get categoryDefaultMessage => '預設分類不可修改名稱和圖示，但可以檢視詳情和遷移資料';
-
-  @override
   String get categoryNameLabel => '分類名稱';
 
   @override
   String get categoryNameHint => '請輸入分類名稱';
-
-  @override
-  String get categoryNameHintDefault => '預設分類名稱不可修改';
 
   @override
   String get categoryNameRequired => '請輸入分類名稱';
@@ -4675,9 +4810,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get categoryIconLabel => '分類圖示';
 
   @override
-  String get categoryIconDefaultMessage => '預設分類圖示不可修改';
-
-  @override
   String get categoryDangerousOperations => '危險操作';
 
   @override
@@ -4685,9 +4817,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryDeleteSubtitle => '刪除後無法復原';
-
-  @override
-  String get categoryDefaultCannotSave => '預設分類不可儲存';
 
   @override
   String get categorySaveError => '儲存失敗';
@@ -4900,9 +5029,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get personalizeSelectColor => '選擇此顏色';
 
   @override
-  String get appearanceDisplaySettings => '顯示設定';
-
-  @override
   String get appearanceThemeMode => '外觀模式';
 
   @override
@@ -5082,9 +5208,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonSelectTime => '選擇時間';
-
-  @override
-  String get commonSelectDate => '選擇日期';
 
   @override
   String get reminderTestNotification => '發送測試通知';
@@ -6046,6 +6169,165 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudCustomWebdavSubtitle => '點擊設定堅果雲/Nextcloud等';
 
   @override
+  String get cloudIcloudSubtitle => '使用 Apple ID 自動同步';
+
+  @override
+  String get cloudIcloudNotAvailableTitle => 'iCloud 不可用';
+
+  @override
+  String get cloudIcloudNotAvailableMessage => '請在系統設定中登入 iCloud 帳戶後再試';
+
+  @override
+  String get cloudIcloudHelpTitle => 'iCloud 使用說明';
+
+  @override
+  String get cloudIcloudHelpPrerequisites => '前提條件';
+
+  @override
+  String get cloudIcloudHelpPrereq1 => '1. 裝置已登入 Apple ID';
+
+  @override
+  String get cloudIcloudHelpPrereq2 => '2. 已開啟 iCloud Drive';
+
+  @override
+  String get cloudIcloudHelpPrereq3 => '3. 裝置已連網';
+
+  @override
+  String get cloudIcloudHelpCheckTitle => '如何檢查 iCloud Drive';
+
+  @override
+  String get cloudIcloudHelpCheck1 => '1. 開啟「設定」';
+
+  @override
+  String get cloudIcloudHelpCheck2 => '2. 點擊頂部的 Apple ID';
+
+  @override
+  String get cloudIcloudHelpCheck3 => '3. 點擊「iCloud」';
+
+  @override
+  String get cloudIcloudHelpCheck4 => '4. 確保「iCloud 雲碟」已開啟';
+
+  @override
+  String get cloudIcloudHelpFaqTitle => '常見問題';
+
+  @override
+  String get cloudIcloudHelpFaq1 => '如果提示不可用，請檢查 iCloud Drive 是否開啟';
+
+  @override
+  String get cloudIcloudHelpFaq2 => '首次使用可能需要等待幾秒鐘初始化';
+
+  @override
+  String get cloudIcloudHelpFaq3 => '資料儲存在您的私人 iCloud 空間中';
+
+  @override
+  String get cloudIcloudHelpFaq4 => '同一 Apple ID 的裝置可自動同步';
+
+  @override
+  String get cloudIcloudHelpNote => 'iCloud 同步使用您的 Apple ID，無需額外設定';
+
+  @override
+  String get cloudSupabaseHelpTitle => 'Supabase 設定說明';
+
+  @override
+  String get cloudSupabaseHelpIntro => '什麼是 Supabase';
+
+  @override
+  String get cloudSupabaseHelpIntro1 => 'Supabase 是一個開源的後端即服務平台';
+
+  @override
+  String get cloudSupabaseHelpIntro2 => '提供免費方案，足夠個人使用';
+
+  @override
+  String get cloudSupabaseHelpIntro3 => '資料完全由您掌控';
+
+  @override
+  String get cloudSupabaseHelpSteps => '設定步驟';
+
+  @override
+  String get cloudSupabaseHelpStep1 => '1. 前往 supabase.com 註冊帳號';
+
+  @override
+  String get cloudSupabaseHelpStep2 => '2. 建立新專案（選擇免費方案）';
+
+  @override
+  String get cloudSupabaseHelpStep3 => '3. 進入專案設定 > API';
+
+  @override
+  String get cloudSupabaseHelpStep4 => '4. 複製 Project URL 和 anon key';
+
+  @override
+  String get cloudSupabaseHelpStep5 => '5. 貼到應用程式的設定中';
+
+  @override
+  String get cloudSupabaseHelpFaq => '常見問題';
+
+  @override
+  String get cloudSupabaseHelpFaq1 => '免費方案有 500MB 儲存空間';
+
+  @override
+  String get cloudSupabaseHelpFaq2 => '資料加密儲存，安全可靠';
+
+  @override
+  String get cloudSupabaseHelpFaq3 => '支援多裝置同步';
+
+  @override
+  String get cloudSupabaseHelpNote => '設定完成後需要註冊/登入帳號才能使用同步功能';
+
+  @override
+  String get cloudDetailedTutorial => '詳細教學';
+
+  @override
+  String get cloudWebdavHelpTitle => 'WebDAV 設定說明';
+
+  @override
+  String get cloudWebdavHelpIntro => '什麼是 WebDAV';
+
+  @override
+  String get cloudWebdavHelpIntro1 => 'WebDAV 是一種網路檔案通訊協定';
+
+  @override
+  String get cloudWebdavHelpIntro2 => '支援多種雲端硬碟和 NAS 裝置';
+
+  @override
+  String get cloudWebdavHelpIntro3 => '資料儲存在您自己的伺服器上';
+
+  @override
+  String get cloudWebdavHelpProviders => '支援的服務商';
+
+  @override
+  String get cloudWebdavHelpProvider1 => '• 堅果雲（推薦國內用戶）';
+
+  @override
+  String get cloudWebdavHelpProvider2 => '• Nextcloud / ownCloud';
+
+  @override
+  String get cloudWebdavHelpProvider3 => '• 群暉 / 威聯通 NAS';
+
+  @override
+  String get cloudWebdavHelpProvider4 => '• 其他支援 WebDAV 的服務';
+
+  @override
+  String get cloudWebdavHelpSteps => '設定步驟（以堅果雲為例）';
+
+  @override
+  String get cloudWebdavHelpStep1 => '1. 登入堅果雲網頁版';
+
+  @override
+  String get cloudWebdavHelpStep2 => '2. 點擊右上角帳戶名 > 帳戶資訊';
+
+  @override
+  String get cloudWebdavHelpStep3 => '3. 選擇「安全選項」標籤';
+
+  @override
+  String get cloudWebdavHelpStep4 => '4. 新增應用程式密碼（用於第三方應用程式）';
+
+  @override
+  String get cloudWebdavHelpStep5 => '5. 複製伺服器地址、帳號、應用程式密碼';
+
+  @override
+  String get cloudWebdavHelpNote => '建議使用應用程式專用密碼，而非帳號密碼';
+
+  @override
   String get cloudStatusNotTested => '未測試';
 
   @override
@@ -6263,19 +6545,19 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get welcomeViewGitHub => '訪問 GitHub 倉庫';
 
   @override
-  String get welcomeCloudSyncTitle => '可選的云同步';
+  String get welcomeCloudSyncTitle => '可選的雲端同步';
 
   @override
-  String get welcomeCloudSyncDescription => '不想使用商業云服務？BeeCount支持多种同步方式';
+  String get welcomeCloudSyncDescription => 'BeeCount 支援多種同步方式，資料完全由你掌控';
 
   @override
-  String get welcomeCloudSyncFeature1 => '完全离線使用';
+  String get welcomeCloudSyncFeature1 => '完全離線使用，無需雲端服務';
 
   @override
-  String get welcomeCloudSyncFeature2 => '自建WebDAV同步';
+  String get welcomeCloudSyncFeature2 => 'iCloud 同步（iOS 用戶零配置）';
 
   @override
-  String get welcomeCloudSyncFeature3 => '自建Supabase服務';
+  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase 服務';
 
   @override
   String get widgetManagement => '桌面小組件';
@@ -6976,6 +7258,26 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get accountCurrencyLocked => '該帳戶已有交易記錄，無法變更幣別';
+
+  @override
+  String get accountDefaultIncomeTitle => '預設收入帳戶';
+
+  @override
+  String get accountDefaultIncomeDescription => '新建收入時自動選中此帳戶';
+
+  @override
+  String get accountDefaultExpenseTitle => '預設支出帳戶';
+
+  @override
+  String get accountDefaultExpenseDescription => '新建支出時自動選中此帳戶';
+
+  @override
+  String get accountDefaultNone => '不設定';
+
+  @override
+  String accountDefaultSet(String name) {
+    return '已設定: $name';
+  }
 
   @override
   String get commonNotice => '提示';

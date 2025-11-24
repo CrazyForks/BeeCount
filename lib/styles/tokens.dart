@@ -380,6 +380,9 @@ class BeeTokens {
   /// WebDAV 品牌色（橙色）
   static const Color brandWebdav = Color(0xFFFF9800);
 
+  /// iCloud 品牌色（苹果蓝）
+  static const Color brandIcloud = Color(0xFF007AFF);
+
   /// 云服务通用图标色（蓝色）
   static const Color brandCloud = Color(0xFF2196F3);
 
