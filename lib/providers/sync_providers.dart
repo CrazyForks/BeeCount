@@ -115,6 +115,7 @@ final syncServiceProvider = Provider<SyncService>((ref) {
 
     case CloudBackendType.supabase:
     case CloudBackendType.webdav:
+    case CloudBackendType.icloud:
       // 使用新的 TransactionsSyncManager (基于 flutter_cloud_sync 包)
       // 采用延迟初始化，首次使用时自动初始化
       return TransactionsSyncManager(

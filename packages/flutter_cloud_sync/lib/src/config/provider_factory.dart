@@ -1,5 +1,9 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_cloud_sync_supabase/flutter_cloud_sync_supabase.dart';
 import 'package:flutter_cloud_sync_webdav/flutter_cloud_sync_webdav.dart';
+import 'package:flutter_cloud_sync_icloud/flutter_cloud_sync_icloud.dart';
 
 import '../core/auth_service.dart';
 import '../core/cloud_provider.dart';
@@ -50,6 +54,24 @@ Future<({CloudProvider? provider, CloudAuthService? auth})> createCloudServices(
       final auth = provider.auth;
 
       return (provider: provider, auth: auth);
+
+    case CloudBackendType.icloud:
+      // iCloud 仅支持 iOS/iPadOS
+      if (kIsWeb || !Platform.isIOS) {
+        return (provider: null, auth: null);
+      }
+
+      try {
+        final provider = ICloudProvider();
+        await provider.initialize({});
+
+        final auth = provider.auth;
+
+        return (provider: provider, auth: auth);
+      } catch (e) {
+        // iCloud 不可用（未登录等），返回 null
+        return (provider: null, auth: null);
+      }
   }
 }
 

@@ -36,6 +36,8 @@ PODS:
     - DKImagePickerController/PhotoGallery
     - Flutter
   - Flutter (1.0.0)
+  - flutter_cloud_sync_icloud (0.1.0):
+    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - gal (1.0.0):
@@ -165,6 +167,7 @@ DEPENDENCIES:
   - app_links (from `.symlinks/plugins/app_links/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
+  - flutter_cloud_sync_icloud (from `.symlinks/plugins/flutter_cloud_sync_icloud/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - gal (from `.symlinks/plugins/gal/darwin`)
   - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
@@ -212,6 +215,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
     :path: Flutter
+  flutter_cloud_sync_icloud:
+    :path: ".symlinks/plugins/flutter_cloud_sync_icloud/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   gal:
@@ -253,6 +258,7 @@ SPEC CHECKSUMS:
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_cloud_sync_icloud: de29f5e021ba43b7486b607ecd4813375add50f6
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   gal: 6a522c75909f1244732d4596d11d6a2f86ff37a5
   google_mlkit_commons: 2544377e5503bf78ee7412ccfce0394c2dcb8a6b

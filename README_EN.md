@@ -10,7 +10,7 @@
 
 **Your Data, Your Control - Open Source Accounting App**
 
-**Core Advantage: Self-hosted Supabase/WebDAV servers - Your data, Your control**
+**Core Advantage: iCloud/Self-hosted Supabase/WebDAV servers - Your data, Your control**
 
 <br/>
 
@@ -90,7 +90,7 @@
 </tr>
 </table>
 
-A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **screenshot auto-billing**, **account transfers**, **hierarchical categories**, category statistics, **chart analysis**, data import/export, and self-hosted Supabase/WebDAV cloud sync. Supports **multiple languages** (Simplified/Traditional Chinese, English) and **dark mode**. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
+A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **screenshot auto-billing**, **account transfers**, **hierarchical categories**, category statistics, **chart analysis**, data import/export, and iCloud (iOS)/self-hosted Supabase/WebDAV cloud sync. Supports **multiple languages** (Simplified/Traditional Chinese, English) and **dark mode**. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
 
 ## 📱 Core Features Showcase
 
@@ -138,6 +138,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 | Solution | Best For | Features |
 |----------|----------|----------|
+| **iCloud** | iOS Users | 🆕 Zero config, native integration, seamless Apple ecosystem sync |
 | **Supabase** | Users without NAS | Free tier sufficient, easy setup, cloud-hosted |
 | **WebDAV** | Users with NAS | Fully localized data, supports Synology/UGREEN/Nextcloud |
 
@@ -226,7 +227,26 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - **Stable & Reliable**: No dependency on third-party hosting services, full control
 - **Flexible Choice**: Choose the most suitable solution based on your needs
 
-### Option 1: Custom Supabase (Recommended for Beginners)
+### Option 1: iCloud (Recommended for iOS Users) 🆕
+
+**Use Case**: iOS users seeking zero-configuration, seamless sync experience
+
+**Advantages**:
+
+- ✅ **Zero Configuration**: Works out of the box, no setup required
+- ✅ **Native Integration**: Auto-sync using your Apple ID
+- ✅ **Privacy Protection**: Data stored in your own iCloud Drive
+- ✅ **Multi-Device Sync**: Automatic sync across iPhone and iPad
+
+**How to Use**:
+
+1. Ensure your iOS device is signed into iCloud with iCloud Drive enabled
+2. Open BeeCount → Profile → Cloud Service
+3. Select **iCloud** and start syncing
+
+> 💡 **Note**: iCloud sync only supports iOS devices. For cross-platform sync (iOS + Android), please use Supabase or WebDAV.
+
+### Option 2: Custom Supabase (Recommended for Beginners)
 
 **Use Case**: Suitable for users without NAS devices who want to get started quickly
 
@@ -266,7 +286,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
    - Save and enable configuration
    - Tap "Login", register/sign in and start syncing
 
-### Option 2: WebDAV Server (Recommended for NAS Users)
+### Option 3: WebDAV Server (Recommended for NAS Users)
 
 **Use Case**: For users with NAS devices or private cloud storage
 
@@ -406,12 +426,13 @@ This project uses a Business Source License. Free for personal use, commercial u
 **Q: Can I use it normally without configuring cloud services?**
 A: Absolutely! The app uses local storage by default, and all features work normally. You can still export CSV backups at any time.
 
-**Q: Should I choose Supabase or WebDAV?**
+**Q: Should I choose iCloud, Supabase or WebDAV?**
 A:
 
-- If you have a NAS device or private cloud, we recommend WebDAV (fully localized data)
-- If you don't have a NAS, we recommend Supabase (free, stable, easy to configure)
-- Both support complete sync functionality, choose based on your needs
+- If you're an iOS user and only sync between Apple devices, we recommend **iCloud** (zero config, native integration)
+- If you need cross-platform sync (iOS + Android), we recommend **Supabase** (free, stable, easy to configure)
+- If you have a NAS device or private cloud, we recommend **WebDAV** (fully localized data)
+- All three support complete sync functionality, choose based on your needs
 
 **Q: Why can't I upload after configuring WebDAV?**
 A:
@@ -438,6 +459,7 @@ A: Currently supports CSV format for import/export, compatible with data formats
 **Q: How to sync data across multiple devices?**
 A:
 
+- **iCloud**: Simply sign in with the same Apple ID on iOS devices, data syncs automatically
 - **Supabase**: Configure same URL and anon key on all devices, log in with same account
 - **WebDAV**: Configure same WebDAV server address and credentials on all devices
 

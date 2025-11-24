@@ -41,6 +41,13 @@ class CloudServiceStore {
         // 回退到本地存储
         return CloudServiceConfig.localStorage();
 
+      case 'icloud':
+        // iCloud 无需额外配置，返回 iCloud 类型的配置
+        return const CloudServiceConfig(
+          type: CloudBackendType.icloud,
+          name: 'iCloud',
+        );
+
       default:
         return CloudServiceConfig.localStorage();
     }
@@ -91,6 +98,11 @@ class CloudServiceStore {
         await sp.setString(_kActiveType, 'webdav');
         // Provider 会在下次使用时自动初始化
         break;
+
+      case CloudBackendType.icloud:
+        await sp.setString(_kActiveType, 'icloud');
+        // iCloud 无需额外配置，Provider 会在下次使用时自动初始化
+        break;
     }
   }
 
@@ -109,6 +121,10 @@ class CloudServiceStore {
 
       case CloudBackendType.webdav:
         await sp.setString(_kWebdavCfg, encodeCloudConfig(cfg));
+        break;
+
+      case CloudBackendType.icloud:
+        // iCloud 无需保存额外配置
         break;
     }
   }
@@ -145,6 +161,11 @@ class CloudServiceStore {
         } catch (e) {
           return false;
         }
+
+      case CloudBackendType.icloud:
+        // iCloud 无需配置，直接激活
+        await sp.setString(_kActiveType, 'icloud');
+        return true;
     }
   }
 }

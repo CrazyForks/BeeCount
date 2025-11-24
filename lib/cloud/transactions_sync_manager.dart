@@ -60,7 +60,9 @@ class TransactionsSyncManager implements SyncService {
     _provider = services.provider;
 
     if (_provider == null) {
-      throw StateError('Failed to create cloud provider for ${config.type}');
+      // Provider 创建失败（如 iCloud 未登录），标记为已初始化但无法使用
+      logger.warning('CloudSync', 'Provider not available for ${config.type}');
+      return;
     }
 
     _syncManager = fcs.CloudSyncManager<int>(
@@ -105,6 +107,10 @@ class TransactionsSyncManager implements SyncService {
   @override
   Future<void> uploadCurrentLedger({required int ledgerId}) async {
     await _ensureInitialized();
+
+    if (_syncManager == null) {
+      throw fcs.CloudSyncException('云服务不可用，请检查配置或登录状态');
+    }
 
     try {
       logger.info('CloudSync', '开始上传账本 $ledgerId');
@@ -168,6 +174,10 @@ class TransactionsSyncManager implements SyncService {
       downloadAndRestoreToCurrentLedger({required int ledgerId}) async {
     await _ensureInitialized();
 
+    if (_provider == null) {
+      throw fcs.CloudSyncException('云服务不可用，请检查配置或登录状态');
+    }
+
     try {
       logger.info('CloudSync', '开始下载账本 $ledgerId');
 
@@ -215,6 +225,16 @@ class TransactionsSyncManager implements SyncService {
   @override
   Future<SyncStatus> getStatus({required int ledgerId}) async {
     await _ensureInitialized();
+
+    // 如果 provider 不可用，返回未登录状态
+    if (_syncManager == null || _provider == null) {
+      return SyncStatus(
+        diff: SyncDiff.notLoggedIn,
+        localCount: 0,
+        localFingerprint: '',
+        message: '云服务不可用，请检查配置或登录状态',
+      );
+    }
 
     // 检查缓存
     final cached = _statusCache[ledgerId];
@@ -407,6 +427,10 @@ class TransactionsSyncManager implements SyncService {
   @override
   Future<void> deleteRemoteBackup({required int ledgerId}) async {
     await _ensureInitialized();
+
+    if (_syncManager == null) {
+      throw fcs.CloudSyncException('云服务不可用，请检查配置或登录状态');
+    }
 
     try {
       logger.info('CloudSync', '删除云端备份: $ledgerId');
