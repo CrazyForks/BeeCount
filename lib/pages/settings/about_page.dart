@@ -123,7 +123,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                         subtitle: AppLocalizations.of(context).aboutWeChatGroupDesc,
                         onTap: () async {
                           final url = Uri.parse(
-                              'https://github.com/TNT-Likely/BeeCount/blob/main/demo/wechat_group_qr.jpg');
+                              'https://github.com/TNT-Likely/BeeCount/blob/main/demo/wechat/README.md');
                           await _tryOpenUrl(url);
                         },
                       ),
