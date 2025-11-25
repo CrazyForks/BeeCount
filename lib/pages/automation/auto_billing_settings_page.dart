@@ -212,22 +212,6 @@ class _AndroidAutoBillingPageState extends ConsumerState<AndroidAutoBillingPage>
                 // 电池优化设置引导卡片
                 _buildBatteryOptimizationCard(context, primaryColor, l10n),
 
-                const SizedBox(height: 16),
-
-                // 支持的支付方式
-                _buildSupportCard(
-                  context,
-                  primaryColor,
-                  l10n,
-                  icon: Icons.payment,
-                  title: l10n.supportedPayments,
-                  items: [
-                    l10n.supportedAlipay,
-                    l10n.supportedWechat,
-                    l10n.supportedUnionpay,
-                    l10n.supportedOthers,
-                  ],
-                ),
               ],
             ),
           ),

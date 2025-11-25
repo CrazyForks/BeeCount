@@ -1,4 +1,6 @@
 # Uncomment this line to define a global platform for your project
+# 设置为15.5（MLKit要求）
+# AppIntents功能通过弱链接和条件编译实现，仅iOS 16+可用
 platform :ios, '15.5'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.

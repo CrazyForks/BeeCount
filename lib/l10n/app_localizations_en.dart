@@ -3065,21 +3065,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disabled => 'Disabled';
 
   @override
-  String get supportedPayments => 'Supported Payment Methods';
-
-  @override
-  String get supportedAlipay => '✅ Alipay';
-
-  @override
-  String get supportedWechat => '✅ WeChat Pay';
-
-  @override
-  String get supportedUnionpay => '✅ UnionPay';
-
-  @override
-  String get supportedOthers => '⚠️ Other payment methods may have lower recognition accuracy';
-
-  @override
   String get photosPermissionRequired => 'Photos permission required for screenshot monitoring';
 
   @override
@@ -3113,74 +3098,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iosAutoFeatureDesc => 'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.';
 
   @override
-  String get iosAutoShortcutQuickAdd => 'Quick Add Shortcut';
+  String get iosAutoShortcutConfigTitle => 'Configuration Steps:';
 
   @override
-  String get iosAutoShortcutQuickAddDesc => 'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.';
+  String get iosAutoShortcutStep1 => 'Open \"Shortcuts\" app, tap \"+\" in top right to create new shortcut';
 
   @override
-  String get iosAutoShortcutImport => 'One-Click Import Shortcut';
+  String get iosAutoShortcutStep2 => 'Add \"Take Screenshot\" action';
 
   @override
-  String get iosAutoShortcutOpenApp => 'Or Manually Open Shortcuts App';
+  String get iosAutoShortcutStep3 => 'Search and add \"BeeCount - Auto Billing\" action';
 
   @override
-  String get iosAutoShortcutConfigTitle => 'Configuration Steps (Recommended - URL Parameter):';
+  String get iosAutoShortcutStep4 => 'Set the screenshot parameter of \"BeeCount\" to the previous \"Screenshot\"';
 
   @override
-  String get iosAutoShortcutStep1 => 'Open \"Shortcuts\" app';
+  String get iosAutoShortcutStep5 => '(Optional) Go to Settings > Accessibility > Touch > Back Tap, bind this shortcut';
 
   @override
-  String get iosAutoShortcutStep2 => 'Tap \"+\" in top right to create new shortcut';
+  String get iosAutoShortcutStep6 => 'Done! Double tap phone back during payment for quick billing';
 
   @override
-  String get iosAutoShortcutStep3 => 'Add \"Take Screenshot\" action (get latest screenshot)';
-
-  @override
-  String get iosAutoShortcutStep4 => 'Add \"Extract Text from Screenshot\" action';
-
-  @override
-  String get iosAutoShortcutStep5 => 'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)';
-
-  @override
-  String get iosAutoShortcutStep6 => 'Add \"URL Encode\" action: encode the replaced text';
-
-  @override
-  String get iosAutoShortcutStep7 => 'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]';
-
-  @override
-  String get iosAutoShortcutStep8 => 'Tap shortcut settings (three dots in top right)';
-
-  @override
-  String get iosAutoShortcutStep9 => 'In \"When...\" add \"When Screenshot is taken\" trigger';
-
-  @override
-  String get iosAutoShortcutStep10 => 'Save and test: auto-identify after screenshot';
-
-  @override
-  String get iosAutoShortcutRecommendedTip => '✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit';
+  String get iosAutoShortcutRecommendedTip => '✅ Recommended: After binding the shortcut to \"Back Tap\", double tap phone back during payment to auto-screenshot and recognize billing, no manual screenshot needed.';
 
   @override
   String get iosAutoBackTapTitle => '💡 Double Tap Back to Trigger (Recommended)';
 
   @override
   String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
-
-  @override
-  String iosAutoImportFailed(Object error) {
-    return 'Import failed: $error';
-  }
-
-  @override
-  String iosAutoOpenAppFailed(Object error) {
-    return 'Open failed: $error';
-  }
-
-  @override
-  String get iosAutoCannotOpenLink => 'Cannot open link, please check network connection';
-
-  @override
-  String get iosAutoCannotOpenShortcuts => 'Cannot open Shortcuts app';
 
   @override
   String get aiSettingsTitle => 'AI Recognition';
@@ -3756,4 +3701,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => 'Perfect for detailed management';
+
+  @override
+  String get iosVersionWarningTitle => 'Requires iOS 16.0 or later';
+
+  @override
+  String get iosVersionWarningDesc => 'Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.';
 }

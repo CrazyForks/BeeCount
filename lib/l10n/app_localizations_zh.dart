@@ -3065,21 +3065,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get disabled => '已禁用';
 
   @override
-  String get supportedPayments => '支持的支付方式';
-
-  @override
-  String get supportedAlipay => '✅ 支付宝';
-
-  @override
-  String get supportedWechat => '✅ 微信支付';
-
-  @override
-  String get supportedUnionpay => '✅ 云闪付';
-
-  @override
-  String get supportedOthers => '⚠️ 其他支付方式识别准确率可能较低';
-
-  @override
   String get photosPermissionRequired => '需要照片权限才能监听截图';
 
   @override
@@ -3113,74 +3098,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get iosAutoFeatureDesc => '通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。';
 
   @override
-  String get iosAutoShortcutQuickAdd => '快速添加快捷指令';
+  String get iosAutoShortcutConfigTitle => '配置步骤：';
 
   @override
-  String get iosAutoShortcutQuickAddDesc => '点击下方按钮可以直接导入配置好的快捷指令，或手动打开快捷指令App配置。';
+  String get iosAutoShortcutStep1 => '打开\"快捷指令\"应用，点击右上角\"+\"创建新快捷指令';
 
   @override
-  String get iosAutoShortcutImport => '一键导入快捷指令';
+  String get iosAutoShortcutStep2 => '添加\"截屏\"操作';
 
   @override
-  String get iosAutoShortcutOpenApp => '或手动打开快捷指令App配置';
+  String get iosAutoShortcutStep3 => '搜索并添加\"蜜蜂记账 - 截图自动记账\"操作';
 
   @override
-  String get iosAutoShortcutConfigTitle => '配置步骤（推荐方式 - URL参数传递）：';
+  String get iosAutoShortcutStep4 => '将\"蜜蜂记账\"的截图参数设置为上一步的\"截屏\"';
 
   @override
-  String get iosAutoShortcutStep1 => '打开\"快捷指令\"应用';
+  String get iosAutoShortcutStep5 => '（可选）在系统设置 > 辅助功能 > 触控 > 轻点背面中，绑定此快捷指令';
 
   @override
-  String get iosAutoShortcutStep2 => '点击右上角\"+\"创建新快捷指令';
+  String get iosAutoShortcutStep6 => '完成！支付时双击手机背部即可快速记账';
 
   @override
-  String get iosAutoShortcutStep3 => '添加\"截屏\"操作（获取最新截图）';
-
-  @override
-  String get iosAutoShortcutStep4 => '添加\"从截屏中提取文本\"操作';
-
-  @override
-  String get iosAutoShortcutStep5 => '添加\"替换文本\"操作：将\"提取的文本\"中的\"\\n\"替换为\",\"（逗号）';
-
-  @override
-  String get iosAutoShortcutStep6 => '添加\"URL编码\"操作：对\"替换后的文本\"进行URL编码';
-
-  @override
-  String get iosAutoShortcutStep7 => '添加\"打开URL\"操作，URL填写：\nbeecount://auto-billing?text=[URL编码后的文本]';
-
-  @override
-  String get iosAutoShortcutStep8 => '点击快捷指令设置（右上角三点）';
-
-  @override
-  String get iosAutoShortcutStep9 => '在\"当...时运行\"中添加\"截屏时\"触发器';
-
-  @override
-  String get iosAutoShortcutStep10 => '保存并测试：截图后会自动识别';
-
-  @override
-  String get iosAutoShortcutRecommendedTip => '✅ 推荐：URL参数传递，无需权限，体验最佳。关键步骤：\n• 替换文本时将换行符\\n替换为逗号,（避免URL截断）\n• 使用URL编码操作（避免中文乱码）\n• 一般截图文本不会超过2048字符限制';
+  String get iosAutoShortcutRecommendedTip => '✅ 推荐：在\"轻点背面\"中绑定快捷指令后，支付时双击手机背部即可自动截图并识别记账，无需手动截图。';
 
   @override
   String get iosAutoBackTapTitle => '💡 双击背部快速触发（推荐）';
 
   @override
   String get iosAutoBackTapDesc => '设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图';
-
-  @override
-  String iosAutoImportFailed(Object error) {
-    return '导入失败: $error';
-  }
-
-  @override
-  String iosAutoOpenAppFailed(Object error) {
-    return '打开失败: $error';
-  }
-
-  @override
-  String get iosAutoCannotOpenLink => '无法打开链接，请检查网络连接';
-
-  @override
-  String get iosAutoCannotOpenShortcuts => '无法打开快捷指令App';
 
   @override
   String get aiSettingsTitle => 'AI智能识别';
@@ -3756,6 +3701,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => '适合需要精细管理的用户';
+
+  @override
+  String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
+
+  @override
+  String get iosVersionWarningDesc => '截图自动记账功能使用了 iOS 16 引入的 App Intents 框架。您的设备系统版本较低，暂不支持此功能。\n\n请升级到 iOS 16 或更高版本以使用此功能。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -6821,21 +6772,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get disabled => '已停用';
 
   @override
-  String get supportedPayments => '支援的支付方式';
-
-  @override
-  String get supportedAlipay => '✅ 支付寶';
-
-  @override
-  String get supportedWechat => '✅ 微信支付';
-
-  @override
-  String get supportedUnionpay => '✅ 雲閃付';
-
-  @override
-  String get supportedOthers => '⚠️ 其他支付方式識別準確率可能較低';
-
-  @override
   String get photosPermissionRequired => '需要相片權限才能監聽截圖';
 
   @override
@@ -6869,74 +6805,34 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get iosAutoFeatureDesc => '透過 iOS「捷徑」應用程式，實現截圖後自動識別支付資訊並記帳。設定後，每次截圖都會自動觸發識別。';
 
   @override
-  String get iosAutoShortcutQuickAdd => '快速新增捷徑';
-
-  @override
-  String get iosAutoShortcutQuickAddDesc => '點擊下方按鈕可以直接匯入設定好的捷徑，或手動開啟捷徑 App 設定。';
-
-  @override
-  String get iosAutoShortcutImport => '一鍵匯入捷徑';
-
-  @override
-  String get iosAutoShortcutOpenApp => '或手動開啟捷徑 App 設定';
-
-  @override
   String get iosAutoShortcutConfigTitle => '設定步驟（推薦方式 - URL 參數傳遞）：';
 
   @override
-  String get iosAutoShortcutStep1 => '開啟「捷徑」應用程式';
+  String get iosAutoShortcutStep1 => '開啟「捷徑」應用程式，點擊右上角「+」建立新捷徑';
 
   @override
-  String get iosAutoShortcutStep2 => '點擊右上角「+」建立新捷徑';
+  String get iosAutoShortcutStep2 => '新增「截圖」操作';
 
   @override
-  String get iosAutoShortcutStep3 => '新增「截圖」操作（取得最新截圖）';
+  String get iosAutoShortcutStep3 => '搜尋並新增「蜜蜂記帳 - 截圖自動記帳」操作';
 
   @override
-  String get iosAutoShortcutStep4 => '新增「從截圖中擷取文字」操作';
+  String get iosAutoShortcutStep4 => '將「蜜蜂記帳」的截圖參數設定為上一步的「截圖」';
 
   @override
-  String get iosAutoShortcutStep5 => '新增「取代文字」操作：將「擷取的文字」中的「\\n」取代為「,」（逗號）';
+  String get iosAutoShortcutStep5 => '（可選）在系統設定 > 輔助使用 > 觸控 > 輕點背面中，綁定此捷徑';
 
   @override
-  String get iosAutoShortcutStep6 => '新增「URL 編碼」操作：對「取代後的文字」進行 URL 編碼';
+  String get iosAutoShortcutStep6 => '完成！支付時雙擊手機背部即可快速記帳';
 
   @override
-  String get iosAutoShortcutStep7 => '新增「開啟 URL」操作，URL 填寫：\nbeecount://auto-billing?text=[URL 編碼後的文字]';
-
-  @override
-  String get iosAutoShortcutStep8 => '點擊捷徑設定（右上角三點）';
-
-  @override
-  String get iosAutoShortcutStep9 => '在「當...時執行」中新增「截圖時」觸發程序';
-
-  @override
-  String get iosAutoShortcutStep10 => '儲存並測試：截圖後會自動識別';
-
-  @override
-  String get iosAutoShortcutRecommendedTip => '✅ 推薦：URL 參數傳遞，無需權限，體驗最佳。關鍵步驟：\n• 取代文字時將換行符號\\n取代為逗號,（避免 URL 截斷）\n• 使用 URL 編碼操作（避免中文亂碼）\n• 一般截圖文字不會超過 2048 字元限制';
+  String get iosAutoShortcutRecommendedTip => '✅ 推薦：在「輕點背面」中綁定捷徑後，支付時雙擊手機背部即可自動截圖並識別記帳，無需手動截圖。';
 
   @override
   String get iosAutoBackTapTitle => '💡 雙擊背面快速觸發（推薦）';
 
   @override
   String get iosAutoBackTapDesc => '設定 > 輔助使用 > 觸控 > 背面輕點\n• 選擇「點兩下」或「點三下」\n• 選擇剛建立的捷徑\n• 完成後，支付時雙擊手機背面即可自動記帳，無需截圖';
-
-  @override
-  String iosAutoImportFailed(Object error) {
-    return '匯入失敗: $error';
-  }
-
-  @override
-  String iosAutoOpenAppFailed(Object error) {
-    return '開啟失敗: $error';
-  }
-
-  @override
-  String get iosAutoCannotOpenLink => '無法開啟連結，請檢查網路連線';
-
-  @override
-  String get iosAutoCannotOpenShortcuts => '無法開啟捷徑 App';
 
   @override
   String get aiSettingsTitle => 'AI 智慧識別';
@@ -7512,4 +7408,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => '適合精細化管理';
+
+  @override
+  String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
+
+  @override
+  String get iosVersionWarningDesc => '截圖自動記帳功能使用了 iOS 16 引入的 App Intents 框架。您的裝置系統版本較低，暫不支援此功能。\n\n請升級到 iOS 16 或更高版本以使用此功能。';
 }

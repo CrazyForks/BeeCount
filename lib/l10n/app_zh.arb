@@ -1176,11 +1176,6 @@
   "autoBilling": "自动记账",
   "enabled": "已启用",
   "disabled": "已禁用",
-  "supportedPayments": "支持的支付方式",
-  "supportedAlipay": "✅ 支付宝",
-  "supportedWechat": "✅ 微信支付",
-  "supportedUnionpay": "✅ 云闪付",
-  "supportedOthers": "⚠️ 其他支付方式识别准确率可能较低",
   "photosPermissionRequired": "需要照片权限才能监听截图",
   "enableSuccess": "自动记账已启用",
   "disableSuccess": "自动记账已禁用",
@@ -1192,42 +1187,16 @@
   "enableFailed": "启用失败",
   "disableFailed": "禁用失败",
   "iosAutoFeatureDesc": "通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。",
-  "iosAutoShortcutQuickAdd": "快速添加快捷指令",
-  "iosAutoShortcutQuickAddDesc": "点击下方按钮可以直接导入配置好的快捷指令，或手动打开快捷指令App配置。",
-  "iosAutoShortcutImport": "一键导入快捷指令",
-  "iosAutoShortcutOpenApp": "或手动打开快捷指令App配置",
-  "iosAutoShortcutConfigTitle": "配置步骤（推荐方式 - URL参数传递）：",
-  "iosAutoShortcutStep1": "打开\"快捷指令\"应用",
-  "iosAutoShortcutStep2": "点击右上角\"+\"创建新快捷指令",
-  "iosAutoShortcutStep3": "添加\"截屏\"操作（获取最新截图）",
-  "iosAutoShortcutStep4": "添加\"从截屏中提取文本\"操作",
-  "iosAutoShortcutStep5": "添加\"替换文本\"操作：将\"提取的文本\"中的\"\\n\"替换为\",\"（逗号）",
-  "iosAutoShortcutStep6": "添加\"URL编码\"操作：对\"替换后的文本\"进行URL编码",
-  "iosAutoShortcutStep7": "添加\"打开URL\"操作，URL填写：\nbeecount://auto-billing?text=[URL编码后的文本]",
-  "iosAutoShortcutStep8": "点击快捷指令设置（右上角三点）",
-  "iosAutoShortcutStep9": "在\"当...时运行\"中添加\"截屏时\"触发器",
-  "iosAutoShortcutStep10": "保存并测试：截图后会自动识别",
-  "iosAutoShortcutRecommendedTip": "✅ 推荐：URL参数传递，无需权限，体验最佳。关键步骤：\n• 替换文本时将换行符\\n替换为逗号,（避免URL截断）\n• 使用URL编码操作（避免中文乱码）\n• 一般截图文本不会超过2048字符限制",
+  "iosAutoShortcutConfigTitle": "配置步骤：",
+  "iosAutoShortcutStep1": "打开\"快捷指令\"应用，点击右上角\"+\"创建新快捷指令",
+  "iosAutoShortcutStep2": "添加\"截屏\"操作",
+  "iosAutoShortcutStep3": "搜索并添加\"蜜蜂记账 - 截图自动记账\"操作",
+  "iosAutoShortcutStep4": "将\"蜜蜂记账\"的截图参数设置为上一步的\"截屏\"",
+  "iosAutoShortcutStep5": "（可选）在系统设置 > 辅助功能 > 触控 > 轻点背面中，绑定此快捷指令",
+  "iosAutoShortcutStep6": "完成！支付时双击手机背部即可快速记账",
+  "iosAutoShortcutRecommendedTip": "✅ 推荐：在\"轻点背面\"中绑定快捷指令后，支付时双击手机背部即可自动截图并识别记账，无需手动截图。",
   "iosAutoBackTapTitle": "💡 双击背部快速触发（推荐）",
   "iosAutoBackTapDesc": "设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图",
-  "iosAutoImportFailed": "导入失败: {error}",
-  "@iosAutoImportFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "iosAutoOpenAppFailed": "打开失败: {error}",
-  "@iosAutoOpenAppFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "iosAutoCannotOpenLink": "无法打开链接，请检查网络连接",
-  "iosAutoCannotOpenShortcuts": "无法打开快捷指令App",
   "aiSettingsTitle": "AI智能识别",
   "aiSettingsSubtitle": "配置AI模型和识别策略",
   "aiEnableTitle": "启用AI智能识别",
@@ -1570,5 +1539,7 @@
   "welcomeCategoryModeHierarchicalDescription": "精细管理，清晰明了",
   "welcomeCategoryModeHierarchicalFeature1": "支持父子分类层级",
   "welcomeCategoryModeHierarchicalFeature2": "更细致的账单归类",
-  "welcomeCategoryModeHierarchicalFeature3": "适合需要精细管理的用户"
+  "welcomeCategoryModeHierarchicalFeature3": "适合需要精细管理的用户",
+  "iosVersionWarningTitle": "需要 iOS 16.0 或更高版本",
+  "iosVersionWarningDesc": "截图自动记账功能使用了 iOS 16 引入的 App Intents 框架。您的设备系统版本较低，暂不支持此功能。\n\n请升级到 iOS 16 或更高版本以使用此功能。"
 }

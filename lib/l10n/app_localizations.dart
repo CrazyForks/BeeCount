@@ -5832,36 +5832,6 @@ abstract class AppLocalizations {
   /// **'Disabled'**
   String get disabled;
 
-  /// No description provided for @supportedPayments.
-  ///
-  /// In en, this message translates to:
-  /// **'Supported Payment Methods'**
-  String get supportedPayments;
-
-  /// No description provided for @supportedAlipay.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ Alipay'**
-  String get supportedAlipay;
-
-  /// No description provided for @supportedWechat.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ WeChat Pay'**
-  String get supportedWechat;
-
-  /// No description provided for @supportedUnionpay.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ UnionPay'**
-  String get supportedUnionpay;
-
-  /// No description provided for @supportedOthers.
-  ///
-  /// In en, this message translates to:
-  /// **'⚠️ Other payment methods may have lower recognition accuracy'**
-  String get supportedOthers;
-
   /// No description provided for @photosPermissionRequired.
   ///
   /// In en, this message translates to:
@@ -5928,100 +5898,52 @@ abstract class AppLocalizations {
   /// **'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.'**
   String get iosAutoFeatureDesc;
 
-  /// No description provided for @iosAutoShortcutQuickAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Add Shortcut'**
-  String get iosAutoShortcutQuickAdd;
-
-  /// No description provided for @iosAutoShortcutQuickAddDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.'**
-  String get iosAutoShortcutQuickAddDesc;
-
-  /// No description provided for @iosAutoShortcutImport.
-  ///
-  /// In en, this message translates to:
-  /// **'One-Click Import Shortcut'**
-  String get iosAutoShortcutImport;
-
-  /// No description provided for @iosAutoShortcutOpenApp.
-  ///
-  /// In en, this message translates to:
-  /// **'Or Manually Open Shortcuts App'**
-  String get iosAutoShortcutOpenApp;
-
   /// No description provided for @iosAutoShortcutConfigTitle.
   ///
   /// In en, this message translates to:
-  /// **'Configuration Steps (Recommended - URL Parameter):'**
+  /// **'Configuration Steps:'**
   String get iosAutoShortcutConfigTitle;
 
   /// No description provided for @iosAutoShortcutStep1.
   ///
   /// In en, this message translates to:
-  /// **'Open \"Shortcuts\" app'**
+  /// **'Open \"Shortcuts\" app, tap \"+\" in top right to create new shortcut'**
   String get iosAutoShortcutStep1;
 
   /// No description provided for @iosAutoShortcutStep2.
   ///
   /// In en, this message translates to:
-  /// **'Tap \"+\" in top right to create new shortcut'**
+  /// **'Add \"Take Screenshot\" action'**
   String get iosAutoShortcutStep2;
 
   /// No description provided for @iosAutoShortcutStep3.
   ///
   /// In en, this message translates to:
-  /// **'Add \"Take Screenshot\" action (get latest screenshot)'**
+  /// **'Search and add \"BeeCount - Auto Billing\" action'**
   String get iosAutoShortcutStep3;
 
   /// No description provided for @iosAutoShortcutStep4.
   ///
   /// In en, this message translates to:
-  /// **'Add \"Extract Text from Screenshot\" action'**
+  /// **'Set the screenshot parameter of \"BeeCount\" to the previous \"Screenshot\"'**
   String get iosAutoShortcutStep4;
 
   /// No description provided for @iosAutoShortcutStep5.
   ///
   /// In en, this message translates to:
-  /// **'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)'**
+  /// **'(Optional) Go to Settings > Accessibility > Touch > Back Tap, bind this shortcut'**
   String get iosAutoShortcutStep5;
 
   /// No description provided for @iosAutoShortcutStep6.
   ///
   /// In en, this message translates to:
-  /// **'Add \"URL Encode\" action: encode the replaced text'**
+  /// **'Done! Double tap phone back during payment for quick billing'**
   String get iosAutoShortcutStep6;
-
-  /// No description provided for @iosAutoShortcutStep7.
-  ///
-  /// In en, this message translates to:
-  /// **'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]'**
-  String get iosAutoShortcutStep7;
-
-  /// No description provided for @iosAutoShortcutStep8.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap shortcut settings (three dots in top right)'**
-  String get iosAutoShortcutStep8;
-
-  /// No description provided for @iosAutoShortcutStep9.
-  ///
-  /// In en, this message translates to:
-  /// **'In \"When...\" add \"When Screenshot is taken\" trigger'**
-  String get iosAutoShortcutStep9;
-
-  /// No description provided for @iosAutoShortcutStep10.
-  ///
-  /// In en, this message translates to:
-  /// **'Save and test: auto-identify after screenshot'**
-  String get iosAutoShortcutStep10;
 
   /// No description provided for @iosAutoShortcutRecommendedTip.
   ///
   /// In en, this message translates to:
-  /// **'✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit'**
+  /// **'✅ Recommended: After binding the shortcut to \"Back Tap\", double tap phone back during payment to auto-screenshot and recognize billing, no manual screenshot needed.'**
   String get iosAutoShortcutRecommendedTip;
 
   /// No description provided for @iosAutoBackTapTitle.
@@ -6035,30 +5957,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed'**
   String get iosAutoBackTapDesc;
-
-  /// No description provided for @iosAutoImportFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Import failed: {error}'**
-  String iosAutoImportFailed(Object error);
-
-  /// No description provided for @iosAutoOpenAppFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Open failed: {error}'**
-  String iosAutoOpenAppFailed(Object error);
-
-  /// No description provided for @iosAutoCannotOpenLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot open link, please check network connection'**
-  String get iosAutoCannotOpenLink;
-
-  /// No description provided for @iosAutoCannotOpenShortcuts.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot open Shortcuts app'**
-  String get iosAutoCannotOpenShortcuts;
 
   /// No description provided for @aiSettingsTitle.
   ///
@@ -7157,6 +7055,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Perfect for detailed management'**
   String get welcomeCategoryModeHierarchicalFeature3;
+
+  /// No description provided for @iosVersionWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires iOS 16.0 or later'**
+  String get iosVersionWarningTitle;
+
+  /// No description provided for @iosVersionWarningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.'**
+  String get iosVersionWarningDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
