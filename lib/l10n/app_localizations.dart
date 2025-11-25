@@ -2244,6 +2244,12 @@ abstract class AppLocalizations {
   /// **'• Migrate all transaction records from one category to another\n• After migration, all transaction data from the source category will be transferred to the target category\n• This operation cannot be undone, please choose carefully'**
   String get categoryMigrationDescriptionContent;
 
+  /// No description provided for @categoryMigrationTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Type'**
+  String get categoryMigrationTypeLabel;
+
   /// No description provided for @categoryMigrationFromLabel.
   ///
   /// In en, this message translates to:

@@ -442,6 +442,7 @@
   "categoryMigrationTitle": "分类迁移",
   "categoryMigrationDescription": "分类迁移说明",
   "categoryMigrationDescriptionContent": "• 将指定分类的所有交易记录迁移到另一个分类\n• 迁移后，原分类的交易数据将全部转移到目标分类\n• 此操作不可撤销，请谨慎选择",
+  "categoryMigrationTypeLabel": "选择类型",
   "categoryMigrationFromLabel": "迁出分类",
   "categoryMigrationFromHint": "选择要迁出的分类",
   "categoryMigrationToLabel": "迁入分类",

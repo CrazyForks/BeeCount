@@ -1179,6 +1179,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryMigrationDescriptionContent => '• 将指定分类的所有交易记录迁移到另一个分类\n• 迁移后，原分类的交易数据将全部转移到目标分类\n• 此操作不可撤销，请谨慎选择';
 
   @override
+  String get categoryMigrationTypeLabel => '选择类型';
+
+  @override
   String get categoryMigrationFromLabel => '迁出分类';
 
   @override
@@ -4937,6 +4940,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryMigrationDescriptionContent => '• 將指定分類的所有交易記錄遷移到另一個分類\n• 遷移後，原分類的交易資料將全部轉移到目標分類\n• 此操作不可撤銷，請謹慎選擇';
+
+  @override
+  String get categoryMigrationTypeLabel => '選擇類型';
 
   @override
   String get categoryMigrationFromLabel => '遷出分類';

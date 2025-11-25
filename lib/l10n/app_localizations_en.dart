@@ -1179,6 +1179,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryMigrationDescriptionContent => '• Migrate all transaction records from one category to another\n• After migration, all transaction data from the source category will be transferred to the target category\n• This operation cannot be undone, please choose carefully';
 
   @override
+  String get categoryMigrationTypeLabel => 'Select Type';
+
+  @override
   String get categoryMigrationFromLabel => 'From Category';
 
   @override

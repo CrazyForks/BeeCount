@@ -307,6 +307,7 @@
   "categoryMigrationTitle": "分類遷移",
   "categoryMigrationDescription": "分類遷移說明",
   "categoryMigrationDescriptionContent": "• 將指定分類的所有交易記錄遷移到另一個分類\n• 遷移後，原分類的交易資料將全部轉移到目標分類\n• 此操作不可撤銷，請謹慎選擇",
+  "categoryMigrationTypeLabel": "選擇類型",
   "categoryMigrationFromLabel": "遷出分類",
   "categoryMigrationFromHint": "選擇要遷出的分類",
   "categoryMigrationToLabel": "遷入分類",
