@@ -2,24 +2,121 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import '../ai/ai_settings_page.dart';
-import '../automation/ocr_billing_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import '../../l10n/app_localizations.dart';
-import '../../utils/ui_scale_extensions.dart';
 
 /// 智能记账二级页面
 class SmartBillingPage extends ConsumerWidget {
   const SmartBillingPage({super.key});
 
+  /// 显示功能引导弹窗
+  void _showFeatureGuideDialog(
+    BuildContext context,
+    String title,
+    String description,
+    String aiRequirement,
+    bool requiresAI,
+  ) {
+    final l10n = AppLocalizations.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.info_outline, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            Text(title),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              description,
+              style: const TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: requiresAI
+                    ? Colors.orange.withOpacity(0.1)
+                    : Colors.blue.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: requiresAI ? Colors.orange : Colors.blue,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    requiresAI ? Icons.warning_amber : Icons.psychology,
+                    color: requiresAI ? Colors.orange : Colors.blue,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      aiRequirement,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: requiresAI ? Colors.orange[900] : Colors.blue[900],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.touch_app,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      l10n.smartBillingGuideHint,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.commonKnow),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final cameraFirst = ref.watch(fabCameraFirstProvider).value ?? false;
 
     return Scaffold(
       backgroundColor: BeeTokens.scaffoldBackground(context),
@@ -34,11 +131,12 @@ class SmartBillingPage extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                // AI设置卡片
                 SectionCard(
                   margin: EdgeInsets.zero,
                   child: Column(
                     children: [
-                      // AI智能识别
+                      // AI智能识别设置
                       AppListTile(
                         leading: Icons.psychology_outlined,
                         title: l10n.aiSettingsTitle,
@@ -64,122 +162,101 @@ class SmartBillingPage extends ConsumerWidget {
                           );
                         },
                       ),
-                      BeeTokens.cardDivider(context),
-                      // OCR扫描记账
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // 快速记账功能引导
+                SectionCard(
+                  margin: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      // 图片记账
                       AppListTile(
-                        leading: Icons.document_scanner_outlined,
-                        title: l10n.ocrBilling,
-                        subtitle: l10n.ocrBillingDesc,
-                        trailing: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'BETA',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const OcrBillingPage()),
+                        leading: Icons.photo_library_outlined,
+                        title: l10n.smartBillingImageBilling,
+                        subtitle: l10n.smartBillingImageBillingDesc,
+                        onTap: () {
+                          _showFeatureGuideDialog(
+                            context,
+                            l10n.smartBillingImageBilling,
+                            l10n.smartBillingImageBillingGuide,
+                            l10n.smartBillingAIOptional,
+                            false,
                           );
                         },
                       ),
                       BeeTokens.cardDivider(context),
-                      // 截图自动记账
+
+                      // 拍照记账
                       AppListTile(
-                        leading: Icons.auto_fix_high,
-                        title: l10n.autoScreenshotBilling,
-                        subtitle: Platform.isAndroid
-                            ? l10n.autoScreenshotBillingDesc
-                            : '通过快捷指令实现截图自动识别记账',
-                        trailing: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'BETA',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const AutoBillingSettingsPage()),
+                        leading: Icons.camera_alt_outlined,
+                        title: l10n.smartBillingCameraBilling,
+                        subtitle: l10n.smartBillingCameraBillingDesc,
+                        onTap: () {
+                          _showFeatureGuideDialog(
+                            context,
+                            l10n.smartBillingCameraBilling,
+                            l10n.smartBillingCameraBillingGuide,
+                            l10n.smartBillingAIOptional,
+                            false,
                           );
                         },
                       ),
                       BeeTokens.cardDivider(context),
-                      // FAB行为切换
-                      InkWell(
-                        onTap: () async {
-                          final newValue = !cameraFirst;
-                          await ref.read(fabBehaviorSetterProvider).setCameraFirst(newValue);
-                          ref.invalidate(fabCameraFirstProvider);
+
+                      // 语音记账
+                      AppListTile(
+                        leading: Icons.mic_outlined,
+                        title: l10n.smartBillingVoiceBilling,
+                        subtitle: l10n.smartBillingVoiceBillingDesc,
+                        onTap: () {
+                          _showFeatureGuideDialog(
+                            context,
+                            l10n.smartBillingVoiceBilling,
+                            l10n.smartBillingVoiceBillingGuide,
+                            l10n.smartBillingAIRequired,
+                            true,
+                          );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  cameraFirst ? Icons.camera_alt : Icons.edit,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 24,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      l10n.aiFabSettingTitle,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                        color: BeeTokens.textPrimary(context),
-                                      ),
-                                    ),
-                                    Text(
-                                      cameraFirst ? l10n.aiFabSettingDescCamera : l10n.aiFabSettingDescManual,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: BeeTokens.textSecondary(context),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Switch(
-                                value: cameraFirst,
-                                onChanged: (value) async {
-                                  await ref.read(fabBehaviorSetterProvider).setCameraFirst(value);
-                                  ref.invalidate(fabCameraFirstProvider);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
                     ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // 截图自动记账
+                SectionCard(
+                  margin: EdgeInsets.zero,
+                  child: AppListTile(
+                    leading: Icons.auto_fix_high,
+                    title: l10n.autoScreenshotBilling,
+                    subtitle: Platform.isAndroid
+                        ? l10n.autoScreenshotBillingDesc
+                        : l10n.autoScreenshotBillingIosDesc,
+                    trailing: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'BETA',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const AutoBillingSettingsPage()),
+                      );
+                    },
                   ),
                 ),
               ],

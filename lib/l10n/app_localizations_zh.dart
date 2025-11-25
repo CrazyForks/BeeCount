@@ -43,6 +43,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonOk => '确定';
 
   @override
+  String get commonKnow => '知道了';
+
+  @override
   String get commonNo => '否';
 
   @override
@@ -64,7 +67,71 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonNext => '下一步';
 
   @override
-  String get fabLongPressTip => '长按可拍照记账';
+  String get fabActionCamera => '拍照';
+
+  @override
+  String get fabActionGallery => '相册';
+
+  @override
+  String get fabActionVoice => '语音';
+
+  @override
+  String get fabActionVoiceDisabled => '需要启用AI并配置 GLM API';
+
+  @override
+  String get fabSpeedDialTip => '长按展开更多记账方式';
+
+  @override
+  String get voiceRecordingTitle => '语音记账';
+
+  @override
+  String get voiceRecordingPreparing => '准备录音...';
+
+  @override
+  String get voiceRecordingInProgress => '正在录音...';
+
+  @override
+  String get voiceRecordingProcessing => '正在识别...';
+
+  @override
+  String voiceRecordingDuration(int duration) {
+    return '录音时长: $duration秒';
+  }
+
+  @override
+  String get voiceRecordingSuccess => '语音记账成功';
+
+  @override
+  String get voiceRecordingNoLedger => '未找到当前账本';
+
+  @override
+  String get voiceRecordingNoInfo => '未识别到记账信息';
+
+  @override
+  String get voiceRecordingPermissionDenied => '需要麦克风权限才能录音';
+
+  @override
+  String voiceRecordingStartFailed(String error) {
+    return '启动录音失败: $error';
+  }
+
+  @override
+  String voiceRecordingFailed(String error) {
+    return '录音失败: $error';
+  }
+
+  @override
+  String voiceRecordingRecognizeFailed(String error) {
+    return '识别失败: $error';
+  }
+
+  @override
+  String voiceRecordingNoInfoDetected(String text) {
+    return '未能识别账单信息: $text';
+  }
+
+  @override
+  String get voiceRecordingNoSpeech => '未检测到语音输入';
 
   @override
   String get commonPrevious => '上一步';
@@ -3191,15 +3258,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiLocalModelUnavailable => '本地模型训练中，暂不可用';
 
   @override
-  String get aiFabSettingTitle => '快捷记账按钮优先拍照';
-
-  @override
-  String get aiFabSettingDescCamera => '短按拍照，长按手动记账';
-
-  @override
-  String get aiFabSettingDescManual => '短按手动记账，长按拍照';
-
-  @override
   String get aiOcrRecognizing => '正在识别账单...';
 
   @override
@@ -3277,6 +3335,48 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get smartBillingPageSubtitle => 'AI和自动化记账功能';
+
+  @override
+  String get smartBillingGuideHint => '长按首页底部中间的 + 按钮，即可快速使用这些功能';
+
+  @override
+  String get smartBillingImageBilling => '图片记账';
+
+  @override
+  String get smartBillingImageBillingDesc => '从相册选择支付截图进行识别';
+
+  @override
+  String get smartBillingImageBillingGuide => '在首页长按底部中间的 + 按钮，选择「相册」即可使用图片记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。';
+
+  @override
+  String get smartBillingAIOptional => 'AI 识别为可选功能，配置后可提高识别准确度';
+
+  @override
+  String get smartBillingCameraBilling => '拍照记账';
+
+  @override
+  String get smartBillingCameraBillingDesc => '拍摄支付截图进行识别';
+
+  @override
+  String get smartBillingCameraBillingGuide => '在首页长按底部中间的 + 按钮，选择「拍照」即可使用拍照记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。';
+
+  @override
+  String get smartBillingVoiceBilling => '语音记账';
+
+  @override
+  String get smartBillingVoiceBillingDesc => '通过语音输入快速记账';
+
+  @override
+  String get smartBillingVoiceBillingGuide => '在首页长按底部中间的 + 按钮，选择「语音」即可使用语音记账功能。语音记账需要通过AI将语音转为文字并提取账单信息。';
+
+  @override
+  String get smartBillingRequired => '必须';
+
+  @override
+  String get smartBillingAIRequired => '语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置';
+
+  @override
+  String get autoScreenshotBillingIosDesc => '通过快捷指令实现截图自动识别记账';
 
   @override
   String get automation => '自动化';
@@ -3715,6 +3815,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonOk => '確定';
 
   @override
+  String get commonKnow => '知道了';
+
+  @override
   String get commonNo => '否';
 
   @override
@@ -3736,7 +3839,71 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonNext => '下一步';
 
   @override
-  String get fabLongPressTip => '長按可拍照記帳';
+  String get fabActionCamera => '拍照';
+
+  @override
+  String get fabActionGallery => '相簿';
+
+  @override
+  String get fabActionVoice => '語音';
+
+  @override
+  String get fabActionVoiceDisabled => '需要啟用AI並配置 GLM API';
+
+  @override
+  String get fabSpeedDialTip => '長按展開更多記帳方式';
+
+  @override
+  String get voiceRecordingTitle => '語音記帳';
+
+  @override
+  String get voiceRecordingPreparing => '準備錄音...';
+
+  @override
+  String get voiceRecordingInProgress => '正在錄音...';
+
+  @override
+  String get voiceRecordingProcessing => '正在識別...';
+
+  @override
+  String voiceRecordingDuration(int duration) {
+    return '錄音時長: $duration秒';
+  }
+
+  @override
+  String get voiceRecordingSuccess => '語音記帳成功';
+
+  @override
+  String get voiceRecordingNoLedger => '未找到當前帳本';
+
+  @override
+  String get voiceRecordingNoInfo => '未識別到記帳資訊';
+
+  @override
+  String get voiceRecordingPermissionDenied => '需要麥克風權限才能錄音';
+
+  @override
+  String voiceRecordingStartFailed(String error) {
+    return '啟動錄音失敗: $error';
+  }
+
+  @override
+  String voiceRecordingFailed(String error) {
+    return '錄音失敗: $error';
+  }
+
+  @override
+  String voiceRecordingRecognizeFailed(String error) {
+    return '識別失敗: $error';
+  }
+
+  @override
+  String voiceRecordingNoInfoDetected(String text) {
+    return '未能識別帳單資訊: $text';
+  }
+
+  @override
+  String get voiceRecordingNoSpeech => '未檢測到語音輸入';
 
   @override
   String get commonPrevious => '上一步';
@@ -6863,15 +7030,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiLocalModelUnavailable => '本機模型訓練中，暫不可用';
 
   @override
-  String get aiFabSettingTitle => '快捷記帳按鈕優先拍照';
-
-  @override
-  String get aiFabSettingDescCamera => '短按拍照，長按手動記帳';
-
-  @override
-  String get aiFabSettingDescManual => '短按手動記帳，長按拍照';
-
-  @override
   String get aiOcrRecognizing => '正在識別帳單...';
 
   @override
@@ -6949,6 +7107,48 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get smartBillingPageSubtitle => 'AI和自動化記帳功能';
+
+  @override
+  String get smartBillingGuideHint => '長按首頁底部中間的 + 按鈕，即可快速使用這些功能';
+
+  @override
+  String get smartBillingImageBilling => '圖片記帳';
+
+  @override
+  String get smartBillingImageBillingDesc => '從相簿選擇支付截圖進行識別';
+
+  @override
+  String get smartBillingImageBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「相簿」即可使用圖片記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。';
+
+  @override
+  String get smartBillingAIOptional => 'AI 識別為可選功能，配置後可提高識別準確度';
+
+  @override
+  String get smartBillingCameraBilling => '拍照記帳';
+
+  @override
+  String get smartBillingCameraBillingDesc => '拍攝支付截圖進行識別';
+
+  @override
+  String get smartBillingCameraBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「拍照」即可使用拍照記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。';
+
+  @override
+  String get smartBillingVoiceBilling => '語音記帳';
+
+  @override
+  String get smartBillingVoiceBillingDesc => '透過語音輸入快速記帳';
+
+  @override
+  String get smartBillingVoiceBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「語音」即可使用語音記帳功能。語音記帳需要透過AI將語音轉為文字並提取帳單資訊。';
+
+  @override
+  String get smartBillingRequired => '必須';
+
+  @override
+  String get smartBillingAIRequired => '語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定';
+
+  @override
+  String get autoScreenshotBillingIosDesc => '透過快捷指令實現截圖自動識別記帳';
 
   @override
   String get automation => '自動化';

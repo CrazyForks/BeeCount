@@ -12,6 +12,7 @@
   "commonAdd": "添加",
   "commonEdit": "编辑",
   "commonOk": "确定",
+  "commonKnow": "知道了",
   "commonNo": "否",
   "commonEmpty": "暂无数据",
   "commonError": "错误",
@@ -19,7 +20,60 @@
   "commonFailed": "失败",
   "commonBack": "返回",
   "commonNext": "下一步",
-  "fabLongPressTip": "长按可拍照记账",
+  "fabActionCamera": "拍照",
+  "fabActionGallery": "相册",
+  "fabActionVoice": "语音",
+  "fabActionVoiceDisabled": "需要启用AI并配置 GLM API",
+  "fabSpeedDialTip": "长按展开更多记账方式",
+  "voiceRecordingTitle": "语音记账",
+  "voiceRecordingPreparing": "准备录音...",
+  "voiceRecordingInProgress": "正在录音...",
+  "voiceRecordingProcessing": "正在识别...",
+  "voiceRecordingDuration": "录音时长: {duration}秒",
+  "@voiceRecordingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRecordingSuccess": "语音记账成功",
+  "voiceRecordingNoLedger": "未找到当前账本",
+  "voiceRecordingNoInfo": "未识别到记账信息",
+  "voiceRecordingPermissionDenied": "需要麦克风权限才能录音",
+  "voiceRecordingStartFailed": "启动录音失败: {error}",
+  "@voiceRecordingStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingFailed": "录音失败: {error}",
+  "@voiceRecordingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingRecognizeFailed": "识别失败: {error}",
+  "@voiceRecordingRecognizeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoInfoDetected": "未能识别账单信息: {text}",
+  "@voiceRecordingNoInfoDetected": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoSpeech": "未检测到语音输入",
   "commonPrevious": "上一步",
   "commonFinish": "完成",
   "commonClose": "关闭",
@@ -1211,9 +1265,6 @@
   "aiLocalModelTraining": "训练中",
   "aiLocalModelManagement": "模型管理",
   "aiLocalModelUnavailable": "本地模型训练中，暂不可用",
-  "aiFabSettingTitle": "快捷记账按钮优先拍照",
-  "aiFabSettingDescCamera": "短按拍照，长按手动记账",
-  "aiFabSettingDescManual": "短按手动记账，长按拍照",
   "aiOcrRecognizing": "正在识别账单...",
   "aiOcrNoAmount": "未识别到有效金额，请手动记账",
   "aiOcrNoLedger": "未找到账本",
@@ -1256,6 +1307,20 @@
   "smartBillingDesc": "AI识别、OCR扫描、自动记账",
   "smartBillingPageTitle": "智能记账",
   "smartBillingPageSubtitle": "AI和自动化记账功能",
+  "smartBillingGuideHint": "长按首页底部中间的 + 按钮，即可快速使用这些功能",
+  "smartBillingImageBilling": "图片记账",
+  "smartBillingImageBillingDesc": "从相册选择支付截图进行识别",
+  "smartBillingImageBillingGuide": "在首页长按底部中间的 + 按钮，选择「相册」即可使用图片记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。",
+  "smartBillingAIOptional": "AI 识别为可选功能，配置后可提高识别准确度",
+  "smartBillingCameraBilling": "拍照记账",
+  "smartBillingCameraBillingDesc": "拍摄支付截图进行识别",
+  "smartBillingCameraBillingGuide": "在首页长按底部中间的 + 按钮，选择「拍照」即可使用拍照记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。",
+  "smartBillingVoiceBilling": "语音记账",
+  "smartBillingVoiceBillingDesc": "通过语音输入快速记账",
+  "smartBillingVoiceBillingGuide": "在首页长按底部中间的 + 按钮，选择「语音」即可使用语音记账功能。语音记账需要通过AI将语音转为文字并提取账单信息。",
+  "smartBillingRequired": "必须",
+  "smartBillingAIRequired": "语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置",
+  "autoScreenshotBillingIosDesc": "通过快捷指令实现截图自动识别记账",
   "automation": "自动化",
   "automationDesc": "周期记账、记账提醒",
   "automationPageTitle": "自动化功能",

@@ -12,6 +12,7 @@
   "commonAdd": "新增",
   "commonEdit": "編輯",
   "commonOk": "確定",
+  "commonKnow": "知道了",
   "commonNo": "否",
   "commonEmpty": "暫無資料",
   "commonError": "錯誤",
@@ -19,7 +20,60 @@
   "commonFailed": "失敗",
   "commonBack": "返回",
   "commonNext": "下一步",
-  "fabLongPressTip": "長按可拍照記帳",
+  "fabActionCamera": "拍照",
+  "fabActionGallery": "相簿",
+  "fabActionVoice": "語音",
+  "fabActionVoiceDisabled": "需要啟用AI並配置 GLM API",
+  "fabSpeedDialTip": "長按展開更多記帳方式",
+  "voiceRecordingTitle": "語音記帳",
+  "voiceRecordingPreparing": "準備錄音...",
+  "voiceRecordingInProgress": "正在錄音...",
+  "voiceRecordingProcessing": "正在識別...",
+  "voiceRecordingDuration": "錄音時長: {duration}秒",
+  "@voiceRecordingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRecordingSuccess": "語音記帳成功",
+  "voiceRecordingNoLedger": "未找到當前帳本",
+  "voiceRecordingNoInfo": "未識別到記帳資訊",
+  "voiceRecordingPermissionDenied": "需要麥克風權限才能錄音",
+  "voiceRecordingStartFailed": "啟動錄音失敗: {error}",
+  "@voiceRecordingStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingFailed": "錄音失敗: {error}",
+  "@voiceRecordingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingRecognizeFailed": "識別失敗: {error}",
+  "@voiceRecordingRecognizeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoInfoDetected": "未能識別帳單資訊: {text}",
+  "@voiceRecordingNoInfoDetected": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoSpeech": "未檢測到語音輸入",
   "commonPrevious": "上一步",
   "commonFinish": "完成",
   "commonClose": "關閉",
@@ -920,9 +974,6 @@
   "aiEnableTitle": "啟用 AI 智慧識別",
   "aiEnableToastOff": "AI 增強已停用",
   "aiEnableToastOn": "AI 增強已啟用",
-  "aiFabSettingDescCamera": "短按拍照，長按手動記帳",
-  "aiFabSettingDescManual": "短按手動記帳，長按拍照",
-  "aiFabSettingTitle": "快捷記帳按鈕優先拍照",
   "aiLocalModelManagement": "模型管理",
   "aiLocalModelTitle": "本機模型",
   "aiLocalModelTraining": "訓練中",
@@ -1041,6 +1092,20 @@
   "smartBilling": "智慧記帳",
   "smartBillingDesc": "AI識別、OCR掃描、自動記帳",
   "smartBillingPageSubtitle": "AI和自動化記帳功能",
+  "smartBillingGuideHint": "長按首頁底部中間的 + 按鈕，即可快速使用這些功能",
+  "smartBillingImageBilling": "圖片記帳",
+  "smartBillingImageBillingDesc": "從相簿選擇支付截圖進行識別",
+  "smartBillingImageBillingGuide": "在首頁長按底部中間的 + 按鈕，選擇「相簿」即可使用圖片記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。",
+  "smartBillingAIOptional": "AI 識別為可選功能，配置後可提高識別準確度",
+  "smartBillingCameraBilling": "拍照記帳",
+  "smartBillingCameraBillingDesc": "拍攝支付截圖進行識別",
+  "smartBillingCameraBillingGuide": "在首頁長按底部中間的 + 按鈕，選擇「拍照」即可使用拍照記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。",
+  "smartBillingVoiceBilling": "語音記帳",
+  "smartBillingVoiceBillingDesc": "透過語音輸入快速記帳",
+  "smartBillingVoiceBillingGuide": "在首頁長按底部中間的 + 按鈕，選擇「語音」即可使用語音記帳功能。語音記帳需要透過AI將語音轉為文字並提取帳單資訊。",
+  "smartBillingRequired": "必須",
+  "smartBillingAIRequired": "語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定",
+  "autoScreenshotBillingIosDesc": "透過快捷指令實現截圖自動識別記帳",
   "smartBillingPageTitle": "智慧記帳",
   "storageManagementTitle": "儲存空間管理",
   "storageManagementSubtitle": "清理快取釋放空間",

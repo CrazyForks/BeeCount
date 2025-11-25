@@ -43,6 +43,7 @@ dependencies:
   image_picker: ^1.1.2
   gbk_codec: ^0.4.0
   app_links: ^6.4.1
+  record: ^5.1.2
   yaml: ^3.1.2
   qr_flutter: ^4.1.0
   gal: ^2.3.0
@@ -72,6 +73,10 @@ dev_dependencies:
   mocktail: ^1.0.4
   integration_test:
     sdk: flutter
+
+dependency_overrides:
+  # Fix record_linux compatibility issue (we target iOS/Android only)
+  record_platform_interface: 1.2.0
 
 flutter_launcher_icons:
   android: true

@@ -43,6 +43,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonOk => 'OK';
 
   @override
+  String get commonKnow => 'Got it';
+
+  @override
   String get commonNo => 'No';
 
   @override
@@ -64,7 +67,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonNext => 'Next';
 
   @override
-  String get fabLongPressTip => 'Long press to scan receipt';
+  String get fabActionCamera => 'Camera';
+
+  @override
+  String get fabActionGallery => 'Gallery';
+
+  @override
+  String get fabActionVoice => 'Voice';
+
+  @override
+  String get fabActionVoiceDisabled => 'AI enabled & GLM API required';
+
+  @override
+  String get fabSpeedDialTip => 'Long press for more options';
+
+  @override
+  String get voiceRecordingTitle => 'Voice Billing';
+
+  @override
+  String get voiceRecordingPreparing => 'Preparing...';
+
+  @override
+  String get voiceRecordingInProgress => 'Recording...';
+
+  @override
+  String get voiceRecordingProcessing => 'Recognizing...';
+
+  @override
+  String voiceRecordingDuration(int duration) {
+    return 'Duration: ${duration}s';
+  }
+
+  @override
+  String get voiceRecordingSuccess => 'Voice billing successful';
+
+  @override
+  String get voiceRecordingNoLedger => 'No ledger found';
+
+  @override
+  String get voiceRecordingNoInfo => 'No billing information recognized';
+
+  @override
+  String get voiceRecordingPermissionDenied => 'Microphone permission required';
+
+  @override
+  String voiceRecordingStartFailed(String error) {
+    return 'Failed to start recording: $error';
+  }
+
+  @override
+  String voiceRecordingFailed(String error) {
+    return 'Recording failed: $error';
+  }
+
+  @override
+  String voiceRecordingRecognizeFailed(String error) {
+    return 'Recognition failed: $error';
+  }
+
+  @override
+  String voiceRecordingNoInfoDetected(String text) {
+    return 'Unable to extract bill info: $text';
+  }
+
+  @override
+  String get voiceRecordingNoSpeech => 'No speech detected';
 
   @override
   String get commonPrevious => 'Previous';
@@ -3191,15 +3258,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiLocalModelUnavailable => 'Local model in training, not available yet';
 
   @override
-  String get aiFabSettingTitle => 'Quick Add Button Prioritize Camera';
-
-  @override
-  String get aiFabSettingDescCamera => 'Tap for camera, long press for manual';
-
-  @override
-  String get aiFabSettingDescManual => 'Tap for manual, long press for camera';
-
-  @override
   String get aiOcrRecognizing => 'Recognizing bill...';
 
   @override
@@ -3277,6 +3335,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartBillingPageSubtitle => 'AI and automation billing features';
+
+  @override
+  String get smartBillingGuideHint => 'Long press the + button at the bottom center of the home page to quickly access these features';
+
+  @override
+  String get smartBillingImageBilling => 'Image Billing';
+
+  @override
+  String get smartBillingImageBillingDesc => 'Select payment screenshots from gallery for recognition';
+
+  @override
+  String get smartBillingImageBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.';
+
+  @override
+  String get smartBillingAIOptional => 'AI recognition is optional, configuration can improve recognition accuracy';
+
+  @override
+  String get smartBillingCameraBilling => 'Camera Billing';
+
+  @override
+  String get smartBillingCameraBillingDesc => 'Capture payment screenshots for recognition';
+
+  @override
+  String get smartBillingCameraBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.';
+
+  @override
+  String get smartBillingVoiceBilling => 'Voice Billing';
+
+  @override
+  String get smartBillingVoiceBillingDesc => 'Quick billing through voice input';
+
+  @override
+  String get smartBillingVoiceBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Voice\' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.';
+
+  @override
+  String get smartBillingRequired => 'Required';
+
+  @override
+  String get smartBillingAIRequired => 'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first';
+
+  @override
+  String get autoScreenshotBillingIosDesc => 'Auto-recognize payment screenshots via Shortcuts';
 
   @override
   String get automation => 'Automation';

@@ -39,6 +39,9 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
   /// 图片文件（可选，用于GLM-4V视觉模型）
   final File? imageFile;
 
+  /// 音频文件（可选，用于GLM-4语音识别）
+  final File? audioFile;
+
   final Dio _dio = Dio();
 
   ZhipuGLMProvider({
@@ -46,6 +49,7 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
     this.model = 'glm-4-flash',
     this.temperature = 0.1,
     this.imageFile,
+    this.audioFile,
   });
 
   @override
@@ -70,6 +74,28 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
       // 准备消息内容
       final messageContent = await _prepareMessageContent(task.input);
 
+      // 构建消息列表
+      final messages = <Map<String, dynamic>>[];
+
+      // 对于音频模型，添加system消息强制JSON输出
+      if (audioFile != null) {
+        messages.add({
+          'role': 'system',
+          'content': '你是一个专业的账单信息提取助手。用户会提供语音输入和提取要求，你必须严格按照要求返回JSON格式的结果，不要返回其他任何文字或解释。'
+        });
+      }
+
+      messages.add({'role': 'user', 'content': messageContent});
+
+      print('🔍 [GLM] 请求数据: ${jsonEncode({
+        'model': model,
+        'messages': messages.map((m) => {
+          'role': m['role'],
+          'content': m['content'] is String ? m['content'] : '[multimodal content]'
+        }).toList(),
+        'temperature': temperature,
+      })}');
+
       final response = await _dio.post(
         'https://open.bigmodel.cn/api/paas/v4/chat/completions',
         options: Options(headers: {
@@ -78,12 +104,12 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
         }),
         data: {
           'model': model,
-          'messages': [
-            {'role': 'user', 'content': messageContent}
-          ],
+          'messages': messages,
           'temperature': temperature,
         },
       );
+
+      print('📦 [GLM] 响应数据: ${jsonEncode(response.data)}');
 
       final content = response.data['choices'][0]['message']['content'];
       final tokens = response.data['usage']['total_tokens'];
@@ -98,12 +124,19 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
         ),
       );
     } on DioException catch (e) {
+      print('❌ [GLM] DioException: ${e.type} - ${e.message}');
+      if (e.response != null) {
+        print('❌ [GLM] 响应状态码: ${e.response?.statusCode}');
+        print('❌ [GLM] 响应数据: ${e.response?.data}');
+      }
       return AIResult.failure(
         _parseDioError(e),
         DateTime.now().difference(startTime),
         metadata: AIResultMetadata(providerName: name),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('❌ [GLM] Exception: $e');
+      print('❌ [GLM] Stack trace: $stackTrace');
       return AIResult.failure(
         e.toString(),
         DateTime.now().difference(startTime),
@@ -132,36 +165,98 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
     }
   }
 
-  /// 准备消息内容（支持图片上传）
+  /// 准备消息内容（支持图片和音频上传）
   Future<dynamic> _prepareMessageContent(String text) async {
-    // 如果没有图片，直接返回文本
-    if (imageFile == null) {
-      return text;
+    print('📝 [GLM] 准备消息内容，文本长度: ${text.length}');
+    print('📝 [GLM] 音频文件: ${audioFile?.path ?? "无"}');
+    print('📝 [GLM] 图片文件: ${imageFile?.path ?? "无"}');
+
+    final List<Map<String, dynamic>> content = [];
+
+    // 添加音频（如果有）
+    if (audioFile != null) {
+      try {
+        final audioBytes = await audioFile!.readAsBytes();
+        final base64Audio = base64Encode(audioBytes);
+
+        // 检测音频格式（GLM API 支持 wav 和 mp3）
+        final extension = audioFile!.path.split('.').last.toLowerCase();
+        String format = 'mp3'; // 默认
+        if (extension == 'wav') {
+          format = 'wav';
+        } else if (extension == 'm4a' || extension == 'aac') {
+          // m4a/aac 录音格式，GLM可能识别为 mp3
+          format = 'mp3';
+        }
+
+        content.add({
+          'type': 'input_audio',
+          'input_audio': {
+            'data': base64Audio, // 纯 base64，不需要 data URI 前缀
+            'format': format,
+          }
+        });
+      } catch (e) {
+        print('⚠️ [GLM] 音频编码失败: $e');
+      }
     }
 
-    // 如果有图片，准备multimodal content（用于GLM-4V）
-    try {
-      // 读取图片并转换为base64
-      final imageBytes = await imageFile!.readAsBytes();
-      final base64Image = base64Encode(imageBytes);
+    // 添加图片（如果有）
+    if (imageFile != null) {
+      try {
+        final imageBytes = await imageFile!.readAsBytes();
+        final base64Image = base64Encode(imageBytes);
 
-      // 返回包含文本和图片的多模态内容
-      return [
-        {
+        // 检测图片格式
+        final extension = imageFile!.path.split('.').last.toLowerCase();
+        String mimeType = 'image/jpeg'; // 默认
+        if (extension == 'png') {
+          mimeType = 'image/png';
+        } else if (extension == 'jpg' || extension == 'jpeg') {
+          mimeType = 'image/jpeg';
+        } else if (extension == 'webp') {
+          mimeType = 'image/webp';
+        }
+
+        content.add({
           'type': 'image_url',
           'image_url': {
-            'url': base64Image,
+            'url': 'data:$mimeType;base64,$base64Image',
           }
-        },
-        {
-          'type': 'text',
-          'text': text,
-        }
-      ];
-    } catch (e) {
-      print('⚠️ [GLM] 图片编码失败: $e，降级使用纯文本');
+        });
+      } catch (e) {
+        print('⚠️ [GLM] 图片编码失败: $e');
+      }
+    }
+
+    // 添加文本
+    if (text.isNotEmpty) {
+      print('📝 [GLM] 添加文本内容: ${text.substring(0, text.length > 100 ? 100 : text.length)}...');
+      content.add({
+        'type': 'text',
+        'text': text,
+      });
+    } else {
+      print('⚠️ [GLM] 文本内容为空，跳过添加');
+    }
+
+    print('📝 [GLM] 内容块数量: ${content.length}');
+
+    // 如果只有文本，直接返回字符串
+    if (content.length == 1 && content[0]['type'] == 'text') {
+      print('📝 [GLM] 返回纯文本格式');
       return text;
     }
+
+    // 如果有多模态内容，返回数组
+    if (content.isNotEmpty) {
+      print('📝 [GLM] 返回多模态内容数组（${content.length}个块）');
+      return content;
+    }
+
+    // 默认返回文本
+    print('📝 [GLM] 默认返回文本');
+    return text;
   }
 
   String _parseDioError(DioException e) {

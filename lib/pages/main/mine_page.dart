@@ -26,7 +26,6 @@ import '../settings/reminder_settings_page.dart';
 import '../settings/language_settings_page.dart';
 import '../account/accounts_page.dart';
 import '../settings/widget_management_page.dart';
-import '../automation/ocr_billing_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import '../ai/ai_settings_page.dart';
 import '../cloud/cloud_sync_page.dart';
@@ -152,8 +151,8 @@ class MinePage extends ConsumerWidget {
                                       cloudConfig.value!.type ==
                                           CloudBackendType.icloud;
                                   // iCloud 使用系统账号，不需要登录；其他云服务需要登录
-                                  final canUseCloud =
-                                      !isLocalMode && (isICloudMode || user != null);
+                                  final canUseCloud = !isLocalMode &&
+                                      (isICloudMode || user != null);
                                   final asyncSt = sectionRef
                                       .watch(syncStatusProvider(ledgerId));
                                   final cached = sectionRef
@@ -235,9 +234,9 @@ class MinePage extends ConsumerWidget {
                                                     color: sectionRef.watch(
                                                         primaryColorProvider),
                                                     size: 20)
-                                                : Icon(
-                                                    Icons.chevron_right,
-                                                    color: BeeTokens.iconTertiary(context), // ⭐ 使用 Token
+                                                : Icon(Icons.chevron_right,
+                                                    color: BeeTokens.iconTertiary(
+                                                        context), // ⭐ 使用 Token
                                                     size: 20),
                                         onTap: () async {
                                           await Navigator.of(sectionContext)
@@ -272,7 +271,8 @@ class MinePage extends ConsumerWidget {
                         title: AppLocalizations.of(context).smartBilling,
                         subtitle: AppLocalizations.of(context).smartBillingDesc,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
+                            color: BeeTokens.iconTertiary(context),
+                            size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -288,7 +288,8 @@ class MinePage extends ConsumerWidget {
                         subtitle:
                             AppLocalizations.of(context).dataManagementDesc,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
+                            color: BeeTokens.iconTertiary(context),
+                            size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -304,7 +305,8 @@ class MinePage extends ConsumerWidget {
                         subtitle:
                             AppLocalizations.of(context).accountsManageDesc,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
+                            color: BeeTokens.iconTertiary(context),
+                            size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -319,7 +321,8 @@ class MinePage extends ConsumerWidget {
                         title: AppLocalizations.of(context).automation,
                         subtitle: AppLocalizations.of(context).automationDesc,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
+                            color: BeeTokens.iconTertiary(context),
+                            size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -335,7 +338,8 @@ class MinePage extends ConsumerWidget {
                         subtitle:
                             AppLocalizations.of(context).appearanceSettingsDesc,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
+                            color: BeeTokens.iconTertiary(context),
+                            size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -358,7 +362,8 @@ class MinePage extends ConsumerWidget {
                         title: AppLocalizations.of(context).about,
                         subtitle: AppLocalizations.of(context).aboutDesc,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20), // ⭐ 使用 Token
+                            color: BeeTokens.iconTertiary(context),
+                            size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -435,7 +440,8 @@ class MinePage extends ConsumerWidget {
                         AppListTile(
                           leading: Icons.star_border_rounded,
                           title: AppLocalizations.of(context).mineRateApp,
-                          subtitle: AppLocalizations.of(context).mineRateAppSubtitle,
+                          subtitle:
+                              AppLocalizations.of(context).mineRateAppSubtitle,
                           onTap: () => _rateApp(context),
                         ),
                       ],
@@ -625,324 +631,6 @@ Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
       ],
     ),
   );
-}
-
-// 智能记账分组（合并AI和OCR功能）
-Widget _buildSmartBillingSection(BuildContext context, WidgetRef ref) {
-  final l10n = AppLocalizations.of(context);
-  final cameraFirst = ref.watch(fabCameraFirstProvider).value ?? false;
-
-  return SectionCard(
-    margin: EdgeInsets.fromLTRB(
-        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-    child: Column(
-      children: [
-        // AI智能识别
-        AppListTile(
-          leading: Icons.psychology_outlined,
-          title: l10n.aiSettingsTitle,
-          subtitle: l10n.aiSettingsSubtitle,
-          trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Text(
-              'AI',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const AISettingsPage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // OCR扫描记账
-        AppListTile(
-          leading: Icons.document_scanner_outlined,
-          title: l10n.ocrBilling,
-          subtitle: l10n.ocrBillingDesc,
-          trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Text(
-              'BETA',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const OcrBillingPage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 截图自动记账
-        AppListTile(
-          leading: Icons.auto_fix_high,
-          title: l10n.autoScreenshotBilling,
-          subtitle: Platform.isAndroid
-              ? l10n.autoScreenshotBillingDesc
-              : '通过快捷指令实现截图自动识别记账',
-          trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Text(
-              'BETA',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (_) => const AutoBillingSettingsPage()),
-            );
-          },
-        ),
-        BeeTokens.cardDivider(context),
-        // FAB行为切换
-        InkWell(
-          onTap: () async {
-            final newValue = !cameraFirst;
-            await ref.read(fabBehaviorSetterProvider).setCameraFirst(newValue);
-            ref.invalidate(fabCameraFirstProvider);
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.12),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    cameraFirst ? Icons.camera_alt : Icons.edit,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 24,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.aiFabSettingTitle,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: BeeTokens.textPrimary(context), // ⭐ 使用 Token
-                        ),
-                      ),
-                      Text(
-                        cameraFirst
-                            ? l10n.aiFabSettingDescCamera
-                            : l10n.aiFabSettingDescManual,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: BeeTokens.textSecondary(context), // ⭐ 使用 Token
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Switch(
-                  value: cameraFirst,
-                  onChanged: (value) async {
-                    await ref
-                        .read(fabBehaviorSetterProvider)
-                        .setCameraFirst(value);
-                    ref.invalidate(fabCameraFirstProvider);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-// 自动化功能分组（仅保留周期和提醒）
-Widget _buildAutomationSection(BuildContext context, WidgetRef ref) {
-  return SectionCard(
-    margin: EdgeInsets.fromLTRB(
-        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-    child: Column(
-      children: [
-        // 周期记账
-        AppListTile(
-          leading: Icons.repeat,
-          title: AppLocalizations.of(context).mineRecurringTransactions,
-          subtitle:
-              AppLocalizations.of(context).mineRecurringTransactionsSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (_) => const RecurringTransactionPage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 记账提醒
-        AppListTile(
-          leading: Icons.notifications_outlined,
-          title: AppLocalizations.of(context).mineReminderSettings,
-          subtitle: AppLocalizations.of(context).mineReminderSettingsSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const ReminderSettingsPage()),
-            );
-          },
-        ),
-      ],
-    ),
-  );
-}
-
-// 外观与显示分组
-Widget _buildAppearanceSection(BuildContext context, WidgetRef ref) {
-  final currentLanguage = ref.watch(languageProvider);
-  final l10n = AppLocalizations.of(context);
-
-  String languageDisplay;
-  if (currentLanguage == null) {
-    languageDisplay = l10n.languageSystemDefault;
-  } else {
-    switch (currentLanguage.languageCode) {
-      case 'zh':
-        languageDisplay = l10n.languageChinese;
-        break;
-      case 'en':
-        languageDisplay = l10n.languageEnglish;
-        break;
-      default:
-        languageDisplay = currentLanguage.languageCode;
-    }
-  }
-
-  return SectionCard(
-    margin: EdgeInsets.fromLTRB(
-        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-    child: Column(
-      children: [
-        // 桌面小组件
-        AppListTile(
-          leading: Icons.widgets_outlined,
-          title: l10n.widgetManagement,
-          subtitle: l10n.widgetManagementDesc,
-          trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Text(
-              'NEW',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const WidgetManagementPage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 个性化
-        AppListTile(
-          leading: Icons.brush_outlined,
-          title: AppLocalizations.of(context).minePersonalize,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PersonalizePage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 显示缩放
-        AppListTile(
-          leading: Icons.zoom_out_map_outlined,
-          title: AppLocalizations.of(context).mineDisplayScale,
-          subtitle: AppLocalizations.of(context).mineDisplayScaleSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const FontSettingsPage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 语言设置
-        AppListTile(
-          leading: Icons.language_outlined,
-          title: l10n.mineLanguageSettings,
-          subtitle: languageDisplay,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
-            );
-          },
-        ),
-      ],
-    ),
-  );
-}
-
-// -------- 工具方法：关于与更新 --------
-class _AppInfo {
-  final String version;
-  final String buildNumber;
-  final String? commit;
-  final String? buildTime;
-  const _AppInfo(this.version, this.buildNumber, {this.commit, this.buildTime});
-}
-
-// 优先读取 CI 注入的 dart-define（CI_VERSION/GIT_COMMIT/BUILD_TIME），否则回退 PackageInfo
-Future<_AppInfo> _getAppInfo() async {
-  final p = await PackageInfo.fromPlatform();
-  final commit = const String.fromEnvironment('GIT_COMMIT');
-  final buildTime = const String.fromEnvironment('BUILD_TIME');
-  final ciVersion = const String.fromEnvironment('CI_VERSION');
-
-  // 版本号策略：CI版本优先，本地开发显示 "dev-{pubspec版本}"
-  final version =
-      ciVersion.isNotEmpty ? ciVersion : 'dev-${p.version}'; // 本地开发版本标识
-
-  return _AppInfo(version, p.buildNumber,
-      commit: commit.isEmpty ? null : commit,
-      buildTime: buildTime.isEmpty ? null : buildTime);
 }
 
 /// 尝试使用多种方式打开URL，提供更好的兼容性

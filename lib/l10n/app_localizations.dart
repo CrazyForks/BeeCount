@@ -168,6 +168,12 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get commonOk;
 
+  /// No description provided for @commonKnow.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get commonKnow;
+
   /// No description provided for @commonNo.
   ///
   /// In en, this message translates to:
@@ -210,11 +216,119 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get commonNext;
 
-  /// No description provided for @fabLongPressTip.
+  /// No description provided for @fabActionCamera.
   ///
   /// In en, this message translates to:
-  /// **'Long press to scan receipt'**
-  String get fabLongPressTip;
+  /// **'Camera'**
+  String get fabActionCamera;
+
+  /// No description provided for @fabActionGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get fabActionGallery;
+
+  /// No description provided for @fabActionVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get fabActionVoice;
+
+  /// No description provided for @fabActionVoiceDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'AI enabled & GLM API required'**
+  String get fabActionVoiceDisabled;
+
+  /// No description provided for @fabSpeedDialTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press for more options'**
+  String get fabSpeedDialTip;
+
+  /// No description provided for @voiceRecordingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Billing'**
+  String get voiceRecordingTitle;
+
+  /// No description provided for @voiceRecordingPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing...'**
+  String get voiceRecordingPreparing;
+
+  /// No description provided for @voiceRecordingInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording...'**
+  String get voiceRecordingInProgress;
+
+  /// No description provided for @voiceRecordingProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognizing...'**
+  String get voiceRecordingProcessing;
+
+  /// No description provided for @voiceRecordingDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {duration}s'**
+  String voiceRecordingDuration(int duration);
+
+  /// No description provided for @voiceRecordingSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice billing successful'**
+  String get voiceRecordingSuccess;
+
+  /// No description provided for @voiceRecordingNoLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'No ledger found'**
+  String get voiceRecordingNoLedger;
+
+  /// No description provided for @voiceRecordingNoInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'No billing information recognized'**
+  String get voiceRecordingNoInfo;
+
+  /// No description provided for @voiceRecordingPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission required'**
+  String get voiceRecordingPermissionDenied;
+
+  /// No description provided for @voiceRecordingStartFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start recording: {error}'**
+  String voiceRecordingStartFailed(String error);
+
+  /// No description provided for @voiceRecordingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording failed: {error}'**
+  String voiceRecordingFailed(String error);
+
+  /// No description provided for @voiceRecordingRecognizeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognition failed: {error}'**
+  String voiceRecordingRecognizeFailed(String error);
+
+  /// No description provided for @voiceRecordingNoInfoDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to extract bill info: {text}'**
+  String voiceRecordingNoInfoDetected(String text);
+
+  /// No description provided for @voiceRecordingNoSpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'No speech detected'**
+  String get voiceRecordingNoSpeech;
 
   /// No description provided for @commonPrevious.
   ///
@@ -6084,24 +6198,6 @@ abstract class AppLocalizations {
   /// **'Local model in training, not available yet'**
   String get aiLocalModelUnavailable;
 
-  /// No description provided for @aiFabSettingTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Add Button Prioritize Camera'**
-  String get aiFabSettingTitle;
-
-  /// No description provided for @aiFabSettingDescCamera.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap for camera, long press for manual'**
-  String get aiFabSettingDescCamera;
-
-  /// No description provided for @aiFabSettingDescManual.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap for manual, long press for camera'**
-  String get aiFabSettingDescManual;
-
   /// No description provided for @aiOcrRecognizing.
   ///
   /// In en, this message translates to:
@@ -6251,6 +6347,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI and automation billing features'**
   String get smartBillingPageSubtitle;
+
+  /// No description provided for @smartBillingGuideHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page to quickly access these features'**
+  String get smartBillingGuideHint;
+
+  /// No description provided for @smartBillingImageBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Billing'**
+  String get smartBillingImageBilling;
+
+  /// No description provided for @smartBillingImageBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Select payment screenshots from gallery for recognition'**
+  String get smartBillingImageBillingDesc;
+
+  /// No description provided for @smartBillingImageBillingGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.'**
+  String get smartBillingImageBillingGuide;
+
+  /// No description provided for @smartBillingAIOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'AI recognition is optional, configuration can improve recognition accuracy'**
+  String get smartBillingAIOptional;
+
+  /// No description provided for @smartBillingCameraBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Billing'**
+  String get smartBillingCameraBilling;
+
+  /// No description provided for @smartBillingCameraBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture payment screenshots for recognition'**
+  String get smartBillingCameraBillingDesc;
+
+  /// No description provided for @smartBillingCameraBillingGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.'**
+  String get smartBillingCameraBillingGuide;
+
+  /// No description provided for @smartBillingVoiceBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Billing'**
+  String get smartBillingVoiceBilling;
+
+  /// No description provided for @smartBillingVoiceBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick billing through voice input'**
+  String get smartBillingVoiceBillingDesc;
+
+  /// No description provided for @smartBillingVoiceBillingGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page and select \'Voice\' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.'**
+  String get smartBillingVoiceBillingGuide;
+
+  /// No description provided for @smartBillingRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get smartBillingRequired;
+
+  /// No description provided for @smartBillingAIRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first'**
+  String get smartBillingAIRequired;
+
+  /// No description provided for @autoScreenshotBillingIosDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-recognize payment screenshots via Shortcuts'**
+  String get autoScreenshotBillingIosDesc;
 
   /// No description provided for @automation.
   ///

@@ -217,6 +217,8 @@ class AutoBillingService {
 
           if (transactionId != null) {
             // 记账成功
+            // 刷新统计信息
+            _container.read(statsRefreshProvider.notifier).state++;
             if (showNotification) {
               await _showNotification(
                 id: notificationId,
@@ -373,6 +375,8 @@ class AutoBillingService {
       final txId = await _createTransaction(resultWithCategory);
 
       if (txId != null) {
+        // 刷新统计信息
+        _container.read(statsRefreshProvider.notifier).state++;
         print('✅ 交易创建成功: id=$txId');
         if (showNotification) {
           await _showNotification(

@@ -15,6 +15,7 @@
   "commonAdd": "Add",
   "commonEdit": "Edit",
   "commonOk": "OK",
+  "commonKnow": "Got it",
   "commonNo": "No",
   "commonEmpty": "No data",
   "commonError": "Error",
@@ -22,7 +23,60 @@
   "commonFailed": "Failed",
   "commonBack": "Back",
   "commonNext": "Next",
-  "fabLongPressTip": "Long press to scan receipt",
+  "fabActionCamera": "Camera",
+  "fabActionGallery": "Gallery",
+  "fabActionVoice": "Voice",
+  "fabActionVoiceDisabled": "AI enabled & GLM API required",
+  "fabSpeedDialTip": "Long press for more options",
+  "voiceRecordingTitle": "Voice Billing",
+  "voiceRecordingPreparing": "Preparing...",
+  "voiceRecordingInProgress": "Recording...",
+  "voiceRecordingProcessing": "Recognizing...",
+  "voiceRecordingDuration": "Duration: {duration}s",
+  "@voiceRecordingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRecordingSuccess": "Voice billing successful",
+  "voiceRecordingNoLedger": "No ledger found",
+  "voiceRecordingNoInfo": "No billing information recognized",
+  "voiceRecordingPermissionDenied": "Microphone permission required",
+  "voiceRecordingStartFailed": "Failed to start recording: {error}",
+  "@voiceRecordingStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingFailed": "Recording failed: {error}",
+  "@voiceRecordingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingRecognizeFailed": "Recognition failed: {error}",
+  "@voiceRecordingRecognizeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoInfoDetected": "Unable to extract bill info: {text}",
+  "@voiceRecordingNoInfoDetected": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoSpeech": "No speech detected",
   "commonPrevious": "Previous",
   "commonFinish": "Finish",
   "commonClose": "Close",
@@ -1324,9 +1378,6 @@
   "aiLocalModelTraining": "Training",
   "aiLocalModelManagement": "Model Management",
   "aiLocalModelUnavailable": "Local model in training, not available yet",
-  "aiFabSettingTitle": "Quick Add Button Prioritize Camera",
-  "aiFabSettingDescCamera": "Tap for camera, long press for manual",
-  "aiFabSettingDescManual": "Tap for manual, long press for camera",
   "aiOcrRecognizing": "Recognizing bill...",
   "aiOcrNoAmount": "No valid amount recognized, please add manually",
   "aiOcrNoLedger": "Ledger not found",
@@ -1369,6 +1420,20 @@
   "smartBillingDesc": "AI recognition, OCR scan, auto billing",
   "smartBillingPageTitle": "Smart Billing",
   "smartBillingPageSubtitle": "AI and automation billing features",
+  "smartBillingGuideHint": "Long press the + button at the bottom center of the home page to quickly access these features",
+  "smartBillingImageBilling": "Image Billing",
+  "smartBillingImageBillingDesc": "Select payment screenshots from gallery for recognition",
+  "smartBillingImageBillingGuide": "Long press the + button at the bottom center of the home page and select 'Gallery' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.",
+  "smartBillingAIOptional": "AI recognition is optional, configuration can improve recognition accuracy",
+  "smartBillingCameraBilling": "Camera Billing",
+  "smartBillingCameraBillingDesc": "Capture payment screenshots for recognition",
+  "smartBillingCameraBillingGuide": "Long press the + button at the bottom center of the home page and select 'Camera' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.",
+  "smartBillingVoiceBilling": "Voice Billing",
+  "smartBillingVoiceBillingDesc": "Quick billing through voice input",
+  "smartBillingVoiceBillingGuide": "Long press the + button at the bottom center of the home page and select 'Voice' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.",
+  "smartBillingRequired": "Required",
+  "smartBillingAIRequired": "Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first",
+  "autoScreenshotBillingIosDesc": "Auto-recognize payment screenshots via Shortcuts",
   "automation": "Automation",
   "automationDesc": "Recurring transactions and reminders",
   "automationPageTitle": "Automation",
