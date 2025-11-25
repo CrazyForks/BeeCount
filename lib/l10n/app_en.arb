@@ -15,6 +15,7 @@
   "commonAdd": "Add",
   "commonEdit": "Edit",
   "commonOk": "OK",
+  "commonKnow": "Got it",
   "commonNo": "No",
   "commonEmpty": "No data",
   "commonError": "Error",
@@ -22,13 +23,68 @@
   "commonFailed": "Failed",
   "commonBack": "Back",
   "commonNext": "Next",
-  "fabLongPressTip": "Long press to scan receipt",
+  "fabActionCamera": "Camera",
+  "fabActionGallery": "Gallery",
+  "fabActionVoice": "Voice",
+  "fabActionVoiceDisabled": "AI enabled & GLM API required",
+  "voiceRecordingTitle": "Voice Billing",
+  "voiceRecordingPreparing": "Preparing...",
+  "voiceRecordingInProgress": "Recording...",
+  "voiceRecordingProcessing": "Recognizing...",
+  "voiceRecordingDuration": "Duration: {duration}s",
+  "@voiceRecordingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRecordingSuccess": "Voice billing successful",
+  "voiceRecordingNoLedger": "No ledger found",
+  "voiceRecordingNoInfo": "No billing information recognized",
+  "voiceRecordingPermissionDenied": "Microphone permission required",
+  "voiceRecordingPermissionDeniedTitle": "Microphone Permission Required",
+  "voiceRecordingPermissionDeniedMessage": "Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.",
+  "voiceRecordingStartFailed": "Failed to start recording: {error}",
+  "@voiceRecordingStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingFailed": "Recording failed: {error}",
+  "@voiceRecordingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingRecognizeFailed": "Recognition failed: {error}",
+  "@voiceRecordingRecognizeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoInfoDetected": "Unable to extract bill info: {text}",
+  "@voiceRecordingNoInfoDetected": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoSpeech": "No speech detected",
   "commonPrevious": "Previous",
   "commonFinish": "Finish",
   "commonClose": "Close",
   "commonSearch": "Search",
   "commonNoteHint": "Note...",
   "commonSettings": "Settings",
+  "commonGoSettings": "Go to Settings",
   "commonHelp": "Help",
   "commonLanguage": "Language",
   "commonCurrent": "Current",
@@ -75,10 +131,9 @@
   "widgetMonthSuffix": "",
   "searchTitle": "Search",
   "searchHint": "Search notes, categories or amounts...",
-  "searchAmountRange": "Amount range filter",
+  "searchCategoryHint": "Search category name...",
   "searchMinAmount": "Min amount",
   "searchMaxAmount": "Max amount",
-  "searchTo": "to",
   "searchNoInput": "Enter keywords to start searching",
   "searchNoResults": "No matching results found",
   "searchBatchMode": "Batch Operations",
@@ -94,9 +149,6 @@
   "searchBatchSetNoteTitle": "Batch Set Note",
   "searchBatchSetNoteMessage": "Set the same note for the selected {count} transactions",
   "searchBatchSetNoteHint": "Enter note content (leave empty to clear notes)",
-  "searchBatchChangeCategoryTitle": "Batch Change Category",
-  "searchBatchChangeCategoryMessage": "Set a new category for the selected {count} transactions",
-  "searchBatchChangeCategoryLabel": "Select Category",
   "searchBatchDeleteSuccess": "Successfully deleted {count} transactions",
   "searchBatchDeleteFailed": "Delete failed: {error}",
   "searchBatchSetNoteSuccess": "Successfully set note for {count} transactions",
@@ -104,6 +156,17 @@
   "searchBatchChangeCategorySuccess": "Successfully changed category for {count} transactions",
   "searchBatchChangeCategoryFailed": "Change category failed: {error}",
   "searchResultsCount": "{count} results",
+  "searchFilterTitle": "Filter",
+  "searchAmountFilter": "Amount Filter",
+  "searchDateFilter": "Date Filter",
+  "searchStartDate": "Start Date",
+  "searchEndDate": "End Date",
+  "searchNotSet": "Not Set",
+  "searchClearFilter": "Clear Filter",
+  "searchBatchCategoryTransferError": "Selected transactions contain transfers, cannot change category",
+  "searchBatchCategoryTypeError": "Selected transactions have different types, please select all income or all expense",
+  "searchDateStart": "Start",
+  "searchDateEnd": "End",
   "analyticsMonth": "Month",
   "analyticsYear": "Year",
   "analyticsAll": "All",
@@ -427,20 +490,13 @@
   "categoryMigrationTitle": "Category Migration",
   "categoryMigrationDescription": "Category Migration Instructions",
   "categoryMigrationDescriptionContent": "• Migrate all transaction records from one category to another\n• After migration, all transaction data from the source category will be transferred to the target category\n• This operation cannot be undone, please choose carefully",
+  "categoryMigrationTypeLabel": "Select Type",
   "categoryMigrationFromLabel": "From Category",
   "categoryMigrationFromHint": "Select category to migrate from",
   "categoryMigrationToLabel": "To Category",
   "categoryMigrationToHint": "Select target category",
   "categoryMigrationToHintFirst": "Please select source category first",
   "categoryMigrationStartButton": "Start Migration",
-  "categoryMigrationTransactionCount": "{count} records",
-  "@categoryMigrationTransactionCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "categoryMigrationCannotTitle": "Cannot Migrate",
   "categoryMigrationCannotMessage": "Selected categories cannot be migrated, please check category status.",
   "categoryExpenseType": "Expense Category",
@@ -1247,11 +1303,6 @@
   "autoBilling": "Auto Billing",
   "enabled": "Enabled",
   "disabled": "Disabled",
-  "supportedPayments": "Supported Payment Methods",
-  "supportedAlipay": "✅ Alipay",
-  "supportedWechat": "✅ WeChat Pay",
-  "supportedUnionpay": "✅ UnionPay",
-  "supportedOthers": "⚠️ Other payment methods may have lower recognition accuracy",
   "photosPermissionRequired": "Photos permission required for screenshot monitoring",
   "enableSuccess": "Auto billing enabled",
   "disableSuccess": "Auto billing disabled",
@@ -1262,34 +1313,17 @@
   "autoBillingBatteryWarning": "⚠️ Battery optimization is not disabled. The app may be automatically cleaned by the system, causing auto billing to fail. Please tap the \"Settings\" button above to disable battery optimization.",
   "enableFailed": "Enable failed",
   "disableFailed": "Disable failed",
-  "reselectImage": "Reselect",
-  "viewOriginalText": "View Original Text",
-  "createBill": "Create Bill",
-  "ocrBilling": "OCR Scan Billing",
-  "ocrBillingDesc": "Auto-recognize payment screenshots",
   "iosAutoFeatureDesc": "Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.",
-  "iosAutoShortcutQuickAdd": "Quick Add Shortcut",
-  "iosAutoShortcutQuickAddDesc": "Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.",
-  "iosAutoShortcutImport": "One-Click Import Shortcut",
-  "iosAutoShortcutOpenApp": "Or Manually Open Shortcuts App",
-  "iosAutoShortcutConfigTitle": "Configuration Steps (Recommended - URL Parameter):",
-  "iosAutoShortcutStep1": "Open \"Shortcuts\" app",
-  "iosAutoShortcutStep2": "Tap \"+\" in top right to create new shortcut",
-  "iosAutoShortcutStep3": "Add \"Take Screenshot\" action (get latest screenshot)",
-  "iosAutoShortcutStep4": "Add \"Extract Text from Screenshot\" action",
-  "iosAutoShortcutStep5": "Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)",
-  "iosAutoShortcutStep6": "Add \"URL Encode\" action: encode the replaced text",
-  "iosAutoShortcutStep7": "Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]",
-  "iosAutoShortcutStep8": "Tap shortcut settings (three dots in top right)",
-  "iosAutoShortcutStep9": "In \"When...\" add \"When Screenshot is taken\" trigger",
-  "iosAutoShortcutStep10": "Save and test: auto-identify after screenshot",
-  "iosAutoShortcutRecommendedTip": "✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn't exceed 2048 character limit",
+  "iosAutoShortcutConfigTitle": "Configuration Steps:",
+  "iosAutoShortcutStep1": "Open \"Shortcuts\" app, tap \"+\" in top right to create new shortcut",
+  "iosAutoShortcutStep2": "Add \"Take Screenshot\" action",
+  "iosAutoShortcutStep3": "Search and add \"BeeCount - Auto Billing\" action",
+  "iosAutoShortcutStep4": "Set the screenshot parameter of \"BeeCount\" to the previous \"Screenshot\"",
+  "iosAutoShortcutStep5": "(Optional) Go to Settings > Accessibility > Touch > Back Tap, bind this shortcut",
+  "iosAutoShortcutStep6": "Done! Double tap phone back during payment for quick billing",
+  "iosAutoShortcutRecommendedTip": "✅ Recommended: After binding the shortcut to \"Back Tap\", double tap phone back during payment to auto-screenshot and recognize billing, no manual screenshot needed.",
   "iosAutoBackTapTitle": "💡 Double Tap Back to Trigger (Recommended)",
   "iosAutoBackTapDesc": "Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed",
-  "iosAutoImportFailed": "Import failed: {error}",
-  "iosAutoOpenAppFailed": "Open failed: {error}",
-  "iosAutoCannotOpenLink": "Cannot open link, please check network connection",
-  "iosAutoCannotOpenShortcuts": "Cannot open Shortcuts app",
   "aiSettingsTitle": "AI Recognition",
   "aiSettingsSubtitle": "Configure AI models and recognition strategy",
   "aiEnableTitle": "Enable AI Recognition",
@@ -1324,9 +1358,6 @@
   "aiLocalModelTraining": "Training",
   "aiLocalModelManagement": "Model Management",
   "aiLocalModelUnavailable": "Local model in training, not available yet",
-  "aiFabSettingTitle": "Quick Add Button Prioritize Camera",
-  "aiFabSettingDescCamera": "Tap for camera, long press for manual",
-  "aiFabSettingDescManual": "Tap for manual, long press for camera",
   "aiOcrRecognizing": "Recognizing bill...",
   "aiOcrNoAmount": "No valid amount recognized, please add manually",
   "aiOcrNoLedger": "Ledger not found",
@@ -1352,13 +1383,6 @@
   "aiOcrCreateFailed": "Failed to create bill",
   "aiTypeIncome": "Income",
   "aiTypeExpense": "Expense",
-  "ocrRecognitionResult": "Recognition Result",
-  "ocrAmount": "Amount",
-  "ocrNoAmountDetected": "No amount detected",
-  "ocrManualAmountInput": "Or enter amount manually",
-  "ocrMerchant": "Merchant",
-  "ocrSuggestedCategory": "Suggested Category",
-  "ocrTime": "Time",
   "cloudSyncPageTitle": "Cloud Sync & Backup",
   "cloudSyncPageSubtitle": "Manage cloud services and data sync",
   "dataManagement": "Data Management",
@@ -1369,6 +1393,19 @@
   "smartBillingDesc": "AI recognition, OCR scan, auto billing",
   "smartBillingPageTitle": "Smart Billing",
   "smartBillingPageSubtitle": "AI and automation billing features",
+  "smartBillingGuideHint": "Long press the + button at the bottom center of the home page to quickly access these features",
+  "smartBillingImageBilling": "Image Billing",
+  "smartBillingImageBillingDesc": "Select payment screenshots from gallery for recognition",
+  "smartBillingImageBillingGuide": "Long press the + button at the bottom center of the home page and select 'Gallery' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.",
+  "smartBillingAIOptional": "AI recognition is optional, configuration can improve recognition accuracy",
+  "smartBillingCameraBilling": "Camera Billing",
+  "smartBillingCameraBillingDesc": "Capture payment screenshots for recognition",
+  "smartBillingCameraBillingGuide": "Long press the + button at the bottom center of the home page and select 'Camera' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.",
+  "smartBillingVoiceBilling": "Voice Billing",
+  "smartBillingVoiceBillingDesc": "Quick billing through voice input",
+  "smartBillingVoiceBillingGuide": "Long press the + button at the bottom center of the home page and select 'Voice' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.",
+  "smartBillingAIRequired": "Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first",
+  "autoScreenshotBillingIosDesc": "Auto-recognize payment screenshots via Shortcuts",
   "automation": "Automation",
   "automationDesc": "Recurring transactions and reminders",
   "automationPageTitle": "Automation",
@@ -1563,5 +1600,7 @@
   "welcomeCategoryModeHierarchicalDescription": "Detailed management",
   "welcomeCategoryModeHierarchicalFeature1": "Support parent-child category levels",
   "welcomeCategoryModeHierarchicalFeature2": "More detailed transaction classification",
-  "welcomeCategoryModeHierarchicalFeature3": "Perfect for detailed management"
+  "welcomeCategoryModeHierarchicalFeature3": "Perfect for detailed management",
+  "iosVersionWarningTitle": "Requires iOS 16.0 or later",
+  "iosVersionWarningDesc": "Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature."
 }

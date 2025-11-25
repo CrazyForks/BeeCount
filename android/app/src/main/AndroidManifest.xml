@@ -2,6 +2,9 @@
     <!-- Required for Supabase network requests -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Required for voice recording -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <!-- Required for downloading APK files and saving images (API <= 29) -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />

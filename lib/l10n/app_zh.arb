@@ -12,6 +12,7 @@
   "commonAdd": "添加",
   "commonEdit": "编辑",
   "commonOk": "确定",
+  "commonKnow": "知道了",
   "commonNo": "否",
   "commonEmpty": "暂无数据",
   "commonError": "错误",
@@ -19,13 +20,68 @@
   "commonFailed": "失败",
   "commonBack": "返回",
   "commonNext": "下一步",
-  "fabLongPressTip": "长按可拍照记账",
+  "fabActionCamera": "拍照",
+  "fabActionGallery": "相册",
+  "fabActionVoice": "语音",
+  "fabActionVoiceDisabled": "需要启用AI并配置 GLM API",
+  "voiceRecordingTitle": "语音记账",
+  "voiceRecordingPreparing": "准备录音...",
+  "voiceRecordingInProgress": "正在录音...",
+  "voiceRecordingProcessing": "正在识别...",
+  "voiceRecordingDuration": "录音时长: {duration}秒",
+  "@voiceRecordingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRecordingSuccess": "语音记账成功",
+  "voiceRecordingNoLedger": "未找到当前账本",
+  "voiceRecordingNoInfo": "未识别到记账信息",
+  "voiceRecordingPermissionDenied": "需要麦克风权限才能录音",
+  "voiceRecordingPermissionDeniedTitle": "需要麦克风权限",
+  "voiceRecordingPermissionDeniedMessage": "语音记账功能需要使用麦克风权限。请在系统设置中允许蜜蜂记账访问麦克风。",
+  "voiceRecordingStartFailed": "启动录音失败: {error}",
+  "@voiceRecordingStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingFailed": "录音失败: {error}",
+  "@voiceRecordingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingRecognizeFailed": "识别失败: {error}",
+  "@voiceRecordingRecognizeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoInfoDetected": "未能识别账单信息: {text}",
+  "@voiceRecordingNoInfoDetected": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoSpeech": "未检测到语音输入",
   "commonPrevious": "上一步",
   "commonFinish": "完成",
   "commonClose": "关闭",
   "commonSearch": "搜索",
   "commonNoteHint": "备注…",
   "commonSettings": "设置",
+  "commonGoSettings": "前往设置",
   "commonHelp": "帮助",
   "commonLanguage": "语言",
   "commonWeekdayMonday": "星期一",
@@ -58,10 +114,9 @@
   "widgetMonthSuffix": "月",
   "searchTitle": "搜索",
   "searchHint": "搜索备注、分类或金额...",
-  "searchAmountRange": "金额范围筛选",
+  "searchCategoryHint": "搜索分类名称...",
   "searchMinAmount": "最小金额",
   "searchMaxAmount": "最大金额",
-  "searchTo": "至",
   "searchNoInput": "输入关键词开始搜索",
   "searchNoResults": "未找到匹配的结果",
   "searchBatchMode": "批量操作",
@@ -108,16 +163,6 @@
     }
   },
   "searchBatchSetNoteHint": "输入备注内容 (留空则清空备注)",
-  "searchBatchChangeCategoryTitle": "批量调整分类",
-  "searchBatchChangeCategoryMessage": "将为选中的 {count} 笔记账设置新的分类",
-  "@searchBatchChangeCategoryMessage": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "searchBatchChangeCategoryLabel": "选择分类",
   "searchBatchDeleteSuccess": "成功删除 {count} 笔记账",
   "@searchBatchDeleteSuccess": {
     "placeholders": {
@@ -174,6 +219,17 @@
       }
     }
   },
+  "searchFilterTitle": "筛选",
+  "searchAmountFilter": "金额筛选",
+  "searchDateFilter": "时间筛选",
+  "searchStartDate": "开始日期",
+  "searchEndDate": "结束日期",
+  "searchNotSet": "未设置",
+  "searchClearFilter": "清空筛选",
+  "searchBatchCategoryTransferError": "选中的交易包含转账，无法修改分类",
+  "searchBatchCategoryTypeError": "选中的交易类型不一致，请选择全部为收入或全部为支出的交易",
+  "searchDateStart": "开始",
+  "searchDateEnd": "结束",
   "analyticsMonth": "月",
   "analyticsYear": "年",
   "analyticsAll": "全部",
@@ -379,13 +435,13 @@
   "categoryMigrationTitle": "分类迁移",
   "categoryMigrationDescription": "分类迁移说明",
   "categoryMigrationDescriptionContent": "• 将指定分类的所有交易记录迁移到另一个分类\n• 迁移后，原分类的交易数据将全部转移到目标分类\n• 此操作不可撤销，请谨慎选择",
+  "categoryMigrationTypeLabel": "选择类型",
   "categoryMigrationFromLabel": "迁出分类",
   "categoryMigrationFromHint": "选择要迁出的分类",
   "categoryMigrationToLabel": "迁入分类",
   "categoryMigrationToHint": "选择迁入的分类",
   "categoryMigrationToHintFirst": "请先选择迁出分类",
   "categoryMigrationStartButton": "开始迁移",
-  "categoryMigrationTransactionCount": "{count}笔",
   "categoryMigrationCannotTitle": "无法迁移",
   "categoryMigrationCannotMessage": "选择的分类无法进行迁移，请检查分类状态。",
   "categoryExpenseType": "支出分类",
@@ -1093,8 +1149,6 @@
   "welcomeCloudSyncFeature3": "自建 WebDAV/Supabase 服务",
   "widgetManagement": "桌面小组件",
   "widgetManagementDesc": "在主屏幕快速查看收支情况",
-  "ocrBilling": "OCR扫描记账",
-  "ocrBillingDesc": "扫描支付截图自动识别金额",
   "widgetPreview": "小组件预览",
   "widgetPreviewDesc": "小组件会自动显示当前账本的实际数据，主题色跟随应用设置",
   "howToAddWidget": "如何添加小组件",
@@ -1122,11 +1176,6 @@
   "autoBilling": "自动记账",
   "enabled": "已启用",
   "disabled": "已禁用",
-  "supportedPayments": "支持的支付方式",
-  "supportedAlipay": "✅ 支付宝",
-  "supportedWechat": "✅ 微信支付",
-  "supportedUnionpay": "✅ 云闪付",
-  "supportedOthers": "⚠️ 其他支付方式识别准确率可能较低",
   "photosPermissionRequired": "需要照片权限才能监听截图",
   "enableSuccess": "自动记账已启用",
   "disableSuccess": "自动记账已禁用",
@@ -1137,46 +1186,17 @@
   "autoBillingBatteryWarning": "⚠️ 未关闭电池优化，应用可能会被系统自动清理，导致自动记账失效。建议点击上方\"去设置\"按钮关闭电池优化。",
   "enableFailed": "启用失败",
   "disableFailed": "禁用失败",
-  "reselectImage": "重新选择",
-  "viewOriginalText": "查看原始文本",
-  "createBill": "创建账单",
   "iosAutoFeatureDesc": "通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。",
-  "iosAutoShortcutQuickAdd": "快速添加快捷指令",
-  "iosAutoShortcutQuickAddDesc": "点击下方按钮可以直接导入配置好的快捷指令，或手动打开快捷指令App配置。",
-  "iosAutoShortcutImport": "一键导入快捷指令",
-  "iosAutoShortcutOpenApp": "或手动打开快捷指令App配置",
-  "iosAutoShortcutConfigTitle": "配置步骤（推荐方式 - URL参数传递）：",
-  "iosAutoShortcutStep1": "打开\"快捷指令\"应用",
-  "iosAutoShortcutStep2": "点击右上角\"+\"创建新快捷指令",
-  "iosAutoShortcutStep3": "添加\"截屏\"操作（获取最新截图）",
-  "iosAutoShortcutStep4": "添加\"从截屏中提取文本\"操作",
-  "iosAutoShortcutStep5": "添加\"替换文本\"操作：将\"提取的文本\"中的\"\\n\"替换为\",\"（逗号）",
-  "iosAutoShortcutStep6": "添加\"URL编码\"操作：对\"替换后的文本\"进行URL编码",
-  "iosAutoShortcutStep7": "添加\"打开URL\"操作，URL填写：\nbeecount://auto-billing?text=[URL编码后的文本]",
-  "iosAutoShortcutStep8": "点击快捷指令设置（右上角三点）",
-  "iosAutoShortcutStep9": "在\"当...时运行\"中添加\"截屏时\"触发器",
-  "iosAutoShortcutStep10": "保存并测试：截图后会自动识别",
-  "iosAutoShortcutRecommendedTip": "✅ 推荐：URL参数传递，无需权限，体验最佳。关键步骤：\n• 替换文本时将换行符\\n替换为逗号,（避免URL截断）\n• 使用URL编码操作（避免中文乱码）\n• 一般截图文本不会超过2048字符限制",
+  "iosAutoShortcutConfigTitle": "配置步骤：",
+  "iosAutoShortcutStep1": "打开\"快捷指令\"应用，点击右上角\"+\"创建新快捷指令",
+  "iosAutoShortcutStep2": "添加\"截屏\"操作",
+  "iosAutoShortcutStep3": "搜索并添加\"蜜蜂记账 - 截图自动记账\"操作",
+  "iosAutoShortcutStep4": "将\"蜜蜂记账\"的截图参数设置为上一步的\"截屏\"",
+  "iosAutoShortcutStep5": "（可选）在系统设置 > 辅助功能 > 触控 > 轻点背面中，绑定此快捷指令",
+  "iosAutoShortcutStep6": "完成！支付时双击手机背部即可快速记账",
+  "iosAutoShortcutRecommendedTip": "✅ 推荐：在\"轻点背面\"中绑定快捷指令后，支付时双击手机背部即可自动截图并识别记账，无需手动截图。",
   "iosAutoBackTapTitle": "💡 双击背部快速触发（推荐）",
   "iosAutoBackTapDesc": "设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图",
-  "iosAutoImportFailed": "导入失败: {error}",
-  "@iosAutoImportFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "iosAutoOpenAppFailed": "打开失败: {error}",
-  "@iosAutoOpenAppFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "iosAutoCannotOpenLink": "无法打开链接，请检查网络连接",
-  "iosAutoCannotOpenShortcuts": "无法打开快捷指令App",
   "aiSettingsTitle": "AI智能识别",
   "aiSettingsSubtitle": "配置AI模型和识别策略",
   "aiEnableTitle": "启用AI智能识别",
@@ -1211,9 +1231,6 @@
   "aiLocalModelTraining": "训练中",
   "aiLocalModelManagement": "模型管理",
   "aiLocalModelUnavailable": "本地模型训练中，暂不可用",
-  "aiFabSettingTitle": "快捷记账按钮优先拍照",
-  "aiFabSettingDescCamera": "短按拍照，长按手动记账",
-  "aiFabSettingDescManual": "短按手动记账，长按拍照",
   "aiOcrRecognizing": "正在识别账单...",
   "aiOcrNoAmount": "未识别到有效金额，请手动记账",
   "aiOcrNoLedger": "未找到账本",
@@ -1239,13 +1256,6 @@
   "aiOcrCreateFailed": "创建账单失败",
   "aiTypeIncome": "收入",
   "aiTypeExpense": "支出",
-  "ocrRecognitionResult": "识别结果",
-  "ocrAmount": "金额",
-  "ocrNoAmountDetected": "未识别到金额",
-  "ocrManualAmountInput": "或手动输入金额",
-  "ocrMerchant": "商家",
-  "ocrSuggestedCategory": "推荐分类",
-  "ocrTime": "时间",
   "cloudSyncPageTitle": "云同步与备份",
   "cloudSyncPageSubtitle": "管理云服务和数据同步",
   "dataManagement": "数据管理",
@@ -1256,6 +1266,19 @@
   "smartBillingDesc": "AI识别、OCR扫描、自动记账",
   "smartBillingPageTitle": "智能记账",
   "smartBillingPageSubtitle": "AI和自动化记账功能",
+  "smartBillingGuideHint": "长按首页底部中间的 + 按钮，即可快速使用这些功能",
+  "smartBillingImageBilling": "图片记账",
+  "smartBillingImageBillingDesc": "从相册选择支付截图进行识别",
+  "smartBillingImageBillingGuide": "在首页长按底部中间的 + 按钮，选择「相册」即可使用图片记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。",
+  "smartBillingAIOptional": "AI 识别为可选功能，配置后可提高识别准确度",
+  "smartBillingCameraBilling": "拍照记账",
+  "smartBillingCameraBillingDesc": "拍摄支付截图进行识别",
+  "smartBillingCameraBillingGuide": "在首页长按底部中间的 + 按钮，选择「拍照」即可使用拍照记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。",
+  "smartBillingVoiceBilling": "语音记账",
+  "smartBillingVoiceBillingDesc": "通过语音输入快速记账",
+  "smartBillingVoiceBillingGuide": "在首页长按底部中间的 + 按钮，选择「语音」即可使用语音记账功能。语音记账需要通过AI将语音转为文字并提取账单信息。",
+  "smartBillingAIRequired": "语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置",
+  "autoScreenshotBillingIosDesc": "通过快捷指令实现截图自动识别记账",
   "automation": "自动化",
   "automationDesc": "周期记账、记账提醒",
   "automationPageTitle": "自动化功能",
@@ -1516,5 +1539,7 @@
   "welcomeCategoryModeHierarchicalDescription": "精细管理，清晰明了",
   "welcomeCategoryModeHierarchicalFeature1": "支持父子分类层级",
   "welcomeCategoryModeHierarchicalFeature2": "更细致的账单归类",
-  "welcomeCategoryModeHierarchicalFeature3": "适合需要精细管理的用户"
+  "welcomeCategoryModeHierarchicalFeature3": "适合需要精细管理的用户",
+  "iosVersionWarningTitle": "需要 iOS 16.0 或更高版本",
+  "iosVersionWarningDesc": "截图自动记账功能使用了 iOS 16 引入的 App Intents 框架。您的设备系统版本较低，暂不支持此功能。\n\n请升级到 iOS 16 或更高版本以使用此功能。"
 }

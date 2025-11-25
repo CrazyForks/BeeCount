@@ -22,18 +22,18 @@ class SearchPage extends ConsumerStatefulWidget {
 
 class _SearchPageState extends ConsumerState<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  final TextEditingController _minAmountController = TextEditingController();
-  final TextEditingController _maxAmountController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
   List<({Transaction t, Category? category})> _searchResults = [];
   List<({Transaction t, Category? category})> _allTransactions = [];
   bool _isSearching = false;
   String _searchText = '';
+
+  // 筛选条件
   double? _minAmount;
   double? _maxAmount;
-  bool _showAmountFilter = false;
-  bool _hasInitializedAmountFilter = false;
+  DateTime? _startDate;
+  DateTime? _endDate;
   bool _hasScheduledSearch = false; // 防止重复调度搜索
 
   // 批量操作相关
@@ -49,8 +49,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   @override
   void dispose() {
     _searchController.dispose();
-    _minAmountController.dispose();
-    _maxAmountController.dispose();
     _noteController.dispose();
     super.dispose();
   }
@@ -62,17 +60,11 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     _performSearch();
   }
 
-  void _onAmountFilterChanged() {
-    setState(() {
-      _minAmount = double.tryParse(_minAmountController.text.trim());
-      _maxAmount = double.tryParse(_maxAmountController.text.trim());
-    });
-    _performSearch();
-  }
-
   /// 执行搜索
   void _performSearch() {
-    if (_searchText.isEmpty && _minAmount == null && _maxAmount == null) {
+    // 如果没有任何搜索条件，清空结果
+    if (_searchText.isEmpty && _minAmount == null && _maxAmount == null &&
+        _startDate == null && _endDate == null) {
       setState(() {
         _searchResults = [];
         _isSearching = false;
@@ -107,7 +99,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
       // 金额范围搜索
       bool amountMatch = true;
       if (_minAmount != null || _maxAmount != null) {
-        final amount = transaction.amount;
+        final amount = transaction.amount.abs();
         if (_minAmount != null && amount < _minAmount!) {
           amountMatch = false;
         }
@@ -116,7 +108,25 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         }
       }
 
-      return textMatch && amountMatch;
+      // 时间范围搜索
+      bool dateMatch = true;
+      if (_startDate != null || _endDate != null) {
+        final happenedAt = transaction.happenedAt;
+        if (_startDate != null) {
+          final startOfDay = DateTime(_startDate!.year, _startDate!.month, _startDate!.day);
+          if (happenedAt.isBefore(startOfDay)) {
+            dateMatch = false;
+          }
+        }
+        if (_endDate != null) {
+          final endOfDay = DateTime(_endDate!.year, _endDate!.month, _endDate!.day, 23, 59, 59);
+          if (happenedAt.isAfter(endOfDay)) {
+            dateMatch = false;
+          }
+        }
+      }
+
+      return textMatch && amountMatch && dateMatch;
     }).toList();
 
     setState(() {
@@ -182,11 +192,186 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     });
   }
 
-  /// 检查选中的交易中是否包含转账类型
-  bool _hasTransferInSelection() {
-    return _searchResults
-        .where((item) => _selectedIds.contains(item.t.id))
-        .any((item) => item.t.type == 'transfer');
+  /// 显示筛选弹窗
+  Future<void> _showFilterDialog() async {
+    final l10n = AppLocalizations.of(context);
+    double? tempMinAmount = _minAmount;
+    double? tempMaxAmount = _maxAmount;
+    DateTime? tempStartDate = _startDate;
+    DateTime? tempEndDate = _endDate;
+
+    await showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text(l10n.searchFilterTitle),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 金额筛选
+                  Text(l10n.searchAmountFilter, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: l10n.searchMinAmount,
+                            border: const OutlineInputBorder(),
+                            isDense: true,
+                          ),
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          controller: TextEditingController(text: tempMinAmount?.toString() ?? ''),
+                          onChanged: (value) {
+                            tempMinAmount = double.tryParse(value);
+                          },
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text('~'),
+                      ),
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: l10n.searchMaxAmount,
+                            border: const OutlineInputBorder(),
+                            isDense: true,
+                          ),
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          controller: TextEditingController(text: tempMaxAmount?.toString() ?? ''),
+                          onChanged: (value) {
+                            tempMaxAmount = double.tryParse(value);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // 时间筛选
+                  Text(l10n.searchDateFilter, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(l10n.searchStartDate),
+                    subtitle: Text(tempStartDate != null
+                        ? '${tempStartDate!.year}-${tempStartDate!.month.toString().padLeft(2, '0')}-${tempStartDate!.day.toString().padLeft(2, '0')}'
+                        : l10n.searchNotSet),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (tempStartDate != null)
+                          IconButton(
+                            icon: const Icon(Icons.clear, size: 20),
+                            onPressed: () {
+                              setState(() {
+                                tempStartDate = null;
+                              });
+                            },
+                          ),
+                        IconButton(
+                          icon: const Icon(Icons.calendar_today, size: 20),
+                          onPressed: () async {
+                            final date = await showWheelDatePicker(
+                              context,
+                              initial: tempStartDate ?? DateTime.now(),
+                              mode: WheelDatePickerMode.ymd,
+                              minDate: DateTime(2000),
+                              maxDate: DateTime.now(),
+                            );
+                            if (date != null) {
+                              setState(() {
+                                tempStartDate = date;
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(l10n.searchEndDate),
+                    subtitle: Text(tempEndDate != null
+                        ? '${tempEndDate!.year}-${tempEndDate!.month.toString().padLeft(2, '0')}-${tempEndDate!.day.toString().padLeft(2, '0')}'
+                        : l10n.searchNotSet),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (tempEndDate != null)
+                          IconButton(
+                            icon: const Icon(Icons.clear, size: 20),
+                            onPressed: () {
+                              setState(() {
+                                tempEndDate = null;
+                              });
+                            },
+                          ),
+                        IconButton(
+                          icon: const Icon(Icons.calendar_today, size: 20),
+                          onPressed: () async {
+                            final date = await showWheelDatePicker(
+                              context,
+                              initial: tempEndDate ?? DateTime.now(),
+                              mode: WheelDatePickerMode.ymd,
+                              minDate: DateTime(2000),
+                              maxDate: DateTime.now(),
+                            );
+                            if (date != null) {
+                              setState(() {
+                                tempEndDate = date;
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(l10n.commonCancel),
+              ),
+              TextButton(
+                onPressed: () {
+                  // 清空筛选
+                  setState(() {
+                    tempMinAmount = null;
+                    tempMaxAmount = null;
+                    tempStartDate = null;
+                    tempEndDate = null;
+                  });
+                },
+                child: Text(l10n.searchClearFilter),
+              ),
+              TextButton(
+                onPressed: () {
+                  this.setState(() {
+                    _minAmount = tempMinAmount;
+                    _maxAmount = tempMaxAmount;
+                    _startDate = tempStartDate;
+                    _endDate = tempEndDate;
+                  });
+                  _performSearch();
+                  Navigator.pop(context);
+                },
+                child: Text(l10n.commonConfirm),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   /// 批量操作完成后刷新
@@ -325,86 +510,43 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   }
 
   /// 批量调整分类对话框
-  void _showBatchChangeCategoryDialog() {
-    final count = _selectedIds.length;
-    final db = ref.read(databaseProvider);
+  Future<void> _showBatchChangeCategoryDialog() async {
     final l10n = AppLocalizations.of(context);
-    int? selectedCategoryId;
 
-    showDialog(
-      context: context,
-      builder: (context) => StreamBuilder<List<Category>>(
-        stream: (db.select(db.categories)
-              ..orderBy([(c) => d.OrderingTerm(expression: c.sortOrder)]))
-            .watch(),
-        builder: (context, snapshot) {
-          final categories = snapshot.data ?? [];
+    // 检查选中的交易类型是否一致
+    final selectedTransactions = _searchResults
+        .where((item) => _selectedIds.contains(item.t.id))
+        .toList();
 
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return AlertDialog(
-                title: Text(l10n.searchBatchChangeCategoryTitle),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(l10n.searchBatchChangeCategoryMessage(count)),
-                    const SizedBox(height: 16),
-                    DropdownButtonFormField<int>(
-                      value: selectedCategoryId,
-                      decoration: InputDecoration(
-                        labelText: l10n.searchBatchChangeCategoryLabel,
-                        border: const OutlineInputBorder(),
-                      ),
-                      items: categories.map((category) {
-                        final iconData = getCategoryIconData(
-                            category: category, categoryName: category.name);
-                        return DropdownMenuItem(
-                          value: category.id,
-                          child: Row(
-                            children: [
-                              Icon(
-                                iconData,
-                                size: 24,
-                                color: ref.watch(primaryColorProvider),
-                              ),
-                              const SizedBox(width: 12),
-                              Text(CategoryUtils.getDisplayName(
-                                  category.name, context)),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCategoryId = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(l10n.commonCancel),
-                  ),
-                  TextButton(
-                    onPressed: selectedCategoryId == null
-                        ? null
-                        : () async {
-                            Navigator.pop(context);
-                            await _executeBatchChangeCategory(
-                                selectedCategoryId!);
-                          },
-                    child: Text(l10n.commonConfirm),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ),
+    // 获取所有选中交易的类型
+    final types = selectedTransactions.map((item) => item.t.type).toSet();
+
+    // 如果包含转账类型或类型不一致，则不允许修改分类
+    if (types.contains('transfer')) {
+      showToast(context, l10n.searchBatchCategoryTransferError);
+      return;
+    }
+
+    if (types.length > 1) {
+      showToast(context, l10n.searchBatchCategoryTypeError);
+      return;
+    }
+
+    // 获取统一的交易类型
+    final transactionType = types.first;
+
+    // 显示分类选择器
+    final selectedCategory = await showCategorySelector(
+      context,
+      type: transactionType,
+      includeParentCategories: false, // 不包含有子分类的父分类
+      showTransactionCount: true, // 显示笔数
+      ledgerId: ref.read(currentLedgerIdProvider),
     );
+
+    if (selectedCategory != null) {
+      await _executeBatchChangeCategory(selectedCategory.id);
+    }
   }
 
   /// 执行批量调整分类
@@ -440,19 +582,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     final ledgerId = ref.watch(currentLedgerIdProvider);
     final hide = ref.watch(hideAmountsProvider);
     final l10n = AppLocalizations.of(context);
-
-    // 监听金额筛选开关的持久化状态
-    ref.listen<AsyncValue<bool>>(searchAmountFilterEnabledProvider,
-        (previous, next) {
-      next.whenData((enabled) {
-        if (!_hasInitializedAmountFilter) {
-          setState(() {
-            _showAmountFilter = enabled;
-            _hasInitializedAmountFilter = true;
-          });
-        }
-      });
-    });
 
     return Scaffold(
       backgroundColor: BeeTokens.scaffoldBackground(context),
@@ -501,116 +630,99 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               ),
               child: Column(
                 children: [
-                  // 文本搜索框
-                  TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).searchHint,
-                      prefixIcon:
-                          Icon(Icons.search, color: BeeTokens.textTertiary(context)),
-                      suffixIcon: _searchController.text.isNotEmpty
-                          ? IconButton(
-                              onPressed: () {
-                                _searchController.clear();
-                              },
-                              icon: Icon(Icons.clear,
-                                  color: BeeTokens.textTertiary(context)),
-                            )
-                          : null,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: Colors.grey.withValues(alpha: 0.3)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // 金额筛选切换
+                  // 搜索框和筛选按钮
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          AppLocalizations.of(context).searchAmountRange,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: BeeTokens.textPrimary(context),
-                                  ),
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context).searchHint,
+                            prefixIcon: Icon(Icons.search,
+                                color: BeeTokens.textTertiary(context)),
+                            suffixIcon: _searchController.text.isNotEmpty
+                                ? IconButton(
+                                    onPressed: () {
+                                      _searchController.clear();
+                                    },
+                                    icon: Icon(Icons.clear,
+                                        color: BeeTokens.textTertiary(context)),
+                                  )
+                                : null,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: Colors.grey.withValues(alpha: 0.3)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 16),
+                          ),
                         ),
                       ),
-                      Switch(
-                        value: _showAmountFilter,
-                        onChanged: (value) async {
-                          setState(() {
-                            _showAmountFilter = value;
-                            if (!value) {
-                              _minAmountController.clear();
-                              _maxAmountController.clear();
-                              _minAmount = null;
-                              _maxAmount = null;
-                              _performSearch();
-                            }
-                          });
-
-                          final setter = ref.read(searchSettingsSetterProvider);
-                          await setter.setAmountFilterEnabled(value);
-                        },
+                      const SizedBox(width: 8),
+                      // 筛选按钮
+                      IconButton(
+                        onPressed: _showFilterDialog,
+                        icon: Icon(
+                          Icons.filter_list,
+                          color: (_minAmount != null || _maxAmount != null ||
+                                  _startDate != null || _endDate != null)
+                              ? ref.watch(primaryColorProvider)
+                              : BeeTokens.iconPrimary(context),
+                        ),
+                        tooltip: l10n.searchFilterTitle,
                       ),
                     ],
                   ),
-                  // 金额范围输入框
-                  if (_showAmountFilter) ...[
+                  // 显示已选筛选条件
+                  if (_minAmount != null || _maxAmount != null ||
+                      _startDate != null || _endDate != null) ...[
                     const SizedBox(height: 12),
-                    Row(
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _minAmountController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context).searchMinAmount,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                    color: Colors.grey.withValues(alpha: 0.3)),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 12),
+                        if (_minAmount != null || _maxAmount != null)
+                          Chip(
+                            label: Text(
+                              '${l10n.searchAmountFilter}: ${_minAmount?.toStringAsFixed(2) ?? '0'} ~ ${_maxAmount?.toStringAsFixed(2) ?? '∞'}',
+                              style: TextStyle(fontSize: 12, color: ref.watch(primaryColorProvider)),
                             ),
-                            onChanged: (value) => _onAmountFilterChanged(),
+                            backgroundColor: ref.watch(primaryColorProvider).withValues(alpha: 0.1),
+                            side: BorderSide(color: ref.watch(primaryColorProvider), width: 1),
+                            deleteIconColor: ref.watch(primaryColorProvider),
+                            deleteIcon: const Icon(Icons.close, size: 16),
+                            onDeleted: () {
+                              setState(() {
+                                _minAmount = null;
+                                _maxAmount = null;
+                              });
+                              _performSearch();
+                            },
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(AppLocalizations.of(context).searchTo,
-                            style: Theme.of(context).textTheme.bodyMedium),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TextField(
-                            controller: _maxAmountController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context).searchMaxAmount,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                    color: Colors.grey.withValues(alpha: 0.3)),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 12),
+                        if (_startDate != null || _endDate != null)
+                          Chip(
+                            label: Text(
+                              '${l10n.searchDateFilter}: ${_startDate != null ? '${_startDate!.year}-${_startDate!.month.toString().padLeft(2, '0')}-${_startDate!.day.toString().padLeft(2, '0')}' : l10n.searchDateStart} ~ ${_endDate != null ? '${_endDate!.year}-${_endDate!.month.toString().padLeft(2, '0')}-${_endDate!.day.toString().padLeft(2, '0')}' : l10n.searchDateEnd}',
+                              style: TextStyle(fontSize: 12, color: ref.watch(primaryColorProvider)),
                             ),
-                            onChanged: (value) => _onAmountFilterChanged(),
+                            backgroundColor: ref.watch(primaryColorProvider).withValues(alpha: 0.1),
+                            side: BorderSide(color: ref.watch(primaryColorProvider), width: 1),
+                            deleteIconColor: ref.watch(primaryColorProvider),
+                            deleteIcon: const Icon(Icons.close, size: 16),
+                            onDeleted: () {
+                              setState(() {
+                                _startDate = null;
+                                _endDate = null;
+                              });
+                              _performSearch();
+                            },
                           ),
-                        ),
                       ],
                     ),
                   ],
@@ -626,7 +738,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   _allTransactions = snapshot.data!;
                   if ((_searchText.isNotEmpty ||
                           _minAmount != null ||
-                          _maxAmount != null) &&
+                          _maxAmount != null ||
+                          _startDate != null ||
+                          _endDate != null) &&
                       _searchResults.isEmpty &&
                       !_isSearching &&
                       !_hasScheduledSearch) {
@@ -645,7 +759,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
                 if (_searchText.isEmpty &&
                     _minAmount == null &&
-                    _maxAmount == null) {
+                    _maxAmount == null &&
+                    _startDate == null &&
+                    _endDate == null) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -776,7 +892,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: OutlinedButton.icon(
-                                    onPressed: _selectedIds.isEmpty || _hasTransferInSelection()
+                                    onPressed: _selectedIds.isEmpty
                                         ? null
                                         : _showBatchChangeCategoryDialog,
                                     icon: const Icon(Icons.category, size: 16),
@@ -847,6 +963,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                 isExpense: isExpense,
                                 hide: hide,
                                 happenedAt: item.t.happenedAt,
+                                showFullDate: true,
                                 isSelectionMode: _isBatchMode,
                                 isSelected: isSelected,
                                 onSelectionChanged: () =>

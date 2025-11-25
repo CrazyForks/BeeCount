@@ -10,6 +10,15 @@ import UserNotifications
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
 
+    // 注册AppIntents桥接插件
+    if #available(iOS 13.0, *) {
+      let controller = window?.rootViewController as! FlutterViewController
+      let registrar = self.registrar(forPlugin: "AppIntentsBridge")
+      if let registrar = registrar {
+        AppIntentsBridge.register(with: registrar)
+      }
+    }
+
     // 设置通知中心代理
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self

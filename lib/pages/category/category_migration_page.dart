@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/database_providers.dart';
+import '../../providers/theme_providers.dart';
 import '../../data/db.dart' as db;
 import '../../widgets/ui/ui.dart';
+import '../../widgets/biz/biz.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 import '../../widgets/category_icon.dart';
+import '../../styles/tokens.dart';
 
 class CategoryMigrationPage extends ConsumerStatefulWidget {
   final db.Category? preselectedFromCategory; // 预填充的来源分类
@@ -22,13 +25,20 @@ class CategoryMigrationPage extends ConsumerStatefulWidget {
 class _CategoryMigrationPageState extends ConsumerState<CategoryMigrationPage> {
   db.Category? _fromCategory;
   db.Category? _toCategory;
+  String? _selectedType; // 'income' or 'expense'
   bool _isLoading = false;
-  
+
   @override
   void initState() {
     super.initState();
     // 预填充来源分类
     _fromCategory = widget.preselectedFromCategory;
+    if (_fromCategory != null) {
+      _selectedType = _fromCategory!.kind;
+    } else {
+      // 默认选中支出
+      _selectedType = 'expense';
+    }
   }
   
   @override
@@ -57,152 +67,192 @@ class _CategoryMigrationPageState extends ConsumerState<CategoryMigrationPage> {
   }
   
   Widget _buildMigrationForm(List<({db.Category category, int transactionCount})> categoriesWithCount) {
+    final l10n = AppLocalizations.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.info_outline,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        AppLocalizations.of(context).categoryMigrationDescription,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    AppLocalizations.of(context).categoryMigrationDescriptionContent,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+          // 说明卡片
+          SectionCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: ref.watch(primaryColorProvider),
                     ),
+                    const SizedBox(width: 8),
+                    Text(
+                      l10n.categoryMigrationDescription,
+                      style: TextStyle(
+                        color: ref.watch(primaryColorProvider),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.categoryMigrationDescriptionContent,
+                  style: TextStyle(
+                    color: BeeTokens.textSecondary(context),
+                    fontSize: 14,
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // 类型选择
+          Text(
+            l10n.categoryMigrationTypeLabel,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: BeeTokens.textPrimary(context),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: _TypeButton(
+                  label: l10n.categoryExpense,
+                  icon: Icons.trending_down,
+                  isSelected: _selectedType == 'expense',
+                  onTap: () {
+                    setState(() {
+                      _selectedType = 'expense';
+                      _fromCategory = null;
+                      _toCategory = null;
+                    });
+                  },
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _TypeButton(
+                  label: l10n.categoryIncome,
+                  icon: Icons.trending_up,
+                  isSelected: _selectedType == 'income',
+                  onTap: () {
+                    setState(() {
+                      _selectedType = 'income';
+                      _fromCategory = null;
+                      _toCategory = null;
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 24),
+
+          // 迁出分类
           Text(
-            AppLocalizations.of(context).categoryMigrationFromLabel,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            l10n.categoryMigrationFromLabel,
+            style: TextStyle(
               fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: BeeTokens.textPrimary(context),
             ),
           ),
           const SizedBox(height: 8),
-          SearchableDropdown<({db.Category category, int transactionCount})>(
-            items: categoriesWithCount.where((item) {
-              // 只显示有交易记录的分类
-              if (item.transactionCount == 0) return false;
-
-              // 排除带有二级分类的一级分类
-              if (item.category.level == 1) {
-                final hasSubCategories = categoriesWithCount.any((c) =>
-                  c.category.level == 2 && c.category.parentId == item.category.id
-                );
-                if (hasSubCategories) return false;
-              }
-
-              return true;
-            }).toList(),
-            value: categoriesWithCount.where((item) => item.category.id == _fromCategory?.id).firstOrNull,
-            hintText: AppLocalizations.of(context).categoryMigrationFromHint,
-            prefixIcon: const Icon(Icons.upload_outlined),
-            onChanged: (item) {
-              setState(() {
-                _fromCategory = item?.category;
-                // 如果选择了相同的分类，清除目标分类
-                if (_toCategory?.id == _fromCategory?.id) {
-                  _toCategory = null;
-                }
-              });
-            },
-            itemBuilder: (item) => _CategoryDropdownItem(
-              category: item.category,
-              transactionCount: item.transactionCount,
-            ),
-            filter: (item, query) {
-              return CategoryUtils.getDisplayName(item.category.name, context).toLowerCase().contains(query) ||
-                     item.category.kind.toLowerCase().contains(query);
-            },
-            labelExtractor: (item) => '${CategoryUtils.getDisplayName(item.category.name, context)} (${AppLocalizations.of(context).categoryMigrationTransactionCount(item.transactionCount)})',
+          _CategorySelectorButton(
+            category: _fromCategory,
+            hintText: l10n.categoryMigrationFromHint,
+            icon: Icons.upload_outlined,
+            enabled: _selectedType != null,
+            onTap: _selectedType != null ? () => _selectFromCategory() : null,
           ),
           const SizedBox(height: 24),
+
+          // 迁入分类
           Text(
-            AppLocalizations.of(context).categoryMigrationToLabel,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            l10n.categoryMigrationToLabel,
+            style: TextStyle(
               fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: BeeTokens.textPrimary(context),
             ),
           ),
           const SizedBox(height: 8),
-          SearchableDropdown<({db.Category category, int transactionCount})>(
-            items: _fromCategory != null
-              ? categoriesWithCount.where((item) {
-                  // 必须是相同类型且不是自己
-                  if (item.category.kind != _fromCategory!.kind) return false;
-                  if (item.category.id == _fromCategory!.id) return false;
-
-                  // 排除带有二级分类的一级分类
-                  if (item.category.level == 1) {
-                    final hasSubCategories = categoriesWithCount.any((c) =>
-                      c.category.level == 2 && c.category.parentId == item.category.id
-                    );
-                    if (hasSubCategories) return false;
-                  }
-
-                  return true;
-                }).toList()
-              : [],
-            value: categoriesWithCount.where((item) => item.category.id == _toCategory?.id).firstOrNull,
-            hintText: _fromCategory == null ? AppLocalizations.of(context).categoryMigrationToHintFirst : AppLocalizations.of(context).categoryMigrationToHint,
-            prefixIcon: const Icon(Icons.download_outlined),
+          _CategorySelectorButton(
+            category: _toCategory,
+            hintText: _fromCategory == null
+                ? l10n.categoryMigrationToHintFirst
+                : l10n.categoryMigrationToHint,
+            icon: Icons.download_outlined,
             enabled: _fromCategory != null,
-            onChanged: (item) {
-              setState(() {
-                _toCategory = item?.category;
-              });
-            },
-            itemBuilder: (item) => _CategoryDropdownItem(
-              category: item.category,
-              transactionCount: item.transactionCount,
-            ),
-            filter: (item, query) {
-              return CategoryUtils.getDisplayName(item.category.name, context).toLowerCase().contains(query) ||
-                     item.category.kind.toLowerCase().contains(query);
-            },
-            labelExtractor: (item) => '${CategoryUtils.getDisplayName(item.category.name, context)} (${AppLocalizations.of(context).categoryMigrationTransactionCount(item.transactionCount)})',
+            onTap: _fromCategory != null ? () => _selectToCategory() : null,
           ),
           const Spacer(),
           SizedBox(
             width: double.infinity,
             child: FilledButton(
               onPressed: _canMigrate() && !_isLoading ? _performMigration : null,
-              child: _isLoading 
+              child: _isLoading
                 ? const SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : Text(AppLocalizations.of(context).categoryMigrationStartButton),
+                : Text(l10n.categoryMigrationStartButton),
             ),
           ),
           const SizedBox(height: 16),
         ],
       ),
     );
+  }
+
+  /// 选择迁出分类
+  Future<void> _selectFromCategory() async {
+    if (_selectedType == null) return;
+
+    final selected = await showCategorySelector(
+      context,
+      type: _selectedType!,
+      includeParentCategories: false, // 不包含有子分类的父分类
+      showTransactionCount: true, // 显示交易笔数
+      ledgerId: ref.read(currentLedgerIdProvider),
+    );
+
+    if (selected != null) {
+      setState(() {
+        _fromCategory = selected;
+        // 如果选择了相同的分类，清除目标分类
+        if (_toCategory?.id == _fromCategory?.id) {
+          _toCategory = null;
+        }
+      });
+    }
+  }
+
+  /// 选择迁入分类
+  Future<void> _selectToCategory() async {
+    if (_fromCategory == null) return;
+
+    final selected = await showCategorySelector(
+      context,
+      type: _fromCategory!.kind,
+      includeParentCategories: true, // 可以包含有子分类的父分类
+      excludeIds: [_fromCategory!.id], // 排除迁出分类本身
+      showTransactionCount: true, // 显示交易笔数
+      ledgerId: ref.read(currentLedgerIdProvider),
+    );
+
+    if (selected != null) {
+      setState(() {
+        _toCategory = selected;
+      });
+    }
   }
   
   bool _canMigrate() {
@@ -273,10 +323,12 @@ class _CategoryMigrationPageState extends ConsumerState<CategoryMigrationPage> {
           CategoryUtils.getDisplayName(toCategory.name, context),
         ),
       );
-      
+
+      if (!mounted) return;
+
       // 刷新数据
       ref.invalidate(categoriesWithCountProvider);
-      
+
       // 返回上一页
       Navigator.of(context).pop(true);
       
@@ -297,54 +349,158 @@ class _CategoryMigrationPageState extends ConsumerState<CategoryMigrationPage> {
   }
 }
 
-class _CategoryDropdownItem extends StatelessWidget {
-  final db.Category category;
-  final int transactionCount;
-  
-  const _CategoryDropdownItem({
-    required this.category,
-    required this.transactionCount,
+/// 类型选择按钮（收入/支出）
+class _TypeButton extends ConsumerWidget {
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _TypeButton({
+    required this.label,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
   });
-  
+
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-            shape: BoxShape.circle,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final primaryColor = ref.watch(primaryColorProvider);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? primaryColor.withValues(alpha: 0.1)
+              : BeeTokens.surface(context),
+          border: Border.all(
+            color: isSelected
+                ? primaryColor
+                : BeeTokens.border(context),
+            width: isSelected ? 2 : 1,
           ),
-          child: Icon(
-            getCategoryIconData(category: category),
-            color: Theme.of(context).colorScheme.primary,
-            size: 18,
-          ),
+          borderRadius: BorderRadius.circular(12),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                CategoryUtils.getDisplayName(category.name, context),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected
+                  ? primaryColor
+                  : BeeTokens.iconSecondary(context),
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: isSelected
+                    ? primaryColor
+                    : BeeTokens.textPrimary(context),
               ),
-              if (transactionCount > 0)
-                Text(
-                  '${AppLocalizations.of(context).categoryMigrationTransactionLabel(transactionCount)} · ${category.kind == 'expense' ? AppLocalizations.of(context).homeExpense : AppLocalizations.of(context).homeIncome}',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+}
+
+/// 分类选择按钮
+class _CategorySelectorButton extends ConsumerWidget {
+  final db.Category? category;
+  final String hintText;
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  const _CategorySelectorButton({
+    required this.category,
+    required this.hintText,
+    required this.icon,
+    this.enabled = true,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final primaryColor = ref.watch(primaryColorProvider);
+
+    return InkWell(
+      onTap: enabled ? onTap : null,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: BeeTokens.surface(context),
+          border: Border.all(
+            color: category != null
+                ? primaryColor
+                : BeeTokens.border(context),
+            width: category != null ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            // 图标
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: category != null
+                    ? primaryColor.withValues(alpha: 0.1)
+                    : BeeTokens.surface(context),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                category != null
+                    ? getCategoryIconData(category: category!)
+                    : icon,
+                color: category != null
+                    ? primaryColor
+                    : BeeTokens.iconTertiary(context),
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 12),
+            // 分类信息
+            Expanded(
+              child: category != null
+                  ? Text(
+                      CategoryUtils.getDisplayName(category!.name, context),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: BeeTokens.textPrimary(context),
+                      ),
+                    )
+                  : Text(
+                      hintText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: enabled
+                            ? BeeTokens.textTertiary(context)
+                            : BeeTokens.textTertiary(context).withValues(alpha: 0.5),
+                      ),
+                    ),
+            ),
+            // 箭头图标
+            Icon(
+              Icons.chevron_right,
+              color: enabled
+                  ? BeeTokens.iconSecondary(context)
+                  : BeeTokens.iconTertiary(context),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

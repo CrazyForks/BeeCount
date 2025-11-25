@@ -168,6 +168,12 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get commonOk;
 
+  /// No description provided for @commonKnow.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get commonKnow;
+
   /// No description provided for @commonNo.
   ///
   /// In en, this message translates to:
@@ -210,11 +216,125 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get commonNext;
 
-  /// No description provided for @fabLongPressTip.
+  /// No description provided for @fabActionCamera.
   ///
   /// In en, this message translates to:
-  /// **'Long press to scan receipt'**
-  String get fabLongPressTip;
+  /// **'Camera'**
+  String get fabActionCamera;
+
+  /// No description provided for @fabActionGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get fabActionGallery;
+
+  /// No description provided for @fabActionVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get fabActionVoice;
+
+  /// No description provided for @fabActionVoiceDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'AI enabled & GLM API required'**
+  String get fabActionVoiceDisabled;
+
+  /// No description provided for @voiceRecordingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Billing'**
+  String get voiceRecordingTitle;
+
+  /// No description provided for @voiceRecordingPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing...'**
+  String get voiceRecordingPreparing;
+
+  /// No description provided for @voiceRecordingInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording...'**
+  String get voiceRecordingInProgress;
+
+  /// No description provided for @voiceRecordingProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognizing...'**
+  String get voiceRecordingProcessing;
+
+  /// No description provided for @voiceRecordingDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {duration}s'**
+  String voiceRecordingDuration(int duration);
+
+  /// No description provided for @voiceRecordingSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice billing successful'**
+  String get voiceRecordingSuccess;
+
+  /// No description provided for @voiceRecordingNoLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'No ledger found'**
+  String get voiceRecordingNoLedger;
+
+  /// No description provided for @voiceRecordingNoInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'No billing information recognized'**
+  String get voiceRecordingNoInfo;
+
+  /// No description provided for @voiceRecordingPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission required'**
+  String get voiceRecordingPermissionDenied;
+
+  /// No description provided for @voiceRecordingPermissionDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone Permission Required'**
+  String get voiceRecordingPermissionDeniedTitle;
+
+  /// No description provided for @voiceRecordingPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.'**
+  String get voiceRecordingPermissionDeniedMessage;
+
+  /// No description provided for @voiceRecordingStartFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start recording: {error}'**
+  String voiceRecordingStartFailed(String error);
+
+  /// No description provided for @voiceRecordingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording failed: {error}'**
+  String voiceRecordingFailed(String error);
+
+  /// No description provided for @voiceRecordingRecognizeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognition failed: {error}'**
+  String voiceRecordingRecognizeFailed(String error);
+
+  /// No description provided for @voiceRecordingNoInfoDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to extract bill info: {text}'**
+  String voiceRecordingNoInfoDetected(String text);
+
+  /// No description provided for @voiceRecordingNoSpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'No speech detected'**
+  String get voiceRecordingNoSpeech;
 
   /// No description provided for @commonPrevious.
   ///
@@ -251,6 +371,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get commonSettings;
+
+  /// No description provided for @commonGoSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get commonGoSettings;
 
   /// No description provided for @commonHelp.
   ///
@@ -444,11 +570,11 @@ abstract class AppLocalizations {
   /// **'Search notes, categories or amounts...'**
   String get searchHint;
 
-  /// No description provided for @searchAmountRange.
+  /// No description provided for @searchCategoryHint.
   ///
   /// In en, this message translates to:
-  /// **'Amount range filter'**
-  String get searchAmountRange;
+  /// **'Search category name...'**
+  String get searchCategoryHint;
 
   /// No description provided for @searchMinAmount.
   ///
@@ -461,12 +587,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Max amount'**
   String get searchMaxAmount;
-
-  /// No description provided for @searchTo.
-  ///
-  /// In en, this message translates to:
-  /// **'to'**
-  String get searchTo;
 
   /// No description provided for @searchNoInput.
   ///
@@ -558,24 +678,6 @@ abstract class AppLocalizations {
   /// **'Enter note content (leave empty to clear notes)'**
   String get searchBatchSetNoteHint;
 
-  /// No description provided for @searchBatchChangeCategoryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Batch Change Category'**
-  String get searchBatchChangeCategoryTitle;
-
-  /// No description provided for @searchBatchChangeCategoryMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Set a new category for the selected {count} transactions'**
-  String searchBatchChangeCategoryMessage(Object count);
-
-  /// No description provided for @searchBatchChangeCategoryLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Category'**
-  String get searchBatchChangeCategoryLabel;
-
   /// No description provided for @searchBatchDeleteSuccess.
   ///
   /// In en, this message translates to:
@@ -617,6 +719,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} results'**
   String searchResultsCount(Object count);
+
+  /// No description provided for @searchFilterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get searchFilterTitle;
+
+  /// No description provided for @searchAmountFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount Filter'**
+  String get searchAmountFilter;
+
+  /// No description provided for @searchDateFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Date Filter'**
+  String get searchDateFilter;
+
+  /// No description provided for @searchStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get searchStartDate;
+
+  /// No description provided for @searchEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get searchEndDate;
+
+  /// No description provided for @searchNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Set'**
+  String get searchNotSet;
+
+  /// No description provided for @searchClearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filter'**
+  String get searchClearFilter;
+
+  /// No description provided for @searchBatchCategoryTransferError.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected transactions contain transfers, cannot change category'**
+  String get searchBatchCategoryTransferError;
+
+  /// No description provided for @searchBatchCategoryTypeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected transactions have different types, please select all income or all expense'**
+  String get searchBatchCategoryTypeError;
+
+  /// No description provided for @searchDateStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get searchDateStart;
+
+  /// No description provided for @searchDateEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get searchDateEnd;
 
   /// No description provided for @analyticsMonth.
   ///
@@ -2076,6 +2244,12 @@ abstract class AppLocalizations {
   /// **'• Migrate all transaction records from one category to another\n• After migration, all transaction data from the source category will be transferred to the target category\n• This operation cannot be undone, please choose carefully'**
   String get categoryMigrationDescriptionContent;
 
+  /// No description provided for @categoryMigrationTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Type'**
+  String get categoryMigrationTypeLabel;
+
   /// No description provided for @categoryMigrationFromLabel.
   ///
   /// In en, this message translates to:
@@ -2111,12 +2285,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Migration'**
   String get categoryMigrationStartButton;
-
-  /// No description provided for @categoryMigrationTransactionCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} records'**
-  String categoryMigrationTransactionCount(int count);
 
   /// No description provided for @categoryMigrationCannotTitle.
   ///
@@ -5664,36 +5832,6 @@ abstract class AppLocalizations {
   /// **'Disabled'**
   String get disabled;
 
-  /// No description provided for @supportedPayments.
-  ///
-  /// In en, this message translates to:
-  /// **'Supported Payment Methods'**
-  String get supportedPayments;
-
-  /// No description provided for @supportedAlipay.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ Alipay'**
-  String get supportedAlipay;
-
-  /// No description provided for @supportedWechat.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ WeChat Pay'**
-  String get supportedWechat;
-
-  /// No description provided for @supportedUnionpay.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ UnionPay'**
-  String get supportedUnionpay;
-
-  /// No description provided for @supportedOthers.
-  ///
-  /// In en, this message translates to:
-  /// **'⚠️ Other payment methods may have lower recognition accuracy'**
-  String get supportedOthers;
-
   /// No description provided for @photosPermissionRequired.
   ///
   /// In en, this message translates to:
@@ -5754,136 +5892,58 @@ abstract class AppLocalizations {
   /// **'Disable failed'**
   String get disableFailed;
 
-  /// No description provided for @reselectImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Reselect'**
-  String get reselectImage;
-
-  /// No description provided for @viewOriginalText.
-  ///
-  /// In en, this message translates to:
-  /// **'View Original Text'**
-  String get viewOriginalText;
-
-  /// No description provided for @createBill.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Bill'**
-  String get createBill;
-
-  /// No description provided for @ocrBilling.
-  ///
-  /// In en, this message translates to:
-  /// **'OCR Scan Billing'**
-  String get ocrBilling;
-
-  /// No description provided for @ocrBillingDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-recognize payment screenshots'**
-  String get ocrBillingDesc;
-
   /// No description provided for @iosAutoFeatureDesc.
   ///
   /// In en, this message translates to:
   /// **'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.'**
   String get iosAutoFeatureDesc;
 
-  /// No description provided for @iosAutoShortcutQuickAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Add Shortcut'**
-  String get iosAutoShortcutQuickAdd;
-
-  /// No description provided for @iosAutoShortcutQuickAddDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.'**
-  String get iosAutoShortcutQuickAddDesc;
-
-  /// No description provided for @iosAutoShortcutImport.
-  ///
-  /// In en, this message translates to:
-  /// **'One-Click Import Shortcut'**
-  String get iosAutoShortcutImport;
-
-  /// No description provided for @iosAutoShortcutOpenApp.
-  ///
-  /// In en, this message translates to:
-  /// **'Or Manually Open Shortcuts App'**
-  String get iosAutoShortcutOpenApp;
-
   /// No description provided for @iosAutoShortcutConfigTitle.
   ///
   /// In en, this message translates to:
-  /// **'Configuration Steps (Recommended - URL Parameter):'**
+  /// **'Configuration Steps:'**
   String get iosAutoShortcutConfigTitle;
 
   /// No description provided for @iosAutoShortcutStep1.
   ///
   /// In en, this message translates to:
-  /// **'Open \"Shortcuts\" app'**
+  /// **'Open \"Shortcuts\" app, tap \"+\" in top right to create new shortcut'**
   String get iosAutoShortcutStep1;
 
   /// No description provided for @iosAutoShortcutStep2.
   ///
   /// In en, this message translates to:
-  /// **'Tap \"+\" in top right to create new shortcut'**
+  /// **'Add \"Take Screenshot\" action'**
   String get iosAutoShortcutStep2;
 
   /// No description provided for @iosAutoShortcutStep3.
   ///
   /// In en, this message translates to:
-  /// **'Add \"Take Screenshot\" action (get latest screenshot)'**
+  /// **'Search and add \"BeeCount - Auto Billing\" action'**
   String get iosAutoShortcutStep3;
 
   /// No description provided for @iosAutoShortcutStep4.
   ///
   /// In en, this message translates to:
-  /// **'Add \"Extract Text from Screenshot\" action'**
+  /// **'Set the screenshot parameter of \"BeeCount\" to the previous \"Screenshot\"'**
   String get iosAutoShortcutStep4;
 
   /// No description provided for @iosAutoShortcutStep5.
   ///
   /// In en, this message translates to:
-  /// **'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)'**
+  /// **'(Optional) Go to Settings > Accessibility > Touch > Back Tap, bind this shortcut'**
   String get iosAutoShortcutStep5;
 
   /// No description provided for @iosAutoShortcutStep6.
   ///
   /// In en, this message translates to:
-  /// **'Add \"URL Encode\" action: encode the replaced text'**
+  /// **'Done! Double tap phone back during payment for quick billing'**
   String get iosAutoShortcutStep6;
-
-  /// No description provided for @iosAutoShortcutStep7.
-  ///
-  /// In en, this message translates to:
-  /// **'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]'**
-  String get iosAutoShortcutStep7;
-
-  /// No description provided for @iosAutoShortcutStep8.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap shortcut settings (three dots in top right)'**
-  String get iosAutoShortcutStep8;
-
-  /// No description provided for @iosAutoShortcutStep9.
-  ///
-  /// In en, this message translates to:
-  /// **'In \"When...\" add \"When Screenshot is taken\" trigger'**
-  String get iosAutoShortcutStep9;
-
-  /// No description provided for @iosAutoShortcutStep10.
-  ///
-  /// In en, this message translates to:
-  /// **'Save and test: auto-identify after screenshot'**
-  String get iosAutoShortcutStep10;
 
   /// No description provided for @iosAutoShortcutRecommendedTip.
   ///
   /// In en, this message translates to:
-  /// **'✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit'**
+  /// **'✅ Recommended: After binding the shortcut to \"Back Tap\", double tap phone back during payment to auto-screenshot and recognize billing, no manual screenshot needed.'**
   String get iosAutoShortcutRecommendedTip;
 
   /// No description provided for @iosAutoBackTapTitle.
@@ -5897,30 +5957,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed'**
   String get iosAutoBackTapDesc;
-
-  /// No description provided for @iosAutoImportFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Import failed: {error}'**
-  String iosAutoImportFailed(Object error);
-
-  /// No description provided for @iosAutoOpenAppFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Open failed: {error}'**
-  String iosAutoOpenAppFailed(Object error);
-
-  /// No description provided for @iosAutoCannotOpenLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot open link, please check network connection'**
-  String get iosAutoCannotOpenLink;
-
-  /// No description provided for @iosAutoCannotOpenShortcuts.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot open Shortcuts app'**
-  String get iosAutoCannotOpenShortcuts;
 
   /// No description provided for @aiSettingsTitle.
   ///
@@ -6084,24 +6120,6 @@ abstract class AppLocalizations {
   /// **'Local model in training, not available yet'**
   String get aiLocalModelUnavailable;
 
-  /// No description provided for @aiFabSettingTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Add Button Prioritize Camera'**
-  String get aiFabSettingTitle;
-
-  /// No description provided for @aiFabSettingDescCamera.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap for camera, long press for manual'**
-  String get aiFabSettingDescCamera;
-
-  /// No description provided for @aiFabSettingDescManual.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap for manual, long press for camera'**
-  String get aiFabSettingDescManual;
-
   /// No description provided for @aiOcrRecognizing.
   ///
   /// In en, this message translates to:
@@ -6149,48 +6167,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expense'**
   String get aiTypeExpense;
-
-  /// No description provided for @ocrRecognitionResult.
-  ///
-  /// In en, this message translates to:
-  /// **'Recognition Result'**
-  String get ocrRecognitionResult;
-
-  /// No description provided for @ocrAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Amount'**
-  String get ocrAmount;
-
-  /// No description provided for @ocrNoAmountDetected.
-  ///
-  /// In en, this message translates to:
-  /// **'No amount detected'**
-  String get ocrNoAmountDetected;
-
-  /// No description provided for @ocrManualAmountInput.
-  ///
-  /// In en, this message translates to:
-  /// **'Or enter amount manually'**
-  String get ocrManualAmountInput;
-
-  /// No description provided for @ocrMerchant.
-  ///
-  /// In en, this message translates to:
-  /// **'Merchant'**
-  String get ocrMerchant;
-
-  /// No description provided for @ocrSuggestedCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Suggested Category'**
-  String get ocrSuggestedCategory;
-
-  /// No description provided for @ocrTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Time'**
-  String get ocrTime;
 
   /// No description provided for @cloudSyncPageTitle.
   ///
@@ -6251,6 +6227,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI and automation billing features'**
   String get smartBillingPageSubtitle;
+
+  /// No description provided for @smartBillingGuideHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page to quickly access these features'**
+  String get smartBillingGuideHint;
+
+  /// No description provided for @smartBillingImageBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Billing'**
+  String get smartBillingImageBilling;
+
+  /// No description provided for @smartBillingImageBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Select payment screenshots from gallery for recognition'**
+  String get smartBillingImageBillingDesc;
+
+  /// No description provided for @smartBillingImageBillingGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.'**
+  String get smartBillingImageBillingGuide;
+
+  /// No description provided for @smartBillingAIOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'AI recognition is optional, configuration can improve recognition accuracy'**
+  String get smartBillingAIOptional;
+
+  /// No description provided for @smartBillingCameraBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Billing'**
+  String get smartBillingCameraBilling;
+
+  /// No description provided for @smartBillingCameraBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture payment screenshots for recognition'**
+  String get smartBillingCameraBillingDesc;
+
+  /// No description provided for @smartBillingCameraBillingGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.'**
+  String get smartBillingCameraBillingGuide;
+
+  /// No description provided for @smartBillingVoiceBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Billing'**
+  String get smartBillingVoiceBilling;
+
+  /// No description provided for @smartBillingVoiceBillingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick billing through voice input'**
+  String get smartBillingVoiceBillingDesc;
+
+  /// No description provided for @smartBillingVoiceBillingGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the + button at the bottom center of the home page and select \'Voice\' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.'**
+  String get smartBillingVoiceBillingGuide;
+
+  /// No description provided for @smartBillingAIRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first'**
+  String get smartBillingAIRequired;
+
+  /// No description provided for @autoScreenshotBillingIosDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-recognize payment screenshots via Shortcuts'**
+  String get autoScreenshotBillingIosDesc;
 
   /// No description provided for @automation.
   ///
@@ -7001,6 +7055,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Perfect for detailed management'**
   String get welcomeCategoryModeHierarchicalFeature3;
+
+  /// No description provided for @iosVersionWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires iOS 16.0 or later'**
+  String get iosVersionWarningTitle;
+
+  /// No description provided for @iosVersionWarningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.'**
+  String get iosVersionWarningDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

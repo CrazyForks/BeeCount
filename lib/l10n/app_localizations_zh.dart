@@ -43,6 +43,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonOk => '确定';
 
   @override
+  String get commonKnow => '知道了';
+
+  @override
   String get commonNo => '否';
 
   @override
@@ -64,7 +67,74 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonNext => '下一步';
 
   @override
-  String get fabLongPressTip => '长按可拍照记账';
+  String get fabActionCamera => '拍照';
+
+  @override
+  String get fabActionGallery => '相册';
+
+  @override
+  String get fabActionVoice => '语音';
+
+  @override
+  String get fabActionVoiceDisabled => '需要启用AI并配置 GLM API';
+
+  @override
+  String get voiceRecordingTitle => '语音记账';
+
+  @override
+  String get voiceRecordingPreparing => '准备录音...';
+
+  @override
+  String get voiceRecordingInProgress => '正在录音...';
+
+  @override
+  String get voiceRecordingProcessing => '正在识别...';
+
+  @override
+  String voiceRecordingDuration(int duration) {
+    return '录音时长: $duration秒';
+  }
+
+  @override
+  String get voiceRecordingSuccess => '语音记账成功';
+
+  @override
+  String get voiceRecordingNoLedger => '未找到当前账本';
+
+  @override
+  String get voiceRecordingNoInfo => '未识别到记账信息';
+
+  @override
+  String get voiceRecordingPermissionDenied => '需要麦克风权限才能录音';
+
+  @override
+  String get voiceRecordingPermissionDeniedTitle => '需要麦克风权限';
+
+  @override
+  String get voiceRecordingPermissionDeniedMessage => '语音记账功能需要使用麦克风权限。请在系统设置中允许蜜蜂记账访问麦克风。';
+
+  @override
+  String voiceRecordingStartFailed(String error) {
+    return '启动录音失败: $error';
+  }
+
+  @override
+  String voiceRecordingFailed(String error) {
+    return '录音失败: $error';
+  }
+
+  @override
+  String voiceRecordingRecognizeFailed(String error) {
+    return '识别失败: $error';
+  }
+
+  @override
+  String voiceRecordingNoInfoDetected(String text) {
+    return '未能识别账单信息: $text';
+  }
+
+  @override
+  String get voiceRecordingNoSpeech => '未检测到语音输入';
 
   @override
   String get commonPrevious => '上一步';
@@ -83,6 +153,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get commonSettings => '设置';
+
+  @override
+  String get commonGoSettings => '前往设置';
 
   @override
   String get commonHelp => '帮助';
@@ -185,16 +258,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get searchHint => '搜索备注、分类或金额...';
 
   @override
-  String get searchAmountRange => '金额范围筛选';
+  String get searchCategoryHint => '搜索分类名称...';
 
   @override
   String get searchMinAmount => '最小金额';
 
   @override
   String get searchMaxAmount => '最大金额';
-
-  @override
-  String get searchTo => '至';
 
   @override
   String get searchNoInput => '输入关键词开始搜索';
@@ -250,17 +320,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get searchBatchSetNoteHint => '输入备注内容 (留空则清空备注)';
 
   @override
-  String get searchBatchChangeCategoryTitle => '批量调整分类';
-
-  @override
-  String searchBatchChangeCategoryMessage(Object count) {
-    return '将为选中的 $count 笔记账设置新的分类';
-  }
-
-  @override
-  String get searchBatchChangeCategoryLabel => '选择分类';
-
-  @override
   String searchBatchDeleteSuccess(Object count) {
     return '成功删除 $count 笔记账';
   }
@@ -294,6 +353,39 @@ class AppLocalizationsZh extends AppLocalizations {
   String searchResultsCount(Object count) {
     return '共 $count 条结果';
   }
+
+  @override
+  String get searchFilterTitle => '筛选';
+
+  @override
+  String get searchAmountFilter => '金额筛选';
+
+  @override
+  String get searchDateFilter => '时间筛选';
+
+  @override
+  String get searchStartDate => '开始日期';
+
+  @override
+  String get searchEndDate => '结束日期';
+
+  @override
+  String get searchNotSet => '未设置';
+
+  @override
+  String get searchClearFilter => '清空筛选';
+
+  @override
+  String get searchBatchCategoryTransferError => '选中的交易包含转账，无法修改分类';
+
+  @override
+  String get searchBatchCategoryTypeError => '选中的交易类型不一致，请选择全部为收入或全部为支出的交易';
+
+  @override
+  String get searchDateStart => '开始';
+
+  @override
+  String get searchDateEnd => '结束';
 
   @override
   String get analyticsMonth => '月';
@@ -1085,6 +1177,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryMigrationDescriptionContent => '• 将指定分类的所有交易记录迁移到另一个分类\n• 迁移后，原分类的交易数据将全部转移到目标分类\n• 此操作不可撤销，请谨慎选择';
 
   @override
+  String get categoryMigrationTypeLabel => '选择类型';
+
+  @override
   String get categoryMigrationFromLabel => '迁出分类';
 
   @override
@@ -1101,11 +1196,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categoryMigrationStartButton => '开始迁移';
-
-  @override
-  String categoryMigrationTransactionCount(int count) {
-    return '$count笔';
-  }
 
   @override
   String get categoryMigrationCannotTitle => '无法迁移';
@@ -2975,21 +3065,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get disabled => '已禁用';
 
   @override
-  String get supportedPayments => '支持的支付方式';
-
-  @override
-  String get supportedAlipay => '✅ 支付宝';
-
-  @override
-  String get supportedWechat => '✅ 微信支付';
-
-  @override
-  String get supportedUnionpay => '✅ 云闪付';
-
-  @override
-  String get supportedOthers => '⚠️ 其他支付方式识别准确率可能较低';
-
-  @override
   String get photosPermissionRequired => '需要照片权限才能监听截图';
 
   @override
@@ -3020,92 +3095,37 @@ class AppLocalizationsZh extends AppLocalizations {
   String get disableFailed => '禁用失败';
 
   @override
-  String get reselectImage => '重新选择';
-
-  @override
-  String get viewOriginalText => '查看原始文本';
-
-  @override
-  String get createBill => '创建账单';
-
-  @override
-  String get ocrBilling => 'OCR扫描记账';
-
-  @override
-  String get ocrBillingDesc => '扫描支付截图自动识别金额';
-
-  @override
   String get iosAutoFeatureDesc => '通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。';
 
   @override
-  String get iosAutoShortcutQuickAdd => '快速添加快捷指令';
+  String get iosAutoShortcutConfigTitle => '配置步骤：';
 
   @override
-  String get iosAutoShortcutQuickAddDesc => '点击下方按钮可以直接导入配置好的快捷指令，或手动打开快捷指令App配置。';
+  String get iosAutoShortcutStep1 => '打开\"快捷指令\"应用，点击右上角\"+\"创建新快捷指令';
 
   @override
-  String get iosAutoShortcutImport => '一键导入快捷指令';
+  String get iosAutoShortcutStep2 => '添加\"截屏\"操作';
 
   @override
-  String get iosAutoShortcutOpenApp => '或手动打开快捷指令App配置';
+  String get iosAutoShortcutStep3 => '搜索并添加\"蜜蜂记账 - 截图自动记账\"操作';
 
   @override
-  String get iosAutoShortcutConfigTitle => '配置步骤（推荐方式 - URL参数传递）：';
+  String get iosAutoShortcutStep4 => '将\"蜜蜂记账\"的截图参数设置为上一步的\"截屏\"';
 
   @override
-  String get iosAutoShortcutStep1 => '打开\"快捷指令\"应用';
+  String get iosAutoShortcutStep5 => '（可选）在系统设置 > 辅助功能 > 触控 > 轻点背面中，绑定此快捷指令';
 
   @override
-  String get iosAutoShortcutStep2 => '点击右上角\"+\"创建新快捷指令';
+  String get iosAutoShortcutStep6 => '完成！支付时双击手机背部即可快速记账';
 
   @override
-  String get iosAutoShortcutStep3 => '添加\"截屏\"操作（获取最新截图）';
-
-  @override
-  String get iosAutoShortcutStep4 => '添加\"从截屏中提取文本\"操作';
-
-  @override
-  String get iosAutoShortcutStep5 => '添加\"替换文本\"操作：将\"提取的文本\"中的\"\\n\"替换为\",\"（逗号）';
-
-  @override
-  String get iosAutoShortcutStep6 => '添加\"URL编码\"操作：对\"替换后的文本\"进行URL编码';
-
-  @override
-  String get iosAutoShortcutStep7 => '添加\"打开URL\"操作，URL填写：\nbeecount://auto-billing?text=[URL编码后的文本]';
-
-  @override
-  String get iosAutoShortcutStep8 => '点击快捷指令设置（右上角三点）';
-
-  @override
-  String get iosAutoShortcutStep9 => '在\"当...时运行\"中添加\"截屏时\"触发器';
-
-  @override
-  String get iosAutoShortcutStep10 => '保存并测试：截图后会自动识别';
-
-  @override
-  String get iosAutoShortcutRecommendedTip => '✅ 推荐：URL参数传递，无需权限，体验最佳。关键步骤：\n• 替换文本时将换行符\\n替换为逗号,（避免URL截断）\n• 使用URL编码操作（避免中文乱码）\n• 一般截图文本不会超过2048字符限制';
+  String get iosAutoShortcutRecommendedTip => '✅ 推荐：在\"轻点背面\"中绑定快捷指令后，支付时双击手机背部即可自动截图并识别记账，无需手动截图。';
 
   @override
   String get iosAutoBackTapTitle => '💡 双击背部快速触发（推荐）';
 
   @override
   String get iosAutoBackTapDesc => '设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图';
-
-  @override
-  String iosAutoImportFailed(Object error) {
-    return '导入失败: $error';
-  }
-
-  @override
-  String iosAutoOpenAppFailed(Object error) {
-    return '打开失败: $error';
-  }
-
-  @override
-  String get iosAutoCannotOpenLink => '无法打开链接，请检查网络连接';
-
-  @override
-  String get iosAutoCannotOpenShortcuts => '无法打开快捷指令App';
 
   @override
   String get aiSettingsTitle => 'AI智能识别';
@@ -3191,15 +3211,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiLocalModelUnavailable => '本地模型训练中，暂不可用';
 
   @override
-  String get aiFabSettingTitle => '快捷记账按钮优先拍照';
-
-  @override
-  String get aiFabSettingDescCamera => '短按拍照，长按手动记账';
-
-  @override
-  String get aiFabSettingDescManual => '短按手动记账，长按拍照';
-
-  @override
   String get aiOcrRecognizing => '正在识别账单...';
 
   @override
@@ -3226,27 +3237,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiTypeExpense => '支出';
-
-  @override
-  String get ocrRecognitionResult => '识别结果';
-
-  @override
-  String get ocrAmount => '金额';
-
-  @override
-  String get ocrNoAmountDetected => '未识别到金额';
-
-  @override
-  String get ocrManualAmountInput => '或手动输入金额';
-
-  @override
-  String get ocrMerchant => '商家';
-
-  @override
-  String get ocrSuggestedCategory => '推荐分类';
-
-  @override
-  String get ocrTime => '时间';
 
   @override
   String get cloudSyncPageTitle => '云同步与备份';
@@ -3277,6 +3267,45 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get smartBillingPageSubtitle => 'AI和自动化记账功能';
+
+  @override
+  String get smartBillingGuideHint => '长按首页底部中间的 + 按钮，即可快速使用这些功能';
+
+  @override
+  String get smartBillingImageBilling => '图片记账';
+
+  @override
+  String get smartBillingImageBillingDesc => '从相册选择支付截图进行识别';
+
+  @override
+  String get smartBillingImageBillingGuide => '在首页长按底部中间的 + 按钮，选择「相册」即可使用图片记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。';
+
+  @override
+  String get smartBillingAIOptional => 'AI 识别为可选功能，配置后可提高识别准确度';
+
+  @override
+  String get smartBillingCameraBilling => '拍照记账';
+
+  @override
+  String get smartBillingCameraBillingDesc => '拍摄支付截图进行识别';
+
+  @override
+  String get smartBillingCameraBillingGuide => '在首页长按底部中间的 + 按钮，选择「拍照」即可使用拍照记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。';
+
+  @override
+  String get smartBillingVoiceBilling => '语音记账';
+
+  @override
+  String get smartBillingVoiceBillingDesc => '通过语音输入快速记账';
+
+  @override
+  String get smartBillingVoiceBillingGuide => '在首页长按底部中间的 + 按钮，选择「语音」即可使用语音记账功能。语音记账需要通过AI将语音转为文字并提取账单信息。';
+
+  @override
+  String get smartBillingAIRequired => '语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置';
+
+  @override
+  String get autoScreenshotBillingIosDesc => '通过快捷指令实现截图自动识别记账';
 
   @override
   String get automation => '自动化';
@@ -3672,6 +3701,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => '适合需要精细管理的用户';
+
+  @override
+  String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
+
+  @override
+  String get iosVersionWarningDesc => '截图自动记账功能使用了 iOS 16 引入的 App Intents 框架。您的设备系统版本较低，暂不支持此功能。\n\n请升级到 iOS 16 或更高版本以使用此功能。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -3715,6 +3750,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonOk => '確定';
 
   @override
+  String get commonKnow => '知道了';
+
+  @override
   String get commonNo => '否';
 
   @override
@@ -3736,7 +3774,74 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonNext => '下一步';
 
   @override
-  String get fabLongPressTip => '長按可拍照記帳';
+  String get fabActionCamera => '拍照';
+
+  @override
+  String get fabActionGallery => '相簿';
+
+  @override
+  String get fabActionVoice => '語音';
+
+  @override
+  String get fabActionVoiceDisabled => '需要啟用AI並配置 GLM API';
+
+  @override
+  String get voiceRecordingTitle => '語音記帳';
+
+  @override
+  String get voiceRecordingPreparing => '準備錄音...';
+
+  @override
+  String get voiceRecordingInProgress => '正在錄音...';
+
+  @override
+  String get voiceRecordingProcessing => '正在識別...';
+
+  @override
+  String voiceRecordingDuration(int duration) {
+    return '錄音時長: $duration秒';
+  }
+
+  @override
+  String get voiceRecordingSuccess => '語音記帳成功';
+
+  @override
+  String get voiceRecordingNoLedger => '未找到當前帳本';
+
+  @override
+  String get voiceRecordingNoInfo => '未識別到記帳資訊';
+
+  @override
+  String get voiceRecordingPermissionDenied => '需要麥克風權限才能錄音';
+
+  @override
+  String get voiceRecordingPermissionDeniedTitle => '需要麥克風權限';
+
+  @override
+  String get voiceRecordingPermissionDeniedMessage => '語音記帳功能需要使用麥克風權限。請在系統設定中允許蜜蜂記帳存取麥克風。';
+
+  @override
+  String voiceRecordingStartFailed(String error) {
+    return '啟動錄音失敗: $error';
+  }
+
+  @override
+  String voiceRecordingFailed(String error) {
+    return '錄音失敗: $error';
+  }
+
+  @override
+  String voiceRecordingRecognizeFailed(String error) {
+    return '識別失敗: $error';
+  }
+
+  @override
+  String voiceRecordingNoInfoDetected(String text) {
+    return '未能識別帳單資訊: $text';
+  }
+
+  @override
+  String get voiceRecordingNoSpeech => '未檢測到語音輸入';
 
   @override
   String get commonPrevious => '上一步';
@@ -3755,6 +3860,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonSettings => '設定';
+
+  @override
+  String get commonGoSettings => '前往設定';
 
   @override
   String get commonHelp => '說明';
@@ -3857,16 +3965,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get searchHint => '搜尋備註、分類或金額...';
 
   @override
-  String get searchAmountRange => '金額範圍篩選';
+  String get searchCategoryHint => '搜尋分類名稱...';
 
   @override
   String get searchMinAmount => '最小金額';
 
   @override
   String get searchMaxAmount => '最大金額';
-
-  @override
-  String get searchTo => '至';
 
   @override
   String get searchNoInput => '輸入關鍵詞開始搜尋';
@@ -3922,17 +4027,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get searchBatchSetNoteHint => '輸入備註內容 (留空則清空備註)';
 
   @override
-  String get searchBatchChangeCategoryTitle => '批次調整分類';
-
-  @override
-  String searchBatchChangeCategoryMessage(Object count) {
-    return '將為選中的 $count 筆記帳設定新的分類';
-  }
-
-  @override
-  String get searchBatchChangeCategoryLabel => '選擇分類';
-
-  @override
   String searchBatchDeleteSuccess(Object count) {
     return '成功刪除 $count 筆記帳';
   }
@@ -3966,6 +4060,39 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String searchResultsCount(Object count) {
     return '共 $count 條結果';
   }
+
+  @override
+  String get searchFilterTitle => '篩選';
+
+  @override
+  String get searchAmountFilter => '金額篩選';
+
+  @override
+  String get searchDateFilter => '時間篩選';
+
+  @override
+  String get searchStartDate => '開始日期';
+
+  @override
+  String get searchEndDate => '結束日期';
+
+  @override
+  String get searchNotSet => '未設定';
+
+  @override
+  String get searchClearFilter => '清空篩選';
+
+  @override
+  String get searchBatchCategoryTransferError => '選中的交易包含轉帳，無法修改分類';
+
+  @override
+  String get searchBatchCategoryTypeError => '選中的交易類型不一致，請選擇全部為收入或全部為支出的交易';
+
+  @override
+  String get searchDateStart => '開始';
+
+  @override
+  String get searchDateEnd => '結束';
 
   @override
   String get analyticsMonth => '月';
@@ -4757,6 +4884,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get categoryMigrationDescriptionContent => '• 將指定分類的所有交易記錄遷移到另一個分類\n• 遷移後，原分類的交易資料將全部轉移到目標分類\n• 此操作不可撤銷，請謹慎選擇';
 
   @override
+  String get categoryMigrationTypeLabel => '選擇類型';
+
+  @override
   String get categoryMigrationFromLabel => '遷出分類';
 
   @override
@@ -4773,11 +4903,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryMigrationStartButton => '開始遷移';
-
-  @override
-  String categoryMigrationTransactionCount(int count) {
-    return '$count筆';
-  }
 
   @override
   String get categoryMigrationCannotTitle => '無法遷移';
@@ -6647,21 +6772,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get disabled => '已停用';
 
   @override
-  String get supportedPayments => '支援的支付方式';
-
-  @override
-  String get supportedAlipay => '✅ 支付寶';
-
-  @override
-  String get supportedWechat => '✅ 微信支付';
-
-  @override
-  String get supportedUnionpay => '✅ 雲閃付';
-
-  @override
-  String get supportedOthers => '⚠️ 其他支付方式識別準確率可能較低';
-
-  @override
   String get photosPermissionRequired => '需要相片權限才能監聽截圖';
 
   @override
@@ -6692,92 +6802,37 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get disableFailed => '停用失敗';
 
   @override
-  String get reselectImage => '重新選擇';
-
-  @override
-  String get viewOriginalText => '檢視原始文字';
-
-  @override
-  String get createBill => '建立帳單';
-
-  @override
-  String get ocrBilling => 'OCR 掃描記帳';
-
-  @override
-  String get ocrBillingDesc => '掃描支付截圖自動識別金額';
-
-  @override
   String get iosAutoFeatureDesc => '透過 iOS「捷徑」應用程式，實現截圖後自動識別支付資訊並記帳。設定後，每次截圖都會自動觸發識別。';
-
-  @override
-  String get iosAutoShortcutQuickAdd => '快速新增捷徑';
-
-  @override
-  String get iosAutoShortcutQuickAddDesc => '點擊下方按鈕可以直接匯入設定好的捷徑，或手動開啟捷徑 App 設定。';
-
-  @override
-  String get iosAutoShortcutImport => '一鍵匯入捷徑';
-
-  @override
-  String get iosAutoShortcutOpenApp => '或手動開啟捷徑 App 設定';
 
   @override
   String get iosAutoShortcutConfigTitle => '設定步驟（推薦方式 - URL 參數傳遞）：';
 
   @override
-  String get iosAutoShortcutStep1 => '開啟「捷徑」應用程式';
+  String get iosAutoShortcutStep1 => '開啟「捷徑」應用程式，點擊右上角「+」建立新捷徑';
 
   @override
-  String get iosAutoShortcutStep2 => '點擊右上角「+」建立新捷徑';
+  String get iosAutoShortcutStep2 => '新增「截圖」操作';
 
   @override
-  String get iosAutoShortcutStep3 => '新增「截圖」操作（取得最新截圖）';
+  String get iosAutoShortcutStep3 => '搜尋並新增「蜜蜂記帳 - 截圖自動記帳」操作';
 
   @override
-  String get iosAutoShortcutStep4 => '新增「從截圖中擷取文字」操作';
+  String get iosAutoShortcutStep4 => '將「蜜蜂記帳」的截圖參數設定為上一步的「截圖」';
 
   @override
-  String get iosAutoShortcutStep5 => '新增「取代文字」操作：將「擷取的文字」中的「\\n」取代為「,」（逗號）';
+  String get iosAutoShortcutStep5 => '（可選）在系統設定 > 輔助使用 > 觸控 > 輕點背面中，綁定此捷徑';
 
   @override
-  String get iosAutoShortcutStep6 => '新增「URL 編碼」操作：對「取代後的文字」進行 URL 編碼';
+  String get iosAutoShortcutStep6 => '完成！支付時雙擊手機背部即可快速記帳';
 
   @override
-  String get iosAutoShortcutStep7 => '新增「開啟 URL」操作，URL 填寫：\nbeecount://auto-billing?text=[URL 編碼後的文字]';
-
-  @override
-  String get iosAutoShortcutStep8 => '點擊捷徑設定（右上角三點）';
-
-  @override
-  String get iosAutoShortcutStep9 => '在「當...時執行」中新增「截圖時」觸發程序';
-
-  @override
-  String get iosAutoShortcutStep10 => '儲存並測試：截圖後會自動識別';
-
-  @override
-  String get iosAutoShortcutRecommendedTip => '✅ 推薦：URL 參數傳遞，無需權限，體驗最佳。關鍵步驟：\n• 取代文字時將換行符號\\n取代為逗號,（避免 URL 截斷）\n• 使用 URL 編碼操作（避免中文亂碼）\n• 一般截圖文字不會超過 2048 字元限制';
+  String get iosAutoShortcutRecommendedTip => '✅ 推薦：在「輕點背面」中綁定捷徑後，支付時雙擊手機背部即可自動截圖並識別記帳，無需手動截圖。';
 
   @override
   String get iosAutoBackTapTitle => '💡 雙擊背面快速觸發（推薦）';
 
   @override
   String get iosAutoBackTapDesc => '設定 > 輔助使用 > 觸控 > 背面輕點\n• 選擇「點兩下」或「點三下」\n• 選擇剛建立的捷徑\n• 完成後，支付時雙擊手機背面即可自動記帳，無需截圖';
-
-  @override
-  String iosAutoImportFailed(Object error) {
-    return '匯入失敗: $error';
-  }
-
-  @override
-  String iosAutoOpenAppFailed(Object error) {
-    return '開啟失敗: $error';
-  }
-
-  @override
-  String get iosAutoCannotOpenLink => '無法開啟連結，請檢查網路連線';
-
-  @override
-  String get iosAutoCannotOpenShortcuts => '無法開啟捷徑 App';
 
   @override
   String get aiSettingsTitle => 'AI 智慧識別';
@@ -6863,15 +6918,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiLocalModelUnavailable => '本機模型訓練中，暫不可用';
 
   @override
-  String get aiFabSettingTitle => '快捷記帳按鈕優先拍照';
-
-  @override
-  String get aiFabSettingDescCamera => '短按拍照，長按手動記帳';
-
-  @override
-  String get aiFabSettingDescManual => '短按手動記帳，長按拍照';
-
-  @override
   String get aiOcrRecognizing => '正在識別帳單...';
 
   @override
@@ -6898,27 +6944,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiTypeExpense => '支出';
-
-  @override
-  String get ocrRecognitionResult => '識別結果';
-
-  @override
-  String get ocrAmount => '金額';
-
-  @override
-  String get ocrNoAmountDetected => '未識別到金額';
-
-  @override
-  String get ocrManualAmountInput => '或手動輸入金額';
-
-  @override
-  String get ocrMerchant => '商家';
-
-  @override
-  String get ocrSuggestedCategory => '推薦分類';
-
-  @override
-  String get ocrTime => '時間';
 
   @override
   String get cloudSyncPageTitle => '雲同步與備份';
@@ -6949,6 +6974,45 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get smartBillingPageSubtitle => 'AI和自動化記帳功能';
+
+  @override
+  String get smartBillingGuideHint => '長按首頁底部中間的 + 按鈕，即可快速使用這些功能';
+
+  @override
+  String get smartBillingImageBilling => '圖片記帳';
+
+  @override
+  String get smartBillingImageBillingDesc => '從相簿選擇支付截圖進行識別';
+
+  @override
+  String get smartBillingImageBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「相簿」即可使用圖片記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。';
+
+  @override
+  String get smartBillingAIOptional => 'AI 識別為可選功能，配置後可提高識別準確度';
+
+  @override
+  String get smartBillingCameraBilling => '拍照記帳';
+
+  @override
+  String get smartBillingCameraBillingDesc => '拍攝支付截圖進行識別';
+
+  @override
+  String get smartBillingCameraBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「拍照」即可使用拍照記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。';
+
+  @override
+  String get smartBillingVoiceBilling => '語音記帳';
+
+  @override
+  String get smartBillingVoiceBillingDesc => '透過語音輸入快速記帳';
+
+  @override
+  String get smartBillingVoiceBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「語音」即可使用語音記帳功能。語音記帳需要透過AI將語音轉為文字並提取帳單資訊。';
+
+  @override
+  String get smartBillingAIRequired => '語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定';
+
+  @override
+  String get autoScreenshotBillingIosDesc => '透過快捷指令實現截圖自動識別記帳';
 
   @override
   String get automation => '自動化';
@@ -7344,4 +7408,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => '適合精細化管理';
+
+  @override
+  String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
+
+  @override
+  String get iosVersionWarningDesc => '截圖自動記帳功能使用了 iOS 16 引入的 App Intents 框架。您的裝置系統版本較低，暫不支援此功能。\n\n請升級到 iOS 16 或更高版本以使用此功能。';
 }

@@ -492,7 +492,7 @@ class _ConfigContentDialog extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeTokens.scaffoldBackground(context),
+              color: BeeTokens.surfaceElevated(context),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
@@ -540,7 +540,7 @@ class _ConfigContentDialog extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeTokens.scaffoldBackground(context),
+              color: BeeTokens.surfaceElevated(context),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(4),
                 bottomRight: Radius.circular(4),
@@ -580,13 +580,14 @@ class _ConfigPreviewDialogState extends State<_ConfigPreviewDialog> {
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      backgroundColor: BeeTokens.surfaceElevated(context),
       child: Column(
         children: [
           // 标题栏
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeTokens.scaffoldBackground(context),
+              color: BeeTokens.surfaceElevated(context),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
@@ -656,16 +657,17 @@ class _ConfigPreviewDialogState extends State<_ConfigPreviewDialog> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: BeeTokens.surface(context),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey[300]!),
+                      border: Border.all(color: BeeTokens.border(context)),
                     ),
                     child: SelectableText(
                       widget.yamlContent,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'monospace',
                         fontSize: 12,
                         height: 1.5,
+                        color: BeeTokens.textPrimary(context),
                       ),
                     ),
                   ),
@@ -677,7 +679,7 @@ class _ConfigPreviewDialogState extends State<_ConfigPreviewDialog> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: BeeTokens.scaffoldBackground(context),
+              color: BeeTokens.surfaceElevated(context),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(4),
                 bottomRight: Radius.circular(4),

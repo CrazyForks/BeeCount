@@ -43,6 +43,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonOk => 'OK';
 
   @override
+  String get commonKnow => 'Got it';
+
+  @override
   String get commonNo => 'No';
 
   @override
@@ -64,7 +67,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonNext => 'Next';
 
   @override
-  String get fabLongPressTip => 'Long press to scan receipt';
+  String get fabActionCamera => 'Camera';
+
+  @override
+  String get fabActionGallery => 'Gallery';
+
+  @override
+  String get fabActionVoice => 'Voice';
+
+  @override
+  String get fabActionVoiceDisabled => 'AI enabled & GLM API required';
+
+  @override
+  String get voiceRecordingTitle => 'Voice Billing';
+
+  @override
+  String get voiceRecordingPreparing => 'Preparing...';
+
+  @override
+  String get voiceRecordingInProgress => 'Recording...';
+
+  @override
+  String get voiceRecordingProcessing => 'Recognizing...';
+
+  @override
+  String voiceRecordingDuration(int duration) {
+    return 'Duration: ${duration}s';
+  }
+
+  @override
+  String get voiceRecordingSuccess => 'Voice billing successful';
+
+  @override
+  String get voiceRecordingNoLedger => 'No ledger found';
+
+  @override
+  String get voiceRecordingNoInfo => 'No billing information recognized';
+
+  @override
+  String get voiceRecordingPermissionDenied => 'Microphone permission required';
+
+  @override
+  String get voiceRecordingPermissionDeniedTitle => 'Microphone Permission Required';
+
+  @override
+  String get voiceRecordingPermissionDeniedMessage => 'Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.';
+
+  @override
+  String voiceRecordingStartFailed(String error) {
+    return 'Failed to start recording: $error';
+  }
+
+  @override
+  String voiceRecordingFailed(String error) {
+    return 'Recording failed: $error';
+  }
+
+  @override
+  String voiceRecordingRecognizeFailed(String error) {
+    return 'Recognition failed: $error';
+  }
+
+  @override
+  String voiceRecordingNoInfoDetected(String text) {
+    return 'Unable to extract bill info: $text';
+  }
+
+  @override
+  String get voiceRecordingNoSpeech => 'No speech detected';
 
   @override
   String get commonPrevious => 'Previous';
@@ -83,6 +153,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonSettings => 'Settings';
+
+  @override
+  String get commonGoSettings => 'Go to Settings';
 
   @override
   String get commonHelp => 'Help';
@@ -185,16 +258,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchHint => 'Search notes, categories or amounts...';
 
   @override
-  String get searchAmountRange => 'Amount range filter';
+  String get searchCategoryHint => 'Search category name...';
 
   @override
   String get searchMinAmount => 'Min amount';
 
   @override
   String get searchMaxAmount => 'Max amount';
-
-  @override
-  String get searchTo => 'to';
 
   @override
   String get searchNoInput => 'Enter keywords to start searching';
@@ -250,17 +320,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchBatchSetNoteHint => 'Enter note content (leave empty to clear notes)';
 
   @override
-  String get searchBatchChangeCategoryTitle => 'Batch Change Category';
-
-  @override
-  String searchBatchChangeCategoryMessage(Object count) {
-    return 'Set a new category for the selected $count transactions';
-  }
-
-  @override
-  String get searchBatchChangeCategoryLabel => 'Select Category';
-
-  @override
   String searchBatchDeleteSuccess(Object count) {
     return 'Successfully deleted $count transactions';
   }
@@ -294,6 +353,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String searchResultsCount(Object count) {
     return '$count results';
   }
+
+  @override
+  String get searchFilterTitle => 'Filter';
+
+  @override
+  String get searchAmountFilter => 'Amount Filter';
+
+  @override
+  String get searchDateFilter => 'Date Filter';
+
+  @override
+  String get searchStartDate => 'Start Date';
+
+  @override
+  String get searchEndDate => 'End Date';
+
+  @override
+  String get searchNotSet => 'Not Set';
+
+  @override
+  String get searchClearFilter => 'Clear Filter';
+
+  @override
+  String get searchBatchCategoryTransferError => 'Selected transactions contain transfers, cannot change category';
+
+  @override
+  String get searchBatchCategoryTypeError => 'Selected transactions have different types, please select all income or all expense';
+
+  @override
+  String get searchDateStart => 'Start';
+
+  @override
+  String get searchDateEnd => 'End';
 
   @override
   String get analyticsMonth => 'Month';
@@ -1085,6 +1177,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryMigrationDescriptionContent => '• Migrate all transaction records from one category to another\n• After migration, all transaction data from the source category will be transferred to the target category\n• This operation cannot be undone, please choose carefully';
 
   @override
+  String get categoryMigrationTypeLabel => 'Select Type';
+
+  @override
   String get categoryMigrationFromLabel => 'From Category';
 
   @override
@@ -1101,11 +1196,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryMigrationStartButton => 'Start Migration';
-
-  @override
-  String categoryMigrationTransactionCount(int count) {
-    return '$count records';
-  }
 
   @override
   String get categoryMigrationCannotTitle => 'Cannot Migrate';
@@ -2975,21 +3065,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disabled => 'Disabled';
 
   @override
-  String get supportedPayments => 'Supported Payment Methods';
-
-  @override
-  String get supportedAlipay => '✅ Alipay';
-
-  @override
-  String get supportedWechat => '✅ WeChat Pay';
-
-  @override
-  String get supportedUnionpay => '✅ UnionPay';
-
-  @override
-  String get supportedOthers => '⚠️ Other payment methods may have lower recognition accuracy';
-
-  @override
   String get photosPermissionRequired => 'Photos permission required for screenshot monitoring';
 
   @override
@@ -3020,92 +3095,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disableFailed => 'Disable failed';
 
   @override
-  String get reselectImage => 'Reselect';
-
-  @override
-  String get viewOriginalText => 'View Original Text';
-
-  @override
-  String get createBill => 'Create Bill';
-
-  @override
-  String get ocrBilling => 'OCR Scan Billing';
-
-  @override
-  String get ocrBillingDesc => 'Auto-recognize payment screenshots';
-
-  @override
   String get iosAutoFeatureDesc => 'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.';
 
   @override
-  String get iosAutoShortcutQuickAdd => 'Quick Add Shortcut';
+  String get iosAutoShortcutConfigTitle => 'Configuration Steps:';
 
   @override
-  String get iosAutoShortcutQuickAddDesc => 'Click the button below to import the configured shortcut directly, or manually open the Shortcuts app to configure.';
+  String get iosAutoShortcutStep1 => 'Open \"Shortcuts\" app, tap \"+\" in top right to create new shortcut';
 
   @override
-  String get iosAutoShortcutImport => 'One-Click Import Shortcut';
+  String get iosAutoShortcutStep2 => 'Add \"Take Screenshot\" action';
 
   @override
-  String get iosAutoShortcutOpenApp => 'Or Manually Open Shortcuts App';
+  String get iosAutoShortcutStep3 => 'Search and add \"BeeCount - Auto Billing\" action';
 
   @override
-  String get iosAutoShortcutConfigTitle => 'Configuration Steps (Recommended - URL Parameter):';
+  String get iosAutoShortcutStep4 => 'Set the screenshot parameter of \"BeeCount\" to the previous \"Screenshot\"';
 
   @override
-  String get iosAutoShortcutStep1 => 'Open \"Shortcuts\" app';
+  String get iosAutoShortcutStep5 => '(Optional) Go to Settings > Accessibility > Touch > Back Tap, bind this shortcut';
 
   @override
-  String get iosAutoShortcutStep2 => 'Tap \"+\" in top right to create new shortcut';
+  String get iosAutoShortcutStep6 => 'Done! Double tap phone back during payment for quick billing';
 
   @override
-  String get iosAutoShortcutStep3 => 'Add \"Take Screenshot\" action (get latest screenshot)';
-
-  @override
-  String get iosAutoShortcutStep4 => 'Add \"Extract Text from Screenshot\" action';
-
-  @override
-  String get iosAutoShortcutStep5 => 'Add \"Replace Text\" action: replace \"\\n\" in extracted text with \",\" (comma)';
-
-  @override
-  String get iosAutoShortcutStep6 => 'Add \"URL Encode\" action: encode the replaced text';
-
-  @override
-  String get iosAutoShortcutStep7 => 'Add \"Open URL\" action, URL:\nbeecount://auto-billing?text=[URL encoded text]';
-
-  @override
-  String get iosAutoShortcutStep8 => 'Tap shortcut settings (three dots in top right)';
-
-  @override
-  String get iosAutoShortcutStep9 => 'In \"When...\" add \"When Screenshot is taken\" trigger';
-
-  @override
-  String get iosAutoShortcutStep10 => 'Save and test: auto-identify after screenshot';
-
-  @override
-  String get iosAutoShortcutRecommendedTip => '✅ Recommended: URL parameter passing, no permission needed, best experience. Key steps:\n• Replace newlines \\n with comma , (avoid URL truncation)\n• Use URL encoding (avoid Chinese garbled text)\n• Screenshot text usually doesn\'t exceed 2048 character limit';
+  String get iosAutoShortcutRecommendedTip => '✅ Recommended: After binding the shortcut to \"Back Tap\", double tap phone back during payment to auto-screenshot and recognize billing, no manual screenshot needed.';
 
   @override
   String get iosAutoBackTapTitle => '💡 Double Tap Back to Trigger (Recommended)';
 
   @override
   String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
-
-  @override
-  String iosAutoImportFailed(Object error) {
-    return 'Import failed: $error';
-  }
-
-  @override
-  String iosAutoOpenAppFailed(Object error) {
-    return 'Open failed: $error';
-  }
-
-  @override
-  String get iosAutoCannotOpenLink => 'Cannot open link, please check network connection';
-
-  @override
-  String get iosAutoCannotOpenShortcuts => 'Cannot open Shortcuts app';
 
   @override
   String get aiSettingsTitle => 'AI Recognition';
@@ -3191,15 +3211,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiLocalModelUnavailable => 'Local model in training, not available yet';
 
   @override
-  String get aiFabSettingTitle => 'Quick Add Button Prioritize Camera';
-
-  @override
-  String get aiFabSettingDescCamera => 'Tap for camera, long press for manual';
-
-  @override
-  String get aiFabSettingDescManual => 'Tap for manual, long press for camera';
-
-  @override
   String get aiOcrRecognizing => 'Recognizing bill...';
 
   @override
@@ -3226,27 +3237,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiTypeExpense => 'Expense';
-
-  @override
-  String get ocrRecognitionResult => 'Recognition Result';
-
-  @override
-  String get ocrAmount => 'Amount';
-
-  @override
-  String get ocrNoAmountDetected => 'No amount detected';
-
-  @override
-  String get ocrManualAmountInput => 'Or enter amount manually';
-
-  @override
-  String get ocrMerchant => 'Merchant';
-
-  @override
-  String get ocrSuggestedCategory => 'Suggested Category';
-
-  @override
-  String get ocrTime => 'Time';
 
   @override
   String get cloudSyncPageTitle => 'Cloud Sync & Backup';
@@ -3277,6 +3267,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartBillingPageSubtitle => 'AI and automation billing features';
+
+  @override
+  String get smartBillingGuideHint => 'Long press the + button at the bottom center of the home page to quickly access these features';
+
+  @override
+  String get smartBillingImageBilling => 'Image Billing';
+
+  @override
+  String get smartBillingImageBillingDesc => 'Select payment screenshots from gallery for recognition';
+
+  @override
+  String get smartBillingImageBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.';
+
+  @override
+  String get smartBillingAIOptional => 'AI recognition is optional, configuration can improve recognition accuracy';
+
+  @override
+  String get smartBillingCameraBilling => 'Camera Billing';
+
+  @override
+  String get smartBillingCameraBillingDesc => 'Capture payment screenshots for recognition';
+
+  @override
+  String get smartBillingCameraBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.';
+
+  @override
+  String get smartBillingVoiceBilling => 'Voice Billing';
+
+  @override
+  String get smartBillingVoiceBillingDesc => 'Quick billing through voice input';
+
+  @override
+  String get smartBillingVoiceBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Voice\' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.';
+
+  @override
+  String get smartBillingAIRequired => 'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first';
+
+  @override
+  String get autoScreenshotBillingIosDesc => 'Auto-recognize payment screenshots via Shortcuts';
 
   @override
   String get automation => 'Automation';
@@ -3672,4 +3701,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => 'Perfect for detailed management';
+
+  @override
+  String get iosVersionWarningTitle => 'Requires iOS 16.0 or later';
+
+  @override
+  String get iosVersionWarningDesc => 'Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.';
 }

@@ -1,17 +1,106 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'automation/auto_billing_service.dart';
+import 'logger_service.dart';
 
 /// iOS快捷指令处理服务
-/// 处理通过URL Scheme触发的快捷指令自动化
+/// 处理通过URL Scheme和AppIntents触发的快捷指令自动化
 class ShortcutsHandlerService {
   final ProviderContainer _container;
   late final AutoBillingService _autoBillingService;
   final ImagePicker _imagePicker = ImagePicker();
+  StreamSubscription<dynamic>? _appIntentSubscription;
+
+  static const MethodChannel _methodChannel = MethodChannel('com.beecount.app_intents');
+  static const EventChannel _eventChannel = EventChannel('com.beecount.app_intents/events');
 
   ShortcutsHandlerService(this._container) {
     _autoBillingService = AutoBillingService(_container);
+    _initAppIntentsListener();
+  }
+
+  /// 初始化AppIntents监听器
+  void _initAppIntentsListener() {
+    try {
+      // 先检查是否支持AppIntents
+      _checkAppIntentsSupport();
+
+      // 监听来自AppIntents的事件
+      _appIntentSubscription = _eventChannel.receiveBroadcastStream().listen(
+        (event) {
+          if (event is String) {
+            logger.info('AppIntent', '收到AppIntent事件: $event');
+            _handleAppIntent(event);
+          }
+        },
+        onError: (error) {
+          logger.error('AppIntent', 'AppIntent监听错误', error);
+        },
+      );
+      logger.info('AppIntent', 'AppIntents监听器已启动');
+    } catch (e, stackTrace) {
+      logger.debug('AppIntent', 'AppIntents监听器初始化失败: $e');
+    }
+  }
+
+  /// 检查AppIntents支持
+  Future<void> _checkAppIntentsSupport() async {
+    try {
+      final isSupported = await _methodChannel.invokeMethod<bool>('isSupported');
+      if (isSupported == true) {
+        logger.info('AppIntent', 'AppIntents已支持（iOS 16+）');
+      } else {
+        logger.info('AppIntent', 'AppIntents不支持（iOS < 16）');
+      }
+    } catch (e) {
+      logger.debug('AppIntent', '检查AppIntents支持失败: $e');
+    }
+  }
+
+  /// 处理AppIntent事件
+  Future<void> _handleAppIntent(String event) async {
+    logger.info('AppIntent', '收到AppIntent事件: $event');
+
+    try {
+      // 解析JSON格式
+      final data = jsonDecode(event) as Map<String, dynamic>;
+      final action = data['action'] as String?;
+
+      if (action == 'auto-billing') {
+        final imagePath = data['imagePath'] as String?;
+
+        if (imagePath != null && imagePath.isNotEmpty) {
+          logger.info('AppIntent', '收到截图路径: $imagePath');
+          await _handleScreenshotBilling(imagePath);
+        } else {
+          logger.info('AppIntent', '未收到截图路径，打开相册选择');
+          await _handleQuickBilling();
+        }
+      } else {
+        logger.warning('AppIntent', '未知的action: $action');
+      }
+    } catch (e, stackTrace) {
+      logger.error('AppIntent', 'JSON解析失败', e, stackTrace);
+    }
+  }
+
+  /// 处理快捷指令传递的截图
+  Future<void> _handleScreenshotBilling(String imagePath) async {
+    logger.info('AppIntent', '开始处理快捷指令截图: $imagePath');
+
+    try {
+      // 直接处理截图
+      await _autoBillingService.processScreenshot(
+        imagePath,
+        showNotification: true,
+      );
+      logger.info('AppIntent', '截图处理完成');
+    } catch (e, stackTrace) {
+      logger.error('AppIntent', '截图处理失败', e, stackTrace);
+    }
   }
 
   /// 处理快捷指令URL
@@ -123,6 +212,7 @@ class ShortcutsHandlerService {
 
   /// 释放资源
   void dispose() {
+    _appIntentSubscription?.cancel();
     _autoBillingService.dispose();
   }
 }

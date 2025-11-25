@@ -12,6 +12,7 @@
   "commonAdd": "新增",
   "commonEdit": "編輯",
   "commonOk": "確定",
+  "commonKnow": "知道了",
   "commonNo": "否",
   "commonEmpty": "暫無資料",
   "commonError": "錯誤",
@@ -19,13 +20,68 @@
   "commonFailed": "失敗",
   "commonBack": "返回",
   "commonNext": "下一步",
-  "fabLongPressTip": "長按可拍照記帳",
+  "fabActionCamera": "拍照",
+  "fabActionGallery": "相簿",
+  "fabActionVoice": "語音",
+  "fabActionVoiceDisabled": "需要啟用AI並配置 GLM API",
+  "voiceRecordingTitle": "語音記帳",
+  "voiceRecordingPreparing": "準備錄音...",
+  "voiceRecordingInProgress": "正在錄音...",
+  "voiceRecordingProcessing": "正在識別...",
+  "voiceRecordingDuration": "錄音時長: {duration}秒",
+  "@voiceRecordingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRecordingSuccess": "語音記帳成功",
+  "voiceRecordingNoLedger": "未找到當前帳本",
+  "voiceRecordingNoInfo": "未識別到記帳資訊",
+  "voiceRecordingPermissionDenied": "需要麥克風權限才能錄音",
+  "voiceRecordingPermissionDeniedTitle": "需要麥克風權限",
+  "voiceRecordingPermissionDeniedMessage": "語音記帳功能需要使用麥克風權限。請在系統設定中允許蜜蜂記帳存取麥克風。",
+  "voiceRecordingStartFailed": "啟動錄音失敗: {error}",
+  "@voiceRecordingStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingFailed": "錄音失敗: {error}",
+  "@voiceRecordingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingRecognizeFailed": "識別失敗: {error}",
+  "@voiceRecordingRecognizeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoInfoDetected": "未能識別帳單資訊: {text}",
+  "@voiceRecordingNoInfoDetected": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRecordingNoSpeech": "未檢測到語音輸入",
   "commonPrevious": "上一步",
   "commonFinish": "完成",
   "commonClose": "關閉",
   "commonSearch": "搜尋",
   "commonNoteHint": "備註…",
   "commonSettings": "設定",
+  "commonGoSettings": "前往設定",
   "commonHelp": "說明",
   "commonLanguage": "語言",
   "commonCurrent": "當前",
@@ -57,10 +113,9 @@
   "widgetMonthSuffix": "月",
   "searchTitle": "搜尋",
   "searchHint": "搜尋備註、分類或金額...",
-  "searchAmountRange": "金額範圍篩選",
+  "searchCategoryHint": "搜尋分類名稱...",
   "searchMinAmount": "最小金額",
   "searchMaxAmount": "最大金額",
-  "searchTo": "至",
   "searchNoInput": "輸入關鍵詞開始搜尋",
   "searchNoResults": "未找到符合的結果",
   "searchBatchMode": "批次操作",
@@ -76,9 +131,6 @@
   "searchBatchSetNoteTitle": "批次設定備註",
   "searchBatchSetNoteMessage": "將為選中的 {count} 筆記帳設定相同的備註",
   "searchBatchSetNoteHint": "輸入備註內容 (留空則清空備註)",
-  "searchBatchChangeCategoryTitle": "批次調整分類",
-  "searchBatchChangeCategoryMessage": "將為選中的 {count} 筆記帳設定新的分類",
-  "searchBatchChangeCategoryLabel": "選擇分類",
   "searchBatchDeleteSuccess": "成功刪除 {count} 筆記帳",
   "searchBatchDeleteFailed": "刪除失敗: {error}",
   "searchBatchSetNoteSuccess": "成功為 {count} 筆記帳設定備註",
@@ -86,6 +138,17 @@
   "searchBatchChangeCategorySuccess": "成功為 {count} 筆記帳調整分類",
   "searchBatchChangeCategoryFailed": "調整分類失敗: {error}",
   "searchResultsCount": "共 {count} 條結果",
+  "searchFilterTitle": "篩選",
+  "searchAmountFilter": "金額篩選",
+  "searchDateFilter": "時間篩選",
+  "searchStartDate": "開始日期",
+  "searchEndDate": "結束日期",
+  "searchNotSet": "未設定",
+  "searchClearFilter": "清空篩選",
+  "searchBatchCategoryTransferError": "選中的交易包含轉帳，無法修改分類",
+  "searchBatchCategoryTypeError": "選中的交易類型不一致，請選擇全部為收入或全部為支出的交易",
+  "searchDateStart": "開始",
+  "searchDateEnd": "結束",
   "analyticsMonth": "月",
   "analyticsYear": "年",
   "analyticsAll": "全部",
@@ -244,13 +307,13 @@
   "categoryMigrationTitle": "分類遷移",
   "categoryMigrationDescription": "分類遷移說明",
   "categoryMigrationDescriptionContent": "• 將指定分類的所有交易記錄遷移到另一個分類\n• 遷移後，原分類的交易資料將全部轉移到目標分類\n• 此操作不可撤銷，請謹慎選擇",
+  "categoryMigrationTypeLabel": "選擇類型",
   "categoryMigrationFromLabel": "遷出分類",
   "categoryMigrationFromHint": "選擇要遷出的分類",
   "categoryMigrationToLabel": "遷入分類",
   "categoryMigrationToHint": "選擇遷入的分類",
   "categoryMigrationToHintFirst": "請先選擇遷出分類",
   "categoryMigrationStartButton": "開始遷移",
-  "categoryMigrationTransactionCount": "{count}筆",
   "categoryMigrationCannotTitle": "無法遷移",
   "categoryMigrationCannotMessage": "選擇的分類無法進行遷移，請檢查分類狀態。",
   "categoryExpenseType": "支出分類",
@@ -920,9 +983,6 @@
   "aiEnableTitle": "啟用 AI 智慧識別",
   "aiEnableToastOff": "AI 增強已停用",
   "aiEnableToastOn": "AI 增強已啟用",
-  "aiFabSettingDescCamera": "短按拍照，長按手動記帳",
-  "aiFabSettingDescManual": "短按手動記帳，長按拍照",
-  "aiFabSettingTitle": "快捷記帳按鈕優先拍照",
   "aiLocalModelManagement": "模型管理",
   "aiLocalModelTitle": "本機模型",
   "aiLocalModelTraining": "訓練中",
@@ -957,7 +1017,6 @@
   "autoScreenshotBilling": "截圖自動記帳",
   "autoScreenshotBillingDesc": "截圖後自動識別支付資訊",
   "autoScreenshotBillingTitle": "截圖自動記帳",
-  "createBill": "建立帳單",
   "disableFailed": "停用失敗",
   "disableSuccess": "自動記帳已停用",
   "disabled": "已停用",
@@ -968,44 +1027,16 @@
   "featureDescriptionContent": "截圖支付頁面後，系統會自動識別金額和商家資訊，並建立支出記錄。\n\n⚡ 識別速度約 2-3 秒\n🤖 智慧配對分類\n📝 自動填寫備註",
   "iosAutoBackTapDesc": "設定 > 輔助使用 > 觸控 > 背面輕點\n• 選擇「點兩下」或「點三下」\n• 選擇剛建立的捷徑\n• 完成後，支付時雙擊手機背面即可自動記帳，無需截圖",
   "iosAutoBackTapTitle": "💡 雙擊背面快速觸發（推薦）",
-  "iosAutoCannotOpenLink": "無法開啟連結，請檢查網路連線",
-  "iosAutoCannotOpenShortcuts": "無法開啟捷徑 App",
   "iosAutoFeatureDesc": "透過 iOS「捷徑」應用程式，實現截圖後自動識別支付資訊並記帳。設定後，每次截圖都會自動觸發識別。",
-  "iosAutoImportFailed": "匯入失敗: {error}",
-  "iosAutoOpenAppFailed": "開啟失敗: {error}",
   "iosAutoShortcutConfigTitle": "設定步驟（推薦方式 - URL 參數傳遞）：",
-  "iosAutoShortcutImport": "一鍵匯入捷徑",
-  "iosAutoShortcutOpenApp": "或手動開啟捷徑 App 設定",
-  "iosAutoShortcutQuickAdd": "快速新增捷徑",
-  "iosAutoShortcutQuickAddDesc": "點擊下方按鈕可以直接匯入設定好的捷徑，或手動開啟捷徑 App 設定。",
-  "iosAutoShortcutRecommendedTip": "✅ 推薦：URL 參數傳遞，無需權限，體驗最佳。關鍵步驟：\n• 取代文字時將換行符號\\n取代為逗號,（避免 URL 截斷）\n• 使用 URL 編碼操作（避免中文亂碼）\n• 一般截圖文字不會超過 2048 字元限制",
-  "iosAutoShortcutStep1": "開啟「捷徑」應用程式",
-  "iosAutoShortcutStep10": "儲存並測試：截圖後會自動識別",
-  "iosAutoShortcutStep2": "點擊右上角「+」建立新捷徑",
-  "iosAutoShortcutStep3": "新增「截圖」操作（取得最新截圖）",
-  "iosAutoShortcutStep4": "新增「從截圖中擷取文字」操作",
-  "iosAutoShortcutStep5": "新增「取代文字」操作：將「擷取的文字」中的「\\n」取代為「,」（逗號）",
-  "iosAutoShortcutStep6": "新增「URL 編碼」操作：對「取代後的文字」進行 URL 編碼",
-  "iosAutoShortcutStep7": "新增「開啟 URL」操作，URL 填寫：\nbeecount://auto-billing?text=[URL 編碼後的文字]",
-  "iosAutoShortcutStep8": "點擊捷徑設定（右上角三點）",
-  "iosAutoShortcutStep9": "在「當...時執行」中新增「截圖時」觸發程序",
-  "ocrBilling": "OCR 掃描記帳",
-  "ocrBillingDesc": "掃描支付截圖自動識別金額",
+  "iosAutoShortcutRecommendedTip": "✅ 推薦：在「輕點背面」中綁定捷徑後，支付時雙擊手機背部即可自動截圖並識別記帳，無需手動截圖。",
+  "iosAutoShortcutStep1": "開啟「捷徑」應用程式，點擊右上角「+」建立新捷徑",
+  "iosAutoShortcutStep2": "新增「截圖」操作",
+  "iosAutoShortcutStep3": "搜尋並新增「蜜蜂記帳 - 截圖自動記帳」操作",
+  "iosAutoShortcutStep4": "將「蜜蜂記帳」的截圖參數設定為上一步的「截圖」",
+  "iosAutoShortcutStep5": "（可選）在系統設定 > 輔助使用 > 觸控 > 輕點背面中，綁定此捷徑",
+  "iosAutoShortcutStep6": "完成！支付時雙擊手機背部即可快速記帳",
   "photosPermissionRequired": "需要相片權限才能監聽截圖",
-  "reselectImage": "重新選擇",
-  "supportedAlipay": "✅ 支付寶",
-  "supportedOthers": "⚠️ 其他支付方式識別準確率可能較低",
-  "supportedPayments": "支援的支付方式",
-  "supportedUnionpay": "✅ 雲閃付",
-  "supportedWechat": "✅ 微信支付",
-  "viewOriginalText": "檢視原始文字",
-  "ocrRecognitionResult": "識別結果",
-  "ocrAmount": "金額",
-  "ocrNoAmountDetected": "未識別到金額",
-  "ocrManualAmountInput": "或手動輸入金額",
-  "ocrMerchant": "商家",
-  "ocrSuggestedCategory": "推薦分類",
-  "ocrTime": "時間",
   "about": "關於",
   "aboutContactEmail": "聯絡電子郵件",
   "aboutDesc": "版本資訊、說明與回饋",
@@ -1041,6 +1072,19 @@
   "smartBilling": "智慧記帳",
   "smartBillingDesc": "AI識別、OCR掃描、自動記帳",
   "smartBillingPageSubtitle": "AI和自動化記帳功能",
+  "smartBillingGuideHint": "長按首頁底部中間的 + 按鈕，即可快速使用這些功能",
+  "smartBillingImageBilling": "圖片記帳",
+  "smartBillingImageBillingDesc": "從相簿選擇支付截圖進行識別",
+  "smartBillingImageBillingGuide": "在首頁長按底部中間的 + 按鈕，選擇「相簿」即可使用圖片記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。",
+  "smartBillingAIOptional": "AI 識別為可選功能，配置後可提高識別準確度",
+  "smartBillingCameraBilling": "拍照記帳",
+  "smartBillingCameraBillingDesc": "拍攝支付截圖進行識別",
+  "smartBillingCameraBillingGuide": "在首頁長按底部中間的 + 按鈕，選擇「拍照」即可使用拍照記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。",
+  "smartBillingVoiceBilling": "語音記帳",
+  "smartBillingVoiceBillingDesc": "透過語音輸入快速記帳",
+  "smartBillingVoiceBillingGuide": "在首頁長按底部中間的 + 按鈕，選擇「語音」即可使用語音記帳功能。語音記帳需要透過AI將語音轉為文字並提取帳單資訊。",
+  "smartBillingAIRequired": "語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定",
+  "autoScreenshotBillingIosDesc": "透過快捷指令實現截圖自動識別記帳",
   "smartBillingPageTitle": "智慧記帳",
   "storageManagementTitle": "儲存空間管理",
   "storageManagementSubtitle": "清理快取釋放空間",
@@ -1283,5 +1327,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "iosVersionWarningTitle": "需要 iOS 16.0 或更高版本",
+  "iosVersionWarningDesc": "截圖自動記帳功能使用了 iOS 16 引入的 App Intents 框架。您的裝置系統版本較低，暫不支援此功能。\n\n請升級到 iOS 16 或更高版本以使用此功能。"
 }
