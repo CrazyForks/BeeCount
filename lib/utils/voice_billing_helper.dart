@@ -13,6 +13,7 @@ import '../services/automation/voice_billing_service.dart';
 import '../services/automation/bill_creation_service.dart';
 import '../services/automation/ocr_service.dart';
 import '../widgets/ui/ui.dart';
+import '../styles/tokens.dart';
 
 /// 语音记账帮助类
 class VoiceBillingHelper {
@@ -35,13 +36,64 @@ class VoiceBillingHelper {
         return;
       }
 
-      // 1. 请求麦克风权限
-      final status = await Permission.microphone.request();
-      if (!status.isGranted) {
+      // 1. 检查并请求麦克风权限
+      var status = await Permission.microphone.status;
+      logger.info('VoiceBilling', '======== 语音记账权限检查 ========');
+      logger.info('VoiceBilling', '当前麦克风权限状态: $status');
+      logger.info('VoiceBilling', '权限详情:');
+      logger.info('VoiceBilling', '  - isGranted: ${status.isGranted}');
+      logger.info('VoiceBilling', '  - isDenied: ${status.isDenied}');
+      logger.info('VoiceBilling', '  - isPermanentlyDenied: ${status.isPermanentlyDenied}');
+      logger.info('VoiceBilling', '  - isRestricted: ${status.isRestricted}');
+      logger.info('VoiceBilling', '  - isLimited: ${status.isLimited}');
+      logger.info('VoiceBilling', '  - isProvisional: ${status.isProvisional}');
+
+      // iOS 特殊处理：如果被限制（设备管理策略），引导用户检查设备设置
+      if (status.isRestricted) {
+        logger.warning('VoiceBilling', '麦克风权限被设备管理策略限制');
         if (!context.mounted) return;
-        showToast(context, l10n.voiceRecordingPermissionDenied);
+        showToast(context, '设备管理策略限制了麦克风权限');
         return;
       }
+
+      // Android 特殊处理：如果权限被永久拒绝，引导用户去设置
+      if (status.isPermanentlyDenied) {
+        logger.info('VoiceBilling', 'Android 权限被永久拒绝，弹出引导对话框');
+        if (!context.mounted) return;
+        final shouldOpenSettings = await AppDialog.confirm<bool>(
+          context,
+          title: l10n.voiceRecordingPermissionDeniedTitle,
+          message: l10n.voiceRecordingPermissionDeniedMessage,
+          okLabel: l10n.commonGoSettings,
+          cancelLabel: l10n.commonCancel,
+        );
+
+        if (shouldOpenSettings == true) {
+          logger.info('VoiceBilling', '用户选择前往设置');
+          await openAppSettings();
+        }
+        return;
+      }
+
+      // 如果权限未授予，请求权限（iOS 和 Android 首次都会弹出系统对话框）
+      if (!status.isGranted) {
+        logger.info('VoiceBilling', '权限未授予，发起权限请求...');
+        status = await Permission.microphone.request();
+        logger.info('VoiceBilling', '请求后的权限状态: $status');
+        logger.info('VoiceBilling', '  - isGranted: ${status.isGranted}');
+        logger.info('VoiceBilling', '  - isDenied: ${status.isDenied}');
+
+        if (!status.isGranted) {
+          logger.warning('VoiceBilling', '用户拒绝了权限请求');
+          if (!context.mounted) return;
+          // 用户拒绝后，显示提示
+          showToast(context, l10n.voiceRecordingPermissionDenied);
+          return;
+        }
+      }
+
+      logger.info('VoiceBilling', '✓ 麦克风权限已授予，准备开始录音');
+      logger.info('VoiceBilling', '================================');
 
       // 2. 创建录音器
       final recorder = AudioRecorder();
@@ -407,8 +459,11 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: BeeTokens.surface(context),
                   borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: BeeTokens.border(context),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,7 +480,10 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
                     const SizedBox(height: 4),
                     Text(
                       _recognizedText!,
-                      style: const TextStyle(fontSize: 14),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: BeeTokens.textPrimary(context),
+                      ),
                     ),
                   ],
                 ),

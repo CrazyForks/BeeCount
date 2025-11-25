@@ -108,6 +108,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voiceRecordingPermissionDenied => 'Microphone permission required';
 
   @override
+  String get voiceRecordingPermissionDeniedTitle => 'Microphone Permission Required';
+
+  @override
+  String get voiceRecordingPermissionDeniedMessage => 'Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.';
+
+  @override
   String voiceRecordingStartFailed(String error) {
     return 'Failed to start recording: $error';
   }
@@ -147,6 +153,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonSettings => 'Settings';
+
+  @override
+  String get commonGoSettings => 'Go to Settings';
 
   @override
   String get commonHelp => 'Help';
@@ -309,17 +318,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchBatchSetNoteHint => 'Enter note content (leave empty to clear notes)';
-
-  @override
-  String get searchBatchChangeCategoryTitle => 'Batch Change Category';
-
-  @override
-  String searchBatchChangeCategoryMessage(Object count) {
-    return 'Set a new category for the selected $count transactions';
-  }
-
-  @override
-  String get searchBatchChangeCategoryLabel => 'Select Category';
 
   @override
   String searchBatchDeleteSuccess(Object count) {
@@ -1198,11 +1196,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryMigrationStartButton => 'Start Migration';
-
-  @override
-  String categoryMigrationTransactionCount(int count) {
-    return '$count records';
-  }
 
   @override
   String get categoryMigrationCannotTitle => 'Cannot Migrate';

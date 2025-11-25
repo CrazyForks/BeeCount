@@ -45,8 +45,21 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
 
-    # 禁用第三方库的编译警告,减少构建日志噪音
     target.build_configurations.each do |config|
+      # permission_handler 权限配置
+      # 只启用需要的权限，避免 App Store 审核时被拒
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        ## dart: PermissionGroup.camera
+        'PERMISSION_CAMERA=1',
+        ## dart: PermissionGroup.microphone
+        'PERMISSION_MICROPHONE=1',
+        ## dart: PermissionGroup.photos
+        'PERMISSION_PHOTOS=1',
+        ## dart: PermissionGroup.notification
+        'PERMISSION_NOTIFICATIONS=1',
+      ]
+
       # 针对sqlite3等C库禁用常见警告
       if target.name == 'sqlite3'
         config.build_settings['GCC_WARN_64_TO_32_BIT_CONVERSION'] = 'NO'

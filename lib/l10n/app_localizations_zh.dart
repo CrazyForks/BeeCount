@@ -108,6 +108,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get voiceRecordingPermissionDenied => '需要麦克风权限才能录音';
 
   @override
+  String get voiceRecordingPermissionDeniedTitle => '需要麦克风权限';
+
+  @override
+  String get voiceRecordingPermissionDeniedMessage => '语音记账功能需要使用麦克风权限。请在系统设置中允许蜜蜂记账访问麦克风。';
+
+  @override
   String voiceRecordingStartFailed(String error) {
     return '启动录音失败: $error';
   }
@@ -147,6 +153,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get commonSettings => '设置';
+
+  @override
+  String get commonGoSettings => '前往设置';
 
   @override
   String get commonHelp => '帮助';
@@ -309,17 +318,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get searchBatchSetNoteHint => '输入备注内容 (留空则清空备注)';
-
-  @override
-  String get searchBatchChangeCategoryTitle => '批量调整分类';
-
-  @override
-  String searchBatchChangeCategoryMessage(Object count) {
-    return '将为选中的 $count 笔记账设置新的分类';
-  }
-
-  @override
-  String get searchBatchChangeCategoryLabel => '选择分类';
 
   @override
   String searchBatchDeleteSuccess(Object count) {
@@ -1198,11 +1196,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categoryMigrationStartButton => '开始迁移';
-
-  @override
-  String categoryMigrationTransactionCount(int count) {
-    return '$count笔';
-  }
 
   @override
   String get categoryMigrationCannotTitle => '无法迁移';
@@ -3871,6 +3864,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get voiceRecordingPermissionDenied => '需要麥克風權限才能錄音';
 
   @override
+  String get voiceRecordingPermissionDeniedTitle => '需要麥克風權限';
+
+  @override
+  String get voiceRecordingPermissionDeniedMessage => '語音記帳功能需要使用麥克風權限。請在系統設定中允許蜜蜂記帳存取麥克風。';
+
+  @override
   String voiceRecordingStartFailed(String error) {
     return '啟動錄音失敗: $error';
   }
@@ -3910,6 +3909,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonSettings => '設定';
+
+  @override
+  String get commonGoSettings => '前往設定';
 
   @override
   String get commonHelp => '說明';
@@ -4072,17 +4074,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchBatchSetNoteHint => '輸入備註內容 (留空則清空備註)';
-
-  @override
-  String get searchBatchChangeCategoryTitle => '批次調整分類';
-
-  @override
-  String searchBatchChangeCategoryMessage(Object count) {
-    return '將為選中的 $count 筆記帳設定新的分類';
-  }
-
-  @override
-  String get searchBatchChangeCategoryLabel => '選擇分類';
 
   @override
   String searchBatchDeleteSuccess(Object count) {
@@ -4961,11 +4952,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryMigrationStartButton => '開始遷移';
-
-  @override
-  String categoryMigrationTransactionCount(int count) {
-    return '$count筆';
-  }
 
   @override
   String get categoryMigrationCannotTitle => '無法遷移';

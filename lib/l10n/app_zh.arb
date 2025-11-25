@@ -40,6 +40,8 @@
   "voiceRecordingNoLedger": "未找到当前账本",
   "voiceRecordingNoInfo": "未识别到记账信息",
   "voiceRecordingPermissionDenied": "需要麦克风权限才能录音",
+  "voiceRecordingPermissionDeniedTitle": "需要麦克风权限",
+  "voiceRecordingPermissionDeniedMessage": "语音记账功能需要使用麦克风权限。请在系统设置中允许蜜蜂记账访问麦克风。",
   "voiceRecordingStartFailed": "启动录音失败: {error}",
   "@voiceRecordingStartFailed": {
     "placeholders": {
@@ -79,6 +81,7 @@
   "commonSearch": "搜索",
   "commonNoteHint": "备注…",
   "commonSettings": "设置",
+  "commonGoSettings": "前往设置",
   "commonHelp": "帮助",
   "commonLanguage": "语言",
   "commonWeekdayMonday": "星期一",
@@ -160,16 +163,6 @@
     }
   },
   "searchBatchSetNoteHint": "输入备注内容 (留空则清空备注)",
-  "searchBatchChangeCategoryTitle": "批量调整分类",
-  "searchBatchChangeCategoryMessage": "将为选中的 {count} 笔记账设置新的分类",
-  "@searchBatchChangeCategoryMessage": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "searchBatchChangeCategoryLabel": "选择分类",
   "searchBatchDeleteSuccess": "成功删除 {count} 笔记账",
   "@searchBatchDeleteSuccess": {
     "placeholders": {
@@ -449,7 +442,6 @@
   "categoryMigrationToHint": "选择迁入的分类",
   "categoryMigrationToHintFirst": "请先选择迁出分类",
   "categoryMigrationStartButton": "开始迁移",
-  "categoryMigrationTransactionCount": "{count}笔",
   "categoryMigrationCannotTitle": "无法迁移",
   "categoryMigrationCannotMessage": "选择的分类无法进行迁移，请检查分类状态。",
   "categoryExpenseType": "支出分类",

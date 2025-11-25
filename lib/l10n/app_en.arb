@@ -43,6 +43,8 @@
   "voiceRecordingNoLedger": "No ledger found",
   "voiceRecordingNoInfo": "No billing information recognized",
   "voiceRecordingPermissionDenied": "Microphone permission required",
+  "voiceRecordingPermissionDeniedTitle": "Microphone Permission Required",
+  "voiceRecordingPermissionDeniedMessage": "Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.",
   "voiceRecordingStartFailed": "Failed to start recording: {error}",
   "@voiceRecordingStartFailed": {
     "placeholders": {
@@ -82,6 +84,7 @@
   "commonSearch": "Search",
   "commonNoteHint": "Note...",
   "commonSettings": "Settings",
+  "commonGoSettings": "Go to Settings",
   "commonHelp": "Help",
   "commonLanguage": "Language",
   "commonCurrent": "Current",
@@ -146,9 +149,6 @@
   "searchBatchSetNoteTitle": "Batch Set Note",
   "searchBatchSetNoteMessage": "Set the same note for the selected {count} transactions",
   "searchBatchSetNoteHint": "Enter note content (leave empty to clear notes)",
-  "searchBatchChangeCategoryTitle": "Batch Change Category",
-  "searchBatchChangeCategoryMessage": "Set a new category for the selected {count} transactions",
-  "searchBatchChangeCategoryLabel": "Select Category",
   "searchBatchDeleteSuccess": "Successfully deleted {count} transactions",
   "searchBatchDeleteFailed": "Delete failed: {error}",
   "searchBatchSetNoteSuccess": "Successfully set note for {count} transactions",
@@ -497,14 +497,6 @@
   "categoryMigrationToHint": "Select target category",
   "categoryMigrationToHintFirst": "Please select source category first",
   "categoryMigrationStartButton": "Start Migration",
-  "categoryMigrationTransactionCount": "{count} records",
-  "@categoryMigrationTransactionCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "categoryMigrationCannotTitle": "Cannot Migrate",
   "categoryMigrationCannotMessage": "Selected categories cannot be migrated, please check category status.",
   "categoryExpenseType": "Expense Category",

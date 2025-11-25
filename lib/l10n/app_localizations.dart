@@ -294,6 +294,18 @@ abstract class AppLocalizations {
   /// **'Microphone permission required'**
   String get voiceRecordingPermissionDenied;
 
+  /// No description provided for @voiceRecordingPermissionDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone Permission Required'**
+  String get voiceRecordingPermissionDeniedTitle;
+
+  /// No description provided for @voiceRecordingPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.'**
+  String get voiceRecordingPermissionDeniedMessage;
+
   /// No description provided for @voiceRecordingStartFailed.
   ///
   /// In en, this message translates to:
@@ -359,6 +371,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get commonSettings;
+
+  /// No description provided for @commonGoSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get commonGoSettings;
 
   /// No description provided for @commonHelp.
   ///
@@ -659,24 +677,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter note content (leave empty to clear notes)'**
   String get searchBatchSetNoteHint;
-
-  /// No description provided for @searchBatchChangeCategoryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Batch Change Category'**
-  String get searchBatchChangeCategoryTitle;
-
-  /// No description provided for @searchBatchChangeCategoryMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Set a new category for the selected {count} transactions'**
-  String searchBatchChangeCategoryMessage(Object count);
-
-  /// No description provided for @searchBatchChangeCategoryLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Category'**
-  String get searchBatchChangeCategoryLabel;
 
   /// No description provided for @searchBatchDeleteSuccess.
   ///
@@ -2285,12 +2285,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Migration'**
   String get categoryMigrationStartButton;
-
-  /// No description provided for @categoryMigrationTransactionCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} records'**
-  String categoryMigrationTransactionCount(int count);
 
   /// No description provided for @categoryMigrationCannotTitle.
   ///
