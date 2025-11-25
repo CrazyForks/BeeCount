@@ -22,6 +22,7 @@ class TransactionListItem extends ConsumerWidget {
   final bool isSelectionMode; // 是否处于选择模式
   final bool isSelected; // 是否被选中
   final VoidCallback? onSelectionChanged; // 选中状态改变回调
+  final bool showFullDate; // 是否显示完整日期（年-月-日 时:分）
 
   const TransactionListItem({
       super.key,
@@ -39,6 +40,7 @@ class TransactionListItem extends ConsumerWidget {
       this.isSelectionMode = false,
       this.isSelected = false,
       this.onSelectionChanged,
+      this.showFullDate = false,
   });
 
   @override
@@ -89,8 +91,18 @@ class TransactionListItem extends ConsumerWidget {
                             overflow: TextOverflow.ellipsis,
                             style: BeeTextTokens.title(context)),
                       ),
-                      // 显示时间（如果设置开启且有时间数据）
-                      if (ref.watch(showTransactionTimeProvider) && happenedAt != null) ...[
+                      // 显示完整日期（如果showFullDate为true）
+                      if (showFullDate && happenedAt != null) ...[
+                        const SizedBox(width: 6),
+                        Text(
+                          '${happenedAt!.year}-${happenedAt!.month.toString().padLeft(2, '0')}-${happenedAt!.day.toString().padLeft(2, '0')} ${happenedAt!.hour.toString().padLeft(2, '0')}:${happenedAt!.minute.toString().padLeft(2, '0')}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: BeeTokens.textTertiary(context),
+                          ),
+                        ),
+                      ]
+                      // 显示时间（如果设置开启且有时间数据，且不显示完整日期）
+                      else if (ref.watch(showTransactionTimeProvider) && happenedAt != null) ...[
                         const SizedBox(width: 6),
                         Text(
                           '${happenedAt!.hour.toString().padLeft(2, '0')}:${happenedAt!.minute.toString().padLeft(2, '0')}:${happenedAt!.second.toString().padLeft(2, '0')}',

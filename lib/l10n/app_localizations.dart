@@ -240,12 +240,6 @@ abstract class AppLocalizations {
   /// **'AI enabled & GLM API required'**
   String get fabActionVoiceDisabled;
 
-  /// No description provided for @fabSpeedDialTip.
-  ///
-  /// In en, this message translates to:
-  /// **'Long press for more options'**
-  String get fabSpeedDialTip;
-
   /// No description provided for @voiceRecordingTitle.
   ///
   /// In en, this message translates to:
@@ -558,11 +552,11 @@ abstract class AppLocalizations {
   /// **'Search notes, categories or amounts...'**
   String get searchHint;
 
-  /// No description provided for @searchAmountRange.
+  /// No description provided for @searchCategoryHint.
   ///
   /// In en, this message translates to:
-  /// **'Amount range filter'**
-  String get searchAmountRange;
+  /// **'Search category name...'**
+  String get searchCategoryHint;
 
   /// No description provided for @searchMinAmount.
   ///
@@ -575,12 +569,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Max amount'**
   String get searchMaxAmount;
-
-  /// No description provided for @searchTo.
-  ///
-  /// In en, this message translates to:
-  /// **'to'**
-  String get searchTo;
 
   /// No description provided for @searchNoInput.
   ///
@@ -731,6 +719,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} results'**
   String searchResultsCount(Object count);
+
+  /// No description provided for @searchFilterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get searchFilterTitle;
+
+  /// No description provided for @searchAmountFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount Filter'**
+  String get searchAmountFilter;
+
+  /// No description provided for @searchDateFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Date Filter'**
+  String get searchDateFilter;
+
+  /// No description provided for @searchStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get searchStartDate;
+
+  /// No description provided for @searchEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get searchEndDate;
+
+  /// No description provided for @searchNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Set'**
+  String get searchNotSet;
+
+  /// No description provided for @searchClearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filter'**
+  String get searchClearFilter;
+
+  /// No description provided for @searchBatchCategoryTransferError.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected transactions contain transfers, cannot change category'**
+  String get searchBatchCategoryTransferError;
+
+  /// No description provided for @searchBatchCategoryTypeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected transactions have different types, please select all income or all expense'**
+  String get searchBatchCategoryTypeError;
+
+  /// No description provided for @searchDateStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get searchDateStart;
+
+  /// No description provided for @searchDateEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get searchDateEnd;
 
   /// No description provided for @analyticsMonth.
   ///
@@ -5868,36 +5922,6 @@ abstract class AppLocalizations {
   /// **'Disable failed'**
   String get disableFailed;
 
-  /// No description provided for @reselectImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Reselect'**
-  String get reselectImage;
-
-  /// No description provided for @viewOriginalText.
-  ///
-  /// In en, this message translates to:
-  /// **'View Original Text'**
-  String get viewOriginalText;
-
-  /// No description provided for @createBill.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Bill'**
-  String get createBill;
-
-  /// No description provided for @ocrBilling.
-  ///
-  /// In en, this message translates to:
-  /// **'OCR Scan Billing'**
-  String get ocrBilling;
-
-  /// No description provided for @ocrBillingDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-recognize payment screenshots'**
-  String get ocrBillingDesc;
-
   /// No description provided for @iosAutoFeatureDesc.
   ///
   /// In en, this message translates to:
@@ -6246,48 +6270,6 @@ abstract class AppLocalizations {
   /// **'Expense'**
   String get aiTypeExpense;
 
-  /// No description provided for @ocrRecognitionResult.
-  ///
-  /// In en, this message translates to:
-  /// **'Recognition Result'**
-  String get ocrRecognitionResult;
-
-  /// No description provided for @ocrAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Amount'**
-  String get ocrAmount;
-
-  /// No description provided for @ocrNoAmountDetected.
-  ///
-  /// In en, this message translates to:
-  /// **'No amount detected'**
-  String get ocrNoAmountDetected;
-
-  /// No description provided for @ocrManualAmountInput.
-  ///
-  /// In en, this message translates to:
-  /// **'Or enter amount manually'**
-  String get ocrManualAmountInput;
-
-  /// No description provided for @ocrMerchant.
-  ///
-  /// In en, this message translates to:
-  /// **'Merchant'**
-  String get ocrMerchant;
-
-  /// No description provided for @ocrSuggestedCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Suggested Category'**
-  String get ocrSuggestedCategory;
-
-  /// No description provided for @ocrTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Time'**
-  String get ocrTime;
-
   /// No description provided for @cloudSyncPageTitle.
   ///
   /// In en, this message translates to:
@@ -6413,12 +6395,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Long press the + button at the bottom center of the home page and select \'Voice\' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.'**
   String get smartBillingVoiceBillingGuide;
-
-  /// No description provided for @smartBillingRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Required'**
-  String get smartBillingRequired;
 
   /// No description provided for @smartBillingAIRequired.
   ///

@@ -79,9 +79,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fabActionVoiceDisabled => 'AI enabled & GLM API required';
 
   @override
-  String get fabSpeedDialTip => 'Long press for more options';
-
-  @override
   String get voiceRecordingTitle => 'Voice Billing';
 
   @override
@@ -252,16 +249,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchHint => 'Search notes, categories or amounts...';
 
   @override
-  String get searchAmountRange => 'Amount range filter';
+  String get searchCategoryHint => 'Search category name...';
 
   @override
   String get searchMinAmount => 'Min amount';
 
   @override
   String get searchMaxAmount => 'Max amount';
-
-  @override
-  String get searchTo => 'to';
 
   @override
   String get searchNoInput => 'Enter keywords to start searching';
@@ -361,6 +355,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String searchResultsCount(Object count) {
     return '$count results';
   }
+
+  @override
+  String get searchFilterTitle => 'Filter';
+
+  @override
+  String get searchAmountFilter => 'Amount Filter';
+
+  @override
+  String get searchDateFilter => 'Date Filter';
+
+  @override
+  String get searchStartDate => 'Start Date';
+
+  @override
+  String get searchEndDate => 'End Date';
+
+  @override
+  String get searchNotSet => 'Not Set';
+
+  @override
+  String get searchClearFilter => 'Clear Filter';
+
+  @override
+  String get searchBatchCategoryTransferError => 'Selected transactions contain transfers, cannot change category';
+
+  @override
+  String get searchBatchCategoryTypeError => 'Selected transactions have different types, please select all income or all expense';
+
+  @override
+  String get searchDateStart => 'Start';
+
+  @override
+  String get searchDateEnd => 'End';
 
   @override
   String get analyticsMonth => 'Month';
@@ -3087,21 +3114,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disableFailed => 'Disable failed';
 
   @override
-  String get reselectImage => 'Reselect';
-
-  @override
-  String get viewOriginalText => 'View Original Text';
-
-  @override
-  String get createBill => 'Create Bill';
-
-  @override
-  String get ocrBilling => 'OCR Scan Billing';
-
-  @override
-  String get ocrBillingDesc => 'Auto-recognize payment screenshots';
-
-  @override
   String get iosAutoFeatureDesc => 'Use iOS \"Shortcuts\" app to automatically identify payment information from screenshots and create transactions. Once set up, it will automatically trigger on every screenshot.';
 
   @override
@@ -3286,27 +3298,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiTypeExpense => 'Expense';
 
   @override
-  String get ocrRecognitionResult => 'Recognition Result';
-
-  @override
-  String get ocrAmount => 'Amount';
-
-  @override
-  String get ocrNoAmountDetected => 'No amount detected';
-
-  @override
-  String get ocrManualAmountInput => 'Or enter amount manually';
-
-  @override
-  String get ocrMerchant => 'Merchant';
-
-  @override
-  String get ocrSuggestedCategory => 'Suggested Category';
-
-  @override
-  String get ocrTime => 'Time';
-
-  @override
   String get cloudSyncPageTitle => 'Cloud Sync & Backup';
 
   @override
@@ -3368,9 +3359,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartBillingVoiceBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Voice\' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.';
-
-  @override
-  String get smartBillingRequired => 'Required';
 
   @override
   String get smartBillingAIRequired => 'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first';

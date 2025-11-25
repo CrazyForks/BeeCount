@@ -79,9 +79,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fabActionVoiceDisabled => '需要启用AI并配置 GLM API';
 
   @override
-  String get fabSpeedDialTip => '长按展开更多记账方式';
-
-  @override
   String get voiceRecordingTitle => '语音记账';
 
   @override
@@ -252,16 +249,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get searchHint => '搜索备注、分类或金额...';
 
   @override
-  String get searchAmountRange => '金额范围筛选';
+  String get searchCategoryHint => '搜索分类名称...';
 
   @override
   String get searchMinAmount => '最小金额';
 
   @override
   String get searchMaxAmount => '最大金额';
-
-  @override
-  String get searchTo => '至';
 
   @override
   String get searchNoInput => '输入关键词开始搜索';
@@ -361,6 +355,39 @@ class AppLocalizationsZh extends AppLocalizations {
   String searchResultsCount(Object count) {
     return '共 $count 条结果';
   }
+
+  @override
+  String get searchFilterTitle => '筛选';
+
+  @override
+  String get searchAmountFilter => '金额筛选';
+
+  @override
+  String get searchDateFilter => '时间筛选';
+
+  @override
+  String get searchStartDate => '开始日期';
+
+  @override
+  String get searchEndDate => '结束日期';
+
+  @override
+  String get searchNotSet => '未设置';
+
+  @override
+  String get searchClearFilter => '清空筛选';
+
+  @override
+  String get searchBatchCategoryTransferError => '选中的交易包含转账，无法修改分类';
+
+  @override
+  String get searchBatchCategoryTypeError => '选中的交易类型不一致，请选择全部为收入或全部为支出的交易';
+
+  @override
+  String get searchDateStart => '开始';
+
+  @override
+  String get searchDateEnd => '结束';
 
   @override
   String get analyticsMonth => '月';
@@ -3087,21 +3114,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get disableFailed => '禁用失败';
 
   @override
-  String get reselectImage => '重新选择';
-
-  @override
-  String get viewOriginalText => '查看原始文本';
-
-  @override
-  String get createBill => '创建账单';
-
-  @override
-  String get ocrBilling => 'OCR扫描记账';
-
-  @override
-  String get ocrBillingDesc => '扫描支付截图自动识别金额';
-
-  @override
   String get iosAutoFeatureDesc => '通过iOS\"快捷指令\"应用，实现截图后自动识别支付信息并记账。设置后，每次截图都会自动触发识别。';
 
   @override
@@ -3286,27 +3298,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiTypeExpense => '支出';
 
   @override
-  String get ocrRecognitionResult => '识别结果';
-
-  @override
-  String get ocrAmount => '金额';
-
-  @override
-  String get ocrNoAmountDetected => '未识别到金额';
-
-  @override
-  String get ocrManualAmountInput => '或手动输入金额';
-
-  @override
-  String get ocrMerchant => '商家';
-
-  @override
-  String get ocrSuggestedCategory => '推荐分类';
-
-  @override
-  String get ocrTime => '时间';
-
-  @override
   String get cloudSyncPageTitle => '云同步与备份';
 
   @override
@@ -3368,9 +3359,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get smartBillingVoiceBillingGuide => '在首页长按底部中间的 + 按钮，选择「语音」即可使用语音记账功能。语音记账需要通过AI将语音转为文字并提取账单信息。';
-
-  @override
-  String get smartBillingRequired => '必须';
 
   @override
   String get smartBillingAIRequired => '语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置';
@@ -3851,9 +3839,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get fabActionVoiceDisabled => '需要啟用AI並配置 GLM API';
 
   @override
-  String get fabSpeedDialTip => '長按展開更多記帳方式';
-
-  @override
   String get voiceRecordingTitle => '語音記帳';
 
   @override
@@ -4024,16 +4009,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get searchHint => '搜尋備註、分類或金額...';
 
   @override
-  String get searchAmountRange => '金額範圍篩選';
+  String get searchCategoryHint => '搜尋分類名稱...';
 
   @override
   String get searchMinAmount => '最小金額';
 
   @override
   String get searchMaxAmount => '最大金額';
-
-  @override
-  String get searchTo => '至';
 
   @override
   String get searchNoInput => '輸入關鍵詞開始搜尋';
@@ -4133,6 +4115,39 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String searchResultsCount(Object count) {
     return '共 $count 條結果';
   }
+
+  @override
+  String get searchFilterTitle => '篩選';
+
+  @override
+  String get searchAmountFilter => '金額篩選';
+
+  @override
+  String get searchDateFilter => '時間篩選';
+
+  @override
+  String get searchStartDate => '開始日期';
+
+  @override
+  String get searchEndDate => '結束日期';
+
+  @override
+  String get searchNotSet => '未設定';
+
+  @override
+  String get searchClearFilter => '清空篩選';
+
+  @override
+  String get searchBatchCategoryTransferError => '選中的交易包含轉帳，無法修改分類';
+
+  @override
+  String get searchBatchCategoryTypeError => '選中的交易類型不一致，請選擇全部為收入或全部為支出的交易';
+
+  @override
+  String get searchDateStart => '開始';
+
+  @override
+  String get searchDateEnd => '結束';
 
   @override
   String get analyticsMonth => '月';
@@ -6859,21 +6874,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get disableFailed => '停用失敗';
 
   @override
-  String get reselectImage => '重新選擇';
-
-  @override
-  String get viewOriginalText => '檢視原始文字';
-
-  @override
-  String get createBill => '建立帳單';
-
-  @override
-  String get ocrBilling => 'OCR 掃描記帳';
-
-  @override
-  String get ocrBillingDesc => '掃描支付截圖自動識別金額';
-
-  @override
   String get iosAutoFeatureDesc => '透過 iOS「捷徑」應用程式，實現截圖後自動識別支付資訊並記帳。設定後，每次截圖都會自動觸發識別。';
 
   @override
@@ -7058,27 +7058,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiTypeExpense => '支出';
 
   @override
-  String get ocrRecognitionResult => '識別結果';
-
-  @override
-  String get ocrAmount => '金額';
-
-  @override
-  String get ocrNoAmountDetected => '未識別到金額';
-
-  @override
-  String get ocrManualAmountInput => '或手動輸入金額';
-
-  @override
-  String get ocrMerchant => '商家';
-
-  @override
-  String get ocrSuggestedCategory => '推薦分類';
-
-  @override
-  String get ocrTime => '時間';
-
-  @override
   String get cloudSyncPageTitle => '雲同步與備份';
 
   @override
@@ -7140,9 +7119,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get smartBillingVoiceBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「語音」即可使用語音記帳功能。語音記帳需要透過AI將語音轉為文字並提取帳單資訊。';
-
-  @override
-  String get smartBillingRequired => '必須';
 
   @override
   String get smartBillingAIRequired => '語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定';

@@ -14,14 +14,14 @@
 
 <br/>
 
-<a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
-  <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
-</a>
 <a href="https://apps.apple.com/app/id6754611670">
   <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1480636800" alt="Download on App Store" height="50"/>
 </a>
 <a href="https://testflight.apple.com/join/Eaw2rWxa">
   <img src="https://img.shields.io/badge/TestFlight-Public%20Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+</a>
+<a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
+  <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
 </a>
 
 <br/>
@@ -33,27 +33,13 @@
 
 ---
 
-> ## 🎉 Great News
->
-> **🍎 iOS Version Now Available on App Store!**
->
-> Search for **"BeeCount"** on the App Store to download and install
->
-> ---
->
-> **🚀 Alipay/WeChat Auto-Billing - Zero Manual Input!**
->
-> 📸 **Photo Recognition** - AI auto-extracts amount, merchant, and category (Local Model in training + GLM Cloud Model)
->
-> ⚡ **Screenshot Billing** - Android screenshot monitoring + iOS Shortcuts, auto-create bills after payment
-
----
-
 > ## 📱 Platform Support
 >
 > 🤖 **Android** - [Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | Supports Android 5.0+
 >
 > 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa) | Supports iOS 15.5+
+>
+> 💡 Search for **"BeeCount"** on the App Store to download and install
 >
 > 📱 **HarmonyOS** - Coming Soon | Supports HarmonyOS 5.0+ | [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 
@@ -90,7 +76,7 @@
 </tr>
 </table>
 
-A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **screenshot auto-billing**, **account transfers**, **hierarchical categories**, category statistics, **chart analysis**, data import/export, and iCloud (iOS)/self-hosted Supabase/WebDAV cloud sync. Supports **multiple languages** (Simplified/Traditional Chinese, English) and **dark mode**. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
+A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **OCR image recognition**, **photo billing**, **voice billing**, **screenshot auto-billing**, **account transfers**, **hierarchical categories**, category statistics, **chart analysis**, data import/export, and iCloud (iOS)/self-hosted Supabase/WebDAV cloud sync. Supports **multiple languages** (Simplified/Traditional Chinese, English) and **dark mode**. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
 
 ## 📱 Core Features Showcase
 
@@ -158,26 +144,31 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - **Optional Sync**: Works completely without cloud configuration
 - **Zero Tracking**: No analytics, no ads, no data collection
 
-### 🤖 Smart Auto-Billing - One-Tap Payment Recording
-
-> **🌟 Core Feature Highlight: Screenshot and bill automatically, payment info auto-recognized!**
-
-**Android Auto-Billing**:
-
-- 📸 **Accessibility Service Auto-Billing**: Once enabled, automatically recognizes payment info and creates bills with each screenshot
-- 🎯 **Smart Recognition**: Auto-recognizes Alipay, WeChat Pay, UnionPay and other mainstream payment methods
-- ⚡ **Real-time Recording**: Screenshot after payment, transaction info recorded immediately
-
-**iOS Auto-Billing**:
-
-- 🔗 **Shortcuts Integration**: Automate through iOS "Shortcuts" app
-- 👆 **Double Tap Back Trigger**: After setup, double tap phone back during payment for auto-billing
-- 🎨 **Flexible Configuration**: Supports auto-trigger on screenshot or manual trigger, adapts to different usage scenarios
-
 ### 📊 Complete Accounting Features
 
-- **Smart Accounting**: Income/expense categories, amounts, dates, notes
-- **OCR Scan Billing**: Take photos or select payment screenshots, auto-recognize amounts and merchant info
+#### 🤖 AI Smart Billing
+
+- **📸 OCR Image Recognition / Photo Billing**
+  - Support camera or album to select payment screenshots
+  - AI auto-extracts amount, merchant, category and bill info
+  - Dual-engine support: Local TFLite model + GLM cloud model
+  - Accurately recognizes Alipay, WeChat Pay, UnionPay and other mainstream payment methods
+
+- **🎤 Voice Billing**
+  - Press and hold to speak, release to complete billing
+  - GLM voice model intelligently understands natural language
+  - Support colloquial expressions like: "Spent 50 on groceries today"
+  - Auto-recognizes amount, category, notes and more
+
+- **⚡ Screenshot Auto-Billing**
+  - **Android**: Accessibility service auto-monitors screenshots, auto-bills after payment
+  - **iOS**: Shortcuts integration, support double-tap back trigger
+  - Smart recognition of Alipay and WeChat Pay info
+  - Auto-create bills, real-time ledger updates
+
+#### 📝 Basic Billing Features
+
+- **Manual Billing**: Income/expense categories, amounts, dates, notes
 - **Multi-Ledger Management**: Separate management for personal, work, investment
 - **Independent Account Management**: Support for cash, bank cards, credit cards and other account types, each account tracks balance independently
 - **Account Transfer Feature**: Support inter-account transfer records, auto-update balances for both accounts
@@ -219,6 +210,17 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 ## ☁️ Cloud Backup Configuration (Optional)
 
+BeeCount supports multiple cloud sync solutions, giving you complete control over your data. Choose the most suitable solution based on your needs:
+
+| Solution | Best For | Features |
+|----------|----------|----------|
+| **iCloud** | iOS Users | 🆕 Zero config, native integration, seamless Apple ecosystem sync |
+| **Supabase** | Users without NAS | Free tier sufficient, easy setup, cloud-hosted |
+| **WebDAV** | Users with NAS | Fully localized data, supports Synology/UGREEN/Nextcloud |
+
+<details>
+<summary><b>📖 Click to view detailed configuration guide</b></summary>
+
 ### Why Choose Self-Hosted Cloud Service?
 
 - **Data Sovereignty**: Data completely stored in servers or cloud platforms you control
@@ -226,6 +228,8 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - **Cost Control**: Most solutions offer free tiers or one-time purchase options
 - **Stable & Reliable**: No dependency on third-party hosting services, full control
 - **Flexible Choice**: Choose the most suitable solution based on your needs
+
+---
 
 ### Option 1: iCloud (Recommended for iOS Users) 🆕
 
@@ -352,7 +356,14 @@ We will continue expanding cloud service support, planning to add:
 
 If you'd like to prioritize support for a specific cloud service, welcome to create a feature request in [Issues](https://github.com/TNT-Likely/BeeCount/issues)!
 
+</details>
+
+---
+
 ## 🛠️ Development Guide
+
+<details>
+<summary><b>View development guide and contribution methods</b></summary>
 
 ### Tech Stack
 
@@ -361,20 +372,7 @@ If you'd like to prioritize support for a specific cloud service, welcome to cre
 - **Drift (SQLite)**: Local database ORM
 - **Supabase**: Cloud backup and sync service
 
-### Project Structure
-
-```
-lib/
-├── data/           # Data models and database operations
-├── pages/          # Application pages
-├── widgets/        # Reusable components
-├── cloud/          # Cloud service integration
-├── l10n/           # Internationalization resources
-├── providers/      # Riverpod state providers
-└── utils/          # Utility functions
-```
-
-### Development Commands
+### Quick Start
 
 ```bash
 # Install dependencies
@@ -383,8 +381,8 @@ flutter pub get
 # Code generation
 dart run build_runner build --delete-conflicting-outputs
 
-# Run tests
-flutter test
+# Run app
+flutter run --flavor dev
 
 # Build release version
 flutter build apk --flavor prod --release
@@ -392,14 +390,14 @@ flutter build apk --flavor prod --release
 
 ### Contribution Guidelines
 
-We welcome all forms of contributions! Please see our detailed [Contributing Guide](docs/contributing/CONTRIBUTING_EN.md) to learn how to participate:
+We welcome all forms of contributions!
 
 - 🐛 [Report Bugs](https://github.com/TNT-Likely/BeeCount/issues/new)
 - 💡 [Suggest Features](https://github.com/TNT-Likely/BeeCount/discussions/new?category=ideas)
 - 💻 [Contribute Code](docs/contributing/CONTRIBUTING_EN.md#code-contribution-workflow)
 - 🌍 [Contribute Translations](docs/contributing/CONTRIBUTING_EN.md#translation-contributions)
 - 📝 [Improve Documentation](docs/contributing/CONTRIBUTING_EN.md#documentation-contributions)
-- 🎨 [Designer Recruitment](docs/contributing/CONTRIBUTING_EN.md#designer-recruitment) - We're looking for UI/UX designers!
+- 🎨 [Designer Recruitment](docs/contributing/CONTRIBUTING_EN.md#designer-recruitment)
 
 **Quick Start**:
 
@@ -411,17 +409,44 @@ We welcome all forms of contributions! Please see our detailed [Contributing Gui
 
 For detailed standards, please refer to the [Complete Contributing Guide](docs/contributing/CONTRIBUTING_EN.md).
 
+</details>
+
+---
+
 ## 📄 Open Source License
 
-This project uses a Business Source License. Free for personal use, commercial use requires paid authorization. See [LICENSE](LICENSE) for details.
+<details>
+<summary><b>View license details</b></summary>
 
-## ⚠️ Disclaimer
+This project is licensed under the **Business Source License**:
 
-- This software is provided "as is" without any express or implied warranties
-- Users are responsible for any data loss or financial loss caused by using this software
-- Please ensure legal and compliant use of this software
+- ✅ **Personal Use** - Completely Free
+- ✅ **Learning & Research** - Completely Free
+- ✅ **Open Source Contribution** - Welcome
+- ❌ **Commercial Use** - Paid License Required
+
+### What is Commercial Use?
+
+Commercial license is required for:
+- Providing this software as part of commercial products or services
+- Using this software in for-profit organizations
+- Developing commercial products based on this software
+- Providing paid cloud services based on this software
+
+For commercial use, please contact us via [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues).
+
+See [LICENSE](LICENSE) for details.
+
+</details>
+
+---
 
 ## 💬 FAQ
+
+<details>
+<summary><b>View frequently asked questions</b></summary>
+
+<br/>
 
 **Q: Can I use it normally without configuring cloud services?**
 A: Absolutely! The app uses local storage by default, and all features work normally. You can still export CSV backups at any time.
@@ -462,6 +487,10 @@ A:
 - **iCloud**: Simply sign in with the same Apple ID on iOS devices, data syncs automatically
 - **Supabase**: Configure same URL and anon key on all devices, log in with same account
 - **WebDAV**: Configure same WebDAV server address and credentials on all devices
+
+> 💡 More questions? Visit [Issues](https://github.com/TNT-Likely/BeeCount/issues) or [Discussions](https://github.com/TNT-Likely/BeeCount/discussions)
+
+</details>
 
 ---
 

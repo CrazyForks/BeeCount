@@ -14,14 +14,14 @@
 
 <br/>
 
-<a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
-  <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
-</a>
 <a href="https://apps.apple.com/app/id6754611670">
   <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1480636800" alt="Download on App Store" height="50"/>
 </a>
 <a href="https://testflight.apple.com/join/Eaw2rWxa">
   <img src="https://img.shields.io/badge/TestFlight-Public%20Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+</a>
+<a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
+  <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
 </a>
 
 <br/>
@@ -33,30 +33,11 @@
 
 ---
 
-> ## 🎉 重大消息
->
-> **🍎 iOS 正式版已上架 App Store！**
->
-> 在 App Store 搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
->
-> ---
->
-> **🚀 支付宝/微信自动记账，全程 0 操作！**
->
-> 📸 **拍照识别** - AI 自动提取金额、商家、分类信息（本地模型训练中 + GLM 云端模型）
->
-> ⚡ **截图记账** - Android 截图监听 + iOS 快捷指令，支付后自动创建账单
-
----
-
 > ## 💬 加入微信交流群
 >
-> 由于微信群已满200人，无法通过自由扫码加入，请添加微信“LinYiXiao_Sx”邀请入群，备注“BeeCount”。
-> <div align="center">
->   <img src="demo/wechat_group_qr.jpg" alt="微信交流群" width="200" />
+> 由于微信群已满200人，无法通过自由扫码加入，请添加微信 **"LinYiXiao_Sx"** 邀请入群，备注 **"BeeCount"**。
 >
-> **扫码加入微信群，获取最新动态、功能建议、问题反馈**
-> </div>
+> **加入微信群，获取最新动态、功能建议、问题反馈**
 
 ---
 
@@ -65,6 +46,8 @@
 > 🤖 **Android** - [下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | 支持 Android 5.0+
 >
 > 🍎 **iOS** - [App Store 正式版](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 15.5+
+>
+> 💡 在 App Store 搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
 >
 > 📱 **HarmonyOS** - 正在上架中 | 支持 HarmonyOS 5.0+ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
@@ -101,7 +84,7 @@
 </tr>
 </table>
 
-一款轻量、开源、隐私可控的**个人财务管理**和**支出追踪** App，支持 iOS/Android 双平台。内置完整的账本管理、**收支记录**、**截图自动记账**、**账户转账**、**二级分类**、分类统计、**图表分析**、数据导入导出功能，并支持 iCloud（iOS）/自建 Supabase/WebDAV 云服务器同步。支持**多语言**（简繁中文/英文）和**暗黑模式**，适合注重隐私的个人和家庭进行日常**费用记录**和**收支管理**。
+一款轻量、开源、隐私可控的**个人财务管理**和**支出追踪** App，支持 iOS/Android 双平台。内置完整的账本管理、**收支记录**、**OCR 图片识别**、**拍照记账**、**语音记账**、**截图自动记账**、**账户转账**、**二级分类**、分类统计、**图表分析**、数据导入导出功能，并支持 iCloud（iOS）/自建 Supabase/WebDAV 云服务器同步。支持**多语言**（简繁中文/英文）和**暗黑模式**，适合注重隐私的个人和家庭进行日常**费用记录**和**收支管理**。
 
 ## 📱 核心功能展示
 
@@ -169,30 +152,35 @@
 - **可选同步**：不配置云服务也能完整使用
 - **零追踪**：无统计、无广告、无数据收集
 
-### 🤖 智能自动记账 - 一键记录支付信息
-
-> **🌟 核心功能亮点：截图即记账，支付信息自动识别！**
-
-**Android 自动记账**：
-
-- 📸 **无障碍服务自动记账**：启用后，每次截图自动识别支付信息并记账
-- 🎯 **智能识别**：自动识别支付宝、微信支付、云闪付等主流支付方式
-- ⚡ **实时记录**：支付完成后截图，立即自动记录交易信息
-
-**iOS 自动记账**：
-
-- 🔗 **快捷指令集成**：通过 iOS "快捷指令"应用实现自动化
-- 👆 **双击背部触发**：设置后，支付时双击手机背面即可自动记账
-- 🎨 **灵活配置**：支持截图自动触发或手动触发，适应不同使用场景
-
 ### 📊 完整记账功能
 
-- **智能记账**：收入/支出分类、金额、日期、备注
-- **OCR 扫描记账**：拍照或选择支付截图，自动识别金额和商家信息
+#### 🤖 AI 智能记账
+
+- **📸 OCR 图片识别 / 拍照记账**
+  - 支持拍照或从相册选择支付截图
+  - AI 自动识别金额、商家、分类等账单信息
+  - 双引擎支持：本地 TFLite 模型 + GLM 云端模型
+  - 准确识别支付宝、微信支付、云闪付等主流支付方式
+
+- **🎤 语音记账**
+  - 按住说话，松手即完成记账
+  - GLM 语音模型智能理解自然语言
+  - 支持口语化表达，如："今天买菜花了50块"
+  - 自动识别金额、分类、备注等信息
+
+- **⚡ 截图自动记账**
+  - **Android**：无障碍服务自动监听截图，支付后自动记账
+  - **iOS**：快捷指令集成，支持双击背部触发
+  - 智能识别支付宝、微信支付信息
+  - 自动创建账单，实时更新账本数据
+
+#### 📝 基础记账功能
+
+- **手动记账**：收入/支出分类、金额、日期、备注
 - **多账本管理**：生活、工作、投资分开管理
-- **独立账户管理**：支持现金、银行卡、信用卡等多种账户类型,每个账户独立记录余额
-- **账户转账功能**：支持账户间转账记录,自动更新双方账户余额
-- **二级分类系统**：支持父子分类层级,更细致的账单归类(可选择一级或二级分类模式)
+- **独立账户管理**：支持现金、银行卡、信用卡等多种账户类型，每个账户独立记录余额
+- **账户转账功能**：支持账户间转账记录，自动更新双方账户余额
+- **二级分类系统**：支持父子分类层级，更细致的账单归类（可选择一级或二级分类模式）
 - **图表分析**：月度报表、分类排行、趋势分析
 - **数据导入导出**：CSV 格式，兼容主流应用
 - **桌面小组件**：iOS/Android 桌面小组件，快速查看收支情况
@@ -230,6 +218,17 @@
 
 ## ☁️ 云备份配置（可选）
 
+蜜蜂记账支持多种云同步方案，数据完全由你掌控。根据需求选择最合适的方案：
+
+| 云同步方案 | 适用场景 | 特点 |
+|---------|---------|------|
+| **iCloud** | iOS 用户 | 🆕 零配置、原生集成、Apple 生态无缝同步 |
+| **Supabase** | 无 NAS 的用户 | 免费额度充足、配置简单、云端托管 |
+| **WebDAV** | 有 NAS 的用户 | 数据完全本地化、支持群晖/绿联云/Nextcloud |
+
+<details>
+<summary><b>📖 点击查看详细配置教程</b></summary>
+
 ### 为什么选择自建云服务？
 
 - **数据主权**：数据完全存储在你自己控制的服务器或云平台中
@@ -237,6 +236,8 @@
 - **成本可控**：大多数方案都提供免费额度或一次性购买
 - **稳定可靠**：不依赖第三方托管服务，自主掌控
 - **灵活选择**：根据自己的需求选择最合适的方案
+
+---
 
 ### 方案一：iCloud（推荐 iOS 用户）🆕
 
@@ -256,6 +257,8 @@
 3. 选择 **iCloud**，即可开始同步
 
 > 💡 **提示**：iCloud 同步仅支持 iOS 设备。如果你需要跨平台同步（iOS + Android），请使用 Supabase 或 WebDAV。
+
+---
 
 ### 方案二：自定义 Supabase（推荐新手）
 
@@ -363,7 +366,14 @@
 
 如果你希望优先支持某个云服务，欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出需求！
 
+</details>
+
+---
+
 ## 🛠️ 开发指南
+
+<details>
+<summary><b>查看开发指南和贡献方式</b></summary>
 
 ### 技术栈
 
@@ -372,20 +382,7 @@
 - **Drift (SQLite)**：本地数据库 ORM
 - **Supabase**：云端备份和同步服务
 
-### 项目结构
-
-```
-lib/
-├── data/           # 数据模型和数据库操作
-├── pages/          # 应用页面
-├── widgets/        # 可复用组件
-├── cloud/          # 云服务集成
-├── l10n/           # 国际化资源
-├── providers/      # Riverpod 状态提供者
-└── utils/          # 工具函数
-```
-
-### 开发命令
+### 快速开始
 
 ```bash
 # 安装依赖
@@ -394,8 +391,8 @@ flutter pub get
 # 代码生成
 dart run build_runner build --delete-conflicting-outputs
 
-# 运行测试
-flutter test
+# 运行应用
+flutter run --flavor dev
 
 # 构建发布版本
 flutter build apk --flavor prod --release
@@ -403,14 +400,14 @@ flutter build apk --flavor prod --release
 
 ### 贡献指南
 
-我们欢迎所有形式的贡献！请查看详细的[贡献指南](docs/contributing/CONTRIBUTING_ZH.md)了解如何参与：
+我们欢迎所有形式的贡献！
 
 - 🐛 [报告 Bug](https://github.com/TNT-Likely/BeeCount/issues/new)
 - 💡 [提出功能建议](https://github.com/TNT-Likely/BeeCount/discussions/new?category=ideas)
 - 💻 [贡献代码](docs/contributing/CONTRIBUTING_ZH.md#代码贡献流程)
 - 🌍 [贡献翻译](docs/contributing/CONTRIBUTING_ZH.md#翻译贡献)
 - 📝 [完善文档](docs/contributing/CONTRIBUTING_ZH.md#文档贡献)
-- 🎨 [设计师招募](docs/contributing/CONTRIBUTING_ZH.md#designer-recruitment) - 我们正在寻找 UI/UX 设计师！
+- 🎨 [设计师招募](docs/contributing/CONTRIBUTING_ZH.md#designer-recruitment)
 
 **快速开始**：
 
@@ -422,57 +419,76 @@ flutter build apk --flavor prod --release
 
 详细规范请参考[完整贡献指南](docs/contributing/CONTRIBUTING_ZH.md)。
 
+</details>
+
+---
+
 ## 📄 开源协议
 
-本项目采用商业源代码许可证，个人使用完全免费，商业使用需付费授权。详见 [LICENSE](LICENSE) 文件。
+<details>
+<summary><b>查看许可证详情</b></summary>
 
-## ⚠️ 免责声明
+本项目采用 **商业源代码许可证（Business Source License）**：
 
-- 本软件按"现状"提供，不提供任何明示或暗示的保证
-- 使用本软件造成的数据丢失、经济损失等由使用者自行承担
-- 请确保合法、合规地使用本软件
+- ✅ **个人使用** - 完全免费
+- ✅ **学习研究** - 完全免费
+- ✅ **开源贡献** - 欢迎参与
+- ❌ **商业使用** - 需要付费授权
+
+### 什么是商业使用？
+
+以下情况需要获得商业许可：
+- 将本软件作为商业产品或服务提供给客户
+- 在盈利性组织中使用本软件
+- 基于本软件开发商业产品
+- 提供基于本软件的付费云服务
+
+如需商业使用，请通过 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 联系。
+
+详见 [LICENSE](LICENSE) 文件。
+
+</details>
+
+---
 
 ## 💬 常见问题
+
+<details>
+<summary><b>查看常见问题解答</b></summary>
+
+<br/>
 
 **Q: 不配置云服务能正常使用吗？**
 A: 完全可以！应用默认使用本地存储，所有功能都能正常使用。你仍可随时导出 CSV 进行备份。
 
 **Q: 应该选择 iCloud、Supabase 还是 WebDAV？**
 A:
-
 - 如果你是 iOS 用户且只在 Apple 设备间同步，推荐使用 **iCloud**（零配置、原生集成）
 - 如果你需要跨平台同步（iOS + Android），推荐使用 **Supabase**（免费、稳定、易配置）
 - 如果你有 NAS 设备或私有云，推荐使用 **WebDAV**（数据完全本地化）
-- 三者都支持完整的同步功能，可根据自己的需求选择
+
+**Q: 如何在多设备间同步数据？**
+A:
+- **iCloud**：iOS 设备登录同一 Apple ID，数据自动同步
+- **Supabase**：所有设备配置相同的 URL 和 anon key，登录同一账号
+- **WebDAV**：所有设备配置相同的 WebDAV 服务器地址和凭据
+
+**Q: 如何确保数据安全？**
+A:
+- 使用自己的 Supabase 项目或 WebDAV 服务器
+- 定期导出 CSV 备份到本地
+- WebDAV 建议使用 HTTPS 加密传输
 
 **Q: WebDAV 配置后为什么无法上传？**
 A:
-
 - 检查 WebDAV 服务是否启用且端口正确
 - 确认用户名和密码正确
 - 某些 NAS 的 WebDAV 需要在特定路径下才能写入（如绿联云需要 `/home/` 路径）
 - 点击"测试连接"按钮查看详细错误信息
 
-**Q: 配置自定义云服务后还能切回默认模式吗？**
-A: 可以随时切换。已保存的自定义配置不会丢失，可以再次启用。
+> 💡 更多问题请访问 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 或 [Discussions](https://github.com/TNT-Likely/BeeCount/discussions)
 
-**Q: 如何确保数据安全？**
-A:
-
-- 使用自己的 Supabase 项目或 WebDAV 服务器
-- 定期导出 CSV 备份到本地
-- 使用强密码并开启两步验证（如果支持）
-- WebDAV 建议使用 HTTPS 加密传输
-
-**Q: 支持哪些数据格式？**
-A: 目前支持 CSV 格式的导入导出，兼容大部分主流记账应用的数据格式。
-
-**Q: 如何在多设备间同步数据？**
-A:
-
-- **iCloud**：仅需在 iOS 设备上登录同一 Apple ID，数据自动同步
-- **Supabase**：在所有设备上配置相同的 URL 和 anon key，登录同一账号即可
-- **WebDAV**：在所有设备上配置相同的 WebDAV 服务器地址和凭据即可
+</details>
 
 ---
 
