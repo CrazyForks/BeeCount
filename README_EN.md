@@ -15,10 +15,10 @@
 <br/>
 
 <a href="https://apps.apple.com/app/id6754611670">
-  <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1480636800" alt="Download on App Store" height="50"/>
+  <img src="https://img.shields.io/badge/App_Store-Download-000000?style=for-the-badge&logo=app-store&logoColor=white" alt="Download on App Store" height="50"/>
 </a>
 <a href="https://testflight.apple.com/join/Eaw2rWxa">
-  <img src="https://img.shields.io/badge/TestFlight-Public%20Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+  <img src="https://img.shields.io/badge/TestFlight-Public_Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
 </a>
 <a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
   <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
@@ -39,7 +39,7 @@
 >
 > 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa) | Supports iOS 15.5+
 >
-> 💡 Search for **"BeeCount"** on the App Store to download and install
+> 💡 Search for **"BeeCount"** on the App Store (including regions outside China) to download and install
 >
 > 📱 **HarmonyOS** - Coming Soon | Supports HarmonyOS 5.0+ | [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 
@@ -413,34 +413,6 @@ For detailed standards, please refer to the [Complete Contributing Guide](docs/c
 
 ---
 
-## 📄 Open Source License
-
-<details>
-<summary><b>View license details</b></summary>
-
-This project is licensed under the **Business Source License**:
-
-- ✅ **Personal Use** - Completely Free
-- ✅ **Learning & Research** - Completely Free
-- ✅ **Open Source Contribution** - Welcome
-- ❌ **Commercial Use** - Paid License Required
-
-### What is Commercial Use?
-
-Commercial license is required for:
-- Providing this software as part of commercial products or services
-- Using this software in for-profit organizations
-- Developing commercial products based on this software
-- Providing paid cloud services based on this software
-
-For commercial use, please contact us via [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues).
-
-See [LICENSE](LICENSE) for details.
-
-</details>
-
----
-
 ## 💬 FAQ
 
 <details>
@@ -577,7 +549,10 @@ Format: Nickname - Amount - Date
 
 ---
 
-## 📜 License
+## 📄 Open Source License
+
+<details>
+<summary><b>View license details</b></summary>
 
 This project is licensed under the **Business Source License**:
 
@@ -589,20 +564,16 @@ This project is licensed under the **Business Source License**:
 ### What is Commercial Use?
 
 Commercial license is required for:
-
 - Providing this software as part of commercial products or services
 - Using this software in for-profit organizations
 - Developing commercial products based on this software
 - Providing paid cloud services based on this software
 
-### How to Obtain a Commercial License?
+For commercial use, please contact us via [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues).
 
-For commercial use, please contact us via:
+See [LICENSE](LICENSE) for details.
 
-- 📧 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues)
-- 💬 [Telegram Group](https://t.me/beecount)
-
-For detailed license terms, please see the [LICENSE](LICENSE) file.
+</details>
 
 ---
 

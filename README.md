@@ -15,10 +15,10 @@
 <br/>
 
 <a href="https://apps.apple.com/app/id6754611670">
-  <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1480636800" alt="Download on App Store" height="50"/>
+  <img src="https://img.shields.io/badge/App_Store-Download-000000?style=for-the-badge&logo=app-store&logoColor=white" alt="Download on App Store" height="50"/>
 </a>
 <a href="https://testflight.apple.com/join/Eaw2rWxa">
-  <img src="https://img.shields.io/badge/TestFlight-Public%20Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+  <img src="https://img.shields.io/badge/TestFlight-Public_Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
 </a>
 <a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
   <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
@@ -47,7 +47,7 @@
 >
 > 🍎 **iOS** - [App Store 正式版](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 15.5+
 >
-> 💡 在 App Store 搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
+> 💡 在 App Store（外区）搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
 >
 > 📱 **HarmonyOS** - 正在上架中 | 支持 HarmonyOS 5.0+ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
@@ -423,34 +423,6 @@ flutter build apk --flavor prod --release
 
 ---
 
-## 📄 开源协议
-
-<details>
-<summary><b>查看许可证详情</b></summary>
-
-本项目采用 **商业源代码许可证（Business Source License）**：
-
-- ✅ **个人使用** - 完全免费
-- ✅ **学习研究** - 完全免费
-- ✅ **开源贡献** - 欢迎参与
-- ❌ **商业使用** - 需要付费授权
-
-### 什么是商业使用？
-
-以下情况需要获得商业许可：
-- 将本软件作为商业产品或服务提供给客户
-- 在盈利性组织中使用本软件
-- 基于本软件开发商业产品
-- 提供基于本软件的付费云服务
-
-如需商业使用，请通过 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 联系。
-
-详见 [LICENSE](LICENSE) 文件。
-
-</details>
-
----
-
 ## 💬 常见问题
 
 <details>
@@ -463,24 +435,28 @@ A: 完全可以！应用默认使用本地存储，所有功能都能正常使�
 
 **Q: 应该选择 iCloud、Supabase 还是 WebDAV？**
 A:
+
 - 如果你是 iOS 用户且只在 Apple 设备间同步，推荐使用 **iCloud**（零配置、原生集成）
 - 如果你需要跨平台同步（iOS + Android），推荐使用 **Supabase**（免费、稳定、易配置）
 - 如果你有 NAS 设备或私有云，推荐使用 **WebDAV**（数据完全本地化）
 
 **Q: 如何在多设备间同步数据？**
 A:
+
 - **iCloud**：iOS 设备登录同一 Apple ID，数据自动同步
 - **Supabase**：所有设备配置相同的 URL 和 anon key，登录同一账号
 - **WebDAV**：所有设备配置相同的 WebDAV 服务器地址和凭据
 
 **Q: 如何确保数据安全？**
 A:
+
 - 使用自己的 Supabase 项目或 WebDAV 服务器
 - 定期导出 CSV 备份到本地
 - WebDAV 建议使用 HTTPS 加密传输
 
 **Q: WebDAV 配置后为什么无法上传？**
 A:
+
 - 检查 WebDAV 服务是否启用且端口正确
 - 确认用户名和密码正确
 - 某些 NAS 的 WebDAV 需要在特定路径下才能写入（如绿联云需要 `/home/` 路径）
@@ -567,7 +543,10 @@ A:
 
 ---
 
-## 📜 许可证
+## 📄 开源协议
+
+<details>
+<summary><b>查看许可证详情</b></summary>
 
 本项目采用 **商业源代码许可证（Business Source License）**：
 
@@ -579,19 +558,16 @@ A:
 ### 什么是商业使用？
 
 以下情况需要获得商业许可：
-
 - 将本软件作为商业产品或服务提供给客户
 - 在盈利性组织中使用本软件
 - 基于本软件开发商业产品
 - 提供基于本软件的付费云服务
 
-### 如何获取商业许可？
+如需商业使用，请通过 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 联系。
 
-如需商业使用，请通过以下方式联系：
+详见 [LICENSE](LICENSE) 文件。
 
-- 📧 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues)
-
-详细许可条款请查看 [LICENSE](LICENSE) 文件。
+</details>
 
 ---
 
