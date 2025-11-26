@@ -88,20 +88,41 @@ class AppConfig {
 class SupabaseConfig {
   final String url;
   final String anonKey;
+  final String? bucket;
+  final String? email;
+  final String? password;
 
   const SupabaseConfig({
     required this.url,
     required this.anonKey,
+    this.bucket,
+    this.email,
+    this.password,
   });
 
-  Map<String, dynamic> toMap() => {
-        'url': url,
-        'anon_key': anonKey,
-      };
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'url': url,
+      'anon_key': anonKey,
+    };
+    if (bucket != null && bucket!.isNotEmpty) {
+      map['bucket'] = bucket;
+    }
+    if (email != null && email!.isNotEmpty) {
+      map['email'] = email;
+    }
+    if (password != null && password!.isNotEmpty) {
+      map['password'] = password;
+    }
+    return map;
+  }
 
   static SupabaseConfig fromMap(Map<String, dynamic> map) => SupabaseConfig(
         url: map['url'] as String,
         anonKey: map['anon_key'] as String,
+        bucket: map['bucket'] as String?,
+        email: map['email'] as String?,
+        password: map['password'] as String?,
       );
 }
 
@@ -501,6 +522,9 @@ class ConfigExportService {
           supabaseConfig = SupabaseConfig(
             url: cfg.supabaseUrl!,
             anonKey: cfg.supabaseAnonKey!,
+            bucket: cfg.supabaseBucket,
+            email: cfg.supabaseEmail,
+            password: cfg.supabasePassword,
           );
         }
       } catch (e) {
@@ -676,6 +700,19 @@ class ConfigExportService {
       final sb = yamlMap['supabase'] as Map<String, dynamic>;
       buffer.writeln('  url: "${sb['url']}"');
       buffer.writeln('  anon_key: "${sb['anon_key']}"');
+      if (sb.containsKey('bucket')) {
+        buffer.writeln('  # Storage bucket 名称，留空则使用默认值 beecount-backups');
+        buffer.writeln('  bucket: "${sb['bucket']}"');
+      }
+      if (sb.containsKey('email') || sb.containsKey('password')) {
+        buffer.writeln('  # 记住账号密码功能：导入后登录页面会自动填充');
+      }
+      if (sb.containsKey('email')) {
+        buffer.writeln('  email: "${sb['email']}"');
+      }
+      if (sb.containsKey('password')) {
+        buffer.writeln('  password: "${sb['password']}"');
+      }
       buffer.writeln();
     }
 
@@ -899,6 +936,9 @@ class ConfigExportService {
         name: 'Supabase',
         supabaseUrl: config.supabase!.url,
         supabaseAnonKey: config.supabase!.anonKey,
+        supabaseBucket: config.supabase!.bucket ?? 'beecount-backups',  // 导入时也提供默认值
+        supabaseEmail: config.supabase!.email,
+        supabasePassword: config.supabase!.password,
       );
       await prefs.setString(
           'cloud_supabase_cfg', encodeCloudConfig(supabaseCfg));

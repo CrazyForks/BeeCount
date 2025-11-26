@@ -1009,12 +1009,14 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
       builder: (dialogContext) => _SupabaseConfigDialog(
         initialUrl: existing?.supabaseUrl ?? '',
         initialKey: existing?.supabaseAnonKey ?? '',
+        initialBucket: existing?.supabaseBucket ?? '',
       ),
     );
 
     if (result != null) {
       final url = result['url'] as String;
       final key = result['key'] as String;
+      final bucket = result['bucket'] as String;
 
       if (url.isEmpty || key.isEmpty) {
         if (mounted) {
@@ -1028,6 +1030,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         name: AppLocalizations.of(context).cloudCustomSupabaseTitle,
         supabaseUrl: url,
         supabaseAnonKey: key,
+        supabaseBucket: bucket.isEmpty ? 'beecount-backups' : bucket,  // 业务层提供默认值
       );
 
       if (!cfg.valid) {
@@ -1369,10 +1372,12 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 class _SupabaseConfigDialog extends StatefulWidget {
   final String initialUrl;
   final String initialKey;
+  final String initialBucket;
 
   const _SupabaseConfigDialog({
     required this.initialUrl,
     required this.initialKey,
+    required this.initialBucket,
   });
 
   @override
@@ -1382,18 +1387,21 @@ class _SupabaseConfigDialog extends StatefulWidget {
 class _SupabaseConfigDialogState extends State<_SupabaseConfigDialog> {
   late final TextEditingController urlController;
   late final TextEditingController keyController;
+  late final TextEditingController bucketController;
 
   @override
   void initState() {
     super.initState();
     urlController = TextEditingController(text: widget.initialUrl);
     keyController = TextEditingController(text: widget.initialKey);
+    bucketController = TextEditingController(text: widget.initialBucket);
   }
 
   @override
   void dispose() {
     urlController.dispose();
     keyController.dispose();
+    bucketController.dispose();
     super.dispose();
   }
 
@@ -1424,6 +1432,15 @@ class _SupabaseConfigDialogState extends State<_SupabaseConfigDialog> {
               minLines: 1,
               maxLines: 5,
             ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: bucketController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudSupabaseBucketLabel,
+                hintText: AppLocalizations.of(context).cloudSupabaseBucketHint,
+              ),
+              keyboardType: TextInputType.text,
+            ),
           ],
         ),
       ),
@@ -1437,6 +1454,7 @@ class _SupabaseConfigDialogState extends State<_SupabaseConfigDialog> {
             Navigator.of(context).pop({
               'url': urlController.text.trim(),
               'key': keyController.text.trim(),
+              'bucket': bucketController.text.trim(),
             });
           },
           child: Text(AppLocalizations.of(context).commonSave),

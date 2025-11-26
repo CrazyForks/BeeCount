@@ -9,8 +9,9 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 class SupabaseStorageService implements CloudStorageService {
   final supabase.SupabaseClient _client;
   final String _bucketName;
+  final String? _pathPrefix;
 
-  SupabaseStorageService(this._client, this._bucketName);
+  SupabaseStorageService(this._client, this._bucketName, [this._pathPrefix]);
 
   @override
   Future<void> upload({
@@ -226,8 +227,18 @@ class SupabaseStorageService implements CloudStorageService {
   }
 
   /// Builds a user-specific path.
+  ///
+  /// If pathPrefix is provided, it will be used as the prefix (supports {userId} placeholder).
+  /// Otherwise, defaults to 'users/{userId}/' for backward compatibility.
   String _buildUserPath(String userId, String path) {
-    return PathHelper.join(['users', userId, path]);
+    // If no prefix configured, use default 'users/{userId}/' pattern
+    final prefix = _pathPrefix ?? 'users/{userId}';
+
+    // Replace {userId} placeholder with actual user ID
+    final expandedPrefix = prefix.replaceAll('{userId}', userId);
+
+    // Join prefix with path
+    return PathHelper.join([expandedPrefix, path]);
   }
 
   /// Stores custom metadata in a separate database table.

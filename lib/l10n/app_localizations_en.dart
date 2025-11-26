@@ -1896,6 +1896,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudS3PortHint => 'Leave blank for default';
 
   @override
+  String get cloudSupabaseBucketLabel => 'Storage Bucket Name';
+
+  @override
+  String get cloudSupabaseBucketHint => 'Leave blank for default: beecount-backups';
+
+  @override
+  String get authRememberAccount => 'Remember account';
+
+  @override
+  String get authRememberAccountHint => 'Auto-fill on next login (Supabase only)';
+
+  @override
   String get cloudConfigSaved => 'Configuration saved';
 
   @override

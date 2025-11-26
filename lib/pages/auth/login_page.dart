@@ -28,6 +28,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
   late bool isSignup;
   bool _showPwd = false;
   bool _showPwd2 = false;
+  bool _rememberAccount = false;
   void _switchMode(bool toSignup) {
     setState(() {
       isSignup = toSignup;
@@ -40,6 +41,66 @@ class _AuthPageState extends ConsumerState<AuthPage> {
   void initState() {
     super.initState();
     isSignup = widget.initialMode == AuthMode.signup;
+    // 延迟加载凭证，确保 provider 已初始化
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSavedCredentials();
+    });
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    // Only load credentials when in Supabase mode and login mode
+    try {
+      final cloudConfig = await ref.read(activeCloudConfigProvider.future);
+      if (cloudConfig.type != CloudBackendType.supabase) {
+        return;
+      }
+
+      if (cloudConfig.supabaseEmail != null && cloudConfig.supabaseEmail!.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            emailCtrl.text = cloudConfig.supabaseEmail!;
+            if (cloudConfig.supabasePassword != null && cloudConfig.supabasePassword!.isNotEmpty) {
+              pwdCtrl.text = cloudConfig.supabasePassword!;
+              _rememberAccount = true;
+            }
+          });
+        }
+      }
+    } catch (e) {
+      // 忽略加载错误，用户可以手动输入
+      logger.warning('auth', '加载保存的账号密码失败: $e');
+    }
+  }
+
+  Future<void> _saveCredentials(String email, String password) async {
+    // Only save credentials when in Supabase mode
+    try {
+      final cloudConfig = await ref.read(activeCloudConfigProvider.future);
+      if (cloudConfig.type != CloudBackendType.supabase) {
+        return;
+      }
+
+      final store = ref.read(cloudServiceStoreProvider);
+
+      // Create updated config with or without credentials based on checkbox
+      final updatedConfig = CloudServiceConfig(
+        type: cloudConfig.type,
+        name: cloudConfig.name,
+        supabaseUrl: cloudConfig.supabaseUrl,
+        supabaseAnonKey: cloudConfig.supabaseAnonKey,
+        supabaseBucket: cloudConfig.supabaseBucket ?? 'beecount-backups',  // 确保有默认值
+        supabaseEmail: _rememberAccount ? email : null,
+        supabasePassword: _rememberAccount ? password : null,
+      );
+
+      await store.saveOnly(updatedConfig);
+      ref.invalidate(supabaseConfigProvider);
+      ref.invalidate(activeCloudConfigProvider);
+
+      logger.info('auth', '账号密码保存状态：${_rememberAccount ? "已保存" : "已清除"}');
+    } catch (e, st) {
+      logger.error('auth', '保存账号密码失败', e, st);
+    }
   }
 
   @override
@@ -354,6 +415,48 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                             ),
                           ),
                         ],
+                        if (!isSignup) ...[
+                          const SizedBox(height: 4),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _rememberAccount = !_rememberAccount;
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: _rememberAccount,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _rememberAccount = value ?? false;
+                                    });
+                                  },
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context).authRememberAccount,
+                                        style: theme.textTheme.bodyMedium?.copyWith(
+                                          color: BeeTokens.textPrimary(context),
+                                        ),
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context).authRememberAccountHint,
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: BeeTokens.textSecondary(context),
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                         const SizedBox(height: 12),
                         if (errorText != null)
                           Padding(
@@ -482,6 +585,9 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                                 email: email, password: pwd);
                                             if (!context.mounted) return;
                                             logger.info('auth', '登录成功：邮箱=$email');
+
+                                            // Save credentials if "remember account" is checked
+                                            await _saveCredentials(email, pwd);
 
                                             // 刷新认证服务和同步服务以触发状态更新
                                             ref.invalidate(authServiceProvider);

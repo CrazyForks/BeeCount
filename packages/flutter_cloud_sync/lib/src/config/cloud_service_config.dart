@@ -16,6 +16,9 @@ class CloudServiceConfig {
   // Supabase 配置
   final String? supabaseUrl;
   final String? supabaseAnonKey;
+  final String? supabaseBucket; // Storage bucket 名称
+  final String? supabaseEmail;   // 保存的账号（用于记住账号功能）
+  final String? supabasePassword; // 保存的密码（用于记住账号功能）
 
   // WebDAV 配置
   final String? webdavUrl;
@@ -38,6 +41,9 @@ class CloudServiceConfig {
     // Supabase
     this.supabaseUrl,
     this.supabaseAnonKey,
+    this.supabaseBucket,
+    this.supabaseEmail,
+    this.supabasePassword,
     // WebDAV
     this.webdavUrl,
     this.webdavUsername,
@@ -82,6 +88,9 @@ class CloudServiceConfig {
         // Supabase
         'supabaseUrl': supabaseUrl,
         'supabaseAnonKey': supabaseAnonKey,
+        'supabaseBucket': supabaseBucket,
+        'supabaseEmail': supabaseEmail,
+        'supabasePassword': supabasePassword,
         // WebDAV
         'webdavUrl': webdavUrl,
         'webdavUsername': webdavUsername,
@@ -111,6 +120,9 @@ class CloudServiceConfig {
       // Supabase
       supabaseUrl: j['supabaseUrl'] as String?,
       supabaseAnonKey: j['supabaseAnonKey'] as String?,
+      supabaseBucket: j['supabaseBucket'] as String?,
+      supabaseEmail: j['supabaseEmail'] as String?,
+      supabasePassword: j['supabasePassword'] as String?,
       // WebDAV
       webdavUrl: j['webdavUrl'] as String?,
       webdavUsername: j['webdavUsername'] as String?,

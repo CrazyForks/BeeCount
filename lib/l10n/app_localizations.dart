@@ -3606,6 +3606,30 @@ abstract class AppLocalizations {
   /// **'Leave blank for default'**
   String get cloudS3PortHint;
 
+  /// No description provided for @cloudSupabaseBucketLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage Bucket Name'**
+  String get cloudSupabaseBucketLabel;
+
+  /// No description provided for @cloudSupabaseBucketHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave blank for default: beecount-backups'**
+  String get cloudSupabaseBucketHint;
+
+  /// No description provided for @authRememberAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember account'**
+  String get authRememberAccount;
+
+  /// No description provided for @authRememberAccountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-fill on next login (Supabase only)'**
+  String get authRememberAccountHint;
+
   /// No description provided for @cloudConfigSaved.
   ///
   /// In en, this message translates to:

@@ -29,6 +29,7 @@ class SupabaseProvider implements CloudProvider {
   SupabaseAuthService? _authService;
   SupabaseStorageService? _storageService;
   String _bucketName = 'storage';
+  String? _pathPrefix;
 
   // Track current configuration to detect changes
   static String? _currentUrl;
@@ -69,6 +70,7 @@ class SupabaseProvider implements CloudProvider {
     final url = config['url'] as String;
     final anonKey = config['anonKey'] as String;
     _bucketName = config['bucket'] as String? ?? 'storage';
+    _pathPrefix = config['pathPrefix'] as String?;
 
     try {
       // Check if Supabase is already initialized with the same config
@@ -102,14 +104,14 @@ class SupabaseProvider implements CloudProvider {
 
       // Create service instances
       _authService = SupabaseAuthService(_client!);
-      _storageService = SupabaseStorageService(_client!, _bucketName);
+      _storageService = SupabaseStorageService(_client!, _bucketName, _pathPrefix);
     } catch (e) {
       // If initialization fails due to already initialized, try to use existing instance
       if (e.toString().contains('already initialized') ||
           e.toString().contains('LateInitializationError')) {
         _client = supabase.Supabase.instance.client;
         _authService = SupabaseAuthService(_client!);
-        _storageService = SupabaseStorageService(_client!, _bucketName);
+        _storageService = SupabaseStorageService(_client!, _bucketName, _pathPrefix);
         _isInitialized = true;
         _currentUrl = url;
         _currentAnonKey = anonKey;

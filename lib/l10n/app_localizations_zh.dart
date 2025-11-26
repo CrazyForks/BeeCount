@@ -1896,6 +1896,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudS3PortHint => '留空使用默认端口';
 
   @override
+  String get cloudSupabaseBucketLabel => 'Storage Bucket 名称';
+
+  @override
+  String get cloudSupabaseBucketHint => '留空使用默认值 beecount-backups';
+
+  @override
+  String get authRememberAccount => '记住账号密码';
+
+  @override
+  String get authRememberAccountHint => '下次登录时自动填充（仅Supabase）';
+
+  @override
   String get cloudConfigSaved => '配置已保存';
 
   @override
@@ -5712,6 +5724,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudS3PortHint => '留空使用預設連接埠';
+
+  @override
+  String get cloudSupabaseBucketLabel => 'Storage Bucket 名稱';
+
+  @override
+  String get cloudSupabaseBucketHint => '留空使用預設值 beecount-backups';
+
+  @override
+  String get authRememberAccount => '記住帳號密碼';
+
+  @override
+  String get authRememberAccountHint => '下次登入時自動填入（僅Supabase）';
 
   @override
   String get cloudConfigSaved => '設定已儲存';
