@@ -58,6 +58,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     final activeAsync = ref.watch(activeCloudConfigProvider);
     final supabaseAsync = ref.watch(supabaseConfigProvider);
     final webdavAsync = ref.watch(webdavConfigProvider);
+    final s3Async = ref.watch(s3ConfigProvider);
 
     return Scaffold(
       backgroundColor: BeeTokens.scaffoldBackground(context),
@@ -160,7 +161,33 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
                     const SizedBox(height: 12),
 
-                    // 4. 自定义 Supabase Card
+                    // 4. S3 Protocol Storage Card
+                    s3Async.when(
+                      loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                      error: (e, _) => const SizedBox.shrink(),
+                      data: (s3Cfg) => _buildServiceCard(
+                        context: context,
+                        icon: Icons.storage,
+                        iconColor: BeeTokens.brandS3,
+                        title: AppLocalizations.of(context).cloudCustomS3Title,
+                        subtitle: s3Cfg?.valid == true
+                            ? s3Cfg!.obfuscatedUrl()
+                            : AppLocalizations.of(context).cloudCustomS3Subtitle,
+                        isSelected: active.type == CloudBackendType.s3,
+                        isConfigured: s3Cfg?.valid == true,
+                        onTap: () => s3Cfg?.valid == true
+                            ? _switchService(CloudBackendType.s3)
+                            : _configureService(CloudBackendType.s3),
+                        onConfigure: s3Cfg?.valid == true
+                            ? () => _configureService(CloudBackendType.s3)
+                            : null,
+                        onShowGuide: _showS3HelpDialog,
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // 5. 自定义 Supabase Card
                     supabaseAsync.when(
                       loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
                       error: (e, _) => const SizedBox.shrink(),
@@ -735,6 +762,91 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     );
   }
 
+  void _showS3HelpDialog() {
+    final l10n = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.storage, color: BeeTokens.brandS3),
+            const SizedBox(width: 8),
+            Text(l10n.cloudS3HelpTitle),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildHelpSection(
+                l10n.cloudS3HelpIntro,
+                [
+                  l10n.cloudS3HelpIntro1,
+                  l10n.cloudS3HelpIntro2,
+                  l10n.cloudS3HelpIntro3,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudS3HelpProviders,
+                [
+                  l10n.cloudS3HelpProvider1,
+                  l10n.cloudS3HelpProvider2,
+                  l10n.cloudS3HelpProvider3,
+                  l10n.cloudS3HelpProvider4,
+                  l10n.cloudS3HelpProvider5,
+                  l10n.cloudS3HelpProvider6,
+                  l10n.cloudS3HelpProvider7,
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildHelpSection(
+                l10n.cloudS3HelpSteps,
+                [
+                  l10n.cloudS3HelpStep1,
+                  l10n.cloudS3HelpStep2,
+                  l10n.cloudS3HelpStep3,
+                  l10n.cloudS3HelpStep4,
+                  l10n.cloudS3HelpStep5,
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: BeeTokens.brandS3.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, color: BeeTokens.brandS3, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.cloudS3HelpNote,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.commonConfirm),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildHelpSection(String title, List<String> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -882,6 +994,8 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
       await _showSupabaseConfigDialog();
     } else if (type == CloudBackendType.webdav) {
       await _showWebdavConfigDialog();
+    } else if (type == CloudBackendType.s3) {
+      await _showS3ConfigDialog();
     }
   }
 
@@ -995,6 +1109,76 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     }
   }
 
+  Future<void> _showS3ConfigDialog() async {
+    final existing = await ref.read(s3ConfigProvider.future);
+
+    if (!mounted) return;
+
+    final result = await showDialog<Map<String, dynamic>?>(
+      context: context,
+      builder: (dialogContext) => _S3ConfigDialog(
+        initialEndpoint: existing?.s3Endpoint ?? '',
+        initialRegion: existing?.s3Region ?? 'us-east-1',
+        initialAccessKey: existing?.s3AccessKey ?? '',
+        initialSecretKey: existing?.s3SecretKey ?? '',
+        initialBucket: existing?.s3Bucket ?? '',
+        initialUseSSL: existing?.s3UseSSL ?? true,
+        initialPort: existing?.s3Port,
+      ),
+    );
+
+    if (result != null) {
+      var endpoint = result['endpoint'] as String;
+      final region = result['region'] as String;
+      final accessKey = result['accessKey'] as String;
+      final secretKey = result['secretKey'] as String;
+      final bucket = result['bucket'] as String;
+      final useSSL = result['useSSL'] as bool;
+      final port = result['port'] as int?;
+
+      if (endpoint.isEmpty || accessKey.isEmpty || secretKey.isEmpty || bucket.isEmpty) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudConfigInvalidTitle, message: AppLocalizations.of(context).cloudConfigInvalidMessage);
+        }
+        return;
+      }
+
+      // 自动去除 endpoint 中的 http:// 或 https:// 前缀
+      endpoint = endpoint.replaceFirst(RegExp(r'^https?://'), '');
+
+      final cfg = CloudServiceConfig(
+        type: CloudBackendType.s3,
+        name: AppLocalizations.of(context).cloudCustomS3Title,
+        s3Endpoint: endpoint,
+        s3Region: region.isEmpty ? 'us-east-1' : region,
+        s3AccessKey: accessKey,
+        s3SecretKey: secretKey,
+        s3Bucket: bucket,
+        s3UseSSL: useSSL,
+        s3Port: port,
+      );
+
+      if (!cfg.valid) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudConfigInvalidTitle, message: AppLocalizations.of(context).cloudConfigInvalidMessage);
+        }
+        return;
+      }
+
+      try {
+        await ref.read(cloudServiceStoreProvider).saveOnly(cfg);
+        ref.invalidate(s3ConfigProvider);
+        // 刷新激活配置，确保同步服务使用最新配置
+        ref.invalidate(activeCloudConfigProvider);
+        if (mounted) showToast(context, AppLocalizations.of(context).cloudConfigSaved);
+      } catch (e) {
+        if (mounted) {
+          await AppDialog.error(context, title: AppLocalizations.of(context).cloudSaveFailed, message: e.toString());
+        }
+      }
+    }
+  }
+
   String _getTypeName(CloudBackendType type) {
     switch (type) {
       case CloudBackendType.local:
@@ -1005,6 +1189,8 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         return 'WebDAV';
       case CloudBackendType.icloud:
         return 'iCloud';
+      case CloudBackendType.s3:
+        return 'S3';
     }
   }
 
@@ -1087,6 +1273,52 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
               }
             } else {
               throw Exception('iCloud 不可用，请检查设备是否已登录 iCloud 并开启 iCloud Drive');
+            }
+            break;
+
+          case CloudBackendType.s3:
+            // S3 连接测试 - 尝试列出对象（ListObjects）
+            try {
+              // 确保 endpoint 不包含协议前缀（兼容旧配置）
+              final cleanedConfig = CloudServiceConfig(
+                type: config.type,
+                name: config.name,
+                s3Endpoint: config.s3Endpoint?.replaceFirst(RegExp(r'^https?://'), ''),
+                s3Region: config.s3Region,
+                s3AccessKey: config.s3AccessKey,
+                s3SecretKey: config.s3SecretKey,
+                s3Bucket: config.s3Bucket,
+                s3UseSSL: config.s3UseSSL,
+                s3Port: config.s3Port,
+              );
+
+              logger.info('CloudServicePage', 'S3 连接测试开始: endpoint=${cleanedConfig.s3Endpoint}, bucket=${cleanedConfig.s3Bucket}');
+
+              final services = await createCloudServices(cleanedConfig);
+
+              logger.info('CloudServicePage', 'S3 provider 创建结果: ${services.provider != null ? "成功" : "失败"}');
+
+              if (services.provider == null) {
+                throw Exception('S3 provider 初始化失败 - createCloudServices 返回 null');
+              }
+
+              // 实际测试连接：尝试列出 bucket 中的文件
+              // 这会触发真正的 S3 API 调用，验证凭证和连接
+              logger.info('CloudServicePage', 'S3 开始测试列出文件');
+              await services.provider!.storage.list(path: '');
+
+              logger.info('CloudServicePage', 'S3 连接测试成功');
+              connectionSuccess = true;
+            } catch (e, stackTrace) {
+              logger.error('CloudServicePage', 'S3 连接测试失败: $e', e, stackTrace);
+              // 提取最有用的错误信息
+              String errorMsg = e.toString();
+              if (errorMsg.contains('CloudConfigurationException:')) {
+                errorMsg = errorMsg.replaceFirst('CloudConfigurationException: ', '');
+              } else if (errorMsg.contains('Exception:')) {
+                errorMsg = errorMsg.replaceFirst('Exception: ', '');
+              }
+              throw Exception(errorMsg);
             }
             break;
         }
@@ -1322,6 +1554,178 @@ class _WebdavConfigDialogState extends State<_WebdavConfigDialog> {
               'username': usernameController.text.trim(),
               'password': passwordController.text.trim(),
               'path': pathController.text.trim(),
+            });
+          },
+          child: Text(AppLocalizations.of(context).commonSave),
+        ),
+      ],
+    );
+  }
+}
+
+// S3配置对话框(独立Widget,避免controller生命周期问题)
+class _S3ConfigDialog extends StatefulWidget {
+  final String initialEndpoint;
+  final String initialRegion;
+  final String initialAccessKey;
+  final String initialSecretKey;
+  final String initialBucket;
+  final bool initialUseSSL;
+  final int? initialPort;
+
+  const _S3ConfigDialog({
+    required this.initialEndpoint,
+    required this.initialRegion,
+    required this.initialAccessKey,
+    required this.initialSecretKey,
+    required this.initialBucket,
+    required this.initialUseSSL,
+    this.initialPort,
+  });
+
+  @override
+  State<_S3ConfigDialog> createState() => _S3ConfigDialogState();
+}
+
+class _S3ConfigDialogState extends State<_S3ConfigDialog> {
+  late final TextEditingController endpointController;
+  late final TextEditingController regionController;
+  late final TextEditingController accessKeyController;
+  late final TextEditingController secretKeyController;
+  late final TextEditingController bucketController;
+  late final TextEditingController portController;
+  late bool useSSL;
+  bool obscureSecretKey = true;
+
+  @override
+  void initState() {
+    super.initState();
+    endpointController = TextEditingController(text: widget.initialEndpoint);
+    regionController = TextEditingController(text: widget.initialRegion);
+    accessKeyController = TextEditingController(text: widget.initialAccessKey);
+    secretKeyController = TextEditingController(text: widget.initialSecretKey);
+    bucketController = TextEditingController(text: widget.initialBucket);
+    portController = TextEditingController(text: widget.initialPort?.toString() ?? '');
+    useSSL = widget.initialUseSSL;
+  }
+
+  @override
+  void dispose() {
+    endpointController.dispose();
+    regionController.dispose();
+    accessKeyController.dispose();
+    secretKeyController.dispose();
+    bucketController.dispose();
+    portController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context).cloudConfigureS3Title),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: endpointController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudS3EndpointLabel,
+                hintText: AppLocalizations.of(context).cloudS3EndpointHint,
+              ),
+              keyboardType: TextInputType.url,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: regionController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudS3RegionLabel,
+                hintText: AppLocalizations.of(context).cloudS3RegionHint,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: accessKeyController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudS3AccessKeyLabel,
+                hintText: AppLocalizations.of(context).cloudS3AccessKeyHint,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: secretKeyController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudS3SecretKeyLabel,
+                hintText: AppLocalizations.of(context).cloudS3SecretKeyHint,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    obscureSecretKey ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      obscureSecretKey = !obscureSecretKey;
+                    });
+                  },
+                ),
+              ),
+              obscureText: obscureSecretKey,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: bucketController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudS3BucketLabel,
+                hintText: AppLocalizations.of(context).cloudS3BucketHint,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(AppLocalizations.of(context).cloudS3UseSSLLabel),
+                ),
+                Switch(
+                  value: useSSL,
+                  onChanged: (value) {
+                    setState(() {
+                      useSSL = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: portController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).cloudS3PortLabel,
+                hintText: AppLocalizations.of(context).cloudS3PortHint,
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(null),
+          child: Text(AppLocalizations.of(context).commonCancel),
+        ),
+        FilledButton(
+          onPressed: () {
+            final portText = portController.text.trim();
+            final port = portText.isEmpty ? null : int.tryParse(portText);
+
+            Navigator.of(context).pop({
+              'endpoint': endpointController.text.trim(),
+              'region': regionController.text.trim(),
+              'accessKey': accessKeyController.text.trim(),
+              'secretKey': secretKeyController.text.trim(),
+              'bucket': bucketController.text.trim(),
+              'useSSL': useSSL,
+              'port': port,
             });
           },
           child: Text(AppLocalizations.of(context).commonSave),

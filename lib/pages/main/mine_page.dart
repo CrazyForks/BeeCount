@@ -101,6 +101,8 @@ class MinePage extends ConsumerWidget {
                                 case CloudBackendType.supabase:
                                   return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceCustom;
+                                case CloudBackendType.s3:
+                                  return 'S3';
                               }
                             },
                           ),

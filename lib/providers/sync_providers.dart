@@ -76,6 +76,12 @@ final webdavConfigProvider = FutureProvider<CloudServiceConfig?>((ref) async {
   return store.loadWebdav();
 });
 
+// S3配置(不管是否激活)
+final s3ConfigProvider = FutureProvider<CloudServiceConfig?>((ref) async {
+  final store = ref.watch(cloudServiceStoreProvider);
+  return store.loadS3();
+});
+
 final authServiceProvider = FutureProvider<CloudAuthService>((ref) async {
   final activeAsync = ref.watch(activeCloudConfigProvider);
   if (!activeAsync.hasValue) {
@@ -116,6 +122,7 @@ final syncServiceProvider = Provider<SyncService>((ref) {
     case CloudBackendType.supabase:
     case CloudBackendType.webdav:
     case CloudBackendType.icloud:
+    case CloudBackendType.s3:
       // 使用新的 TransactionsSyncManager (基于 flutter_cloud_sync 包)
       // 采用延迟初始化，首次使用时自动初始化
       return TransactionsSyncManager(

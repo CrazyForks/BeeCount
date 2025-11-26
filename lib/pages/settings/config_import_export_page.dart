@@ -415,6 +415,13 @@ class _ConfigImportExportPageState
                         _buildConfigItem(
                           context,
                           ref,
+                          Icons.storage,
+                          l10n.configIncludeS3,
+                        ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
                           Icons.smart_toy_outlined,
                           l10n.configIncludeAI,
                         ),

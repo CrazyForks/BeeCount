@@ -2,11 +2,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'cloud_service_config.dart';
 
 /// 云服务配置持久化存储
-/// 支持3种类型:本地存储、自定义Supabase、自定义WebDAV
+/// 支持4种类型:本地存储、自定义Supabase、自定义WebDAV、S3协议存储
 class CloudServiceStore {
-  static const _kActiveType = 'cloud_active_type'; // local | supabase | webdav
+  static const _kActiveType = 'cloud_active_type'; // local | supabase | webdav | s3
   static const _kSupabaseCfg = 'cloud_supabase_cfg';
   static const _kWebdavCfg = 'cloud_webdav_cfg';
+  static const _kS3Cfg = 'cloud_s3_cfg';
 
   /// 加载当前激活的云服务配置
   Future<CloudServiceConfig> loadActive() async {
@@ -48,6 +49,18 @@ class CloudServiceStore {
           name: 'iCloud',
         );
 
+      case 's3':
+        final raw = sp.getString(_kS3Cfg);
+        if (raw != null) {
+          try {
+            return decodeCloudConfig(raw);
+          } catch (e) {
+            // 解析失败，静默回退到本地存储
+          }
+        }
+        // 回退到本地存储
+        return CloudServiceConfig.localStorage();
+
       default:
         return CloudServiceConfig.localStorage();
     }
@@ -69,6 +82,18 @@ class CloudServiceStore {
   Future<CloudServiceConfig?> loadWebdav() async {
     final sp = await SharedPreferences.getInstance();
     final raw = sp.getString(_kWebdavCfg);
+    if (raw == null) return null;
+    try {
+      return decodeCloudConfig(raw);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// 加载S3配置(不管是否激活)
+  Future<CloudServiceConfig?> loadS3() async {
+    final sp = await SharedPreferences.getInstance();
+    final raw = sp.getString(_kS3Cfg);
     if (raw == null) return null;
     try {
       return decodeCloudConfig(raw);
@@ -103,6 +128,12 @@ class CloudServiceStore {
         await sp.setString(_kActiveType, 'icloud');
         // iCloud 无需额外配置，Provider 会在下次使用时自动初始化
         break;
+
+      case CloudBackendType.s3:
+        await sp.setString(_kS3Cfg, encodeCloudConfig(cfg));
+        await sp.setString(_kActiveType, 's3');
+        // Provider 会在下次使用时自动初始化
+        break;
     }
   }
 
@@ -125,6 +156,10 @@ class CloudServiceStore {
 
       case CloudBackendType.icloud:
         // iCloud 无需保存额外配置
+        break;
+
+      case CloudBackendType.s3:
+        await sp.setString(_kS3Cfg, encodeCloudConfig(cfg));
         break;
     }
   }
@@ -166,6 +201,18 @@ class CloudServiceStore {
         // iCloud 无需配置，直接激活
         await sp.setString(_kActiveType, 'icloud');
         return true;
+
+      case CloudBackendType.s3:
+        final raw = sp.getString(_kS3Cfg);
+        if (raw == null) return false;
+        try {
+          final cfg = decodeCloudConfig(raw);
+          if (!cfg.valid) return false;
+          await sp.setString(_kActiveType, 's3');
+          return true;
+        } catch (e) {
+          return false;
+        }
     }
   }
 }

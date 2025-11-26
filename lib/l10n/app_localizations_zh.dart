@@ -1857,6 +1857,45 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudWebdavPathHint => '/BeeCount';
 
   @override
+  String get cloudS3EndpointLabel => '端点地址';
+
+  @override
+  String get cloudS3EndpointHint => 's3.amazonaws.com 或自定义端点';
+
+  @override
+  String get cloudS3RegionLabel => '区域';
+
+  @override
+  String get cloudS3RegionHint => 'us-east-1（留空自动）';
+
+  @override
+  String get cloudS3AccessKeyLabel => 'Access Key';
+
+  @override
+  String get cloudS3AccessKeyHint => '您的 Access Key ID';
+
+  @override
+  String get cloudS3SecretKeyLabel => 'Secret Key';
+
+  @override
+  String get cloudS3SecretKeyHint => '您的 Secret Access Key';
+
+  @override
+  String get cloudS3BucketLabel => '存储桶名称';
+
+  @override
+  String get cloudS3BucketHint => 'beecount-data';
+
+  @override
+  String get cloudS3UseSSLLabel => '使用 HTTPS';
+
+  @override
+  String get cloudS3PortLabel => '端口（可选）';
+
+  @override
+  String get cloudS3PortHint => '留空使用默认端口';
+
+  @override
   String get cloudConfigSaved => '配置已保存';
 
   @override
@@ -2587,6 +2626,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudCustomWebdavSubtitle => '点击配置坚果云/Nextcloud等';
 
   @override
+  String get cloudCustomS3Title => 'S3 协议存储';
+
+  @override
+  String get cloudCustomS3Subtitle => 'AWS S3 / Cloudflare R2 / MinIO';
+
+  @override
   String get cloudIcloudSubtitle => '使用 Apple ID 自动同步';
 
   @override
@@ -2746,6 +2791,66 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudWebdavHelpNote => '建议使用应用专用密码，而非账号密码';
 
   @override
+  String get cloudS3HelpTitle => 'S3 存储配置说明';
+
+  @override
+  String get cloudS3HelpIntro => '什么是 S3';
+
+  @override
+  String get cloudS3HelpIntro1 => 'S3 是一种标准的对象存储协议';
+
+  @override
+  String get cloudS3HelpIntro2 => '支持多家云服务商';
+
+  @override
+  String get cloudS3HelpIntro3 => '数据存储在您选择的云服务中';
+
+  @override
+  String get cloudS3HelpProviders => '支持的服务商';
+
+  @override
+  String get cloudS3HelpProvider1 => '• AWS S3（Amazon Web Services）';
+
+  @override
+  String get cloudS3HelpProvider2 => '• Cloudflare R2（免费 10GB/月）';
+
+  @override
+  String get cloudS3HelpProvider3 => '• Backblaze B2（免费 10GB）';
+
+  @override
+  String get cloudS3HelpProvider4 => '• MinIO（自建服务）';
+
+  @override
+  String get cloudS3HelpProvider5 => '• 阿里云 OSS';
+
+  @override
+  String get cloudS3HelpProvider6 => '• 腾讯云 COS';
+
+  @override
+  String get cloudS3HelpProvider7 => '• 七牛云 Kodo';
+
+  @override
+  String get cloudS3HelpSteps => '配置步骤（以 Cloudflare R2 为例）';
+
+  @override
+  String get cloudS3HelpStep1 => '1. 登录 Cloudflare 控制台';
+
+  @override
+  String get cloudS3HelpStep2 => '2. 进入 R2 > 创建存储桶';
+
+  @override
+  String get cloudS3HelpStep3 => '3. 进入 R2 > 管理 R2 API 令牌';
+
+  @override
+  String get cloudS3HelpStep4 => '4. 创建 API 令牌并复制凭据';
+
+  @override
+  String get cloudS3HelpStep5 => '5. 粘贴端点、访问密钥、私密密钥和存储桶名称';
+
+  @override
+  String get cloudS3HelpNote => '推荐使用 Cloudflare R2，提供 10GB 免费存储且无流量费';
+
+  @override
   String get cloudStatusNotTested => '未测试';
 
   @override
@@ -2830,6 +2935,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudConfigureWebdavTitle => '配置 WebDAV';
+
+  @override
+  String get cloudConfigureS3Title => '配置 S3';
 
   @override
   String get cloudSupabaseAnonKeyHintLong => '粘贴完整的 anon key';
@@ -2975,7 +3083,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeCloudSyncFeature2 => 'iCloud 同步（iOS 用户零配置）';
 
   @override
-  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase 服务';
+  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase/S3 服务';
 
   @override
   String get widgetManagement => '桌面小组件';
@@ -3500,6 +3608,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get configIncludeWebdav => 'WebDAV 云服务配置';
+
+  @override
+  String get configIncludeS3 => 'S3 云服务配置';
 
   @override
   String get configIncludeAI => 'AI 智能识别配置';
@@ -5564,6 +5675,45 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudWebdavPathHint => '/BeeCount';
 
   @override
+  String get cloudS3EndpointLabel => '端點地址';
+
+  @override
+  String get cloudS3EndpointHint => 's3.amazonaws.com 或自訂端點';
+
+  @override
+  String get cloudS3RegionLabel => '區域';
+
+  @override
+  String get cloudS3RegionHint => 'us-east-1（留空自動）';
+
+  @override
+  String get cloudS3AccessKeyLabel => 'Access Key';
+
+  @override
+  String get cloudS3AccessKeyHint => '您的 Access Key ID';
+
+  @override
+  String get cloudS3SecretKeyLabel => 'Secret Key';
+
+  @override
+  String get cloudS3SecretKeyHint => '您的 Secret Access Key';
+
+  @override
+  String get cloudS3BucketLabel => '儲存桶名稱';
+
+  @override
+  String get cloudS3BucketHint => 'beecount-data';
+
+  @override
+  String get cloudS3UseSSLLabel => '使用 HTTPS';
+
+  @override
+  String get cloudS3PortLabel => '連接埠（選填）';
+
+  @override
+  String get cloudS3PortHint => '留空使用預設連接埠';
+
+  @override
   String get cloudConfigSaved => '設定已儲存';
 
   @override
@@ -6294,6 +6444,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudCustomWebdavSubtitle => '點擊設定堅果雲/Nextcloud等';
 
   @override
+  String get cloudCustomS3Title => 'S3 協議儲存';
+
+  @override
+  String get cloudCustomS3Subtitle => 'AWS S3 / Cloudflare R2 / MinIO';
+
+  @override
   String get cloudIcloudSubtitle => '使用 Apple ID 自動同步';
 
   @override
@@ -6453,6 +6609,66 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudWebdavHelpNote => '建議使用應用程式專用密碼，而非帳號密碼';
 
   @override
+  String get cloudS3HelpTitle => 'S3 儲存設定說明';
+
+  @override
+  String get cloudS3HelpIntro => '什麼是 S3';
+
+  @override
+  String get cloudS3HelpIntro1 => 'S3 是一種標準的物件儲存通訊協定';
+
+  @override
+  String get cloudS3HelpIntro2 => '支援多家雲端服務商';
+
+  @override
+  String get cloudS3HelpIntro3 => '資料儲存在您選擇的雲端服務中';
+
+  @override
+  String get cloudS3HelpProviders => '支援的服務商';
+
+  @override
+  String get cloudS3HelpProvider1 => '• AWS S3（Amazon Web Services）';
+
+  @override
+  String get cloudS3HelpProvider2 => '• Cloudflare R2（免費 10GB/月）';
+
+  @override
+  String get cloudS3HelpProvider3 => '• Backblaze B2（免費 10GB）';
+
+  @override
+  String get cloudS3HelpProvider4 => '• MinIO（自建服務）';
+
+  @override
+  String get cloudS3HelpProvider5 => '• 阿里雲 OSS';
+
+  @override
+  String get cloudS3HelpProvider6 => '• 騰訊雲 COS';
+
+  @override
+  String get cloudS3HelpProvider7 => '• 七牛雲 Kodo';
+
+  @override
+  String get cloudS3HelpSteps => '設定步驟（以 Cloudflare R2 為例）';
+
+  @override
+  String get cloudS3HelpStep1 => '1. 登入 Cloudflare 控制台';
+
+  @override
+  String get cloudS3HelpStep2 => '2. 進入 R2 > 建立儲存桶';
+
+  @override
+  String get cloudS3HelpStep3 => '3. 進入 R2 > 管理 R2 API 令牌';
+
+  @override
+  String get cloudS3HelpStep4 => '4. 建立 API 令牌並複製憑據';
+
+  @override
+  String get cloudS3HelpStep5 => '5. 貼上端點、存取金鑰、私密金鑰和儲存桶名稱';
+
+  @override
+  String get cloudS3HelpNote => '推薦使用 Cloudflare R2，提供 10GB 免費儲存且無流量費';
+
+  @override
   String get cloudStatusNotTested => '未測試';
 
   @override
@@ -6537,6 +6753,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudConfigureWebdavTitle => '設定 WebDAV';
+
+  @override
+  String get cloudConfigureS3Title => '設定 S3';
 
   @override
   String get cloudSupabaseAnonKeyHintLong => '貼上完整的 anon key';
@@ -6682,7 +6901,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get welcomeCloudSyncFeature2 => 'iCloud 同步（iOS 用戶零配置）';
 
   @override
-  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase 服務';
+  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase/S3 服務';
 
   @override
   String get widgetManagement => '桌面小組件';
@@ -7207,6 +7426,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get configIncludeWebdav => 'WebDAV 雲端服務配置';
+
+  @override
+  String get configIncludeS3 => 'S3 雲端服務配置';
 
   @override
   String get configIncludeAI => 'AI 智慧識別配置';

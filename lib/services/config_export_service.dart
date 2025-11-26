@@ -11,6 +11,7 @@ import 'logger_service.dart';
 class AppConfig {
   final SupabaseConfig? supabase;
   final WebdavConfig? webdav;
+  final S3Config? s3;
   final AIConfig? ai;
   final AppSettingsConfig? appSettings;
   final RecurringTransactionsConfig? recurringTransactions;
@@ -18,6 +19,7 @@ class AppConfig {
   const AppConfig({
     this.supabase,
     this.webdav,
+    this.s3,
     this.ai,
     this.appSettings,
     this.recurringTransactions,
@@ -32,6 +34,10 @@ class AppConfig {
 
     if (webdav != null) {
       map['webdav'] = webdav!.toMap();
+    }
+
+    if (s3 != null) {
+      map['s3'] = s3!.toMap();
     }
 
     if (ai != null) {
@@ -58,6 +64,10 @@ class AppConfig {
       webdav: yaml.containsKey('webdav')
           ? WebdavConfig.fromMap(
               Map<String, dynamic>.from(yaml['webdav'] as Map))
+          : null,
+      s3: yaml.containsKey('s3')
+          ? S3Config.fromMap(
+              Map<String, dynamic>.from(yaml['s3'] as Map))
           : null,
       ai: yaml.containsKey('ai')
           ? AIConfig.fromMap(Map<String, dynamic>.from(yaml['ai'] as Map))
@@ -126,6 +136,54 @@ class WebdavConfig {
         username: map['username'] as String,
         password: map['password'] as String,
         remotePath: map['remote_path'] as String?,
+      );
+}
+
+/// S3配置
+class S3Config {
+  final String endpoint;
+  final String region;
+  final String accessKey;
+  final String secretKey;
+  final String bucket;
+  final bool? useSSL;
+  final int? port;
+
+  const S3Config({
+    required this.endpoint,
+    required this.region,
+    required this.accessKey,
+    required this.secretKey,
+    required this.bucket,
+    this.useSSL,
+    this.port,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'endpoint': endpoint,
+      'region': region,
+      'access_key': accessKey,
+      'secret_key': secretKey,
+      'bucket': bucket,
+    };
+    if (useSSL != null) {
+      map['use_ssl'] = useSSL;
+    }
+    if (port != null) {
+      map['port'] = port;
+    }
+    return map;
+  }
+
+  static S3Config fromMap(Map<String, dynamic> map) => S3Config(
+        endpoint: map['endpoint'] as String,
+        region: map['region'] as String,
+        accessKey: map['access_key'] as String,
+        secretKey: map['secret_key'] as String,
+        bucket: map['bucket'] as String,
+        useSSL: map['use_ssl'] as bool?,
+        port: map['port'] as int?,
       );
 }
 
@@ -471,6 +529,32 @@ class ConfigExportService {
       }
     }
 
+    // 读取S3配置
+    S3Config? s3Config;
+    final s3CfgRaw = prefs.getString('cloud_s3_cfg');
+    if (s3CfgRaw != null) {
+      try {
+        final cfg = decodeCloudConfig(s3CfgRaw);
+        if (cfg.s3Endpoint != null &&
+            cfg.s3Region != null &&
+            cfg.s3AccessKey != null &&
+            cfg.s3SecretKey != null &&
+            cfg.s3Bucket != null) {
+          s3Config = S3Config(
+            endpoint: cfg.s3Endpoint!,
+            region: cfg.s3Region!,
+            accessKey: cfg.s3AccessKey!,
+            secretKey: cfg.s3SecretKey!,
+            bucket: cfg.s3Bucket!,
+            useSSL: cfg.s3UseSSL,
+            port: cfg.s3Port,
+          );
+        }
+      } catch (e) {
+        logger.warning('ConfigExport', '读取S3配置失败: $e');
+      }
+    }
+
     // 读取AI配置
     AIConfig? aiConfig;
     final glmApiKey = prefs.getString('ai_glm_api_key');
@@ -572,6 +656,7 @@ class ConfigExportService {
     final config = AppConfig(
       supabase: supabaseConfig,
       webdav: webdavConfig,
+      s3: s3Config,
       ai: aiConfig,
       appSettings: appSettings,
       recurringTransactions: recurringConfig,
@@ -602,6 +687,23 @@ class ConfigExportService {
       buffer.writeln('  password: "${wd['password']}"');
       if (wd.containsKey('remote_path')) {
         buffer.writeln('  remote_path: "${wd['remote_path']}"');
+      }
+      buffer.writeln();
+    }
+
+    if (yamlMap.containsKey('s3')) {
+      buffer.writeln('s3:');
+      final s3 = yamlMap['s3'] as Map<String, dynamic>;
+      buffer.writeln('  endpoint: "${s3['endpoint']}"');
+      buffer.writeln('  region: "${s3['region']}"');
+      buffer.writeln('  access_key: "${s3['access_key']}"');
+      buffer.writeln('  secret_key: "${s3['secret_key']}"');
+      buffer.writeln('  bucket: "${s3['bucket']}"');
+      if (s3.containsKey('use_ssl')) {
+        buffer.writeln('  use_ssl: ${s3['use_ssl']}');
+      }
+      if (s3.containsKey('port')) {
+        buffer.writeln('  port: ${s3['port']}');
       }
       buffer.writeln();
     }
@@ -815,6 +917,23 @@ class ConfigExportService {
       );
       await prefs.setString('cloud_webdav_cfg', encodeCloudConfig(webdavCfg));
       logger.info('ConfigImport', 'WebDAV配置已导入');
+    }
+
+    // 导入S3配置
+    if (config.s3 != null) {
+      final s3Cfg = CloudServiceConfig(
+        type: CloudBackendType.s3,
+        name: 'S3',
+        s3Endpoint: config.s3!.endpoint,
+        s3Region: config.s3!.region,
+        s3AccessKey: config.s3!.accessKey,
+        s3SecretKey: config.s3!.secretKey,
+        s3Bucket: config.s3!.bucket,
+        s3UseSSL: config.s3!.useSSL,
+        s3Port: config.s3!.port,
+      );
+      await prefs.setString('cloud_s3_cfg', encodeCloudConfig(s3Cfg));
+      logger.info('ConfigImport', 'S3配置已导入');
     }
 
     // 导入AI配置

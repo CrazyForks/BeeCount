@@ -82,10 +82,10 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                 final cloudConfig = ref.watch(activeCloudConfigProvider);
                 final isLocalMode = cloudConfig.hasValue &&
                     cloudConfig.value!.type == CloudBackendType.local;
-                final isICloudMode = cloudConfig.hasValue &&
-                    cloudConfig.value!.type == CloudBackendType.icloud;
-                // iCloud 使用系统账号，不需要登录；其他云服务需要登录
-                final canUseCloud = !isLocalMode && (isICloudMode || user != null);
+                final isSupabaseMode = cloudConfig.hasValue &&
+                    cloudConfig.value!.type == CloudBackendType.supabase;
+                // 只有 Supabase 需要登录，其他云服务（iCloud/S3/WebDAV）使用配置文件认证
+                final canUseCloud = !isLocalMode && (!isSupabaseMode || user != null);
                 final asyncSt = ref.watch(syncStatusProvider(ledgerId));
                 final cached = ref.watch(lastSyncStatusProvider(ledgerId));
                 final st = asyncSt.asData?.value ?? cached;
@@ -408,8 +408,8 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                               }
                             },
                           ),
-                          // 登录/登出 (仅 Supabase/WebDAV 模式，iCloud 使用系统账号)
-                          if (!isLocalMode && cloudConfig.value!.type != CloudBackendType.icloud)
+                          // 登录/登出 (仅 Supabase 需要，其他云服务使用配置文件认证)
+                          if (!isLocalMode && cloudConfig.value!.type == CloudBackendType.supabase)
                             Consumer(builder: (ctx, r, _) {
                               final userNow = user;
                               final cloudConfig = r.watch(activeCloudConfigProvider);

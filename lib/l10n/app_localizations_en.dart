@@ -1857,6 +1857,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudWebdavPathHint => '/BeeCount';
 
   @override
+  String get cloudS3EndpointLabel => 'Endpoint';
+
+  @override
+  String get cloudS3EndpointHint => 's3.amazonaws.com or custom endpoint';
+
+  @override
+  String get cloudS3RegionLabel => 'Region';
+
+  @override
+  String get cloudS3RegionHint => 'us-east-1 (leave blank for auto)';
+
+  @override
+  String get cloudS3AccessKeyLabel => 'Access Key';
+
+  @override
+  String get cloudS3AccessKeyHint => 'Your Access Key ID';
+
+  @override
+  String get cloudS3SecretKeyLabel => 'Secret Key';
+
+  @override
+  String get cloudS3SecretKeyHint => 'Your Secret Access Key';
+
+  @override
+  String get cloudS3BucketLabel => 'Bucket Name';
+
+  @override
+  String get cloudS3BucketHint => 'beecount-data';
+
+  @override
+  String get cloudS3UseSSLLabel => 'Use HTTPS';
+
+  @override
+  String get cloudS3PortLabel => 'Port (optional)';
+
+  @override
+  String get cloudS3PortHint => 'Leave blank for default';
+
+  @override
   String get cloudConfigSaved => 'Configuration saved';
 
   @override
@@ -2587,6 +2626,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudCustomWebdavSubtitle => 'Click to configure Nutstore/Nextcloud etc.';
 
   @override
+  String get cloudCustomS3Title => 'S3 Protocol Storage';
+
+  @override
+  String get cloudCustomS3Subtitle => 'AWS S3 / Cloudflare R2 / MinIO';
+
+  @override
   String get cloudIcloudSubtitle => 'Auto sync with Apple ID';
 
   @override
@@ -2746,6 +2791,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudWebdavHelpNote => 'Use an app-specific password instead of your account password';
 
   @override
+  String get cloudS3HelpTitle => 'S3 Storage Setup Guide';
+
+  @override
+  String get cloudS3HelpIntro => 'What is S3';
+
+  @override
+  String get cloudS3HelpIntro1 => 'S3 is a standard object storage protocol';
+
+  @override
+  String get cloudS3HelpIntro2 => 'Supported by many cloud providers';
+
+  @override
+  String get cloudS3HelpIntro3 => 'Data is stored on your chosen cloud service';
+
+  @override
+  String get cloudS3HelpProviders => 'Supported Providers';
+
+  @override
+  String get cloudS3HelpProvider1 => '- AWS S3 (Amazon Web Services)';
+
+  @override
+  String get cloudS3HelpProvider2 => '- Cloudflare R2 (free 10GB/month)';
+
+  @override
+  String get cloudS3HelpProvider3 => '- Backblaze B2 (free 10GB)';
+
+  @override
+  String get cloudS3HelpProvider4 => '- MinIO (self-hosted)';
+
+  @override
+  String get cloudS3HelpProvider5 => '- Alibaba Cloud OSS';
+
+  @override
+  String get cloudS3HelpProvider6 => '- Tencent Cloud COS';
+
+  @override
+  String get cloudS3HelpProvider7 => '- Qiniu Kodo';
+
+  @override
+  String get cloudS3HelpSteps => 'Setup Steps (Cloudflare R2 example)';
+
+  @override
+  String get cloudS3HelpStep1 => '1. Login to Cloudflare Dashboard';
+
+  @override
+  String get cloudS3HelpStep2 => '2. Go to R2 > Create Bucket';
+
+  @override
+  String get cloudS3HelpStep3 => '3. Go to R2 > Manage R2 API Tokens';
+
+  @override
+  String get cloudS3HelpStep4 => '4. Create API Token and copy credentials';
+
+  @override
+  String get cloudS3HelpStep5 => '5. Paste endpoint, access key, secret key, and bucket name';
+
+  @override
+  String get cloudS3HelpNote => 'Recommended: Cloudflare R2 offers 10GB free storage without egress fees';
+
+  @override
   String get cloudStatusNotTested => 'Not tested';
 
   @override
@@ -2830,6 +2935,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudConfigureWebdavTitle => 'Configure WebDAV';
+
+  @override
+  String get cloudConfigureS3Title => 'Configure S3';
 
   @override
   String get cloudSupabaseAnonKeyHintLong => 'Paste complete anon key';
@@ -2975,7 +3083,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeCloudSyncFeature2 => 'iCloud sync (zero config for iOS users)';
 
   @override
-  String get welcomeCloudSyncFeature3 => 'Self-hosted WebDAV/Supabase service';
+  String get welcomeCloudSyncFeature3 => 'Self-hosted WebDAV/Supabase/S3 service';
 
   @override
   String get widgetManagement => 'Home Screen Widget';
@@ -3500,6 +3608,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get configIncludeWebdav => 'WebDAV cloud service config';
+
+  @override
+  String get configIncludeS3 => 'S3 cloud service config';
 
   @override
   String get configIncludeAI => 'AI smart recognition config';

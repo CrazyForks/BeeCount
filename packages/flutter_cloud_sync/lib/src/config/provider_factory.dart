@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_cloud_sync_supabase/flutter_cloud_sync_supabase.dart';
 import 'package:flutter_cloud_sync_webdav/flutter_cloud_sync_webdav.dart';
 import 'package:flutter_cloud_sync_icloud/flutter_cloud_sync_icloud.dart';
+import 'package:flutter_cloud_sync_s3/flutter_cloud_sync_s3.dart';
 
 import '../core/auth_service.dart';
 import '../core/cloud_provider.dart';
@@ -72,6 +73,23 @@ Future<({CloudProvider? provider, CloudAuthService? auth})> createCloudServices(
         // iCloud 不可用（未登录等），返回 null
         return (provider: null, auth: null);
       }
+
+    case CloudBackendType.s3:
+      // S3 初始化 - 不捕获异常，让错误向上传递以便调试
+      final provider = S3Provider();
+      await provider.initialize({
+        'endpoint': config.s3Endpoint!,
+        'region': config.s3Region ?? 'us-east-1',
+        'accessKey': config.s3AccessKey!,
+        'secretKey': config.s3SecretKey!,
+        'bucket': config.s3Bucket!,
+        'useSSL': config.s3UseSSL ?? true,
+        'port': config.s3Port,
+      });
+
+      final auth = provider.auth;
+
+      return (provider: provider, auth: auth);
   }
 }
 
