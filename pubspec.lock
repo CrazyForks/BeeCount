@@ -425,6 +425,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  flutter_cloud_sync_s3:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_cloud_sync_s3"
+      relative: true
+    source: path
+    version: "0.1.0"
   flutter_cloud_sync_supabase:
     dependency: "direct main"
     description:

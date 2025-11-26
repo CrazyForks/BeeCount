@@ -18,7 +18,6 @@ import '../../services/logger_service.dart';
 import '../../services/avatar_service.dart';
 import '../../services/share_poster_service.dart';
 import '../../l10n/app_localizations.dart';
-import '../settings/font_settings_page.dart';
 import '../category/category_manage_page.dart';
 import '../category/category_migration_page.dart';
 import '../transaction/recurring_transaction_page.dart';
@@ -101,6 +100,8 @@ class MinePage extends ConsumerWidget {
                                 case CloudBackendType.supabase:
                                   return AppLocalizations.of(sectionContext)
                                       .mineCloudServiceCustom;
+                                case CloudBackendType.s3:
+                                  return 'S3';
                               }
                             },
                           ),
@@ -396,42 +397,17 @@ class MinePage extends ConsumerWidget {
                         },
                       ),
                       BeeTokens.cardDivider(context),
+                      // 分享海报
                       AppListTile(
-                        leading: Icons.share_outlined,
+                        leading: Icons.ios_share_rounded,
                         title: AppLocalizations.of(context).mineShareApp,
-                        subtitle:
-                            AppLocalizations.of(context).mineShareAppSubtitle,
-                        onTap: () async {
-                          try {
-                            showToast(
-                                context,
-                                AppLocalizations.of(context)
-                                    .mineShareGenerating);
-                            final primaryColor = ref.read(primaryColorProvider);
-                            final imageBytes =
-                                await SharePosterService.generatePoster(
-                                    context, primaryColor);
-                            if (!context.mounted) return;
-                            if (imageBytes != null) {
-                              await SharePosterService.showPosterPreview(
-                                  context, imageBytes);
-                            } else {
-                              await AppDialog.error(
-                                context,
-                                title:
-                                    AppLocalizations.of(context).commonFailed,
-                                message: AppLocalizations.of(context)
-                                    .mineShareFailed,
-                              );
-                            }
-                          } catch (e) {
-                            if (!context.mounted) return;
-                            await AppDialog.error(
-                              context,
-                              title: AppLocalizations.of(context).commonFailed,
-                              message: '$e',
-                            );
-                          }
+                        subtitle: AppLocalizations.of(context).mineShareWithFriends,
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context),
+                            size: 20),
+                        onTap: () {
+                          // 打开海报轮播预览对话框（支持年度、月度、总览3种海报）
+                          SharePosterService.showPosterCarouselPreview(context);
                         },
                       ),
                       // 只在iOS上显示评分入口（Android还未上架）
@@ -812,11 +788,13 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
         12.0.scaled(context, ref),
         10.0.scaled(context, ref),
       ),
-      child: Column(
+      child: Stack(
         children: [
-          // 头像/Logo
-          GestureDetector(
-            onTap: canEditAvatar ? _showAvatarOptions : null,
+          Column(
+            children: [
+              // 头像/Logo
+              GestureDetector(
+                onTap: canEditAvatar ? _showAvatarOptions : null,
             child: Stack(
               children: [
                 Container(
@@ -936,8 +914,10 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
                   centered: true,
                 ),
               ),
-            ],
-          ),
+              ],
+            ),
+          ],
+        ),
         ],
       ),
     );

@@ -872,6 +872,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineShareAppSubtitle => '生成分享海报并保存到相册';
 
   @override
+  String get mineShareWithFriends => '和好友分享蜜蜂记账';
+
+  @override
   String get mineShareGenerating => '正在生成分享海报...';
 
   @override
@@ -884,22 +887,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterSlogan => '一笔一蜜，记录美好生活';
 
   @override
-  String get sharePosterFeature1 => '✨ 完全开源免费';
+  String get sharePosterFeature1 => '🔒 数据安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '🤖 AI智能识别账单';
+  String get sharePosterFeature2 => '✨ 完全开源·可审计';
 
   @override
-  String get sharePosterFeature3 => '⚡ 自动化记账';
+  String get sharePosterFeature3 => '🤖 AI智能记账·图片语音';
 
   @override
-  String get sharePosterFeature4 => '🔒 数据隐私安全';
+  String get sharePosterFeature4 => '📸 拍照记账·自动识别';
 
   @override
-  String get sharePosterFeature5 => '☁️ 云端同步备份';
+  String get sharePosterFeature5 => '📊 多账本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '📊 多账本管理';
+  String get sharePosterFeature6 => '☁️ 自建云同步·永久免费';
 
   @override
   String get sharePosterScanText => '扫码访问开源项目';
@@ -918,6 +921,122 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterPermissionDenied => '相册权限被拒绝，请在设置中开启';
+
+  @override
+  String get sharePosterYearSummary => '年度总结';
+
+  @override
+  String get sharePosterYearSummaryDesc => '分享你的年度记账成就';
+
+  @override
+  String get sharePosterMonthSummary => '月度总结';
+
+  @override
+  String get sharePosterMonthSummaryDesc => '分享你的月度财务报告';
+
+  @override
+  String get sharePosterAppPromo => '分享应用';
+
+  @override
+  String get sharePosterAppPromoDesc => '推荐蜜蜂记账给好友';
+
+  @override
+  String get sharePosterSelectTitle => '选择分享海报';
+
+  @override
+  String get sharePosterSwipeHint => '左右滑动切换海报样式';
+
+  @override
+  String get sharePosterGenerating => '生成中...';
+
+  @override
+  String sharePosterGenerateButton(String type) {
+    return '生成$type';
+  }
+
+  @override
+  String get sharePosterGenerateFailed => '生成海报失败，请重试';
+
+  @override
+  String get sharePosterNoLedger => '请先选择一个账本';
+
+  @override
+  String get sharePosterYearTitle => '我的记账年度报告';
+
+  @override
+  String get sharePosterYearSubtitle => '用数据记录生活 用理性规划未来';
+
+  @override
+  String get sharePosterMonthTitle => '月度账单报告';
+
+  @override
+  String get sharePosterMonthSubtitle => '精打细算 理性消费';
+
+  @override
+  String get sharePosterLedgerTitle => '账本统计报告';
+
+  @override
+  String get sharePosterRecordDays => '记账天数';
+
+  @override
+  String get sharePosterRecordCount => '记账笔数';
+
+  @override
+  String get sharePosterTotalExpense => '总支出';
+
+  @override
+  String get sharePosterTotalIncome => '总收入';
+
+  @override
+  String get sharePosterYearBalance => '年度结余';
+
+  @override
+  String get sharePosterYearDeficit => '年度赤字';
+
+  @override
+  String get sharePosterMonthBalance => '月度结余';
+
+  @override
+  String get sharePosterBalance => '总结余';
+
+  @override
+  String get sharePosterAvgMonthlyExpense => '月均支出';
+
+  @override
+  String get sharePosterAvgMonthlyIncome => '月均收入';
+
+  @override
+  String get sharePosterAvgDailyExpense => '日均支出';
+
+  @override
+  String get sharePosterMaxExpenseMonth => '支出最高月份';
+
+  @override
+  String get sharePosterTopExpense => 'TOP 3 支出';
+
+  @override
+  String get sharePosterCompareLastMonth => '环比上月';
+
+  @override
+  String get sharePosterIncreaseRate => '较上月增长';
+
+  @override
+  String get sharePosterDecreaseRate => '较上月减少';
+
+  @override
+  String get sharePosterLedgerName => '账本名称';
+
+  @override
+  String get sharePosterScanMore => '扫码了解更多';
+
+  @override
+  String get sharePosterUnitDay => '天';
+
+  @override
+  String get sharePosterUnitCount => '笔';
+
+  @override
+  String get sharePosterUnitYuan => '元';
 
   @override
   String get mineDaysCount => '记账天数';
@@ -982,6 +1101,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineSyncError => '状态获取失败';
+
+  @override
+  String get mineSyncCloudUnavailable => '云服务不可用，请检查配置或登录状态';
 
   @override
   String get mineSyncDetailTitle => '同步状态详情';
@@ -1622,6 +1744,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reminderDailySubtitle => '开启后将在指定时间提醒您记账';
 
   @override
+  String get reminderDailyBody => '别忘了记录今天的收支哦 💰';
+
+  @override
+  String get reminderChannelName => '记账提醒';
+
+  @override
+  String get reminderChannelDescription => '每日记账提醒';
+
+  @override
   String get reminderTimeTitle => '提醒时间';
 
   @override
@@ -1855,6 +1986,57 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudS3EndpointLabel => '端点地址';
+
+  @override
+  String get cloudS3EndpointHint => 's3.amazonaws.com 或自定义端点';
+
+  @override
+  String get cloudS3RegionLabel => '区域';
+
+  @override
+  String get cloudS3RegionHint => 'us-east-1（留空自动）';
+
+  @override
+  String get cloudS3AccessKeyLabel => 'Access Key';
+
+  @override
+  String get cloudS3AccessKeyHint => '您的 Access Key ID';
+
+  @override
+  String get cloudS3SecretKeyLabel => 'Secret Key';
+
+  @override
+  String get cloudS3SecretKeyHint => '您的 Secret Access Key';
+
+  @override
+  String get cloudS3BucketLabel => '存储桶名称';
+
+  @override
+  String get cloudS3BucketHint => 'beecount-data';
+
+  @override
+  String get cloudS3UseSSLLabel => '使用 HTTPS';
+
+  @override
+  String get cloudS3PortLabel => '端口（可选）';
+
+  @override
+  String get cloudS3PortHint => '留空使用默认端口';
+
+  @override
+  String get cloudSupabaseBucketLabel => 'Storage Bucket 名称';
+
+  @override
+  String get cloudSupabaseBucketHint => '留空使用默认值 beecount-backups';
+
+  @override
+  String get authRememberAccount => '记住账号密码';
+
+  @override
+  String get authRememberAccountHint => '下次登录时自动填充（仅Supabase）';
 
   @override
   String get cloudConfigSaved => '配置已保存';
@@ -2587,6 +2769,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudCustomWebdavSubtitle => '点击配置坚果云/Nextcloud等';
 
   @override
+  String get cloudCustomS3Title => 'S3 协议存储';
+
+  @override
+  String get cloudCustomS3Subtitle => 'AWS S3 / Cloudflare R2 / MinIO';
+
+  @override
   String get cloudIcloudSubtitle => '使用 Apple ID 自动同步';
 
   @override
@@ -2746,6 +2934,66 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudWebdavHelpNote => '建议使用应用专用密码，而非账号密码';
 
   @override
+  String get cloudS3HelpTitle => 'S3 存储配置说明';
+
+  @override
+  String get cloudS3HelpIntro => '什么是 S3';
+
+  @override
+  String get cloudS3HelpIntro1 => 'S3 是一种标准的对象存储协议';
+
+  @override
+  String get cloudS3HelpIntro2 => '支持多家云服务商';
+
+  @override
+  String get cloudS3HelpIntro3 => '数据存储在您选择的云服务中';
+
+  @override
+  String get cloudS3HelpProviders => '支持的服务商';
+
+  @override
+  String get cloudS3HelpProvider1 => '• AWS S3（Amazon Web Services）';
+
+  @override
+  String get cloudS3HelpProvider2 => '• Cloudflare R2（免费 10GB/月）';
+
+  @override
+  String get cloudS3HelpProvider3 => '• Backblaze B2（免费 10GB）';
+
+  @override
+  String get cloudS3HelpProvider4 => '• MinIO（自建服务）';
+
+  @override
+  String get cloudS3HelpProvider5 => '• 阿里云 OSS';
+
+  @override
+  String get cloudS3HelpProvider6 => '• 腾讯云 COS';
+
+  @override
+  String get cloudS3HelpProvider7 => '• 七牛云 Kodo';
+
+  @override
+  String get cloudS3HelpSteps => '配置步骤（以 Cloudflare R2 为例）';
+
+  @override
+  String get cloudS3HelpStep1 => '1. 登录 Cloudflare 控制台';
+
+  @override
+  String get cloudS3HelpStep2 => '2. 进入 R2 > 创建存储桶';
+
+  @override
+  String get cloudS3HelpStep3 => '3. 进入 R2 > 管理 R2 API 令牌';
+
+  @override
+  String get cloudS3HelpStep4 => '4. 创建 API 令牌并复制凭据';
+
+  @override
+  String get cloudS3HelpStep5 => '5. 粘贴端点、访问密钥、私密密钥和存储桶名称';
+
+  @override
+  String get cloudS3HelpNote => '推荐使用 Cloudflare R2，提供 10GB 免费存储且无流量费';
+
+  @override
   String get cloudStatusNotTested => '未测试';
 
   @override
@@ -2830,6 +3078,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudConfigureWebdavTitle => '配置 WebDAV';
+
+  @override
+  String get cloudConfigureS3Title => '配置 S3';
 
   @override
   String get cloudSupabaseAnonKeyHintLong => '粘贴完整的 anon key';
@@ -2975,7 +3226,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeCloudSyncFeature2 => 'iCloud 同步（iOS 用户零配置）';
 
   @override
-  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase 服务';
+  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase/S3 服务';
 
   @override
   String get widgetManagement => '桌面小组件';
@@ -3500,6 +3751,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get configIncludeWebdav => 'WebDAV 云服务配置';
+
+  @override
+  String get configIncludeS3 => 'S3 云服务配置';
 
   @override
   String get configIncludeAI => 'AI 智能识别配置';
@@ -4579,6 +4833,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineShareAppSubtitle => '生成分享海報並儲存到相簿';
 
   @override
+  String get mineShareWithFriends => '和好友分享蜜蜂記帳';
+
+  @override
   String get mineShareGenerating => '正在生成分享海報...';
 
   @override
@@ -4591,22 +4848,22 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterSlogan => '一筆一蜜，記錄美好生活';
 
   @override
-  String get sharePosterFeature1 => '✨ 完全開源免費';
+  String get sharePosterFeature1 => '🔒 資料安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '🤖 AI智能識別帳單';
+  String get sharePosterFeature2 => '✨ 完全開源·可審計';
 
   @override
-  String get sharePosterFeature3 => '⚡ 自動化記帳';
+  String get sharePosterFeature3 => '🤖 AI智能記帳·圖片語音';
 
   @override
-  String get sharePosterFeature4 => '🔒 資料隱私安全';
+  String get sharePosterFeature4 => '📸 拍照記帳·自動識別';
 
   @override
-  String get sharePosterFeature5 => '☁️ 雲端同步備份';
+  String get sharePosterFeature5 => '📊 多帳本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '📊 多帳本管理';
+  String get sharePosterFeature6 => '☁️ 自建雲同步·永久免費';
 
   @override
   String get sharePosterScanText => '掃碼訪問開源專案';
@@ -4625,6 +4882,122 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterPermissionDenied => '相簿權限被拒絕，請在設定中開啟';
+
+  @override
+  String get sharePosterYearSummary => '年度總結';
+
+  @override
+  String get sharePosterYearSummaryDesc => '分享你的年度記帳成就';
+
+  @override
+  String get sharePosterMonthSummary => '月度總結';
+
+  @override
+  String get sharePosterMonthSummaryDesc => '分享你的月度財務報告';
+
+  @override
+  String get sharePosterAppPromo => '分享應用';
+
+  @override
+  String get sharePosterAppPromoDesc => '推薦蜜蜂記帳給好友';
+
+  @override
+  String get sharePosterSelectTitle => '選擇分享海報';
+
+  @override
+  String get sharePosterSwipeHint => '左右滑動切換海報樣式';
+
+  @override
+  String get sharePosterGenerating => '生成中...';
+
+  @override
+  String sharePosterGenerateButton(String type) {
+    return '生成$type';
+  }
+
+  @override
+  String get sharePosterGenerateFailed => '生成海報失敗，請重試';
+
+  @override
+  String get sharePosterNoLedger => '請先選擇一個帳本';
+
+  @override
+  String get sharePosterYearTitle => '我的記帳年度報告';
+
+  @override
+  String get sharePosterYearSubtitle => '用數據記錄生活 用理性規劃未來';
+
+  @override
+  String get sharePosterMonthTitle => '月度帳單報告';
+
+  @override
+  String get sharePosterMonthSubtitle => '精打細算 理性消費';
+
+  @override
+  String get sharePosterLedgerTitle => '帳本統計報告';
+
+  @override
+  String get sharePosterRecordDays => '記帳天數';
+
+  @override
+  String get sharePosterRecordCount => '記帳筆數';
+
+  @override
+  String get sharePosterTotalExpense => '總支出';
+
+  @override
+  String get sharePosterTotalIncome => '總收入';
+
+  @override
+  String get sharePosterYearBalance => '年度結餘';
+
+  @override
+  String get sharePosterYearDeficit => '年度赤字';
+
+  @override
+  String get sharePosterMonthBalance => '月度結餘';
+
+  @override
+  String get sharePosterBalance => '總結餘';
+
+  @override
+  String get sharePosterAvgMonthlyExpense => '月均支出';
+
+  @override
+  String get sharePosterAvgMonthlyIncome => '月均收入';
+
+  @override
+  String get sharePosterAvgDailyExpense => '日均支出';
+
+  @override
+  String get sharePosterMaxExpenseMonth => '支出最高月份';
+
+  @override
+  String get sharePosterTopExpense => 'TOP 3 支出';
+
+  @override
+  String get sharePosterCompareLastMonth => '環比上月';
+
+  @override
+  String get sharePosterIncreaseRate => '較上月增長';
+
+  @override
+  String get sharePosterDecreaseRate => '較上月減少';
+
+  @override
+  String get sharePosterLedgerName => '帳本名稱';
+
+  @override
+  String get sharePosterScanMore => '掃碼瞭解更多';
+
+  @override
+  String get sharePosterUnitDay => '天';
+
+  @override
+  String get sharePosterUnitCount => '筆';
+
+  @override
+  String get sharePosterUnitYuan => '元';
 
   @override
   String get mineDaysCount => '記帳天數';
@@ -4689,6 +5062,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineSyncError => '狀態取得失敗';
+
+  @override
+  String get mineSyncCloudUnavailable => '雲端服務不可用，請檢查配置或登入狀態';
 
   @override
   String get mineSyncDetailTitle => '同步狀態詳情';
@@ -5329,6 +5705,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get reminderDailySubtitle => '開啟後將在指定時間提醒您記帳';
 
   @override
+  String get reminderDailyBody => '別忘了記錄今天的收支哦 💰';
+
+  @override
+  String get reminderChannelName => '記帳提醒';
+
+  @override
+  String get reminderChannelDescription => '每日記帳提醒';
+
+  @override
   String get reminderTimeTitle => '提醒時間';
 
   @override
@@ -5562,6 +5947,57 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudS3EndpointLabel => '端點地址';
+
+  @override
+  String get cloudS3EndpointHint => 's3.amazonaws.com 或自訂端點';
+
+  @override
+  String get cloudS3RegionLabel => '區域';
+
+  @override
+  String get cloudS3RegionHint => 'us-east-1（留空自動）';
+
+  @override
+  String get cloudS3AccessKeyLabel => 'Access Key';
+
+  @override
+  String get cloudS3AccessKeyHint => '您的 Access Key ID';
+
+  @override
+  String get cloudS3SecretKeyLabel => 'Secret Key';
+
+  @override
+  String get cloudS3SecretKeyHint => '您的 Secret Access Key';
+
+  @override
+  String get cloudS3BucketLabel => '儲存桶名稱';
+
+  @override
+  String get cloudS3BucketHint => 'beecount-data';
+
+  @override
+  String get cloudS3UseSSLLabel => '使用 HTTPS';
+
+  @override
+  String get cloudS3PortLabel => '連接埠（選填）';
+
+  @override
+  String get cloudS3PortHint => '留空使用預設連接埠';
+
+  @override
+  String get cloudSupabaseBucketLabel => 'Storage Bucket 名稱';
+
+  @override
+  String get cloudSupabaseBucketHint => '留空使用預設值 beecount-backups';
+
+  @override
+  String get authRememberAccount => '記住帳號密碼';
+
+  @override
+  String get authRememberAccountHint => '下次登入時自動填入（僅Supabase）';
 
   @override
   String get cloudConfigSaved => '設定已儲存';
@@ -6294,6 +6730,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudCustomWebdavSubtitle => '點擊設定堅果雲/Nextcloud等';
 
   @override
+  String get cloudCustomS3Title => 'S3 協議儲存';
+
+  @override
+  String get cloudCustomS3Subtitle => 'AWS S3 / Cloudflare R2 / MinIO';
+
+  @override
   String get cloudIcloudSubtitle => '使用 Apple ID 自動同步';
 
   @override
@@ -6453,6 +6895,66 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudWebdavHelpNote => '建議使用應用程式專用密碼，而非帳號密碼';
 
   @override
+  String get cloudS3HelpTitle => 'S3 儲存設定說明';
+
+  @override
+  String get cloudS3HelpIntro => '什麼是 S3';
+
+  @override
+  String get cloudS3HelpIntro1 => 'S3 是一種標準的物件儲存通訊協定';
+
+  @override
+  String get cloudS3HelpIntro2 => '支援多家雲端服務商';
+
+  @override
+  String get cloudS3HelpIntro3 => '資料儲存在您選擇的雲端服務中';
+
+  @override
+  String get cloudS3HelpProviders => '支援的服務商';
+
+  @override
+  String get cloudS3HelpProvider1 => '• AWS S3（Amazon Web Services）';
+
+  @override
+  String get cloudS3HelpProvider2 => '• Cloudflare R2（免費 10GB/月）';
+
+  @override
+  String get cloudS3HelpProvider3 => '• Backblaze B2（免費 10GB）';
+
+  @override
+  String get cloudS3HelpProvider4 => '• MinIO（自建服務）';
+
+  @override
+  String get cloudS3HelpProvider5 => '• 阿里雲 OSS';
+
+  @override
+  String get cloudS3HelpProvider6 => '• 騰訊雲 COS';
+
+  @override
+  String get cloudS3HelpProvider7 => '• 七牛雲 Kodo';
+
+  @override
+  String get cloudS3HelpSteps => '設定步驟（以 Cloudflare R2 為例）';
+
+  @override
+  String get cloudS3HelpStep1 => '1. 登入 Cloudflare 控制台';
+
+  @override
+  String get cloudS3HelpStep2 => '2. 進入 R2 > 建立儲存桶';
+
+  @override
+  String get cloudS3HelpStep3 => '3. 進入 R2 > 管理 R2 API 令牌';
+
+  @override
+  String get cloudS3HelpStep4 => '4. 建立 API 令牌並複製憑據';
+
+  @override
+  String get cloudS3HelpStep5 => '5. 貼上端點、存取金鑰、私密金鑰和儲存桶名稱';
+
+  @override
+  String get cloudS3HelpNote => '推薦使用 Cloudflare R2，提供 10GB 免費儲存且無流量費';
+
+  @override
   String get cloudStatusNotTested => '未測試';
 
   @override
@@ -6537,6 +7039,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudConfigureWebdavTitle => '設定 WebDAV';
+
+  @override
+  String get cloudConfigureS3Title => '設定 S3';
 
   @override
   String get cloudSupabaseAnonKeyHintLong => '貼上完整的 anon key';
@@ -6682,7 +7187,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get welcomeCloudSyncFeature2 => 'iCloud 同步（iOS 用戶零配置）';
 
   @override
-  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase 服務';
+  String get welcomeCloudSyncFeature3 => '自建 WebDAV/Supabase/S3 服務';
 
   @override
   String get widgetManagement => '桌面小組件';
@@ -7207,6 +7712,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get configIncludeWebdav => 'WebDAV 雲端服務配置';
+
+  @override
+  String get configIncludeS3 => 'S3 雲端服務配置';
 
   @override
   String get configIncludeAI => 'AI 智慧識別配置';

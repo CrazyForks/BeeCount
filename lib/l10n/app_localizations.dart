@@ -1674,6 +1674,12 @@ abstract class AppLocalizations {
   /// **'Generate share poster and save to gallery'**
   String get mineShareAppSubtitle;
 
+  /// No description provided for @mineShareWithFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Share BeeCount with friends'**
+  String get mineShareWithFriends;
+
   /// No description provided for @mineShareGenerating.
   ///
   /// In en, this message translates to:
@@ -1701,37 +1707,37 @@ abstract class AppLocalizations {
   /// No description provided for @sharePosterFeature1.
   ///
   /// In en, this message translates to:
-  /// **'✨ Completely Open Source & Free'**
+  /// **'🔒 Data Security·You Control'**
   String get sharePosterFeature1;
 
   /// No description provided for @sharePosterFeature2.
   ///
   /// In en, this message translates to:
-  /// **'🤖 AI Smart Bill Recognition'**
+  /// **'✨ Open Source·Auditable'**
   String get sharePosterFeature2;
 
   /// No description provided for @sharePosterFeature3.
   ///
   /// In en, this message translates to:
-  /// **'⚡ Automated Accounting'**
+  /// **'🤖 AI Smart·Photo & Voice'**
   String get sharePosterFeature3;
 
   /// No description provided for @sharePosterFeature4.
   ///
   /// In en, this message translates to:
-  /// **'🔒 Privacy & Security'**
+  /// **'📸 Photo Accounting·Auto Recognition'**
   String get sharePosterFeature4;
 
   /// No description provided for @sharePosterFeature5.
   ///
   /// In en, this message translates to:
-  /// **'☁️ Cloud Sync & Backup'**
+  /// **'📊 Multi Ledger·Dark Mode'**
   String get sharePosterFeature5;
 
   /// No description provided for @sharePosterFeature6.
   ///
   /// In en, this message translates to:
-  /// **'📊 Multiple Ledgers'**
+  /// **'☁️ Self-Hosted Cloud·Free Forever'**
   String get sharePosterFeature6;
 
   /// No description provided for @sharePosterScanText.
@@ -1769,6 +1775,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gallery permission denied, please enable in settings'**
   String get sharePosterPermissionDenied;
+
+  /// No description provided for @sharePosterYearSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Year Summary'**
+  String get sharePosterYearSummary;
+
+  /// No description provided for @sharePosterYearSummaryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your annual bookkeeping achievements'**
+  String get sharePosterYearSummaryDesc;
+
+  /// No description provided for @sharePosterMonthSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Month Summary'**
+  String get sharePosterMonthSummary;
+
+  /// No description provided for @sharePosterMonthSummaryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your monthly financial report'**
+  String get sharePosterMonthSummaryDesc;
+
+  /// No description provided for @sharePosterAppPromo.
+  ///
+  /// In en, this message translates to:
+  /// **'Share App'**
+  String get sharePosterAppPromo;
+
+  /// No description provided for @sharePosterAppPromoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommend BeeCount to friends'**
+  String get sharePosterAppPromoDesc;
+
+  /// No description provided for @sharePosterSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Share Poster'**
+  String get sharePosterSelectTitle;
+
+  /// No description provided for @sharePosterSwipeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe left or right to switch poster styles'**
+  String get sharePosterSwipeHint;
+
+  /// No description provided for @sharePosterGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating...'**
+  String get sharePosterGenerating;
+
+  /// No description provided for @sharePosterGenerateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate {type}'**
+  String sharePosterGenerateButton(String type);
+
+  /// No description provided for @sharePosterGenerateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate poster, please try again'**
+  String get sharePosterGenerateFailed;
+
+  /// No description provided for @sharePosterNoLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a ledger first'**
+  String get sharePosterNoLedger;
+
+  /// No description provided for @sharePosterYearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Annual Bookkeeping Report'**
+  String get sharePosterYearTitle;
+
+  /// No description provided for @sharePosterYearSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Record life with data, plan future with reason'**
+  String get sharePosterYearSubtitle;
+
+  /// No description provided for @sharePosterMonthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Bill Report'**
+  String get sharePosterMonthTitle;
+
+  /// No description provided for @sharePosterMonthSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Wisely, Spend Rationally'**
+  String get sharePosterMonthSubtitle;
+
+  /// No description provided for @sharePosterLedgerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger Statistics Report'**
+  String get sharePosterLedgerTitle;
+
+  /// No description provided for @sharePosterRecordDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Record Days'**
+  String get sharePosterRecordDays;
+
+  /// No description provided for @sharePosterRecordCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Record Count'**
+  String get sharePosterRecordCount;
+
+  /// No description provided for @sharePosterTotalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get sharePosterTotalExpense;
+
+  /// No description provided for @sharePosterTotalIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Income'**
+  String get sharePosterTotalIncome;
+
+  /// No description provided for @sharePosterYearBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Balance'**
+  String get sharePosterYearBalance;
+
+  /// No description provided for @sharePosterYearDeficit.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Deficit'**
+  String get sharePosterYearDeficit;
+
+  /// No description provided for @sharePosterMonthBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Balance'**
+  String get sharePosterMonthBalance;
+
+  /// No description provided for @sharePosterBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Balance'**
+  String get sharePosterBalance;
+
+  /// No description provided for @sharePosterAvgMonthlyExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg. Monthly Expense'**
+  String get sharePosterAvgMonthlyExpense;
+
+  /// No description provided for @sharePosterAvgMonthlyIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg. Monthly Income'**
+  String get sharePosterAvgMonthlyIncome;
+
+  /// No description provided for @sharePosterAvgDailyExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg. Daily Expense'**
+  String get sharePosterAvgDailyExpense;
+
+  /// No description provided for @sharePosterMaxExpenseMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest Expense Month'**
+  String get sharePosterMaxExpenseMonth;
+
+  /// No description provided for @sharePosterTopExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'TOP 3 Expenses'**
+  String get sharePosterTopExpense;
+
+  /// No description provided for @sharePosterCompareLastMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'vs Last Month'**
+  String get sharePosterCompareLastMonth;
+
+  /// No description provided for @sharePosterIncreaseRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase'**
+  String get sharePosterIncreaseRate;
+
+  /// No description provided for @sharePosterDecreaseRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease'**
+  String get sharePosterDecreaseRate;
+
+  /// No description provided for @sharePosterLedgerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger Name'**
+  String get sharePosterLedgerName;
+
+  /// No description provided for @sharePosterScanMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan for more'**
+  String get sharePosterScanMore;
+
+  /// No description provided for @sharePosterUnitDay.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get sharePosterUnitDay;
+
+  /// No description provided for @sharePosterUnitCount.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get sharePosterUnitCount;
+
+  /// No description provided for @sharePosterUnitYuan.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get sharePosterUnitYuan;
 
   /// No description provided for @mineDaysCount.
   ///
@@ -1889,6 +2123,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to get status'**
   String get mineSyncError;
+
+  /// No description provided for @mineSyncCloudUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud service unavailable, please check configuration or login status'**
+  String get mineSyncCloudUnavailable;
 
   /// No description provided for @mineSyncDetailTitle.
   ///
@@ -3090,6 +3330,24 @@ abstract class AppLocalizations {
   /// **'When enabled, will remind you to record at specified time'**
   String get reminderDailySubtitle;
 
+  /// No description provided for @reminderDailyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t forget to record your transactions today 💰'**
+  String get reminderDailyBody;
+
+  /// No description provided for @reminderChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording Reminder'**
+  String get reminderChannelName;
+
+  /// No description provided for @reminderChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily recording reminder'**
+  String get reminderChannelDescription;
+
   /// No description provided for @reminderTimeTitle.
   ///
   /// In en, this message translates to:
@@ -3527,6 +3785,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'/BeeCount'**
   String get cloudWebdavPathHint;
+
+  /// No description provided for @cloudS3EndpointLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Endpoint'**
+  String get cloudS3EndpointLabel;
+
+  /// No description provided for @cloudS3EndpointHint.
+  ///
+  /// In en, this message translates to:
+  /// **'s3.amazonaws.com or custom endpoint'**
+  String get cloudS3EndpointHint;
+
+  /// No description provided for @cloudS3RegionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get cloudS3RegionLabel;
+
+  /// No description provided for @cloudS3RegionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'us-east-1 (leave blank for auto)'**
+  String get cloudS3RegionHint;
+
+  /// No description provided for @cloudS3AccessKeyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Key'**
+  String get cloudS3AccessKeyLabel;
+
+  /// No description provided for @cloudS3AccessKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Access Key ID'**
+  String get cloudS3AccessKeyHint;
+
+  /// No description provided for @cloudS3SecretKeyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Secret Key'**
+  String get cloudS3SecretKeyLabel;
+
+  /// No description provided for @cloudS3SecretKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Secret Access Key'**
+  String get cloudS3SecretKeyHint;
+
+  /// No description provided for @cloudS3BucketLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bucket Name'**
+  String get cloudS3BucketLabel;
+
+  /// No description provided for @cloudS3BucketHint.
+  ///
+  /// In en, this message translates to:
+  /// **'beecount-data'**
+  String get cloudS3BucketHint;
+
+  /// No description provided for @cloudS3UseSSLLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Use HTTPS'**
+  String get cloudS3UseSSLLabel;
+
+  /// No description provided for @cloudS3PortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Port (optional)'**
+  String get cloudS3PortLabel;
+
+  /// No description provided for @cloudS3PortHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave blank for default'**
+  String get cloudS3PortHint;
+
+  /// No description provided for @cloudSupabaseBucketLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage Bucket Name'**
+  String get cloudSupabaseBucketLabel;
+
+  /// No description provided for @cloudSupabaseBucketHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave blank for default: beecount-backups'**
+  String get cloudSupabaseBucketHint;
+
+  /// No description provided for @authRememberAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember account'**
+  String get authRememberAccount;
+
+  /// No description provided for @authRememberAccountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-fill on next login (Supabase only)'**
+  String get authRememberAccountHint;
 
   /// No description provided for @cloudConfigSaved.
   ///
@@ -4896,6 +5256,18 @@ abstract class AppLocalizations {
   /// **'Click to configure Nutstore/Nextcloud etc.'**
   String get cloudCustomWebdavSubtitle;
 
+  /// No description provided for @cloudCustomS3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 Protocol Storage'**
+  String get cloudCustomS3Title;
+
+  /// No description provided for @cloudCustomS3Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AWS S3 / Cloudflare R2 / MinIO'**
+  String get cloudCustomS3Subtitle;
+
   /// No description provided for @cloudIcloudSubtitle.
   ///
   /// In en, this message translates to:
@@ -5214,6 +5586,126 @@ abstract class AppLocalizations {
   /// **'Use an app-specific password instead of your account password'**
   String get cloudWebdavHelpNote;
 
+  /// No description provided for @cloudS3HelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 Storage Setup Guide'**
+  String get cloudS3HelpTitle;
+
+  /// No description provided for @cloudS3HelpIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'What is S3'**
+  String get cloudS3HelpIntro;
+
+  /// No description provided for @cloudS3HelpIntro1.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 is a standard object storage protocol'**
+  String get cloudS3HelpIntro1;
+
+  /// No description provided for @cloudS3HelpIntro2.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported by many cloud providers'**
+  String get cloudS3HelpIntro2;
+
+  /// No description provided for @cloudS3HelpIntro3.
+  ///
+  /// In en, this message translates to:
+  /// **'Data is stored on your chosen cloud service'**
+  String get cloudS3HelpIntro3;
+
+  /// No description provided for @cloudS3HelpProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported Providers'**
+  String get cloudS3HelpProviders;
+
+  /// No description provided for @cloudS3HelpProvider1.
+  ///
+  /// In en, this message translates to:
+  /// **'- AWS S3 (Amazon Web Services)'**
+  String get cloudS3HelpProvider1;
+
+  /// No description provided for @cloudS3HelpProvider2.
+  ///
+  /// In en, this message translates to:
+  /// **'- Cloudflare R2 (free 10GB/month)'**
+  String get cloudS3HelpProvider2;
+
+  /// No description provided for @cloudS3HelpProvider3.
+  ///
+  /// In en, this message translates to:
+  /// **'- Backblaze B2 (free 10GB)'**
+  String get cloudS3HelpProvider3;
+
+  /// No description provided for @cloudS3HelpProvider4.
+  ///
+  /// In en, this message translates to:
+  /// **'- MinIO (self-hosted)'**
+  String get cloudS3HelpProvider4;
+
+  /// No description provided for @cloudS3HelpProvider5.
+  ///
+  /// In en, this message translates to:
+  /// **'- Alibaba Cloud OSS'**
+  String get cloudS3HelpProvider5;
+
+  /// No description provided for @cloudS3HelpProvider6.
+  ///
+  /// In en, this message translates to:
+  /// **'- Tencent Cloud COS'**
+  String get cloudS3HelpProvider6;
+
+  /// No description provided for @cloudS3HelpProvider7.
+  ///
+  /// In en, this message translates to:
+  /// **'- Qiniu Kodo'**
+  String get cloudS3HelpProvider7;
+
+  /// No description provided for @cloudS3HelpSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Steps (Cloudflare R2 example)'**
+  String get cloudS3HelpSteps;
+
+  /// No description provided for @cloudS3HelpStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Login to Cloudflare Dashboard'**
+  String get cloudS3HelpStep1;
+
+  /// No description provided for @cloudS3HelpStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Go to R2 > Create Bucket'**
+  String get cloudS3HelpStep2;
+
+  /// No description provided for @cloudS3HelpStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Go to R2 > Manage R2 API Tokens'**
+  String get cloudS3HelpStep3;
+
+  /// No description provided for @cloudS3HelpStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Create API Token and copy credentials'**
+  String get cloudS3HelpStep4;
+
+  /// No description provided for @cloudS3HelpStep5.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Paste endpoint, access key, secret key, and bucket name'**
+  String get cloudS3HelpStep5;
+
+  /// No description provided for @cloudS3HelpNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended: Cloudflare R2 offers 10GB free storage without egress fees'**
+  String get cloudS3HelpNote;
+
   /// No description provided for @cloudStatusNotTested.
   ///
   /// In en, this message translates to:
@@ -5369,6 +5861,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Configure WebDAV'**
   String get cloudConfigureWebdavTitle;
+
+  /// No description provided for @cloudConfigureS3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure S3'**
+  String get cloudConfigureS3Title;
 
   /// No description provided for @cloudSupabaseAnonKeyHintLong.
   ///
@@ -5655,7 +6153,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeCloudSyncFeature3.
   ///
   /// In en, this message translates to:
-  /// **'Self-hosted WebDAV/Supabase service'**
+  /// **'Self-hosted WebDAV/Supabase/S3 service'**
   String get welcomeCloudSyncFeature3;
 
   /// No description provided for @widgetManagement.
@@ -6689,6 +7187,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'WebDAV cloud service config'**
   String get configIncludeWebdav;
+
+  /// No description provided for @configIncludeS3.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 cloud service config'**
+  String get configIncludeS3;
 
   /// No description provided for @configIncludeAI.
   ///

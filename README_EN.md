@@ -10,7 +10,7 @@
 
 **Your Data, Your Control - Open Source Accounting App**
 
-**Core Advantage: iCloud/Self-hosted Supabase/WebDAV servers - Your data, Your control**
+**Core Advantage: iCloud/Supabase/WebDAV/S3 protocol servers - Your data, Your control**
 
 <br/>
 
@@ -76,7 +76,7 @@
 </tr>
 </table>
 
-A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **OCR image recognition**, **photo billing**, **voice billing**, **screenshot auto-billing**, **account transfers**, **hierarchical categories**, category statistics, **chart analysis**, data import/export, and iCloud (iOS)/self-hosted Supabase/WebDAV cloud sync. Supports **multiple languages** (Simplified/Traditional Chinese, English) and **dark mode**. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
+A lightweight, open-source, privacy-focused **personal finance management** and **expense tracker** app for iOS/Android. Features complete ledger management, **income and expense tracking**, **OCR image recognition**, **photo billing**, **voice billing**, **screenshot auto-billing**, **account transfers**, **hierarchical categories**, category statistics, **chart analysis**, data import/export, and iCloud (iOS)/Supabase/WebDAV/S3 protocol (Cloudflare R2/AWS S3/MinIO) cloud sync. Supports **multiple languages** (Simplified/Traditional Chinese, English) and **dark mode**. Perfect for privacy-conscious individuals and families to manage daily **spending** and **budget tracking**.
 
 ## 📱 Core Features Showcase
 
@@ -127,6 +127,7 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 | **iCloud** | iOS Users | 🆕 Zero config, native integration, seamless Apple ecosystem sync |
 | **Supabase** | Users without NAS | Free tier sufficient, easy setup, cloud-hosted |
 | **WebDAV** | Users with NAS | Fully localized data, supports Synology/UGREEN/Nextcloud |
+| **S3 Protocol** | Flexibility seekers | 🆕 Supports Cloudflare R2/AWS S3/MinIO, generous free tier |
 
 **Why Self-Hosted?**
 
@@ -217,6 +218,7 @@ BeeCount supports multiple cloud sync solutions, giving you complete control ove
 | **iCloud** | iOS Users | 🆕 Zero config, native integration, seamless Apple ecosystem sync |
 | **Supabase** | Users without NAS | Free tier sufficient, easy setup, cloud-hosted |
 | **WebDAV** | Users with NAS | Fully localized data, supports Synology/UGREEN/Nextcloud |
+| **S3 Protocol** | Flexibility seekers | 🆕 Supports Cloudflare R2/AWS S3/MinIO, generous free tier |
 
 <details>
 <summary><b>📖 Click to view detailed configuration guide</b></summary>
@@ -250,7 +252,7 @@ BeeCount supports multiple cloud sync solutions, giving you complete control ove
 
 > 💡 **Note**: iCloud sync only supports iOS devices. For cross-platform sync (iOS + Android), please use Supabase or WebDAV.
 
-### Option 2: Custom Supabase (Recommended for Beginners)
+### Option 2: Supabase (Recommended for Beginners)
 
 **Use Case**: Suitable for users without NAS devices who want to get started quickly
 
@@ -343,15 +345,100 @@ Nutstore:
 - Remote Path: /BeeCount
 ```
 
+---
+
+### Option 4: S3 Protocol Storage (Recommended for Flexibility Seekers) 🆕
+
+**Use Case**: Users who need flexible cloud provider choice or want to leverage generous free tiers
+
+**Supported Services**:
+
+- ✅ **Cloudflare R2** (Recommended, 10GB free storage)
+- ✅ **AWS S3** (World's most popular object storage)
+- ✅ **MinIO** (Open-source self-hosted solution)
+- ✅ **Alibaba Cloud OSS** (S3 protocol compatible)
+- ✅ **Tencent Cloud COS** (S3 protocol compatible)
+- ✅ Other S3 protocol-compatible object storage services
+
+**Advantages**:
+
+- ✅ **Generous Free Tier**: Cloudflare R2 offers 10GB free storage
+- ✅ **Flexible Choice**: Support for multiple cloud providers, easy to switch
+- ✅ **Standard Protocol**: S3 is an industry-standard protocol with excellent compatibility
+- ✅ **Excellent Performance**: CDN acceleration, fast global access
+
+**Configuration Steps (Using Cloudflare R2 as Example)**:
+
+1. **Create R2 Bucket**
+   - Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/)
+   - Go to **R2** service
+   - Create a new bucket, e.g., named `beecount-backups`
+   - Record the bucket name
+
+2. **Get API Credentials**
+   - On the R2 page, click **Manage R2 API Tokens**
+   - Create a new API Token
+   - Select **Object Read & Write** permissions
+   - Record the following information:
+     - **Access Key ID** (access key)
+     - **Secret Access Key** (secret key)
+     - **Endpoint** (e.g., `<account-id>.r2.cloudflarestorage.com`)
+
+3. **In-App Configuration**
+   - Open BeeCount → Profile → Cloud Service
+   - Click "Add Custom Cloud Service"
+   - Select service type: **S3 Protocol Storage**
+   - Fill in configuration:
+     - **Endpoint**: Cloudflare R2 endpoint (without `https://` prefix)
+     - **Region**: `auto` (R2 auto-selects region)
+     - **Access Key**: Your Access Key ID
+     - **Secret Key**: Your Secret Access Key
+     - **Bucket Name**: Created bucket name (e.g., `beecount-backups`)
+     - **Use HTTPS**: Enable (recommended)
+     - **Port**: Leave empty (use default port)
+   - Click "Test Connection" to verify configuration
+   - Save and enable configuration
+   - S3 requires no additional login, can sync directly after configuration
+
+**Other S3 Service Configuration Examples**:
+
+```
+Cloudflare R2:
+- Endpoint: <account-id>.r2.cloudflarestorage.com
+- Region: auto
+- Use HTTPS: Yes
+
+AWS S3:
+- Endpoint: s3.amazonaws.com
+- Region: us-east-1 (fill in according to your bucket region)
+- Use HTTPS: Yes
+
+MinIO (Self-hosted):
+- Endpoint: minio.example.com
+- Region: us-east-1 or auto
+- Use HTTPS: Based on your configuration
+- Port: 9000 (or custom port)
+
+Alibaba Cloud OSS (S3 Compatible Mode):
+- Endpoint: oss-cn-hangzhou.aliyuncs.com
+- Region: oss-cn-hangzhou
+- Use HTTPS: Yes
+```
+
+> 💡 **Tips**:
+> - Endpoint address should **NOT** include `http://` or `https://` prefix
+> - Cloudflare R2 free tier: 10GB storage + 10M Class A operations per month
+> - S3 protocol supports cross-platform sync (iOS + Android)
+
+---
+
 ### Future Plans
 
 We will continue expanding cloud service support, planning to add:
 
-- 📦 Alibaba Cloud OSS
-- 📦 Tencent Cloud COS
-- 📦 AWS S3
 - 📦 Google Drive
 - 📦 Dropbox
+- 📦 OneDrive
 - 📦 More...
 
 If you'd like to prioritize support for a specific cloud service, welcome to create a feature request in [Issues](https://github.com/TNT-Likely/BeeCount/issues)!
@@ -363,7 +450,7 @@ If you'd like to prioritize support for a specific cloud service, welcome to cre
 ## 🛠️ Development Guide
 
 <details>
-<summary><b>View development guide and contribution methods</b></summary>
+<summary><b>View development guide</b></summary>
 
 ### Tech Stack
 
@@ -388,7 +475,14 @@ flutter run --flavor dev
 flutter build apk --flavor prod --release
 ```
 
-### Contribution Guidelines
+</details>
+
+---
+
+## 🤝 Contributing
+
+<details>
+<summary><b>View contribution guidelines</b></summary>
 
 We welcome all forms of contributions!
 
@@ -423,13 +517,14 @@ For detailed standards, please refer to the [Complete Contributing Guide](docs/c
 **Q: Can I use it normally without configuring cloud services?**
 A: Absolutely! The app uses local storage by default, and all features work normally. You can still export CSV backups at any time.
 
-**Q: Should I choose iCloud, Supabase or WebDAV?**
+**Q: Should I choose iCloud, Supabase, WebDAV or S3?**
 A:
 
 - If you're an iOS user and only sync between Apple devices, we recommend **iCloud** (zero config, native integration)
-- If you need cross-platform sync (iOS + Android), we recommend **Supabase** (free, stable, easy to configure)
+- If you need cross-platform sync (iOS + Android), we recommend **Supabase** or **S3** (free, stable, easy to configure)
 - If you have a NAS device or private cloud, we recommend **WebDAV** (fully localized data)
-- All three support complete sync functionality, choose based on your needs
+- If you want flexible cloud provider choice, we recommend **S3** (supports Cloudflare R2/AWS S3/MinIO)
+- All options support complete sync functionality, choose based on your needs
 
 **Q: Why can't I upload after configuring WebDAV?**
 A:
@@ -439,16 +534,26 @@ A:
 - Some NAS WebDAV requires specific paths for write access (e.g., UGREEN Cloud requires `/home/` path)
 - Click "Test Connection" button to view detailed error messages
 
+**Q: Why does S3 connection fail?**
+A:
+
+- Ensure endpoint address does **NOT** include `http://` or `https://` prefix
+- Verify Access Key and Secret Key are correct
+- Confirm bucket name spelling is correct
+- Check bucket region matches (AWS S3 requires accurate region, Cloudflare R2 uses `auto`)
+- Click "Test Connection" button to view detailed error messages
+
 **Q: Can I switch back to default mode after configuring custom cloud service?**
 A: Yes, you can switch anytime. The saved custom configuration won't be lost and can be re-enabled.
 
 **Q: How to ensure data security?**
 A:
 
-- Use your own Supabase project or WebDAV server
+- Use your own Supabase project, WebDAV server or S3 bucket
 - Regularly export CSV backups to local storage
 - Use strong passwords and enable two-factor authentication (if supported)
-- For WebDAV, recommend using HTTPS for encrypted transmission
+- For WebDAV and S3, recommend using HTTPS for encrypted transmission
+- Keep your S3 Access Key and Secret Key secure
 
 **Q: What data formats are supported?**
 A: Currently supports CSV format for import/export, compatible with data formats from most mainstream accounting apps.
@@ -459,6 +564,7 @@ A:
 - **iCloud**: Simply sign in with the same Apple ID on iOS devices, data syncs automatically
 - **Supabase**: Configure same URL and anon key on all devices, log in with same account
 - **WebDAV**: Configure same WebDAV server address and credentials on all devices
+- **S3**: Configure same S3 endpoint, Access Key and bucket name on all devices
 
 > 💡 More questions? Visit [Issues](https://github.com/TNT-Likely/BeeCount/issues) or [Discussions](https://github.com/TNT-Likely/BeeCount/discussions)
 

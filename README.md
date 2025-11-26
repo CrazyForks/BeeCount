@@ -10,7 +10,7 @@
 
 **你的数据，你做主的开源记账应用**
 
-**核心优势：支持 iCloud/自建 Supabase/WebDAV 服务器，数据完全掌控在你手中**
+**核心优势：支持 iCloud/自建 Supabase/WebDAV/S3 协议服务器，数据完全掌控在你手中**
 
 <br/>
 
@@ -84,7 +84,7 @@
 </tr>
 </table>
 
-一款轻量、开源、隐私可控的**个人财务管理**和**支出追踪** App，支持 iOS/Android 双平台。内置完整的账本管理、**收支记录**、**OCR 图片识别**、**拍照记账**、**语音记账**、**截图自动记账**、**账户转账**、**二级分类**、分类统计、**图表分析**、数据导入导出功能，并支持 iCloud（iOS）/自建 Supabase/WebDAV 云服务器同步。支持**多语言**（简繁中文/英文）和**暗黑模式**，适合注重隐私的个人和家庭进行日常**费用记录**和**收支管理**。
+一款轻量、开源、隐私可控的**个人财务管理**和**支出追踪** App，支持 iOS/Android 双平台。内置完整的账本管理、**收支记录**、**OCR 图片识别**、**拍照记账**、**语音记账**、**截图自动记账**、**账户转账**、**二级分类**、分类统计、**图表分析**、数据导入导出功能，并支持 iCloud（iOS）/自建 Supabase/WebDAV/S3 协议（Cloudflare R2/AWS S3/MinIO 等）云服务器同步。支持**多语言**（简繁中文/英文）和**暗黑模式**，适合注重隐私的个人和家庭进行日常**费用记录**和**收支管理**。
 
 ## 📱 核心功能展示
 
@@ -135,11 +135,13 @@
 | **iCloud** | iOS 用户 | 🆕 零配置、原生集成、Apple 生态无缝同步 |
 | **Supabase** | 无 NAS 的用户 | 免费额度充足、配置简单、云端托管 |
 | **WebDAV** | 有 NAS 的用户 | 数据完全本地化、支持群晖/绿联云/Nextcloud |
+| **S3 协议** | 追求灵活性的用户 | 🆕 支持 Cloudflare R2/AWS S3/MinIO，免费额度大 |
+| **S3 协议** | 追求灵活性的用户 | 🆕 支持 Cloudflare R2/AWS S3/MinIO，免费额度大 |
 
 **为什么选择自建？**
 
 - 🔐 **隐私第一**：开发者无法访问你的数据
-- 💰 **成本可控**：Supabase 免费额度够用，WebDAV 一次性投入
+- 💰 **成本可控**：Supabase/Cloudflare R2 免费额度够用，WebDAV 一次性投入
 - 🛡️ **数据安全**：不担心服务商倒闭或数据泄露
 - 🔓 **开源审计**：所有云同步代码开源，可审计
 
@@ -225,6 +227,7 @@
 | **iCloud** | iOS 用户 | 🆕 零配置、原生集成、Apple 生态无缝同步 |
 | **Supabase** | 无 NAS 的用户 | 免费额度充足、配置简单、云端托管 |
 | **WebDAV** | 有 NAS 的用户 | 数据完全本地化、支持群晖/绿联云/Nextcloud |
+| **S3 协议** | 追求灵活性的用户 | 🆕 支持 Cloudflare R2/AWS S3/MinIO，免费额度大 |
 
 <details>
 <summary><b>📖 点击查看详细配置教程</b></summary>
@@ -260,7 +263,7 @@
 
 ---
 
-### 方案二：自定义 Supabase（推荐新手）
+### 方案二：Supabase（推荐新手）
 
 **适用场景**：适合没有 NAS 设备，想要快速开始的用户
 
@@ -353,15 +356,100 @@
 - 远程路径: /BeeCount
 ```
 
+---
+
+### 方案四：S3 协议存储（推荐追求灵活性的用户）🆕
+
+**适用场景**：需要灵活选择云服务商，或想利用免费额度的用户
+
+**支持的服务**：
+
+- ✅ **Cloudflare R2**（推荐，10GB 免费存储）
+- ✅ **AWS S3**（全球最流行的对象存储）
+- ✅ **MinIO**（开源自建方案）
+- ✅ **阿里云 OSS**（兼容 S3 协议）
+- ✅ **腾讯云 COS**（兼容 S3 协议）
+- ✅ 其他兼容 S3 协议的对象存储服务
+
+**优势**：
+
+- ✅ **免费额度大**：Cloudflare R2 提供 10GB 免费存储
+- ✅ **灵活选择**：支持多家云服务商，随时切换
+- ✅ **标准协议**：S3 协议是业界标准，兼容性强
+- ✅ **性能优异**：CDN 加速，全球访问快速
+
+**配置步骤（以 Cloudflare R2 为例）**：
+
+1. **创建 R2 存储桶**
+   - 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
+   - 进入 **R2** 服务
+   - 创建新存储桶（Bucket），如命名为 `beecount-backups`
+   - 记录存储桶名称
+
+2. **获取 API 凭证**
+   - 在 R2 页面点击 **Manage R2 API Tokens**
+   - 创建新的 API Token
+   - 权限选择 **Object Read & Write**
+   - 记录以下信息：
+     - **Access Key ID**（访问密钥）
+     - **Secret Access Key**（私密密钥）
+     - **Endpoint**（如 `<账户ID>.r2.cloudflarestorage.com`）
+
+3. **应用内配置**
+   - 打开蜜蜂记账 → 个人中心 → 云服务
+   - 点击"添加自定义云服务"
+   - 选择服务类型：**S3 协议存储**
+   - 填写配置信息：
+     - **端点地址**：Cloudflare R2 endpoint（不含 `https://`）
+     - **区域**：`auto`（R2 自动选择区域）
+     - **Access Key**：你的 Access Key ID
+     - **Secret Key**：你的 Secret Access Key
+     - **存储桶名称**：创建的存储桶名称（如 `beecount-backups`）
+     - **使用 HTTPS**：开启（推荐）
+     - **端口**：留空（使用默认端口）
+   - 点击"测试连接"验证配置
+   - 保存并启用配置
+   - S3 无需额外登录，配置后即可直接同步
+
+**其他 S3 服务配置示例**：
+
+```
+Cloudflare R2：
+- 端点地址: <账户ID>.r2.cloudflarestorage.com
+- 区域: auto
+- 使用 HTTPS: 是
+
+AWS S3：
+- 端点地址: s3.amazonaws.com
+- 区域: us-east-1（根据你的存储桶区域填写）
+- 使用 HTTPS: 是
+
+MinIO（自建）：
+- 端点地址: minio.example.com
+- 区域: us-east-1 或 auto
+- 使用 HTTPS: 根据配置选择
+- 端口: 9000（或自定义端口）
+
+阿里云 OSS（S3 兼容模式）：
+- 端点地址: oss-cn-hangzhou.aliyuncs.com
+- 区域: oss-cn-hangzhou
+- 使用 HTTPS: 是
+```
+
+> 💡 **提示**：
+> - 端点地址请**不要**包含 `http://` 或 `https://` 前缀
+> - Cloudflare R2 免费额度：10GB 存储 + 每月 1000 万次 A 类操作
+> - S3 协议支持跨平台同步（iOS + Android）
+
+---
+
 ### 后续计划
 
 我们将持续扩展云服务支持，计划添加：
 
-- 📦 阿里云 OSS
-- 📦 腾讯云 COS
-- 📦 AWS S3
 - 📦 Google Drive
 - 📦 Dropbox
+- 📦 OneDrive
 - 📦 更多...
 
 如果你希望优先支持某个云服务，欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出需求！
@@ -373,7 +461,7 @@
 ## 🛠️ 开发指南
 
 <details>
-<summary><b>查看开发指南和贡献方式</b></summary>
+<summary><b>查看开发指南</b></summary>
 
 ### 技术栈
 
@@ -398,7 +486,14 @@ flutter run --flavor dev
 flutter build apk --flavor prod --release
 ```
 
-### 贡献指南
+</details>
+
+---
+
+## 🤝 贡献指南
+
+<details>
+<summary><b>查看贡献方式</b></summary>
 
 我们欢迎所有形式的贡献！
 
@@ -433,12 +528,13 @@ flutter build apk --flavor prod --release
 **Q: 不配置云服务能正常使用吗？**
 A: 完全可以！应用默认使用本地存储，所有功能都能正常使用。你仍可随时导出 CSV 进行备份。
 
-**Q: 应该选择 iCloud、Supabase 还是 WebDAV？**
+**Q: 应该选择 iCloud、Supabase、WebDAV 还是 S3？**
 A:
 
 - 如果你是 iOS 用户且只在 Apple 设备间同步，推荐使用 **iCloud**（零配置、原生集成）
-- 如果你需要跨平台同步（iOS + Android），推荐使用 **Supabase**（免费、稳定、易配置）
+- 如果你需要跨平台同步（iOS + Android），推荐使用 **Supabase** 或 **S3**（免费、稳定、易配置）
 - 如果你有 NAS 设备或私有云，推荐使用 **WebDAV**（数据完全本地化）
+- 如果你想要灵活选择云服务商，推荐使用 **S3**（支持 Cloudflare R2/AWS S3/MinIO 等）
 
 **Q: 如何在多设备间同步数据？**
 A:
@@ -446,13 +542,15 @@ A:
 - **iCloud**：iOS 设备登录同一 Apple ID，数据自动同步
 - **Supabase**：所有设备配置相同的 URL 和 anon key，登录同一账号
 - **WebDAV**：所有设备配置相同的 WebDAV 服务器地址和凭据
+- **S3**：所有设备配置相同的 S3 端点、Access Key 和存储桶名称
 
 **Q: 如何确保数据安全？**
 A:
 
-- 使用自己的 Supabase 项目或 WebDAV 服务器
+- 使用自己的 Supabase 项目、WebDAV 服务器或 S3 存储桶
 - 定期导出 CSV 备份到本地
-- WebDAV 建议使用 HTTPS 加密传输
+- WebDAV 和 S3 建议使用 HTTPS 加密传输
+- S3 的 Access Key 和 Secret Key 请妥善保管
 
 **Q: WebDAV 配置后为什么无法上传？**
 A:
@@ -460,6 +558,15 @@ A:
 - 检查 WebDAV 服务是否启用且端口正确
 - 确认用户名和密码正确
 - 某些 NAS 的 WebDAV 需要在特定路径下才能写入（如绿联云需要 `/home/` 路径）
+- 点击"测试连接"按钮查看详细错误信息
+
+**Q: S3 配置后为什么连接失败？**
+A:
+
+- 确认端点地址**不包含** `http://` 或 `https://` 前缀
+- 检查 Access Key 和 Secret Key 是否正确
+- 确认存储桶名称拼写正确
+- 检查存储桶区域是否匹配（AWS S3 需要准确区域，Cloudflare R2 使用 `auto`）
 - 点击"测试连接"按钮查看详细错误信息
 
 > 💡 更多问题请访问 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 或 [Discussions](https://github.com/TNT-Likely/BeeCount/discussions)

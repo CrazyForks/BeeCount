@@ -872,6 +872,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineShareAppSubtitle => 'Generate share poster and save to gallery';
 
   @override
+  String get mineShareWithFriends => 'Share BeeCount with friends';
+
+  @override
   String get mineShareGenerating => 'Generating share poster...';
 
   @override
@@ -884,22 +887,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharePosterSlogan => 'Smart Accounting, Beautiful Life';
 
   @override
-  String get sharePosterFeature1 => '✨ Completely Open Source & Free';
+  String get sharePosterFeature1 => '🔒 Data Security·You Control';
 
   @override
-  String get sharePosterFeature2 => '🤖 AI Smart Bill Recognition';
+  String get sharePosterFeature2 => '✨ Open Source·Auditable';
 
   @override
-  String get sharePosterFeature3 => '⚡ Automated Accounting';
+  String get sharePosterFeature3 => '🤖 AI Smart·Photo & Voice';
 
   @override
-  String get sharePosterFeature4 => '🔒 Privacy & Security';
+  String get sharePosterFeature4 => '📸 Photo Accounting·Auto Recognition';
 
   @override
-  String get sharePosterFeature5 => '☁️ Cloud Sync & Backup';
+  String get sharePosterFeature5 => '📊 Multi Ledger·Dark Mode';
 
   @override
-  String get sharePosterFeature6 => '📊 Multiple Ledgers';
+  String get sharePosterFeature6 => '☁️ Self-Hosted Cloud·Free Forever';
 
   @override
   String get sharePosterScanText => 'Scan to visit open source project';
@@ -918,6 +921,122 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharePosterPermissionDenied => 'Gallery permission denied, please enable in settings';
+
+  @override
+  String get sharePosterYearSummary => 'Year Summary';
+
+  @override
+  String get sharePosterYearSummaryDesc => 'Share your annual bookkeeping achievements';
+
+  @override
+  String get sharePosterMonthSummary => 'Month Summary';
+
+  @override
+  String get sharePosterMonthSummaryDesc => 'Share your monthly financial report';
+
+  @override
+  String get sharePosterAppPromo => 'Share App';
+
+  @override
+  String get sharePosterAppPromoDesc => 'Recommend BeeCount to friends';
+
+  @override
+  String get sharePosterSelectTitle => 'Select Share Poster';
+
+  @override
+  String get sharePosterSwipeHint => 'Swipe left or right to switch poster styles';
+
+  @override
+  String get sharePosterGenerating => 'Generating...';
+
+  @override
+  String sharePosterGenerateButton(String type) {
+    return 'Generate $type';
+  }
+
+  @override
+  String get sharePosterGenerateFailed => 'Failed to generate poster, please try again';
+
+  @override
+  String get sharePosterNoLedger => 'Please select a ledger first';
+
+  @override
+  String get sharePosterYearTitle => 'My Annual Bookkeeping Report';
+
+  @override
+  String get sharePosterYearSubtitle => 'Record life with data, plan future with reason';
+
+  @override
+  String get sharePosterMonthTitle => 'Monthly Bill Report';
+
+  @override
+  String get sharePosterMonthSubtitle => 'Budget Wisely, Spend Rationally';
+
+  @override
+  String get sharePosterLedgerTitle => 'Ledger Statistics Report';
+
+  @override
+  String get sharePosterRecordDays => 'Record Days';
+
+  @override
+  String get sharePosterRecordCount => 'Record Count';
+
+  @override
+  String get sharePosterTotalExpense => 'Total Expense';
+
+  @override
+  String get sharePosterTotalIncome => 'Total Income';
+
+  @override
+  String get sharePosterYearBalance => 'Annual Balance';
+
+  @override
+  String get sharePosterYearDeficit => 'Annual Deficit';
+
+  @override
+  String get sharePosterMonthBalance => 'Monthly Balance';
+
+  @override
+  String get sharePosterBalance => 'Total Balance';
+
+  @override
+  String get sharePosterAvgMonthlyExpense => 'Avg. Monthly Expense';
+
+  @override
+  String get sharePosterAvgMonthlyIncome => 'Avg. Monthly Income';
+
+  @override
+  String get sharePosterAvgDailyExpense => 'Avg. Daily Expense';
+
+  @override
+  String get sharePosterMaxExpenseMonth => 'Highest Expense Month';
+
+  @override
+  String get sharePosterTopExpense => 'TOP 3 Expenses';
+
+  @override
+  String get sharePosterCompareLastMonth => 'vs Last Month';
+
+  @override
+  String get sharePosterIncreaseRate => 'Increase';
+
+  @override
+  String get sharePosterDecreaseRate => 'Decrease';
+
+  @override
+  String get sharePosterLedgerName => 'Ledger Name';
+
+  @override
+  String get sharePosterScanMore => 'Scan for more';
+
+  @override
+  String get sharePosterUnitDay => 'days';
+
+  @override
+  String get sharePosterUnitCount => '';
+
+  @override
+  String get sharePosterUnitYuan => '';
 
   @override
   String get mineDaysCount => 'Days';
@@ -982,6 +1101,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mineSyncError => 'Failed to get status';
+
+  @override
+  String get mineSyncCloudUnavailable => 'Cloud service unavailable, please check configuration or login status';
 
   @override
   String get mineSyncDetailTitle => 'Sync Status Details';
@@ -1622,6 +1744,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderDailySubtitle => 'When enabled, will remind you to record at specified time';
 
   @override
+  String get reminderDailyBody => 'Don\'t forget to record your transactions today 💰';
+
+  @override
+  String get reminderChannelName => 'Recording Reminder';
+
+  @override
+  String get reminderChannelDescription => 'Daily recording reminder';
+
+  @override
   String get reminderTimeTitle => 'Reminder Time';
 
   @override
@@ -1855,6 +1986,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudWebdavPathHint => '/BeeCount';
+
+  @override
+  String get cloudS3EndpointLabel => 'Endpoint';
+
+  @override
+  String get cloudS3EndpointHint => 's3.amazonaws.com or custom endpoint';
+
+  @override
+  String get cloudS3RegionLabel => 'Region';
+
+  @override
+  String get cloudS3RegionHint => 'us-east-1 (leave blank for auto)';
+
+  @override
+  String get cloudS3AccessKeyLabel => 'Access Key';
+
+  @override
+  String get cloudS3AccessKeyHint => 'Your Access Key ID';
+
+  @override
+  String get cloudS3SecretKeyLabel => 'Secret Key';
+
+  @override
+  String get cloudS3SecretKeyHint => 'Your Secret Access Key';
+
+  @override
+  String get cloudS3BucketLabel => 'Bucket Name';
+
+  @override
+  String get cloudS3BucketHint => 'beecount-data';
+
+  @override
+  String get cloudS3UseSSLLabel => 'Use HTTPS';
+
+  @override
+  String get cloudS3PortLabel => 'Port (optional)';
+
+  @override
+  String get cloudS3PortHint => 'Leave blank for default';
+
+  @override
+  String get cloudSupabaseBucketLabel => 'Storage Bucket Name';
+
+  @override
+  String get cloudSupabaseBucketHint => 'Leave blank for default: beecount-backups';
+
+  @override
+  String get authRememberAccount => 'Remember account';
+
+  @override
+  String get authRememberAccountHint => 'Auto-fill on next login (Supabase only)';
 
   @override
   String get cloudConfigSaved => 'Configuration saved';
@@ -2587,6 +2769,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudCustomWebdavSubtitle => 'Click to configure Nutstore/Nextcloud etc.';
 
   @override
+  String get cloudCustomS3Title => 'S3 Protocol Storage';
+
+  @override
+  String get cloudCustomS3Subtitle => 'AWS S3 / Cloudflare R2 / MinIO';
+
+  @override
   String get cloudIcloudSubtitle => 'Auto sync with Apple ID';
 
   @override
@@ -2746,6 +2934,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudWebdavHelpNote => 'Use an app-specific password instead of your account password';
 
   @override
+  String get cloudS3HelpTitle => 'S3 Storage Setup Guide';
+
+  @override
+  String get cloudS3HelpIntro => 'What is S3';
+
+  @override
+  String get cloudS3HelpIntro1 => 'S3 is a standard object storage protocol';
+
+  @override
+  String get cloudS3HelpIntro2 => 'Supported by many cloud providers';
+
+  @override
+  String get cloudS3HelpIntro3 => 'Data is stored on your chosen cloud service';
+
+  @override
+  String get cloudS3HelpProviders => 'Supported Providers';
+
+  @override
+  String get cloudS3HelpProvider1 => '- AWS S3 (Amazon Web Services)';
+
+  @override
+  String get cloudS3HelpProvider2 => '- Cloudflare R2 (free 10GB/month)';
+
+  @override
+  String get cloudS3HelpProvider3 => '- Backblaze B2 (free 10GB)';
+
+  @override
+  String get cloudS3HelpProvider4 => '- MinIO (self-hosted)';
+
+  @override
+  String get cloudS3HelpProvider5 => '- Alibaba Cloud OSS';
+
+  @override
+  String get cloudS3HelpProvider6 => '- Tencent Cloud COS';
+
+  @override
+  String get cloudS3HelpProvider7 => '- Qiniu Kodo';
+
+  @override
+  String get cloudS3HelpSteps => 'Setup Steps (Cloudflare R2 example)';
+
+  @override
+  String get cloudS3HelpStep1 => '1. Login to Cloudflare Dashboard';
+
+  @override
+  String get cloudS3HelpStep2 => '2. Go to R2 > Create Bucket';
+
+  @override
+  String get cloudS3HelpStep3 => '3. Go to R2 > Manage R2 API Tokens';
+
+  @override
+  String get cloudS3HelpStep4 => '4. Create API Token and copy credentials';
+
+  @override
+  String get cloudS3HelpStep5 => '5. Paste endpoint, access key, secret key, and bucket name';
+
+  @override
+  String get cloudS3HelpNote => 'Recommended: Cloudflare R2 offers 10GB free storage without egress fees';
+
+  @override
   String get cloudStatusNotTested => 'Not tested';
 
   @override
@@ -2830,6 +3078,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudConfigureWebdavTitle => 'Configure WebDAV';
+
+  @override
+  String get cloudConfigureS3Title => 'Configure S3';
 
   @override
   String get cloudSupabaseAnonKeyHintLong => 'Paste complete anon key';
@@ -2975,7 +3226,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeCloudSyncFeature2 => 'iCloud sync (zero config for iOS users)';
 
   @override
-  String get welcomeCloudSyncFeature3 => 'Self-hosted WebDAV/Supabase service';
+  String get welcomeCloudSyncFeature3 => 'Self-hosted WebDAV/Supabase/S3 service';
 
   @override
   String get widgetManagement => 'Home Screen Widget';
@@ -3500,6 +3751,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get configIncludeWebdav => 'WebDAV cloud service config';
+
+  @override
+  String get configIncludeS3 => 'S3 cloud service config';
 
   @override
   String get configIncludeAI => 'AI smart recognition config';
