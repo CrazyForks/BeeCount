@@ -6,6 +6,7 @@ import '../cloud/transactions_sync_manager.dart';
 import '../models/ledger_display_item.dart';
 import 'database_providers.dart';
 import 'ui_state_providers.dart';
+import 'statistics_providers.dart';
 
 // 同步状态（根据 ledgerId 与刷新 tick 缓存），避免因 UI 重建重复拉取
 final syncStatusProvider =
@@ -146,8 +147,9 @@ final uploadingLedgerIdsProvider = StateProvider<Set<int>>((ref) => {});
 
 /// 本地账本列表（快速，仅本地）
 final localLedgersProvider = FutureProvider<List<LedgerDisplayItem>>((ref) async {
-  // 监听刷新触发器
+  // 监听刷新触发器（账本列表和统计信息）
   ref.watch(ledgerListRefreshProvider);
+  ref.watch(statsRefreshProvider);  // 监听统计刷新，确保自动记账后刷新
 
   // 使用 syncServiceProvider，TransactionsSyncManager 现在包含账本管理功能
   final syncService = ref.watch(syncServiceProvider);
