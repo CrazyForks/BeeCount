@@ -872,6 +872,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineShareAppSubtitle => 'Generate share poster and save to gallery';
 
   @override
+  String get mineShareWithFriends => 'Share BeeCount with friends';
+
+  @override
   String get mineShareGenerating => 'Generating share poster...';
 
   @override
@@ -884,22 +887,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharePosterSlogan => 'Smart Accounting, Beautiful Life';
 
   @override
-  String get sharePosterFeature1 => '✨ Completely Open Source & Free';
+  String get sharePosterFeature1 => '🔒 Data Security·You Control';
 
   @override
-  String get sharePosterFeature2 => '🤖 AI Smart Bill Recognition';
+  String get sharePosterFeature2 => '✨ Open Source·Auditable';
 
   @override
-  String get sharePosterFeature3 => '⚡ Automated Accounting';
+  String get sharePosterFeature3 => '🤖 AI Smart·Photo & Voice';
 
   @override
-  String get sharePosterFeature4 => '🔒 Privacy & Security';
+  String get sharePosterFeature4 => '📸 Photo Accounting·Auto Recognition';
 
   @override
-  String get sharePosterFeature5 => '☁️ Cloud Sync & Backup';
+  String get sharePosterFeature5 => '📊 Multi Ledger·Dark Mode';
 
   @override
-  String get sharePosterFeature6 => '📊 Multiple Ledgers';
+  String get sharePosterFeature6 => '☁️ Self-Hosted Cloud·Free Forever';
 
   @override
   String get sharePosterScanText => 'Scan to visit open source project';
@@ -918,6 +921,122 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharePosterPermissionDenied => 'Gallery permission denied, please enable in settings';
+
+  @override
+  String get sharePosterYearSummary => 'Year Summary';
+
+  @override
+  String get sharePosterYearSummaryDesc => 'Share your annual bookkeeping achievements';
+
+  @override
+  String get sharePosterMonthSummary => 'Month Summary';
+
+  @override
+  String get sharePosterMonthSummaryDesc => 'Share your monthly financial report';
+
+  @override
+  String get sharePosterAppPromo => 'Share App';
+
+  @override
+  String get sharePosterAppPromoDesc => 'Recommend BeeCount to friends';
+
+  @override
+  String get sharePosterSelectTitle => 'Select Share Poster';
+
+  @override
+  String get sharePosterSwipeHint => 'Swipe left or right to switch poster styles';
+
+  @override
+  String get sharePosterGenerating => 'Generating...';
+
+  @override
+  String sharePosterGenerateButton(String type) {
+    return 'Generate $type';
+  }
+
+  @override
+  String get sharePosterGenerateFailed => 'Failed to generate poster, please try again';
+
+  @override
+  String get sharePosterNoLedger => 'Please select a ledger first';
+
+  @override
+  String get sharePosterYearTitle => 'My Annual Bookkeeping Report';
+
+  @override
+  String get sharePosterYearSubtitle => 'Record life with data, plan future with reason';
+
+  @override
+  String get sharePosterMonthTitle => 'Monthly Bill Report';
+
+  @override
+  String get sharePosterMonthSubtitle => 'Budget Wisely, Spend Rationally';
+
+  @override
+  String get sharePosterLedgerTitle => 'Ledger Statistics Report';
+
+  @override
+  String get sharePosterRecordDays => 'Record Days';
+
+  @override
+  String get sharePosterRecordCount => 'Record Count';
+
+  @override
+  String get sharePosterTotalExpense => 'Total Expense';
+
+  @override
+  String get sharePosterTotalIncome => 'Total Income';
+
+  @override
+  String get sharePosterYearBalance => 'Annual Balance';
+
+  @override
+  String get sharePosterYearDeficit => 'Annual Deficit';
+
+  @override
+  String get sharePosterMonthBalance => 'Monthly Balance';
+
+  @override
+  String get sharePosterBalance => 'Total Balance';
+
+  @override
+  String get sharePosterAvgMonthlyExpense => 'Avg. Monthly Expense';
+
+  @override
+  String get sharePosterAvgMonthlyIncome => 'Avg. Monthly Income';
+
+  @override
+  String get sharePosterAvgDailyExpense => 'Avg. Daily Expense';
+
+  @override
+  String get sharePosterMaxExpenseMonth => 'Highest Expense Month';
+
+  @override
+  String get sharePosterTopExpense => 'TOP 3 Expenses';
+
+  @override
+  String get sharePosterCompareLastMonth => 'vs Last Month';
+
+  @override
+  String get sharePosterIncreaseRate => 'Increase';
+
+  @override
+  String get sharePosterDecreaseRate => 'Decrease';
+
+  @override
+  String get sharePosterLedgerName => 'Ledger Name';
+
+  @override
+  String get sharePosterScanMore => 'Scan for more';
+
+  @override
+  String get sharePosterUnitDay => 'days';
+
+  @override
+  String get sharePosterUnitCount => '';
+
+  @override
+  String get sharePosterUnitYuan => '';
 
   @override
   String get mineDaysCount => 'Days';
@@ -982,6 +1101,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mineSyncError => 'Failed to get status';
+
+  @override
+  String get mineSyncCloudUnavailable => 'Cloud service unavailable, please check configuration or login status';
 
   @override
   String get mineSyncDetailTitle => 'Sync Status Details';
@@ -1620,6 +1742,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderDailySubtitle => 'When enabled, will remind you to record at specified time';
+
+  @override
+  String get reminderDailyBody => 'Don\'t forget to record your transactions today 💰';
+
+  @override
+  String get reminderChannelName => 'Recording Reminder';
+
+  @override
+  String get reminderChannelDescription => 'Daily recording reminder';
 
   @override
   String get reminderTimeTitle => 'Reminder Time';

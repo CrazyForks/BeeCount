@@ -872,6 +872,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineShareAppSubtitle => '生成分享海报并保存到相册';
 
   @override
+  String get mineShareWithFriends => '和好友分享蜜蜂记账';
+
+  @override
   String get mineShareGenerating => '正在生成分享海报...';
 
   @override
@@ -884,22 +887,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterSlogan => '一笔一蜜，记录美好生活';
 
   @override
-  String get sharePosterFeature1 => '✨ 完全开源免费';
+  String get sharePosterFeature1 => '🔒 数据安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '🤖 AI智能识别账单';
+  String get sharePosterFeature2 => '✨ 完全开源·可审计';
 
   @override
-  String get sharePosterFeature3 => '⚡ 自动化记账';
+  String get sharePosterFeature3 => '🤖 AI智能记账·图片语音';
 
   @override
-  String get sharePosterFeature4 => '🔒 数据隐私安全';
+  String get sharePosterFeature4 => '📸 拍照记账·自动识别';
 
   @override
-  String get sharePosterFeature5 => '☁️ 云端同步备份';
+  String get sharePosterFeature5 => '📊 多账本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '📊 多账本管理';
+  String get sharePosterFeature6 => '☁️ 自建云同步·永久免费';
 
   @override
   String get sharePosterScanText => '扫码访问开源项目';
@@ -918,6 +921,122 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterPermissionDenied => '相册权限被拒绝，请在设置中开启';
+
+  @override
+  String get sharePosterYearSummary => '年度总结';
+
+  @override
+  String get sharePosterYearSummaryDesc => '分享你的年度记账成就';
+
+  @override
+  String get sharePosterMonthSummary => '月度总结';
+
+  @override
+  String get sharePosterMonthSummaryDesc => '分享你的月度财务报告';
+
+  @override
+  String get sharePosterAppPromo => '分享应用';
+
+  @override
+  String get sharePosterAppPromoDesc => '推荐蜜蜂记账给好友';
+
+  @override
+  String get sharePosterSelectTitle => '选择分享海报';
+
+  @override
+  String get sharePosterSwipeHint => '左右滑动切换海报样式';
+
+  @override
+  String get sharePosterGenerating => '生成中...';
+
+  @override
+  String sharePosterGenerateButton(String type) {
+    return '生成$type';
+  }
+
+  @override
+  String get sharePosterGenerateFailed => '生成海报失败，请重试';
+
+  @override
+  String get sharePosterNoLedger => '请先选择一个账本';
+
+  @override
+  String get sharePosterYearTitle => '我的记账年度报告';
+
+  @override
+  String get sharePosterYearSubtitle => '用数据记录生活 用理性规划未来';
+
+  @override
+  String get sharePosterMonthTitle => '月度账单报告';
+
+  @override
+  String get sharePosterMonthSubtitle => '精打细算 理性消费';
+
+  @override
+  String get sharePosterLedgerTitle => '账本统计报告';
+
+  @override
+  String get sharePosterRecordDays => '记账天数';
+
+  @override
+  String get sharePosterRecordCount => '记账笔数';
+
+  @override
+  String get sharePosterTotalExpense => '总支出';
+
+  @override
+  String get sharePosterTotalIncome => '总收入';
+
+  @override
+  String get sharePosterYearBalance => '年度结余';
+
+  @override
+  String get sharePosterYearDeficit => '年度赤字';
+
+  @override
+  String get sharePosterMonthBalance => '月度结余';
+
+  @override
+  String get sharePosterBalance => '总结余';
+
+  @override
+  String get sharePosterAvgMonthlyExpense => '月均支出';
+
+  @override
+  String get sharePosterAvgMonthlyIncome => '月均收入';
+
+  @override
+  String get sharePosterAvgDailyExpense => '日均支出';
+
+  @override
+  String get sharePosterMaxExpenseMonth => '支出最高月份';
+
+  @override
+  String get sharePosterTopExpense => 'TOP 3 支出';
+
+  @override
+  String get sharePosterCompareLastMonth => '环比上月';
+
+  @override
+  String get sharePosterIncreaseRate => '较上月增长';
+
+  @override
+  String get sharePosterDecreaseRate => '较上月减少';
+
+  @override
+  String get sharePosterLedgerName => '账本名称';
+
+  @override
+  String get sharePosterScanMore => '扫码了解更多';
+
+  @override
+  String get sharePosterUnitDay => '天';
+
+  @override
+  String get sharePosterUnitCount => '笔';
+
+  @override
+  String get sharePosterUnitYuan => '元';
 
   @override
   String get mineDaysCount => '记账天数';
@@ -982,6 +1101,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineSyncError => '状态获取失败';
+
+  @override
+  String get mineSyncCloudUnavailable => '云服务不可用，请检查配置或登录状态';
 
   @override
   String get mineSyncDetailTitle => '同步状态详情';
@@ -1620,6 +1742,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reminderDailySubtitle => '开启后将在指定时间提醒您记账';
+
+  @override
+  String get reminderDailyBody => '别忘了记录今天的收支哦 💰';
+
+  @override
+  String get reminderChannelName => '记账提醒';
+
+  @override
+  String get reminderChannelDescription => '每日记账提醒';
 
   @override
   String get reminderTimeTitle => '提醒时间';
@@ -4702,6 +4833,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineShareAppSubtitle => '生成分享海報並儲存到相簿';
 
   @override
+  String get mineShareWithFriends => '和好友分享蜜蜂記帳';
+
+  @override
   String get mineShareGenerating => '正在生成分享海報...';
 
   @override
@@ -4714,22 +4848,22 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterSlogan => '一筆一蜜，記錄美好生活';
 
   @override
-  String get sharePosterFeature1 => '✨ 完全開源免費';
+  String get sharePosterFeature1 => '🔒 資料安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '🤖 AI智能識別帳單';
+  String get sharePosterFeature2 => '✨ 完全開源·可審計';
 
   @override
-  String get sharePosterFeature3 => '⚡ 自動化記帳';
+  String get sharePosterFeature3 => '🤖 AI智能記帳·圖片語音';
 
   @override
-  String get sharePosterFeature4 => '🔒 資料隱私安全';
+  String get sharePosterFeature4 => '📸 拍照記帳·自動識別';
 
   @override
-  String get sharePosterFeature5 => '☁️ 雲端同步備份';
+  String get sharePosterFeature5 => '📊 多帳本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '📊 多帳本管理';
+  String get sharePosterFeature6 => '☁️ 自建雲同步·永久免費';
 
   @override
   String get sharePosterScanText => '掃碼訪問開源專案';
@@ -4748,6 +4882,122 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterPermissionDenied => '相簿權限被拒絕，請在設定中開啟';
+
+  @override
+  String get sharePosterYearSummary => '年度總結';
+
+  @override
+  String get sharePosterYearSummaryDesc => '分享你的年度記帳成就';
+
+  @override
+  String get sharePosterMonthSummary => '月度總結';
+
+  @override
+  String get sharePosterMonthSummaryDesc => '分享你的月度財務報告';
+
+  @override
+  String get sharePosterAppPromo => '分享應用';
+
+  @override
+  String get sharePosterAppPromoDesc => '推薦蜜蜂記帳給好友';
+
+  @override
+  String get sharePosterSelectTitle => '選擇分享海報';
+
+  @override
+  String get sharePosterSwipeHint => '左右滑動切換海報樣式';
+
+  @override
+  String get sharePosterGenerating => '生成中...';
+
+  @override
+  String sharePosterGenerateButton(String type) {
+    return '生成$type';
+  }
+
+  @override
+  String get sharePosterGenerateFailed => '生成海報失敗，請重試';
+
+  @override
+  String get sharePosterNoLedger => '請先選擇一個帳本';
+
+  @override
+  String get sharePosterYearTitle => '我的記帳年度報告';
+
+  @override
+  String get sharePosterYearSubtitle => '用數據記錄生活 用理性規劃未來';
+
+  @override
+  String get sharePosterMonthTitle => '月度帳單報告';
+
+  @override
+  String get sharePosterMonthSubtitle => '精打細算 理性消費';
+
+  @override
+  String get sharePosterLedgerTitle => '帳本統計報告';
+
+  @override
+  String get sharePosterRecordDays => '記帳天數';
+
+  @override
+  String get sharePosterRecordCount => '記帳筆數';
+
+  @override
+  String get sharePosterTotalExpense => '總支出';
+
+  @override
+  String get sharePosterTotalIncome => '總收入';
+
+  @override
+  String get sharePosterYearBalance => '年度結餘';
+
+  @override
+  String get sharePosterYearDeficit => '年度赤字';
+
+  @override
+  String get sharePosterMonthBalance => '月度結餘';
+
+  @override
+  String get sharePosterBalance => '總結餘';
+
+  @override
+  String get sharePosterAvgMonthlyExpense => '月均支出';
+
+  @override
+  String get sharePosterAvgMonthlyIncome => '月均收入';
+
+  @override
+  String get sharePosterAvgDailyExpense => '日均支出';
+
+  @override
+  String get sharePosterMaxExpenseMonth => '支出最高月份';
+
+  @override
+  String get sharePosterTopExpense => 'TOP 3 支出';
+
+  @override
+  String get sharePosterCompareLastMonth => '環比上月';
+
+  @override
+  String get sharePosterIncreaseRate => '較上月增長';
+
+  @override
+  String get sharePosterDecreaseRate => '較上月減少';
+
+  @override
+  String get sharePosterLedgerName => '帳本名稱';
+
+  @override
+  String get sharePosterScanMore => '掃碼瞭解更多';
+
+  @override
+  String get sharePosterUnitDay => '天';
+
+  @override
+  String get sharePosterUnitCount => '筆';
+
+  @override
+  String get sharePosterUnitYuan => '元';
 
   @override
   String get mineDaysCount => '記帳天數';
@@ -4812,6 +5062,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineSyncError => '狀態取得失敗';
+
+  @override
+  String get mineSyncCloudUnavailable => '雲端服務不可用，請檢查配置或登入狀態';
 
   @override
   String get mineSyncDetailTitle => '同步狀態詳情';
@@ -5450,6 +5703,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderDailySubtitle => '開啟後將在指定時間提醒您記帳';
+
+  @override
+  String get reminderDailyBody => '別忘了記錄今天的收支哦 💰';
+
+  @override
+  String get reminderChannelName => '記帳提醒';
+
+  @override
+  String get reminderChannelDescription => '每日記帳提醒';
 
   @override
   String get reminderTimeTitle => '提醒時間';
