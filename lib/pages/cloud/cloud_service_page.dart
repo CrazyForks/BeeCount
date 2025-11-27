@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import 'package:flutter_cloud_sync_icloud/flutter_cloud_sync_icloud.dart';
-import '../../cloud/sync_service.dart';
 import '../../providers/sync_providers.dart';
 import '../../services/logger_service.dart';
 import '../../widgets/ui/ui.dart';

@@ -37,7 +37,7 @@ abstract class BillExtractionGLMBaseProvider implements AIProvider<String, BillI
     // 1. 构建账单提取Prompt（由子类实现）
     final prompt = buildPrompt(task.input);
     logger.debug('AI', '[Prompt长度] ${prompt.length}');
-    logger.debug('AI', '[Prompt前100字符] ${prompt.substring(0, prompt.length > 100 ? 100 : prompt.length)}');
+    logger.debug('AI', '[完整Prompt]\n$prompt');
 
     // 2. 调用底层GLM Provider
     final textTask = _TextTask(prompt);
@@ -103,7 +103,7 @@ $categoryHint$accountHint
    - 相对日期（昨天、前天、上周）→推算具体日期
    - 时间段（早上、中午、晚上）→使用合理时刻（早上09:00、中午12:00、晚上19:00）
    - 完全没提时间→使用当前时间
-3. merchant: 商家名称
+3. merchant: 商家名称（如果没有明确商家信息，省略此字段或返回空字符串，不要返回"未知"）
 4. category: 从分类列表选择
 5. type: income或expense
 6. account: 支付账户（可选）
@@ -113,7 +113,7 @@ $categoryHint$accountHint
 输入"早上买咖啡30" → {"amount":-30,"time":"${currentDate}T09:00:00","category":"咖啡","type":"expense"}
 输入"买了件衣服200" → {"amount":-200,"time":"${currentDate}T$currentHour:$currentMinute:00","category":"服装","type":"expense"}
 
-注意：只返回JSON，尽量推断时间不要返回null
+注意：只返回JSON，尽量推断时间不要返回null，merchant没有时省略或留空
 ''';
   }
 

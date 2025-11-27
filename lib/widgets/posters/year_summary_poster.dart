@@ -13,11 +13,13 @@ import '../../l10n/app_localizations.dart';
 class YearSummaryPoster extends StatelessWidget {
   final YearSummaryPosterData data;
   final Color primaryColor;
+  final bool hideIncome;
 
   const YearSummaryPoster({
     super.key,
     required this.data,
     required this.primaryColor,
+    this.hideIncome = false,
   });
 
   @override
@@ -307,7 +309,7 @@ class YearSummaryPoster extends StatelessWidget {
           _buildStatRow(
             icon: Icons.trending_up_rounded,
             label: l10n.sharePosterTotalIncome,
-            value: formatter.format(data.totalIncome),
+            value: hideIncome ? '**' : formatter.format(data.totalIncome),
             unit: l10n.sharePosterUnitYuan,
             color: const Color(0xFF51CF66),
             isHighlight: true,
@@ -317,7 +319,7 @@ class YearSummaryPoster extends StatelessWidget {
           const SizedBox(height: 16),
 
           // 结余
-          _buildBalanceRow(context),
+          _buildBalanceRow(context, hideIncome),
         ],
       ),
     );
@@ -428,7 +430,7 @@ class YearSummaryPoster extends StatelessWidget {
   }
 
   /// 构建结余行
-  Widget _buildBalanceRow(BuildContext context) {
+  Widget _buildBalanceRow(BuildContext context, bool hideIncome) {
     final l10n = AppLocalizations.of(context);
     final formatter = NumberFormat('#,##0.00', 'zh_CN');
     final isPositive = data.balance >= 0;
@@ -455,7 +457,7 @@ class YearSummaryPoster extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            '${isPositive ? '+' : ''}${formatter.format(data.balance)}',
+            hideIncome ? '**' : '${isPositive ? '+' : ''}${formatter.format(data.balance)}',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,

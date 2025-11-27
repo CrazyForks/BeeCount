@@ -128,6 +128,7 @@ class SharePosterService {
     required int ledgerId,
     required int year,
     required Color primaryColor,
+    bool hideIncome = false,
   }) async {
     try {
       final repository = ref.read(repositoryProvider);
@@ -140,7 +141,7 @@ class SharePosterService {
 
       return await _generatePosterFromWidgetStatic(
         context,
-        YearSummaryPoster(data: data, primaryColor: primaryColor),
+        YearSummaryPoster(data: data, primaryColor: primaryColor, hideIncome: hideIncome),
       );
     } catch (e) {
       return null;
@@ -155,6 +156,7 @@ class SharePosterService {
     required int year,
     required int month,
     required Color primaryColor,
+    bool hideIncome = false,
   }) async {
     try {
       final repository = ref.read(repositoryProvider);
@@ -168,7 +170,7 @@ class SharePosterService {
 
       return await _generatePosterFromWidgetStatic(
         context,
-        MonthSummaryPoster(data: data, primaryColor: primaryColor),
+        MonthSummaryPoster(data: data, primaryColor: primaryColor, hideIncome: hideIncome),
       );
     } catch (e) {
       return null;
@@ -181,6 +183,7 @@ class SharePosterService {
     WidgetRef ref, {
     required int ledgerId,
     required Color primaryColor,
+    bool hideIncome = false,
   }) async {
     try {
       final repository = ref.read(repositoryProvider);
@@ -192,7 +195,7 @@ class SharePosterService {
 
       return await _generatePosterFromWidgetStatic(
         context,
-        LedgerSummaryPoster(data: data, primaryColor: primaryColor),
+        LedgerSummaryPoster(data: data, primaryColor: primaryColor, hideIncome: hideIncome),
       );
     } catch (e) {
       return null;
@@ -277,6 +280,27 @@ class SharePosterService {
       builder: (context) => _PosterPreviewDialog(
         imageBytes: imageBytes,
         l10n: l10n,
+      ),
+    );
+  }
+
+  /// 显示可动态生成的海报预览对话框（支持隐藏收入）
+  static Future<void> showDynamicPosterPreview(
+    BuildContext context,
+    WidgetRef ref, {
+    required String type, // 'year', 'month', 'ledger'
+    required int ledgerId,
+    int? year,
+    int? month,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (context) => _DynamicPosterPreviewDialog(
+        ref: ref,
+        type: type,
+        ledgerId: ledgerId,
+        year: year,
+        month: month,
       ),
     );
   }
@@ -455,6 +479,7 @@ class _PosterCarouselPreviewDialogState
   final Set<int> _generating = {};
 
   bool _isSaving = false;
+  bool _hideIncome = false; // 是否隐藏收入和结余
 
   @override
   void initState() {
@@ -493,13 +518,13 @@ class _PosterCarouselPreviewDialogState
 
       switch (posterType) {
         case PosterType.yearSummary:
-          imageBytes = await _generateYearSummary(primaryColor);
+          imageBytes = await _generateYearSummary(primaryColor, _hideIncome);
           break;
         case PosterType.monthSummary:
-          imageBytes = await _generateMonthSummary(primaryColor);
+          imageBytes = await _generateMonthSummary(primaryColor, _hideIncome);
           break;
         case PosterType.ledgerSummary:
-          imageBytes = await _generateLedgerSummary(primaryColor);
+          imageBytes = await _generateLedgerSummary(primaryColor, _hideIncome);
           break;
         case PosterType.appPromo:
           imageBytes =
@@ -531,7 +556,7 @@ class _PosterCarouselPreviewDialogState
   }
 
   /// 生成年度总结海报
-  Future<Uint8List?> _generateYearSummary(Color primaryColor) async {
+  Future<Uint8List?> _generateYearSummary(Color primaryColor, bool hideIncome) async {
     final ledgerId = ref.read(currentLedgerIdProvider);
     if (ledgerId == 0) {
       final l10n = AppLocalizations.of(context);
@@ -552,12 +577,12 @@ class _PosterCarouselPreviewDialogState
     );
 
     return await _generatePosterFromWidget(
-      YearSummaryPoster(data: data, primaryColor: primaryColor),
+      YearSummaryPoster(data: data, primaryColor: primaryColor, hideIncome: hideIncome),
     );
   }
 
   /// 生成月度总结海报
-  Future<Uint8List?> _generateMonthSummary(Color primaryColor) async {
+  Future<Uint8List?> _generateMonthSummary(Color primaryColor, bool hideIncome) async {
     final ledgerId = ref.read(currentLedgerIdProvider);
     if (ledgerId == 0) {
       final l10n = AppLocalizations.of(context);
@@ -580,12 +605,12 @@ class _PosterCarouselPreviewDialogState
     );
 
     return await _generatePosterFromWidget(
-      MonthSummaryPoster(data: data, primaryColor: primaryColor),
+      MonthSummaryPoster(data: data, primaryColor: primaryColor, hideIncome: hideIncome),
     );
   }
 
   /// 生成账本总结海报
-  Future<Uint8List?> _generateLedgerSummary(Color primaryColor) async {
+  Future<Uint8List?> _generateLedgerSummary(Color primaryColor, bool hideIncome) async {
     final ledgerId = ref.read(currentLedgerIdProvider);
     if (ledgerId == 0) {
       final l10n = AppLocalizations.of(context);
@@ -601,7 +626,7 @@ class _PosterCarouselPreviewDialogState
     );
 
     return await _generatePosterFromWidget(
-      LedgerSummaryPoster(data: data, primaryColor: primaryColor),
+      LedgerSummaryPoster(data: data, primaryColor: primaryColor, hideIncome: hideIncome),
     );
   }
 
@@ -803,6 +828,59 @@ class _PosterCarouselPreviewDialogState
                                     ),
                                   ),
                                 ),
+
+                              // 隐藏收入按钮（只在年度/月度/账本总结海报显示）
+                              if (_posterTypes[index] != PosterType.appPromo && !generating)
+                                Positioned(
+                                  top: 16,
+                                  right: 16,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          _hideIncome = !_hideIncome;
+                                          // 清除所有海报缓存以便重新生成
+                                          _posterCache.clear();
+                                        });
+                                        // 重新生成当前海报
+                                        await _generatePosterAtIndex(index);
+                                      },
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withValues(alpha: 0.5),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              _hideIncome
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              size: 16,
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              _hideIncome ? l10n.sharePosterShowIncome : l10n.sharePosterHideIncome,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         ),
@@ -869,6 +947,316 @@ class _PosterCarouselPreviewDialogState
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: (cachedPoster == null || isGenerating || _isSaving)
+                        ? null
+                        : _savePoster,
+                    icon: _isSaving
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation(Colors.white),
+                            ),
+                          )
+                        : const Icon(Icons.download_outlined, color: Colors.white),
+                    label: Text(l10n.sharePosterSave),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 动态海报预览对话框（支持隐藏收入）
+class _DynamicPosterPreviewDialog extends ConsumerStatefulWidget {
+  final WidgetRef ref;
+  final String type; // 'year', 'month', 'ledger'
+  final int ledgerId;
+  final int? year;
+  final int? month;
+
+  const _DynamicPosterPreviewDialog({
+    required this.ref,
+    required this.type,
+    required this.ledgerId,
+    this.year,
+    this.month,
+  });
+
+  @override
+  ConsumerState<_DynamicPosterPreviewDialog> createState() =>
+      _DynamicPosterPreviewDialogState();
+}
+
+class _DynamicPosterPreviewDialogState
+    extends ConsumerState<_DynamicPosterPreviewDialog> {
+  Uint8List? _posterImage;
+  bool _isGenerating = false;
+  bool _isSaving = false;
+  bool _hideIncome = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _generatePoster();
+  }
+
+  Future<void> _generatePoster() async {
+    setState(() => _isGenerating = true);
+
+    try {
+      final primaryColor = ref.read(primaryColorProvider);
+      Uint8List? imageBytes;
+
+      switch (widget.type) {
+        case 'year':
+          imageBytes = await SharePosterService.generateYearSummaryPoster(
+            context,
+            widget.ref,
+            ledgerId: widget.ledgerId,
+            year: widget.year ?? DateTime.now().year,
+            primaryColor: primaryColor,
+            hideIncome: _hideIncome,
+          );
+          break;
+        case 'month':
+          imageBytes = await SharePosterService.generateMonthSummaryPoster(
+            context,
+            widget.ref,
+            ledgerId: widget.ledgerId,
+            year: widget.year ?? DateTime.now().year,
+            month: widget.month ?? DateTime.now().month,
+            primaryColor: primaryColor,
+            hideIncome: _hideIncome,
+          );
+          break;
+        case 'ledger':
+          imageBytes = await SharePosterService.generateLedgerSummaryPoster(
+            context,
+            widget.ref,
+            ledgerId: widget.ledgerId,
+            primaryColor: primaryColor,
+            hideIncome: _hideIncome,
+          );
+          break;
+      }
+
+      if (mounted) {
+        setState(() {
+          _posterImage = imageBytes;
+          _isGenerating = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isGenerating = false);
+        final l10n = AppLocalizations.of(context);
+        showToast(context, l10n.sharePosterGenerateFailed);
+      }
+    }
+  }
+
+  Future<void> _toggleHideIncome() async {
+    setState(() => _hideIncome = !_hideIncome);
+    await _generatePoster();
+  }
+
+  Future<void> _savePoster() async {
+    if (_posterImage == null) return;
+
+    setState(() => _isSaving = true);
+
+    final result = await SharePosterService.savePosterToGallery(_posterImage!);
+
+    if (!mounted) return;
+
+    setState(() => _isSaving = false);
+
+    final l10n = AppLocalizations.of(context);
+    switch (result) {
+      case SavePosterResult.success:
+        showToast(context, l10n.sharePosterSaveSuccess);
+        Navigator.pop(context);
+        break;
+      case SavePosterResult.accessDenied:
+        showToast(context, l10n.sharePosterPermissionDenied);
+        break;
+      case SavePosterResult.failed:
+        showToast(context, l10n.sharePosterSaveFailed);
+        break;
+    }
+  }
+
+  Future<void> _sharePoster() async {
+    if (_posterImage == null) return;
+    await SharePosterService.sharePoster(_posterImage!);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.watch(primaryColorProvider);
+    final isDark = BeeTokens.isDark(context);
+
+    final secondaryButtonBg = isDark ? BeeTokens.surface(context) : Colors.white;
+    final secondaryButtonFg = isDark ? BeeTokens.textPrimary(context) : primaryColor;
+
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+      elevation: 0,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 海报预览
+          Flexible(
+            child: Container(
+              constraints: const BoxConstraints(maxHeight: 600),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(28),
+                child: Stack(
+                  children: [
+                    // 海报图片
+                    if (_posterImage != null && !_isGenerating)
+                      Image.memory(
+                        _posterImage!,
+                        fit: BoxFit.contain,
+                      )
+                    else
+                      Container(
+                        color: Colors.grey[100],
+                        child: Center(
+                          child: Icon(
+                            Icons.image_outlined,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ),
+
+                    // 生成中的加载指示器
+                    if (_isGenerating)
+                      Container(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                l10n.sharePosterGenerating,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                    // 隐藏收入按钮
+                    if (!_isGenerating)
+                      Positioned(
+                        top: 16,
+                        right: 16,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: _toggleHideIncome,
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    _hideIncome
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    size: 16,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    _hideIncome ? l10n.sharePosterShowIncome : l10n.sharePosterHideIncome,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // 操作按钮
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: (_posterImage == null || _isGenerating || _isSaving)
+                        ? null
+                        : _sharePoster,
+                    icon: Icon(Icons.share_outlined, color: secondaryButtonFg),
+                    label: Text(l10n.sharePosterShare),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: secondaryButtonFg,
+                      backgroundColor: secondaryButtonBg,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: isDark
+                            ? BorderSide(color: BeeTokens.border(context))
+                            : BorderSide.none,
+                      ),
+                      elevation: 0,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: (_posterImage == null || _isGenerating || _isSaving)
                         ? null
                         : _savePoster,
                     icon: _isSaving

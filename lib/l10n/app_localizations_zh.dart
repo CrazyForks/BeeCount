@@ -25,7 +25,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonCancel => '取消';
 
   @override
-  String get commonConfirm => '确认';
+  String get commonConfirm => '确定';
 
   @override
   String get commonSave => '保存';
@@ -158,9 +158,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonGoSettings => '前往设置';
 
   @override
-  String get commonHelp => '帮助';
-
-  @override
   String get commonLanguage => '语言';
 
   @override
@@ -216,12 +213,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeSearch => '搜索';
-
-  @override
-  String get homeShowAmount => '显示金额';
-
-  @override
-  String get homeHideAmount => '隐藏金额';
 
   @override
   String homeYear(int year) {
@@ -404,9 +395,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get analyticsSwipeHint => '左右滑动切换周期';
-
-  @override
-  String get analyticsTipContent => '1) 底部左右滑动可切换收入/支出/结余\\n2) 图表区域左右滑动可切换上一/下一周期';
 
   @override
   String analyticsSwitchTo(String type) {
@@ -869,16 +857,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineShareApp => '分享应用';
 
   @override
-  String get mineShareAppSubtitle => '生成分享海报并保存到相册';
-
-  @override
   String get mineShareWithFriends => '和好友分享蜜蜂记账';
 
   @override
   String get mineShareGenerating => '正在生成分享海报...';
-
-  @override
-  String get mineShareFailed => '保存失败，请检查相册权限';
 
   @override
   String get sharePosterAppName => '蜜蜂记账';
@@ -914,6 +896,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterShare => '分享';
 
   @override
+  String get sharePosterHideIncome => '隐藏收入';
+
+  @override
+  String get sharePosterShowIncome => '显示收入';
+
+  @override
   String get sharePosterSaveSuccess => '已保存到相册';
 
   @override
@@ -923,36 +911,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterPermissionDenied => '相册权限被拒绝，请在设置中开启';
 
   @override
-  String get sharePosterYearSummary => '年度总结';
-
-  @override
-  String get sharePosterYearSummaryDesc => '分享你的年度记账成就';
-
-  @override
-  String get sharePosterMonthSummary => '月度总结';
-
-  @override
-  String get sharePosterMonthSummaryDesc => '分享你的月度财务报告';
-
-  @override
-  String get sharePosterAppPromo => '分享应用';
-
-  @override
-  String get sharePosterAppPromoDesc => '推荐蜜蜂记账给好友';
-
-  @override
-  String get sharePosterSelectTitle => '选择分享海报';
-
-  @override
-  String get sharePosterSwipeHint => '左右滑动切换海报样式';
-
-  @override
   String get sharePosterGenerating => '生成中...';
-
-  @override
-  String sharePosterGenerateButton(String type) {
-    return '生成$type';
-  }
 
   @override
   String get sharePosterGenerateFailed => '生成海报失败，请重试';
@@ -1027,9 +986,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterLedgerName => '账本名称';
 
   @override
-  String get sharePosterScanMore => '扫码了解更多';
-
-  @override
   String get sharePosterUnitDay => '天';
 
   @override
@@ -1101,9 +1057,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineSyncError => '状态获取失败';
-
-  @override
-  String get mineSyncCloudUnavailable => '云服务不可用，请检查配置或登录状态';
 
   @override
   String get mineSyncDetailTitle => '同步状态详情';
@@ -1742,15 +1695,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reminderDailySubtitle => '开启后将在指定时间提醒您记账';
-
-  @override
-  String get reminderDailyBody => '别忘了记录今天的收支哦 💰';
-
-  @override
-  String get reminderChannelName => '记账提醒';
-
-  @override
-  String get reminderChannelDescription => '每日记账提醒';
 
   @override
   String get reminderTimeTitle => '提醒时间';
@@ -3379,22 +3323,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get iosAutoBackTapDesc => '设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图';
 
   @override
-  String get aiSettingsTitle => 'AI智能识别';
+  String get aiSettingsTitle => 'AI小助手';
 
   @override
   String get aiSettingsSubtitle => '配置AI模型和识别策略';
 
   @override
-  String get aiEnableTitle => '启用AI智能识别';
+  String get aiEnableTitle => '启用AI小助手';
 
   @override
-  String get aiEnableSubtitle => '使用AI增强OCR识别准确度，提取金额、商家、时间等信息';
+  String get aiEnableSubtitle => '使用AI增强OCR识别准确度，提取金额、商家、时间等信息，并支持自然语言对话';
 
   @override
-  String get aiEnableToastOn => 'AI增强已启用';
+  String get aiEnableToastOn => 'AI小助手已启用';
 
   @override
-  String get aiEnableToastOff => 'AI增强已禁用';
+  String get aiEnableToastOff => 'AI小助手已关闭';
 
   @override
   String get aiStrategyTitle => '执行策略';
@@ -3511,7 +3455,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get smartBilling => '智能记账';
 
   @override
-  String get smartBillingDesc => 'AI识别、OCR扫描、自动记账';
+  String get smartBillingDesc => 'AI小助手、OCR扫描、自动记账';
 
   @override
   String get smartBillingPageTitle => '智能记账';
@@ -3961,6 +3905,66 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get iosVersionWarningDesc => '截图自动记账功能使用了 iOS 16 引入的 App Intents 框架。您的设备系统版本较低，暂不支持此功能。\n\n请升级到 iOS 16 或更高版本以使用此功能。';
+
+  @override
+  String get aiChatTitle => 'AI助手';
+
+  @override
+  String get aiChatClearHistory => '清除对话历史';
+
+  @override
+  String get aiChatClearHistoryDialogTitle => '清除对话历史';
+
+  @override
+  String get aiChatClearHistoryDialogContent => '确定要清除所有对话记录吗?此操作不可恢复。';
+
+  @override
+  String get aiChatInputHint => '例如: 买了杯咖啡35块';
+
+  @override
+  String get aiChatThinking => '思考中...';
+
+  @override
+  String get aiChatHistoryCleared => '对话历史已清空';
+
+  @override
+  String get aiChatUndone => '已撤销';
+
+  @override
+  String get aiChatUndoFailed => '撤销失败';
+
+  @override
+  String get aiChatTransactionNotFound => '交易记录不存在';
+
+  @override
+  String get aiChatOpenEditorFailed => '打开编辑页面失败';
+
+  @override
+  String get aiChatSendFailed => '发送失败';
+
+  @override
+  String get billCardSuccess => '记账成功';
+
+  @override
+  String get billCardUndone => '已撤销';
+
+  @override
+  String get billCardAmount => '💰 金额';
+
+  @override
+  String get billCardCategory => '🏷️ 分类';
+
+  @override
+  String get billCardTime => '📅 时间';
+
+  @override
+  String get billCardNote => '📝 备注';
+
+  @override
+  String get billCardUndo => '撤销';
+
+  @override
+  String get billCardEdit => '修改';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -3986,7 +3990,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonCancel => '取消';
 
   @override
-  String get commonConfirm => '確認';
+  String get commonConfirm => '確定';
 
   @override
   String get commonSave => '儲存';
@@ -4119,9 +4123,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get commonGoSettings => '前往設定';
 
   @override
-  String get commonHelp => '說明';
-
-  @override
   String get commonLanguage => '語言';
 
   @override
@@ -4177,12 +4178,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get homeSearch => '搜尋';
-
-  @override
-  String get homeShowAmount => '顯示金額';
-
-  @override
-  String get homeHideAmount => '隱藏金額';
 
   @override
   String homeYear(int year) {
@@ -4365,9 +4360,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get analyticsSwipeHint => '左右滑動切換週期';
-
-  @override
-  String get analyticsTipContent => '1) 底部左右滑動可切換收入/支出/結餘\\n2) 圖表區域左右滑動可切換上一/下一週期';
 
   @override
   String analyticsSwitchTo(String type) {
@@ -4830,16 +4822,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineShareApp => '分享應用程式';
 
   @override
-  String get mineShareAppSubtitle => '生成分享海報並儲存到相簿';
-
-  @override
   String get mineShareWithFriends => '和好友分享蜜蜂記帳';
 
   @override
   String get mineShareGenerating => '正在生成分享海報...';
-
-  @override
-  String get mineShareFailed => '儲存失敗，請檢查相簿權限';
 
   @override
   String get sharePosterAppName => '蜜蜂記帳';
@@ -4875,6 +4861,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterShare => '分享';
 
   @override
+  String get sharePosterHideIncome => '隱藏收入';
+
+  @override
+  String get sharePosterShowIncome => '顯示收入';
+
+  @override
   String get sharePosterSaveSuccess => '已儲存到相簿';
 
   @override
@@ -4884,36 +4876,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterPermissionDenied => '相簿權限被拒絕，請在設定中開啟';
 
   @override
-  String get sharePosterYearSummary => '年度總結';
-
-  @override
-  String get sharePosterYearSummaryDesc => '分享你的年度記帳成就';
-
-  @override
-  String get sharePosterMonthSummary => '月度總結';
-
-  @override
-  String get sharePosterMonthSummaryDesc => '分享你的月度財務報告';
-
-  @override
-  String get sharePosterAppPromo => '分享應用';
-
-  @override
-  String get sharePosterAppPromoDesc => '推薦蜜蜂記帳給好友';
-
-  @override
-  String get sharePosterSelectTitle => '選擇分享海報';
-
-  @override
-  String get sharePosterSwipeHint => '左右滑動切換海報樣式';
-
-  @override
   String get sharePosterGenerating => '生成中...';
-
-  @override
-  String sharePosterGenerateButton(String type) {
-    return '生成$type';
-  }
 
   @override
   String get sharePosterGenerateFailed => '生成海報失敗，請重試';
@@ -4988,9 +4951,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterLedgerName => '帳本名稱';
 
   @override
-  String get sharePosterScanMore => '掃碼瞭解更多';
-
-  @override
   String get sharePosterUnitDay => '天';
 
   @override
@@ -5062,9 +5022,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mineSyncError => '狀態取得失敗';
-
-  @override
-  String get mineSyncCloudUnavailable => '雲端服務不可用，請檢查配置或登入狀態';
 
   @override
   String get mineSyncDetailTitle => '同步狀態詳情';
@@ -5703,15 +5660,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderDailySubtitle => '開啟後將在指定時間提醒您記帳';
-
-  @override
-  String get reminderDailyBody => '別忘了記錄今天的收支哦 💰';
-
-  @override
-  String get reminderChannelName => '記帳提醒';
-
-  @override
-  String get reminderChannelDescription => '每日記帳提醒';
 
   @override
   String get reminderTimeTitle => '提醒時間';
@@ -7340,22 +7288,22 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get iosAutoBackTapDesc => '設定 > 輔助使用 > 觸控 > 背面輕點\n• 選擇「點兩下」或「點三下」\n• 選擇剛建立的捷徑\n• 完成後，支付時雙擊手機背面即可自動記帳，無需截圖';
 
   @override
-  String get aiSettingsTitle => 'AI 智慧識別';
+  String get aiSettingsTitle => 'AI 小助手';
 
   @override
   String get aiSettingsSubtitle => '設定 AI 模型和識別策略';
 
   @override
-  String get aiEnableTitle => '啟用 AI 智慧識別';
+  String get aiEnableTitle => '啟用 AI 小助手';
 
   @override
-  String get aiEnableSubtitle => '使用 AI 增強 OCR 識別準確度，提取金額、商家、時間等資訊';
+  String get aiEnableSubtitle => '使用 AI 增強 OCR 識別準確度，提取金額、商家、時間等資訊，並支援自然語言對話';
 
   @override
-  String get aiEnableToastOn => 'AI 增強已啟用';
+  String get aiEnableToastOn => 'AI 小助手已啟用';
 
   @override
-  String get aiEnableToastOff => 'AI 增強已停用';
+  String get aiEnableToastOff => 'AI 小助手已關閉';
 
   @override
   String get aiStrategyTitle => '執行策略';
@@ -7472,7 +7420,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get smartBilling => '智慧記帳';
 
   @override
-  String get smartBillingDesc => 'AI識別、OCR掃描、自動記帳';
+  String get smartBillingDesc => 'AI 小助手、OCR掃描、自動記帳';
 
   @override
   String get smartBillingPageTitle => '智慧記帳';
@@ -7922,4 +7870,64 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get iosVersionWarningDesc => '截圖自動記帳功能使用了 iOS 16 引入的 App Intents 框架。您的裝置系統版本較低，暫不支援此功能。\n\n請升級到 iOS 16 或更高版本以使用此功能。';
+
+  @override
+  String get aiChatTitle => 'AI助手';
+
+  @override
+  String get aiChatClearHistory => '清除對話歷史';
+
+  @override
+  String get aiChatClearHistoryDialogTitle => '清除對話歷史';
+
+  @override
+  String get aiChatClearHistoryDialogContent => '確定要清除所有對話記錄嗎？此操作不可恢復。';
+
+  @override
+  String get aiChatInputHint => '例如：買了杯咖啡35元';
+
+  @override
+  String get aiChatThinking => '思考中...';
+
+  @override
+  String get aiChatHistoryCleared => '對話歷史已清空';
+
+  @override
+  String get aiChatUndone => '已撤銷';
+
+  @override
+  String get aiChatUndoFailed => '撤銷失敗';
+
+  @override
+  String get aiChatTransactionNotFound => '交易記錄不存在';
+
+  @override
+  String get aiChatOpenEditorFailed => '打開編輯頁面失敗';
+
+  @override
+  String get aiChatSendFailed => '發送失敗';
+
+  @override
+  String get billCardSuccess => '記帳成功';
+
+  @override
+  String get billCardUndone => '已撤銷';
+
+  @override
+  String get billCardAmount => '💰 金額';
+
+  @override
+  String get billCardCategory => '🏷️ 分類';
+
+  @override
+  String get billCardTime => '📅 時間';
+
+  @override
+  String get billCardNote => '📝 備註';
+
+  @override
+  String get billCardUndo => '撤銷';
+
+  @override
+  String get billCardEdit => '修改';
 }

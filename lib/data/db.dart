@@ -3,7 +3,6 @@ import 'dart:ui' show Locale;
 
 import 'package:drift/drift.dart';
 import '../l10n/app_localizations.dart';
-import '../services/category_service.dart';
 import '../services/seed_service.dart';
 import '../services/logger_service.dart';
 import 'package:drift/native.dart';
@@ -90,18 +89,41 @@ class RecurringTransactions extends Table {
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
 
+// AI 对话表
+class Conversations extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get ledgerId => integer()();
+  TextColumn get title => text().withDefault(const Constant('AI对话'))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+// AI 消息表
+class Messages extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get conversationId => integer()();
+  TextColumn get role => text()(); // 'user' | 'assistant'
+  TextColumn get content => text()();
+  TextColumn get messageType => text()(); // 'text' | 'bill_card'
+  TextColumn get metadata => text().nullable()(); // JSON (BillInfo 数据)
+  IntColumn get transactionId => integer().nullable()(); // 关联的交易ID(撤销用)
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+
 @DriftDatabase(tables: [
   Ledgers,
   Accounts,
   Categories,
   Transactions,
-  RecurringTransactions
+  RecurringTransactions,
+  Conversations,
+  Messages,
 ])
 class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 7; // v7: 周期账单支持转账（添加toAccountId字段，categoryId改为可空）
+  int get schemaVersion => 8; // v8: AI 对话助手（添加 Conversations 和 Messages 表）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -248,6 +270,14 @@ class BeeDatabase extends _$BeeDatabase {
             print('[DB Migration] 步骤4: 重命名新表');
             await customStatement('ALTER TABLE recurring_transactions_new RENAME TO recurring_transactions;');
             print('[DB Migration] v7 迁移完成');
+          }
+          if (from < 8) {
+            // v8: AI 对话助手
+            print('[DB Migration] 开始迁移到 v8: AI 对话助手');
+            await migrator.createTable(conversations);
+            await migrator.createTable(messages);
+            logger.info('DB', 'v8 迁移完成: AI Chat tables created');
+            print('[DB Migration] v8 迁移完成');
           }
         },
       );

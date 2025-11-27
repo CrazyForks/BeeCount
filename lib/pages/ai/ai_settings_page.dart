@@ -8,6 +8,7 @@ import '../../widgets/biz/section_card.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
+import '../../providers/ui_state_providers.dart';
 import '../../l10n/app_localizations.dart';
 
 /// AI智能识别设置页面
@@ -135,9 +136,12 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
             onChanged: (value) async {
               setState(() => _aiEnabled = value);
 
-              // 立即保存AI开关状态（用户体验更好）
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.setBool('ai_bill_extraction_enabled', value);
+              // 使用setter保存并通知所有监听者
+              final setter = ref.read(aiAssistantSetterProvider);
+              await setter.setEnabled(value);
+
+              // Invalidate provider以触发重新加载
+              ref.invalidate(aiAssistantEnabledProvider);
 
               if (mounted) {
                 showToast(context, value ? l10n.aiEnableToastOn : l10n.aiEnableToastOff);
