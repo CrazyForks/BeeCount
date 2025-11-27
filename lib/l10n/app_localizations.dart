@@ -378,12 +378,6 @@ abstract class AppLocalizations {
   /// **'Go to Settings'**
   String get commonGoSettings;
 
-  /// No description provided for @commonHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'Help'**
-  String get commonHelp;
-
   /// No description provided for @commonLanguage.
   ///
   /// In en, this message translates to:
@@ -821,12 +815,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Swipe left/right to change period'**
   String get analyticsSwipeHint;
-
-  /// No description provided for @analyticsTipContent.
-  ///
-  /// In en, this message translates to:
-  /// **'1) Swipe left/right at bottom to switch Expense/Income/Balance\\n2) Swipe left/right in chart area to switch periods'**
-  String get analyticsTipContent;
 
   /// No description provided for @analyticsSwitchTo.
   ///
@@ -1668,12 +1656,6 @@ abstract class AppLocalizations {
   /// **'Share App'**
   String get mineShareApp;
 
-  /// No description provided for @mineShareAppSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate share poster and save to gallery'**
-  String get mineShareAppSubtitle;
-
   /// No description provided for @mineShareWithFriends.
   ///
   /// In en, this message translates to:
@@ -1685,12 +1667,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Generating share poster...'**
   String get mineShareGenerating;
-
-  /// No description provided for @mineShareFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Save failed, please check gallery permissions'**
-  String get mineShareFailed;
 
   /// No description provided for @sharePosterAppName.
   ///
@@ -1776,65 +1752,11 @@ abstract class AppLocalizations {
   /// **'Gallery permission denied, please enable in settings'**
   String get sharePosterPermissionDenied;
 
-  /// No description provided for @sharePosterYearSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'Year Summary'**
-  String get sharePosterYearSummary;
-
-  /// No description provided for @sharePosterYearSummaryDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Share your annual bookkeeping achievements'**
-  String get sharePosterYearSummaryDesc;
-
-  /// No description provided for @sharePosterMonthSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'Month Summary'**
-  String get sharePosterMonthSummary;
-
-  /// No description provided for @sharePosterMonthSummaryDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Share your monthly financial report'**
-  String get sharePosterMonthSummaryDesc;
-
-  /// No description provided for @sharePosterAppPromo.
-  ///
-  /// In en, this message translates to:
-  /// **'Share App'**
-  String get sharePosterAppPromo;
-
-  /// No description provided for @sharePosterAppPromoDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Recommend BeeCount to friends'**
-  String get sharePosterAppPromoDesc;
-
-  /// No description provided for @sharePosterSelectTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Share Poster'**
-  String get sharePosterSelectTitle;
-
-  /// No description provided for @sharePosterSwipeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Swipe left or right to switch poster styles'**
-  String get sharePosterSwipeHint;
-
   /// No description provided for @sharePosterGenerating.
   ///
   /// In en, this message translates to:
   /// **'Generating...'**
   String get sharePosterGenerating;
-
-  /// No description provided for @sharePosterGenerateButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate {type}'**
-  String sharePosterGenerateButton(String type);
 
   /// No description provided for @sharePosterGenerateFailed.
   ///
@@ -1980,12 +1902,6 @@ abstract class AppLocalizations {
   /// **'Ledger Name'**
   String get sharePosterLedgerName;
 
-  /// No description provided for @sharePosterScanMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Scan for more'**
-  String get sharePosterScanMore;
-
   /// No description provided for @sharePosterUnitDay.
   ///
   /// In en, this message translates to:
@@ -2123,12 +2039,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to get status'**
   String get mineSyncError;
-
-  /// No description provided for @mineSyncCloudUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Cloud service unavailable, please check configuration or login status'**
-  String get mineSyncCloudUnavailable;
 
   /// No description provided for @mineSyncDetailTitle.
   ///
@@ -3329,24 +3239,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'When enabled, will remind you to record at specified time'**
   String get reminderDailySubtitle;
-
-  /// No description provided for @reminderDailyBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t forget to record your transactions today 💰'**
-  String get reminderDailyBody;
-
-  /// No description provided for @reminderChannelName.
-  ///
-  /// In en, this message translates to:
-  /// **'Recording Reminder'**
-  String get reminderChannelName;
-
-  /// No description provided for @reminderChannelDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily recording reminder'**
-  String get reminderChannelDescription;
 
   /// No description provided for @reminderTimeTitle.
   ///
@@ -6459,7 +6351,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSettingsTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI Recognition'**
+  /// **'AI Assistant'**
   String get aiSettingsTitle;
 
   /// No description provided for @aiSettingsSubtitle.
@@ -6471,25 +6363,25 @@ abstract class AppLocalizations {
   /// No description provided for @aiEnableTitle.
   ///
   /// In en, this message translates to:
-  /// **'Enable AI Recognition'**
+  /// **'Enable AI Assistant'**
   String get aiEnableTitle;
 
   /// No description provided for @aiEnableSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Use AI to enhance OCR accuracy and extract amount, merchant, time, etc.'**
+  /// **'Use AI to enhance OCR accuracy, extract amount, merchant, time, and support natural language conversation'**
   String get aiEnableSubtitle;
 
   /// No description provided for @aiEnableToastOn.
   ///
   /// In en, this message translates to:
-  /// **'AI enhancement enabled'**
+  /// **'AI Assistant enabled'**
   String get aiEnableToastOn;
 
   /// No description provided for @aiEnableToastOff.
   ///
   /// In en, this message translates to:
-  /// **'AI enhancement disabled'**
+  /// **'AI Assistant disabled'**
   String get aiEnableToastOff;
 
   /// No description provided for @aiStrategyTitle.
@@ -6711,7 +6603,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartBillingDesc.
   ///
   /// In en, this message translates to:
-  /// **'AI recognition, OCR scan, auto billing'**
+  /// **'AI Assistant, OCR scan, auto billing'**
   String get smartBillingDesc;
 
   /// No description provided for @smartBillingPageTitle.
@@ -7571,6 +7463,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.'**
   String get iosVersionWarningDesc;
+
+  /// No description provided for @aiChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get aiChatTitle;
+
+  /// No description provided for @aiChatClearHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear History'**
+  String get aiChatClearHistory;
+
+  /// No description provided for @aiChatClearHistoryDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Conversation History'**
+  String get aiChatClearHistoryDialogTitle;
+
+  /// No description provided for @aiChatClearHistoryDialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all conversation records? This action cannot be undone.'**
+  String get aiChatClearHistoryDialogContent;
+
+  /// No description provided for @aiChatInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g.: Bought a coffee for \$35'**
+  String get aiChatInputHint;
+
+  /// No description provided for @aiChatThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking...'**
+  String get aiChatThinking;
+
+  /// No description provided for @aiChatHistoryCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation history cleared'**
+  String get aiChatHistoryCleared;
+
+  /// No description provided for @aiChatUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'Undone'**
+  String get aiChatUndone;
+
+  /// No description provided for @aiChatUndoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo failed'**
+  String get aiChatUndoFailed;
+
+  /// No description provided for @aiChatTransactionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction not found'**
+  String get aiChatTransactionNotFound;
+
+  /// No description provided for @aiChatOpenEditorFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to open editor'**
+  String get aiChatOpenEditorFailed;
+
+  /// No description provided for @aiChatSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send'**
+  String get aiChatSendFailed;
+
+  /// No description provided for @billCardSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking Successful'**
+  String get billCardSuccess;
+
+  /// No description provided for @billCardUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'Undone'**
+  String get billCardUndone;
+
+  /// No description provided for @billCardAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'💰 Amount'**
+  String get billCardAmount;
+
+  /// No description provided for @billCardCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'🏷️ Category'**
+  String get billCardCategory;
+
+  /// No description provided for @billCardTime.
+  ///
+  /// In en, this message translates to:
+  /// **'📅 Time'**
+  String get billCardTime;
+
+  /// No description provided for @billCardNote.
+  ///
+  /// In en, this message translates to:
+  /// **'📝 Note'**
+  String get billCardNote;
+
+  /// No description provided for @billCardUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get billCardUndo;
+
+  /// No description provided for @billCardEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get billCardEdit;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

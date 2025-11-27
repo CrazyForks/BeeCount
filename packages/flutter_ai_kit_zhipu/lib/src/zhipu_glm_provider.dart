@@ -87,14 +87,21 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
 
       messages.add({'role': 'user', 'content': messageContent});
 
-      print('🔍 [GLM] 请求数据: ${jsonEncode({
-        'model': model,
-        'messages': messages.map((m) => {
-          'role': m['role'],
-          'content': m['content'] is String ? m['content'] : '[multimodal content]'
-        }).toList(),
-        'temperature': temperature,
-      })}');
+      // 简化日志输出
+      final simplifiedMessages = messages.map((m) {
+        final content = m['content'];
+        String contentPreview;
+        if (content is String) {
+          contentPreview = content.length > 200
+              ? '${content.substring(0, 200)}...(${content.length} chars)'
+              : content;
+        } else {
+          contentPreview = '[multimodal content]';
+        }
+        return {'role': m['role'], 'content': contentPreview};
+      }).toList();
+
+      print('🔍 [GLM] 请求: model=$model, messages=${simplifiedMessages.length}条, temperature=$temperature');
 
       final response = await _dio.post(
         'https://open.bigmodel.cn/api/paas/v4/chat/completions',
@@ -231,20 +238,14 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
 
     // 添加文本
     if (text.isNotEmpty) {
-      print('📝 [GLM] 添加文本内容: ${text.substring(0, text.length > 100 ? 100 : text.length)}...');
       content.add({
         'type': 'text',
         'text': text,
       });
-    } else {
-      print('⚠️ [GLM] 文本内容为空，跳过添加');
     }
-
-    print('📝 [GLM] 内容块数量: ${content.length}');
 
     // 如果只有文本，直接返回字符串
     if (content.length == 1 && content[0]['type'] == 'text') {
-      print('📝 [GLM] 返回纯文本格式');
       return text;
     }
 

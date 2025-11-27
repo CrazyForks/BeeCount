@@ -401,10 +401,10 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.ios_share_rounded,
                         title: AppLocalizations.of(context).mineShareApp,
-                        subtitle: AppLocalizations.of(context).mineShareWithFriends,
+                        subtitle:
+                            AppLocalizations.of(context).mineShareWithFriends,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context),
-                            size: 20),
+                            color: BeeTokens.iconTertiary(context), size: 20),
                         onTap: () {
                           // 打开海报轮播预览对话框（支持年度、月度、总览3种海报）
                           SharePosterService.showPosterCarouselPreview(context);
@@ -512,101 +512,6 @@ class _ImportSuccessTile extends StatelessWidget {
       },
     );
   }
-}
-
-// 数据管理分组
-Widget _buildDataManagementSection(BuildContext context, WidgetRef ref) {
-  return SectionCard(
-    margin: EdgeInsets.fromLTRB(
-        12.0.scaled(context, ref), 0, 12.0.scaled(context, ref), 0),
-    child: Column(
-      children: [
-        // 导入数据
-        Consumer(builder: (ctx, r, _) {
-          final p = r.watch(importProgressProvider);
-          if (!p.running && p.total == 0) {
-            return AppListTile(
-              leading: Icons.file_upload_outlined,
-              title: AppLocalizations.of(context).mineImport,
-              onTap: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ImportPage()),
-                );
-              },
-            );
-          }
-          if (p.running) {
-            final percent =
-                p.total == 0 ? null : (p.done / p.total).clamp(0.0, 1.0);
-            return AppListTile(
-              leading: Icons.upload_outlined,
-              title: AppLocalizations.of(context).mineImportProgressTitle,
-              subtitle: AppLocalizations.of(context)
-                  .mineImportProgressSubtitle(p.done, p.fail, p.ok, p.total),
-              trailing: SizedBox(
-                  width: 72, child: LinearProgressIndicator(value: percent)),
-              onTap: null,
-            );
-          }
-          final allOk = (p.done == p.total) && (p.fail == 0);
-          if (allOk) return const _ImportSuccessTile();
-          return AppListTile(
-            leading: Icons.info_outline,
-            title: AppLocalizations.of(context).mineImportCompleteTitle,
-            subtitle:
-                '${AppLocalizations.of(context).commonSuccess} ${p.ok}，${AppLocalizations.of(context).commonFailed} ${p.fail}',
-            onTap: null,
-          );
-        }),
-        BeeDivider.thin(),
-        // 导出数据
-        AppListTile(
-          leading: Icons.file_download_outlined,
-          title: AppLocalizations.of(context).mineExport,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const ExportPage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 分类管理
-        AppListTile(
-          leading: Icons.category_outlined,
-          title: AppLocalizations.of(context).mineCategoryManagement,
-          subtitle: AppLocalizations.of(context).mineCategoryManagementSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const CategoryManagePage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 分类迁移
-        AppListTile(
-          leading: Icons.swap_horiz,
-          title: AppLocalizations.of(context).mineCategoryMigration,
-          subtitle: AppLocalizations.of(context).mineCategoryMigrationSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const CategoryMigrationPage()),
-            );
-          },
-        ),
-        BeeDivider.thin(),
-        // 账户管理
-        AppListTile(
-          leading: Icons.account_balance_wallet_outlined,
-          title: AppLocalizations.of(context).accountsTitle,
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const AccountsPage()),
-            );
-          },
-        ),
-      ],
-    ),
-  );
 }
 
 /// 尝试使用多种方式打开URL，提供更好的兼容性
@@ -767,6 +672,7 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
     final countsAsync = ref.watch(countsForLedgerProvider(currentLedgerId));
     final balanceAsync = ref.watch(currentBalanceProvider(currentLedgerId));
     final currentLedgerAsync = ref.watch(currentLedgerProvider);
+    final hide = ref.watch(hideAmountsProvider);
 
     final day = countsAsync.asData?.value.dayCount ?? 0;
     final tx = countsAsync.asData?.value.txCount ?? 0;
@@ -795,129 +701,159 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
               // 头像/Logo
               GestureDetector(
                 onTap: canEditAvatar ? _showAvatarOptions : null,
-            child: Stack(
-              children: [
-                Container(
-                  width: 80.0.scaled(context, ref),
-                  height: 80.0.scaled(context, ref),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.1),
-                    border: Border.all(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withValues(alpha: 0.3),
-                      width: 2,
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: _isLoadingAvatar
-                        ? Center(
-                            child: SizedBox(
-                              width: 20.0.scaled(context, ref),
-                              height: 20.0.scaled(context, ref),
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          )
-                        : (_avatarPath != null
-                            ? Image.file(
-                                File(_avatarPath!),
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return BeeIcon(
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 80.0.scaled(context, ref),
+                      height: 80.0.scaled(context, ref),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.1),
+                        border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withValues(alpha: 0.3),
+                          width: 2,
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: _isLoadingAvatar
+                            ? Center(
+                                child: SizedBox(
+                                  width: 20.0.scaled(context, ref),
+                                  height: 20.0.scaled(context, ref),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              )
+                            : (_avatarPath != null
+                                ? Image.file(
+                                    File(_avatarPath!),
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return BeeIcon(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 40.0.scaled(context, ref),
+                                      );
+                                    },
+                                  )
+                                : BeeIcon(
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                     size: 40.0.scaled(context, ref),
-                                  );
-                                },
-                              )
-                            : BeeIcon(
-                                color: Theme.of(context).colorScheme.primary,
-                                size: 40.0.scaled(context, ref),
-                              )),
-                  ),
-                ),
-                if (canEditAvatar)
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      width: 24.0.scaled(context, ref),
-                      height: 24.0.scaled(context, ref),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 12.0.scaled(context, ref),
-                        color: Colors.white,
+                                  )),
                       ),
                     ),
+                    if (canEditAvatar)
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          width: 24.0.scaled(context, ref),
+                          height: 24.0.scaled(context, ref),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 12.0.scaled(context, ref),
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 12.0.scaled(context, ref)),
+              // Slogan with eye icon - 手动偏移让文字视觉居中
+              Padding(
+                padding: EdgeInsets.only(
+                    left: 26.0.scaled(context, ref)), // 偏移量 = 图标(18) + 间距(8)
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center, // 垂直居中对齐
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).mineSlogan,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: BeeTokens.textPrimary(context), // ⭐ 使用 Token
+                            fontWeight: FontWeight.w600,
+                          ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(width: 8.0.scaled(context, ref)),
+                    GestureDetector(
+                      onTap: () {
+                        final cur = ref.read(hideAmountsProvider);
+                        ref.read(hideAmountsProvider.notifier).state = !cur;
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 2.0.scaled(context, ref)),
+                        child: Icon(
+                          hide
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          size: 18,
+                          color: BeeTokens.textPrimary(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.0.scaled(context, ref)),
+              // 统计数据
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatCell(
+                      label: AppLocalizations.of(context).mineDaysCount,
+                      value: day.toString(),
+                      labelStyle: labelStyle,
+                      numStyle: numStyle,
+                      centered: true,
+                    ),
                   ),
-              ],
-            ),
-          ),
-          SizedBox(height: 12.0.scaled(context, ref)),
-          // Slogan
-          Text(
-            AppLocalizations.of(context).mineSlogan,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: BeeTokens.textPrimary(context), // ⭐ 使用 Token
-                  fontWeight: FontWeight.w600,
-                ),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(height: 16.0.scaled(context, ref)),
-          // 统计数据
-          Row(
-            children: [
-              Expanded(
-                child: _StatCell(
-                  label: AppLocalizations.of(context).mineDaysCount,
-                  value: day.toString(),
-                  labelStyle: labelStyle,
-                  numStyle: numStyle,
-                  centered: true,
-                ),
-              ),
-              Expanded(
-                child: _StatCell(
-                  label: AppLocalizations.of(context).mineTotalRecords,
-                  value: tx.toString(),
-                  labelStyle: labelStyle,
-                  numStyle: numStyle,
-                  centered: true,
-                ),
-              ),
-              Expanded(
-                child: _StatCell(
-                  label: AppLocalizations.of(context).mineCurrentBalance,
-                  value: balance,
-                  isAmount: true,
-                  currencyCode: currencyCode,
-                  labelStyle: labelStyle,
-                  numStyle: numStyle.copyWith(
-                    color: balance >= 0
-                        ? BeeTokens.textPrimary(context)
-                        : BeeTokens.error(context),
+                  Expanded(
+                    child: _StatCell(
+                      label: AppLocalizations.of(context).mineTotalRecords,
+                      value: tx.toString(),
+                      labelStyle: labelStyle,
+                      numStyle: numStyle,
+                      centered: true,
+                    ),
                   ),
-                  centered: true,
-                ),
+                  Expanded(
+                    child: _StatCell(
+                      label: AppLocalizations.of(context).mineCurrentBalance,
+                      value: balance,
+                      isAmount: true,
+                      currencyCode: currencyCode,
+                      labelStyle: labelStyle,
+                      numStyle: numStyle.copyWith(
+                        color: balance >= 0
+                            ? BeeTokens.textPrimary(context)
+                            : BeeTokens.error(context),
+                      ),
+                      centered: true,
+                    ),
+                  ),
+                ],
               ),
-              ],
-            ),
-          ],
-        ),
+            ],
+          ),
         ],
       ),
     );

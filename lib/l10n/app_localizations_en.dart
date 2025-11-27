@@ -158,9 +158,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonGoSettings => 'Go to Settings';
 
   @override
-  String get commonHelp => 'Help';
-
-  @override
   String get commonLanguage => 'Language';
 
   @override
@@ -404,9 +401,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get analyticsSwipeHint => 'Swipe left/right to change period';
-
-  @override
-  String get analyticsTipContent => '1) Swipe left/right at bottom to switch Expense/Income/Balance\\n2) Swipe left/right in chart area to switch periods';
 
   @override
   String analyticsSwitchTo(String type) {
@@ -869,16 +863,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineShareApp => 'Share App';
 
   @override
-  String get mineShareAppSubtitle => 'Generate share poster and save to gallery';
-
-  @override
   String get mineShareWithFriends => 'Share BeeCount with friends';
 
   @override
   String get mineShareGenerating => 'Generating share poster...';
-
-  @override
-  String get mineShareFailed => 'Save failed, please check gallery permissions';
 
   @override
   String get sharePosterAppName => 'BeeCount';
@@ -923,36 +911,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharePosterPermissionDenied => 'Gallery permission denied, please enable in settings';
 
   @override
-  String get sharePosterYearSummary => 'Year Summary';
-
-  @override
-  String get sharePosterYearSummaryDesc => 'Share your annual bookkeeping achievements';
-
-  @override
-  String get sharePosterMonthSummary => 'Month Summary';
-
-  @override
-  String get sharePosterMonthSummaryDesc => 'Share your monthly financial report';
-
-  @override
-  String get sharePosterAppPromo => 'Share App';
-
-  @override
-  String get sharePosterAppPromoDesc => 'Recommend BeeCount to friends';
-
-  @override
-  String get sharePosterSelectTitle => 'Select Share Poster';
-
-  @override
-  String get sharePosterSwipeHint => 'Swipe left or right to switch poster styles';
-
-  @override
   String get sharePosterGenerating => 'Generating...';
-
-  @override
-  String sharePosterGenerateButton(String type) {
-    return 'Generate $type';
-  }
 
   @override
   String get sharePosterGenerateFailed => 'Failed to generate poster, please try again';
@@ -1027,9 +986,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharePosterLedgerName => 'Ledger Name';
 
   @override
-  String get sharePosterScanMore => 'Scan for more';
-
-  @override
   String get sharePosterUnitDay => 'days';
 
   @override
@@ -1101,9 +1057,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mineSyncError => 'Failed to get status';
-
-  @override
-  String get mineSyncCloudUnavailable => 'Cloud service unavailable, please check configuration or login status';
 
   @override
   String get mineSyncDetailTitle => 'Sync Status Details';
@@ -1742,15 +1695,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderDailySubtitle => 'When enabled, will remind you to record at specified time';
-
-  @override
-  String get reminderDailyBody => 'Don\'t forget to record your transactions today 💰';
-
-  @override
-  String get reminderChannelName => 'Recording Reminder';
-
-  @override
-  String get reminderChannelDescription => 'Daily recording reminder';
 
   @override
   String get reminderTimeTitle => 'Reminder Time';
@@ -3379,22 +3323,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
 
   @override
-  String get aiSettingsTitle => 'AI Recognition';
+  String get aiSettingsTitle => 'AI Assistant';
 
   @override
   String get aiSettingsSubtitle => 'Configure AI models and recognition strategy';
 
   @override
-  String get aiEnableTitle => 'Enable AI Recognition';
+  String get aiEnableTitle => 'Enable AI Assistant';
 
   @override
-  String get aiEnableSubtitle => 'Use AI to enhance OCR accuracy and extract amount, merchant, time, etc.';
+  String get aiEnableSubtitle => 'Use AI to enhance OCR accuracy, extract amount, merchant, time, and support natural language conversation';
 
   @override
-  String get aiEnableToastOn => 'AI enhancement enabled';
+  String get aiEnableToastOn => 'AI Assistant enabled';
 
   @override
-  String get aiEnableToastOff => 'AI enhancement disabled';
+  String get aiEnableToastOff => 'AI Assistant disabled';
 
   @override
   String get aiStrategyTitle => 'Execution Strategy';
@@ -3511,7 +3455,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get smartBilling => 'Smart Billing';
 
   @override
-  String get smartBillingDesc => 'AI recognition, OCR scan, auto billing';
+  String get smartBillingDesc => 'AI Assistant, OCR scan, auto billing';
 
   @override
   String get smartBillingPageTitle => 'Smart Billing';
@@ -3961,4 +3905,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get iosVersionWarningDesc => 'Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.';
+
+  @override
+  String get aiChatTitle => 'AI Assistant';
+
+  @override
+  String get aiChatClearHistory => 'Clear History';
+
+  @override
+  String get aiChatClearHistoryDialogTitle => 'Clear Conversation History';
+
+  @override
+  String get aiChatClearHistoryDialogContent => 'Are you sure you want to clear all conversation records? This action cannot be undone.';
+
+  @override
+  String get aiChatInputHint => 'e.g.: Bought a coffee for \$35';
+
+  @override
+  String get aiChatThinking => 'Thinking...';
+
+  @override
+  String get aiChatHistoryCleared => 'Conversation history cleared';
+
+  @override
+  String get aiChatUndone => 'Undone';
+
+  @override
+  String get aiChatUndoFailed => 'Undo failed';
+
+  @override
+  String get aiChatTransactionNotFound => 'Transaction not found';
+
+  @override
+  String get aiChatOpenEditorFailed => 'Failed to open editor';
+
+  @override
+  String get aiChatSendFailed => 'Failed to send';
+
+  @override
+  String get billCardSuccess => 'Booking Successful';
+
+  @override
+  String get billCardUndone => 'Undone';
+
+  @override
+  String get billCardAmount => '💰 Amount';
+
+  @override
+  String get billCardCategory => '🏷️ Category';
+
+  @override
+  String get billCardTime => '📅 Time';
+
+  @override
+  String get billCardNote => '📝 Note';
+
+  @override
+  String get billCardUndo => 'Undo';
+
+  @override
+  String get billCardEdit => 'Edit';
 }

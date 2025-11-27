@@ -272,3 +272,23 @@ class DefaultAccountSetter {
 final defaultAccountSetterProvider = Provider<DefaultAccountSetter>((ref) {
   return DefaultAccountSetter();
 });
+
+// AI小助手开关状态持久化
+final aiAssistantEnabledProvider =
+    FutureProvider.autoDispose<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return prefs.getBool('ai_bill_extraction_enabled') ?? true; // 默认开启
+});
+
+class AIAssistantSetter {
+  Future<void> setEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('ai_bill_extraction_enabled', enabled);
+  }
+}
+
+final aiAssistantSetterProvider = Provider<AIAssistantSetter>((ref) {
+  return AIAssistantSetter();
+});
