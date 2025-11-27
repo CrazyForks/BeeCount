@@ -149,6 +149,13 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 #### 🤖 AI Smart Billing
 
+- **🤖 AI Assistant** (New!)
+  - **Intelligent Conversational Billing**: Natural language interaction with smart intent understanding
+  - **Contextual Memory**: Remembers conversation history for continuous dialogue
+  - **Bill Information Extraction**: Intelligently identifies amount, merchant, category and more
+  - **One-Click Confirmation**: Confirm and complete billing after AI extraction
+  - Powered by Zhipu GLM-4 large model for complex semantic understanding
+
 - **📸 OCR Image Recognition / Photo Billing**
   - Support camera or album to select payment screenshots
   - AI auto-extracts amount, merchant, category and bill info

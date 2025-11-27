@@ -13,11 +13,13 @@ import '../../l10n/app_localizations.dart';
 class MonthSummaryPoster extends StatelessWidget {
   final MonthSummaryPosterData data;
   final Color primaryColor;
+  final bool hideIncome;
 
   const MonthSummaryPoster({
     super.key,
     required this.data,
     required this.primaryColor,
+    this.hideIncome = false,
   });
 
   @override
@@ -218,7 +220,7 @@ class MonthSummaryPoster extends StatelessWidget {
                 child: _buildStatColumn(
                   context,
                   label: l10n.sharePosterTotalIncome,
-                  value: formatter.format(data.totalIncome),
+                  value: hideIncome ? '**' : formatter.format(data.totalIncome),
                   color: const Color(0xFF51CF66),
                   icon: Icons.arrow_upward_rounded,
                 ),
@@ -237,14 +239,14 @@ class MonthSummaryPoster extends StatelessWidget {
                 child: _buildStatColumn(
                   context,
                   label: l10n.sharePosterMonthBalance,
-                  value: formatter.format(data.balance),
+                  value: hideIncome ? '**' : formatter.format(data.balance),
                   color: data.balance >= 0
                       ? const Color(0xFF51CF66)
                       : const Color(0xFFFF6B6B),
                   icon: data.balance >= 0
                       ? Icons.trending_up_rounded
                       : Icons.trending_down_rounded,
-                  showSign: true,
+                  showSign: !hideIncome,
                 ),
               ),
               Container(

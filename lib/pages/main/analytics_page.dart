@@ -455,59 +455,34 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                       );
 
                       try {
-                        if (_scope == 'month') {
-                          // 月度视图：生成月度海报
-                          final primaryColor = ref.read(primaryColorProvider);
-                          final imageBytes = await SharePosterService
-                              .generateMonthSummaryPoster(
-                            context,
-                            ref,
-                            ledgerId: ledgerId,
-                            year: selMonth.year,
-                            month: selMonth.month,
-                            primaryColor: primaryColor,
-                          );
-                          if (context.mounted) {
-                            Navigator.of(context).pop(); // 关闭加载对话框
-                            if (imageBytes != null) {
-                              await SharePosterService.showPosterPreview(
-                                  context, imageBytes);
-                            }
-                          }
-                        } else if (_scope == 'year') {
-                          // 年度视图：生成年度海报
-                          final primaryColor = ref.read(primaryColorProvider);
-                          final imageBytes = await SharePosterService
-                              .generateYearSummaryPoster(
-                            context,
-                            ref,
-                            ledgerId: ledgerId,
-                            year: selMonth.year,
-                            primaryColor: primaryColor,
-                          );
-                          if (context.mounted) {
-                            Navigator.of(context).pop(); // 关闭加载对话框
-                            if (imageBytes != null) {
-                              await SharePosterService.showPosterPreview(
-                                  context, imageBytes);
-                            }
-                          }
-                        } else {
-                          // 全部视图：生成账本总结海报
-                          final primaryColor = ref.read(primaryColorProvider);
-                          final imageBytes = await SharePosterService
-                              .generateLedgerSummaryPoster(
-                            context,
-                            ref,
-                            ledgerId: ledgerId,
-                            primaryColor: primaryColor,
-                          );
-                          if (context.mounted) {
-                            Navigator.of(context).pop(); // 关闭加载对话框
-                            if (imageBytes != null) {
-                              await SharePosterService.showPosterPreview(
-                                  context, imageBytes);
-                            }
+                        if (context.mounted) {
+                          Navigator.of(context).pop(); // 关闭加载对话框
+
+                          // 使用动态预览对话框（支持隐藏收入）
+                          if (_scope == 'month') {
+                            await SharePosterService.showDynamicPosterPreview(
+                              context,
+                              ref,
+                              type: 'month',
+                              ledgerId: ledgerId,
+                              year: selMonth.year,
+                              month: selMonth.month,
+                            );
+                          } else if (_scope == 'year') {
+                            await SharePosterService.showDynamicPosterPreview(
+                              context,
+                              ref,
+                              type: 'year',
+                              ledgerId: ledgerId,
+                              year: selMonth.year,
+                            );
+                          } else {
+                            await SharePosterService.showDynamicPosterPreview(
+                              context,
+                              ref,
+                              type: 'ledger',
+                              ledgerId: ledgerId,
+                            );
                           }
                         }
                       } catch (e) {

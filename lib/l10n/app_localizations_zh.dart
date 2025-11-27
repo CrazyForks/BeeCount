@@ -215,12 +215,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeSearch => '搜索';
 
   @override
-  String get homeShowAmount => '显示金额';
-
-  @override
-  String get homeHideAmount => '隐藏金额';
-
-  @override
   String homeYear(int year) {
     return '$year年';
   }
@@ -900,6 +894,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterShare => '分享';
+
+  @override
+  String get sharePosterHideIncome => '隐藏收入';
+
+  @override
+  String get sharePosterShowIncome => '显示收入';
 
   @override
   String get sharePosterSaveSuccess => '已保存到相册';
@@ -4180,12 +4180,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get homeSearch => '搜尋';
 
   @override
-  String get homeShowAmount => '顯示金額';
-
-  @override
-  String get homeHideAmount => '隱藏金額';
-
-  @override
   String homeYear(int year) {
     return '$year年';
   }
@@ -4865,6 +4859,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterShare => '分享';
+
+  @override
+  String get sharePosterHideIncome => '隱藏收入';
+
+  @override
+  String get sharePosterShowIncome => '顯示收入';
 
   @override
   String get sharePosterSaveSuccess => '已儲存到相簿';

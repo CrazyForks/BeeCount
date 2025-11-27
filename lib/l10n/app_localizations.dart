@@ -492,18 +492,6 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get homeSearch;
 
-  /// No description provided for @homeShowAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Show amounts'**
-  String get homeShowAmount;
-
-  /// No description provided for @homeHideAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide amounts'**
-  String get homeHideAmount;
-
   /// No description provided for @homeYear.
   ///
   /// In en, this message translates to:
@@ -1733,6 +1721,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share'**
   String get sharePosterShare;
+
+  /// No description provided for @sharePosterHideIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Income'**
+  String get sharePosterHideIncome;
+
+  /// No description provided for @sharePosterShowIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Income'**
+  String get sharePosterShowIncome;
 
   /// No description provided for @sharePosterSaveSuccess.
   ///

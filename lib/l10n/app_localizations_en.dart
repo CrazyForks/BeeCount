@@ -215,12 +215,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSearch => 'Search';
 
   @override
-  String get homeShowAmount => 'Show amounts';
-
-  @override
-  String get homeHideAmount => 'Hide amounts';
-
-  @override
   String homeYear(int year) {
     return '$year';
   }
@@ -900,6 +894,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharePosterShare => 'Share';
+
+  @override
+  String get sharePosterHideIncome => 'Hide Income';
+
+  @override
+  String get sharePosterShowIncome => 'Show Income';
 
   @override
   String get sharePosterSaveSuccess => 'Saved to gallery';
