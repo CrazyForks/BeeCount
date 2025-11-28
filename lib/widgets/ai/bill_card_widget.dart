@@ -15,6 +15,7 @@ class BillCardWidget extends ConsumerWidget {
   final int? transactionId;
   final VoidCallback? onUndo;
   final VoidCallback? onEdit;
+  final VoidCallback? onChangeLedger; // 修改账本回调
   final bool isUndone; // 是否已撤销
 
   const BillCardWidget({
@@ -23,11 +24,18 @@ class BillCardWidget extends ConsumerWidget {
     this.transactionId,
     this.onUndo,
     this.onEdit,
+    this.onChangeLedger,
     this.isUndone = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // 获取账本名称
+    final ledger = billInfo.ledgerId != null
+        ? ref.watch(ledgerByIdProvider(billInfo.ledgerId!)).asData?.value
+        : null;
+    final ledgerName = ledger?.name ?? AppLocalizations.of(context).billCardUnknownLedger;
+
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 8.0.scaled(context, ref),
@@ -36,7 +44,7 @@ class BillCardWidget extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 标题
+            // 标题（账本名称在右上角）
             Row(
               children: [
                 Icon(
@@ -57,6 +65,9 @@ class BillCardWidget extends ConsumerWidget {
                         : BeeTokens.textPrimary(context),
                   ),
                 ),
+                const Spacer(),
+                // 账本名称（右上角，可点击修改）
+                _buildLedgerChip(context, ref, ledgerName),
               ],
             ),
 
@@ -115,13 +126,8 @@ class BillCardWidget extends ConsumerWidget {
                   if (onUndo != null && onEdit != null)
                     SizedBox(width: 8.0.scaled(context, ref)),
                   if (onEdit != null)
-                    OutlinedButton(
+                    TextButton(
                       onPressed: onEdit,
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: ref.watch(primaryColorProvider),
-                        ),
-                      ),
                       child: Text(
                         AppLocalizations.of(context).billCardEdit,
                         style: TextStyle(
@@ -167,6 +173,68 @@ class BillCardWidget extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  /// 账本芯片（显示在右上角）
+  Widget _buildLedgerChip(
+    BuildContext context,
+    WidgetRef ref,
+    String ledgerName,
+  ) {
+    final canChange = onChangeLedger != null && !isUndone;
+
+    return GestureDetector(
+      onTap: canChange ? onChangeLedger : null,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 8.0.scaled(context, ref),
+          vertical: 4.0.scaled(context, ref),
+        ),
+        decoration: BoxDecoration(
+          color: canChange
+              ? ref.watch(primaryColorProvider).withOpacity(0.1)
+              : BeeTokens.textSecondary(context).withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+          border: canChange
+              ? Border.all(
+                  color: ref.watch(primaryColorProvider).withOpacity(0.3),
+                  width: 1,
+                )
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.book,
+              size: 12.0.scaled(context, ref),
+              color: canChange
+                  ? ref.watch(primaryColorProvider)
+                  : BeeTokens.textSecondary(context),
+            ),
+            SizedBox(width: 4.0.scaled(context, ref)),
+            Text(
+              ledgerName,
+              style: TextStyle(
+                fontSize: 12.0.scaled(context, ref),
+                color: canChange
+                    ? ref.watch(primaryColorProvider)
+                    : BeeTokens.textSecondary(context),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            if (canChange) ...[
+              SizedBox(width: 2.0.scaled(context, ref)),
+              Icon(
+                Icons.edit,
+                size: 10.0.scaled(context, ref),
+                color: ref.watch(primaryColorProvider),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 

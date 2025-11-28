@@ -4,6 +4,8 @@ import 'package:drift/drift.dart' as drift;
 import 'package:intl/intl.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
+import '../../widgets/biz/category_selector_dialog.dart';
+import '../../widgets/biz/ledger_selector_dialog.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/recurring_transaction_service.dart';
@@ -35,6 +37,7 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
   int? _selectedToAccountId; // 转账的目标账户
   late bool _enabled;
   bool _hasAttemptedSave = false; // 是否已尝试保存
+  int? _selectedLedgerId; // 选中的账本ID
 
   bool get _isEditing => widget.recurring != null;
 
@@ -51,6 +54,7 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       _selectedAccountId = widget.recurring!.accountId;
       _selectedToAccountId = widget.recurring!.toAccountId;
       _enabled = widget.recurring!.enabled;
+      _selectedLedgerId = widget.recurring!.ledgerId;
       _amountController.text = widget.recurring!.amount.toStringAsFixed(2);
       _noteController.text = widget.recurring!.note ?? '';
       _loadCategoryAndAccount();
@@ -61,6 +65,8 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       _startDate = DateTime.now();
       _dayOfMonth = DateTime.now().day;
       _enabled = true;
+      // 新建时使用当前账本
+      _selectedLedgerId = ref.read(currentLedgerIdProvider);
     }
 
     // 监听金额输入变化，更新按钮状态
@@ -117,6 +123,10 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
                 children: [
                   // Type selection
                   _buildTypeSelector(l10n),
+                  const SizedBox(height: 16),
+
+                  // Ledger selection
+                  _buildLedgerSelector(l10n),
                   const SizedBox(height: 16),
 
                   // Amount
@@ -197,23 +207,6 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
                       border: const OutlineInputBorder(),
                     ),
                     maxLines: 3,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Enabled switch
-                  Card(
-                    child: SwitchListTile(
-                      title: Text(l10n.recurringTransactionEnabled),
-                      subtitle: Text(_enabled
-                        ? l10n.recurringTransactionEnabled
-                        : l10n.recurringTransactionDisabled),
-                      value: _enabled,
-                      onChanged: (value) {
-                        setState(() {
-                          _enabled = value;
-                        });
-                      },
-                    ),
                   ),
                 ],
               ),
@@ -306,6 +299,30 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
     );
   }
 
+  Widget _buildLedgerSelector(AppLocalizations l10n) {
+    return InkWell(
+      onTap: () => _selectLedger(),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: l10n.ledgerSelectTitle,
+          border: const OutlineInputBorder(),
+          errorText: _getLedgerErrorText(),
+        ),
+        child: FutureBuilder<Ledger?>(
+          future: _selectedLedgerId != null
+              ? (ref.read(databaseProvider).select(ref.read(databaseProvider).ledgers)
+                    ..where((l) => l.id.equals(_selectedLedgerId!)))
+                  .getSingleOrNull()
+              : Future.value(null),
+          builder: (context, snapshot) {
+            final ledgerName = snapshot.data?.name ?? l10n.ledgerSelect;
+            return Text(ledgerName);
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _buildAccountSelector(AppLocalizations l10n, {required bool isFromAccount}) {
     final accountId = isFromAccount ? _selectedAccountId : _selectedToAccountId;
     final label = isFromAccount
@@ -357,6 +374,14 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
     return null;
   }
 
+  String? _getLedgerErrorText() {
+    if (!_hasAttemptedSave) return null;
+    if (_selectedLedgerId == null) {
+      return '请选择账本';
+    }
+    return null;
+  }
+
   String? _getCategoryErrorText() {
     if (!_hasAttemptedSave) return null;
     if (_type != 'transfer' && _selectedCategory == null) {
@@ -368,6 +393,11 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
   bool _isFormValid() {
     // 检查金额
     if (_amountController.text.isEmpty || double.tryParse(_amountController.text) == null) {
+      return false;
+    }
+
+    // 检查账本
+    if (_selectedLedgerId == null) {
       return false;
     }
 
@@ -593,33 +623,28 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
     }
   }
 
-  Future<void> _selectCategory() async {
-    final db = ref.read(databaseProvider);
-    final categories = await (db.select(db.categories)
-          ..where((c) => c.kind.equals(_type)))
-        .get();
-
+  Future<void> _selectLedger() async {
     if (!mounted) return;
 
-    final selected = await showDialog<Category>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.categoryTitle),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              final category = categories[index];
-              return ListTile(
-                title: Text(CategoryUtils.getDisplayName(category.name, context)),
-                onTap: () => Navigator.of(context).pop(category),
-              );
-            },
-          ),
-        ),
-      ),
+    final selected = await showLedgerSelector(
+      context,
+      currentLedgerId: _selectedLedgerId,
+    );
+
+    if (selected != null) {
+      setState(() {
+        _selectedLedgerId = selected;
+      });
+    }
+  }
+
+  Future<void> _selectCategory() async {
+    if (!mounted) return;
+
+    final selected = await showCategorySelector(
+      context,
+      type: _type,
+      currentCategoryId: _selectedCategory?.id,
     );
 
     if (selected != null) {
@@ -711,10 +736,20 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
 
     final db = ref.read(databaseProvider);
     final service = RecurringTransactionService(db);
-    final ledgerId = ref.read(currentLedgerIdProvider);
+
+    // 检查是否需要重置 lastGeneratedDate
+    // 当编辑时，如果修改了开始日期且新日期早于已生成日期，需要重置
+    drift.Value<DateTime?> lastGeneratedDate = const drift.Value.absent();
+    if (_isEditing && widget.recurring!.lastGeneratedDate != null) {
+      // 如果新的开始日期早于最后生成日期，重置 lastGeneratedDate
+      if (_startDate.isBefore(widget.recurring!.lastGeneratedDate!)) {
+        lastGeneratedDate = const drift.Value(null);
+        logger.info('周期账单', '开始日期早于最后生成日期，重置 lastGeneratedDate');
+      }
+    }
 
     final companion = RecurringTransactionsCompanion(
-      ledgerId: drift.Value(ledgerId),
+      ledgerId: drift.Value(_selectedLedgerId!),
       type: drift.Value(_type),
       amount: drift.Value(double.parse(_amountController.text)),
       categoryId: drift.Value(_type == 'transfer' ? null : _selectedCategory!.id),
@@ -727,6 +762,7 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
       startDate: drift.Value(_startDate),
       endDate: drift.Value(_endDate),
       enabled: drift.Value(_enabled),
+      lastGeneratedDate: lastGeneratedDate, // 如果需要重置，这里会设置为 null
       updatedAt: drift.Value(DateTime.now()),
     );
 

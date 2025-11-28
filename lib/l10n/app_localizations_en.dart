@@ -2677,6 +2677,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get recurringTransactionLedger => 'Ledger';
+
+  @override
+  String get recurringTransactionUsageTitle => 'Usage Guide';
+
+  @override
+  String get recurringTransactionUsageContent => 'Recurring transactions are automatically scanned and generated when the app cold starts. After setting a date, the system will create corresponding bills on the first startup after that date. For example: if set to Nov 27, bills will be auto-recorded on the first launch after Nov 27.';
+
+  @override
+  String get ledgerSelectTitle => 'Select Ledger';
+
+  @override
+  String get ledgerSelect => 'Select Ledger';
+
+  @override
   String get syncNotConfiguredMessage => 'Cloud not configured';
 
   @override
@@ -3394,6 +3409,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiGetKey => 'Get API Key';
 
   @override
+  String get aiCloudApiTestKey => 'Test Connection';
+
+  @override
+  String get aiCloudApiKeyValid => '✅ API Key is valid, AI features are available';
+
+  @override
+  String get aiCloudApiKeyInvalid => '❌ API Key is invalid, please check and re-enter';
+
+  @override
+  String get aiCloudApiKeyRequired => '⚠️ API Key not configured. AI chat and enhanced recognition will be unavailable';
+
+  @override
+  String get aiChatConfigWarning => 'Zhipu API Key is not configured or invalid, AI features are unavailable';
+
+  @override
+  String get aiChatGoToSettings => 'Go to Settings';
+
+  @override
   String get aiLocalModelTitle => 'Local Model';
 
   @override
@@ -3958,6 +3991,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get billCardTime => '📅 Time';
 
   @override
+  String get billCardLedger => '📒 Ledger';
+
+  @override
   String get billCardNote => '📝 Note';
 
   @override
@@ -3965,4 +4001,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get billCardEdit => 'Edit';
+
+  @override
+  String get aiQuickCommandFinancialHealthTitle => 'Financial Health Analysis';
+
+  @override
+  String get aiQuickCommandFinancialHealthDesc => 'Analyze income-expense balance and savings rate';
+
+  @override
+  String get aiQuickCommandFinancialHealthPrompt => 'Please analyze my financial health based on the following data:\n\n[monthlyStats]\n\n[recentTrends]\n\nPlease provide professional analysis and suggestions from the perspectives of income-expense balance, savings rate, and spending trends. Please respond in English.';
+
+  @override
+  String get aiQuickCommandMonthlyExpenseTitle => 'Monthly Expense Summary';
+
+  @override
+  String get aiQuickCommandMonthlyExpenseDesc => 'Monthly expense analysis and recommendations';
+
+  @override
+  String get aiQuickCommandMonthlyExpensePrompt => 'Please summarize my monthly expenses based on the following data:\n\n[monthlyStats]\n\n[categoryStats]\n\nPlease analyze which categories account for the highest proportion and provide optimization suggestions. Please respond in English.';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisTitle => 'Category Analysis';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisDesc => 'Analyze spending distribution by category';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisPrompt => 'Please analyze my spending by category based on the following data:\n\n[categoryStats]\n\nPlease point out whether there are unreasonable spending ratios and provide optimization suggestions. Please respond in English.';
+
+  @override
+  String get aiQuickCommandBudgetPlanningTitle => 'Budget Planning';
+
+  @override
+  String get aiQuickCommandBudgetPlanningDesc => 'Smart budget recommendations';
+
+  @override
+  String get aiQuickCommandBudgetPlanningPrompt => 'Please help me plan a reasonable budget based on the following data:\n\n[monthlyStats]\n\n[recentTrends]\n\nPlease provide specific budget amounts and execution suggestions for each category. Please respond in English.';
+
+  @override
+  String get aiQuickCommandAbnormalExpenseTitle => 'Abnormal Expense Alert';
+
+  @override
+  String get aiQuickCommandAbnormalExpenseDesc => 'Identify unusual spending';
+
+  @override
+  String get aiQuickCommandAbnormalExpensePrompt => 'Please check if there are any abnormal expenses based on the following data:\n\n[recentTransactions]\n\n[monthlyStats]\n\nPlease identify significantly higher expenses than usual and provide analysis. Please respond in English.';
+
+  @override
+  String get aiQuickCommandSavingTipsTitle => 'Saving Tips';
+
+  @override
+  String get aiQuickCommandSavingTipsDesc => 'Personalized money-saving suggestions';
+
+  @override
+  String get aiQuickCommandSavingTipsPrompt => 'Please provide practical money-saving suggestions based on the following data:\n\n[categoryStats]\n\n[recentTrends]\n\nPlease give 3-5 specific and actionable suggestions. Please respond in English.';
+
+  @override
+  String get billCardUnknownLedger => 'Unknown Ledger';
 }

@@ -5076,6 +5076,36 @@ abstract class AppLocalizations {
   /// **'Every {n} year(s)'**
   String recurringTransactionEveryNYears(int n);
 
+  /// No description provided for @recurringTransactionLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger'**
+  String get recurringTransactionLedger;
+
+  /// No description provided for @recurringTransactionUsageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Guide'**
+  String get recurringTransactionUsageTitle;
+
+  /// No description provided for @recurringTransactionUsageContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions are automatically scanned and generated when the app cold starts. After setting a date, the system will create corresponding bills on the first startup after that date. For example: if set to Nov 27, bills will be auto-recorded on the first launch after Nov 27.'**
+  String get recurringTransactionUsageContent;
+
+  /// No description provided for @ledgerSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Ledger'**
+  String get ledgerSelectTitle;
+
+  /// No description provided for @ledgerSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Ledger'**
+  String get ledgerSelect;
+
   /// No description provided for @syncNotConfiguredMessage.
   ///
   /// In en, this message translates to:
@@ -6486,6 +6516,42 @@ abstract class AppLocalizations {
   /// **'Get API Key'**
   String get aiCloudApiGetKey;
 
+  /// No description provided for @aiCloudApiTestKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Connection'**
+  String get aiCloudApiTestKey;
+
+  /// No description provided for @aiCloudApiKeyValid.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ API Key is valid, AI features are available'**
+  String get aiCloudApiKeyValid;
+
+  /// No description provided for @aiCloudApiKeyInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ API Key is invalid, please check and re-enter'**
+  String get aiCloudApiKeyInvalid;
+
+  /// No description provided for @aiCloudApiKeyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ API Key not configured. AI chat and enhanced recognition will be unavailable'**
+  String get aiCloudApiKeyRequired;
+
+  /// No description provided for @aiChatConfigWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Zhipu API Key is not configured or invalid, AI features are unavailable'**
+  String get aiChatConfigWarning;
+
+  /// No description provided for @aiChatGoToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get aiChatGoToSettings;
+
   /// No description provided for @aiLocalModelTitle.
   ///
   /// In en, this message translates to:
@@ -7566,6 +7632,12 @@ abstract class AppLocalizations {
   /// **'📅 Time'**
   String get billCardTime;
 
+  /// No description provided for @billCardLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'📒 Ledger'**
+  String get billCardLedger;
+
   /// No description provided for @billCardNote.
   ///
   /// In en, this message translates to:
@@ -7583,6 +7655,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit'**
   String get billCardEdit;
+
+  /// No description provided for @aiQuickCommandFinancialHealthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Financial Health Analysis'**
+  String get aiQuickCommandFinancialHealthTitle;
+
+  /// No description provided for @aiQuickCommandFinancialHealthDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze income-expense balance and savings rate'**
+  String get aiQuickCommandFinancialHealthDesc;
+
+  /// No description provided for @aiQuickCommandFinancialHealthPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please analyze my financial health based on the following data:\n\n[monthlyStats]\n\n[recentTrends]\n\nPlease provide professional analysis and suggestions from the perspectives of income-expense balance, savings rate, and spending trends. Please respond in English.'**
+  String get aiQuickCommandFinancialHealthPrompt;
+
+  /// No description provided for @aiQuickCommandMonthlyExpenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Expense Summary'**
+  String get aiQuickCommandMonthlyExpenseTitle;
+
+  /// No description provided for @aiQuickCommandMonthlyExpenseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly expense analysis and recommendations'**
+  String get aiQuickCommandMonthlyExpenseDesc;
+
+  /// No description provided for @aiQuickCommandMonthlyExpensePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please summarize my monthly expenses based on the following data:\n\n[monthlyStats]\n\n[categoryStats]\n\nPlease analyze which categories account for the highest proportion and provide optimization suggestions. Please respond in English.'**
+  String get aiQuickCommandMonthlyExpensePrompt;
+
+  /// No description provided for @aiQuickCommandCategoryAnalysisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Analysis'**
+  String get aiQuickCommandCategoryAnalysisTitle;
+
+  /// No description provided for @aiQuickCommandCategoryAnalysisDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze spending distribution by category'**
+  String get aiQuickCommandCategoryAnalysisDesc;
+
+  /// No description provided for @aiQuickCommandCategoryAnalysisPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please analyze my spending by category based on the following data:\n\n[categoryStats]\n\nPlease point out whether there are unreasonable spending ratios and provide optimization suggestions. Please respond in English.'**
+  String get aiQuickCommandCategoryAnalysisPrompt;
+
+  /// No description provided for @aiQuickCommandBudgetPlanningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Planning'**
+  String get aiQuickCommandBudgetPlanningTitle;
+
+  /// No description provided for @aiQuickCommandBudgetPlanningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart budget recommendations'**
+  String get aiQuickCommandBudgetPlanningDesc;
+
+  /// No description provided for @aiQuickCommandBudgetPlanningPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please help me plan a reasonable budget based on the following data:\n\n[monthlyStats]\n\n[recentTrends]\n\nPlease provide specific budget amounts and execution suggestions for each category. Please respond in English.'**
+  String get aiQuickCommandBudgetPlanningPrompt;
+
+  /// No description provided for @aiQuickCommandAbnormalExpenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Abnormal Expense Alert'**
+  String get aiQuickCommandAbnormalExpenseTitle;
+
+  /// No description provided for @aiQuickCommandAbnormalExpenseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Identify unusual spending'**
+  String get aiQuickCommandAbnormalExpenseDesc;
+
+  /// No description provided for @aiQuickCommandAbnormalExpensePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check if there are any abnormal expenses based on the following data:\n\n[recentTransactions]\n\n[monthlyStats]\n\nPlease identify significantly higher expenses than usual and provide analysis. Please respond in English.'**
+  String get aiQuickCommandAbnormalExpensePrompt;
+
+  /// No description provided for @aiQuickCommandSavingTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving Tips'**
+  String get aiQuickCommandSavingTipsTitle;
+
+  /// No description provided for @aiQuickCommandSavingTipsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalized money-saving suggestions'**
+  String get aiQuickCommandSavingTipsDesc;
+
+  /// No description provided for @aiQuickCommandSavingTipsPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide practical money-saving suggestions based on the following data:\n\n[categoryStats]\n\n[recentTrends]\n\nPlease give 3-5 specific and actionable suggestions. Please respond in English.'**
+  String get aiQuickCommandSavingTipsPrompt;
+
+  /// No description provided for @billCardUnknownLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Ledger'**
+  String get billCardUnknownLedger;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

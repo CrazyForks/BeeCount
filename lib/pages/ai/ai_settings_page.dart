@@ -10,6 +10,7 @@ import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../providers/ui_state_providers.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/ai_chat_service.dart';
 
 /// AI智能识别设置页面
 class AISettingsPage extends ConsumerStatefulWidget {
@@ -25,6 +26,8 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
   bool _aiEnabled = false; // AI增强开关
   bool _useVision = true; // 使用视觉模型开关（默认打开）
   bool _loading = true;
+  bool? _apiKeyValid; // API Key验证状态: null=未测试, true=有效, false=无效
+  bool _testing = false; // 是否正在测试
 
   late final TextEditingController _apiKeyController;
 
@@ -60,6 +63,35 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
     final uri = Uri.parse('https://open.bigmodel.cn/');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  /// 测试API Key是否有效
+  Future<void> _testApiKey() async {
+    if (_glmApiKey.isEmpty) {
+      setState(() => _apiKeyValid = null);
+      return;
+    }
+
+    setState(() {
+      _testing = true;
+      _apiKeyValid = null;
+    });
+
+    // 调用统一的验证方法
+    final result = await AIChatService.validateApiKey();
+
+    setState(() {
+      _apiKeyValid = result.isValid;
+      _testing = false;
+    });
+
+    if (mounted) {
+      if (result.isValid) {
+        showToast(context, AppLocalizations.of(context).aiCloudApiKeyValid);
+      } else {
+        showToast(context, AppLocalizations.of(context).aiCloudApiKeyInvalid);
+      }
     }
   }
 
@@ -356,6 +388,23 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                const Spacer(),
+                // 测试按钮
+                TextButton.icon(
+                  onPressed: _testing || _glmApiKey.isEmpty ? null : _testApiKey,
+                  icon: _testing
+                      ? const SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.check_circle_outline, size: 16),
+                  label: Text(l10n.aiCloudApiTestKey),
+                  style: TextButton.styleFrom(
+                    foregroundColor: ref.watch(primaryColorProvider),
+                    textStyle: const TextStyle(fontSize: 13),
+                  ),
+                ),
               ],
             ),
           ),
@@ -394,7 +443,11 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                   ),
                   controller: _apiKeyController,
                   onChanged: (v) {
-                    setState(() => _glmApiKey = v);
+                    setState(() {
+                      _glmApiKey = v;
+                      // 用户修改API Key时，重置验证状态
+                      _apiKeyValid = null;
+                    });
                   },
                   onSubmitted: (v) async {
                     // 按回车键自动保存
@@ -414,6 +467,74 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                     foregroundColor: ref.watch(primaryColorProvider),
                   ),
                 ),
+                // API Key验证状态提示
+                if (_glmApiKey.isEmpty || _apiKeyValid == false) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.red.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.red[700],
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _glmApiKey.isEmpty
+                                ? l10n.aiCloudApiKeyRequired
+                                : l10n.aiCloudApiKeyInvalid,
+                            style: TextStyle(
+                              color: Colors.red[700],
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ] else if (_apiKeyValid == true) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.green.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.green[700],
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            l10n.aiCloudApiKeyValid,
+                            style: TextStyle(
+                              color: Colors.green[700],
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

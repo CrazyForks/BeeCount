@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/amount_text.dart';
+import '../../widgets/biz/section_card.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/recurring_transaction_service.dart';
@@ -16,8 +17,7 @@ class RecurringTransactionPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ledgerId = ref.watch(currentLedgerIdProvider);
-    final recurringTransactionsAsync = ref.watch(recurringTransactionsProvider(ledgerId));
+    final recurringTransactionsAsync = ref.watch(allRecurringTransactionsProvider);
 
     return Scaffold(
       body: Column(
@@ -70,10 +70,18 @@ class RecurringTransactionPage extends ConsumerWidget {
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: recurringTransactions.length,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  itemCount: recurringTransactions.length + 1, // +1 for usage guide card
                   itemBuilder: (context, index) {
-                    final recurring = recurringTransactions[index];
+                    // 第一个显示使用说明卡片
+                    if (index == 0) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _UsageGuideCard(),
+                      );
+                    }
+                    // 后续显示周期记账卡片
+                    final recurring = recurringTransactions[index - 1];
                     return _RecurringTransactionCard(recurring: recurring);
                   },
                 );
@@ -92,7 +100,7 @@ class RecurringTransactionPage extends ConsumerWidget {
       ),
     );
     // Refresh the list
-    ref.invalidate(recurringTransactionsProvider);
+    ref.invalidate(allRecurringTransactionsProvider);
   }
 }
 
@@ -105,160 +113,213 @@ class _RecurringTransactionCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final db = ref.watch(databaseProvider);
     final service = RecurringTransactionService(db);
+    final primaryColor = ref.watch(primaryColorProvider);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => RecurringTransactionEditPage(recurring: recurring),
-            ),
-          );
-          // Refresh the list
-          ref.invalidate(recurringTransactionsProvider);
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  // Type icon
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: recurring.type == 'expense'
-                          ? BeeTokens.error(context).withValues(alpha: 0.1)
-                          : BeeTokens.success(context).withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      recurring.type == 'expense'
-                          ? Icons.arrow_upward
-                          : Icons.arrow_downward,
-                      color: recurring.type == 'expense' ? BeeTokens.error(context) : BeeTokens.success(context),
-                      size: 20,
-                    ),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: BeeTokens.surface(context),
+        borderRadius: BorderRadius.circular(16),
+        border: BeeTokens.isDark(context)
+            ? Border.all(
+                color: recurring.enabled
+                    ? primaryColor.withValues(alpha: 0.3)
+                    : BeeTokens.border(context),
+                width: 1,
+              )
+            : null,
+        boxShadow: BeeTokens.isDark(context)
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => RecurringTransactionEditPage(recurring: recurring),
+              ),
+            );
+            ref.invalidate(allRecurringTransactionsProvider);
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Row(
+              children: [
+                // 左侧：类型指示条
+                Container(
+                  width: 3,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: recurring.type == 'expense'
+                        ? BeeTokens.error(context)
+                        : recurring.type == 'income'
+                            ? BeeTokens.success(context)
+                            : primaryColor,
+                    borderRadius: BorderRadius.circular(1.5),
                   ),
-                  const SizedBox(width: 12),
-                  // Category and amount
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // 显示分类或转账
-                        recurring.type == 'transfer'
-                            ? Text(
-                                AppLocalizations.of(context)!.transferTitle,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              )
-                            : FutureBuilder<Category?>(
-                                future: _getCategory(ref, recurring.categoryId),
-                                builder: (context, snapshot) {
-                                  final categoryName = snapshot.data?.name ?? '';
-                                  return Text(
-                                    CategoryUtils.getDisplayName(categoryName, context),
-                                    style: Theme.of(context).textTheme.titleMedium,
-                                  );
-                                },
+                ),
+                const SizedBox(width: 12),
+                // 中间：信息区域
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 第一行：分类名称
+                      recurring.type == 'transfer'
+                          ? Text(
+                              AppLocalizations.of(context)!.transferTitle,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: BeeTokens.textPrimary(context),
                               ),
+                            )
+                          : FutureBuilder<Category?>(
+                              future: _getCategory(ref, recurring.categoryId),
+                              builder: (context, snapshot) {
+                                final categoryName = snapshot.data?.name ?? '';
+                                return Text(
+                                  CategoryUtils.getDisplayName(categoryName, context),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: BeeTokens.textPrimary(context),
+                                  ),
+                                );
+                              },
+                            ),
+                      const SizedBox(height: 6),
+                      // 第二行：账本 + 频率 + 时间
+                      Row(
+                        children: [
+                          // 账本
+                          FutureBuilder<Ledger?>(
+                            future: _getLedger(ref, recurring.ledgerId),
+                            builder: (context, snapshot) {
+                              final ledgerName = snapshot.data?.name ?? '';
+                              return Text(
+                                ledgerName,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: BeeTokens.textTertiary(context),
+                                ),
+                              );
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
+                            child: Text(
+                              '·',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: BeeTokens.textTertiary(context),
+                              ),
+                            ),
+                          ),
+                          // 频率
+                          Text(
+                            _getFrequencyDescription(context, service),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: BeeTokens.textTertiary(context),
+                            ),
+                          ),
+                          // 下次生成时间（如果有）
+                          if (recurring.lastGeneratedDate != null) ...[
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                              child: Text(
+                                '·',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: BeeTokens.textTertiary(context),
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              Icons.access_time,
+                              size: 11,
+                              color: primaryColor,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              DateFormat.Md().format(recurring.lastGeneratedDate!),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: primaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      // 备注（如果有）
+                      if (recurring.note != null && recurring.note!.isNotEmpty) ...[
                         const SizedBox(height: 4),
                         Text(
-                          _getFrequencyDescription(context, service),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          recurring.note!,
+                          style: TextStyle(
+                            fontSize: 11,
                             color: BeeTokens.textSecondary(context),
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                    ),
-                  ),
-                  // Amount
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      AmountText(
-                        value: recurring.type == 'expense' ? -recurring.amount : recurring.amount,
-                        signed: true,
-                        decimals: 2,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: recurring.type == 'expense' ? BeeTokens.error(context) : BeeTokens.success(context),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: recurring.enabled
-                              ? BeeTokens.success(context).withValues(alpha: 0.1)
-                              : BeeTokens.textTertiary(context).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          recurring.enabled
-                              ? AppLocalizations.of(context)!.recurringTransactionEnabled
-                              : AppLocalizations.of(context)!.recurringTransactionDisabled,
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: recurring.enabled ? BeeTokens.success(context) : BeeTokens.textSecondary(context),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
-                ],
-              ),
-              if (recurring.note != null && recurring.note!.isNotEmpty) ...[
-                const SizedBox(height: 12),
-                Text(
-                  recurring.note!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: BeeTokens.textSecondary(context),
-                  ),
                 ),
-              ],
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Icon(Icons.calendar_today, size: 14, color: BeeTokens.textSecondary(context)),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${AppLocalizations.of(context)!.recurringTransactionStartDate}: ${DateFormat.yMd().format(recurring.startDate)}',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: BeeTokens.textSecondary(context),
-                    ),
-                  ),
-                  if (recurring.endDate != null) ...[
-                    const SizedBox(width: 12),
-                    Text(
-                      '→ ${DateFormat.yMd().format(recurring.endDate!)}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: BeeTokens.textSecondary(context),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-              if (recurring.lastGeneratedDate != null) ...[
-                const SizedBox(height: 8),
-                Row(
+                const SizedBox(width: 12),
+                // 右侧：金额 + 开关
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.history, size: 14, color: BeeTokens.textSecondary(context)),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${AppLocalizations.of(context)!.recurringTransactionNextGeneration}: ${DateFormat.yMd().format(recurring.lastGeneratedDate!)}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: BeeTokens.textSecondary(context),
+                    // 金额
+                    AmountText(
+                      value: recurring.type == 'expense'
+                          ? -recurring.amount
+                          : recurring.amount,
+                      signed: recurring.type != 'transfer',
+                      decimals: 2,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: recurring.type == 'expense'
+                            ? BeeTokens.error(context)
+                            : recurring.type == 'income'
+                                ? BeeTokens.success(context)
+                                : BeeTokens.textPrimary(context),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    // 开关
+                    Transform.scale(
+                      scale: 0.65,
+                      alignment: Alignment.centerRight,
+                      child: Switch(
+                        value: recurring.enabled,
+                        onChanged: (value) async {
+                          await service.toggleRecurringTransaction(
+                              recurring.id, value);
+                          ref.invalidate(allRecurringTransactionsProvider);
+                        },
+                        activeColor: primaryColor,
                       ),
                     ),
                   ],
                 ),
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -302,5 +363,61 @@ class _RecurringTransactionCard extends ConsumerWidget {
           ..where((c) => c.id.equals(categoryId)))
         .getSingleOrNull();
     return result;
+  }
+
+  Future<Ledger?> _getLedger(WidgetRef ref, int ledgerId) async {
+    final db = ref.read(databaseProvider);
+    final result = await (db.select(db.ledgers)
+          ..where((l) => l.id.equals(ledgerId)))
+        .getSingleOrNull();
+    return result;
+  }
+}
+
+/// 使用说明卡片
+class _UsageGuideCard extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final primaryColor = ref.watch(primaryColorProvider);
+
+    return SectionCard(
+      margin: EdgeInsets.zero,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.info_outline,
+            size: 20,
+            color: primaryColor,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.recurringTransactionUsageTitle,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: BeeTokens.textPrimary(context),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  l10n.recurringTransactionUsageContent,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: BeeTokens.textSecondary(context),
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
