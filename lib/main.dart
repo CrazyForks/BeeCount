@@ -13,6 +13,7 @@ import 'pages/auth/welcome_page.dart';
 import 'services/reminder_monitor_service.dart';
 import 'services/recurring_transaction_service.dart';
 import 'services/screenshot_monitor_service.dart';
+import 'services/image_share_handler_service.dart';
 import 'services/shortcuts_handler_service.dart';
 import 'services/logger_service.dart';
 import 'services/migration_service.dart';
@@ -82,6 +83,11 @@ Future<void> main() async {
 
   // 恢复截图自动识别设置（Android专属），传入container
   await _restoreScreenshotMonitor(container);
+
+  // 初始化图片分享处理服务（Android专属）
+  if (Platform.isAndroid) {
+    _setupImageShareHandler(container);
+  }
 
   // 启动iOS URL监听（用于快捷指令自动记账）
   if (Platform.isIOS) {
@@ -253,6 +259,24 @@ Future<void> _autoMigrateToV2() async {
     await db.close();
   } catch (e) {
     logger.error('App', '❌ [v1.15.0] 迁移检测失败', e);
+    // 不抛出异常，避免影响应用启动
+  }
+}
+
+/// 设置图片分享处理（Android专属）
+///
+/// 初始化 ImageShareHandlerService 以接收从相册或其他应用分享的图片
+/// 分享的图片会自动触发记账流程
+void _setupImageShareHandler(ProviderContainer container) {
+  try {
+    logger.info('App', '🖼️  [Android] 初始化图片分享处理服务...');
+
+    // 初始化服务（会自动设置MethodChannel监听器）
+    ImageShareHandlerService(container);
+
+    logger.info('App', '✅ [Android] 图片分享处理服务已启动');
+  } catch (e) {
+    logger.error('App', '❌ [Android] 图片分享处理服务初始化失败', e);
     // 不抛出异常，避免影响应用启动
   }
 }
