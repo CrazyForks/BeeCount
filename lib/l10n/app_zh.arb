@@ -1040,6 +1040,11 @@
       }
     }
   },
+  "recurringTransactionLedger": "账本",
+  "recurringTransactionUsageTitle": "使用说明",
+  "recurringTransactionUsageContent": "周期记账会在每次冷启动进入App时自动扫描并生成账单。设置日期后，系统会在该日期之后的冷启动时创建对应账单。例如：设置11月27日，则会在11月27日之后的首次启动时自动记账。",
+  "ledgerSelectTitle": "选择账本",
+  "ledgerSelect": "选择账本",
   "syncNotConfiguredMessage": "未配置云端",
   "syncNotLoggedInMessage": "未登录",
   "syncCloudBackupCorruptedMessage": "云端备份内容无法解析，可能是早期版本编码问题造成的损坏。请点击\\\"上传当前账本到云端\\\"覆盖修复。",

@@ -101,11 +101,19 @@ final categoriesWithCountProvider = StreamProvider<List<({Category category, int
 });
 
 
-// 重复交易Provider
+// 重复交易Provider（按账本过滤）
 final recurringTransactionsProvider = FutureProvider.family<List<RecurringTransaction>, int>((ref, ledgerId) async {
   final db = ref.watch(databaseProvider);
   return await (db.select(db.recurringTransactions)
         ..where((t) => t.ledgerId.equals(ledgerId))
+        ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+      .get();
+});
+
+// 所有重复交易Provider（不限账本）
+final allRecurringTransactionsProvider = FutureProvider<List<RecurringTransaction>>((ref) async {
+  final db = ref.watch(databaseProvider);
+  return await (db.select(db.recurringTransactions)
         ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
       .get();
 });

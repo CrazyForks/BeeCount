@@ -2677,6 +2677,21 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get recurringTransactionLedger => '账本';
+
+  @override
+  String get recurringTransactionUsageTitle => '使用说明';
+
+  @override
+  String get recurringTransactionUsageContent => '周期记账会在每次冷启动进入App时自动扫描并生成账单。设置日期后，系统会在该日期之后的冷启动时创建对应账单。例如：设置11月27日，则会在11月27日之后的首次启动时自动记账。';
+
+  @override
+  String get ledgerSelectTitle => '选择账本';
+
+  @override
+  String get ledgerSelect => '选择账本';
+
+  @override
   String get syncNotConfiguredMessage => '未配置云端';
 
   @override
@@ -6664,6 +6679,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String recurringTransactionEveryNYears(int n) {
     return '每 $n 年';
   }
+
+  @override
+  String get recurringTransactionLedger => '帳本';
+
+  @override
+  String get recurringTransactionUsageTitle => '使用說明';
+
+  @override
+  String get recurringTransactionUsageContent => '週期記帳會在每次冷啟動進入 App 時自動掃描並產生帳單。設定日期後，系統會在該日期之後的冷啟動時建立對應帳單。例如：設定 11 月 27 日，則會在 11 月 27 日之後的首次啟動時自動記帳。';
+
+  @override
+  String get ledgerSelectTitle => '選擇帳本';
+
+  @override
+  String get ledgerSelect => '選擇帳本';
 
   @override
   String get syncNotConfiguredMessage => '未設定雲端';

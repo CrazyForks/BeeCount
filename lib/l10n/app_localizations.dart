@@ -5076,6 +5076,36 @@ abstract class AppLocalizations {
   /// **'Every {n} year(s)'**
   String recurringTransactionEveryNYears(int n);
 
+  /// No description provided for @recurringTransactionLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger'**
+  String get recurringTransactionLedger;
+
+  /// No description provided for @recurringTransactionUsageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Guide'**
+  String get recurringTransactionUsageTitle;
+
+  /// No description provided for @recurringTransactionUsageContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transactions are automatically scanned and generated when the app cold starts. After setting a date, the system will create corresponding bills on the first startup after that date. For example: if set to Nov 27, bills will be auto-recorded on the first launch after Nov 27.'**
+  String get recurringTransactionUsageContent;
+
+  /// No description provided for @ledgerSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Ledger'**
+  String get ledgerSelectTitle;
+
+  /// No description provided for @ledgerSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Ledger'**
+  String get ledgerSelect;
+
   /// No description provided for @syncNotConfiguredMessage.
   ///
   /// In en, this message translates to:

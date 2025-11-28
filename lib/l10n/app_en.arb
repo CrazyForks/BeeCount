@@ -1142,6 +1142,11 @@
       }
     }
   },
+  "recurringTransactionLedger": "Ledger",
+  "recurringTransactionUsageTitle": "Usage Guide",
+  "recurringTransactionUsageContent": "Recurring transactions are automatically scanned and generated when the app cold starts. After setting a date, the system will create corresponding bills on the first startup after that date. For example: if set to Nov 27, bills will be auto-recorded on the first launch after Nov 27.",
+  "ledgerSelectTitle": "Select Ledger",
+  "ledgerSelect": "Select Ledger",
   "syncNotConfiguredMessage": "Cloud not configured",
   "syncNotLoggedInMessage": "Not logged in",
   "syncCloudBackupCorruptedMessage": "Cloud backup content is corrupted, possibly due to encoding issues from earlier versions. Please click 'Upload Current Ledger to Cloud' to overwrite and fix.",

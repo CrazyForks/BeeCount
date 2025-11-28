@@ -11,6 +11,7 @@ import '../category_icon.dart';
 /// 显示分类选择器
 ///
 /// [type] 分类类型：'income' 或 'expense'
+/// [currentCategoryId] 当前选中的分类ID（用于高亮显示）
 /// [includeParentCategories] 是否包含有子分类的一级分类
 /// [excludeNames] 排除的分类名称列表
 /// [excludeIds] 排除的分类ID列表
@@ -20,6 +21,7 @@ import '../category_icon.dart';
 Future<Category?> showCategorySelector(
   BuildContext context, {
   required String type,
+  int? currentCategoryId,
   bool includeParentCategories = false,
   List<String>? excludeNames,
   List<int>? excludeIds,
@@ -31,6 +33,7 @@ Future<Category?> showCategorySelector(
     context: context,
     builder: (context) => CategorySelectorDialog(
       type: type,
+      currentCategoryId: currentCategoryId,
       includeParentCategories: includeParentCategories,
       excludeNames: excludeNames,
       excludeIds: excludeIds,
@@ -43,6 +46,7 @@ Future<Category?> showCategorySelector(
 
 class CategorySelectorDialog extends ConsumerStatefulWidget {
   final String type;
+  final int? currentCategoryId;
   final bool includeParentCategories;
   final List<String>? excludeNames;
   final List<int>? excludeIds;
@@ -53,6 +57,7 @@ class CategorySelectorDialog extends ConsumerStatefulWidget {
   const CategorySelectorDialog({
     super.key,
     required this.type,
+    this.currentCategoryId,
     this.includeParentCategories = false,
     this.excludeNames,
     this.excludeIds,
@@ -194,10 +199,17 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
         }
       } else {
         // 无搜索时，显示所有
+        // 判断是否需要展开：如果当前选中的是子分类且属于该父分类，则展开
+        bool shouldExpand = widget.expandChildrenByDefault;
+        if (widget.currentCategoryId != null && !shouldExpand) {
+          // 检查是否有子分类被选中
+          shouldExpand = children.any((c) => c.id == widget.currentCategoryId);
+        }
+
         groups.add(_CategoryGroup(
           parent: parent,
           children: children,
-          isExpanded: widget.expandChildrenByDefault,
+          isExpanded: shouldExpand,
           isParentSelectable: isParentSelectable,
         ));
       }
@@ -350,6 +362,7 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
                     final group = groups[index];
                     return _CategoryGroupItem(
                       group: group,
+                      currentCategoryId: widget.currentCategoryId,
                       showTransactionCount: widget.showTransactionCount,
                       transactionCounts: _transactionCounts,
                       primaryColor: ref.watch(primaryColorProvider),
@@ -387,6 +400,7 @@ class _CategoryGroup {
 /// 分类分组项组件
 class _CategoryGroupItem extends StatefulWidget {
   final _CategoryGroup group;
+  final int? currentCategoryId;
   final bool showTransactionCount;
   final Map<int, int> transactionCounts;
   final Color primaryColor;
@@ -394,6 +408,7 @@ class _CategoryGroupItem extends StatefulWidget {
 
   const _CategoryGroupItem({
     required this.group,
+    this.currentCategoryId,
     required this.showTransactionCount,
     required this.transactionCounts,
     required this.primaryColor,
@@ -423,6 +438,7 @@ class _CategoryGroupItemState extends State<_CategoryGroupItem> {
         // 父分类
         _CategoryTile(
           category: widget.group.parent,
+          isSelected: widget.currentCategoryId == widget.group.parent.id,
           showTransactionCount: widget.showTransactionCount,
           transactionCount: widget.transactionCounts[widget.group.parent.id] ?? 0,
           primaryColor: widget.primaryColor,
@@ -444,18 +460,16 @@ class _CategoryGroupItemState extends State<_CategoryGroupItem> {
         // 子分类（如果展开）
         if (hasChildren && _isExpanded)
           ...widget.group.children.map((child) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: _CategoryTile(
-                category: child,
-                showTransactionCount: widget.showTransactionCount,
-                transactionCount: widget.transactionCounts[child.id] ?? 0,
-                primaryColor: widget.primaryColor,
-                isChild: true,
-                onTap: () {
-                  widget.onCategorySelected(child);
-                },
-              ),
+            return _CategoryTile(
+              category: child,
+              isSelected: widget.currentCategoryId == child.id,
+              showTransactionCount: widget.showTransactionCount,
+              transactionCount: widget.transactionCounts[child.id] ?? 0,
+              primaryColor: widget.primaryColor,
+              isChild: true,
+              onTap: () {
+                widget.onCategorySelected(child);
+              },
             );
           }),
       ],
@@ -466,6 +480,7 @@ class _CategoryGroupItemState extends State<_CategoryGroupItem> {
 /// 分类项组件
 class _CategoryTile extends StatelessWidget {
   final Category category;
+  final bool isSelected;
   final bool showTransactionCount;
   final int transactionCount;
   final Color primaryColor;
@@ -477,6 +492,7 @@ class _CategoryTile extends StatelessWidget {
 
   const _CategoryTile({
     required this.category,
+    this.isSelected = false,
     required this.showTransactionCount,
     required this.transactionCount,
     required this.primaryColor,
@@ -502,8 +518,11 @@ class _CategoryTile extends StatelessWidget {
       child: Opacity(
         opacity: opacity,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
+            // 选中状态背景色（通栏）
+            color: isSelected
+                ? primaryColor.withValues(alpha: 0.08)
+                : null,
             border: Border(
               bottom: BorderSide(
                 color: BeeTokens.divider(context),
@@ -511,57 +530,89 @@ class _CategoryTile extends StatelessWidget {
               ),
             ),
           ),
-          child: Row(
-            children: [
-              // 分类图标
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  iconData,
-                  color: primaryColor,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 12),
-              // 分类名称
-              Expanded(
-                child: Text(
-                  CategoryUtils.getDisplayName(category.name, context),
-                  style: TextStyle(
-                    fontSize: isChild ? 15 : 16,
-                    fontWeight: isChild ? FontWeight.normal : FontWeight.w500,
-                    color: BeeTokens.textPrimary(context),
-                  ),
-                ),
-              ),
-              // 交易笔数
-              if (showTransactionCount && transactionCount > 0)
+          child: Padding(
+            // 子分类添加左边距，父分类正常边距
+            padding: EdgeInsets.fromLTRB(
+              isChild ? 56 : 16,  // 左边距：子分类56，父分类16
+              12,
+              16,
+              12,
+            ),
+            child: Row(
+              children: [
+                // 分类图标
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    color: BeeTokens.surface(context),
-                    borderRadius: BorderRadius.circular(12),
+                    color: isSelected
+                        ? primaryColor.withValues(alpha: 0.15)
+                        : primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    // 选中状态添加边框
+                    border: isSelected
+                        ? Border.all(color: primaryColor, width: 1.5)
+                        : null,
                   ),
+                  child: Icon(
+                    iconData,
+                    color: primaryColor,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // 分类名称
+                Expanded(
                   child: Text(
-                    '$transactionCount',
+                    CategoryUtils.getDisplayName(category.name, context),
                     style: TextStyle(
-                      fontSize: 12,
-                      color: BeeTokens.textSecondary(context),
+                      fontSize: isChild ? 15 : 16,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : (isChild ? FontWeight.normal : FontWeight.w500),
+                      color: isSelected
+                          ? primaryColor
+                          : BeeTokens.textPrimary(context),
                     ),
                   ),
                 ),
-              // 展开/收起图标（父分类总是显示）
-              if (isParent)
-                Icon(
-                  isExpanded ? Icons.expand_less : Icons.expand_more,
-                  color: BeeTokens.iconSecondary(context),
-                ),
-            ],
+                // 交易笔数
+                if (showTransactionCount && transactionCount > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: BeeTokens.surface(context),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '$transactionCount',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: BeeTokens.textSecondary(context),
+                      ),
+                    ),
+                  ),
+                // 选中图标
+                if (isSelected)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Icon(
+                      Icons.check_circle,
+                      color: primaryColor,
+                      size: 20,
+                    ),
+                  ),
+                // 展开/收起图标（父分类总是显示）
+                if (isParent)
+                  Padding(
+                    padding: EdgeInsets.only(left: isSelected ? 0 : 8),
+                    child: Icon(
+                      isExpanded ? Icons.expand_less : Icons.expand_more,
+                      color: BeeTokens.iconSecondary(context),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

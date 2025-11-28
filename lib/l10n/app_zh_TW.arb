@@ -851,6 +851,11 @@
       }
     }
   },
+  "recurringTransactionLedger": "帳本",
+  "recurringTransactionUsageTitle": "使用說明",
+  "recurringTransactionUsageContent": "週期記帳會在每次冷啟動進入 App 時自動掃描並產生帳單。設定日期後，系統會在該日期之後的冷啟動時建立對應帳單。例如：設定 11 月 27 日，則會在 11 月 27 日之後的首次啟動時自動記帳。",
+  "ledgerSelectTitle": "選擇帳本",
+  "ledgerSelect": "選擇帳本",
   "syncNotConfiguredMessage": "未設定雲端",
   "syncNotLoggedInMessage": "未登入",
   "syncCloudBackupCorruptedMessage": "雲端備份內容無法解析，可能是早期版本編碼問題造成的損壞。請點擊\\\"上傳當前帳本到雲端\\\"覆蓋修復。",

@@ -7,6 +7,9 @@ import '../data/db.dart';
 import '../providers.dart';
 import 'logger_service.dart';
 
+// 导入 OrderingTerm
+typedef OrderingTerm = d.OrderingTerm;
+
 /// 应用配置模型
 class AppConfig {
   final SupabaseConfig? supabase;
@@ -413,6 +416,7 @@ class RecurringTransactionsConfig {
 
 /// 周期账单项
 class RecurringTransactionItem {
+  final int ledgerId; // 账本ID
   final String type; // expense / income / transfer
   final double amount;
   final int? categoryId;
@@ -429,6 +433,7 @@ class RecurringTransactionItem {
   final bool enabled;
 
   const RecurringTransactionItem({
+    required this.ledgerId,
     required this.type,
     required this.amount,
     this.categoryId,
@@ -447,6 +452,7 @@ class RecurringTransactionItem {
 
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{
+      'ledger_id': ledgerId,
       'type': type,
       'amount': amount,
       'frequency': frequency,
@@ -467,6 +473,7 @@ class RecurringTransactionItem {
 
   static RecurringTransactionItem fromMap(Map<String, dynamic> map) {
     return RecurringTransactionItem(
+      ledgerId: map['ledger_id'] as int,
       type: map['type'] as String,
       amount: (map['amount'] as num).toDouble(),
       categoryId: map['category_id'] as int?,
@@ -486,6 +493,7 @@ class RecurringTransactionItem {
 
   factory RecurringTransactionItem.fromDb(RecurringTransaction rt) {
     return RecurringTransactionItem(
+      ledgerId: rt.ledgerId,
       type: rt.type,
       amount: rt.amount,
       categoryId: rt.categoryId,
@@ -657,12 +665,12 @@ class ConfigExportService {
       );
     }
 
-    // 读取周期账单配置
+    // 读取周期账单配置（导出全部账本的周期记账）
     RecurringTransactionsConfig? recurringConfig;
-    if (db != null && ledgerId != null) {
+    if (db != null) {
       try {
         final recurringList = await (db.select(db.recurringTransactions)
-              ..where((t) => t.ledgerId.equals(ledgerId)))
+              ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
             .get();
 
         if (recurringList.isNotEmpty) {
@@ -869,7 +877,8 @@ class ConfigExportService {
         buffer.writeln('  items:');
         for (final item in items) {
           final itemMap = item as Map<String, dynamic>;
-          buffer.writeln('    - type: "${itemMap['type']}"');
+          buffer.writeln('    - ledger_id: ${itemMap['ledger_id']}');
+          buffer.writeln('      type: "${itemMap['type']}"');
           buffer.writeln('      amount: ${itemMap['amount']}');
 
           if (itemMap.containsKey('category_id')) {
@@ -1069,16 +1078,17 @@ class ConfigExportService {
     }
 
     // 导入周期账单
-    if (config.recurringTransactions != null && db != null && ledgerId != null) {
+    if (config.recurringTransactions != null && db != null) {
       try {
         final items = config.recurringTransactions!.items;
         int importedCount = 0;
 
         for (final item in items) {
           try {
+            // 使用导出数据中的ledgerId，保留原有账本关联
             await db.into(db.recurringTransactions).insert(
               RecurringTransactionsCompanion.insert(
-                ledgerId: ledgerId,
+                ledgerId: item.ledgerId,
                 type: item.type,
                 amount: item.amount,
                 categoryId: d.Value(item.categoryId),

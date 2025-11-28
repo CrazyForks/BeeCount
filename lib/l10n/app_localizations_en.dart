@@ -2677,6 +2677,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get recurringTransactionLedger => 'Ledger';
+
+  @override
+  String get recurringTransactionUsageTitle => 'Usage Guide';
+
+  @override
+  String get recurringTransactionUsageContent => 'Recurring transactions are automatically scanned and generated when the app cold starts. After setting a date, the system will create corresponding bills on the first startup after that date. For example: if set to Nov 27, bills will be auto-recorded on the first launch after Nov 27.';
+
+  @override
+  String get ledgerSelectTitle => 'Select Ledger';
+
+  @override
+  String get ledgerSelect => 'Select Ledger';
+
+  @override
   String get syncNotConfiguredMessage => 'Cloud not configured';
 
   @override

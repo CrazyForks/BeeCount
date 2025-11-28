@@ -17,6 +17,7 @@ import '../../providers/ai_chat_providers.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
 import '../../pages/transaction/transaction_editor_page.dart';
 import '../../pages/ai/ai_settings_page.dart';
+import '../../widgets/biz/ledger_selector_dialog.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/avatar_service.dart';
@@ -31,7 +32,8 @@ class AIChatPage extends ConsumerStatefulWidget {
   ConsumerState<AIChatPage> createState() => _AIChatPageState();
 }
 
-class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObserver {
+class _AIChatPageState extends ConsumerState<AIChatPage>
+    with WidgetsBindingObserver {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   int? _conversationId;
@@ -282,7 +284,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObse
       padding: EdgeInsets.only(bottom: 8.0.scaled(context, ref)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           // AI头像（左侧）
           if (!isUser) ...[
@@ -412,7 +415,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObse
                     color: BeeTokens.textTertiary(context),
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0.scaled(context, ref)),
+                    borderRadius:
+                        BorderRadius.circular(20.0.scaled(context, ref)),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
@@ -528,7 +532,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObse
       _scrollToBottom();
     } catch (e) {
       if (mounted) {
-        showToast(context, '${AppLocalizations.of(context).aiChatSendFailed}: $e');
+        showToast(
+            context, '${AppLocalizations.of(context).aiChatSendFailed}: $e');
       }
     } finally {
       if (mounted) {
@@ -640,7 +645,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObse
 
       if (transaction == null) {
         if (mounted) {
-          showToast(context, AppLocalizations.of(context).aiChatTransactionNotFound);
+          showToast(
+              context, AppLocalizations.of(context).aiChatTransactionNotFound);
         }
         return;
       }
@@ -661,11 +667,87 @@ class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObse
             ),
           ),
         );
+
+        // 从编辑页面返回后，无论是否保存，都刷新账单卡片
+        if (mounted) {
+          logger.info('AIChat', '编辑页面返回，刷新账单卡片: transactionId=$transactionId');
+          await _refreshBillCard(transactionId);
+        }
       }
     } catch (e) {
       if (mounted) {
         showToast(context, AppLocalizations.of(context).aiChatOpenEditorFailed);
       }
+    }
+  }
+
+  /// 刷新账单卡片信息
+  Future<void> _refreshBillCard(int transactionId) async {
+    try {
+      final db = ref.read(databaseProvider);
+
+      // 找到包含此交易ID的消息
+      final message = await (db.select(db.messages)
+            ..where((m) => m.transactionId.equals(transactionId)))
+          .getSingleOrNull();
+
+      if (message == null || message.metadata == null) return;
+
+      // 重新加载最新的交易数据
+      final transaction = await (db.select(db.transactions)
+            ..where((t) => t.id.equals(transactionId)))
+          .getSingleOrNull();
+
+      if (transaction == null) return;
+
+      // 查询分类名称
+      String? categoryName;
+      if (transaction.categoryId != null) {
+        final category = await (db.select(db.categories)
+              ..where((c) => c.id.equals(transaction.categoryId!)))
+            .getSingleOrNull();
+        categoryName = category?.name;
+      }
+
+      // 查询账户名称
+      String? accountName;
+      if (transaction.accountId != null) {
+        final account = await (db.select(db.accounts)
+              ..where((a) => a.id.equals(transaction.accountId!)))
+            .getSingleOrNull();
+        accountName = account?.name;
+      }
+
+      // 重新构建BillInfo
+      final updatedBillInfo = BillInfo(
+        amount: transaction.amount,
+        time: transaction.happenedAt,
+        merchant: transaction.note,
+        category: categoryName,
+        type:
+            transaction.type == 'expense' ? BillType.expense : BillType.income,
+        account: accountName,
+        ledgerId: transaction.ledgerId,
+        confidence: 1.0,
+      );
+
+      // 更新消息的metadata
+      final metadata = jsonDecode(message.metadata!) as Map<String, dynamic>;
+      final isUndone = metadata['isUndone'] == true;
+
+      final updatedMetadata = {
+        'billInfo': updatedBillInfo.toJson(),
+        'isUndone': isUndone,
+      };
+
+      await (db.update(db.messages)..where((m) => m.id.equals(message.id)))
+          .write(MessagesCompanion(
+        metadata: Value(jsonEncode(updatedMetadata)),
+      ));
+
+      logger.info('AIChat', '账单卡片已刷新: transactionId=$transactionId');
+    } catch (e, st) {
+      logger.error('AIChat', '刷新账单卡片失败', e, st);
     }
   }
 
@@ -681,51 +763,22 @@ class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObse
 
       if (transaction == null) {
         if (mounted) {
-          showToast(context, AppLocalizations.of(context).aiChatTransactionNotFound);
+          showToast(
+              context, AppLocalizations.of(context).aiChatTransactionNotFound);
         }
         return;
       }
 
-      // 获取所有账本
-      final ledgers = await (db.select(db.ledgers)).get();
-      if (ledgers.isEmpty) return;
-
       if (!mounted) return;
 
       // 显示账本选择对话框
-      final selectedLedgerId = await showDialog<int>(
-        context: context,
-        builder: (dialogContext) {
-          return SimpleDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: Text(AppLocalizations.of(context).billCardLedger),
-            children: ledgers.map((ledger) {
-              final isSelected = ledger.id == transaction.ledgerId;
-              return SimpleDialogOption(
-                onPressed: () => Navigator.pop(dialogContext, ledger.id),
-                child: Row(
-                  children: [
-                    Icon(
-                      isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
-                      color: isSelected ? ref.watch(primaryColorProvider) : null,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      ledger.name,
-                      style: TextStyle(
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                        color: isSelected ? ref.watch(primaryColorProvider) : null,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          );
-        },
+      final selectedLedgerId = await showLedgerSelector(
+        context,
+        currentLedgerId: transaction.ledgerId,
       );
 
-      if (selectedLedgerId == null || selectedLedgerId == transaction.ledgerId) {
+      if (selectedLedgerId == null ||
+          selectedLedgerId == transaction.ledgerId) {
         return; // 用户取消或选择了相同的账本
       }
 
@@ -751,18 +804,20 @@ class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObse
 
         final updatedMetadata = jsonEncode(metadata);
 
-        await (db.update(db.messages)
-              ..where((m) => m.id.equals(messageId)))
+        await (db.update(db.messages)..where((m) => m.id.equals(messageId)))
             .write(MessagesCompanion(metadata: Value(updatedMetadata)));
 
         // 刷新统计信息（修改账本后，需要刷新旧账本和新账本的统计）
         ref.read(statsRefreshProvider.notifier).state++;
 
         // 触发云同步（旧账本和新账本都需要同步）
-        await handleLocalChange(ref, ledgerId: transaction.ledgerId, background: true);
-        await handleLocalChange(ref, ledgerId: selectedLedgerId, background: true);
+        await handleLocalChange(ref,
+            ledgerId: transaction.ledgerId, background: true);
+        await handleLocalChange(ref,
+            ledgerId: selectedLedgerId, background: true);
 
-        logger.info('AIChat', '修改账本成功: ${transaction.ledgerId} -> $selectedLedgerId，已刷新统计信息和触发云同步');
+        logger.info('AIChat',
+            '修改账本成功: ${transaction.ledgerId} -> $selectedLedgerId，已刷新统计信息和触发云同步');
 
         if (mounted) {
           setState(() {}); // 触发重建以显示新的账本名称
