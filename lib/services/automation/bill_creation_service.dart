@@ -200,15 +200,63 @@ class BillCreationService {
     }
 
     // 2. 确定交易类型
-    // 优先级：AI识别类型 > 金额正负推断 > 默认支出
+    // 优先级：AI识别类型 > 关键字识别 > 金额正负推断 > 默认支出
     String transactionType;
+    String typeSource = ''; // 记录类型判断依据
+
     if (result.aiType != null && result.aiType!.isNotEmpty) {
       transactionType = result.aiType!;
-    } else if (result.amount! > 0) {
-      transactionType = 'income';
+      typeSource = 'AI识别';
     } else {
-      transactionType = 'expense';
+      // 尝试从OCR文本中识别关键字和符号
+      final rawTextLower = result.rawText.toLowerCase();
+      final rawText = result.rawText;
+
+      // 检查是否有加号（明确的收入标志）
+      final hasPlusSign = RegExp(r'\+\s*\d+\.?\d*').hasMatch(rawText);
+
+      // 明确的收入关键字（优先级最高）
+      final strongIncomeKeywords = ['转入成功', '转入', '收款', '收入', '到账', '退款', '入账', '收益'];
+      // 明确的支出关键字
+      final strongExpenseKeywords = ['付款', '支付', '支出', '消费', '转出'];
+
+      // 检查明确的收入关键字
+      bool hasStrongIncomeKeyword = strongIncomeKeywords.any((k) => rawTextLower.contains(k));
+      // 检查明确的支出关键字
+      bool hasStrongExpenseKeyword = strongExpenseKeywords.any((k) => rawTextLower.contains(k));
+
+      if (hasPlusSign) {
+        // 有加号，明确表示收入
+        transactionType = 'income';
+        typeSource = '加号(收入)';
+      } else if (hasStrongIncomeKeyword && !hasStrongExpenseKeyword) {
+        // 明确的收入关键字
+        transactionType = 'income';
+        typeSource = '关键字(收入)';
+      } else if (hasStrongExpenseKeyword && !hasStrongIncomeKeyword) {
+        // 明确的支出关键字
+        transactionType = 'expense';
+        typeSource = '关键字(支出)';
+      } else if (hasStrongIncomeKeyword && hasStrongExpenseKeyword) {
+        // 同时出现收入和支出关键字，优先判断收入（因为收入关键字通常更明确）
+        transactionType = 'income';
+        typeSource = '关键字冲突(收入优先)';
+      } else if (result.amount! < 0) {
+        // 负数金额 → 支出
+        transactionType = 'expense';
+        typeSource = '负号(支出)';
+      } else if (result.amount! > 0) {
+        // 正数金额且无关键字，默认为支出（更安全的假设）
+        transactionType = 'expense';
+        typeSource = '默认(支出)';
+      } else {
+        // 金额为0或null，默认支出
+        transactionType = 'expense';
+        typeSource = '默认(支出)';
+      }
     }
+
+    logger.debug(_tag, '[类型判断] $typeSource → ${transactionType == 'income' ? '收入' : '支出'}');
 
     // 3. 查询对应类型的所有分类
     final allCategories = await (db.select(db.categories)
