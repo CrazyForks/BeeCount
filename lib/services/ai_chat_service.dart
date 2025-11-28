@@ -93,12 +93,13 @@ class AIChatService {
     List<String>? expenseCategories,
     List<String>? incomeCategories,
     String? languageCode,
+    bool forceChat = false, // 强制为自由对话，跳过意图检测
   }) async {
-    logger.info('AIChat', '收到消息: $userInput');
+    logger.info('AIChat', '收到消息: $userInput (forceChat: $forceChat)');
 
     try {
       // 判断意图
-      if (_isTransactionIntent(userInput)) {
+      if (!forceChat && _isTransactionIntent(userInput)) {
         logger.debug('AIChat', '识别为记账意图');
         return await _handleTransaction(
           userInput,

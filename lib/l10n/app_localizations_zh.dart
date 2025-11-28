@@ -4003,6 +4003,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get billCardEdit => '修改';
 
   @override
+  String get aiQuickCommandFinancialHealthTitle => '财务健康分析';
+
+  @override
+  String get aiQuickCommandFinancialHealthDesc => '分析收支平衡和储蓄率';
+
+  @override
+  String get aiQuickCommandFinancialHealthPrompt => '请根据以下数据分析我的财务健康状况：\n\n[monthlyStats]\n\n[recentTrends]\n\n请从收支平衡、储蓄率、消费趋势等角度给出专业分析和建议。请用简体中文回复。';
+
+  @override
+  String get aiQuickCommandMonthlyExpenseTitle => '本月支出总结';
+
+  @override
+  String get aiQuickCommandMonthlyExpenseDesc => '月度支出分析和建议';
+
+  @override
+  String get aiQuickCommandMonthlyExpensePrompt => '请总结我本月的支出情况：\n\n[monthlyStats]\n\n[categoryStats]\n\n请分析主要支出类别，并给出节约开支的建议。请用简体中文回复。';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisTitle => '分类占比分析';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisDesc => '各分类支出占比和趋势';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisPrompt => '请分析我的各分类支出占比：\n\n[categoryStats]\n\n请指出哪些分类支出过高，并给出优化建议。请用简体中文回复。';
+
+  @override
+  String get aiQuickCommandBudgetPlanningTitle => '预算规划建议';
+
+  @override
+  String get aiQuickCommandBudgetPlanningDesc => '基于历史数据的预算建议';
+
+  @override
+  String get aiQuickCommandBudgetPlanningPrompt => '请基于以下数据帮我制定下月预算：\n\n[monthlyStats]\n\n[recentTrends]\n\n请给出各分类的预算建议和注意事项。请用简体中文回复。';
+
+  @override
+  String get aiQuickCommandAbnormalExpenseTitle => '异常支出提醒';
+
+  @override
+  String get aiQuickCommandAbnormalExpenseDesc => '识别大额或异常支出';
+
+  @override
+  String get aiQuickCommandAbnormalExpensePrompt => '请检查我最近是否有异常支出：\n\n[recentTransactions]\n\n[monthlyStats]\n\n请指出可能的异常消费，并分析原因。请用简体中文回复。';
+
+  @override
+  String get aiQuickCommandSavingTipsTitle => '省钱小贴士';
+
+  @override
+  String get aiQuickCommandSavingTipsDesc => '根据消费习惯给建议';
+
+  @override
+  String get aiQuickCommandSavingTipsPrompt => '请根据我的消费习惯给出省钱建议：\n\n[categoryStats]\n\n[recentTrends]\n\n请提供3-5条实用的省钱技巧。请用简体中文回复。';
+
+  @override
   String get billCardUnknownLedger => '未知账本';
 }
 
@@ -8005,6 +8059,60 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get billCardEdit => '修改';
+
+  @override
+  String get aiQuickCommandFinancialHealthTitle => '財務健康分析';
+
+  @override
+  String get aiQuickCommandFinancialHealthDesc => '分析收支平衡和儲蓄率';
+
+  @override
+  String get aiQuickCommandFinancialHealthPrompt => '請根據以下資料分析我的財務健康狀況：\n\n[monthlyStats]\n\n[recentTrends]\n\n請從收支平衡、儲蓄率、消費趨勢等角度給出專業分析和建議。請用繁體中文回覆。';
+
+  @override
+  String get aiQuickCommandMonthlyExpenseTitle => '本月支出總結';
+
+  @override
+  String get aiQuickCommandMonthlyExpenseDesc => '月度支出分析和建議';
+
+  @override
+  String get aiQuickCommandMonthlyExpensePrompt => '請根據以下資料總結我本月的支出情況：\n\n[monthlyStats]\n\n[categoryStats]\n\n請分析哪些分類佔比最高，並給出優化建議。請用繁體中文回覆。';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisTitle => '分類佔比分析';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisDesc => '分析各分類支出分佈';
+
+  @override
+  String get aiQuickCommandCategoryAnalysisPrompt => '請根據以下資料分析我的分類支出情況：\n\n[categoryStats]\n\n請指出是否存在不合理的支出比例，並給出優化建議。請用繁體中文回覆。';
+
+  @override
+  String get aiQuickCommandBudgetPlanningTitle => '預算規劃建議';
+
+  @override
+  String get aiQuickCommandBudgetPlanningDesc => '智能預算推薦';
+
+  @override
+  String get aiQuickCommandBudgetPlanningPrompt => '請根據以下資料幫我規劃合理的預算：\n\n[monthlyStats]\n\n[recentTrends]\n\n請給出各分類的具體預算金額和執行建議。請用繁體中文回覆。';
+
+  @override
+  String get aiQuickCommandAbnormalExpenseTitle => '異常支出提醒';
+
+  @override
+  String get aiQuickCommandAbnormalExpenseDesc => '識別異常消費';
+
+  @override
+  String get aiQuickCommandAbnormalExpensePrompt => '請根據以下資料檢查是否有異常支出：\n\n[recentTransactions]\n\n[monthlyStats]\n\n請識別出明顯高於平常的支出，並給出分析。請用繁體中文回覆。';
+
+  @override
+  String get aiQuickCommandSavingTipsTitle => '省錢小貼士';
+
+  @override
+  String get aiQuickCommandSavingTipsDesc => '個性化省錢建議';
+
+  @override
+  String get aiQuickCommandSavingTipsPrompt => '請根據以下資料給出實用的省錢建議：\n\n[categoryStats]\n\n[recentTrends]\n\n請給出3-5條具體可行的建議。請用繁體中文回覆。';
 
   @override
   String get billCardUnknownLedger => '未知帳本';

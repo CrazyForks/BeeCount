@@ -9,6 +9,7 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/bee_icon.dart';
 import '../../widgets/ai/typewriter_text.dart';
 import '../../widgets/ai/bill_card_widget.dart';
+import '../../widgets/ai/ai_quick_commands_bar.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/sync_helpers.dart';
@@ -20,9 +21,11 @@ import '../../pages/ai/ai_settings_page.dart';
 import '../../widgets/biz/ledger_selector_dialog.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/ai_quick_command.dart';
 import '../../services/avatar_service.dart';
 import '../../services/logger_service.dart';
 import '../../services/ai_chat_service.dart';
+import '../../services/ai_quick_command_service.dart';
 
 /// AI 对话页面
 class AIChatPage extends ConsumerStatefulWidget {
@@ -41,6 +44,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
   int? _animatingMessageId; // 正在播放动画的消息ID
   String? _userAvatarPath; // 用户头像路径
   AIConfigValidationResult? _apiValidation; // API配置验证结果
+  bool _showScrollToBottom = false; // 是否显示"回到底部"按钮
 
   @override
   void initState() {
@@ -49,6 +53,25 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
     _initConversation();
     _loadUserAvatar();
     _validateApiConfig();
+    _scrollController.addListener(_handleScroll);
+  }
+
+  /// 处理滚动事件
+  void _handleScroll() {
+    if (!_scrollController.hasClients) return;
+
+    final position = _scrollController.position;
+    final scrollOffset = position.pixels;
+    final maxScroll = position.maxScrollExtent;
+
+    // 列表可滚动 且 距离底部超过50像素时显示按钮
+    final shouldShow = maxScroll > 0 && (maxScroll - scrollOffset) > 50;
+
+    if (shouldShow != _showScrollToBottom) {
+      setState(() {
+        _showScrollToBottom = shouldShow;
+      });
+    }
   }
 
   @override
@@ -190,26 +213,60 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
           // 消息列表
           Expanded(
-            child: messagesAsync.when(
-              data: (messages) {
-                if (messages.isEmpty) {
-                  return const Center(child: Text('暂无消息'));
-                }
+            child: Stack(
+              children: [
+                messagesAsync.when(
+                  data: (messages) {
+                    if (messages.isEmpty) {
+                      return const Center(child: Text('暂无消息'));
+                    }
 
-                return ListView.builder(
-                  controller: _scrollController,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.0.scaled(context, ref),
-                    vertical: 8.0.scaled(context, ref),
-                  ),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    return _buildMessageBubble(messages[index]);
+                    return ListView.builder(
+                      controller: _scrollController,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.0.scaled(context, ref),
+                        vertical: 8.0.scaled(context, ref),
+                      ),
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        return _buildMessageBubble(messages[index]);
+                      },
+                    );
                   },
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, st) => Center(child: Text('加载失败: $e')),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (e, st) => Center(child: Text('加载失败: $e')),
+                ),
+
+                // 回到底部按钮
+                if (_showScrollToBottom)
+                  Positioned(
+                    right: 16.0.scaled(context, ref),
+                    bottom: 16.0.scaled(context, ref),
+                    child: Material(
+                      color: ref.watch(primaryColorProvider),
+                      borderRadius:
+                          BorderRadius.circular(24.0.scaled(context, ref)),
+                      elevation: 8,
+                      shadowColor: Colors.black.withOpacity(0.4),
+                      child: InkWell(
+                        onTap: _scrollToBottomWithAnimation,
+                        borderRadius:
+                            BorderRadius.circular(24.0.scaled(context, ref)),
+                        child: Container(
+                          width: 48.0.scaled(context, ref),
+                          height: 48.0.scaled(context, ref),
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.white,
+                            size: 30.0.scaled(context, ref),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
 
@@ -243,6 +300,11 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
                 ],
               ),
             ),
+
+          // 快捷指令横条
+          AIQuickCommandsBar(
+            onCommandTap: _handleQuickCommand,
+          ),
 
           // 输入区域
           _buildInputArea(),
@@ -404,6 +466,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         ),
       ),
       child: SafeArea(
+        top: false, // 不保护顶部，避免额外空白
         child: Row(
           children: [
             Expanded(
@@ -448,22 +511,88 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
     );
   }
 
+  /// 处理快捷指令点击
+  Future<void> _handleQuickCommand(AIQuickCommand command) async {
+    if (_isLoading) return;
+
+    try {
+      final ledgerId = ref.read(currentLedgerIdProvider);
+      final commandService = ref.read(aiQuickCommandServiceProvider(ledgerId));
+      final l10n = AppLocalizations.of(context);
+
+      // 生成完整的 Prompt
+      final prompt = await commandService.generatePrompt(command, context);
+
+      // 获取快捷指令的标题作为显示文本
+      String displayText;
+      switch (command.titleKey) {
+        case 'aiQuickCommandFinancialHealthTitle':
+          displayText = l10n.aiQuickCommandFinancialHealthTitle;
+          break;
+        case 'aiQuickCommandMonthlyExpenseTitle':
+          displayText = l10n.aiQuickCommandMonthlyExpenseTitle;
+          break;
+        case 'aiQuickCommandCategoryAnalysisTitle':
+          displayText = l10n.aiQuickCommandCategoryAnalysisTitle;
+          break;
+        case 'aiQuickCommandBudgetPlanningTitle':
+          displayText = l10n.aiQuickCommandBudgetPlanningTitle;
+          break;
+        case 'aiQuickCommandAbnormalExpenseTitle':
+          displayText = l10n.aiQuickCommandAbnormalExpenseTitle;
+          break;
+        case 'aiQuickCommandSavingTipsTitle':
+          displayText = l10n.aiQuickCommandSavingTipsTitle;
+          break;
+        default:
+          displayText = command.titleKey;
+      }
+
+      // 发送完整prompt给AI，但在对话中只显示标题
+      await _sendMessageText(
+        prompt,
+        displayText: displayText,
+        forceChat: true,
+      );
+    } catch (e, st) {
+      logger.error('AIChat', '处理快捷指令失败', e, st);
+      if (mounted) {
+        showToast(context, '${AppLocalizations.of(context).commonFailed}: $e');
+      }
+    }
+  }
+
   Future<void> _sendMessage() async {
     final text = _inputController.text.trim();
     if (text.isEmpty || _isLoading) return;
 
     _inputController.clear();
+    await _sendMessageText(text);
+  }
+
+  /// 发送消息文本
+  ///
+  /// [text] - 发送给AI的完整文本
+  /// [displayText] - 在对话框中显示的文本（可选，默认使用text）
+  /// [forceChat] - 强制为自由对话模式
+  Future<void> _sendMessageText(
+    String text, {
+    String? displayText,
+    bool forceChat = false,
+  }) async {
+    if (text.isEmpty || _isLoading) return;
+
     setState(() => _isLoading = true);
 
     try {
       final db = ref.read(databaseProvider);
 
-      // 保存用户消息
+      // 保存用户消息（使用displayText作为显示内容，如果没有则使用text）
       await db.into(db.messages).insert(
             MessagesCompanion.insert(
               conversationId: _conversationId!,
               role: 'user',
-              content: text,
+              content: displayText ?? text,
               messageType: 'text',
               createdAt: Value(DateTime.now()),
             ),
@@ -490,6 +619,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         expenseCategories: expenseCategories.map((c) => c.name).toList(),
         incomeCategories: incomeCategories.map((c) => c.name).toList(),
         languageCode: currentLocale.languageCode,
+        forceChat: forceChat, // 快捷指令强制为自由对话
       );
 
       // 保存 AI 回复
@@ -552,6 +682,17 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         );
       }
     });
+  }
+
+  /// 点击按钮时滚动到底部（立即执行）
+  void _scrollToBottomWithAnimation() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   void _showClearHistoryDialog() {
