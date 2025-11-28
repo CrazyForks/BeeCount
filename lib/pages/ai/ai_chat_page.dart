@@ -11,13 +11,17 @@ import '../../widgets/ai/typewriter_text.dart';
 import '../../widgets/ai/bill_card_widget.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
+import '../../utils/sync_helpers.dart';
 import '../../providers.dart';
 import '../../providers/ai_chat_providers.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
 import '../../pages/transaction/transaction_editor_page.dart';
+import '../../pages/ai/ai_settings_page.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/avatar_service.dart';
+import '../../services/logger_service.dart';
+import '../../services/ai_chat_service.dart';
 
 /// AI 对话页面
 class AIChatPage extends ConsumerStatefulWidget {
@@ -27,19 +31,39 @@ class AIChatPage extends ConsumerStatefulWidget {
   ConsumerState<AIChatPage> createState() => _AIChatPageState();
 }
 
-class _AIChatPageState extends ConsumerState<AIChatPage> {
+class _AIChatPageState extends ConsumerState<AIChatPage> with WidgetsBindingObserver {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   int? _conversationId;
   bool _isLoading = false;
   int? _animatingMessageId; // 正在播放动画的消息ID
   String? _userAvatarPath; // 用户头像路径
+  AIConfigValidationResult? _apiValidation; // API配置验证结果
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initConversation();
     _loadUserAvatar();
+    _validateApiConfig();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // 当应用从后台恢复到前台时，重新验证API配置
+    if (state == AppLifecycleState.resumed) {
+      _validateApiConfig();
+    }
+  }
+
+  /// 验证 API 配置
+  Future<void> _validateApiConfig() async {
+    final result = await AIChatService.validateApiKey();
+    if (mounted) {
+      setState(() => _apiValidation = result);
+    }
   }
 
   Future<void> _loadUserAvatar() async {
@@ -53,11 +77,9 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
 
   Future<void> _initConversation() async {
     final db = ref.read(databaseProvider);
-    final ledgerId = ref.read(currentLedgerIdProvider);
 
-    // 查找当前账本的活跃对话
+    // 查找全局活跃对话（不限制账本）
     final conv = await (db.select(db.conversations)
-          ..where((c) => c.ledgerId.equals(ledgerId))
           ..orderBy([(c) => OrderingTerm.desc(c.updatedAt)])
           ..limit(1))
         .getSingleOrNull();
@@ -65,10 +87,9 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
     if (conv != null) {
       setState(() => _conversationId = conv.id);
     } else {
-      // 创建新对话
+      // 创建新对话（全局对话，不关联账本）
       final id = await db.into(db.conversations).insert(
             ConversationsCompanion.insert(
-              ledgerId: ledgerId,
               title: const Value('AI对话'),
               createdAt: Value(DateTime.now()),
               updatedAt: Value(DateTime.now()),
@@ -107,6 +128,63 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
               ),
             ],
           ),
+
+          // API配置警告横幅
+          if (_apiValidation != null && !_apiValidation!.isValid)
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 12.0.scaled(context, ref),
+                vertical: 8.0.scaled(context, ref),
+              ),
+              padding: EdgeInsets.all(12.0.scaled(context, ref)),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
+                border: Border.all(
+                  color: Colors.red.withOpacity(0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.red[700],
+                    size: 20.0.scaled(context, ref),
+                  ),
+                  SizedBox(width: 8.0.scaled(context, ref)),
+                  Expanded(
+                    child: Text(
+                      AppLocalizations.of(context).aiChatConfigWarning,
+                      style: TextStyle(
+                        color: Colors.red[700],
+                        fontSize: 13.0.scaled(context, ref),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const AISettingsPage(),
+                        ),
+                      );
+                      // 返回后重新验证
+                      if (mounted) {
+                        await _validateApiConfig();
+                      }
+                    },
+                    child: Text(
+                      AppLocalizations.of(context).aiChatGoToSettings,
+                      style: TextStyle(
+                        color: ref.watch(primaryColorProvider),
+                        fontSize: 13.0.scaled(context, ref),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
           // 消息列表
           Expanded(
@@ -192,6 +270,9 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
             : null,
         onEdit: message.transactionId != null && !isUndone
             ? () => _handleEdit(message.transactionId!)
+            : null,
+        onChangeLedger: message.transactionId != null && !isUndone
+            ? () => _handleChangeLedger(message.id, message.transactionId!)
             : null,
       );
     }
@@ -394,8 +475,14 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
       // 调用 AI 服务
       final chatService = ref.read(aiChatServiceProvider);
       final currentLocale = Localizations.localeOf(context);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+
+      // 调试日志：确认当前账本ID
+      logger.info('AIChat', '当前账本ID: $ledgerId');
+
       final response = await chatService.processMessage(
         text,
+        ledgerId: ledgerId,
         expenseCategories: expenseCategories.map((c) => c.name).toList(),
         incomeCategories: incomeCategories.map((c) => c.name).toList(),
         languageCode: currentLocale.languageCode,
@@ -420,6 +507,18 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
               createdAt: Value(DateTime.now()),
             ),
           );
+
+      // 如果是记账成功，刷新统计信息
+      if (response.type == 'bill_card' && response.transactionId != null) {
+        // 刷新全局统计信息
+        ref.read(statsRefreshProvider.notifier).state++;
+
+        // 触发云同步
+        final billLedgerId = response.billInfo?.ledgerId ?? ledgerId;
+        await handleLocalChange(ref, ledgerId: billLedgerId, background: true);
+
+        logger.info('AIChat', '记账成功，已刷新统计信息和触发云同步');
+      }
 
       // 设置动画消息ID
       setState(() {
@@ -509,6 +608,17 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
             .write(MessagesCompanion(
           metadata: Value(jsonEncode(updatedMetadata)),
         ));
+
+        // 刷新统计信息（撤销记账后）
+        ref.read(statsRefreshProvider.notifier).state++;
+
+        // 触发云同步
+        final billInfo = metadata['billInfo'] as Map<String, dynamic>?;
+        if (billInfo != null && billInfo['ledgerId'] != null) {
+          final ledgerId = billInfo['ledgerId'] as int;
+          await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+          logger.info('AIChat', '撤销记账成功，已刷新统计信息和触发云同步');
+        }
       }
 
       if (mounted) {
@@ -559,8 +669,119 @@ class _AIChatPageState extends ConsumerState<AIChatPage> {
     }
   }
 
+  /// 修改账本
+  Future<void> _handleChangeLedger(int messageId, int transactionId) async {
+    try {
+      final db = ref.read(databaseProvider);
+
+      // 获取当前交易
+      final transaction = await (db.select(db.transactions)
+            ..where((t) => t.id.equals(transactionId)))
+          .getSingleOrNull();
+
+      if (transaction == null) {
+        if (mounted) {
+          showToast(context, AppLocalizations.of(context).aiChatTransactionNotFound);
+        }
+        return;
+      }
+
+      // 获取所有账本
+      final ledgers = await (db.select(db.ledgers)).get();
+      if (ledgers.isEmpty) return;
+
+      if (!mounted) return;
+
+      // 显示账本选择对话框
+      final selectedLedgerId = await showDialog<int>(
+        context: context,
+        builder: (dialogContext) {
+          return SimpleDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Text(AppLocalizations.of(context).billCardLedger),
+            children: ledgers.map((ledger) {
+              final isSelected = ledger.id == transaction.ledgerId;
+              return SimpleDialogOption(
+                onPressed: () => Navigator.pop(dialogContext, ledger.id),
+                child: Row(
+                  children: [
+                    Icon(
+                      isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
+                      color: isSelected ? ref.watch(primaryColorProvider) : null,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      ledger.name,
+                      style: TextStyle(
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                        color: isSelected ? ref.watch(primaryColorProvider) : null,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          );
+        },
+      );
+
+      if (selectedLedgerId == null || selectedLedgerId == transaction.ledgerId) {
+        return; // 用户取消或选择了相同的账本
+      }
+
+      // 更新交易的账本
+      await (db.update(db.transactions)
+            ..where((t) => t.id.equals(transactionId)))
+          .write(TransactionsCompanion(ledgerId: Value(selectedLedgerId)));
+
+      // 更新消息的 metadata
+      final message = await (db.select(db.messages)
+            ..where((m) => m.id.equals(messageId)))
+          .getSingleOrNull();
+
+      if (message != null && message.metadata != null) {
+        final metadata = jsonDecode(message.metadata!) as Map<String, dynamic>;
+
+        // 更新 billInfo 中的 ledgerId
+        if (metadata.containsKey('billInfo')) {
+          metadata['billInfo']['ledgerId'] = selectedLedgerId;
+        } else {
+          metadata['ledgerId'] = selectedLedgerId;
+        }
+
+        final updatedMetadata = jsonEncode(metadata);
+
+        await (db.update(db.messages)
+              ..where((m) => m.id.equals(messageId)))
+            .write(MessagesCompanion(metadata: Value(updatedMetadata)));
+
+        // 刷新统计信息（修改账本后，需要刷新旧账本和新账本的统计）
+        ref.read(statsRefreshProvider.notifier).state++;
+
+        // 触发云同步（旧账本和新账本都需要同步）
+        await handleLocalChange(ref, ledgerId: transaction.ledgerId, background: true);
+        await handleLocalChange(ref, ledgerId: selectedLedgerId, background: true);
+
+        logger.info('AIChat', '修改账本成功: ${transaction.ledgerId} -> $selectedLedgerId，已刷新统计信息和触发云同步');
+
+        if (mounted) {
+          setState(() {}); // 触发重建以显示新的账本名称
+        }
+      }
+
+      if (mounted) {
+        showToast(context, AppLocalizations.of(context).commonSuccess);
+      }
+    } catch (e) {
+      if (mounted) {
+        showToast(context, AppLocalizations.of(context).commonFailed);
+      }
+    }
+  }
+
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _inputController.dispose();
     _scrollController.dispose();
     super.dispose();

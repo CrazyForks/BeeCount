@@ -6486,6 +6486,42 @@ abstract class AppLocalizations {
   /// **'Get API Key'**
   String get aiCloudApiGetKey;
 
+  /// No description provided for @aiCloudApiTestKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Connection'**
+  String get aiCloudApiTestKey;
+
+  /// No description provided for @aiCloudApiKeyValid.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ API Key is valid, AI features are available'**
+  String get aiCloudApiKeyValid;
+
+  /// No description provided for @aiCloudApiKeyInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ API Key is invalid, please check and re-enter'**
+  String get aiCloudApiKeyInvalid;
+
+  /// No description provided for @aiCloudApiKeyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ API Key not configured. AI chat and enhanced recognition will be unavailable'**
+  String get aiCloudApiKeyRequired;
+
+  /// No description provided for @aiChatConfigWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Zhipu API Key is not configured or invalid, AI features are unavailable'**
+  String get aiChatConfigWarning;
+
+  /// No description provided for @aiChatGoToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get aiChatGoToSettings;
+
   /// No description provided for @aiLocalModelTitle.
   ///
   /// In en, this message translates to:
@@ -7566,6 +7602,12 @@ abstract class AppLocalizations {
   /// **'📅 Time'**
   String get billCardTime;
 
+  /// No description provided for @billCardLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'📒 Ledger'**
+  String get billCardLedger;
+
   /// No description provided for @billCardNote.
   ///
   /// In en, this message translates to:
@@ -7583,6 +7625,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit'**
   String get billCardEdit;
+
+  /// No description provided for @billCardUnknownLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Ledger'**
+  String get billCardUnknownLedger;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

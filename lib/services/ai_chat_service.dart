@@ -10,6 +10,25 @@ import '../ai/tasks/bill_extraction_task.dart';
 import '../data/db.dart';
 import '../services/logger_service.dart';
 
+/// AI配置验证结果
+class AIConfigValidationResult {
+  final bool isValid;
+  final String? errorMessage;
+
+  AIConfigValidationResult({
+    required this.isValid,
+    this.errorMessage,
+  });
+
+  factory AIConfigValidationResult.valid() {
+    return AIConfigValidationResult(isValid: true);
+  }
+
+  factory AIConfigValidationResult.invalid(String message) {
+    return AIConfigValidationResult(isValid: false, errorMessage: message);
+  }
+}
+
 /// AI 对话服务
 ///
 /// 支持两种模式:
@@ -21,9 +40,56 @@ class AIChatService {
 
   AIChatService({required BeeDatabase db}) : _db = db;
 
+  /// 验证 API Key 是否有效（静态方法）
+  static Future<AIConfigValidationResult> validateApiKey() async {
+    logger.info('AIChat', '开始验证 API Key 配置');
+
+    final prefs = await SharedPreferences.getInstance();
+    final apiKey = prefs.getString('ai_glm_api_key');
+
+    // 检查是否配置了 API Key
+    if (apiKey == null || apiKey.isEmpty) {
+      logger.warning('AIChat', 'API Key 未配置');
+      return AIConfigValidationResult.invalid('未配置 API Key');
+    }
+
+    try {
+      // 测试 API Key 是否有效
+      final aiKit = FlutterAIKit();
+      final zhipuProvider = ZhipuGLMProvider(
+        apiKey: apiKey,
+        model: 'glm-4-flash',
+        temperature: 0.7,
+      );
+      aiKit.registerProvider(zhipuProvider);
+
+      // 创建简单的测试任务
+      final task = _SimpleChatTask('你好');
+      final result = await aiKit.execute(
+        task,
+        context: AIExecutionContext(
+          hasNetwork: true,
+          timeout: const Duration(seconds: 10),
+        ),
+      );
+
+      if (result.success) {
+        logger.info('AIChat', 'API Key 验证成功');
+        return AIConfigValidationResult.valid();
+      } else {
+        logger.warning('AIChat', 'API Key 验证失败: ${result.error}');
+        return AIConfigValidationResult.invalid('API Key 无效');
+      }
+    } catch (e, st) {
+      logger.error('AIChat', 'API Key 验证异常', e, st);
+      return AIConfigValidationResult.invalid('API Key 验证失败');
+    }
+  }
+
   /// 处理用户消息
   Future<AIResponse> processMessage(
     String userInput, {
+    required int ledgerId, // 当前账本ID
     List<String>? expenseCategories,
     List<String>? incomeCategories,
     String? languageCode,
@@ -36,6 +102,7 @@ class AIChatService {
         logger.debug('AIChat', '识别为记账意图');
         return await _handleTransaction(
           userInput,
+          ledgerId: ledgerId,
           expenseCategories: expenseCategories,
           incomeCategories: incomeCategories,
         );
@@ -64,13 +131,14 @@ class AIChatService {
   /// 处理记账 - 复用 AIBillService
   Future<AIResponse> _handleTransaction(
     String input, {
+    required int ledgerId,
     List<String>? expenseCategories,
     List<String>? incomeCategories,
   }) async {
     logger.debug('AIChat', '识别为记账意图');
 
     // 调用 AIBillService
-    final billInfo = await _aiBillService.extractBillInfo(
+    var billInfo = await _aiBillService.extractBillInfo(
       input,
       expenseCategories: expenseCategories,
       incomeCategories: incomeCategories,
@@ -78,6 +146,20 @@ class AIChatService {
 
     if (billInfo != null && billInfo.isComplete) {
       logger.info('AIChat', '账单提取成功: ${billInfo.toJson()}');
+
+      // 将 ledgerId 添加到 billInfo（创建新实例）
+      billInfo = BillInfo(
+        amount: billInfo.amount,
+        time: billInfo.time,
+        merchant: billInfo.merchant,
+        category: billInfo.category,
+        type: billInfo.type,
+        account: billInfo.account,
+        ledgerId: ledgerId,
+        confidence: billInfo.confidence,
+      );
+
+      logger.info('AIChat', '附加账本ID到BillInfo: ledgerId=$ledgerId');
 
       // 保存到数据库
       final transactionId = await _saveBill(billInfo);
@@ -163,11 +245,18 @@ class AIChatService {
 
   /// 保存账单 - 复用 BillCreationService 的逻辑
   Future<int> _saveBill(BillInfo bill) async {
-    logger.info('AIChat', '开始保存账单: amount=${bill.amount}, category=${bill.category}');
+    logger.info('AIChat', '开始保存账单: amount=${bill.amount}, category=${bill.category}, ledgerId=${bill.ledgerId}');
 
-    // 获取当前账本 ID
-    final ledgers = await (_db.select(_db.ledgers)).get();
-    final ledgerId = ledgers.first.id;
+    // 使用 BillInfo 中的 ledgerId，如果为空则使用第一个账本
+    int ledgerId;
+    if (bill.ledgerId != null) {
+      ledgerId = bill.ledgerId!;
+      logger.info('AIChat', '使用指定账本ID: $ledgerId');
+    } else {
+      final ledgers = await (_db.select(_db.ledgers)).get();
+      ledgerId = ledgers.first.id;
+      logger.warning('AIChat', '未指定账本ID，使用第一个账本: $ledgerId');
+    }
 
     // 确定交易类型
     final transactionType = bill.type == BillType.expense ? 'expense' : 'income';

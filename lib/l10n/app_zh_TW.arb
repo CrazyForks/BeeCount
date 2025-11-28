@@ -990,6 +990,12 @@
   "monthExpense": "本月支出",
   "monthIncome": "本月收入",
   "aiCloudApiGetKey": "取得 API Key",
+  "aiCloudApiTestKey": "測試連線",
+  "aiCloudApiKeyValid": "✅ API Key 有效，AI 功能可正常使用",
+  "aiCloudApiKeyInvalid": "❌ API Key 無效，請檢查後重新輸入",
+  "aiCloudApiKeyRequired": "⚠️ 未設定 API Key，AI 對話和 AI 增強辨識功能將無法使用",
+  "aiChatConfigWarning": "未設定或設定錯誤智譜 API Key，AI 功能不可用",
+  "aiChatGoToSettings": "前往設定",
   "aiCloudApiKeyHelper": "GLM-4-Flash 模型完全免費",
   "aiCloudApiKeyHint": "輸入智譜 AI 的 API Key",
   "aiCloudApiKeyLabel": "API Key",
@@ -1413,7 +1419,9 @@
   "billCardAmount": "💰 金額",
   "billCardCategory": "🏷️ 分類",
   "billCardTime": "📅 時間",
+  "billCardLedger": "📒 帳本",
   "billCardNote": "📝 備註",
   "billCardUndo": "撤銷",
-  "billCardEdit": "修改"
+  "billCardEdit": "修改",
+  "billCardUnknownLedger": "未知帳本"
 }

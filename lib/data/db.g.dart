@@ -2450,8 +2450,8 @@ class $ConversationsTable extends Conversations
       const VerificationMeta('ledgerId');
   @override
   late final GeneratedColumn<int> ledgerId = GeneratedColumn<int>(
-      'ledger_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      'ledger_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
@@ -2494,8 +2494,6 @@ class $ConversationsTable extends Conversations
     if (data.containsKey('ledger_id')) {
       context.handle(_ledgerIdMeta,
           ledgerId.isAcceptableOrUnknown(data['ledger_id']!, _ledgerIdMeta));
-    } else if (isInserting) {
-      context.missing(_ledgerIdMeta);
     }
     if (data.containsKey('title')) {
       context.handle(
@@ -2521,7 +2519,7 @@ class $ConversationsTable extends Conversations
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       ledgerId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}ledger_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}ledger_id']),
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
       createdAt: attachedDatabase.typeMapping
@@ -2539,13 +2537,13 @@ class $ConversationsTable extends Conversations
 
 class Conversation extends DataClass implements Insertable<Conversation> {
   final int id;
-  final int ledgerId;
+  final int? ledgerId;
   final String title;
   final DateTime createdAt;
   final DateTime updatedAt;
   const Conversation(
       {required this.id,
-      required this.ledgerId,
+      this.ledgerId,
       required this.title,
       required this.createdAt,
       required this.updatedAt});
@@ -2553,7 +2551,9 @@ class Conversation extends DataClass implements Insertable<Conversation> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['ledger_id'] = Variable<int>(ledgerId);
+    if (!nullToAbsent || ledgerId != null) {
+      map['ledger_id'] = Variable<int>(ledgerId);
+    }
     map['title'] = Variable<String>(title);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -2563,7 +2563,9 @@ class Conversation extends DataClass implements Insertable<Conversation> {
   ConversationsCompanion toCompanion(bool nullToAbsent) {
     return ConversationsCompanion(
       id: Value(id),
-      ledgerId: Value(ledgerId),
+      ledgerId: ledgerId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ledgerId),
       title: Value(title),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -2575,7 +2577,7 @@ class Conversation extends DataClass implements Insertable<Conversation> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Conversation(
       id: serializer.fromJson<int>(json['id']),
-      ledgerId: serializer.fromJson<int>(json['ledgerId']),
+      ledgerId: serializer.fromJson<int?>(json['ledgerId']),
       title: serializer.fromJson<String>(json['title']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -2586,7 +2588,7 @@ class Conversation extends DataClass implements Insertable<Conversation> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'ledgerId': serializer.toJson<int>(ledgerId),
+      'ledgerId': serializer.toJson<int?>(ledgerId),
       'title': serializer.toJson<String>(title),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -2595,13 +2597,13 @@ class Conversation extends DataClass implements Insertable<Conversation> {
 
   Conversation copyWith(
           {int? id,
-          int? ledgerId,
+          Value<int?> ledgerId = const Value.absent(),
           String? title,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Conversation(
         id: id ?? this.id,
-        ledgerId: ledgerId ?? this.ledgerId,
+        ledgerId: ledgerId.present ? ledgerId.value : this.ledgerId,
         title: title ?? this.title,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -2643,7 +2645,7 @@ class Conversation extends DataClass implements Insertable<Conversation> {
 
 class ConversationsCompanion extends UpdateCompanion<Conversation> {
   final Value<int> id;
-  final Value<int> ledgerId;
+  final Value<int?> ledgerId;
   final Value<String> title;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -2656,11 +2658,11 @@ class ConversationsCompanion extends UpdateCompanion<Conversation> {
   });
   ConversationsCompanion.insert({
     this.id = const Value.absent(),
-    required int ledgerId,
+    this.ledgerId = const Value.absent(),
     this.title = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  }) : ledgerId = Value(ledgerId);
+  });
   static Insertable<Conversation> custom({
     Expression<int>? id,
     Expression<int>? ledgerId,
@@ -2679,7 +2681,7 @@ class ConversationsCompanion extends UpdateCompanion<Conversation> {
 
   ConversationsCompanion copyWith(
       {Value<int>? id,
-      Value<int>? ledgerId,
+      Value<int?>? ledgerId,
       Value<String>? title,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt}) {
@@ -4352,7 +4354,7 @@ typedef $$RecurringTransactionsTableProcessedTableManager
 typedef $$ConversationsTableCreateCompanionBuilder = ConversationsCompanion
     Function({
   Value<int> id,
-  required int ledgerId,
+  Value<int?> ledgerId,
   Value<String> title,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
@@ -4360,7 +4362,7 @@ typedef $$ConversationsTableCreateCompanionBuilder = ConversationsCompanion
 typedef $$ConversationsTableUpdateCompanionBuilder = ConversationsCompanion
     Function({
   Value<int> id,
-  Value<int> ledgerId,
+  Value<int?> ledgerId,
   Value<String> title,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
@@ -4468,7 +4470,7 @@ class $$ConversationsTableTableManager extends RootTableManager<
               $$ConversationsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<int> ledgerId = const Value.absent(),
+            Value<int?> ledgerId = const Value.absent(),
             Value<String> title = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
@@ -4482,7 +4484,7 @@ class $$ConversationsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required int ledgerId,
+            Value<int?> ledgerId = const Value.absent(),
             Value<String> title = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),

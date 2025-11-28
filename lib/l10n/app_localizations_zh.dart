@@ -3394,6 +3394,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiCloudApiGetKey => '获取API Key';
 
   @override
+  String get aiCloudApiTestKey => '测试连接';
+
+  @override
+  String get aiCloudApiKeyValid => '✅ API Key 有效，AI功能可正常使用';
+
+  @override
+  String get aiCloudApiKeyInvalid => '❌ API Key 无效，请检查后重新输入';
+
+  @override
+  String get aiCloudApiKeyRequired => '⚠️ 未配置 API Key，AI对话和AI增强识别功能将无法使用';
+
+  @override
+  String get aiChatConfigWarning => '未配置或配置错误智谱 API Key，AI 功能不可用';
+
+  @override
+  String get aiChatGoToSettings => '去设置';
+
+  @override
   String get aiLocalModelTitle => '本地模型';
 
   @override
@@ -3958,6 +3976,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get billCardTime => '📅 时间';
 
   @override
+  String get billCardLedger => '📒 账本';
+
+  @override
   String get billCardNote => '📝 备注';
 
   @override
@@ -3965,6 +3986,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get billCardEdit => '修改';
+
+  @override
+  String get billCardUnknownLedger => '未知账本';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -7359,6 +7383,24 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiCloudApiGetKey => '取得 API Key';
 
   @override
+  String get aiCloudApiTestKey => '測試連線';
+
+  @override
+  String get aiCloudApiKeyValid => '✅ API Key 有效，AI 功能可正常使用';
+
+  @override
+  String get aiCloudApiKeyInvalid => '❌ API Key 無效，請檢查後重新輸入';
+
+  @override
+  String get aiCloudApiKeyRequired => '⚠️ 未設定 API Key，AI 對話和 AI 增強辨識功能將無法使用';
+
+  @override
+  String get aiChatConfigWarning => '未設定或設定錯誤智譜 API Key，AI 功能不可用';
+
+  @override
+  String get aiChatGoToSettings => '前往設定';
+
+  @override
   String get aiLocalModelTitle => '本機模型';
 
   @override
@@ -7923,6 +7965,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get billCardTime => '📅 時間';
 
   @override
+  String get billCardLedger => '📒 帳本';
+
+  @override
   String get billCardNote => '📝 備註';
 
   @override
@@ -7930,4 +7975,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get billCardEdit => '修改';
+
+  @override
+  String get billCardUnknownLedger => '未知帳本';
 }

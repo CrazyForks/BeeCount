@@ -39,6 +39,9 @@ class BillInfo {
   /// 账户名称
   final String? account;
 
+  /// 账本ID
+  final int? ledgerId;
+
   /// 置信度 (0.0 - 1.0)
   final double confidence;
 
@@ -49,6 +52,7 @@ class BillInfo {
     this.category,
     this.type,
     this.account,
+    this.ledgerId,
     this.confidence = 0.0,
   });
 
@@ -64,6 +68,7 @@ class BillInfo {
       category: json['category'],
       type: json['type'] != null ? _parseBillType(json['type']) : null,
       account: json['account'],
+      ledgerId: json['ledgerId'],
       confidence: json['confidence']?.toDouble() ?? 0.8,
     );
   }
@@ -76,6 +81,7 @@ class BillInfo {
         'category': category,
         'type': type?.toString().split('.').last,
         'account': account,
+        'ledgerId': ledgerId,
         'confidence': confidence,
       };
 

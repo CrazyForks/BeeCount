@@ -1292,6 +1292,12 @@
   "aiCloudApiKeyHelper": "GLM-4-Flash模型完全免费",
   "aiCloudApiKeySaved": "API Key 已保存",
   "aiCloudApiGetKey": "获取API Key",
+  "aiCloudApiTestKey": "测试连接",
+  "aiCloudApiKeyValid": "✅ API Key 有效，AI功能可正常使用",
+  "aiCloudApiKeyInvalid": "❌ API Key 无效，请检查后重新输入",
+  "aiCloudApiKeyRequired": "⚠️ 未配置 API Key，AI对话和AI增强识别功能将无法使用",
+  "aiChatConfigWarning": "未配置或配置错误智谱 API Key，AI 功能不可用",
+  "aiChatGoToSettings": "去设置",
   "aiLocalModelTitle": "本地模型",
   "aiLocalModelTraining": "训练中",
   "aiLocalModelManagement": "模型管理",
@@ -1625,7 +1631,9 @@
   "billCardAmount": "💰 金额",
   "billCardCategory": "🏷️ 分类",
   "billCardTime": "📅 时间",
+  "billCardLedger": "📒 账本",
   "billCardNote": "📝 备注",
   "billCardUndo": "撤销",
-  "billCardEdit": "修改"
+  "billCardEdit": "修改",
+  "billCardUnknownLedger": "未知账本"
 }

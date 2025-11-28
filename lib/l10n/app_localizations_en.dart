@@ -3394,6 +3394,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiGetKey => 'Get API Key';
 
   @override
+  String get aiCloudApiTestKey => 'Test Connection';
+
+  @override
+  String get aiCloudApiKeyValid => '✅ API Key is valid, AI features are available';
+
+  @override
+  String get aiCloudApiKeyInvalid => '❌ API Key is invalid, please check and re-enter';
+
+  @override
+  String get aiCloudApiKeyRequired => '⚠️ API Key not configured. AI chat and enhanced recognition will be unavailable';
+
+  @override
+  String get aiChatConfigWarning => 'Zhipu API Key is not configured or invalid, AI features are unavailable';
+
+  @override
+  String get aiChatGoToSettings => 'Go to Settings';
+
+  @override
   String get aiLocalModelTitle => 'Local Model';
 
   @override
@@ -3958,6 +3976,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get billCardTime => '📅 Time';
 
   @override
+  String get billCardLedger => '📒 Ledger';
+
+  @override
   String get billCardNote => '📝 Note';
 
   @override
@@ -3965,4 +3986,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get billCardEdit => 'Edit';
+
+  @override
+  String get billCardUnknownLedger => 'Unknown Ledger';
 }

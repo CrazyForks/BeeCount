@@ -1419,6 +1419,12 @@
   "aiCloudApiKeyHelper": "GLM-4-Flash model is completely free",
   "aiCloudApiKeySaved": "API Key saved",
   "aiCloudApiGetKey": "Get API Key",
+  "aiCloudApiTestKey": "Test Connection",
+  "aiCloudApiKeyValid": "✅ API Key is valid, AI features are available",
+  "aiCloudApiKeyInvalid": "❌ API Key is invalid, please check and re-enter",
+  "aiCloudApiKeyRequired": "⚠️ API Key not configured. AI chat and enhanced recognition will be unavailable",
+  "aiChatConfigWarning": "Zhipu API Key is not configured or invalid, AI features are unavailable",
+  "aiChatGoToSettings": "Go to Settings",
   "aiLocalModelTitle": "Local Model",
   "aiLocalModelTraining": "Training",
   "aiLocalModelManagement": "Model Management",
@@ -1686,7 +1692,9 @@
   "billCardAmount": "💰 Amount",
   "billCardCategory": "🏷️ Category",
   "billCardTime": "📅 Time",
+  "billCardLedger": "📒 Ledger",
   "billCardNote": "📝 Note",
   "billCardUndo": "Undo",
-  "billCardEdit": "Edit"
+  "billCardEdit": "Edit",
+  "billCardUnknownLedger": "Unknown Ledger"
 }
