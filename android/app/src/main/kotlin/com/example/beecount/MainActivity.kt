@@ -23,17 +23,89 @@ class MainActivity: FlutterActivity() {
     private val INSTALL_CHANNEL = "com.example.beecount/install"
     private val SCREENSHOT_CHANNEL = "com.example.beecount/screenshot"
     private val LOGGER_CHANNEL = "com.beecount.logger"
+    private val SHARE_CHANNEL = "com.example.beecount/share"
 
     private var screenshotObserver: ScreenshotObserver? = null
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         handleNotificationIntent(intent)
+        handleSharedImage(intent)
     }
 
-    private fun onNewIntentHandler(intent: Intent?) {
-        intent?.let { setIntent(it) } // 重要：更新当前intent
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent) // 重要：更新当前intent
         handleNotificationIntent(intent)
+        handleSharedImage(intent)
+    }
+
+    private fun handleSharedImage(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_SEND && intent.type?.startsWith("image/") == true) {
+            android.util.Log.d("MainActivity", "✅ 收到图片分享")
+            LoggerPlugin.info("MainActivity", "收到图片分享")
+
+            val imageUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+            if (imageUri != null) {
+                android.util.Log.d("MainActivity", "图片URI: $imageUri")
+                LoggerPlugin.info("MainActivity", "分享图片URI: $imageUri")
+
+                try {
+                    // 复制图片到临时文件
+                    val imagePath = copySharedImageToTemp(imageUri)
+                    if (imagePath != null) {
+                        android.util.Log.d("MainActivity", "图片已保存到: $imagePath")
+                        LoggerPlugin.info("MainActivity", "分享图片已保存: $imagePath")
+
+                        // 通知Flutter端（延迟一下确保Flutter已初始化）
+                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                            notifyFlutterSharedImage(imagePath)
+                        }, 500)
+                    }
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "处理分享图片失败: $e")
+                    LoggerPlugin.error("MainActivity", "处理分享图片失败: ${e.message}")
+                }
+            }
+        }
+    }
+
+    private fun copySharedImageToTemp(uri: Uri): String? {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+
+            // 创建临时文件
+            val tempDir = File(cacheDir, "shared_images")
+            tempDir.mkdirs()
+
+            val timestamp = System.currentTimeMillis()
+            val tempFile = File(tempDir, "shared_$timestamp.jpg")
+
+            // 复制图片数据
+            tempFile.outputStream().use { output ->
+                inputStream.copyTo(output)
+            }
+            inputStream.close()
+
+            tempFile.absolutePath
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "复制图片失败: $e")
+            LoggerPlugin.error("MainActivity", "复制分享图片失败: ${e.message}")
+            null
+        }
+    }
+
+    private fun notifyFlutterSharedImage(imagePath: String) {
+        try {
+            flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
+                MethodChannel(messenger, SHARE_CHANNEL).invokeMethod("onImageShared", imagePath)
+                android.util.Log.d("MainActivity", "✅ 已通知Flutter端: $imagePath")
+                LoggerPlugin.info("MainActivity", "已通知Flutter端收到分享图片")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "通知Flutter失败: $e")
+            LoggerPlugin.error("MainActivity", "通知Flutter失败: ${e.message}")
+        }
     }
 
     private fun handleNotificationIntent(intent: Intent?) {

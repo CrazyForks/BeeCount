@@ -332,6 +332,20 @@ class OcrService {
     // 移除所有空格和换行，方便匹配
     final cleanText = text.replaceAll(RegExp(r'\s+'), '');
 
+    // 优先识别带加号的金额（明确表示收入）: +9.04
+    final plusPattern = RegExp(r'\+(\d+\.?\d*)');
+    final plusMatch = plusPattern.firstMatch(cleanText);
+    if (plusMatch != null && plusMatch.groupCount > 0) {
+      final amountStr = plusMatch.group(1);
+      if (amountStr != null) {
+        final amount = double.tryParse(amountStr);
+        if (amount != null && amount > 0) {
+          // 返回正数，但会在类型判断中识别加号
+          return amount;
+        }
+      }
+    }
+
     // 支付宝特征：付款 ¥123.45 或 实付 ¥123.45
     final alipayPatterns = [
       RegExp(r'[付实付收款]款?[¥￥]\s*(\d+\.?\d*)'),
@@ -398,7 +412,8 @@ class OcrService {
       }
       if (maxAmount != null && maxAmount >= 1.0) {
         // 只返回大于等于1元的金额，过滤小额红包
-        return maxAmount;
+        // 重要：返回负数以表示支出
+        return -maxAmount;
       }
     }
 

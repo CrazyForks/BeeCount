@@ -45,6 +45,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
   String? _userAvatarPath; // 用户头像路径
   AIConfigValidationResult? _apiValidation; // API配置验证结果
   bool _showScrollToBottom = false; // 是否显示"回到底部"按钮
+  bool _isFirstLoad = true; // 是否首次加载
 
   @override
   void initState() {
@@ -217,6 +218,14 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
               children: [
                 messagesAsync.when(
                   data: (messages) {
+                    // 首次加载完成且有消息时，自动滚动到底部
+                    if (_isFirstLoad && messages.isNotEmpty) {
+                      _isFirstLoad = false;
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _scrollToBottom();
+                      });
+                    }
+
                     if (messages.isEmpty) {
                       return const Center(child: Text('暂无消息'));
                     }
