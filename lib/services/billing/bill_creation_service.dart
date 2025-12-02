@@ -293,7 +293,10 @@ class BillCreationService {
       accountName = account?.name;
     }
 
-    // 8. 使用Repository创建交易
+    // 8. 确定最终备注（优先使用 result.note，其次使用参数 note）
+    final finalNote = result.note ?? note;
+
+    // 9. 使用Repository创建交易
     final repository = BeeRepository(db);
     final finalAmount = result.amount!.abs();
     final transactionId = await repository.addTransaction(
@@ -303,15 +306,15 @@ class BillCreationService {
       categoryId: categoryId,
       accountId: accountId,
       happenedAt: happenedAt,
-      note: note,
+      note: finalNote,
     );
 
-    // 9. 打印最终交易信息汇总（一行）
+    // 10. 打印最终交易信息汇总（一行）
     final typeStr = transactionType == 'income' ? '收入' : '支出';
     final timeStr = _formatDateTime(happenedAt);
     final categoryStr = categoryName ?? '未设置';
     final accountStr = accountName ?? '未设置';
-    final noteStr = note ?? '无';
+    final noteStr = finalNote ?? '无';
 
     logger.info(_tag, '[自动记账] 成功 | ID:$transactionId | $finalAmount元 | $typeStr | 分类:$categoryStr | 账户:$accountStr | 时间:$timeStr | 备注:$noteStr');
 
