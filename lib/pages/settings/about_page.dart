@@ -150,19 +150,6 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           },
                         ),
                       ],
-                      // Telegram群（仅非简体中文显示）
-                      if (Localizations.localeOf(context).languageCode != 'zh') ...[
-                        const Divider(height: 1, thickness: 0.5),
-                        AppListTile(
-                          leading: Icons.send_outlined,
-                          title: AppLocalizations.of(context).aboutTelegramGroup,
-                          subtitle: 't.me/beecount',
-                          onTap: () async {
-                            final url = Uri.parse('https://t.me/beecount');
-                            await _tryOpenUrl(url);
-                          },
-                        ),
-                      ],
                     ],
                   ),
                 ),

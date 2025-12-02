@@ -3587,9 +3587,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutDouyin => '抖音';
 
   @override
-  String get aboutTelegramGroup => 'Telegram 群';
-
-  @override
   String get aboutSupportDevelopment => '支持开发';
 
   @override
@@ -7628,9 +7625,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aboutDouyin => '抖音';
-
-  @override
-  String get aboutTelegramGroup => 'Telegram 群';
 
   @override
   String get aboutSupportDevelopment => '支持開發';

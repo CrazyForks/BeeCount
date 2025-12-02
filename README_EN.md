@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
+[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
 
 </div>
 

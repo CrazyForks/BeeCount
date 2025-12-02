@@ -3587,9 +3587,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutDouyin => 'Douyin';
 
   @override
-  String get aboutTelegramGroup => 'Telegram Group';
-
-  @override
   String get aboutSupportDevelopment => 'Support Development';
 
   @override

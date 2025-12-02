@@ -6864,12 +6864,6 @@ abstract class AppLocalizations {
   /// **'Douyin'**
   String get aboutDouyin;
 
-  /// No description provided for @aboutTelegramGroup.
-  ///
-  /// In en, this message translates to:
-  /// **'Telegram Group'**
-  String get aboutTelegramGroup;
-
   /// No description provided for @aboutSupportDevelopment.
   ///
   /// In en, this message translates to:

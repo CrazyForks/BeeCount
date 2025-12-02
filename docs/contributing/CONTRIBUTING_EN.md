@@ -94,7 +94,6 @@ Help us translate the app into more languages so more people can use it.
 💌 **Contact:**
 
 - GitHub Issues: [Submit design proposals](https://github.com/TNT-Likely/BeeCount/issues)
-- Telegram Group: [Join discussion](https://t.me/beecount)
 
 ## Reporting Bugs
 
