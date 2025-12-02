@@ -894,9 +894,12 @@ class BeeRepository {
   }
 
   /// 响应式监听所有分类及其交易数量变化
-  Stream<List<({Category category, int transactionCount})>> watchCategoriesWithCount() {
-    // 使用自定义查询监听分类和交易数量的变化
-    return db.customSelect(
+  Stream<List<({Category category, int transactionCount})>> watchCategoriesWithCount() async* {
+    final startTime = DateTime.now();
+    logger.debug('CategoryQuery', '开始查询分类和交易数量');
+
+    // 优化后的查询：直接统计每个分类的交易数量（不包含子分类）
+    await for (final _ in db.customSelect(
       '''
       SELECT
         c.id as category_id,
@@ -906,20 +909,25 @@ class BeeRepository {
         c.sort_order as category_sort_order,
         c.parent_id as category_parent_id,
         c.level as category_level,
-        COALESCE(COUNT(DISTINCT t.id), 0) as transaction_count
+        COALESCE(COUNT(t.id), 0) as transaction_count
       FROM categories c
-      LEFT JOIN transactions t ON (
-        t.category_id = c.id
-        OR t.category_id IN (
-          SELECT id FROM categories WHERE parent_id = c.id
-        )
-      )
+      LEFT JOIN transactions t ON t.category_id = c.id
       GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order, c.parent_id, c.level
       ORDER BY c.sort_order
       ''',
       readsFrom: {db.categories, db.transactions},
-    ).watch().map((rows) {
-      return rows.map((row) {
+    ).watch()) {
+      final queryTime = DateTime.now().difference(startTime);
+      logger.debug('CategoryQuery', 'SQL查询完成，耗时: ${queryTime.inMilliseconds}ms');
+
+      final rows = _;
+      final results = <({Category category, int transactionCount})>[];
+
+      // 构建分类映射和交易计数
+      final categoryMap = <int, Category>{};
+      final directCounts = <int, int>{}; // 每个分类直接的交易数
+
+      for (final row in rows) {
         final category = Category(
           id: row.read<int>('category_id'),
           name: row.read<String>('category_name'),
@@ -929,10 +937,29 @@ class BeeRepository {
           parentId: row.read<int?>('category_parent_id'),
           level: row.read<int>('category_level'),
         );
-        final transactionCount = row.read<int>('transaction_count');
-        return (category: category, transactionCount: transactionCount);
-      }).toList();
-    });
+        categoryMap[category.id] = category;
+        directCounts[category.id] = row.read<int>('transaction_count');
+      }
+
+      logger.debug('CategoryQuery', '查询到 ${categoryMap.length} 个分类');
+
+      // 构建最终结果 - 返回每个分类的直接交易数（元数据）
+      for (final entry in categoryMap.entries) {
+        final category = entry.value;
+        final directCount = directCounts[category.id] ?? 0;
+
+        logger.debug('CategoryQuery',
+          '分类 "${category.name}" (ID:${category.id}, level:${category.level}): ${directCount}笔交易');
+
+        // 只返回每个分类自己的交易数，不累加子分类
+        results.add((category: category, transactionCount: directCount));
+      }
+
+      final totalTime = DateTime.now().difference(startTime);
+      logger.info('CategoryQuery', '分类数据处理完成，总耗时: ${totalTime.inMilliseconds}ms, 返回${results.length}条记录');
+
+      yield results;
+    }
   }
 
   // ========== Account Management ==========

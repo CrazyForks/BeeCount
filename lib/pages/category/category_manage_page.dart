@@ -192,9 +192,24 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
       // 直接从内存数据判断是否有子分类
       final hasSubCategories = parentIds.contains(topItem.category.id);
 
+      // 获取所有子分类
+      final subCategories = widget.categoriesWithCount
+          .where((item) => item.category.parentId == topItem.category.id)
+          .toList();
+
+      // 计算一级分类的总交易数（自己的 + 所有子分类的）
+      int totalCount = topItem.transactionCount; // 自己的交易数
+      if (hasSubCategories) {
+        // 累加所有子分类的交易数
+        final subCategoryCounts = subCategories
+            .map((item) => item.transactionCount)
+            .fold(0, (sum, count) => sum + count);
+        totalCount += subCategoryCounts;
+      }
+
       flatList.add(_CategoryItem(
         category: topItem.category,
-        transactionCount: topItem.transactionCount,
+        transactionCount: totalCount, // 使用计算后的总数
         isDefault: false,
         isSubCategory: false,
         hasSubCategories: hasSubCategories,
