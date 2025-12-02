@@ -320,6 +320,43 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File(p.join(dir.path, 'beecount.sqlite'));
+
+    // 开发环境：如果检测到锁文件，尝试删除（仅用于调试）
+    try {
+      final shmFile = File(p.join(dir.path, 'beecount.sqlite-shm'));
+      final walFile = File(p.join(dir.path, 'beecount.sqlite-wal'));
+
+      if (shmFile.existsSync() || walFile.existsSync()) {
+        logger.warning('db', '检测到 SQLite 临时文件，可能存在锁定');
+        // 注意：只在开发环境中记录，不自动删除，因为可能正在使用
+      }
+    } catch (e) {
+      logger.debug('db', '检查锁文件时出错: $e');
+    }
+
     return NativeDatabase.createInBackground(file);
   });
+}
+
+/// 开发工具：清除数据库锁文件（仅在应用完全关闭后使用）
+Future<void> clearDatabaseLockFiles() async {
+  try {
+    final dir = await getApplicationDocumentsDirectory();
+    final shmFile = File(p.join(dir.path, 'beecount.sqlite-shm'));
+    final walFile = File(p.join(dir.path, 'beecount.sqlite-wal'));
+
+    if (shmFile.existsSync()) {
+      await shmFile.delete();
+      logger.info('db', '已删除 .sqlite-shm 文件');
+    }
+
+    if (walFile.existsSync()) {
+      await walFile.delete();
+      logger.info('db', '已删除 .sqlite-wal 文件');
+    }
+
+    logger.info('db', '数据库锁文件清理完成');
+  } catch (e) {
+    logger.error('db', '清理锁文件失败', e);
+  }
 }

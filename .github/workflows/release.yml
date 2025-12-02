@@ -23,6 +23,11 @@ on:
         required: false
         default: "true"
 
+# 允许取消正在运行的workflow
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 

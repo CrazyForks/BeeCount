@@ -1348,38 +1348,33 @@ class ConfigExportService {
     if (config.recurringTransactions != null && db != null) {
       try {
         final items = config.recurringTransactions!.items;
-        int importedCount = 0;
 
-        for (final item in items) {
-          try {
-            // 使用导出数据中的ledgerId，保留原有账本关联
-            await db.into(db.recurringTransactions).insert(
-              RecurringTransactionsCompanion.insert(
-                ledgerId: item.ledgerId,
-                type: item.type,
-                amount: item.amount,
-                categoryId: d.Value(item.categoryId),
-                accountId: d.Value(item.accountId),
-                toAccountId: d.Value(item.toAccountId),
-                note: d.Value(item.note),
-                frequency: item.frequency,
-                interval: d.Value(item.interval),
-                dayOfMonth: d.Value(item.dayOfMonth),
-                dayOfWeek: d.Value(item.dayOfWeek),
-                monthOfYear: d.Value(item.monthOfYear),
-                startDate: DateTime.parse(item.startDate),
-                endDate: d.Value(
-                    item.endDate != null ? DateTime.parse(item.endDate!) : null),
-                enabled: d.Value(item.enabled),
-              ),
-            );
-            importedCount++;
-          } catch (e) {
-            logger.warning('ConfigImport', '导入周期账单项失败: $e');
-          }
-        }
+        // 准备批量插入的数据
+        final recurringToInsert = items.map((item) => RecurringTransactionsCompanion.insert(
+          ledgerId: item.ledgerId,
+          type: item.type,
+          amount: item.amount,
+          categoryId: d.Value(item.categoryId),
+          accountId: d.Value(item.accountId),
+          toAccountId: d.Value(item.toAccountId),
+          note: d.Value(item.note),
+          frequency: item.frequency,
+          interval: d.Value(item.interval),
+          dayOfMonth: d.Value(item.dayOfMonth),
+          dayOfWeek: d.Value(item.dayOfWeek),
+          monthOfYear: d.Value(item.monthOfYear),
+          startDate: DateTime.parse(item.startDate),
+          endDate: d.Value(
+              item.endDate != null ? DateTime.parse(item.endDate!) : null),
+          enabled: d.Value(item.enabled),
+        )).toList();
 
-        logger.info('ConfigImport', '周期账单已导入: $importedCount/${items.length}');
+        // 使用 batch 批量插入
+        await db.batch((batch) {
+          batch.insertAll(db.recurringTransactions, recurringToInsert);
+        });
+
+        logger.info('ConfigImport', '周期账单已批量导入: ${items.length}条');
       } catch (e) {
         logger.error('ConfigImport', '导入周期账单失败: $e');
       }
@@ -1418,61 +1413,56 @@ class ConfigExportService {
       try {
         final items = config.categories!.items;
 
-        // 使用事务确保所有分类一次性导入
-        await db.transaction(() async {
-          // 第一步：批量插入所有一级分类（没有父分类的）
-          final level1Items = items.where((item) => item.parentName == null).toList();
-          final level1Companions = level1Items.map((item) => CategoriesCompanion.insert(
-            name: item.name,
-            kind: item.kind,
-            icon: d.Value(item.icon),
-            sortOrder: d.Value(item.sortOrder),
-            parentId: const d.Value(null),
-            level: d.Value(item.level),
-          )).toList();
+        // 第一步：在事务外批量插入一级分类
+        final level1Items = items.where((item) => item.parentName == null).toList();
+        final level1Companions = level1Items.map((item) => CategoriesCompanion.insert(
+          name: item.name,
+          kind: item.kind,
+          icon: d.Value(item.icon),
+          sortOrder: d.Value(item.sortOrder),
+          parentId: const d.Value(null),
+          level: d.Value(item.level),
+        )).toList();
 
-          // 批量插入一级分类
-          if (level1Companions.isNotEmpty) {
-            await db.batch((batch) {
-              batch.insertAll(db.categories, level1Companions);
-            });
+        if (level1Companions.isNotEmpty) {
+          await db.batch((batch) {
+            batch.insertAll(db.categories, level1Companions);
+          });
+        }
+
+        // 第二步：在事务外查询刚插入的一级分类，构建名称到ID的映射
+        final allCategories = await db.select(db.categories).get();
+        final nameToIdMap = <String, int>{
+          for (var cat in allCategories) cat.name: cat.id
+        };
+
+        // 第三步：批量插入二级分类
+        final level2Items = items.where((item) => item.parentName != null).toList();
+        final level2Companions = <CategoriesCompanion>[];
+
+        for (final item in level2Items) {
+          final parentId = nameToIdMap[item.parentName];
+          if (parentId != null) {
+            level2Companions.add(CategoriesCompanion.insert(
+              name: item.name,
+              kind: item.kind,
+              icon: d.Value(item.icon),
+              sortOrder: d.Value(item.sortOrder),
+              parentId: d.Value(parentId),
+              level: d.Value(item.level),
+            ));
+          } else {
+            logger.warning('ConfigImport', '找不到父分类 "${item.parentName}"，跳过二级分类: ${item.name}');
           }
+        }
 
-          // 构建名称到ID的映射
-          final allCategories = await db.select(db.categories).get();
-          final nameToIdMap = <String, int>{
-            for (var cat in allCategories) cat.name: cat.id
-          };
+        if (level2Companions.isNotEmpty) {
+          await db.batch((batch) {
+            batch.insertAll(db.categories, level2Companions);
+          });
+        }
 
-          // 第二步：批量插入二级分类
-          final level2Items = items.where((item) => item.parentName != null).toList();
-          final level2Companions = <CategoriesCompanion>[];
-
-          for (final item in level2Items) {
-            final parentId = nameToIdMap[item.parentName];
-            if (parentId != null) {
-              level2Companions.add(CategoriesCompanion.insert(
-                name: item.name,
-                kind: item.kind,
-                icon: d.Value(item.icon),
-                sortOrder: d.Value(item.sortOrder),
-                parentId: d.Value(parentId),
-                level: d.Value(item.level),
-              ));
-            } else {
-              logger.warning('ConfigImport', '找不到父分类 "${item.parentName}"，跳过二级分类: ${item.name}');
-            }
-          }
-
-          // 批量插入二级分类
-          if (level2Companions.isNotEmpty) {
-            await db.batch((batch) {
-              batch.insertAll(db.categories, level2Companions);
-            });
-          }
-
-          logger.info('ConfigImport', '分类已批量导入: 一级${level1Items.length}条, 二级${level2Companions.length}条');
-        });
+        logger.info('ConfigImport', '分类已批量导入: 一级${level1Items.length}条, 二级${level2Companions.length}条');
       } catch (e) {
         logger.error('ConfigImport', '导入分类失败: $e');
       }
