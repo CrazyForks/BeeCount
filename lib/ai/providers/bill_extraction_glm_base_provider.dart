@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
 import '../tasks/bill_extraction_task.dart';
-import '../../services/logger_service.dart';
+import '../../services/system/logger_service.dart';
 
 /// 账单提取GLM Provider基类
 ///
@@ -103,17 +103,22 @@ $categoryHint$accountHint
    - 相对日期（昨天、前天、上周）→推算具体日期
    - 时间段（早上、中午、晚上）→使用合理时刻（早上09:00、中午12:00、晚上19:00）
    - 完全没提时间→使用当前时间
-3. merchant: 商家名称（如果没有明确商家信息，省略此字段或返回空字符串，不要返回"未知"）
+3. note: 备注信息，优先提取以下内容（按优先级）：
+   - 用户明确说的备注或描述（如"给女儿买玩具"→"给女儿买玩具"）
+   - 收款方/商家名称（如"收款方：星巴克"→"星巴克"，"向肯德基付款"→"肯德基"）
+   - 店铺/公司名称（如"XX有限公司"→"XX有限公司"）
+   - 如果完全没有上述信息，省略或留空，不要返回"未知"
 4. category: 从分类列表选择
 5. type: income或expense
 6. account: 支付账户（可选）
 
 示例：
 输入"昨天中午吃饭50" → {"amount":-50,"time":"2025-11-24T12:00:00","category":"餐饮","type":"expense"}
-输入"早上买咖啡30" → {"amount":-30,"time":"${currentDate}T09:00:00","category":"咖啡","type":"expense"}
-输入"买了件衣服200" → {"amount":-200,"time":"${currentDate}T$currentHour:$currentMinute:00","category":"服装","type":"expense"}
+输入"早上在星巴克买咖啡30" → {"amount":-30,"time":"${currentDate}T09:00:00","note":"星巴克","category":"咖啡","type":"expense"}
+输入"向肯德基付款58.5元" → {"amount":-58.5,"time":"${currentDate}T$currentHour:$currentMinute:00","note":"肯德基","category":"餐饮","type":"expense"}
+输入"给女儿买件衣服200" → {"amount":-200,"time":"${currentDate}T$currentHour:$currentMinute:00","note":"给女儿买件衣服","category":"服装","type":"expense"}
 
-注意：只返回JSON，尽量推断时间不要返回null，merchant没有时省略或留空
+注意：只返回JSON，尽量推断时间不要返回null，note没有时省略或留空
 ''';
   }
 

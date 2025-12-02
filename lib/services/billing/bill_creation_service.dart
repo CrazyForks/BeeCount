@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/db.dart';
 import '../../data/repository.dart';
 import '../../data/category_node.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 import 'category_matcher.dart';
 import 'ocr_service.dart';
 
@@ -18,6 +18,7 @@ class BillCreationService {
   /// 匹配分类
   ///
   /// 优先使用AI识别的分类名称，失败则降级到规则匹配
+  /// 匹配优先级：完全匹配 > 模糊匹配（包含） > 规则匹配
   /// 返回匹配的分类ID，如果都失败则返回null
   Future<int?> matchCategory(
     OcrResult result,
@@ -27,22 +28,55 @@ class BillCreationService {
     if (result.aiCategoryName != null &&
         result.aiCategoryName!.isNotEmpty &&
         categories.isNotEmpty) {
+      final aiCategory = result.aiCategoryName!;
+
+      // 1.1 尝试完全匹配
       try {
         final matchedCategory = categories.firstWhere(
-          (cat) => cat.name == result.aiCategoryName,
+          (cat) => cat.name == aiCategory,
         );
         final transactionType = result.aiType ?? 'expense';
-        logger.debug(_tag, '[分类匹配] AI分类"${result.aiCategoryName}"($transactionType) → ID:${matchedCategory.id}');
+        logger.debug(_tag, '[分类匹配-完全] AI分类"$aiCategory"($transactionType) → ${matchedCategory.name}(ID:${matchedCategory.id})');
         return matchedCategory.id;
       } catch (_) {
-        logger.debug(_tag, '[分类匹配] AI分类"${result.aiCategoryName}"未找到，降级使用规则匹配');
+        // 完全匹配失败，继续尝试模糊匹配
       }
+
+      // 1.2 尝试模糊匹配（AI分类名包含在分类名中，或分类名包含在AI分类名中）
+      Category? fuzzyMatch;
+      int bestScore = 0;
+
+      for (final cat in categories) {
+        int score = 0;
+
+        // 情况1: 分类名包含AI分类名（如：餐饮美食 包含 餐饮）
+        if (cat.name.contains(aiCategory)) {
+          score = aiCategory.length; // 匹配长度越长，分数越高
+        }
+        // 情况2: AI分类名包含分类名（如：早餐 包含在 午餐早餐 中，但这种情况较少见）
+        else if (aiCategory.contains(cat.name)) {
+          score = cat.name.length;
+        }
+
+        if (score > bestScore) {
+          bestScore = score;
+          fuzzyMatch = cat;
+        }
+      }
+
+      if (fuzzyMatch != null) {
+        final transactionType = result.aiType ?? 'expense';
+        logger.debug(_tag, '[分类匹配-模糊] AI分类"$aiCategory"($transactionType) → ${fuzzyMatch.name}(ID:${fuzzyMatch.id})');
+        return fuzzyMatch.id;
+      }
+
+      logger.debug(_tag, '[分类匹配] AI分类"$aiCategory"未找到匹配，降级使用规则匹配');
     }
 
     // 2. 降级使用规则匹配
     if (categories.isNotEmpty) {
       return CategoryMatcher.smartMatch(
-        merchant: result.merchant,
+        merchant: result.note,
         fullText: result.rawText,
         categories: categories,
       );
@@ -293,7 +327,10 @@ class BillCreationService {
       accountName = account?.name;
     }
 
-    // 8. 使用Repository创建交易
+    // 8. 确定最终备注（优先使用 result.note，其次使用参数 note）
+    final finalNote = result.note ?? note;
+
+    // 9. 使用Repository创建交易
     final repository = BeeRepository(db);
     final finalAmount = result.amount!.abs();
     final transactionId = await repository.addTransaction(
@@ -303,15 +340,15 @@ class BillCreationService {
       categoryId: categoryId,
       accountId: accountId,
       happenedAt: happenedAt,
-      note: note,
+      note: finalNote,
     );
 
-    // 9. 打印最终交易信息汇总（一行）
+    // 10. 打印最终交易信息汇总（一行）
     final typeStr = transactionType == 'income' ? '收入' : '支出';
     final timeStr = _formatDateTime(happenedAt);
     final categoryStr = categoryName ?? '未设置';
     final accountStr = accountName ?? '未设置';
-    final noteStr = note ?? '无';
+    final noteStr = finalNote ?? '无';
 
     logger.info(_tag, '[自动记账] 成功 | ID:$transactionId | $finalAmount元 | $typeStr | 分类:$categoryStr | 账户:$accountStr | 时间:$timeStr | 备注:$noteStr');
 

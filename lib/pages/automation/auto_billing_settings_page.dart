@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../widgets/ui/primary_header.dart';
 import '../../widgets/ui/toast.dart';
 import '../../providers.dart';
-import '../../services/screenshot_monitor_service.dart';
+import '../../services/platform/screenshot_monitor_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/notification_factory.dart';
 import '../../utils/notification_android.dart';

@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [💬 Telegram Group](https://t.me/beecount) | [🇨🇳 中文](README.md)
+[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -659,6 +659,8 @@ Format: Nickname - Amount - Date
 - **\*Shao** - ¥15 - 2025-11-09 (Alipay)
 - **\*Ge** - ¥6 - 2025-11-17 (WeChat)
 - **\*Te** - ¥15 - 2025-11-17 (WeChat)
+- **\*Wen** - ¥50 - 2025-11-29 (Alipay)
+- **Anonymous** - ¥50 - 2025-11-29 (WeChat)
 
 ---
 

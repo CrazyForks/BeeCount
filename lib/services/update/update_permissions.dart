@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// 更新权限管理类
 class UpdatePermissions {

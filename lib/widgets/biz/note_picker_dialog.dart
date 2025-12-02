@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/note_history_service.dart';
+import '../../services/data/note_history_service.dart';
 import '../../styles/tokens.dart';
 
 /// 备注选择弹窗

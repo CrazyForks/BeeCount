@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as db;
-import '../../services/category_service.dart';
+import '../../services/data/category_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 import '../../styles/tokens.dart';

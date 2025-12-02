@@ -1,4 +1,4 @@
-package com.example.beecount
+package com.tntlikely.beecount
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -20,10 +20,10 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "notification_channel"
-    private val INSTALL_CHANNEL = "com.example.beecount/install"
-    private val SCREENSHOT_CHANNEL = "com.example.beecount/screenshot"
+    private val INSTALL_CHANNEL = "com.tntlikely.beecount/install"
+    private val SCREENSHOT_CHANNEL = "com.tntlikely.beecount/screenshot"
     private val LOGGER_CHANNEL = "com.beecount.logger"
-    private val SHARE_CHANNEL = "com.example.beecount/share"
+    private val SHARE_CHANNEL = "com.tntlikely.beecount/share"
 
     private var screenshotObserver: ScreenshotObserver? = null
 

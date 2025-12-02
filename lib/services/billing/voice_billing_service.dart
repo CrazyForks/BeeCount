@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
 import '../../ai/providers/bill_extraction_glm_provider.dart';
 import '../../ai/providers/speech_to_text_glm_provider.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 import '../../data/repository.dart';
 import '../../data/db.dart';
 

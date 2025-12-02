@@ -8,10 +8,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
-import '../services/logger_service.dart';
-import '../services/automation/voice_billing_service.dart';
-import '../services/automation/bill_creation_service.dart';
-import '../services/automation/ocr_service.dart';
+import '../services/system/logger_service.dart';
+import '../services/billing/voice_billing_service.dart';
+import '../services/billing/bill_creation_service.dart';
+import '../services/billing/ocr_service.dart';
 import '../widgets/ui/ui.dart';
 import '../styles/tokens.dart';
 
@@ -341,7 +341,7 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
       // 创建交易记录
       final ocrResult = OcrResult(
         amount: billInfo.amount,
-        merchant: billInfo.merchant,
+        note: billInfo.note,
         time: billInfo.time,
         rawText: recognizedText,
         allNumbers: [],

@@ -1,6 +1,6 @@
-import '../data/db.dart';
-import '../l10n/app_localizations.dart';
-import 'logger_service.dart';
+import '../../data/db.dart';
+import '../../l10n/app_localizations.dart';
+import '../system/logger_service.dart';
 import 'package:drift/drift.dart';
 
 /// 种子数据服务

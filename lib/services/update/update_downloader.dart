@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import 'update_result.dart';
 import 'update_notifications.dart';

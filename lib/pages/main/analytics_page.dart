@@ -11,7 +11,7 @@ import '../../widgets/analytics/category_rank_row.dart';
 import '../../widgets/ui/capsule_switcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../../data/repository.dart';
-import '../../services/share_poster_service.dart';
+import '../../services/export/share_poster_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 
 class AnalyticsPage extends ConsumerStatefulWidget {

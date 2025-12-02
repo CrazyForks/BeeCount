@@ -2,15 +2,15 @@ import 'dart:io';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'ai_bill_service.dart';
+import '../ai/ai_bill_service.dart';
 import '../../data/db.dart';
 import '../../data/repository.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// OCR识别结果
 class OcrResult {
   final double? amount;
-  final String? merchant;
+  final String? note;
   final DateTime? time;
   final String rawText;
   final List<String> allNumbers;
@@ -23,7 +23,7 @@ class OcrResult {
 
   OcrResult({
     this.amount,
-    this.merchant,
+    this.note,
     this.time,
     required this.rawText,
     required this.allNumbers,
@@ -38,7 +38,7 @@ class OcrResult {
   /// 创建副本并合并AI结果
   OcrResult copyWithAI({
     double? amount,
-    String? merchant,
+    String? note,
     DateTime? time,
     int? suggestedCategoryId,
     String? aiCategoryName,
@@ -48,7 +48,7 @@ class OcrResult {
   }) {
     return OcrResult(
       amount: amount ?? this.amount,
-      merchant: merchant ?? this.merchant,
+      note: note ?? this.note,
       time: time ?? this.time,
       rawText: rawText,
       allNumbers: allNumbers,
@@ -130,15 +130,15 @@ class OcrService {
       final ruleStartTime = DateTime.now();
       final allNumbers = _extractAllNumbers(rawText);
       final amount = _extractAmount(rawText);
-      final merchant = _extractMerchant(rawText);
+      final note = _extractNote(rawText);
       final time = _extractTime(rawText);
       final ruleDuration = DateTime.now().difference(ruleStartTime);
 
-      logger.info(_tag, '[规则提取] ${ruleDuration.inMilliseconds}ms | 金额:${amount ?? "无"} 商家:${merchant ?? "无"} 时间:${time ?? "无"} 候选:$allNumbers');
+      logger.info(_tag, '[规则提取] ${ruleDuration.inMilliseconds}ms | 金额:${amount ?? "无"} 备注:${note ?? "无"} 时间:${time ?? "无"} 候选:$allNumbers');
 
       final baseResult = OcrResult(
         amount: amount,
-        merchant: merchant,
+        note: note,
         time: time,
         rawText: rawText,
         allNumbers: allNumbers,
@@ -236,18 +236,18 @@ class OcrService {
       if (billInfo != null) {
         // 智能合并策略：AI优先，规则兜底
         final mergedAmount = billInfo.amount ?? baseResult.amount;
-        final mergedMerchant = billInfo.merchant ?? baseResult.merchant;
+        final mergedNote = billInfo.note ?? baseResult.note;
         final mergedAccount = billInfo.account;
 
         final mergedTime = billInfo.time ?? baseResult.time;
 
         final typeText = billInfo.type?.toString().split('.').last ?? '未知';
         final timeStr = mergedTime?.toString().substring(0, 16) ?? '无';
-        logger.info(_tag, '[AI增强] ${aiDuration.inMilliseconds}ms | $typeText 金额:$mergedAmount 商家:$mergedMerchant 分类:${billInfo.category ?? "无"} 账户:${mergedAccount ?? "无"} 时间:$timeStr');
+        logger.info(_tag, '[AI增强] ${aiDuration.inMilliseconds}ms | $typeText 金额:$mergedAmount 备注:$mergedNote 分类:${billInfo.category ?? "无"} 账户:${mergedAccount ?? "无"} 时间:$timeStr');
 
         return baseResult.copyWithAI(
           amount: mergedAmount,
-          merchant: mergedMerchant,
+          note: mergedNote,
           time: mergedTime,
           aiCategoryName: billInfo.category,
           aiType: typeText,
@@ -273,15 +273,15 @@ class OcrService {
     // 提取金额
     final amount = _extractAmount(rawText);
 
-    // 提取商家名称
-    final merchant = _extractMerchant(rawText);
+    // 提取备注
+    final note = _extractNote(rawText);
 
     // 提取时间
     final time = _extractTime(rawText);
 
     return OcrResult(
       amount: amount,
-      merchant: merchant,
+      note: note,
       time: time,
       rawText: rawText,
       allNumbers: allNumbers,
@@ -426,9 +426,9 @@ class OcrService {
     return null;
   }
 
-  /// 提取商家名称
-  String? _extractMerchant(String text) {
-    // 支付宝特征：收款方全称：xxx 或 收款方：xxx
+  /// 提取备注信息
+  String? _extractNote(String text) {
+    // 提取可作为备注的信息（商家、收款方等）
     final patterns = [
       // 收款方全称后面可能换行，匹配下一行的公司名
       RegExp(r'收款方全称[:：]\s*\n?\s*([^\n]{3,30})'),
@@ -446,15 +446,15 @@ class OcrService {
     for (final pattern in patterns) {
       final match = pattern.firstMatch(text);
       if (match != null && match.groupCount > 0) {
-        var merchant = match.group(1)?.trim();
-        if (merchant != null && merchant.isNotEmpty) {
+        var note = match.group(1)?.trim();
+        if (note != null && note.isNotEmpty) {
           // 过滤掉一些无用信息
-          merchant = merchant.split(RegExp(r'[,，。\.]')).first.trim();
+          note = note.split(RegExp(r'[,，。\.]')).first.trim();
           // 过滤掉数字、日期等
-          if (merchant.length >= 3 &&
-              !RegExp(r'^\d+$').hasMatch(merchant) &&
-              !RegExp(r'\d{4}-\d{2}-\d{2}').hasMatch(merchant)) {
-            return merchant;
+          if (note.length >= 3 &&
+              !RegExp(r'^\d+$').hasMatch(note) &&
+              !RegExp(r'\d{4}-\d{2}-\d{2}').hasMatch(note)) {
+            return note;
           }
         }
       }

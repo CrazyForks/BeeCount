@@ -20,12 +20,13 @@ import '../../pages/transaction/transaction_editor_page.dart';
 import '../../pages/ai/ai_settings_page.dart';
 import '../../widgets/biz/ledger_selector_dialog.dart';
 import '../../data/db.dart';
+import '../../data/repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/ai_quick_command.dart';
-import '../../services/avatar_service.dart';
-import '../../services/logger_service.dart';
-import '../../services/ai_chat_service.dart';
-import '../../services/ai_quick_command_service.dart';
+import '../../services/ui/avatar_service.dart';
+import '../../services/system/logger_service.dart';
+import '../../services/ai/ai_chat_service.dart';
+import '../../services/ai/ai_quick_command_service.dart';
 
 /// AI 对话页面
 class AIChatPage extends ConsumerStatefulWidget {
@@ -388,6 +389,12 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
               child: TypewriterText(
                 text: message.content,
                 animate: shouldAnimate, // 只对标记的消息启用动画
+                onTextChange: shouldAnimate
+                    ? () {
+                        // 每次文本更新时滚动到底部
+                        _scrollToBottomSmooth();
+                      }
+                    : null,
                 onComplete: shouldAnimate
                     ? () {
                         // 动画完成后清除标记
@@ -609,10 +616,10 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
       _scrollToBottom();
 
-      // 获取分类列表
-      final allCategories = await (db.select(db.categories)).get();
-      final expenseCategories = allCategories.where((c) => c.kind == 'expense');
-      final incomeCategories = allCategories.where((c) => c.kind == 'income');
+      // 获取分类列表（使用 repository 过滤，排除有子分类的父分类）
+      final repository = BeeRepository(db);
+      final expenseCategories = await repository.getUsableCategories('expense');
+      final incomeCategories = await repository.getUsableCategories('income');
 
       // 调用 AI 服务
       final chatService = ref.read(aiChatServiceProvider);
@@ -702,6 +709,17 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         curve: Curves.easeOut,
       );
     }
+  }
+
+  /// 平滑滚动到底部（用于打字机效果期间）
+  /// 使用 jumpTo 避免频繁调用 animateTo 造成性能问题
+  void _scrollToBottomSmooth() {
+    // 使用 postFrameCallback 确保在布局完成后滚动
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients && mounted) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   void _showClearHistoryDialog() {
@@ -872,7 +890,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
       final updatedBillInfo = BillInfo(
         amount: transaction.amount,
         time: transaction.happenedAt,
-        merchant: transaction.note,
+        note: transaction.note,
         category: categoryName,
         type:
             transaction.type == 'expense' ? BillType.expense : BillType.income,

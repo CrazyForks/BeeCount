@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// 更新缓存管理类
 class UpdateCache {

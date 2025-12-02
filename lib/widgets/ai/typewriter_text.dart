@@ -17,6 +17,9 @@ class TypewriterText extends StatefulWidget {
   /// 完成回调
   final VoidCallback? onComplete;
 
+  /// 文本更新回调（每次显示新字符时调用）
+  final VoidCallback? onTextChange;
+
   /// 是否启用动画(false则立即显示完整文本)
   final bool animate;
 
@@ -26,6 +29,7 @@ class TypewriterText extends StatefulWidget {
     this.speed = const Duration(milliseconds: 50),
     this.style,
     this.onComplete,
+    this.onTextChange,
     this.animate = true,
   });
 
@@ -80,6 +84,8 @@ class _TypewriterTextState extends State<TypewriterText> {
             _displayedText = widget.text.substring(0, _currentIndex + 1);
             _currentIndex++;
           });
+          // 每次文本更新时通知父组件
+          widget.onTextChange?.call();
         }
       } else {
         timer.cancel();

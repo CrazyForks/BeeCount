@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../l10n/app_localizations.dart';
 import 'update_permissions.dart';
@@ -105,7 +105,7 @@ class UpdateInstaller {
       }
 
       // 使用MethodChannel调用原生Android代码
-      const platform = MethodChannel('com.example.beecount/install');
+      const platform = MethodChannel('com.tntlikely.beecount/install');
 
       logger.info('UpdateInstaller', 'UPDATE_CRASH: 调用原生安装方法，文件路径: $filePath');
 

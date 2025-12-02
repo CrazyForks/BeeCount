@@ -16,7 +16,7 @@ import '../../cloud/sync_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../utils/currencies.dart';
-import '../../services/logger_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/format_utils.dart';
 import '../../utils/sync_helpers.dart';

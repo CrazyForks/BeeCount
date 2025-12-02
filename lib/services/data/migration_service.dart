@@ -1,5 +1,5 @@
-import '../data/db.dart';
-import 'logger_service.dart';
+import '../../data/db.dart';
+import '../system/logger_service.dart';
 
 /// v1.15.0 账户独立改造迁移服务
 ///

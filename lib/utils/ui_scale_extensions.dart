@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/font_scale_provider.dart';
-import '../services/ui_scale_service.dart';
+import '../services/ui/ui_scale_service.dart';
 
 /// 为double类型添加UI缩放扩展
 extension UIScaleDouble on double {

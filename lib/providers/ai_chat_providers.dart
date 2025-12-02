@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart';
 
-import '../services/ai_chat_service.dart';
+import '../services/ai/ai_chat_service.dart';
 import '../providers.dart';
 import '../data/db.dart';
 

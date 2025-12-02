@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/ui_state_providers.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/database_providers.dart';
-import '../../services/logger_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../utils/currencies.dart';
 import '../../widgets/ui/ui.dart';
 

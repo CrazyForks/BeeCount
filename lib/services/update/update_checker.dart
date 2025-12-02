@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 import 'update_result.dart';
 
 /// 更新检查管理类

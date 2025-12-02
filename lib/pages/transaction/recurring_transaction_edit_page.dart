@@ -8,8 +8,8 @@ import '../../widgets/biz/category_selector_dialog.dart';
 import '../../widgets/biz/ledger_selector_dialog.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/recurring_transaction_service.dart';
-import '../../services/logger_service.dart';
+import '../../services/data/recurring_transaction_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../utils/category_utils.dart';
 
 class RecurringTransactionEditPage extends ConsumerStatefulWidget {

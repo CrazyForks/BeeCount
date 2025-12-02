@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
-import '../services/automation/ocr_service.dart';
-import '../services/automation/bill_creation_service.dart';
+import '../services/billing/ocr_service.dart';
+import '../services/billing/bill_creation_service.dart';
 import '../widgets/ui/ui.dart';
 
 /// 图片识别记账帮助类
@@ -108,7 +108,7 @@ class ImageBillingHelper {
       final db = ref.read(databaseProvider);
       final billCreationService = BillCreationService(db);
 
-      final note = ocrResult.merchant ?? '';
+      final note = ocrResult.note ?? '';
       final transactionId = await billCreationService.createBillTransaction(
         result: ocrResult,
         ledgerId: currentLedger.id,

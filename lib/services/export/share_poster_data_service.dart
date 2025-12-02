@@ -1,9 +1,9 @@
 /// 分享海报数据计算服务
 library;
 
-import 'package:drift/drift.dart' show OrderingTerm;
+import 'package:drift/drift.dart' as d;
 
-import '../data/repository.dart';
+import '../../data/repository.dart';
 import 'share_poster_types.dart';
 
 /// 海报数据计算服务
@@ -153,11 +153,13 @@ class SharePosterDataService {
       expenseChangeRate = null;
     }
 
-    // 3. 获取本月的记账笔数 (从账本统计获取总笔数)
-    final ledgerCounts = await repository.countsForLedger(ledgerId: ledgerId);
-    // 注意: 这里使用的是账本的总笔数,不是本月的笔数
-    // 为了更准确,可以考虑计算本月的具体笔数,但这需要额外的SQL查询
-    final recordCount = ledgerCounts.txCount;
+    // 3. 获取本月的记账笔数
+    final monthTransactions = await (repository.db.select(repository.db.transactions)
+          ..where((t) =>
+              t.ledgerId.equals(ledgerId) &
+              t.happenedAt.isBetweenValues(startDate, endDate)))
+        .get();
+    final recordCount = monthTransactions.length;
 
     // 4. 计算TOP分类
     final expenseCategories = await repository.totalsByCategory(
@@ -270,14 +272,14 @@ class SharePosterDataService {
       // 查询最早的交易
       final firstTx = await (repository.db.select(repository.db.transactions)
             ..where((t) => t.ledgerId.equals(ledgerId))
-            ..orderBy([(t) => OrderingTerm.asc(t.happenedAt)])
+            ..orderBy([(t) => d.OrderingTerm.asc(t.happenedAt)])
             ..limit(1))
           .get();
 
       // 查询最晚的交易
       final lastTx = await (repository.db.select(repository.db.transactions)
             ..where((t) => t.ledgerId.equals(ledgerId))
-            ..orderBy([(t) => OrderingTerm.desc(t.happenedAt)])
+            ..orderBy([(t) => d.OrderingTerm.desc(t.happenedAt)])
             ..limit(1))
           .get();
 

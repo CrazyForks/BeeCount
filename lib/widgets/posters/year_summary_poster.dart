@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../services/share_poster_types.dart';
-import '../../services/category_service.dart';
+import '../../services/export/share_poster_types.dart';
+import '../../services/data/category_service.dart';
 import '../../l10n/app_localizations.dart';
 
 /// 年度总结海报

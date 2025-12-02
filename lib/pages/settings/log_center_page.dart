@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../services/logger_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
 import '../../styles/tokens.dart';

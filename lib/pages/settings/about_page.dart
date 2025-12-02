@@ -10,8 +10,8 @@ import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
-import '../../services/update_service.dart';
-import '../../services/logger_service.dart';
+import '../../services/system/update_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import 'log_center_page.dart';
@@ -146,19 +146,6 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           subtitle: '75639334477',
                           onTap: () async {
                             final url = Uri.parse('https://v.douyin.com/YG7tUweYYyQ/');
-                            await _tryOpenUrl(url);
-                          },
-                        ),
-                      ],
-                      // Telegram群（仅非简体中文显示）
-                      if (Localizations.localeOf(context).languageCode != 'zh') ...[
-                        const Divider(height: 1, thickness: 0.5),
-                        AppListTile(
-                          leading: Icons.send_outlined,
-                          title: AppLocalizations.of(context).aboutTelegramGroup,
-                          subtitle: 't.me/beecount',
-                          onTap: () async {
-                            final url = Uri.parse('https://t.me/beecount');
                             await _tryOpenUrl(url);
                           },
                         ),

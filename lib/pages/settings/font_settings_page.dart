@@ -5,7 +5,7 @@ import '../../widgets/ui/ui.dart';
 import '../../providers/font_scale_provider.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../services/ui_scale_service.dart';
+import '../../services/ui/ui_scale_service.dart';
 
 class FontSettingsPage extends ConsumerWidget {
   const FontSettingsPage({super.key});
