@@ -1,17 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'logger_service.dart';
-import '../widgets/ui/ui.dart';
-import '../l10n/app_localizations.dart';
+import '../../widgets/ui/ui.dart';
+import '../../l10n/app_localizations.dart';
 
 // 导入分离的模块
-import 'update/update_result.dart';
-import 'update/update_checker.dart';
-import 'update/update_permissions.dart';
-import 'update/update_dialogs.dart';
-import 'update/update_downloader.dart';
-import 'update/update_installer.dart';
-import 'update/update_cache.dart';
+import '../update/update_result.dart';
+import '../update/update_checker.dart';
+import '../update/update_permissions.dart';
+import '../update/update_dialogs.dart';
+import '../update/update_downloader.dart';
+import '../update/update_installer.dart';
+import '../update/update_cache.dart';
 
 /// 本地化UpdateResult消息的辅助函数
 String _localizeUpdateMessage(BuildContext context, String? message) {

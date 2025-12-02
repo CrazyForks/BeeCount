@@ -8,7 +8,7 @@ import '../billing/bill_creation_service.dart';
 import 'auto_billing_config.dart';
 import '../../providers.dart';
 import '../../data/category_node.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// 自动记账服务 - 通用核心逻辑
 /// Android和iOS共用的OCR识别和自动记账逻辑

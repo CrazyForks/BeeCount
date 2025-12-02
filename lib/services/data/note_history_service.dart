@@ -1,4 +1,4 @@
-import '../data/db.dart';
+import '../../data/db.dart';
 
 /// 备注频率数据
 typedef NoteFrequency = ({String note, int count});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ui/ui.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// 更新对话框管理类
 class UpdateDialogs {

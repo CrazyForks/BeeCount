@@ -10,7 +10,7 @@ import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/transaction_edit_utils.dart';
-import '../../services/category_service.dart';
+import '../../services/data/category_service.dart';
 
 /// 账户详情页面
 /// 显示账户的统计信息和相关交易

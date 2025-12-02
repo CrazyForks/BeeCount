@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
-import '../services/logger_service.dart';
+import '../services/system/logger_service.dart';
 import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
 import '../services/billing/ocr_service.dart';

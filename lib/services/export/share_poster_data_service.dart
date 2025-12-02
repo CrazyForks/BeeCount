@@ -3,7 +3,7 @@ library;
 
 import 'package:drift/drift.dart' as d;
 
-import '../data/repository.dart';
+import '../../data/repository.dart';
 import 'share_poster_types.dart';
 
 /// 海报数据计算服务

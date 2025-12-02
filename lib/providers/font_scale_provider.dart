@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/ui_scale_service.dart';
+import '../services/ui/ui_scale_service.dart';
 
 /// 字体缩放档位：-3~4 八档调整
 final fontScaleLevelProvider = StateProvider<int>((ref) => 0); // 允许 -3,-2,-1,0,1,2,3,4

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/notification_factory.dart';
+import '../../utils/notification_factory.dart';
 
 /// 记账提醒监控服务
 ///

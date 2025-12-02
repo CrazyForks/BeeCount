@@ -3,8 +3,8 @@ import 'dart:ui' show Locale;
 
 import 'package:drift/drift.dart';
 import '../l10n/app_localizations.dart';
-import '../services/seed_service.dart';
-import '../services/logger_service.dart';
+import '../services/data/seed_service.dart';
+import '../services/system/logger_service.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;

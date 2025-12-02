@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
-import '../../services/logger_service.dart';
+import '../../services/system/logger_service.dart';
 import '../tasks/bill_extraction_task.dart';
 import 'bill_extraction_glm_base_provider.dart';
 

@@ -4,7 +4,7 @@ import '../../styles/tokens.dart';
 import '../../widgets/category_icon.dart';
 import '../biz/biz.dart';
 import '../../utils/category_utils.dart';
-import '../../services/category_service.dart';
+import '../../services/data/category_service.dart';
 import '../../providers.dart';
 import '../../pages/transaction/category_detail_page.dart';
 import '../../l10n/app_localizations.dart';

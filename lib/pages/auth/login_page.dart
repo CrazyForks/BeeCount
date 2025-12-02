@@ -5,7 +5,7 @@ import '../../providers.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../widgets/ui/ui.dart';
 import '../../styles/tokens.dart';
-import '../../services/logger_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 
 enum AuthMode { login, signup }

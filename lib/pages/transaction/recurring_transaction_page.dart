@@ -7,7 +7,7 @@ import '../../widgets/biz/amount_text.dart';
 import '../../widgets/biz/section_card.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/recurring_transaction_service.dart';
+import '../../services/data/recurring_transaction_service.dart';
 import '../../utils/category_utils.dart';
 import '../../styles/tokens.dart';
 import 'recurring_transaction_edit_page.dart';

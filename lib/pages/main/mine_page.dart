@@ -14,9 +14,9 @@ import '../../styles/tokens.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
-import '../../services/logger_service.dart';
-import '../../services/avatar_service.dart';
-import '../../services/share_poster_service.dart';
+import '../../services/system/logger_service.dart';
+import '../../services/ui/avatar_service.dart';
+import '../../services/export/share_poster_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../category/category_manage_page.dart';
 import '../category/category_migration_page.dart';
@@ -36,7 +36,7 @@ import '../settings/about_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
-import '../../services/update_service.dart';
+import '../../services/system/update_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 
 class MinePage extends ConsumerWidget {

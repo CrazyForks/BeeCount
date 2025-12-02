@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
-import 'automation/auto_billing_service.dart';
-import 'logger_service.dart';
+import '../automation/auto_billing_service.dart';
+import '../system/logger_service.dart';
 
 /// iOS快捷指令处理服务
 /// 处理通过URL Scheme和AppIntents触发的快捷指令自动化

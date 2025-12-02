@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../ai/ai_bill_service.dart';
 import '../../data/db.dart';
 import '../../data/repository.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// OCR识别结果
 class OcrResult {

@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import '../data/db.dart';
+import '../../data/db.dart';
 
 /// 重复交易频率枚举
 enum RecurringFrequency {

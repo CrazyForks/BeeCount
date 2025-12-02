@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' as d;
 
 import 'db.dart';
 import 'category_node.dart';
-import '../services/logger_service.dart';
+import '../services/system/logger_service.dart';
 
 class BeeRepository {
   final BeeDatabase db;

@@ -7,7 +7,7 @@ import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' as fcs;
 import '../data/db.dart';
 import '../data/repository.dart';
 import '../models/ledger_display_item.dart';
-import '../services/logger_service.dart';
+import '../services/system/logger_service.dart';
 import 'sync_service.dart';
 import 'transactions_json.dart';
 

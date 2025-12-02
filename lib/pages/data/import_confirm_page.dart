@@ -6,7 +6,7 @@ import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as schema;
 import '../../l10n/app_localizations.dart';
-import '../../services/category_service.dart';
+import '../../services/data/category_service.dart';
 import '../../services/import/csv_parser.dart';
 import '../../utils/category_utils.dart';
 import '../../services/import/bill_parser.dart';

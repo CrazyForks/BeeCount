@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'automation/auto_billing_service.dart';
-import 'logger_service.dart';
+import '../automation/auto_billing_service.dart';
+import '../system/logger_service.dart';
 
 /// 图片分享处理服务（Android专用）
 /// 处理从相册或其他应用分享过来的图片，并调用AutoBillingService进行OCR识别和记账

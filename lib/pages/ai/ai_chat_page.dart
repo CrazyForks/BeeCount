@@ -23,8 +23,8 @@ import '../../data/db.dart';
 import '../../data/repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/ai_quick_command.dart';
-import '../../services/avatar_service.dart';
-import '../../services/logger_service.dart';
+import '../../services/ui/avatar_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../services/ai/ai_chat_service.dart';
 import '../../services/ai/ai_quick_command_service.dart';
 

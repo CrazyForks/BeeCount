@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
-import '../services/seed_service.dart';
+import '../services/data/seed_service.dart';
 
 /// 分类工具类
 /// 负责处理分类名称的显示、翻译等

@@ -1,5 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// 更新通知管理类
 class UpdateNotifications {

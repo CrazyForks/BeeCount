@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
 import '../tasks/bill_extraction_task.dart';
-import '../../services/logger_service.dart';
+import '../../services/system/logger_service.dart';
 
 /// 账单提取GLM Provider基类
 ///

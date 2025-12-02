@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beecount/widgets/ui/wheel_date_picker.dart';
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/note_history_service.dart';
+import '../../services/data/note_history_service.dart';
 import '../../data/db.dart';
 import '../../providers.dart';
 import 'note_picker_dialog.dart';

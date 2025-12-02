@@ -9,14 +9,14 @@ import 'package:gal/gal.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../l10n/app_localizations.dart';
-import '../widgets/ui/ui.dart';
-import '../providers.dart';
-import '../styles/tokens.dart';
-import '../widgets/posters/app_promo_poster.dart';
-import '../widgets/posters/year_summary_poster.dart';
-import '../widgets/posters/month_summary_poster.dart';
-import '../widgets/posters/ledger_summary_poster.dart';
+import '../../l10n/app_localizations.dart';
+import '../../widgets/ui/ui.dart';
+import '../../providers.dart';
+import '../../styles/tokens.dart';
+import '../../widgets/posters/app_promo_poster.dart';
+import '../../widgets/posters/year_summary_poster.dart';
+import '../../widgets/posters/month_summary_poster.dart';
+import '../../widgets/posters/ledger_summary_poster.dart';
 import 'share_poster_types.dart';
 import 'share_poster_data_service.dart';
 

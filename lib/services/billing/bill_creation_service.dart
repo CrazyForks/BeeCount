@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/db.dart';
 import '../../data/repository.dart';
 import '../../data/category_node.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 import 'category_matcher.dart';
 import 'ocr_service.dart';
 

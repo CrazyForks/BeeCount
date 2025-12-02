@@ -9,7 +9,7 @@ import '../billing/bill_creation_service.dart';
 import '../billing/ocr_service.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
 import '../../data/db.dart';
-import '../logger_service.dart';
+import '../system/logger_service.dart';
 
 /// AI配置验证结果
 class AIConfigValidationResult {
