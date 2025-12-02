@@ -54,7 +54,10 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
     WidgetsBinding.instance.addObserver(this);
     _initConversation();
     _loadUserAvatar();
-    _validateApiConfig();
+    // 在下一帧后执行 API 验证，完全不阻塞页面渲染
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _validateApiConfig();
+    });
     _scrollController.addListener(_handleScroll);
   }
 
@@ -85,11 +88,29 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
     }
   }
 
-  /// 验证 API 配置
+  /// 验证 API 配置（完全异步，不阻塞 UI）
   Future<void> _validateApiConfig() async {
-    final result = await AIChatService.validateApiKey();
-    if (mounted) {
+    try {
+      // 添加 3 秒超时保护，避免网络卡顿
+      final result = await AIChatService.validateApiKey().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {
+          logger.warning('AIChat', 'API 验证超时（3秒），跳过验证');
+          return AIConfigValidationResult.invalid('验证超时');
+        },
+      );
+
+      // 安全地更新状态
+      if (!mounted) return;
       setState(() => _apiValidation = result);
+    } catch (e, st) {
+      logger.error('AIChat', 'API 验证失败', e, st);
+
+      // 即使失败也要设置状态，避免 UI 一直等待
+      if (!mounted) return;
+      setState(() {
+        _apiValidation = AIConfigValidationResult.invalid('验证失败');
+      });
     }
   }
 

@@ -293,11 +293,13 @@ class BeeDatabase extends _$BeeDatabase {
     AppLocalizations? l10n,
     String currency = 'CNY',
     bool useHierarchicalCategories = false,
+    bool skipCategories = false,
   }) async {
     logger.info('db', 'ensureSeed 被调用');
     logger.info('db', 'l10n 是否提供: ${l10n != null}');
     logger.info('db', '货币: $currency');
     logger.info('db', '使用二级分类: $useHierarchicalCategories');
+    logger.info('db', '跳过分类创建: $skipCategories');
 
     // 如果没有提供l10n，使用Lookup创建默认的英文版本
     final effectiveL10n = l10n ?? lookupAppLocalizations(const Locale('en'));
@@ -308,6 +310,7 @@ class BeeDatabase extends _$BeeDatabase {
       effectiveL10n,
       currency: currency,
       useHierarchicalCategories: useHierarchicalCategories,
+      skipCategories: skipCategories,
     );
     logger.info('db', '数据库初始化完成');
   }

@@ -4,7 +4,6 @@ import 'package:yaml/yaml.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import 'package:drift/drift.dart' as d;
 import '../../data/db.dart';
-import '../../providers.dart';
 import '../system/logger_service.dart';
 
 // 导入 OrderingTerm
@@ -18,6 +17,8 @@ class AppConfig {
   final AIConfig? ai;
   final AppSettingsConfig? appSettings;
   final RecurringTransactionsConfig? recurringTransactions;
+  final AccountsConfig? accounts;
+  final CategoriesConfig? categories;
 
   const AppConfig({
     this.supabase,
@@ -26,6 +27,8 @@ class AppConfig {
     this.ai,
     this.appSettings,
     this.recurringTransactions,
+    this.accounts,
+    this.categories,
   });
 
   Map<String, dynamic> toYaml() {
@@ -55,6 +58,14 @@ class AppConfig {
       map['recurring_transactions'] = recurringTransactions!.toMap();
     }
 
+    if (accounts != null) {
+      map['accounts'] = accounts!.toMap();
+    }
+
+    if (categories != null) {
+      map['categories'] = categories!.toMap();
+    }
+
     return map;
   }
 
@@ -82,6 +93,14 @@ class AppConfig {
       recurringTransactions: yaml.containsKey('recurring_transactions')
           ? RecurringTransactionsConfig.fromMap(
               Map<String, dynamic>.from(yaml['recurring_transactions'] as Map))
+          : null,
+      accounts: yaml.containsKey('accounts')
+          ? AccountsConfig.fromMap(
+              Map<String, dynamic>.from(yaml['accounts'] as Map))
+          : null,
+      categories: yaml.containsKey('categories')
+          ? CategoriesConfig.fromMap(
+              Map<String, dynamic>.from(yaml['categories'] as Map))
           : null,
     );
   }
@@ -512,6 +531,153 @@ class RecurringTransactionItem {
   }
 }
 
+/// 账户配置
+class AccountsConfig {
+  final List<AccountItem> items;
+
+  const AccountsConfig({required this.items});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'items': items.map((item) => item.toMap()).toList(),
+    };
+  }
+
+  static AccountsConfig fromMap(Map<String, dynamic> map) {
+    final itemsList = map['items'] as List<dynamic>? ?? [];
+    return AccountsConfig(
+      items: itemsList
+          .map((item) =>
+              AccountItem.fromMap(Map<String, dynamic>.from(item as Map)))
+          .toList(),
+    );
+  }
+}
+
+/// 账户项
+class AccountItem {
+  final String name;
+  final String type;
+  final String currency;
+  final double initialBalance;
+  final String? createdAt; // ISO 8601 format
+
+  const AccountItem({
+    required this.name,
+    required this.type,
+    required this.currency,
+    required this.initialBalance,
+    this.createdAt,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'name': name,
+      'type': type,
+      'currency': currency,
+      'initial_balance': initialBalance,
+    };
+    if (createdAt != null) map['created_at'] = createdAt;
+    return map;
+  }
+
+  static AccountItem fromMap(Map<String, dynamic> map) {
+    return AccountItem(
+      name: map['name'] as String,
+      type: map['type'] as String,
+      currency: map['currency'] as String? ?? 'CNY',
+      initialBalance: (map['initial_balance'] as num?)?.toDouble() ?? 0.0,
+      createdAt: map['created_at'] as String?,
+    );
+  }
+
+  factory AccountItem.fromDb(Account account) {
+    return AccountItem(
+      name: account.name,
+      type: account.type,
+      currency: account.currency,
+      initialBalance: account.initialBalance,
+      createdAt: account.createdAt?.toIso8601String(),
+    );
+  }
+}
+
+/// 分类配置
+class CategoriesConfig {
+  final List<CategoryItem> items;
+
+  const CategoriesConfig({required this.items});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'items': items.map((item) => item.toMap()).toList(),
+    };
+  }
+
+  static CategoriesConfig fromMap(Map<String, dynamic> map) {
+    final itemsList = map['items'] as List<dynamic>? ?? [];
+    return CategoriesConfig(
+      items: itemsList
+          .map((item) =>
+              CategoryItem.fromMap(Map<String, dynamic>.from(item as Map)))
+          .toList(),
+    );
+  }
+}
+
+/// 分类项
+class CategoryItem {
+  final String name;
+  final String kind; // expense / income
+  final String? icon;
+  final int sortOrder;
+  final String? parentName; // 使用父分类名称而非ID
+  final int level;
+
+  const CategoryItem({
+    required this.name,
+    required this.kind,
+    this.icon,
+    required this.sortOrder,
+    this.parentName,
+    required this.level,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'name': name,
+      'kind': kind,
+      'sort_order': sortOrder,
+      'level': level,
+    };
+    if (icon != null) map['icon'] = icon;
+    if (parentName != null) map['parent_name'] = parentName;
+    return map;
+  }
+
+  static CategoryItem fromMap(Map<String, dynamic> map) {
+    return CategoryItem(
+      name: map['name'] as String,
+      kind: map['kind'] as String,
+      icon: map['icon'] as String?,
+      sortOrder: map['sort_order'] as int? ?? 0,
+      parentName: map['parent_name'] as String?,
+      level: map['level'] as int? ?? 1,
+    );
+  }
+
+  factory CategoryItem.fromDb(Category category, String? parentName) {
+    return CategoryItem(
+      name: category.name,
+      kind: category.kind,
+      icon: category.icon,
+      sortOrder: category.sortOrder,
+      parentName: parentName,
+      level: category.level,
+    );
+  }
+}
+
 /// 配置导入导出服务
 class ConfigExportService {
   /// 导出配置到YAML字符串
@@ -685,6 +851,56 @@ class ConfigExportService {
       }
     }
 
+    // 读取账户配置（导出全部账户）
+    AccountsConfig? accountsConfig;
+    if (db != null) {
+      try {
+        final accountsList = await (db.select(db.accounts)
+              ..orderBy([(t) => OrderingTerm.asc(t.id)]))
+            .get();
+
+        if (accountsList.isNotEmpty) {
+          accountsConfig = AccountsConfig(
+            items: accountsList
+                .map((account) => AccountItem.fromDb(account))
+                .toList(),
+          );
+        }
+      } catch (e) {
+        logger.warning('ConfigExport', '读取账户配置失败: $e');
+      }
+    }
+
+    // 读取分类配置（导出全部分类）
+    CategoriesConfig? categoriesConfig;
+    if (db != null) {
+      try {
+        final categoriesList = await (db.select(db.categories)
+              ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
+            .get();
+
+        if (categoriesList.isNotEmpty) {
+          // 构建 ID 到分类的映射，用于查找父分类名称
+          final categoryMap = <int, Category>{
+            for (var cat in categoriesList) cat.id: cat
+          };
+
+          categoriesConfig = CategoriesConfig(
+            items: categoriesList.map((category) {
+              // 查找父分类名称
+              String? parentName;
+              if (category.parentId != null && categoryMap.containsKey(category.parentId)) {
+                parentName = categoryMap[category.parentId]!.name;
+              }
+              return CategoryItem.fromDb(category, parentName);
+            }).toList(),
+          );
+        }
+      } catch (e) {
+        logger.warning('ConfigExport', '读取分类配置失败: $e');
+      }
+    }
+
     final config = AppConfig(
       supabase: supabaseConfig,
       webdav: webdavConfig,
@@ -692,6 +908,8 @@ class ConfigExportService {
       ai: aiConfig,
       appSettings: appSettings,
       recurringTransactions: recurringConfig,
+      accounts: accountsConfig,
+      categories: categoriesConfig,
     );
 
     // 转换为YAML格式
@@ -917,6 +1135,55 @@ class ConfigExportService {
       buffer.writeln();
     }
 
+    // 账户
+    if (yamlMap.containsKey('accounts')) {
+      buffer.writeln('# 账户');
+      buffer.writeln('accounts:');
+      final accounts = yamlMap['accounts'] as Map<String, dynamic>;
+      final items = accounts['items'] as List;
+
+      if (items.isNotEmpty) {
+        buffer.writeln('  items:');
+        for (final item in items) {
+          final itemMap = item as Map<String, dynamic>;
+          buffer.writeln('    - name: "${itemMap['name']}"');
+          buffer.writeln('      type: "${itemMap['type']}"');
+          buffer.writeln('      currency: "${itemMap['currency']}"');
+          buffer.writeln('      initial_balance: ${itemMap['initial_balance']}');
+          if (itemMap.containsKey('created_at') && itemMap['created_at'] != null) {
+            buffer.writeln('      created_at: "${itemMap['created_at']}"');
+          }
+        }
+      }
+      buffer.writeln();
+    }
+
+    // 分类
+    if (yamlMap.containsKey('categories')) {
+      buffer.writeln('# 分类');
+      buffer.writeln('categories:');
+      final categories = yamlMap['categories'] as Map<String, dynamic>;
+      final items = categories['items'] as List;
+
+      if (items.isNotEmpty) {
+        buffer.writeln('  items:');
+        for (final item in items) {
+          final itemMap = item as Map<String, dynamic>;
+          buffer.writeln('    - name: "${itemMap['name']}"');
+          buffer.writeln('      kind: "${itemMap['kind']}"');
+          if (itemMap.containsKey('icon') && itemMap['icon'] != null) {
+            buffer.writeln('      icon: "${itemMap['icon']}"');
+          }
+          buffer.writeln('      sort_order: ${itemMap['sort_order']}');
+          if (itemMap.containsKey('parent_name') && itemMap['parent_name'] != null) {
+            buffer.writeln('      parent_name: "${itemMap['parent_name']}"');
+          }
+          buffer.writeln('      level: ${itemMap['level']}');
+        }
+      }
+      buffer.writeln();
+    }
+
     return buffer.toString();
   }
 
@@ -1115,6 +1382,99 @@ class ConfigExportService {
         logger.info('ConfigImport', '周期账单已导入: $importedCount/${items.length}');
       } catch (e) {
         logger.error('ConfigImport', '导入周期账单失败: $e');
+      }
+    }
+
+    // 导入账户
+    if (config.accounts != null && db != null) {
+      try {
+        final items = config.accounts!.items;
+
+        // 准备批量插入的数据
+        final accountsToInsert = items.map((item) => AccountsCompanion.insert(
+          ledgerId: 0, // 保留字段，但不再使用（v2迁移后会移除）
+          name: item.name,
+          type: d.Value(item.type),
+          currency: d.Value(item.currency),
+          initialBalance: d.Value(item.initialBalance),
+          createdAt: d.Value(
+              item.createdAt != null ? DateTime.parse(item.createdAt!) : null),
+          updatedAt: d.Value(DateTime.now()),
+        )).toList();
+
+        // 使用 batch 批量插入
+        await db.batch((batch) {
+          batch.insertAll(db.accounts, accountsToInsert);
+        });
+
+        logger.info('ConfigImport', '账户已批量导入: ${items.length}条');
+      } catch (e) {
+        logger.error('ConfigImport', '导入账户失败: $e');
+      }
+    }
+
+    // 导入分类
+    if (config.categories != null && db != null) {
+      try {
+        final items = config.categories!.items;
+
+        // 使用事务确保所有分类一次性导入
+        await db.transaction(() async {
+          // 第一步：批量插入所有一级分类（没有父分类的）
+          final level1Items = items.where((item) => item.parentName == null).toList();
+          final level1Companions = level1Items.map((item) => CategoriesCompanion.insert(
+            name: item.name,
+            kind: item.kind,
+            icon: d.Value(item.icon),
+            sortOrder: d.Value(item.sortOrder),
+            parentId: const d.Value(null),
+            level: d.Value(item.level),
+          )).toList();
+
+          // 批量插入一级分类
+          if (level1Companions.isNotEmpty) {
+            await db.batch((batch) {
+              batch.insertAll(db.categories, level1Companions);
+            });
+          }
+
+          // 构建名称到ID的映射
+          final allCategories = await db.select(db.categories).get();
+          final nameToIdMap = <String, int>{
+            for (var cat in allCategories) cat.name: cat.id
+          };
+
+          // 第二步：批量插入二级分类
+          final level2Items = items.where((item) => item.parentName != null).toList();
+          final level2Companions = <CategoriesCompanion>[];
+
+          for (final item in level2Items) {
+            final parentId = nameToIdMap[item.parentName];
+            if (parentId != null) {
+              level2Companions.add(CategoriesCompanion.insert(
+                name: item.name,
+                kind: item.kind,
+                icon: d.Value(item.icon),
+                sortOrder: d.Value(item.sortOrder),
+                parentId: d.Value(parentId),
+                level: d.Value(item.level),
+              ));
+            } else {
+              logger.warning('ConfigImport', '找不到父分类 "${item.parentName}"，跳过二级分类: ${item.name}');
+            }
+          }
+
+          // 批量插入二级分类
+          if (level2Companions.isNotEmpty) {
+            await db.batch((batch) {
+              batch.insertAll(db.categories, level2Companions);
+            });
+          }
+
+          logger.info('ConfigImport', '分类已批量导入: 一级${level1Items.length}条, 二级${level2Companions.length}条');
+        });
+      } catch (e) {
+        logger.error('ConfigImport', '导入分类失败: $e');
       }
     }
   }

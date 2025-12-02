@@ -24,7 +24,8 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   String _selectedCurrency = 'CNY'; // 默认货币
-  bool _useHierarchicalCategories = false; // 默认使用一级分类
+  // 分类模式: 'flat' = 一级分类, 'hierarchical' = 二级分类, 'none' = 不创建分类
+  String _categoryMode = 'flat'; // 默认使用一级分类
   bool _isInitializing = false; // 初始化状态
 
   @override
@@ -615,7 +616,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('welcome_shown', true);
       // 保存用户选择的分类模式
-      await prefs.setBool('use_hierarchical_categories', _useHierarchicalCategories);
+      await prefs.setString('category_mode', _categoryMode);
       // 保存用户选择的货币
       await prefs.setString('selected_currency', _selectedCurrency);
 
@@ -623,16 +624,31 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       if (context.mounted) {
         logger.info('welcome', '开始初始化数据库');
         logger.info('welcome', '货币: $_selectedCurrency');
-        logger.info('welcome', '分类模式: ${_useHierarchicalCategories ? "二级分类" : "一级分类"}');
+        final categoryModeText = _categoryMode == 'hierarchical'
+            ? '二级分类'
+            : _categoryMode == 'flat'
+                ? '一级分类'
+                : '不创建分类';
+        logger.info('welcome', '分类模式: $categoryModeText');
 
         final l10n = AppLocalizations.of(context);
         final db = ref.read(databaseProvider);
 
-        await db.ensureSeed(
-          l10n: l10n,
-          currency: _selectedCurrency,
-          useHierarchicalCategories: _useHierarchicalCategories,
-        );
+        // 根据用户选择创建分类
+        if (_categoryMode != 'none') {
+          await db.ensureSeed(
+            l10n: l10n,
+            currency: _selectedCurrency,
+            useHierarchicalCategories: _categoryMode == 'hierarchical',
+          );
+        } else {
+          // 只创建默认账本，不创建分类
+          await db.ensureSeed(
+            l10n: l10n,
+            currency: _selectedCurrency,
+            skipCategories: true,
+          );
+        }
 
         logger.info('welcome', '数据库初始化完成');
       }
@@ -654,7 +670,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   /// 第5页：分类模式选择
   Widget _buildCategoryModePage(
       BuildContext context, ThemeData theme, AppLocalizations l10n) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -701,7 +717,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             context,
             theme,
             l10n,
-            isHierarchical: false,
+            mode: 'flat',
             title: l10n.welcomeCategoryModeFlatTitle,
             description: l10n.welcomeCategoryModeFlatDescription,
             features: [
@@ -718,13 +734,30 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             context,
             theme,
             l10n,
-            isHierarchical: true,
+            mode: 'hierarchical',
             title: l10n.welcomeCategoryModeHierarchicalTitle,
             description: l10n.welcomeCategoryModeHierarchicalDescription,
             features: [
               l10n.welcomeCategoryModeHierarchicalFeature1,
               l10n.welcomeCategoryModeHierarchicalFeature2,
               l10n.welcomeCategoryModeHierarchicalFeature3,
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // 不创建分类选项
+          _buildCategoryModeOption(
+            context,
+            theme,
+            l10n,
+            mode: 'none',
+            title: l10n.welcomeCategoryModeNoneTitle,
+            description: l10n.welcomeCategoryModeNoneDescription,
+            features: [
+              l10n.welcomeCategoryModeNoneFeature1,
+              l10n.welcomeCategoryModeNoneFeature2,
+              l10n.welcomeCategoryModeNoneFeature3,
             ],
           ),
         ],
@@ -736,17 +769,17 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     BuildContext context,
     ThemeData theme,
     AppLocalizations l10n, {
-    required bool isHierarchical,
+    required String mode, // 'flat', 'hierarchical', or 'none'
     required String title,
     required String description,
     required List<String> features,
   }) {
-    final isSelected = _useHierarchicalCategories == isHierarchical;
+    final isSelected = _categoryMode == mode;
 
     return InkWell(
       onTap: () {
         setState(() {
-          _useHierarchicalCategories = isHierarchical;
+          _categoryMode = mode;
         });
       },
       borderRadius: BorderRadius.circular(12),

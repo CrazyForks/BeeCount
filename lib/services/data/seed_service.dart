@@ -713,10 +713,15 @@ class SeedService {
     AppLocalizations l10n, {
     String currency = 'CNY',
     bool useHierarchicalCategories = false,
+    bool skipCategories = false,
   }) async {
     logger.info('seed', '开始初始化数据库');
     logger.info('seed', '货币: $currency');
-    logger.info('seed', '分类模式: ${useHierarchicalCategories ? "二级分类" : "一级分类"}');
+    if (skipCategories) {
+      logger.info('seed', '分类模式: 不创建分类');
+    } else {
+      logger.info('seed', '分类模式: ${useHierarchicalCategories ? "二级分类" : "一级分类"}');
+    }
     logger.info('seed', '账本名称: ${l10n.ledgerDefaultName}');
     logger.info('seed', '现金账户名: ${l10n.accountTypeCash}');
 
@@ -728,13 +733,17 @@ class SeedService {
     await createDefaultAccounts(db, ledgerId, l10n, currency);
     logger.info('seed', '已创建3个账户');
 
-    // 3. 创建默认分类
-    if (useHierarchicalCategories) {
-      await createHierarchicalCategories(db, l10n);
-      logger.info('seed', '已创建二级分类');
+    // 3. 创建默认分类（可选）
+    if (!skipCategories) {
+      if (useHierarchicalCategories) {
+        await createHierarchicalCategories(db, l10n);
+        logger.info('seed', '已创建二级分类');
+      } else {
+        await createFlatCategories(db, l10n);
+        logger.info('seed', '已创建一级分类');
+      }
     } else {
-      await createFlatCategories(db, l10n);
-      logger.info('seed', '已创建一级分类');
+      logger.info('seed', '跳过分类创建');
     }
 
     logger.info('seed', '数据库初始化完成');
