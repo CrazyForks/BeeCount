@@ -95,7 +95,8 @@ final categoriesProvider = FutureProvider<List<Category>>((ref) async {
 });
 
 // 分类与交易笔数组合Provider（响应式版本）
-final categoriesWithCountProvider = StreamProvider<List<({Category category, int transactionCount})>>((ref) {
+// 使用 autoDispose 在页面关闭时自动取消订阅
+final categoriesWithCountProvider = StreamProvider.autoDispose<List<({Category category, int transactionCount})>>((ref) {
   final repo = ref.watch(repositoryProvider);
   return repo.watchCategoriesWithCount();
 });

@@ -895,11 +895,8 @@ class BeeRepository {
 
   /// 响应式监听所有分类及其交易数量变化
   Stream<List<({Category category, int transactionCount})>> watchCategoriesWithCount() async* {
-    final startTime = DateTime.now();
-    logger.debug('CategoryQuery', '开始查询分类和交易数量');
-
     // 优化后的查询：直接统计每个分类的交易数量（不包含子分类）
-    await for (final _ in db.customSelect(
+    await for (final rows in db.customSelect(
       '''
       SELECT
         c.id as category_id,
@@ -917,15 +914,8 @@ class BeeRepository {
       ''',
       readsFrom: {db.categories, db.transactions},
     ).watch()) {
-      final queryTime = DateTime.now().difference(startTime);
-      logger.debug('CategoryQuery', 'SQL查询完成，耗时: ${queryTime.inMilliseconds}ms');
-
-      final rows = _;
+      final startTime = DateTime.now();
       final results = <({Category category, int transactionCount})>[];
-
-      // 构建分类映射和交易计数
-      final categoryMap = <int, Category>{};
-      final directCounts = <int, int>{}; // 每个分类直接的交易数
 
       for (final row in rows) {
         final category = Category(
@@ -937,26 +927,13 @@ class BeeRepository {
           parentId: row.read<int?>('category_parent_id'),
           level: row.read<int>('category_level'),
         );
-        categoryMap[category.id] = category;
-        directCounts[category.id] = row.read<int>('transaction_count');
-      }
+        final directCount = row.read<int>('transaction_count');
 
-      logger.debug('CategoryQuery', '查询到 ${categoryMap.length} 个分类');
-
-      // 构建最终结果 - 返回每个分类的直接交易数（元数据）
-      for (final entry in categoryMap.entries) {
-        final category = entry.value;
-        final directCount = directCounts[category.id] ?? 0;
-
-        logger.debug('CategoryQuery',
-          '分类 "${category.name}" (ID:${category.id}, level:${category.level}): ${directCount}笔交易');
-
-        // 只返回每个分类自己的交易数，不累加子分类
         results.add((category: category, transactionCount: directCount));
       }
 
       final totalTime = DateTime.now().difference(startTime);
-      logger.info('CategoryQuery', '分类数据处理完成，总耗时: ${totalTime.inMilliseconds}ms, 返回${results.length}条记录');
+      logger.debug('CategoryQuery', '分类数据查询完成，耗时: ${totalTime.inMilliseconds}ms, 返回${results.length}条记录');
 
       yield results;
     }
