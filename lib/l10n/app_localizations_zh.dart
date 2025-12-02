@@ -1300,6 +1300,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryNameTooLong => '分类名称不能超过4个字';
 
   @override
+  String get categoryNameDuplicate => '分类名称已存在';
+
+  @override
   String get categoryIconLabel => '分类图标';
 
   @override
@@ -5362,6 +5365,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryNameTooLong => '分類名稱不能超過4個字';
+
+  @override
+  String get categoryNameDuplicate => '分類名稱已存在';
 
   @override
   String get categoryIconLabel => '分類圖示';

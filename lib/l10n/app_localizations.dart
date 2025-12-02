@@ -2490,6 +2490,12 @@ abstract class AppLocalizations {
   /// **'Category name cannot exceed 4 characters'**
   String get categoryNameTooLong;
 
+  /// No description provided for @categoryNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name already exists'**
+  String get categoryNameDuplicate;
+
   /// No description provided for @categoryIconLabel.
   ///
   /// In en, this message translates to:

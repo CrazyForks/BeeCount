@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
@@ -31,6 +33,9 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   late final TextEditingController _nameController;
   String? _selectedIcon;
   bool _saving = false;
+  bool _isDuplicateName = false;
+  String? _duplicateErrorMessage;
+  Timer? _debounceTimer;
 
   // 二级分类相关状态
   bool _isSubCategory = false;
@@ -61,6 +66,14 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       _isSubCategory = true;
       _selectedParentCategory = widget.parentCategory;
     }
+
+    // 监听输入框文本变化，防抖500毫秒后检查重复
+    _nameController.addListener(() {
+      _debounceTimer?.cancel();
+      _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+        _checkNameDuplicate();
+      });
+    });
   }
 
   Future<void> _loadParentCategory(int parentId) async {
@@ -77,6 +90,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _nameController.dispose();
     super.dispose();
   }
@@ -84,6 +98,40 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   bool get isEditing => widget.category != null;
 
   bool get isCreatingSubCategory => widget.parentCategory != null;
+
+  /// 检查分类名称是否重复
+  Future<void> _checkNameDuplicate() async {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      setState(() {
+        _isDuplicateName = false;
+        _duplicateErrorMessage = null;
+      });
+      return;
+    }
+
+    final repo = ref.read(repositoryProvider);
+    final excludeId = isEditing ? widget.category!.id : null;
+
+    final isDuplicate = await repo.isCategoryNameDuplicate(
+      name: name,
+      excludeId: excludeId,
+    );
+
+    if (mounted) {
+      setState(() {
+        _isDuplicateName = isDuplicate;
+        if (isDuplicate) {
+          final l10n = AppLocalizations.of(context);
+          _duplicateErrorMessage = l10n.categoryNameDuplicate;
+        } else {
+          _duplicateErrorMessage = null;
+        }
+      });
+      // 触发表单验证更新
+      _formKey.currentState?.validate();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,6 +268,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                             decoration: InputDecoration(
                               hintText: AppLocalizations.of(context).categoryNameHint,
                               border: const OutlineInputBorder(),
+                              errorText: _duplicateErrorMessage,
                             ),
                             maxLength: 4,
                             validator: (value) {
@@ -228,6 +277,9 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                               }
                               if (value.trim().length > 4) {
                                 return AppLocalizations.of(context).categoryNameTooLong;
+                              }
+                              if (_isDuplicateName) {
+                                return _duplicateErrorMessage;
                               }
                               return null;
                             },
@@ -294,7 +346,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             child: FilledButton(
-              onPressed: _saving ? null : _saveCategory,
+              onPressed: (_saving || _isDuplicateName) ? null : _saveCategory,
               child: _saving
                   ? const SizedBox(
                       width: 20,
@@ -326,11 +378,28 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       return;
     }
 
+    // 保存前再次检查名称重复
+    final repo = ref.read(repositoryProvider);
+    final name = _nameController.text.trim();
+    final excludeId = isEditing ? widget.category!.id : null;
+    final isDuplicate = await repo.isCategoryNameDuplicate(
+      name: name,
+      excludeId: excludeId,
+    );
+
+    if (isDuplicate) {
+      if (!mounted) return;
+      await AppDialog.error(
+        context,
+        title: AppLocalizations.of(context).categorySaveError,
+        message: AppLocalizations.of(context).categoryNameDuplicate,
+      );
+      return;
+    }
+
     setState(() => _saving = true);
 
     try {
-      final repo = ref.read(repositoryProvider);
-      final name = _nameController.text.trim();
 
       if (isEditing) {
         // 编辑现有分类

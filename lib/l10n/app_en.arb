@@ -531,6 +531,7 @@
   "categoryNameHint": "Enter category name",
   "categoryNameRequired": "Please enter category name",
   "categoryNameTooLong": "Category name cannot exceed 4 characters",
+  "categoryNameDuplicate": "Category name already exists",
   "categoryIconLabel": "Category Icon",
   "categoryDangerousOperations": "Dangerous Operations",
   "categoryDeleteTitle": "Delete Category",

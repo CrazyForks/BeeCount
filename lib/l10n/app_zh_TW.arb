@@ -365,6 +365,7 @@
   "categoryNameHint": "請輸入分類名稱",
   "categoryNameRequired": "請輸入分類名稱",
   "categoryNameTooLong": "分類名稱不能超過4個字",
+  "categoryNameDuplicate": "分類名稱已存在",
   "categoryIconLabel": "分類圖示",
   "categoryDangerousOperations": "危險操作",
   "categoryDeleteTitle": "刪除分類",

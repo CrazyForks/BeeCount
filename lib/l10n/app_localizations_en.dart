@@ -1300,6 +1300,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryNameTooLong => 'Category name cannot exceed 4 characters';
 
   @override
+  String get categoryNameDuplicate => 'Category name already exists';
+
+  @override
   String get categoryIconLabel => 'Category Icon';
 
   @override

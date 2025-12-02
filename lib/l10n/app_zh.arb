@@ -476,6 +476,7 @@
   "categoryNameHint": "请输入分类名称",
   "categoryNameRequired": "请输入分类名称",
   "categoryNameTooLong": "分类名称不能超过4个字",
+  "categoryNameDuplicate": "分类名称已存在",
   "categoryIconLabel": "分类图标",
   "categoryDangerousOperations": "危险操作",
   "categoryDeleteTitle": "删除分类",

@@ -1449,6 +1449,28 @@ class BeeRepository {
         .getSingleOrNull();
   }
 
+  /// 检查分类名称是否重复
+  ///
+  /// [name] 要检查的分类名称
+  /// [excludeId] 要排除的分类ID（编辑时使用）
+  ///
+  /// 返回true表示名称已存在（所有分类名称全局唯一）
+  Future<bool> isCategoryNameDuplicate({
+    required String name,
+    int? excludeId,
+  }) async {
+    var expression = db.categories.name.equals(name);
+
+    // 如果是编辑模式，排除当前分类
+    if (excludeId != null) {
+      expression = expression & db.categories.id.equals(excludeId).not();
+    }
+
+    final query = db.select(db.categories)..where((c) => expression);
+    final results = await query.get();
+    return results.isNotEmpty;
+  }
+
   /// 创建二级分类
   Future<int> createSubCategory({
     required int parentId,
