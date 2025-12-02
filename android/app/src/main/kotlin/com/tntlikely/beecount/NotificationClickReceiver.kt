@@ -1,4 +1,4 @@
-package com.example.beecount
+package com.tntlikely.beecount
 
 import android.content.BroadcastReceiver
 import android.content.Context

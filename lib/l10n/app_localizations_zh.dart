@@ -2639,15 +2639,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recurringTransactionNoEndDate => '永久周期';
 
   @override
-  String get recurringTransactionEnabled => '已启用';
-
-  @override
-  String get recurringTransactionDisabled => '已禁用';
-
-  @override
-  String get recurringTransactionNextGeneration => '下次生成';
-
-  @override
   String get recurringTransactionDeleteConfirm => '确定要删除这个周期账单吗？';
 
   @override
@@ -2675,9 +2666,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String recurringTransactionEveryNYears(int n) {
     return '每 $n 年';
   }
-
-  @override
-  String get recurringTransactionLedger => '账本';
 
   @override
   String get recurringTransactionUsageTitle => '使用说明';
@@ -3989,9 +3977,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get billCardTime => '📅 时间';
-
-  @override
-  String get billCardLedger => '📒 账本';
 
   @override
   String get billCardNote => '📝 备注';
@@ -6697,15 +6682,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get recurringTransactionNoEndDate => '永久週期';
 
   @override
-  String get recurringTransactionEnabled => '已啟用';
-
-  @override
-  String get recurringTransactionDisabled => '已停用';
-
-  @override
-  String get recurringTransactionNextGeneration => '下次生成';
-
-  @override
   String get recurringTransactionDeleteConfirm => '確定要刪除這個週期帳單嗎？';
 
   @override
@@ -6733,9 +6709,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String recurringTransactionEveryNYears(int n) {
     return '每 $n 年';
   }
-
-  @override
-  String get recurringTransactionLedger => '帳本';
 
   @override
   String get recurringTransactionUsageTitle => '使用說明';
@@ -8047,9 +8020,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get billCardTime => '📅 時間';
-
-  @override
-  String get billCardLedger => '📒 帳本';
 
   @override
   String get billCardNote => '📝 備註';

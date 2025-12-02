@@ -76,7 +76,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.example.beecount</string>
+			<string>com.tntlikely.beecount</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>beecount</string>

@@ -813,9 +813,6 @@
   "recurringTransactionStartDate": "開始日期",
   "recurringTransactionEndDate": "結束日期",
   "recurringTransactionNoEndDate": "永久週期",
-  "recurringTransactionEnabled": "已啟用",
-  "recurringTransactionDisabled": "已停用",
-  "recurringTransactionNextGeneration": "下次生成",
   "recurringTransactionDeleteConfirm": "確定要刪除這個週期帳單嗎？",
   "recurringTransactionEmpty": "暫無週期帳單",
   "recurringTransactionEmptyHint": "點擊右上角 + 按鈕新增",
@@ -851,7 +848,6 @@
       }
     }
   },
-  "recurringTransactionLedger": "帳本",
   "recurringTransactionUsageTitle": "使用說明",
   "recurringTransactionUsageContent": "週期記帳會在每次冷啟動進入 App 時自動掃描並產生帳單。設定日期後，系統會在該日期之後的冷啟動時建立對應帳單。例如：設定 11 月 27 日，則會在 11 月 27 日之後的首次啟動時自動記帳。",
   "ledgerSelectTitle": "選擇帳本",
@@ -1424,7 +1420,6 @@
   "billCardAmount": "💰 金額",
   "billCardCategory": "🏷️ 分類",
   "billCardTime": "📅 時間",
-  "billCardLedger": "📒 帳本",
   "billCardNote": "📝 備註",
   "billCardUndo": "撤銷",
   "billCardEdit": "修改",

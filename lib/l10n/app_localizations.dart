@@ -5016,24 +5016,6 @@ abstract class AppLocalizations {
   /// **'Perpetual'**
   String get recurringTransactionNoEndDate;
 
-  /// No description provided for @recurringTransactionEnabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Enabled'**
-  String get recurringTransactionEnabled;
-
-  /// No description provided for @recurringTransactionDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Disabled'**
-  String get recurringTransactionDisabled;
-
-  /// No description provided for @recurringTransactionNextGeneration.
-  ///
-  /// In en, this message translates to:
-  /// **'Next Generation'**
-  String get recurringTransactionNextGeneration;
-
   /// No description provided for @recurringTransactionDeleteConfirm.
   ///
   /// In en, this message translates to:
@@ -5075,12 +5057,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Every {n} year(s)'**
   String recurringTransactionEveryNYears(int n);
-
-  /// No description provided for @recurringTransactionLedger.
-  ///
-  /// In en, this message translates to:
-  /// **'Ledger'**
-  String get recurringTransactionLedger;
 
   /// No description provided for @recurringTransactionUsageTitle.
   ///
@@ -7631,12 +7607,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'📅 Time'**
   String get billCardTime;
-
-  /// No description provided for @billCardLedger.
-  ///
-  /// In en, this message translates to:
-  /// **'📒 Ledger'**
-  String get billCardLedger;
 
   /// No description provided for @billCardNote.
   ///

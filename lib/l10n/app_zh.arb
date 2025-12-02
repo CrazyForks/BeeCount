@@ -1002,9 +1002,6 @@
   "recurringTransactionStartDate": "开始日期",
   "recurringTransactionEndDate": "结束日期",
   "recurringTransactionNoEndDate": "永久周期",
-  "recurringTransactionEnabled": "已启用",
-  "recurringTransactionDisabled": "已禁用",
-  "recurringTransactionNextGeneration": "下次生成",
   "recurringTransactionDeleteConfirm": "确定要删除这个周期账单吗？",
   "recurringTransactionEmpty": "暂无周期账单",
   "recurringTransactionEmptyHint": "点击右上角 + 按钮添加",
@@ -1040,7 +1037,6 @@
       }
     }
   },
-  "recurringTransactionLedger": "账本",
   "recurringTransactionUsageTitle": "使用说明",
   "recurringTransactionUsageContent": "周期记账会在每次冷启动进入App时自动扫描并生成账单。设置日期后，系统会在该日期之后的冷启动时创建对应账单。例如：设置11月27日，则会在11月27日之后的首次启动时自动记账。",
   "ledgerSelectTitle": "选择账本",
@@ -1654,7 +1650,6 @@
   "billCardAmount": "💰 金额",
   "billCardCategory": "🏷️ 分类",
   "billCardTime": "📅 时间",
-  "billCardLedger": "📒 账本",
   "billCardNote": "📝 备注",
   "billCardUndo": "撤销",
   "billCardEdit": "修改",

@@ -106,7 +106,7 @@
         </receiver>
 
         <!-- 桌面小组件 -->
-        <receiver android:name="com.example.beecount.BeeCountWidgetProvider"
+        <receiver android:name="com.tntlikely.beecount.BeeCountWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

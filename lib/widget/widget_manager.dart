@@ -120,7 +120,7 @@ class WidgetManager {
       // Update the widget
       print('📲 触发小组件更新...');
       await HomeWidget.updateWidget(
-        qualifiedAndroidName: 'com.example.beecount.BeeCountWidgetProvider',
+        qualifiedAndroidName: 'com.tntlikely.beecount.BeeCountWidgetProvider',
         iOSName: 'BeeCountWidget',
       );
       print('✅ 小组件更新命令已发送');

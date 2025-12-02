@@ -1,4 +1,4 @@
-package com.example.beecount
+package com.tntlikely.beecount
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

@@ -2639,15 +2639,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recurringTransactionNoEndDate => 'Perpetual';
 
   @override
-  String get recurringTransactionEnabled => 'Enabled';
-
-  @override
-  String get recurringTransactionDisabled => 'Disabled';
-
-  @override
-  String get recurringTransactionNextGeneration => 'Next Generation';
-
-  @override
   String get recurringTransactionDeleteConfirm => 'Are you sure you want to delete this recurring bill?';
 
   @override
@@ -2675,9 +2666,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String recurringTransactionEveryNYears(int n) {
     return 'Every $n year(s)';
   }
-
-  @override
-  String get recurringTransactionLedger => 'Ledger';
 
   @override
   String get recurringTransactionUsageTitle => 'Usage Guide';
@@ -3989,9 +3977,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get billCardTime => '📅 Time';
-
-  @override
-  String get billCardLedger => '📒 Ledger';
 
   @override
   String get billCardNote => '📝 Note';

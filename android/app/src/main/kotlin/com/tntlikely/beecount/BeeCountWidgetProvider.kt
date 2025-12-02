@@ -1,4 +1,4 @@
-package com.example.beecount
+package com.tntlikely.beecount
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
