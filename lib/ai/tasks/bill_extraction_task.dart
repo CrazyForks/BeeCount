@@ -27,8 +27,8 @@ class BillInfo {
   /// 时间
   final DateTime? time;
 
-  /// 商家/备注
-  final String? merchant;
+  /// 备注
+  final String? note;
 
   /// 分类
   final String? category;
@@ -48,7 +48,7 @@ class BillInfo {
   const BillInfo({
     this.amount,
     this.time,
-    this.merchant,
+    this.note,
     this.category,
     this.type,
     this.account,
@@ -64,7 +64,7 @@ class BillInfo {
     return BillInfo(
       amount: json['amount']?.toDouble(),
       time: json['time'] != null ? DateTime.tryParse(json['time']) : null,
-      merchant: json['merchant'],
+      note: json['note'] ?? json['merchant'], // 兼容旧数据
       category: json['category'],
       type: json['type'] != null ? _parseBillType(json['type']) : null,
       account: json['account'],
@@ -77,7 +77,7 @@ class BillInfo {
   Map<String, dynamic> toJson() => {
         'amount': amount,
         'time': time?.toIso8601String(),
-        'merchant': merchant,
+        'note': note,
         'category': category,
         'type': type?.toString().split('.').last,
         'account': account,
@@ -95,7 +95,7 @@ class BillInfo {
 
   @override
   String toString() {
-    return 'BillInfo(amount: $amount, time: $time, merchant: $merchant, category: $category, type: $type, account: $account)';
+    return 'BillInfo(amount: $amount, time: $time, note: $note, category: $category, type: $type, account: $account)';
   }
 }
 

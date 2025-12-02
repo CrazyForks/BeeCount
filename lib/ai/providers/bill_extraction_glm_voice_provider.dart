@@ -4,24 +4,28 @@ import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
 import '../../services/logger_service.dart';
 import '../tasks/bill_extraction_task.dart';
+import 'bill_extraction_glm_base_provider.dart';
 
 /// 账单提取专用GLM Provider（语音模型）
 ///
 /// 直接使用GLM-4-Voice从语音中提取账单信息JSON
-class BillExtractionGLMVoiceProvider implements AIProvider<String, BillInfo> {
+class BillExtractionGLMVoiceProvider extends BillExtractionGLMBaseProvider {
   final String apiKey;
   final File audioFile;
-  final List<String>? expenseCategories;
-  final List<String>? incomeCategories;
-  final List<String>? accounts;
 
   BillExtractionGLMVoiceProvider(
     this.apiKey, {
-    this.expenseCategories,
-    this.incomeCategories,
-    this.accounts,
+    super.expenseCategories,
+    super.incomeCategories,
+    super.accounts,
     required this.audioFile,
-  });
+  }) : super(
+          baseProvider: ZhipuGLMProvider(
+            apiKey: apiKey,
+            model: 'glm-4-voice',
+            temperature: 0.0,
+          ),
+        );
 
   @override
   String get id => 'bill_extraction_glm_voice';
@@ -30,16 +34,7 @@ class BillExtractionGLMVoiceProvider implements AIProvider<String, BillInfo> {
   String get name => '智谱GLM-语音记账';
 
   @override
-  AIProviderType get type => AIProviderType.cloud;
-
-  @override
-  bool get requiresNetwork => true;
-
-  @override
-  bool supportsTask(String taskType) => taskType == 'bill_extraction';
-
-  @override
-  Future<bool> isReady() async => apiKey.isNotEmpty;
+  String getInputSourceDescription() => '识别语音内容，从中';
 
   @override
   Future<AIResult<BillInfo>> execute(AITask<String, BillInfo> task) async {
@@ -48,8 +43,8 @@ class BillExtractionGLMVoiceProvider implements AIProvider<String, BillInfo> {
     try {
       logger.info('VoiceASR', '使用GLM-4-Voice直接提取账单信息');
 
-      // 构建prompt
-      final prompt = _buildPrompt();
+      // 构建prompt（使用父类方法）
+      final prompt = buildPrompt('');  // 语音模式下ocrText为空
 
       final glmProvider = ZhipuGLMProvider(
         apiKey: apiKey,
@@ -71,9 +66,9 @@ class BillExtractionGLMVoiceProvider implements AIProvider<String, BillInfo> {
       final response = result.data!;
       logger.debug('VoiceASR', '原始响应: $response');
 
-      // 尝试解析JSON
+      // 尝试解析JSON（使用父类方法）
       try {
-        final billInfo = _parseResponse(response);
+        final billInfo = parseResponse(response);
         logger.info('VoiceASR', '账单提取成功: ${billInfo.category}');
         return AIResult.success(
           billInfo,
@@ -102,82 +97,10 @@ class BillExtractionGLMVoiceProvider implements AIProvider<String, BillInfo> {
     }
   }
 
-  /// 构建Prompt
-  String _buildPrompt() {
-    final categoryHint = _buildCategoryHint();
-    final accountHint = _buildAccountHint();
-
-    return '''你是一个专业的账单提取助手。用户会通过语音告诉你记账信息，你必须严格按照JSON格式返回，不要返回任何其他文字或解释。
-
-用户的分类列表：
-$categoryHint$accountHint
-
-请识别语音内容并提取记账信息，返回以下JSON格式（不要包含```json标记）：
-
-{
-  "amount": -35.00,
-  "time": null,
-  "merchant": "星巴克",
-  "category": "餐饮",
-  "type": "expense",
-  "account": "微信支付"
-}
-
-字段说明：
-1. amount: 金额（支出为负数，收入为正数）。如"花了50块"→-50，"收入100"→100
-2. time: 交易时间（ISO8601格式，如"2025-11-25T14:30:00"）。如果没有明确时间，必须设置为null
-3. merchant: 商家名称或交易描述。如"在星巴克买咖啡"→"星巴克"
-4. category: 从上述分类列表中选择最匹配的一个（必须完全匹配）
-5. type: "income"或"expense"
-6. account: 支付账户名称（可选），从用户账户列表中选择或识别常见账户
-
-重要：只返回JSON对象，不要任何解释或对话。''';
-  }
-
-  /// 构建分类提示
-  String _buildCategoryHint() {
-    if ((expenseCategories != null && expenseCategories!.isNotEmpty) ||
-        (incomeCategories != null && incomeCategories!.isNotEmpty)) {
-      final expenseHint = expenseCategories != null && expenseCategories!.isNotEmpty
-          ? '支出分类：${expenseCategories!.join('、')}'
-          : '';
-      final incomeHint = incomeCategories != null && incomeCategories!.isNotEmpty
-          ? '收入分类：${incomeCategories!.join('、')}'
-          : '';
-
-      return [expenseHint, incomeHint].where((s) => s.isNotEmpty).join('\n');
-    } else {
-      return '''支出分类：餐饮、交通、购物、娱乐、居家等
-收入分类：工资、理财、红包、奖金等''';
-    }
-  }
-
-  /// 构建账户提示
-  String _buildAccountHint() {
-    if (accounts != null && accounts!.isNotEmpty) {
-      return '\n用户的账户列表：\n${accounts!.join('、')}';
-    }
-    return '';
-  }
-
-  /// 解析响应
-  BillInfo _parseResponse(String response) {
-    // 提取JSON
-    final jsonMatch = RegExp(r'\{[\s\S]*?\}').firstMatch(response);
-    if (jsonMatch == null) {
-      throw Exception('响应中没有找到JSON');
-    }
-
-    final jsonStr = jsonMatch.group(0)!;
-    final json = jsonDecode(jsonStr) as Map<String, dynamic>;
-
-    return BillInfo.fromJson(json);
-  }
-
   /// 从对话文本中提取信息（fallback方案）
   BillInfo? _extractFromText(String text) {
     // 方案1：尝试解析CSV格式
-    // 格式：amount, time, merchant, category, type, account
+    // 格式：amount, time, note, category, type, account
     // 示例：-35.00, "2023-11-25T14:30:00", "星巴克", "餐饮","支出", "微信支付"
     final csvMatch = RegExp(
       r'(-?\d+(?:\.\d+)?)\s*,\s*(?:"([^"]*)"|\s*null)\s*,\s*"([^"]*)"\s*,\s*"([^"]*)"\s*,\s*"?([^",]*)"?\s*(?:,\s*"([^"]*)")?'
@@ -186,7 +109,7 @@ $categoryHint$accountHint
     if (csvMatch != null) {
       final amount = double.tryParse(csvMatch.group(1)!);
       final timeStr = csvMatch.group(2);
-      final merchant = csvMatch.group(3);
+      final note = csvMatch.group(3);
       final category = csvMatch.group(4);
       final typeStr = csvMatch.group(5);
       final account = csvMatch.group(6);
@@ -194,7 +117,7 @@ $categoryHint$accountHint
       return BillInfo(
         amount: amount,
         time: timeStr != null && timeStr.isNotEmpty ? DateTime.tryParse(timeStr) : null,
-        merchant: merchant,
+        note: note,
         category: category,
         type: _parseBillType(typeStr),
         account: account,
@@ -221,7 +144,7 @@ $categoryHint$accountHint
     return BillInfo(
       amount: amount,
       time: null,
-      merchant: '语音记录',
+      note: '语音记录',
       category: category,
       type: amount < 0 ? BillType.expense : BillType.income,
       confidence: 0.5, // 低置信度

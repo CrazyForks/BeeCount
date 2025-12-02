@@ -1693,6 +1693,7 @@
   "billCardCategory": "🏷️ Category",
   "billCardTime": "📅 Time",
   "billCardNote": "📝 Note",
+  "billCardAccount": "💳 Account",
   "billCardUndo": "Undo",
   "billCardEdit": "Edit",
   "aiQuickCommandFinancialHealthTitle": "Financial Health Analysis",

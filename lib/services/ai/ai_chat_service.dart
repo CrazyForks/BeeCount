@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:drift/drift.dart';
 
 import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
-import '../services/automation/ai_bill_service.dart';
-import '../ai/tasks/bill_extraction_task.dart';
-import '../data/db.dart';
-import '../services/logger_service.dart';
+import 'ai_bill_service.dart';
+import '../billing/bill_creation_service.dart';
+import '../billing/ocr_service.dart';
+import '../../ai/tasks/bill_extraction_task.dart';
+import '../../data/db.dart';
+import '../logger_service.dart';
 
 /// AI配置验证结果
 class AIConfigValidationResult {
@@ -152,7 +153,7 @@ class AIChatService {
       billInfo = BillInfo(
         amount: billInfo.amount,
         time: billInfo.time,
-        merchant: billInfo.merchant,
+        note: billInfo.note,
         category: billInfo.category,
         type: billInfo.type,
         account: billInfo.account,
@@ -162,11 +163,23 @@ class AIChatService {
 
       logger.info('AIChat', '附加账本ID到BillInfo: ledgerId=$ledgerId');
 
-      // 保存到数据库
-      final transactionId = await _saveBill(billInfo);
+      // 保存到数据库并获取实际的分类和账户名称
+      final (transactionId, actualCategory, actualAccount) = await _saveBill(billInfo);
+
+      // 使用实际的分类和账户名称更新 billInfo
+      final updatedBillInfo = BillInfo(
+        amount: billInfo.amount,
+        time: billInfo.time,
+        note: billInfo.note,
+        category: actualCategory ?? billInfo.category,
+        type: billInfo.type,
+        account: actualAccount ?? billInfo.account,
+        ledgerId: ledgerId,
+        confidence: billInfo.confidence,
+      );
 
       // 返回账单卡片
-      return AIResponse.billCard(billInfo, transactionId);
+      return AIResponse.billCard(updatedBillInfo, transactionId);
     } else {
       logger.warning('AIChat', '账单提取失败或信息不完整');
 
@@ -245,7 +258,8 @@ class AIChatService {
   }
 
   /// 保存账单 - 复用 BillCreationService 的逻辑
-  Future<int> _saveBill(BillInfo bill) async {
+  /// 返回 (transactionId, actualCategoryName, actualAccountName)
+  Future<(int, String?, String?)> _saveBill(BillInfo bill) async {
     logger.info('AIChat', '开始保存账单: amount=${bill.amount}, category=${bill.category}, ledgerId=${bill.ledgerId}');
 
     // 使用 BillInfo 中的 ledgerId，如果为空则使用第一个账本
@@ -262,121 +276,57 @@ class AIChatService {
     // 确定交易类型
     final transactionType = bill.type == BillType.expense ? 'expense' : 'income';
 
-    // 获取对应类型的所有分类
-    final typeCategories = await (_db.select(_db.categories)
-          ..where((t) => t.kind.equals(transactionType)))
-        .get();
-
-    // 使用 BillCreationService 匹配分类 (复用图片记账的逻辑)
-    final categoryId = await _matchCategory(
-      bill.category ?? '其他',
-      typeCategories,
+    // 将 BillInfo 转换为 OcrResult（复用 BillCreationService 的逻辑）
+    final ocrResult = OcrResult(
+      amount: bill.amount,
+      note: bill.note,
+      time: bill.time,
+      rawText: bill.note ?? '',
+      allNumbers: bill.amount != null ? [bill.amount!.abs().toString()] : [],
+      aiCategoryName: bill.category,
+      aiAccountName: bill.account,
+      aiType: transactionType,
     );
 
-    // 使用 BillCreationService 匹配账户 (复用图片记账的逻辑)
-    final accountId = await _matchAccount(
-      bill.account,
-      ledgerId,
-      transactionType: transactionType,
+    // 使用 BillCreationService 创建交易
+    final billCreationService = BillCreationService(_db);
+    final id = await billCreationService.createBillTransaction(
+      result: ocrResult,
+      ledgerId: ledgerId,
+      note: bill.note,
     );
 
-    // 插入交易记录 (金额使用绝对值)
-    final amount = bill.amount!.abs();
-    final id = await _db.into(_db.transactions).insert(
-      TransactionsCompanion.insert(
-        ledgerId: ledgerId,
-        type: transactionType,
-        amount: amount,
-        categoryId: Value(categoryId),
-        accountId: Value(accountId),
-        note: Value(bill.merchant),
-        happenedAt: Value(bill.time ?? DateTime.now()),
-      ),
-    );
+    if (id != null) {
+      // 查询实际保存的交易，获取实际的分类和账户名称
+      final transaction = await (_db.select(_db.transactions)
+            ..where((t) => t.id.equals(id)))
+          .getSingleOrNull();
 
-    logger.info('AIChat', '记账成功: id=$id, amount=$amount, categoryId=$categoryId, accountId=$accountId');
-    return id;
-  }
+      String? actualCategoryName;
+      String? actualAccountName;
 
-  /// 匹配分类 - 复用图片记账的逻辑
-  Future<int?> _matchCategory(
-    String categoryName,
-    List<Category> categories,
-  ) async {
-    if (categories.isEmpty) return null;
+      if (transaction != null) {
+        // 获取实际分类名称
+        if (transaction.categoryId != null) {
+          final category = await (_db.select(_db.categories)
+                ..where((c) => c.id.equals(transaction.categoryId!)))
+              .getSingleOrNull();
+          actualCategoryName = category?.name;
+        }
 
-    try {
-      // 优先精确匹配
-      final matched = categories.firstWhere(
-        (cat) => cat.name == categoryName,
-      );
-      logger.debug('AIChat', '[分类匹配] "$categoryName" → ID:${matched.id}');
-      return matched.id;
-    } catch (_) {
-      // 未找到,使用"其他"或第一个一级分类
-      try {
-        final other = categories.firstWhere(
-          (cat) => cat.name == '其他' && cat.level == 1,
-        );
-        logger.debug('AIChat', '[分类匹配] "$categoryName"未找到，使用"其他"');
-        return other.id;
-      } catch (_) {
-        final firstLevel1 = categories.firstWhere(
-          (cat) => cat.level == 1,
-        );
-        logger.debug('AIChat', '[分类匹配] "$categoryName"未找到，使用第一个一级分类');
-        return firstLevel1.id;
+        // 获取实际账户名称
+        if (transaction.accountId != null) {
+          final account = await (_db.select(_db.accounts)
+                ..where((a) => a.id.equals(transaction.accountId!)))
+              .getSingleOrNull();
+          actualAccountName = account?.name;
+        }
       }
-    }
-  }
 
-  /// 匹配账户 - 复用图片记账的逻辑
-  Future<int?> _matchAccount(
-    String? accountName,
-    int ledgerId, {
-    String transactionType = 'expense',
-  }) async {
-    // 检查账户功能是否启用
-    final prefs = await SharedPreferences.getInstance();
-    final accountFeatureEnabled = prefs.getBool('account_feature_enabled') ?? true;
-
-    if (!accountFeatureEnabled) {
-      logger.debug('AIChat', '[账户匹配] 账户功能未启用');
-      return null;
-    }
-
-    if (accountName == null || accountName.isEmpty) {
-      logger.debug('AIChat', '[账户匹配] 未识别账户，尝试使用默认账户');
-      // 获取默认账户
-      final defaultAccountKey = transactionType == 'income'
-          ? 'default_income_account'
-          : 'default_expense_account';
-      return prefs.getInt(defaultAccountKey);
-    }
-
-    // 获取账本币种
-    final ledger = await (_db.select(_db.ledgers)
-          ..where((t) => t.id.equals(ledgerId)))
-        .getSingleOrNull();
-
-    if (ledger == null) return null;
-
-    // 查询匹配账户
-    final allAccounts = await (_db.select(_db.accounts)).get();
-    final matchingAccounts = allAccounts
-        .where((a) => a.currency == ledger.currency)
-        .toList();
-
-    // 精确匹配账户名称
-    try {
-      final matched = matchingAccounts.firstWhere(
-        (a) => a.name.toLowerCase().trim() == accountName.toLowerCase().trim(),
-      );
-      logger.debug('AIChat', '[账户匹配] "$accountName" → ID:${matched.id}');
-      return matched.id;
-    } catch (_) {
-      logger.debug('AIChat', '[账户匹配] "$accountName"未找到');
-      return null;
+      logger.info('AIChat', '记账成功: id=$id, category=$actualCategoryName, account=$actualAccountName');
+      return (id, actualCategoryName, actualAccountName);
+    } else {
+      throw Exception('创建交易失败');
     }
   }
 

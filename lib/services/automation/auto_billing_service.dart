@@ -2,11 +2,12 @@ import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'ocr_service.dart';
-import 'category_matcher.dart';
-import 'bill_creation_service.dart';
+import '../billing/ocr_service.dart';
+import '../billing/category_matcher.dart';
+import '../billing/bill_creation_service.dart';
 import 'auto_billing_config.dart';
 import '../../providers.dart';
+import '../../data/category_node.dart';
 import '../logger_service.dart';
 
 /// 自动记账服务 - 通用核心逻辑
@@ -189,13 +190,13 @@ class AutoBillingService {
       // 打印识别结果用于调试
       print('📋 OCR识别原始文本: ${result.rawText}');
       print('💰 识别到的金额: ${result.amount}');
-      print('🏪 识别到的商家: ${result.merchant}');
+      print('📝 识别到的备注: ${result.note}');
       print('⏰ 识别到的时间: ${result.time}');
       print('🔢 所有数字: ${result.allNumbers}');
       logger.info('AutoBilling', 'OCR识别结果', {
         'rawText': result.rawText,
         'amount': result.amount,
-        'merchant': result.merchant,
+        'note': result.note,
         'time': result.time,
         'allNumbers': result.allNumbers,
       }.toString());
@@ -206,7 +207,7 @@ class AutoBillingService {
       // 根据识别结果处理
       if (result.amount != null && result.amount!.abs() > 0) {
         // 识别成功，自动创建记账记录（支持负数金额）
-        print('✅ OCR识别成功: 金额=${result.amount}, 商家=${result.merchant}');
+        print('✅ OCR识别成功: 金额=${result.amount}, 备注=${result.note}');
 
         try {
           final dbStartTime = DateTime.now().millisecondsSinceEpoch;
@@ -223,8 +224,8 @@ class AutoBillingService {
               await _showNotification(
                 id: notificationId,
                 title: '✅ 自动记账成功 ¥${result.amount!.toStringAsFixed(2)}',
-                body: result.merchant != null
-                    ? '商家: ${result.merchant}'
+                body: result.note != null
+                    ? '备注: ${result.note}'
                     : '已自动创建支出记录',
               );
             }
@@ -249,7 +250,7 @@ class AutoBillingService {
           logger.error('AutoBilling', '自动记账失败', {
             'path': imagePath,
             'amount': result.amount,
-            'merchant': result.merchant,
+            'note': result.note,
             'error': e.toString(),
           }, stackTrace);
           if (showNotification) {
@@ -339,7 +340,7 @@ class AutoBillingService {
         return null;
       }
 
-      print('✅ 识别成功: 金额=${ocrResult.amount}, 商家=${ocrResult.merchant}');
+      print('✅ 识别成功: 金额=${ocrResult.amount}, 备注=${ocrResult.note}');
 
       // 更新通知状态
       if (showNotification) {
@@ -352,19 +353,22 @@ class AutoBillingService {
 
       // 获取分类并创建交易
       final db = _container.read(databaseProvider);
-      final categories = await (db.select(db.categories)
+      final allCategories = await (db.select(db.categories)
             ..where((t) => t.kind.equals('expense')))
           .get();
 
+      // 过滤出可用分类（排除有子分类的父分类）
+      final categories = CategoryHierarchy.getUsableCategories(allCategories);
+
       final suggestedCategoryId = CategoryMatcher.smartMatch(
-        merchant: ocrResult.merchant,
+        merchant: ocrResult.note,
         fullText: ocrResult.rawText,
         categories: categories,
       );
 
       final resultWithCategory = OcrResult(
         amount: ocrResult.amount,
-        merchant: ocrResult.merchant,
+        note: ocrResult.note,
         time: ocrResult.time,
         rawText: ocrResult.rawText,
         allNumbers: ocrResult.allNumbers,
@@ -464,8 +468,8 @@ class AutoBillingService {
 
       // 准备备注
       String? note;
-      if (result.merchant != null) {
-        note = result.merchant!;
+      if (result.note != null) {
+        note = result.note!;
       }
 
       final transactionId = await billCreationService.createBillTransaction(

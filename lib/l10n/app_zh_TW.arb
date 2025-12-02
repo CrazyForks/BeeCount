@@ -1420,6 +1420,7 @@
   "billCardCategory": "🏷️ 分類",
   "billCardTime": "📅 時間",
   "billCardNote": "📝 備註",
+  "billCardAccount": "💳 帳戶",
   "billCardUndo": "撤銷",
   "billCardEdit": "修改",
   "aiQuickCommandFinancialHealthTitle": "財務健康分析",

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/db.dart';
-import '../models/ai_quick_command.dart';
-import '../l10n/app_localizations.dart';
-import '../providers.dart';
+import '../../data/db.dart';
+import '../../models/ai_quick_command.dart';
+import '../../l10n/app_localizations.dart';
+import '../../providers.dart';
 import 'package:drift/drift.dart' as drift;
 
 /// AI快捷指令服务

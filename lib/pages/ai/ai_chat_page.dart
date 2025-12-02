@@ -20,12 +20,13 @@ import '../../pages/transaction/transaction_editor_page.dart';
 import '../../pages/ai/ai_settings_page.dart';
 import '../../widgets/biz/ledger_selector_dialog.dart';
 import '../../data/db.dart';
+import '../../data/repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/ai_quick_command.dart';
 import '../../services/avatar_service.dart';
 import '../../services/logger_service.dart';
-import '../../services/ai_chat_service.dart';
-import '../../services/ai_quick_command_service.dart';
+import '../../services/ai/ai_chat_service.dart';
+import '../../services/ai/ai_quick_command_service.dart';
 
 /// AI 对话页面
 class AIChatPage extends ConsumerStatefulWidget {
@@ -615,10 +616,10 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
       _scrollToBottom();
 
-      // 获取分类列表
-      final allCategories = await (db.select(db.categories)).get();
-      final expenseCategories = allCategories.where((c) => c.kind == 'expense');
-      final incomeCategories = allCategories.where((c) => c.kind == 'income');
+      // 获取分类列表（使用 repository 过滤，排除有子分类的父分类）
+      final repository = BeeRepository(db);
+      final expenseCategories = await repository.getUsableCategories('expense');
+      final incomeCategories = await repository.getUsableCategories('income');
 
       // 调用 AI 服务
       final chatService = ref.read(aiChatServiceProvider);
@@ -889,7 +890,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
       final updatedBillInfo = BillInfo(
         amount: transaction.amount,
         time: transaction.happenedAt,
-        merchant: transaction.note,
+        note: transaction.note,
         category: categoryName,
         type:
             transaction.type == 'expense' ? BillType.expense : BillType.income,

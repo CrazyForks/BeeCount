@@ -3979,6 +3979,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get billCardNote => '📝 Note';
 
   @override
+  String get billCardAccount => '💳 Account';
+
+  @override
   String get billCardUndo => 'Undo';
 
   @override

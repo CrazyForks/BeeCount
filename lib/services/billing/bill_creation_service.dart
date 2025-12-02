@@ -42,7 +42,7 @@ class BillCreationService {
     // 2. 降级使用规则匹配
     if (categories.isNotEmpty) {
       return CategoryMatcher.smartMatch(
-        merchant: result.merchant,
+        merchant: result.note,
         fullText: result.rawText,
         categories: categories,
       );

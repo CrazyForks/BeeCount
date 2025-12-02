@@ -53,7 +53,7 @@ class BillExtractionTFLiteProvider extends TFLiteProvider<String, BillInfo> {
   /// 将模型输出转换为BillInfo
   static BillInfo _parseOutput(List<Object?> output) {
     // TODO: 实际实现需要：
-    // 1. 解析NER标签（B-AMOUNT, I-AMOUNT, B-MERCHANT等）
+    // 1. 解析NER标签（B-AMOUNT, I-AMOUNT, B-NOTE等）
     // 2. 提取实体
     // 3. 合并连续实体
     // 4. 解析日期时间
@@ -77,7 +77,7 @@ class BillExtractionTFLiteProvider extends TFLiteProvider<String, BillInfo> {
     return BillInfo(
       amount: null,
       time: null,
-      merchant: null,
+      note: null,
       category: null,
       type: null,
       account: null,
@@ -109,7 +109,7 @@ class BillExtractionTFLiteProvider extends TFLiteProvider<String, BillInfo> {
     final result = BillInfo(
       amount: null,
       time: null,
-      merchant: null,
+      note: null,
       category: null,
       type: null,
       confidence: 0.0,

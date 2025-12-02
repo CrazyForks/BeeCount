@@ -7608,6 +7608,12 @@ abstract class AppLocalizations {
   /// **'📝 Note'**
   String get billCardNote;
 
+  /// No description provided for @billCardAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'💳 Account'**
+  String get billCardAccount;
+
   /// No description provided for @billCardUndo.
   ///
   /// In en, this message translates to:

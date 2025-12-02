@@ -96,13 +96,22 @@ class BillCardWidget extends ConsumerWidget {
               AppLocalizations.of(context).billCardTime,
               _formatTime(billInfo.time),
             ),
-            if (billInfo.merchant != null && billInfo.merchant!.isNotEmpty) ...[
+            if (billInfo.note != null && billInfo.note!.isNotEmpty) ...[
               SizedBox(height: 8.0.scaled(context, ref)),
               _buildInfoRow(
                 context,
                 ref,
                 AppLocalizations.of(context).billCardNote,
-                billInfo.merchant!,
+                billInfo.note!,
+              ),
+            ],
+            if (billInfo.account != null && billInfo.account!.isNotEmpty) ...[
+              SizedBox(height: 8.0.scaled(context, ref)),
+              _buildInfoRow(
+                context,
+                ref,
+                AppLocalizations.of(context).billCardAccount,
+                billInfo.account!,
               ),
             ],
 

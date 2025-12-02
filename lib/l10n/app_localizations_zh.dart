@@ -3979,6 +3979,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get billCardNote => '📝 备注';
 
   @override
+  String get billCardAccount => '💳 账户';
+
+  @override
   String get billCardUndo => '撤销';
 
   @override
@@ -8017,6 +8020,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get billCardNote => '📝 備註';
+
+  @override
+  String get billCardAccount => '💳 帳戶';
 
   @override
   String get billCardUndo => '撤銷';

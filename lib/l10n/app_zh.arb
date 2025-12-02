@@ -1650,6 +1650,7 @@
   "billCardCategory": "🏷️ 分类",
   "billCardTime": "📅 时间",
   "billCardNote": "📝 备注",
+  "billCardAccount": "💳 账户",
   "billCardUndo": "撤销",
   "billCardEdit": "修改",
   "billCardUnknownLedger": "未知账本"

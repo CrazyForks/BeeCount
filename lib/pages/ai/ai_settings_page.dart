@@ -10,7 +10,7 @@ import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../providers/ui_state_providers.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/ai_chat_service.dart';
+import '../../services/ai/ai_chat_service.dart';
 
 /// AI智能识别设置页面
 class AISettingsPage extends ConsumerStatefulWidget {
