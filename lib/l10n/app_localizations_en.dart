@@ -3727,6 +3727,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get configIncludeRecurringTransactions => 'Recurring transactions';
 
   @override
+  String get configIncludeAccounts => 'Accounts';
+
+  @override
+  String get configIncludeCategories => 'Categories';
+
+  @override
   String get ledgersConflictTitle => 'Sync Conflict';
 
   @override
@@ -3917,6 +3923,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => 'Perfect for detailed management';
+
+  @override
+  String get welcomeCategoryModeNoneTitle => 'No Categories';
+
+  @override
+  String get welcomeCategoryModeNoneDescription => 'Fully customizable, add as needed';
+
+  @override
+  String get welcomeCategoryModeNoneFeature1 => 'No preset categories';
+
+  @override
+  String get welcomeCategoryModeNoneFeature2 => 'Create categories based on your needs';
+
+  @override
+  String get welcomeCategoryModeNoneFeature3 => 'Perfect for custom classification needs';
 
   @override
   String get iosVersionWarningTitle => 'Requires iOS 16.0 or later';

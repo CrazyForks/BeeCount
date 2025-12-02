@@ -7140,6 +7140,18 @@ abstract class AppLocalizations {
   /// **'Recurring transactions'**
   String get configIncludeRecurringTransactions;
 
+  /// No description provided for @configIncludeAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get configIncludeAccounts;
+
+  /// No description provided for @configIncludeCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get configIncludeCategories;
+
   /// No description provided for @ledgersConflictTitle.
   ///
   /// In en, this message translates to:
@@ -7487,6 +7499,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Perfect for detailed management'**
   String get welcomeCategoryModeHierarchicalFeature3;
+
+  /// No description provided for @welcomeCategoryModeNoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No Categories'**
+  String get welcomeCategoryModeNoneTitle;
+
+  /// No description provided for @welcomeCategoryModeNoneDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Fully customizable, add as needed'**
+  String get welcomeCategoryModeNoneDescription;
+
+  /// No description provided for @welcomeCategoryModeNoneFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'No preset categories'**
+  String get welcomeCategoryModeNoneFeature1;
+
+  /// No description provided for @welcomeCategoryModeNoneFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Create categories based on your needs'**
+  String get welcomeCategoryModeNoneFeature2;
+
+  /// No description provided for @welcomeCategoryModeNoneFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect for custom classification needs'**
+  String get welcomeCategoryModeNoneFeature3;
 
   /// No description provided for @iosVersionWarningTitle.
   ///

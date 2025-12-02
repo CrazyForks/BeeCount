@@ -3727,6 +3727,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configIncludeRecurringTransactions => '周期账单';
 
   @override
+  String get configIncludeAccounts => '账户';
+
+  @override
+  String get configIncludeCategories => '分类';
+
+  @override
   String get ledgersConflictTitle => '同步冲突';
 
   @override
@@ -3917,6 +3923,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => '适合需要精细管理的用户';
+
+  @override
+  String get welcomeCategoryModeNoneTitle => '不创建分类';
+
+  @override
+  String get welcomeCategoryModeNoneDescription => '完全自定义，按需添加';
+
+  @override
+  String get welcomeCategoryModeNoneFeature1 => '不预置任何分类';
+
+  @override
+  String get welcomeCategoryModeNoneFeature2 => '完全按自己需求创建';
+
+  @override
+  String get welcomeCategoryModeNoneFeature3 => '适合有特殊分类需求的用户';
 
   @override
   String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
@@ -7770,6 +7791,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get configIncludeRecurringTransactions => '週期帳單';
 
   @override
+  String get configIncludeAccounts => '帳戶';
+
+  @override
+  String get configIncludeCategories => '分類';
+
+  @override
   String get ledgersConflictTitle => '同步衝突';
 
   @override
@@ -7960,6 +7987,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeCategoryModeHierarchicalFeature3 => '適合精細化管理';
+
+  @override
+  String get welcomeCategoryModeNoneTitle => '不建立分類';
+
+  @override
+  String get welcomeCategoryModeNoneDescription => '完全自訂，按需新增';
+
+  @override
+  String get welcomeCategoryModeNoneFeature1 => '不預設任何分類';
+
+  @override
+  String get welcomeCategoryModeNoneFeature2 => '完全按自己需求建立';
+
+  @override
+  String get welcomeCategoryModeNoneFeature3 => '適合有特殊分類需求的使用者';
 
   @override
   String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
