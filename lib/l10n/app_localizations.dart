@@ -7674,6 +7674,60 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get billCardEdit;
 
+  /// No description provided for @donationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Developer'**
+  String get donationTitle;
+
+  /// No description provided for @donationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy me a coffee'**
+  String get donationSubtitle;
+
+  /// No description provided for @donationEntrySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your support ☕'**
+  String get donationEntrySubtitle;
+
+  /// No description provided for @donationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get donationDescription;
+
+  /// No description provided for @donationDescriptionDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for using BeeCount! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.'**
+  String get donationDescriptionDetail;
+
+  /// No description provided for @donationNoFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: Donations will not unlock any features. All features remain completely free.'**
+  String get donationNoFeatures;
+
+  /// No description provided for @donationNoProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'No products available'**
+  String get donationNoProducts;
+
+  /// No description provided for @donationThankYouTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank You!'**
+  String get donationThankYouTitle;
+
+  /// No description provided for @donationThankYouMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for purchasing {productName}! Your support means a lot to me. I will continue to improve BeeCount to make it even better!'**
+  String donationThankYouMessage(String productName);
+
   /// No description provided for @aiQuickCommandFinancialHealthTitle.
   ///
   /// In en, this message translates to:

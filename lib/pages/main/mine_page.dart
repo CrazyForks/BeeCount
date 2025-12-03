@@ -38,6 +38,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
 import '../../services/system/update_service.dart';
 import '../../utils/ui_scale_extensions.dart';
+import '../donation/donation_page.dart';
 
 class MinePage extends ConsumerWidget {
   const MinePage({super.key});
@@ -373,6 +374,42 @@ class MinePage extends ConsumerWidget {
                         },
                       ),
                       BeeTokens.cardDivider(context),
+                      // 仅在iOS显示打赏入口
+                      if (Platform.isIOS) ...[
+                        Consumer(
+                          builder: (context, ref, _) {
+                            final primaryColor = ref.watch(primaryColorProvider);
+                            return AppListTile(
+                              leading: Icons.favorite,
+                              leadingWidget: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: primaryColor.withValues(alpha: 0.12),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.favorite,
+                                  color: primaryColor,
+                                ),
+                              ),
+                              title: AppLocalizations.of(context).donationTitle,
+                              subtitle:
+                                  AppLocalizations.of(context).donationEntrySubtitle,
+                              trailing: Icon(Icons.chevron_right,
+                                  color: BeeTokens.iconTertiary(context),
+                                  size: 20),
+                              onTap: () async {
+                                await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) => const DonationPage()),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                        BeeTokens.cardDivider(context),
+                      ],
                       AppListTile(
                         leading: Icons.feedback_outlined,
                         title: AppLocalizations.of(context).mineFeedback,

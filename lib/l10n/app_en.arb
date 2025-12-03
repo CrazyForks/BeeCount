@@ -1704,6 +1704,22 @@
   "billCardAccount": "💳 Account",
   "billCardUndo": "Undo",
   "billCardEdit": "Edit",
+  "donationTitle": "Support Developer",
+  "donationSubtitle": "Buy me a coffee",
+  "donationEntrySubtitle": "Thank you for your support ☕",
+  "donationDescription": "Description",
+  "donationDescriptionDetail": "Thank you for using BeeCount! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.",
+  "donationNoFeatures": "Note: Donations will not unlock any features. All features remain completely free.",
+  "donationNoProducts": "No products available",
+  "donationThankYouTitle": "Thank You!",
+  "donationThankYouMessage": "Thank you for purchasing {productName}! Your support means a lot to me. I will continue to improve BeeCount to make it even better!",
+  "@donationThankYouMessage": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
   "aiQuickCommandFinancialHealthTitle": "Financial Health Analysis",
   "aiQuickCommandFinancialHealthDesc": "Analyze income-expense balance and savings rate",
   "aiQuickCommandFinancialHealthPrompt": "Please analyze my financial health based on the following data:\n\n[monthlyStats]\n\n[recentTrends]\n\nPlease provide professional analysis and suggestions from the perspectives of income-expense balance, savings rate, and spending trends. Please respond in English.",

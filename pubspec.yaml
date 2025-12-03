@@ -47,6 +47,8 @@ dependencies:
   yaml: ^3.1.2
   qr_flutter: ^4.1.0
   gal: ^2.3.0
+  in_app_purchase: ^3.1.0
+  in_app_purchase_storekit: ^0.3.6
   flutter_ai_kit:
     path: packages/flutter_ai_kit
   flutter_ai_kit_zhipu:

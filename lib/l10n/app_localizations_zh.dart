@@ -4012,6 +4012,35 @@ class AppLocalizationsZh extends AppLocalizations {
   String get billCardEdit => '修改';
 
   @override
+  String get donationTitle => '支持开发者';
+
+  @override
+  String get donationSubtitle => '请我喝杯咖啡';
+
+  @override
+  String get donationEntrySubtitle => '感谢您的支持 ☕';
+
+  @override
+  String get donationDescription => '说明';
+
+  @override
+  String get donationDescriptionDetail => '感谢您使用蜜蜂记账！如果这个应用对您有帮助，欢迎请开发者喝杯咖啡作为鼓励。您的支持是我持续改进的动力。';
+
+  @override
+  String get donationNoFeatures => '注: 打赏不会解锁任何功能，所有功能继续完全免费。';
+
+  @override
+  String get donationNoProducts => '暂无可用商品';
+
+  @override
+  String get donationThankYouTitle => '感谢支持！';
+
+  @override
+  String donationThankYouMessage(String productName) {
+    return '感谢您购买 $productName！您的支持对我意义重大，我会继续努力改进蜜蜂记账，让它变得更好用！';
+  }
+
+  @override
   String get aiQuickCommandFinancialHealthTitle => '财务健康分析';
 
   @override
@@ -8077,6 +8106,35 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get billCardEdit => '修改';
+
+  @override
+  String get donationTitle => '支持開發者';
+
+  @override
+  String get donationSubtitle => '請我喝杯咖啡';
+
+  @override
+  String get donationEntrySubtitle => '感謝您的支持 ☕';
+
+  @override
+  String get donationDescription => '說明';
+
+  @override
+  String get donationDescriptionDetail => '感謝您使用蜜蜂記帳！如果這個應用對您有幫助，歡迎請開發者喝杯咖啡作為鼓勵。您的支持是我持續改進的動力。';
+
+  @override
+  String get donationNoFeatures => '注：打賞不會解鎖任何功能，所有功能繼續完全免費。';
+
+  @override
+  String get donationNoProducts => '暫無可用商品';
+
+  @override
+  String get donationThankYouTitle => '感謝支持！';
+
+  @override
+  String donationThankYouMessage(String productName) {
+    return '感謝您購買 $productName！您的支持對我意義重大，我會繼續努力改進蜜蜂記帳，讓它變得更好用！';
+  }
 
   @override
   String get aiQuickCommandFinancialHealthTitle => '財務健康分析';
