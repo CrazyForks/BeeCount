@@ -1661,5 +1661,21 @@
   "billCardAccount": "💳 账户",
   "billCardUndo": "撤销",
   "billCardEdit": "修改",
-  "billCardUnknownLedger": "未知账本"
+  "billCardUnknownLedger": "未知账本",
+  "donationTitle": "支持开发者",
+  "donationSubtitle": "请我喝杯咖啡",
+  "donationEntrySubtitle": "感谢您的支持 ☕",
+  "donationDescription": "说明",
+  "donationDescriptionDetail": "感谢您使用蜜蜂记账！如果这个应用对您有帮助，欢迎请开发者喝杯咖啡作为鼓励。您的支持是我持续改进的动力。",
+  "donationNoFeatures": "注: 打赏不会解锁任何功能，所有功能继续完全免费。",
+  "donationNoProducts": "暂无可用商品",
+  "donationThankYouTitle": "感谢支持！",
+  "donationThankYouMessage": "感谢您购买 {productName}！您的支持对我意义重大，我会继续努力改进蜜蜂记账，让它变得更好用！",
+  "@donationThankYouMessage": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  }
 }

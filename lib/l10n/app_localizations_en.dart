@@ -4012,6 +4012,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get billCardEdit => 'Edit';
 
   @override
+  String get donationTitle => 'Support Developer';
+
+  @override
+  String get donationSubtitle => 'Buy me a coffee';
+
+  @override
+  String get donationEntrySubtitle => 'Thank you for your support ☕';
+
+  @override
+  String get donationDescription => 'Description';
+
+  @override
+  String get donationDescriptionDetail => 'Thank you for using BeeCount! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.';
+
+  @override
+  String get donationNoFeatures => 'Note: Donations will not unlock any features. All features remain completely free.';
+
+  @override
+  String get donationNoProducts => 'No products available';
+
+  @override
+  String get donationThankYouTitle => 'Thank You!';
+
+  @override
+  String donationThankYouMessage(String productName) {
+    return 'Thank you for purchasing $productName! Your support means a lot to me. I will continue to improve BeeCount to make it even better!';
+  }
+
+  @override
   String get aiQuickCommandFinancialHealthTitle => 'Financial Health Analysis';
 
   @override

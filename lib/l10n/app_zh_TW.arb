@@ -1449,5 +1449,21 @@
   "aiQuickCommandSavingTipsTitle": "省錢小貼士",
   "aiQuickCommandSavingTipsDesc": "個性化省錢建議",
   "aiQuickCommandSavingTipsPrompt": "請根據以下資料給出實用的省錢建議：\n\n[categoryStats]\n\n[recentTrends]\n\n請給出3-5條具體可行的建議。請用繁體中文回覆。",
-  "billCardUnknownLedger": "未知帳本"
+  "billCardUnknownLedger": "未知帳本",
+  "donationTitle": "支持開發者",
+  "donationSubtitle": "請我喝杯咖啡",
+  "donationEntrySubtitle": "感謝您的支持 ☕",
+  "donationDescription": "說明",
+  "donationDescriptionDetail": "感謝您使用蜜蜂記帳！如果這個應用對您有幫助，歡迎請開發者喝杯咖啡作為鼓勵。您的支持是我持續改進的動力。",
+  "donationNoFeatures": "注：打賞不會解鎖任何功能，所有功能繼續完全免費。",
+  "donationNoProducts": "暫無可用商品",
+  "donationThankYouTitle": "感謝支持！",
+  "donationThankYouMessage": "感謝您購買 {productName}！您的支持對我意義重大，我會繼續努力改進蜜蜂記帳，讓它變得更好用！",
+  "@donationThankYouMessage": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  }
 }

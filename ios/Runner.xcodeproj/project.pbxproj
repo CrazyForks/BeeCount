@@ -10,6 +10,7 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		664641F92EDFCE22008D733D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 664641F82EDFCE22008D733D /* StoreKit.framework */; };
 		66AF1DC82EBBA3CE00AD602F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66AF1DC72EBBA3CE00AD602F /* WidgetKit.framework */; };
 		66AF1DCA2EBBA3CE00AD602F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66AF1DC92EBBA3CE00AD602F /* SwiftUI.framework */; };
 		66AF1DD52EBBA3CF00AD602F /* BeeCountWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 66AF1DC62EBBA3CE00AD602F /* BeeCountWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -74,6 +75,7 @@
 		3B88E76BEDC512A92BA874CF /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59D5E7B97888E0B0A524FB70 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		60110015E75245016A029594 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		664641F82EDFCE22008D733D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		66AF1DC62EBBA3CE00AD602F /* BeeCountWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BeeCountWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		66AF1DC72EBBA3CE00AD602F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		66AF1DC92EBBA3CE00AD602F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -139,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF1FAB659C35D9BE1FC671E2 /* Pods_Runner.framework in Frameworks */,
+				664641F92EDFCE22008D733D /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +234,7 @@
 		BB85D2ABE738717A8FC0ED46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				664641F82EDFCE22008D733D /* StoreKit.framework */,
 				66AF1DC72EBBA3CE00AD602F /* WidgetKit.framework */,
 				66AF1DC92EBBA3CE00AD602F /* SwiftUI.framework */,
 				3B88E76BEDC512A92BA874CF /* Pods_Runner.framework */,
