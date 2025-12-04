@@ -62,6 +62,9 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
   final FocusNode _noteFocusNode = FocusNode();
   bool _noteFieldHasFocus = false;
 
+  // 防重复提交标志
+  bool _isSubmitting = false;
+
   @override
   void initState() {
     super.initState();
@@ -444,7 +447,7 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                 } else {
                   total = cur;
                 }
-                final isEnabled = total.abs() > 0;
+                final isEnabled = total.abs() > 0 && !_isSubmitting;
 
                 return Padding(
                   padding: const EdgeInsets.all(6),
@@ -455,6 +458,10 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                       borderRadius: BorderRadius.circular(12),
                       onTap: isEnabled
                           ? () async {
+                              // 防重复点击
+                              if (_isSubmitting) return;
+                              setState(() => _isSubmitting = true);
+
                               HapticFeedback.lightImpact();
                               SystemSound.play(SystemSoundType.click);
                               widget.onSubmit((
@@ -465,18 +472,30 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                                 date: _date,
                                 accountId: _selectedAccountId,
                               ));
+
+                              // 注意：不需要在这里重置 _isSubmitting
+                              // 因为提交后整个 Sheet 会被关闭，State 会被销毁
                             }
                           : null,
                       child: SizedBox(
                         height: 60,
                         child: Center(
-                          child: Text(
-                            AppLocalizations.of(context).commonFinish,
-                            style: TextStyle(
-                                color: isEnabled ? Colors.white : BeeTokens.textTertiary(context),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700),
-                          ),
+                          child: _isSubmitting
+                              ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  ),
+                                )
+                              : Text(
+                                  AppLocalizations.of(context).commonFinish,
+                                  style: TextStyle(
+                                      color: isEnabled ? Colors.white : BeeTokens.textTertiary(context),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
                         ),
                       ),
                     ),

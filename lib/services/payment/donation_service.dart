@@ -124,10 +124,13 @@ class DonationService {
   /// 返回: 商品列表
   Future<List<ProductDetails>> queryProducts() async {
     try {
+      logger.info('Donation', '开始查询商品，Product IDs: $kProductIds');
       final response = await _iap.queryProductDetails(kProductIds);
 
+      logger.info('Donation', '查询响应 - error: ${response.error}, notFoundIDs: ${response.notFoundIDs}, productDetails count: ${response.productDetails.length}');
+
       if (response.error != null) {
-        logger.error('Donation', '查询商品失败: ${response.error}');
+        logger.error('Donation', '查询商品失败 - error code: ${response.error!.code}, message: ${response.error!.message}, details: ${response.error!.details}');
         if (kUseMockData) {
           logger.info('Donation', '启用模拟数据模式');
           return _createMockProducts();
@@ -136,12 +139,15 @@ class DonationService {
       }
 
       if (response.notFoundIDs.isNotEmpty) {
-        logger.warning('Donation', '未找到商品: ${response.notFoundIDs}');
+        logger.warning('Donation', '未找到以下商品 ID: ${response.notFoundIDs.join(", ")}');
       }
 
       // 如果查询到真实商品，优先使用真实商品
       if (response.productDetails.isNotEmpty) {
-        logger.info('Donation', '查询到${response.productDetails.length}个真实商品');
+        logger.info('Donation', '查询到${response.productDetails.length}个真实商品:');
+        for (final product in response.productDetails) {
+          logger.info('Donation', '  - ${product.id}: ${product.title} (${product.price})');
+        }
         return response.productDetails;
       }
 
@@ -151,6 +157,7 @@ class DonationService {
         return _createMockProducts();
       }
 
+      logger.warning('Donation', '没有找到任何商品，且未启用模拟数据模式');
       return [];
     } catch (e, stackTrace) {
       logger.error('Donation', '查询商品异常', e, stackTrace);
