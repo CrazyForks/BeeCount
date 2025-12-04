@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 import 'supabase_auth_service.dart';
 import 'supabase_storage_service.dart';
+import 'supabase_database_service.dart';
+import 'supabase_realtime_service.dart';
 
 /// Supabase implementation of [CloudProvider].
 ///
@@ -28,6 +30,8 @@ class SupabaseProvider implements CloudProvider {
   supabase.SupabaseClient? _client;
   SupabaseAuthService? _authService;
   SupabaseStorageService? _storageService;
+  SupabaseDatabaseService? _databaseService;
+  SupabaseRealtimeService? _realtimeService;
   String _bucketName = 'storage';
   String? _pathPrefix;
 
@@ -59,6 +63,15 @@ class SupabaseProvider implements CloudProvider {
     }
     return _storageService!;
   }
+
+  /// Database service for direct database operations
+  CloudDatabaseService? get databaseService => _databaseService;
+
+  /// Realtime service for WebSocket-based subscriptions
+  CloudRealtimeService? get realtimeService => _realtimeService;
+
+  /// Supabase client instance
+  supabase.SupabaseClient? get client => _client;
 
   @override
   Future<void> initialize(Map<String, dynamic> config) async {
@@ -105,6 +118,8 @@ class SupabaseProvider implements CloudProvider {
       // Create service instances
       _authService = SupabaseAuthService(_client!);
       _storageService = SupabaseStorageService(_client!, _bucketName, _pathPrefix);
+      _databaseService = SupabaseDatabaseService(_client!);
+      _realtimeService = SupabaseRealtimeService(_client!);
     } catch (e) {
       // If initialization fails due to already initialized, try to use existing instance
       if (e.toString().contains('already initialized') ||
@@ -112,6 +127,8 @@ class SupabaseProvider implements CloudProvider {
         _client = supabase.Supabase.instance.client;
         _authService = SupabaseAuthService(_client!);
         _storageService = SupabaseStorageService(_client!, _bucketName, _pathPrefix);
+        _databaseService = SupabaseDatabaseService(_client!);
+        _realtimeService = SupabaseRealtimeService(_client!);
         _isInitialized = true;
         _currentUrl = url;
         _currentAnonKey = anonKey;
@@ -141,6 +158,8 @@ class SupabaseProvider implements CloudProvider {
   Future<void> dispose() async {
     _authService = null;
     _storageService = null;
+    _databaseService = null;
+    _realtimeService = null;
     _client = null;
   }
 }

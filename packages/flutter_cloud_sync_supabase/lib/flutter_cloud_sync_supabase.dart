@@ -20,3 +20,5 @@ library;
 export 'src/supabase_provider.dart';
 export 'src/supabase_auth_service.dart';
 export 'src/supabase_storage_service.dart';
+export 'src/supabase_database_service.dart';
+export 'src/supabase_realtime_service.dart';

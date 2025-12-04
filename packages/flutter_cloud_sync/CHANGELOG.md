@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Database Service**: New `CloudDatabaseService` abstract interface for direct database operations
+  - CRUD operations (insert, update, delete, query)
+  - Flexible query filtering with `QueryFilter` class
+  - Batch operations support
+  - Sorting and pagination
+- **Realtime Service**: New `CloudRealtimeService` abstract interface for WebSocket-based subscriptions
+  - Channel-based subscriptions
+  - PostgreSQL change detection (INSERT, UPDATE, DELETE)
+  - Real-time data synchronization
+  - Automatic reconnection support
+- **Database Sync Manager**: New `DatabaseSyncManager` for managing database synchronization
+  - Real-time bidirectional sync
+  - Conflict resolution strategies
+  - Initial sync support
+  - Connection state management
 - Initial release of flutter_cloud_sync
 - Core abstractions: `CloudProvider`, `CloudAuthService`, `CloudStorageService`
 - Generic `DataSerializer<T>` interface for business data serialization
