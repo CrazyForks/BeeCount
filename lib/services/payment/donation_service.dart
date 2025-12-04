@@ -72,8 +72,8 @@ class DonationService {
   };
 
   /// 是否启用模拟数据（开发模式下自动启用）
-  /// 注意：商品同步到沙盒后，改为 false 以测试真实购买
-  static const bool kUseMockData = true;
+  /// 注意：提交审核时必须设置为 false，使用真实 IAP 商品
+  static const bool kUseMockData = false;
 
   /// 购买成功事件流
   Stream<String> get onSuccess => _successController.stream;
