@@ -3,8 +3,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../ai/ai_bill_service.dart';
-import '../../data/db.dart';
-import '../../data/repository.dart';
+import '../../data/repositories/base_repository.dart';
 import '../system/logger_service.dart';
 
 /// OCR识别结果
@@ -74,12 +73,12 @@ class OcrService {
   /// 识别图片中的文本并提取支付信息
   ///
   /// [imageFile] 图片文件
-  /// [db] 数据库实例（可选，用于获取账户列表）
+  /// [repo] Repository实例（可选，用于获取账户列表）
   static const _tag = 'OCR';
 
   Future<OcrResult> recognizePaymentImage(
     File imageFile, {
-    BeeDatabase? db,
+    BaseRepository? repo,
   }) async {
     final startTime = DateTime.now();
     logger.info(_tag, '========== OCR识别开始 ==========');
@@ -147,7 +146,7 @@ class OcrService {
       // 3. AI增强（如果启用）
       final enhancedResult = await _enhanceWithAI(
         baseResult,
-        db: db,
+        repo: repo,
         imageFile: imageFile,
       );
 
@@ -164,11 +163,11 @@ class OcrService {
   /// AI增强识别结果
   ///
   /// [baseResult] 基础OCR识别结果
-  /// [db] 数据库实例（可选，用于获取账户列表）
+  /// [repo] Repository实例（可选，用于获取账户列表）
   /// [imageFile] 图片文件（用于Vision模型）
   Future<OcrResult> _enhanceWithAI(
     OcrResult baseResult, {
-    BeeDatabase? db,
+    BaseRepository? repo,
     File? imageFile,
   }) async {
     try {
@@ -186,12 +185,11 @@ class OcrService {
       // 获取用户分类列表(从数据库读取，仅获取可用于记账的叶子分类)
       List<String> expenseCategories = [];
       List<String> incomeCategories = [];
-      if (db != null) {
+      if (repo != null) {
         try {
-          final repository = BeeRepository(db);
           // 使用 getUsableCategories 获取可用分类（排除有子分类的父分类）
-          final expenseCats = await repository.getUsableCategories('expense');
-          final incomeCats = await repository.getUsableCategories('income');
+          final expenseCats = await repo.getUsableCategories('expense');
+          final incomeCats = await repo.getUsableCategories('income');
           expenseCategories = expenseCats.map((c) => c.name).toList();
           incomeCategories = incomeCats.map((c) => c.name).toList();
           logger.debug(_tag, '[分类列表] 支出${expenseCategories.length}个 收入${incomeCategories.length}个');
@@ -200,13 +198,12 @@ class OcrService {
         }
       }
 
-      // 获取用户账户列表（如果账户功能已启用且提供了数据库实例）
+      // 获取用户账户列表（如果账户功能已启用且提供了Repository实例）
       List<String>? accounts;
       final accountFeatureEnabled = prefs.getBool('account_feature_enabled') ?? true; // 默认启用
-      if (accountFeatureEnabled && db != null) {
+      if (accountFeatureEnabled && repo != null) {
         try {
-          final repository = BeeRepository(db);
-          final allAccounts = await repository.getAllAccounts();
+          final allAccounts = await repo.getAllAccounts();
           accounts = allAccounts.map((a) => a.name).toList();
           logger.debug(_tag, '[账户列表] ${accounts.length}个: ${accounts.join('、')}');
         } catch (e) {

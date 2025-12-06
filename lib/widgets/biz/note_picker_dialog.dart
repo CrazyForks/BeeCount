@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
-import '../../data/db.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/data/note_history_service.dart';
 import '../../styles/tokens.dart';
+import '../../providers.dart';
 
 /// 备注选择弹窗
 /// 支持可选的分类ID和账本ID参数,用于筛选历史备注
-class NotePickerDialog extends StatefulWidget {
-  final BeeDatabase db;
+class NotePickerDialog extends ConsumerStatefulWidget {
   final int ledgerId;
   final int? categoryId; // 可选：分类ID
   final ValueChanged<String> onNotePicked;
 
   const NotePickerDialog({
     super.key,
-    required this.db,
     required this.ledgerId,
     this.categoryId,
     required this.onNotePicked,
   });
 
   @override
-  State<NotePickerDialog> createState() => _NotePickerDialogState();
+  ConsumerState<NotePickerDialog> createState() => _NotePickerDialogState();
 }
 
-class _NotePickerDialogState extends State<NotePickerDialog> {
+class _NotePickerDialogState extends ConsumerState<NotePickerDialog> {
   List<({String note, int count})> _notes = [];
   bool _isLoading = true;
 
@@ -36,8 +35,9 @@ class _NotePickerDialogState extends State<NotePickerDialog> {
 
   Future<void> _loadNotes() async {
     try {
+      final repo = ref.read(repositoryProvider);
       final notes = await NoteHistoryService.getFrequentNotes(
-        widget.db,
+        repo,
         widget.ledgerId,
         limit: 20,
       );

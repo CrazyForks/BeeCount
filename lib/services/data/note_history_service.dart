@@ -1,4 +1,4 @@
-import '../../data/db.dart';
+import '../../data/repositories/base_repository.dart';
 
 /// 备注频率数据
 typedef NoteFrequency = ({String note, int count});
@@ -7,18 +7,17 @@ typedef NoteFrequency = ({String note, int count});
 /// 从交易记录中统计备注使用频率，提供高频备注列表
 class NoteHistoryService {
   /// 获取高频备注列表（按使用次数从高到低排序）
-  /// [db] 数据库实例
+  /// [repository] 仓库实例
   /// [ledgerId] 账本ID
   /// [limit] 限制返回数量，默认10条
   static Future<List<NoteFrequency>> getFrequentNotes(
-    BeeDatabase db,
+    BaseRepository repository,
     int ledgerId, {
     int limit = 10,
   }) async {
     // 查询当前账本的所有交易
-    final transactions = await (db.select(db.transactions)
-          ..where((t) => t.ledgerId.equals(ledgerId)))
-        .get();
+    final transactionsWithCategory = await repository.transactionsWithCategoryAll(ledgerId: ledgerId).first;
+    final transactions = transactionsWithCategory.map((e) => e.t).toList();
 
     // 统计备注使用频率
     final Map<String, int> noteFrequency = {};

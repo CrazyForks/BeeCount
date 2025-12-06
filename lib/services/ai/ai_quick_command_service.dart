@@ -5,6 +5,7 @@ import '../../models/ai_quick_command.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers.dart';
 import 'package:drift/drift.dart' as drift;
+import '../../data/repositories/local/local_repository.dart';
 
 /// AI快捷指令服务
 class AIQuickCommandService {
@@ -281,9 +282,10 @@ ${trends.join('\n')}
 
 /// Provider for AIQuickCommandService
 final aiQuickCommandServiceProvider = Provider.family<AIQuickCommandService, int>((ref, ledgerId) {
-  final db = ref.watch(databaseProvider);
+  final repo = ref.watch(repositoryProvider);
+  // 注意: AIQuickCommandService 需要直接访问 BeeDatabase 实例进行查询
   return AIQuickCommandService(
-    db: db,
+    db: (repo as LocalRepository).db,
     ledgerId: ledgerId,
   );
 });

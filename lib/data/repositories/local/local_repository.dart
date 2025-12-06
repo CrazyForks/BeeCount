@@ -1,0 +1,843 @@
+import '../../db.dart';
+import '../base_repository.dart';
+import 'local_ledger_repository.dart';
+import 'local_transaction_repository.dart';
+import 'local_category_repository.dart';
+import 'local_account_repository.dart';
+import 'local_statistics_repository.dart';
+import 'local_recurring_transaction_repository.dart';
+import 'local_ai_repository.dart';
+
+/// LocalRepository 本地数据库实现
+/// 基于 Drift 本地数据库实现所有 Repository 接口
+/// 使用委托模式，将具体实现委托给各个子 Repository
+class LocalRepository extends BaseRepository {
+  /// 底层数据库实例
+  /// 仅供需要直接数据库访问的场景使用（如数据库初始化、导入导出）
+  final BeeDatabase db;
+
+  // 子 Repository 实例
+  late final LocalLedgerRepository _ledgerRepo;
+  late final LocalTransactionRepository _transactionRepo;
+  late final LocalCategoryRepository _categoryRepo;
+  late final LocalAccountRepository _accountRepo;
+  late final LocalStatisticsRepository _statisticsRepo;
+  late final LocalRecurringTransactionRepository _recurringTransactionRepo;
+  late final LocalAIRepository _aiRepo;
+
+  LocalRepository(this.db) {
+    _ledgerRepo = LocalLedgerRepository(db);
+    _transactionRepo = LocalTransactionRepository(db);
+    _categoryRepo = LocalCategoryRepository(db);
+    _accountRepo = LocalAccountRepository(db);
+    _statisticsRepo = LocalStatisticsRepository(db);
+    _recurringTransactionRepo = LocalRecurringTransactionRepository(db);
+    _aiRepo = LocalAIRepository(db);
+  }
+
+  // ============================================
+  // LedgerRepository 接口实现 - 委托给 LocalLedgerRepository
+  // ============================================
+
+  @override
+  Stream<List<Ledger>> watchLedgers() => _ledgerRepo.watchLedgers();
+
+  @override
+  Future<List<Ledger>> getAllLedgers() => _ledgerRepo.getAllLedgers();
+
+  @override
+  Future<Ledger?> getLedgerById(int id) => _ledgerRepo.getLedgerById(id);
+
+  @override
+  Future<int> getLedgerCount() => _ledgerRepo.getLedgerCount();
+
+  @override
+  Future<int> ledgerCount() => _ledgerRepo.ledgerCount();
+
+  @override
+  Future<({int dayCount, int txCount})> getCountsForLedger({required int ledgerId}) =>
+      _ledgerRepo.getCountsForLedger(ledgerId: ledgerId);
+
+  @override
+  Future<({int dayCount, int txCount})> getCountsAll() => _ledgerRepo.getCountsAll();
+
+  @override
+  Future<({double balance, int transactionCount})> getLedgerStats({
+    required int ledgerId,
+    bool accountFeatureEnabled = true,
+    List<Transaction>? transactions,
+  }) =>
+      _ledgerRepo.getLedgerStats(
+        ledgerId: ledgerId,
+        accountFeatureEnabled: accountFeatureEnabled,
+        transactions: transactions,
+      );
+
+  @override
+  Future<int> createLedger({required String name, String currency = 'CNY'}) =>
+      _ledgerRepo.createLedger(name: name, currency: currency);
+
+  @override
+  Future<void> updateLedgerName({required int id, required String name}) =>
+      _ledgerRepo.updateLedgerName(id: id, name: name);
+
+  @override
+  Future<void> updateLedger({required int id, String? name, String? currency}) =>
+      _ledgerRepo.updateLedger(id: id, name: name, currency: currency);
+
+  @override
+  Future<void> deleteLedger(int id) => _ledgerRepo.deleteLedger(id);
+
+  @override
+  Future<int> getMaxLedgerId() => _ledgerRepo.getMaxLedgerId();
+
+  @override
+  Future<int> getNextFreeLedgerId() => _ledgerRepo.getNextFreeLedgerId();
+
+  @override
+  Future<void> reassignLedgerId({required int fromId, required int toId}) =>
+      _ledgerRepo.reassignLedgerId(fromId: fromId, toId: toId);
+
+  @override
+  Future<int> clearLedgerTransactions(int ledgerId) =>
+      _ledgerRepo.clearLedgerTransactions(ledgerId);
+
+  @override
+  Future<double> getTotalInitialBalance(int ledgerId) =>
+      _ledgerRepo.getTotalInitialBalance(ledgerId);
+
+  // ============================================
+  // TransactionRepository 接口实现 - 委托给 LocalTransactionRepository
+  // ============================================
+
+  @override
+  Stream<List<Transaction>> watchRecentTransactions({required int ledgerId, int limit = 20}) =>
+      _transactionRepo.watchRecentTransactions(ledgerId: ledgerId, limit: limit);
+
+  @override
+  Stream<List<Transaction>> watchTransactionsInMonth({required int ledgerId, required DateTime month}) =>
+      _transactionRepo.watchTransactionsInMonth(ledgerId: ledgerId, month: month);
+
+  @override
+  Stream<List<({Transaction t, Category? category})>> watchTransactionsWithCategoryAll({required int ledgerId}) =>
+      _transactionRepo.watchTransactionsWithCategoryAll(ledgerId: ledgerId);
+
+  @override
+  Stream<List<({Transaction t, Category? category})>> watchTransactionsWithCategoryInMonth({
+    required int ledgerId,
+    required DateTime month,
+  }) =>
+      _transactionRepo.watchTransactionsWithCategoryInMonth(ledgerId: ledgerId, month: month);
+
+  @override
+  Stream<List<({Transaction t, Category? category})>> watchTransactionsWithCategoryInYear({
+    required int ledgerId,
+    required int year,
+  }) =>
+      _transactionRepo.watchTransactionsWithCategoryInYear(ledgerId: ledgerId, year: year);
+
+  @override
+  Stream<List<({Transaction t, Category? category})>> watchTransactionsForCategoryInRange({
+    required int ledgerId,
+    required DateTime start,
+    required DateTime end,
+    int? categoryId,
+    required String type,
+  }) =>
+      _transactionRepo.watchTransactionsForCategoryInRange(
+        ledgerId: ledgerId,
+        start: start,
+        end: end,
+        categoryId: categoryId,
+        type: type,
+      );
+
+  @override
+  Future<int> addTransaction({
+    required int ledgerId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    required DateTime happenedAt,
+    String? note,
+  }) =>
+      _transactionRepo.addTransaction(
+        ledgerId: ledgerId,
+        type: type,
+        amount: amount,
+        categoryId: categoryId,
+        accountId: accountId,
+        toAccountId: toAccountId,
+        happenedAt: happenedAt,
+        note: note,
+      );
+
+  @override
+  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) =>
+      _transactionRepo.insertTransactionsBatch(items);
+
+  @override
+  Future<void> updateTransaction({
+    required int id,
+    required String type,
+    required double amount,
+    int? categoryId,
+    String? note,
+    DateTime? happenedAt,
+    dynamic accountId,
+  }) =>
+      _transactionRepo.updateTransaction(
+        id: id,
+        type: type,
+        amount: amount,
+        categoryId: categoryId,
+        note: note,
+        happenedAt: happenedAt,
+        accountId: accountId,
+      );
+
+  @override
+  Future<void> deleteTransaction(int id) => _transactionRepo.deleteTransaction(id);
+
+  @override
+  Future<Transaction?> getTransactionById(int id) => _transactionRepo.getTransactionById(id);
+
+  @override
+  Future<int> insertTransactionCompanion(TransactionsCompanion item) =>
+      _transactionRepo.insertTransactionCompanion(item);
+
+  @override
+  Stream<List<({Transaction t, Category? category})>> transactionsWithCategoryAll({required int ledgerId}) =>
+      _transactionRepo.transactionsWithCategoryAll(ledgerId: ledgerId);
+
+  @override
+  Future<int> countByTypeInRange({
+    required int ledgerId,
+    required String type,
+    required DateTime start,
+    required DateTime end,
+  }) =>
+      _transactionRepo.countByTypeInRange(
+        ledgerId: ledgerId,
+        type: type,
+        start: start,
+        end: end,
+      );
+
+  @override
+  String txSignature({
+    required String type,
+    required double amount,
+    required int? categoryId,
+    required DateTime happenedAt,
+    required String? note,
+  }) =>
+      _transactionRepo.txSignature(
+        type: type,
+        amount: amount,
+        categoryId: categoryId,
+        happenedAt: happenedAt,
+        note: note,
+      );
+
+  @override
+  Future<Set<String>> signatureSetForLedger(int ledgerId) =>
+      _transactionRepo.signatureSetForLedger(ledgerId);
+
+  @override
+  Future<int> deduplicateLedgerTransactions(int ledgerId) =>
+      _transactionRepo.deduplicateLedgerTransactions(ledgerId);
+
+  @override
+  Future<List<Transaction>> getTransactionsByLedger(int ledgerId) =>
+      _transactionRepo.getTransactionsByLedger(ledgerId);
+
+  @override
+  Future<List<Transaction>> getTransactionsByLedgerInRange({
+    required int ledgerId,
+    required DateTime start,
+    required DateTime end,
+  }) =>
+      _transactionRepo.getTransactionsByLedgerInRange(
+        ledgerId: ledgerId,
+        start: start,
+        end: end,
+      );
+
+  @override
+  Future<void> updateTransactionFields({
+    required int id,
+    int? accountId,
+    int? toAccountId,
+  }) =>
+      _transactionRepo.updateTransactionFields(
+        id: id,
+        accountId: accountId,
+        toAccountId: toAccountId,
+      );
+
+  @override
+  Future<Transaction?> getFirstTransactionByLedger(int ledgerId) =>
+      _transactionRepo.getFirstTransactionByLedger(ledgerId);
+
+  @override
+  Future<Transaction?> getLastTransactionByLedger(int ledgerId) =>
+      _transactionRepo.getLastTransactionByLedger(ledgerId);
+
+  @override
+  Future<void> updateTransactionLedger({required int id, required int ledgerId}) =>
+      _transactionRepo.updateTransactionLedger(id: id, ledgerId: ledgerId);
+
+  // ============================================
+  // CategoryRepository 接口实现 - 委托给 LocalCategoryRepository
+  // ============================================
+
+  @override
+  Future<int> createCategory({required String name, required String kind, String? icon}) =>
+      _categoryRepo.createCategory(name: name, kind: kind, icon: icon);
+
+  @override
+  Future<int> createSubCategory({
+    required int parentId,
+    required String name,
+    required String kind,
+    String? icon,
+    int? sortOrder,
+  }) =>
+      _categoryRepo.createSubCategory(
+        parentId: parentId,
+        name: name,
+        kind: kind,
+        icon: icon,
+        sortOrder: sortOrder,
+      );
+
+  @override
+  Future<void> updateCategory(int id, {String? name, String? icon}) =>
+      _categoryRepo.updateCategory(id, name: name, icon: icon);
+
+  @override
+  Future<void> deleteCategory(int id) => _categoryRepo.deleteCategory(id);
+
+  @override
+  Future<int> upsertCategory({required String name, required String kind}) =>
+      _categoryRepo.upsertCategory(name: name, kind: kind);
+
+  @override
+  Future<Category?> getCategoryById(int categoryId) =>
+      _categoryRepo.getCategoryById(categoryId);
+
+  @override
+  Future<List<Category>> getTopLevelCategories(String kind) =>
+      _categoryRepo.getTopLevelCategories(kind);
+
+  @override
+  Future<List<Category>> getSubCategories(int parentId) =>
+      _categoryRepo.getSubCategories(parentId);
+
+  @override
+  Future<List<Category>> getUsableCategories(String kind) =>
+      _categoryRepo.getUsableCategories(kind);
+
+  @override
+  Future<bool> isCategoryNameDuplicate({required String name, int? excludeId}) =>
+      _categoryRepo.isCategoryNameDuplicate(name: name, excludeId: excludeId);
+
+  @override
+  Future<bool> hasSubCategories(int categoryId) =>
+      _categoryRepo.hasSubCategories(categoryId);
+
+  @override
+  Future<int> getSubCategoryCount(int categoryId) =>
+      _categoryRepo.getSubCategoryCount(categoryId);
+
+  @override
+  Future<int> getTransactionCountByCategory(int categoryId) =>
+      _categoryRepo.getTransactionCountByCategory(categoryId);
+
+  @override
+  Future<Map<int, int>> getAllCategoryTransactionCounts() =>
+      _categoryRepo.getAllCategoryTransactionCounts();
+
+  @override
+  Future<({int totalCount, double totalAmount, double averageAmount})> getCategorySummary(int categoryId) =>
+      _categoryRepo.getCategorySummary(categoryId);
+
+  @override
+  Future<List<Transaction>> getTransactionsByCategory(int categoryId) =>
+      _categoryRepo.getTransactionsByCategory(categoryId);
+
+  @override
+  Future<List<Transaction>> getTransactionsByCategoryWithSort(
+    int categoryId, {
+    String sortBy = 'time',
+    bool ascending = false,
+  }) =>
+      _categoryRepo.getTransactionsByCategoryWithSort(
+        categoryId,
+        sortBy: sortBy,
+        ascending: ascending,
+      );
+
+  @override
+  Future<int> migrateCategory({required int fromCategoryId, required int toCategoryId}) =>
+      _categoryRepo.migrateCategory(
+        fromCategoryId: fromCategoryId,
+        toCategoryId: toCategoryId,
+      );
+
+  @override
+  Future<({int migratedTransactions, int migratedSubCategories})> migrateCategoryTransactions({
+    required int fromCategoryId,
+    required int toCategoryId,
+  }) =>
+      _categoryRepo.migrateCategoryTransactions(
+        fromCategoryId: fromCategoryId,
+        toCategoryId: toCategoryId,
+      );
+
+  @override
+  Future<({int transactionCount, bool canMigrate})> getCategoryMigrationInfo({
+    required int fromCategoryId,
+    required int toCategoryId,
+  }) =>
+      _categoryRepo.getCategoryMigrationInfo(
+        fromCategoryId: fromCategoryId,
+        toCategoryId: toCategoryId,
+      );
+
+  @override
+  Future<void> updateCategorySortOrders(List<({int id, int sortOrder})> updates) =>
+      _categoryRepo.updateCategorySortOrders(updates);
+
+  @override
+  Future<String> getCategoryFullName(int categoryId) =>
+      _categoryRepo.getCategoryFullName(categoryId);
+
+  @override
+  Stream<Category?> watchCategory(int categoryId) =>
+      _categoryRepo.watchCategory(categoryId);
+
+  @override
+  Stream<List<Transaction>> watchTransactionsByCategory(int categoryId, {int? ledgerId}) =>
+      _categoryRepo.watchTransactionsByCategory(categoryId, ledgerId: ledgerId);
+
+  @override
+  Stream<List<Category>> watchCategoryWithSubs(int categoryId) =>
+      _categoryRepo.watchCategoryWithSubs(categoryId);
+
+  @override
+  Stream<List<({Category category, int transactionCount})>> watchCategoriesWithCount() =>
+      _categoryRepo.watchCategoriesWithCount();
+
+  @override
+  Future<List<Category>> getAllCategories() => _categoryRepo.getAllCategories();
+
+  @override
+  Future<void> batchInsertCategories(List<CategoriesCompanion> categories) =>
+      _categoryRepo.batchInsertCategories(categories);
+
+  @override
+  Future<int> insertCategory(CategoriesCompanion category) =>
+      _categoryRepo.insertCategory(category);
+
+  // ============================================
+  // AccountRepository 接口实现 - 委托给 LocalAccountRepository
+  // ============================================
+
+  @override
+  Stream<List<Account>> watchAccountsForLedger(int ledgerId) =>
+      _accountRepo.watchAccountsForLedger(ledgerId);
+
+  @override
+  Stream<List<Account>> watchAllAccounts() => _accountRepo.watchAllAccounts();
+
+  @override
+  Future<List<Account>> getAllAccounts() => _accountRepo.getAllAccounts();
+
+  @override
+  Future<Account?> getAccount(int accountId) => _accountRepo.getAccount(accountId);
+
+  @override
+  Future<List<Account>> getAvailableAccountsForLedger(int ledgerId) =>
+      _accountRepo.getAvailableAccountsForLedger(ledgerId);
+
+  @override
+  Future<List<Account>> getAccountsByCurrency(String currency) =>
+      _accountRepo.getAccountsByCurrency(currency);
+
+  @override
+  Future<Map<String, List<Account>>> getAccountsGroupedByCurrency() =>
+      _accountRepo.getAccountsGroupedByCurrency();
+
+  @override
+  Future<int> createAccount({
+    required int ledgerId,
+    required String name,
+    String type = 'cash',
+    String currency = 'CNY',
+    double initialBalance = 0.0,
+  }) =>
+      _accountRepo.createAccount(
+        ledgerId: ledgerId,
+        name: name,
+        type: type,
+        currency: currency,
+        initialBalance: initialBalance,
+      );
+
+  @override
+  Future<void> updateAccount(
+    int id, {
+    String? name,
+    String? type,
+    String? currency,
+    double? initialBalance,
+  }) =>
+      _accountRepo.updateAccount(
+        id,
+        name: name,
+        type: type,
+        currency: currency,
+        initialBalance: initialBalance,
+      );
+
+  @override
+  Future<void> deleteAccount(int id) => _accountRepo.deleteAccount(id);
+
+  @override
+  Future<double> getAccountBalance(int accountId) =>
+      _accountRepo.getAccountBalance(accountId);
+
+  @override
+  Future<double> getAccountGlobalBalance(int accountId) =>
+      _accountRepo.getAccountGlobalBalance(accountId);
+
+  @override
+  Future<double> getAccountBalanceInLedger(int accountId, int ledgerId) =>
+      _accountRepo.getAccountBalanceInLedger(accountId, ledgerId);
+
+  @override
+  Future<Map<int, double>> getAllAccountBalances(int ledgerId) =>
+      _accountRepo.getAllAccountBalances(ledgerId);
+
+  @override
+  Future<int> getTransactionCountByAccount(int accountId) =>
+      _accountRepo.getTransactionCountByAccount(accountId);
+
+  @override
+  Future<double> getAccountExpense(int accountId) =>
+      _accountRepo.getAccountExpense(accountId);
+
+  @override
+  Future<double> getAccountIncome(int accountId) =>
+      _accountRepo.getAccountIncome(accountId);
+
+  @override
+  Future<({double balance, double expense, double income})> getAccountStats(int accountId) =>
+      _accountRepo.getAccountStats(accountId);
+
+  @override
+  Future<Map<int, ({double balance, double expense, double income})>> getAllAccountStats() =>
+      _accountRepo.getAllAccountStats();
+
+  @override
+  Future<({double totalBalance, double totalExpense, double totalIncome})> getAllAccountsTotalStats() =>
+      _accountRepo.getAllAccountsTotalStats();
+
+  @override
+  Future<Map<int, int>> getAccountUsageInLedgers(int accountId) =>
+      _accountRepo.getAccountUsageInLedgers(accountId);
+
+  @override
+  Future<int> migrateAccount({required int fromAccountId, required int toAccountId}) =>
+      _accountRepo.migrateAccount(
+        fromAccountId: fromAccountId,
+        toAccountId: toAccountId,
+      );
+
+  @override
+  Future<bool> hasTransactions(int accountId) =>
+      _accountRepo.hasTransactions(accountId);
+
+  @override
+  Stream<Account?> watchAccount(int accountId) =>
+      _accountRepo.watchAccount(accountId);
+
+  @override
+  Stream<List<Transaction>> watchAccountTransactions(int accountId) =>
+      _accountRepo.watchAccountTransactions(accountId);
+
+  @override
+  Future<void> batchInsertAccounts(List<AccountsCompanion> accounts) =>
+      _accountRepo.batchInsertAccounts(accounts);
+
+  // ============================================
+  // StatisticsRepository 接口实现 - 委托给 LocalStatisticsRepository
+  // ============================================
+
+  @override
+  Future<List<({int? id, String name, String? icon, double total})>> totalsByCategory({
+    required int ledgerId,
+    required String type,
+    required DateTime start,
+    required DateTime end,
+  }) =>
+      _statisticsRepo.totalsByCategory(
+        ledgerId: ledgerId,
+        type: type,
+        start: start,
+        end: end,
+      );
+
+  @override
+  Future<List<({int? id, String name, String? icon, int? parentId, int level, double total})>>
+      totalsByCategoryWithHierarchy({
+    required int ledgerId,
+    required String type,
+    required DateTime start,
+    required DateTime end,
+  }) =>
+          _statisticsRepo.totalsByCategoryWithHierarchy(
+            ledgerId: ledgerId,
+            type: type,
+            start: start,
+            end: end,
+          );
+
+  @override
+  Future<List<({DateTime day, double total})>> totalsByDay({
+    required int ledgerId,
+    required String type,
+    required DateTime start,
+    required DateTime end,
+  }) =>
+      _statisticsRepo.totalsByDay(
+        ledgerId: ledgerId,
+        type: type,
+        start: start,
+        end: end,
+      );
+
+  @override
+  Future<List<({DateTime month, double total})>> totalsByMonth({
+    required int ledgerId,
+    required String type,
+    required int year,
+  }) =>
+      _statisticsRepo.totalsByMonth(
+        ledgerId: ledgerId,
+        type: type,
+        year: year,
+      );
+
+  @override
+  Future<List<({int year, double total})>> totalsByYearSeries({
+    required int ledgerId,
+    required String type,
+  }) =>
+      _statisticsRepo.totalsByYearSeries(
+        ledgerId: ledgerId,
+        type: type,
+      );
+
+  @override
+  Future<(double income, double expense)> totalsInRange({
+    required int ledgerId,
+    required DateTime start,
+    required DateTime end,
+  }) =>
+      _statisticsRepo.totalsInRange(
+        ledgerId: ledgerId,
+        start: start,
+        end: end,
+      );
+
+  @override
+  Future<(double income, double expense)> monthlyTotals({
+    required int ledgerId,
+    required DateTime month,
+  }) =>
+      _statisticsRepo.monthlyTotals(
+        ledgerId: ledgerId,
+        month: month,
+      );
+
+  @override
+  Future<(double income, double expense)> yearlyTotals({
+    required int ledgerId,
+    required int year,
+  }) =>
+      _statisticsRepo.yearlyTotals(
+        ledgerId: ledgerId,
+        year: year,
+      );
+
+  // ============================================
+  // RecurringTransactionRepository 接口实现 - 委托给 LocalRecurringTransactionRepository
+  // ============================================
+
+  @override
+  Future<List<RecurringTransaction>> getAllRecurringTransactions() =>
+      _recurringTransactionRepo.getAllRecurringTransactions();
+
+  @override
+  Future<List<RecurringTransaction>> getRecurringTransactionsByLedger(int ledgerId) =>
+      _recurringTransactionRepo.getRecurringTransactionsByLedger(ledgerId);
+
+  @override
+  Future<List<RecurringTransaction>> getEnabledRecurringTransactions(int ledgerId) =>
+      _recurringTransactionRepo.getEnabledRecurringTransactions(ledgerId);
+
+  @override
+  Future<int> addRecurringTransaction({
+    required int ledgerId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    String? note,
+    required String frequency,
+    required int interval,
+    int? dayOfMonth,
+    int? dayOfWeek,
+    int? monthOfYear,
+    required DateTime startDate,
+    DateTime? endDate,
+  }) =>
+      _recurringTransactionRepo.addRecurringTransaction(
+        ledgerId: ledgerId,
+        type: type,
+        amount: amount,
+        categoryId: categoryId,
+        accountId: accountId,
+        toAccountId: toAccountId,
+        note: note,
+        frequency: frequency,
+        interval: interval,
+        dayOfMonth: dayOfMonth,
+        dayOfWeek: dayOfWeek,
+        monthOfYear: monthOfYear,
+        startDate: startDate,
+        endDate: endDate,
+      );
+
+  @override
+  Future<void> updateRecurringTransaction({
+    required int id,
+    required int ledgerId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    String? note,
+    required String frequency,
+    required int interval,
+    int? dayOfMonth,
+    int? dayOfWeek,
+    int? monthOfYear,
+    required DateTime startDate,
+    DateTime? endDate,
+    bool? enabled,
+    DateTime? lastGeneratedDate,
+  }) =>
+      _recurringTransactionRepo.updateRecurringTransaction(
+        id: id,
+        ledgerId: ledgerId,
+        type: type,
+        amount: amount,
+        categoryId: categoryId,
+        accountId: accountId,
+        toAccountId: toAccountId,
+        note: note,
+        frequency: frequency,
+        interval: interval,
+        dayOfMonth: dayOfMonth,
+        dayOfWeek: dayOfWeek,
+        monthOfYear: monthOfYear,
+        startDate: startDate,
+        endDate: endDate,
+        enabled: enabled,
+        lastGeneratedDate: lastGeneratedDate,
+      );
+
+  @override
+  Future<void> deleteRecurringTransaction(int id) =>
+      _recurringTransactionRepo.deleteRecurringTransaction(id);
+
+  @override
+  Future<void> toggleRecurringTransaction(int id, bool enabled) =>
+      _recurringTransactionRepo.toggleRecurringTransaction(id, enabled);
+
+  @override
+  Future<void> updateLastGeneratedDate(int id, DateTime date) =>
+      _recurringTransactionRepo.updateLastGeneratedDate(id, date);
+
+  @override
+  Stream<List<RecurringTransaction>> watchAllRecurringTransactions() =>
+      _recurringTransactionRepo.watchAllRecurringTransactions();
+
+  @override
+  Stream<List<RecurringTransaction>> watchRecurringTransactionsByLedger(int ledgerId) =>
+      _recurringTransactionRepo.watchRecurringTransactionsByLedger(ledgerId);
+
+  @override
+  Future<void> batchInsertRecurringTransactions(List<RecurringTransactionsCompanion> items) =>
+      _recurringTransactionRepo.batchInsertRecurringTransactions(items);
+
+  // ============================================
+  // AIRepository 接口实现 - 委托给 LocalAIRepository
+  // ============================================
+
+  @override
+  Future<Conversation?> getActiveConversation() =>
+      _aiRepo.getActiveConversation();
+
+  @override
+  Future<Conversation?> getConversationById(int id) =>
+      _aiRepo.getConversationById(id);
+
+  @override
+  Future<int> createConversation(ConversationsCompanion conversation) =>
+      _aiRepo.createConversation(conversation);
+
+  @override
+  Future<void> updateConversation(Conversation conversation) =>
+      _aiRepo.updateConversation(conversation);
+
+  @override
+  Future<void> deleteConversation(int id) =>
+      _aiRepo.deleteConversation(id);
+
+  @override
+  Stream<List<Message>> watchMessages(int conversationId) =>
+      _aiRepo.watchMessages(conversationId);
+
+  @override
+  Future<Message?> getMessageById(int id) =>
+      _aiRepo.getMessageById(id);
+
+  @override
+  Future<int> createMessage(MessagesCompanion message) =>
+      _aiRepo.createMessage(message);
+
+  @override
+  Future<void> updateMessage(Message message) =>
+      _aiRepo.updateMessage(message);
+
+  @override
+  Future<void> deleteMessagesByConversation(int conversationId) =>
+      _aiRepo.deleteMessagesByConversation(conversationId);
+
+  @override
+  Future<void> deleteMessage(int id) =>
+      _aiRepo.deleteMessage(id);
+
+  @override
+  Future<Message?> getMessageByTransactionId(int transactionId) =>
+      _aiRepo.getMessageByTransactionId(transactionId);
+}

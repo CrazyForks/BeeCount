@@ -30,6 +30,13 @@ class $LedgersTable extends Ledgers with TableInfo<$LedgersTable, Ledger> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: const Constant('CNY'));
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('personal'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -39,7 +46,7 @@ class $LedgersTable extends Ledgers with TableInfo<$LedgersTable, Ledger> {
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
   @override
-  List<GeneratedColumn> get $columns => [id, name, currency, createdAt];
+  List<GeneratedColumn> get $columns => [id, name, currency, type, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -63,6 +70,10 @@ class $LedgersTable extends Ledgers with TableInfo<$LedgersTable, Ledger> {
       context.handle(_currencyMeta,
           currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
     }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -82,6 +93,8 @@ class $LedgersTable extends Ledgers with TableInfo<$LedgersTable, Ledger> {
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       currency: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}currency'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -97,11 +110,13 @@ class Ledger extends DataClass implements Insertable<Ledger> {
   final int id;
   final String name;
   final String currency;
+  final String type;
   final DateTime createdAt;
   const Ledger(
       {required this.id,
       required this.name,
       required this.currency,
+      required this.type,
       required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -109,6 +124,7 @@ class Ledger extends DataClass implements Insertable<Ledger> {
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['currency'] = Variable<String>(currency);
+    map['type'] = Variable<String>(type);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -118,6 +134,7 @@ class Ledger extends DataClass implements Insertable<Ledger> {
       id: Value(id),
       name: Value(name),
       currency: Value(currency),
+      type: Value(type),
       createdAt: Value(createdAt),
     );
   }
@@ -129,6 +146,7 @@ class Ledger extends DataClass implements Insertable<Ledger> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       currency: serializer.fromJson<String>(json['currency']),
+      type: serializer.fromJson<String>(json['type']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -139,16 +157,22 @@ class Ledger extends DataClass implements Insertable<Ledger> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'currency': serializer.toJson<String>(currency),
+      'type': serializer.toJson<String>(type),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
   Ledger copyWith(
-          {int? id, String? name, String? currency, DateTime? createdAt}) =>
+          {int? id,
+          String? name,
+          String? currency,
+          String? type,
+          DateTime? createdAt}) =>
       Ledger(
         id: id ?? this.id,
         name: name ?? this.name,
         currency: currency ?? this.currency,
+        type: type ?? this.type,
         createdAt: createdAt ?? this.createdAt,
       );
   Ledger copyWithCompanion(LedgersCompanion data) {
@@ -156,6 +180,7 @@ class Ledger extends DataClass implements Insertable<Ledger> {
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       currency: data.currency.present ? data.currency.value : this.currency,
+      type: data.type.present ? data.type.value : this.type,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -166,13 +191,14 @@ class Ledger extends DataClass implements Insertable<Ledger> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('currency: $currency, ')
+          ..write('type: $type, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, currency, createdAt);
+  int get hashCode => Object.hash(id, name, currency, type, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -180,6 +206,7 @@ class Ledger extends DataClass implements Insertable<Ledger> {
           other.id == this.id &&
           other.name == this.name &&
           other.currency == this.currency &&
+          other.type == this.type &&
           other.createdAt == this.createdAt);
 }
 
@@ -187,29 +214,34 @@ class LedgersCompanion extends UpdateCompanion<Ledger> {
   final Value<int> id;
   final Value<String> name;
   final Value<String> currency;
+  final Value<String> type;
   final Value<DateTime> createdAt;
   const LedgersCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.currency = const Value.absent(),
+    this.type = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   LedgersCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     this.currency = const Value.absent(),
+    this.type = const Value.absent(),
     this.createdAt = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Ledger> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? currency,
+    Expression<String>? type,
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (currency != null) 'currency': currency,
+      if (type != null) 'type': type,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
@@ -218,11 +250,13 @@ class LedgersCompanion extends UpdateCompanion<Ledger> {
       {Value<int>? id,
       Value<String>? name,
       Value<String>? currency,
+      Value<String>? type,
       Value<DateTime>? createdAt}) {
     return LedgersCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       currency: currency ?? this.currency,
+      type: type ?? this.type,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -239,6 +273,9 @@ class LedgersCompanion extends UpdateCompanion<Ledger> {
     if (currency.present) {
       map['currency'] = Variable<String>(currency.value);
     }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -251,6 +288,7 @@ class LedgersCompanion extends UpdateCompanion<Ledger> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('currency: $currency, ')
+          ..write('type: $type, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -3188,12 +3226,14 @@ typedef $$LedgersTableCreateCompanionBuilder = LedgersCompanion Function({
   Value<int> id,
   required String name,
   Value<String> currency,
+  Value<String> type,
   Value<DateTime> createdAt,
 });
 typedef $$LedgersTableUpdateCompanionBuilder = LedgersCompanion Function({
   Value<int> id,
   Value<String> name,
   Value<String> currency,
+  Value<String> type,
   Value<DateTime> createdAt,
 });
 
@@ -3214,6 +3254,9 @@ class $$LedgersTableFilterComposer
 
   ColumnFilters<String> get currency => $composableBuilder(
       column: $table.currency, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
@@ -3237,6 +3280,9 @@ class $$LedgersTableOrderingComposer
   ColumnOrderings<String> get currency => $composableBuilder(
       column: $table.currency, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
@@ -3258,6 +3304,9 @@ class $$LedgersTableAnnotationComposer
 
   GeneratedColumn<String> get currency =>
       $composableBuilder(column: $table.currency, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -3289,24 +3338,28 @@ class $$LedgersTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String> currency = const Value.absent(),
+            Value<String> type = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
           }) =>
               LedgersCompanion(
             id: id,
             name: name,
             currency: currency,
+            type: type,
             createdAt: createdAt,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String name,
             Value<String> currency = const Value.absent(),
+            Value<String> type = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
           }) =>
               LedgersCompanion.insert(
             id: id,
             name: name,
             currency: currency,
+            type: type,
             createdAt: createdAt,
           ),
           withReferenceMapper: (p0) => p0

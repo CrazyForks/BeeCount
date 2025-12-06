@@ -77,10 +77,8 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   }
 
   Future<void> _loadParentCategory(int parentId) async {
-    final database = ref.read(databaseProvider);
-    final parent = await (database.select(database.categories)
-          ..where((c) => c.id.equals(parentId)))
-        .getSingleOrNull();
+    final repo = ref.read(repositoryProvider);
+    final parent = await repo.getCategoryById(parentId);
     if (mounted && parent != null) {
       setState(() {
         _selectedParentCategory = parent;
@@ -457,13 +455,13 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
     final repo = ref.read(repositoryProvider);
 
     // 检查是否有交易记录使用此分类
-    int totalTransactionCount = await repo.getTransactionCountByCategory(widget.category!.id);
+    int totalTransactionCount = await repo.getTransactionCountByCategory(widget.category!.id) as int;
 
     // 如果是一级分类，还需要检查所有子分类的交易数量
     if (widget.category!.level == 1) {
       final subCategories = await repo.getSubCategories(widget.category!.id);
       for (final subCat in subCategories) {
-        final subCount = await repo.getTransactionCountByCategory(subCat.id);
+        final subCount = await repo.getTransactionCountByCategory(subCat.id) as int;
         totalTransactionCount += subCount;
       }
     }

@@ -13,6 +13,7 @@ import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
 import '../services/billing/ocr_service.dart';
 import '../widgets/ui/ui.dart';
+import '../data/repositories/local/local_repository.dart';
 import '../styles/tokens.dart';
 
 /// 语音记账帮助类
@@ -294,7 +295,6 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
 
       final audioFile = File(widget.audioPath);
       final repo = ref.read(repositoryProvider);
-      final db = ref.read(databaseProvider);
       final currentLedger = await ref.read(currentLedgerProvider.future);
 
       if (currentLedger == null) {
@@ -322,6 +322,7 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
         _status = '正在提取账单信息...';
       });
 
+      final db = ref.read(databaseProvider);
       final billInfo = await voiceService.extractBillFromText(
         recognizedText,
         repository: repo,
@@ -352,7 +353,7 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
         aiEnhanced: true,
       );
 
-      final billCreationService = BillCreationService(db);
+      final billCreationService = BillCreationService(repo);
       final transactionId = await billCreationService.createBillTransaction(
         result: ocrResult,
         ledgerId: currentLedger.id,

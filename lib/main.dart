@@ -7,11 +7,11 @@ import 'app.dart';
 import 'theme.dart';
 import 'providers.dart';
 import 'providers/font_scale_provider.dart';
+import 'providers/cloud_mode_providers.dart';
 import 'utils/notification_factory.dart';
 import 'pages/auth/splash_page.dart';
 import 'pages/auth/welcome_page.dart';
 import 'services/system/reminder_monitor_service.dart';
-import 'services/data/recurring_transaction_service.dart';
 import 'services/platform/screenshot_monitor_service.dart';
 import 'services/platform/image_share_handler_service.dart';
 import 'services/platform/shortcuts_handler_service.dart';
@@ -65,8 +65,16 @@ Future<void> main() async {
     print('⚠️  提醒监控服务启动失败（可能在不支持的平台上运行）: $e');
   }
 
-  // 生成待处理的重复交易
-  await _generatePendingRecurringTransactions();
+  // 创建全局ProviderContainer（需要在周期交易生成之前创建，因为需要使用 repositoryProvider）
+  final container = ProviderContainer();
+
+  // 初始化应用模式（需要在生成重复交易之前，确保模式正确）
+  // 直接从 SharedPreferences 读取并设置到 appModeProvider
+  await _initializeAppMode(container);
+
+  // 注意：不再在启动时生成重复交易
+  // 周期交易生成已移至 appSplashInitProvider 中（等待数据库完全初始化后执行）
+  // await _generatePendingRecurringTransactions(container);
 
   // v1.15.0: 自动执行账户独立迁移
   await _autoMigrateToV2();
@@ -77,9 +85,6 @@ Future<void> main() async {
   } catch (e) {
     print('⚠️  小组件回调注册失败（可能在不支持的平台上运行）: $e');
   }
-
-  // 创建全局ProviderContainer
-  final container = ProviderContainer();
 
   // 恢复截图自动识别设置（Android专属），传入container
   await _restoreScreenshotMonitor(container);
@@ -208,27 +213,28 @@ Future<void> _restoreScreenshotMonitor(ProviderContainer container) async {
   }
 }
 
-/// 生成待处理的重复交易
+/// 初始化应用模式
 ///
-/// 在应用启动时检查所有重复交易模板，生成到期的交易记录
-Future<void> _generatePendingRecurringTransactions() async {
+/// 在应用启动时从 SharedPreferences 读取模式并设置到 appModeProvider
+/// 这样可以确保后续使用 repositoryProvider 时能获取到正确的模式
+/// [container] Provider容器
+Future<void> _initializeAppMode(ProviderContainer container) async {
   try {
-    print('🔄 检查待生成的重复交易...');
-    final db = BeeDatabase();
-    final service = RecurringTransactionService(db);
+    print('⏳ 初始化应用模式...');
 
-    final generatedTransactions = await service.generatePendingTransactions();
+    // 从 SharedPreferences 直接读取模式
+    final prefs = await SharedPreferences.getInstance();
+    final modeStr = prefs.getString('app_mode');
+    final mode = modeStr != null ? AppMode.fromString(modeStr) : AppMode.local;
 
-    if (generatedTransactions.isNotEmpty) {
-      print('✅ 成功生成 ${generatedTransactions.length} 条重复交易记录');
-    } else {
-      print('ℹ️  没有待生成的重复交易');
-    }
+    // 使用 switchMode 方法设置模式，确保 repositoryProvider 能立即获取到正确的模式
+    // switchMode 不会重复写入 SharedPreferences，因为值已经存在
+    await container.read(appModeProvider.notifier).switchMode(mode);
 
-    await db.close();
-  } catch (e) {
-    print('❌ 生成重复交易失败: $e');
-    // 不抛出异常，避免影响应用启动
+    print('✅ 应用模式已初始化: ${mode.label}');
+  } catch (e, stackTrace) {
+    print('⚠️  应用模式初始化失败: $e');
+    logger.error('Main', '应用模式初始化失败', e, stackTrace);
   }
 }
 
@@ -360,7 +366,9 @@ class MainApp extends ConsumerWidget {
     if (initState == AppInitState.splash) {
       ref.watch(appSplashInitProvider);
     }
-    
+
+    // 周期交易生成已统一在 appSplashInitProvider 中处理
+
     final primary = ref.watch(primaryColorProvider);
     final platform = Theme.of(context).platform; // 当前平台
     final base = BeeTheme.lightTheme(platform: platform);

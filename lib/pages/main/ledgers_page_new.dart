@@ -6,10 +6,9 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:drift/drift.dart' hide Column;
 
 import '../../providers.dart';
+import '../../providers/cloud_mode_providers.dart';
 import '../../models/ledger_display_item.dart';
 import '../../cloud/transactions_sync_manager.dart';
 import '../../cloud/sync_service.dart';
@@ -229,7 +228,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
             vertical: 8.0.scaled(context, ref),
           ),
           children: [
-                    // 本地账本区域
+                    // 账本区域
                     if (localLedgers.isNotEmpty) ...[
                       _SectionHeader(
                         title: AppLocalizations.of(context).ledgersLocal,
@@ -295,6 +294,8 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
     // 正常切换账本
     ref.read(currentLedgerIdProvider.notifier).state = ledger.id;
+    // 清除缓存的交易数据，确保切换后刷新
+    ref.invalidate(cachedTransactionsWithCategoryProvider);
     showToast(context, AppLocalizations.of(context).ledgersSwitched(translateLedgerName(context, ledger.name)));
   }
 
@@ -454,13 +455,10 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
   /// 编辑账本
   Future<void> _handleEditLedger(BuildContext context, LedgerDisplayItem ledger) async {
-    
-
     final repo = ref.read(repositoryProvider);
-    final ledgerData = await (repo.db.select(repo.db.ledgers)
-      ..where((l) => l.id.equals(ledger.id))).getSingle();
+    final ledgerData = await repo.getLedgerById(ledger.id);
 
-    if (!mounted) return;
+    if (ledgerData == null || !mounted) return;
 
     final result = await _showLedgerEditorDialog(
       context,
@@ -485,8 +483,6 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
   /// 清空账本（删除所有账单，保留账本）
   Future<void> _handleClearLedger(BuildContext context, LedgerDisplayItem ledger) async {
-
-
     final l10n = AppLocalizations.of(context);
     final confirmed = await AppDialog.confirm<bool>(
       context,
@@ -500,9 +496,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
       final repo = ref.read(repositoryProvider);
 
       // 删除该账本的所有账单
-      await (repo.db.delete(repo.db.transactions)
-            ..where((t) => t.ledgerId.equals(ledger.id)))
-          .go();
+      await repo.clearLedgerTransactions(ledger.id);
 
       if (!mounted) return;
 
@@ -529,7 +523,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
     // 检查是否只剩一个账本
     final repo = ref.read(repositoryProvider);
-    final allLedgers = await repo.db.select(repo.db.ledgers).get();
+    final allLedgers = await repo.getAllLedgers();
     if (allLedgers.length <= 1) {
       if (!mounted) return;
       showToast(context, l10n.ledgersCannotDeleteLastOne);
@@ -580,7 +574,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
     // 检查是否只剩一个账本
     final repo = ref.read(repositoryProvider);
-    final allLedgers = await repo.db.select(repo.db.ledgers).get();
+    final allLedgers = await repo.getAllLedgers();
     if (allLedgers.length <= 1) {
       if (!mounted) return;
       showToast(context, l10n.ledgersCannotDeleteLastOne);
@@ -734,13 +728,21 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
     if (result == null || !mounted) return;
 
-    final repo = ref.read(repositoryProvider);
-    await repo.createLedger(
-      name: result.name.trim(),
-      currency: result.currency,
-    );
+    try {
+      final repo = ref.read(repositoryProvider);
+      await repo.createLedger(
+        name: result.name.trim(),
+        currency: result.currency,
+      );
 
-    ref.read(ledgerListRefreshProvider.notifier).state++;
+      ref.read(ledgerListRefreshProvider.notifier).state++;
+
+      if (!mounted) return;
+      showToast(context, '账本创建成功');
+    } catch (e) {
+      if (!mounted) return;
+      showToast(context, '创建失败: ${e.toString()}');
+    }
   }
 
   /// 账本编辑对话框

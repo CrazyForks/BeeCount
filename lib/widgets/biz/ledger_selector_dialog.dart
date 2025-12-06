@@ -30,12 +30,12 @@ class LedgerSelectorDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final db = ref.watch(databaseProvider);
+    final repo = ref.watch(repositoryProvider);
     final primaryColor = ref.watch(primaryColorProvider);
     final l10n = AppLocalizations.of(context);
 
     return FutureBuilder<List<Ledger>>(
-      future: (db.select(db.ledgers)).get(),
+      future: repo.getAllLedgers(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());

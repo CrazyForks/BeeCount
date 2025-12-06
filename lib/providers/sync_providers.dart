@@ -4,9 +4,12 @@ import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../cloud/sync_service.dart';
 import '../cloud/transactions_sync_manager.dart';
 import '../models/ledger_display_item.dart';
+import '../data/repositories/base_repository.dart';
+import '../services/system/logger_service.dart';
 import 'database_providers.dart';
 import 'ui_state_providers.dart';
 import 'statistics_providers.dart';
+import 'cloud_mode_providers.dart';
 
 // 同步状态（根据 ledgerId 与刷新 tick 缓存），避免因 UI 重建重复拉取
 final syncStatusProvider =
@@ -113,8 +116,22 @@ final syncServiceProvider = Provider<SyncService>((ref) {
   final config = activeAsync.value!;
   if (!config.valid) return LocalOnlySyncService();
 
+  // 检查是否为云端模式
+  final mode = ref.watch(appModeProvider);
+  if (mode == AppMode.cloud) {
+    // 云端模式下，不使用云同步服务（数据直接存储在 Supabase）
+    logger.info('SyncServiceProvider', '云端模式：返回 LocalOnlySyncService（云端模式不需要同步）');
+    return LocalOnlySyncService();
+  }
+
   final db = ref.watch(databaseProvider);
   final repo = ref.watch(repositoryProvider);
+
+  // 确保 repo 是 BaseRepository 类型
+  if (repo is! BaseRepository) {
+    logger.warning('SyncServiceProvider', 'repo 不是 BaseRepository 类型，返回 LocalOnlySyncService');
+    return LocalOnlySyncService();
+  }
 
   switch (config.type) {
     case CloudBackendType.local:
@@ -151,41 +168,52 @@ final localLedgersProvider = FutureProvider<List<LedgerDisplayItem>>((ref) async
   ref.watch(ledgerListRefreshProvider);
   ref.watch(statsRefreshProvider);  // 监听统计刷新，确保自动记账后刷新
 
-  // 使用 syncServiceProvider，TransactionsSyncManager 现在包含账本管理功能
-  final syncService = ref.watch(syncServiceProvider);
+  try {
+    // 使用 syncServiceProvider，TransactionsSyncManager 现在包含账本管理功能
+    final syncService = ref.watch(syncServiceProvider);
 
-  // 获取账户功能开启状态
-  final accountFeatureEnabled = await ref.watch(accountFeatureEnabledProvider.future);
+    // 获取账户功能开启状态
+    final accountFeatureEnabled = await ref.watch(accountFeatureEnabledProvider.future);
 
-  // syncServiceProvider 是同步的，直接使用
-  if (syncService is TransactionsSyncManager) {
-    return syncService.getLocalLedgers(accountFeatureEnabled: accountFeatureEnabled);
+    // syncServiceProvider 是同步的，直接使用
+    if (syncService is TransactionsSyncManager) {
+      return syncService.getLocalLedgers(accountFeatureEnabled: accountFeatureEnabled);
+    }
+
+    // 如果是 LocalOnlySyncService，只返回本地账本
+    final repo = ref.watch(repositoryProvider);
+
+    // 确保 repo 是 BaseRepository 类型
+    if (repo is! BaseRepository) {
+      logger.warning('LocalLedgers', 'Repository 类型不是 BaseRepository: ${repo.runtimeType}');
+      return [];
+    }
+
+    final localLedgers = await repo.getAllLedgers();
+
+    final result = <LedgerDisplayItem>[];
+    for (final ledger in localLedgers) {
+      // 使用 getLedgerStats 一次性获取余额和交易数，内部会自动查询 transactions
+      final stats = await repo.getLedgerStats(
+        ledgerId: ledger.id,
+        accountFeatureEnabled: accountFeatureEnabled,
+      );
+
+      result.add(LedgerDisplayItem.fromLocal(
+        id: ledger.id,
+        name: ledger.name,
+        currency: ledger.currency,
+        createdAt: ledger.createdAt,
+        transactionCount: stats.transactionCount,
+        balance: stats.balance,
+      ));
+    }
+
+    return result;
+  } catch (e, stackTrace) {
+    logger.error('LocalLedgers', '获取本地账本列表失败', e, stackTrace);
+    return [];
   }
-
-  // 如果是 LocalOnlySyncService，只返回本地账本
-  final db = ref.watch(databaseProvider);
-  final repo = ref.watch(repositoryProvider);
-  final localLedgers = await db.select(db.ledgers).get();
-
-  final result = <LedgerDisplayItem>[];
-  for (final ledger in localLedgers) {
-    // 使用 getLedgerStats 一次性获取余额和交易数，内部会自动查询 transactions
-    final stats = await repo.getLedgerStats(
-      ledgerId: ledger.id,
-      accountFeatureEnabled: accountFeatureEnabled,
-    );
-
-    result.add(LedgerDisplayItem.fromLocal(
-      id: ledger.id,
-      name: ledger.name,
-      currency: ledger.currency,
-      createdAt: ledger.createdAt,
-      transactionCount: stats.transactionCount,
-      balance: stats.balance,
-    ));
-  }
-
-  return result;
 });
 
 /// 远程账本列表（慢速，网络请求）
@@ -210,46 +238,47 @@ final allLedgersProvider = FutureProvider<List<LedgerDisplayItem>>((ref) async {
   // 监听刷新触发器
   ref.watch(ledgerListRefreshProvider);
 
-  // 使用 syncServiceProvider，TransactionsSyncManager 现在包含账本管理功能
-  final syncService = ref.watch(syncServiceProvider);
+  try {
+    // 使用 syncServiceProvider，TransactionsSyncManager 现在包含账本管理功能
+    final syncService = ref.watch(syncServiceProvider);
 
-  // syncServiceProvider 是同步的，直接使用
-  if (syncService is TransactionsSyncManager) {
-    return syncService.getAllLedgers();
-  }
-
-  // 如果是 LocalOnlySyncService，只返回本地账本
-  final db = ref.watch(databaseProvider);
-  final localLedgers = await db.select(db.ledgers).get();
-
-  final result = <LedgerDisplayItem>[];
-  for (final ledger in localLedgers) {
-    // 获取账单数据
-    final transactions = await (db.select(db.transactions)
-          ..where((t) => t.ledgerId.equals(ledger.id)))
-        .get();
-
-    // 计算账单数量和余额
-    final count = transactions.length;
-    double balance = 0.0;
-
-    for (final t in transactions) {
-      if (t.type == 'income') {
-        balance += t.amount;
-      } else if (t.type == 'expense') {
-        balance -= t.amount;
-      }
+    // syncServiceProvider 是同步的，直接使用
+    if (syncService is TransactionsSyncManager) {
+      return syncService.getAllLedgers();
     }
 
-    result.add(LedgerDisplayItem.fromLocal(
-      id: ledger.id,
-      name: ledger.name,
-      currency: ledger.currency,
-      createdAt: ledger.createdAt,
-      transactionCount: count,
-      balance: balance,
-    ));
-  }
+    // 如果是 LocalOnlySyncService，只返回本地账本
+    final repo = ref.watch(repositoryProvider);
 
-  return result;
+    // 确保 repo 是 BaseRepository 类型
+    if (repo is! BaseRepository) {
+      logger.warning('AllLedgers', 'Repository 类型不是 BaseRepository: ${repo.runtimeType}');
+      return [];
+    }
+
+    final localLedgers = await repo.getAllLedgers();
+
+    final result = <LedgerDisplayItem>[];
+    for (final ledger in localLedgers) {
+      // 使用 Repository 的 getLedgerStats 方法获取统计数据
+      final stats = await repo.getLedgerStats(
+        ledgerId: ledger.id,
+        accountFeatureEnabled: false, // 这里使用默认值，实际应该从provider读取
+      );
+
+      result.add(LedgerDisplayItem.fromLocal(
+        id: ledger.id,
+        name: ledger.name,
+        currency: ledger.currency,
+        createdAt: ledger.createdAt,
+        transactionCount: stats.transactionCount,
+        balance: stats.balance,
+      ));
+    }
+
+    return result;
+  } catch (e, stackTrace) {
+    logger.error('AllLedgers', '获取账本列表失败', e, stackTrace);
+    return [];
+  }
 });

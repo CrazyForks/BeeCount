@@ -5,7 +5,11 @@ import 'theme_providers.dart';
 import 'statistics_providers.dart';
 import 'font_scale_provider.dart';
 import 'update_providers.dart';
+import 'cloud_mode_providers.dart';
+import 'supabase_providers.dart';
 import '../data/db.dart';
+import '../services/data/recurring_transaction_service.dart';
+import '../services/system/logger_service.dart';
 
 // 底部导航索引（0: 明细, 1: 图表, 2: 账本, 3: 我的）
 final bottomTabIndexProvider = StateProvider<int>((ref) => 0);
@@ -164,9 +168,9 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
     ]);
     print('✅ 基础配置初始化完成');
 
-    // 确保数据库已初始化
-    ref.read(databaseProvider);
-    print('🗄️ 数据库初始化完成');
+    // 获取 repository（会自动根据模式初始化）
+    final repo = ref.read(repositoryProvider);
+    print('🗄️ Repository 初始化完成');
 
     // 预加载当前账本的关键数据
     final ledgerId = ref.read(currentLedgerIdProvider);
@@ -188,12 +192,24 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
     print('🔢 账本统计预加载完成: $countsResult');
 
     // 预加载首屏交易数据（包含分类信息）
-    final repo = ref.read(repositoryProvider);
     final recentTransactionsWithCategory =
         await repo.transactionsWithCategoryAll(ledgerId: ledgerId).first;
     ref.read(cachedTransactionsWithCategoryProvider.notifier).state =
         recentTransactionsWithCategory;
     print('💳 交易列表预加载完成: ${recentTransactionsWithCategory.length}条记录');
+
+    // 生成待处理的周期交易
+    print('🔄 开始生成待处理的周期交易...');
+    try {
+      await RecurringTransactionService.generatePendingTransactionsStatic(
+        repository: repo,
+        verbose: true,
+      );
+      print('✅ 周期交易生成完成');
+    } catch (e, stackTrace) {
+      print('❌ 周期交易生成失败: $e');
+      print('堆栈: $stackTrace');
+    }
   } catch (e) {
     print('❌ 预加载数据失败: $e');
   }
@@ -292,3 +308,4 @@ class AIAssistantSetter {
 final aiAssistantSetterProvider = Provider<AIAssistantSetter>((ref) {
   return AIAssistantSetter();
 });
+

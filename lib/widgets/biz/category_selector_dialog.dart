@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:drift/drift.dart' as drift;
 import '../../data/db.dart';
 import '../../providers.dart';
 import '../../styles/tokens.dart';
@@ -92,6 +91,28 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  /// 加载所有分类
+  Future<List<Category>> _loadAllCategories() async {
+    final repo = ref.read(repositoryProvider);
+
+    // 获取收入和支出分类
+    final incomeCategories = await repo.getTopLevelCategories('income');
+    final expenseCategories = await repo.getTopLevelCategories('expense');
+
+    // 获取所有二级分类
+    final allCategories = <Category>[];
+    allCategories.addAll(incomeCategories);
+    allCategories.addAll(expenseCategories);
+
+    // 为每个一级分类获取子分类
+    for (final category in [...incomeCategories, ...expenseCategories]) {
+      final subs = await repo.getSubCategories(category.id);
+      allCategories.addAll(subs);
+    }
+
+    return allCategories;
   }
 
   /// 加载每个分类的交易笔数
@@ -221,7 +242,6 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final db = ref.watch(databaseProvider);
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -319,10 +339,8 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
             ),
           // 分类列表
           Expanded(
-            child: StreamBuilder<List<Category>>(
-              stream: (db.select(db.categories)
-                    ..orderBy([(c) => drift.OrderingTerm(expression: c.sortOrder)]))
-                  .watch(),
+            child: FutureBuilder<List<Category>>(
+              future: _loadAllCategories(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());

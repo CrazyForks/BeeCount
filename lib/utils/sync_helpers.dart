@@ -1,14 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers.dart';
+import '../providers/cloud_mode_providers.dart';
 
 /// 统一处理本地变更后的同步逻辑：
 /// - 始终先标记本地变更（使缓存失效）
 /// - 若开启自动同步：先上传，上传完成后刷新同步状态；支持后台静默（不阻塞UI）
-/// - 若未开启自动同步：立即刷新同步状态（应显示“本地较新”）
+/// - 若未开启自动同步：立即刷新同步状态（应显示"本地较新"）
+///
+/// 注意：云端模式下不需要此逻辑（实时同步）
 Future<void> handleLocalChange(WidgetRef ref,
     {required int ledgerId, bool background = true}) async {
   print('🔵 [handleLocalChange] 开始处理账本变更: ledgerId=$ledgerId, background=$background');
+
+  // 云端模式下直接返回，不需要同步逻辑（实时同步）
+  final currentMode = ref.read(appModeProvider);
+  if (currentMode == AppMode.cloud) {
+    print('☁️ [handleLocalChange] 云端模式下跳过同步逻辑（实时同步）');
+    return;
+  }
 
   // 失效缓存
   final sync = ref.read(syncServiceProvider);

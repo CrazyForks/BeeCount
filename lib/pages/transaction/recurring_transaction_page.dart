@@ -94,13 +94,15 @@ class RecurringTransactionPage extends ConsumerWidget {
   }
 
   void _addRecurringTransaction(BuildContext context, WidgetRef ref) async {
-    await Navigator.of(context).push(
+    final result = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         builder: (_) => const RecurringTransactionEditPage(),
       ),
     );
-    // Refresh the list
-    ref.invalidate(allRecurringTransactionsProvider);
+    // 如果返回 true，表示数据已更改，强制刷新列表
+    if (result == true) {
+      ref.invalidate(allRecurringTransactionsProvider);
+    }
   }
 }
 
@@ -111,8 +113,7 @@ class _RecurringTransactionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final db = ref.watch(databaseProvider);
-    final service = RecurringTransactionService(db);
+    final repo = ref.watch(repositoryProvider);
     final primaryColor = ref.watch(primaryColorProvider);
 
     return Container(
@@ -142,12 +143,15 @@ class _RecurringTransactionCard extends ConsumerWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () async {
-            await Navigator.of(context).push(
+            final result = await Navigator.of(context).push<bool>(
               MaterialPageRoute(
                 builder: (_) => RecurringTransactionEditPage(recurring: recurring),
               ),
             );
-            ref.invalidate(allRecurringTransactionsProvider);
+            // 如果返回 true，表示数据已更改，强制刷新列表
+            if (result == true) {
+              ref.invalidate(allRecurringTransactionsProvider);
+            }
           },
           borderRadius: BorderRadius.circular(16),
           child: Padding(
@@ -227,7 +231,7 @@ class _RecurringTransactionCard extends ConsumerWidget {
                           ),
                           // 频率
                           Text(
-                            _getFrequencyDescription(context, service),
+                            _getFrequencyDescription(context),
                             style: TextStyle(
                               fontSize: 12,
                               color: BeeTokens.textTertiary(context),
@@ -309,9 +313,22 @@ class _RecurringTransactionCard extends ConsumerWidget {
                       child: Switch(
                         value: recurring.enabled,
                         onChanged: (value) async {
-                          await service.toggleRecurringTransaction(
-                              recurring.id, value);
-                          ref.invalidate(allRecurringTransactionsProvider);
+                          print('🔧 [周期记账] 开关点击: id=${recurring.id}, newValue=$value, repo类型=${repo.runtimeType}');
+
+                          try {
+                            await repo.toggleRecurringTransaction(
+                                recurring.id, value);
+                            print('✅ [周期记账] toggleRecurringTransaction 完成');
+
+                            // 给Realtime一点时间触发更新
+                            await Future.delayed(const Duration(milliseconds: 100));
+
+                            ref.invalidate(allRecurringTransactionsProvider);
+                            print('✅ [周期记账] Provider已invalidate');
+                          } catch (e, stackTrace) {
+                            print('❌ [周期记账] 切换失败: $e');
+                            print('堆栈: $stackTrace');
+                          }
                         },
                         activeColor: primaryColor,
                       ),
@@ -326,7 +343,7 @@ class _RecurringTransactionCard extends ConsumerWidget {
     );
   }
 
-  String _getFrequencyDescription(BuildContext context, RecurringTransactionService service) {
+  String _getFrequencyDescription(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final frequency = RecurringFrequency.fromString(recurring.frequency);
     final interval = recurring.interval;
@@ -358,19 +375,13 @@ class _RecurringTransactionCard extends ConsumerWidget {
 
   Future<Category?> _getCategory(WidgetRef ref, int? categoryId) async {
     if (categoryId == null) return null;
-    final db = ref.read(databaseProvider);
-    final result = await (db.select(db.categories)
-          ..where((c) => c.id.equals(categoryId)))
-        .getSingleOrNull();
-    return result;
+    final repo = ref.read(repositoryProvider);
+    return await repo.getCategoryById(categoryId);
   }
 
   Future<Ledger?> _getLedger(WidgetRef ref, int ledgerId) async {
-    final db = ref.read(databaseProvider);
-    final result = await (db.select(db.ledgers)
-          ..where((l) => l.id.equals(ledgerId)))
-        .getSingleOrNull();
-    return result;
+    final repo = ref.read(repositoryProvider);
+    return await repo.getLedgerById(ledgerId);
   }
 }
 

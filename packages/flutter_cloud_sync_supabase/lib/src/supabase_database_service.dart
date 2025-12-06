@@ -33,6 +33,7 @@ class SupabaseDatabaseService implements CloudDatabaseService {
   Future<Map<String, dynamic>> insert({
     required String table,
     required Map<String, dynamic> data,
+    bool autoInjectUserId = true,
   }) async {
     try {
       // Check authentication
@@ -41,10 +42,16 @@ class SupabaseDatabaseService implements CloudDatabaseService {
         throw CloudNotAuthenticatedException('User not authenticated');
       }
 
+      // 自动注入 user_id
+      final insertData = Map<String, dynamic>.from(data);
+      if (autoInjectUserId && !insertData.containsKey('user_id')) {
+        insertData['user_id'] = user.id;
+      }
+
       // Insert and return the created record
       final response = await _client
           .from(table)
-          .insert(data)
+          .insert(insertData)
           .select()
           .single();
 
@@ -89,6 +96,7 @@ class SupabaseDatabaseService implements CloudDatabaseService {
     required String table,
     required String id,
     required Map<String, dynamic> data,
+    bool autoFilterByUser = true,
   }) async {
     try {
       // Check authentication
@@ -97,13 +105,19 @@ class SupabaseDatabaseService implements CloudDatabaseService {
         throw CloudNotAuthenticatedException('User not authenticated');
       }
 
-      // Update and return the updated record
-      final response = await _client
+      // Build query
+      var query = _client
           .from(table)
           .update(data)
-          .eq('id', id)
-          .select()
-          .single();
+          .eq('id', id);
+
+      // 自动添加用户过滤
+      if (autoFilterByUser) {
+        query = query.eq('user_id', user.id);
+      }
+
+      // Update and return the updated record
+      final response = await query.select().single();
 
       return response as Map<String, dynamic>;
     } on supabase.PostgrestException catch (e) {
@@ -118,6 +132,7 @@ class SupabaseDatabaseService implements CloudDatabaseService {
   Future<void> delete({
     required String table,
     required String id,
+    bool autoFilterByUser = true,
   }) async {
     try {
       // Check authentication
@@ -126,11 +141,19 @@ class SupabaseDatabaseService implements CloudDatabaseService {
         throw CloudNotAuthenticatedException('User not authenticated');
       }
 
-      // Delete record
-      await _client
+      // Build query
+      var query = _client
           .from(table)
           .delete()
           .eq('id', id);
+
+      // 自动添加用户过滤
+      if (autoFilterByUser) {
+        query = query.eq('user_id', user.id);
+      }
+
+      // Delete record
+      await query;
     } on supabase.PostgrestException catch (e) {
       throw CloudStorageException('Delete failed: ${e.message}', e);
     } catch (e) {
@@ -147,6 +170,7 @@ class SupabaseDatabaseService implements CloudDatabaseService {
     bool descending = false,
     int? limit,
     int? offset,
+    bool autoFilterByUser = true,
   }) async {
     try {
       // Check authentication
@@ -157,6 +181,11 @@ class SupabaseDatabaseService implements CloudDatabaseService {
 
       // Build query
       dynamic query = _client.from(table).select();
+
+      // 自动添加用户过滤
+      if (autoFilterByUser) {
+        query = query.eq('user_id', user.id);
+      }
 
       // Apply filters
       if (filters != null) {

@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:collection/collection.dart';
 import '../../data/db.dart';
 
 /// 重复交易频率枚举
@@ -20,48 +21,48 @@ enum RecurringFrequency {
 }
 
 /// 重复交易服务
+///
+/// 注意：此服务主要用于生成待处理的周期交易记录
+/// 基础的 CRUD 操作请使用 RecurringTransactionRepository
+///
+/// repository 参数可以是 BeeRepository 或 CloudRepository
 class RecurringTransactionService {
-  final BeeDatabase db;
+  final dynamic repository;
 
-  RecurringTransactionService(this.db);
+  RecurringTransactionService(this.repository);
 
-  /// 获取指定账本的所有重复交易
-  Future<List<RecurringTransaction>> getRecurringTransactions(int ledgerId) {
-    return (db.select(db.recurringTransactions)
-          ..where((t) => t.ledgerId.equals(ledgerId))
-          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
-        .get();
-  }
+  /// 静态方法：生成待处理的重复交易（供启动时和初始化时调用）
+  ///
+  /// [repository] 可以是 BeeRepository 或 CloudRepository
+  /// [verbose] 是否打印详细日志
+  static Future<void> generatePendingTransactionsStatic({
+    required dynamic repository,
+    bool verbose = false,
+  }) async {
+    try {
+      if (verbose) {
+        print('🔄 [RecurringTransaction] 开始生成待处理的重复交易...');
+        print('🔧 [RecurringTransaction] Repository类型: ${repository.runtimeType}');
+      }
 
-  /// 获取指定账本的启用的重复交易
-  Future<List<RecurringTransaction>> getEnabledRecurringTransactions(int ledgerId) {
-    return (db.select(db.recurringTransactions)
-          ..where((t) => t.ledgerId.equals(ledgerId) & t.enabled.equals(true))
-          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
-        .get();
-  }
+      final service = RecurringTransactionService(repository);
+      final generatedTransactions = await service.generatePendingTransactions();
 
-  /// 创建重复交易
-  Future<int> createRecurringTransaction(RecurringTransactionsCompanion data) {
-    return db.into(db.recurringTransactions).insert(data);
-  }
-
-  /// 更新重复交易
-  Future<int> updateRecurringTransaction(int id, RecurringTransactionsCompanion data) {
-    return (db.update(db.recurringTransactions)..where((t) => t.id.equals(id)))
-        .write(data);
-  }
-
-  /// 删除重复交易
-  Future<int> deleteRecurringTransaction(int id) {
-    return (db.delete(db.recurringTransactions)..where((t) => t.id.equals(id)))
-        .go();
-  }
-
-  /// 启用/禁用重复交易
-  Future<int> toggleRecurringTransaction(int id, bool enabled) {
-    return (db.update(db.recurringTransactions)..where((t) => t.id.equals(id)))
-        .write(RecurringTransactionsCompanion(enabled: Value(enabled)));
+      if (generatedTransactions.isNotEmpty) {
+        print('✅ [RecurringTransaction] 成功生成 ${generatedTransactions.length} 条重复交易记录');
+      } else {
+        if (verbose) {
+          print('ℹ️  [RecurringTransaction] 没有待生成的重复交易');
+        }
+      }
+    } catch (e, stackTrace) {
+      print('❌ [RecurringTransaction] 生成重复交易失败: $e');
+      if (verbose) {
+        print('📍 [RecurringTransaction] 错误堆栈:');
+        print(stackTrace.toString());
+      }
+      // 不抛出异常，避免影响应用启动
+    }
   }
 
   /// 计算下一次应该生成交易的日期
@@ -137,13 +138,29 @@ class RecurringTransactionService {
 
   /// 生成待处理的交易记录
   Future<List<Transaction>> generatePendingTransactions() async {
-    final ledgers = await db.select(db.ledgers).get();
+    print('🔧 [RecurringTransactionService] 开始生成待处理的交易记录');
+
+    print('🔧 [RecurringTransactionService] 正在获取所有账本...');
+    final ledgers = await repository.getAllLedgers();
+    print('✅ [RecurringTransactionService] 获取到 ${ledgers.length} 个账本');
+
     final generatedTransactions = <Transaction>[];
 
     for (final ledger in ledgers) {
-      final recurringList = await getEnabledRecurringTransactions(ledger.id);
+      print('🔧 [RecurringTransactionService] 处理账本: ${ledger.name} (id=${ledger.id})');
+
+      // 获取所有启用的周期交易
+      print('🔧 [RecurringTransactionService] 正在获取周期交易...');
+      final allRecurring = await repository.getAllRecurringTransactions();
+      print('✅ [RecurringTransactionService] 获取到 ${allRecurring.length} 个周期交易');
+
+      final recurringList = allRecurring
+          .where((r) => r.ledgerId == ledger.id && r.enabled)
+          .toList();
+      print('📋 [RecurringTransactionService] 账本 ${ledger.name} 中有 ${recurringList.length} 个启用的周期交易');
 
       for (final recurring in recurringList) {
+        print('🔧 [RecurringTransactionService] 处理周期交易: id=${recurring.id}');
         // 循环生成所有缺失的交易记录
         var currentRecurring = recurring;
         while (true) {
@@ -151,38 +168,44 @@ class RecurringTransactionService {
           if (nextDate == null) break;
 
           // 生成交易记录
-          final transactionId = await db.into(db.transactions).insert(
-                TransactionsCompanion.insert(
-                  ledgerId: currentRecurring.ledgerId,
-                  type: currentRecurring.type,
-                  amount: currentRecurring.amount,
-                  categoryId: Value(currentRecurring.categoryId),
-                  accountId: Value(currentRecurring.accountId),
-                  toAccountId: Value(currentRecurring.toAccountId),
-                  happenedAt: Value(nextDate),
-                  note: Value(currentRecurring.note),
-                  recurringId: Value(currentRecurring.id),
-                ),
-              );
+          final transactionId = await repository.addTransaction(
+            ledgerId: currentRecurring.ledgerId,
+            type: currentRecurring.type,
+            amount: currentRecurring.amount,
+            categoryId: currentRecurring.categoryId,
+            accountId: currentRecurring.accountId,
+            toAccountId: currentRecurring.toAccountId,
+            happenedAt: nextDate,
+            note: currentRecurring.note,
+          );
 
           // 更新最后生成日期
-          await (db.update(db.recurringTransactions)
-                ..where((t) => t.id.equals(currentRecurring.id)))
-              .write(RecurringTransactionsCompanion(
-            lastGeneratedDate: Value(nextDate),
-            updatedAt: Value(DateTime.now()),
-          ));
+          await repository.updateLastGeneratedDate(
+            currentRecurring.id,
+            nextDate,
+          );
 
-          // 获取生成的交易
-          final transaction = await (db.select(db.transactions)
-                ..where((t) => t.id.equals(transactionId)))
-              .getSingle();
-          generatedTransactions.add(transaction);
+          // 使用流式查询获取生成的交易（取第一个）
+          final transactionsWithCategory =
+              await repository.transactionsWithCategoryAll(ledgerId: ledger.id).first;
+          final matchedTransactions = transactionsWithCategory
+              .where((e) => e.t.id == transactionId)
+              .toList();
+          final transaction = matchedTransactions.isNotEmpty
+              ? matchedTransactions.first.t
+              : null;
+
+          if (transaction != null) {
+            generatedTransactions.add(transaction);
+          }
 
           // 重新读取更新后的重复交易记录，用于下一次循环
-          currentRecurring = await (db.select(db.recurringTransactions)
-                ..where((t) => t.id.equals(currentRecurring.id)))
-              .getSingle();
+          final updatedList = await repository.getAllRecurringTransactions();
+          final matchedRecurring =
+              updatedList.where((r) => r.id == currentRecurring.id).toList();
+          if (matchedRecurring.isEmpty) break;
+          final updatedRecurring = matchedRecurring.first;
+          currentRecurring = updatedRecurring;
         }
       }
     }

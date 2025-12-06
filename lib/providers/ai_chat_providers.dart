@@ -7,8 +7,8 @@ import '../data/db.dart';
 
 /// AI 对话服务 Provider
 final aiChatServiceProvider = Provider<AIChatService>((ref) {
-  final db = ref.watch(databaseProvider);
-  return AIChatService(db: db);
+  final repo = ref.watch(repositoryProvider);
+  return AIChatService(repo: repo);
 });
 
 /// 当前对话 ID Provider
@@ -17,10 +17,7 @@ final currentConversationIdProvider = StateProvider<int?>((ref) => null);
 /// 消息列表 Provider
 final messagesProvider = StreamProvider.family<List<Message>, int>(
   (ref, conversationId) {
-    final db = ref.watch(databaseProvider);
-    return (db.select(db.messages)
-          ..where((m) => m.conversationId.equals(conversationId))
-          ..orderBy([(m) => OrderingTerm.asc(m.createdAt)]))
-        .watch();
+    final repo = ref.watch(repositoryProvider);
+    return repo.watchMessages(conversationId);
   },
 );

@@ -5,7 +5,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' as fcs;
 
 import '../data/db.dart';
-import '../data/repository.dart';
+import '../data/repositories/base_repository.dart';
 import '../models/ledger_display_item.dart';
 import '../services/system/logger_service.dart';
 import 'sync_service.dart';
@@ -17,7 +17,7 @@ import 'transactions_json.dart';
 class TransactionsSyncManager implements SyncService {
   final fcs.CloudServiceConfig config;
   final BeeDatabase db;
-  final BeeRepository repo;
+  final BaseRepository repo;
 
   fcs.CloudSyncManager<int>? _syncManager;
   fcs.CloudProvider? _provider;

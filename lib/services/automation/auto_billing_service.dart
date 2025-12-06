@@ -7,6 +7,7 @@ import '../billing/category_matcher.dart';
 import '../billing/bill_creation_service.dart';
 import 'auto_billing_config.dart';
 import '../../providers.dart';
+import '../../data/db.dart';
 import '../../data/category_node.dart';
 import '../system/logger_service.dart';
 
@@ -179,9 +180,9 @@ class AutoBillingService {
       print('⏱️ [性能] 开始OCR识别');
       logger.info('AutoBilling', '开始OCR识别');
 
-      // 获取数据库实例用于账户识别
-      final db = _container.read(databaseProvider);
-      final result = await _ocrService.recognizePaymentImage(file, db: db);
+      // 获取Repository实例用于账户识别
+      final repo = _container.read(repositoryProvider);
+      final result = await _ocrService.recognizePaymentImage(file, repo: repo);
 
       final ocrElapsed = DateTime.now().millisecondsSinceEpoch - ocrStartTime;
       print('⏱️ [性能] OCR识别完成, 耗时=${ocrElapsed}ms');
@@ -352,10 +353,15 @@ class AutoBillingService {
       }
 
       // 获取分类并创建交易
-      final db = _container.read(databaseProvider);
-      final allCategories = await (db.select(db.categories)
-            ..where((t) => t.kind.equals('expense')))
-          .get();
+      final repo = _container.read(repositoryProvider);
+      final topLevelCategories = await repo.getTopLevelCategories('expense');
+      final allCategories = <Category>[];
+      allCategories.addAll(topLevelCategories);
+      // 获取所有子分类
+      for (final category in topLevelCategories) {
+        final subCategories = await repo.getSubCategories(category.id);
+        allCategories.addAll(subCategories);
+      }
 
       // 过滤出可用分类（排除有子分类的父分类）
       final categories = CategoryHierarchy.getUsableCategories(allCategories);
@@ -444,14 +450,14 @@ class AutoBillingService {
       // 方案3: 如果都失败，从数据库获取第一个账本
       if (ledgerId == null) {
         print('⚠️ 无法从缓存获取账本ID，尝试从数据库获取默认账本');
-        final db = _container.read(databaseProvider);
-        final ledgers = await db.select(db.ledgers).get();
+        final repo = _container.read(repositoryProvider);
+        final ledgers = await repo.getAllLedgers();
         if (ledgers.isNotEmpty) {
           ledgerId = ledgers.first.id;
           print('✅ 从数据库获取默认账本ID: $ledgerId');
           // 保存到SharedPreferences供下次使用
           final prefs = await SharedPreferences.getInstance();
-          await prefs.setInt(_ledgerIdKey, ledgerId);
+          await prefs.setInt(_ledgerIdKey, ledgerId!);
         }
       }
 
@@ -463,8 +469,8 @@ class AutoBillingService {
       print('📝 准备创建交易: ledgerId=$ledgerId');
 
       // 使用共享的BillCreationService创建交易
-      final db = _container.read(databaseProvider);
-      final billCreationService = BillCreationService(db);
+      final repo = _container.read(repositoryProvider);
+      final billCreationService = BillCreationService(repo);
 
       // 准备备注
       String? note;

@@ -14,6 +14,7 @@ import '../../styles/tokens.dart';
 import '../transaction/search_page.dart';
 import '../ai/ai_chat_page.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/system/logger_service.dart';
 
 // 优化版首页 - 使用FlutterListView实现精准定位和丝滑跳转
 class HomePage extends ConsumerStatefulWidget {
@@ -32,6 +33,10 @@ class _HomePageState extends ConsumerState<HomePage> {
   // 可见性管理
   final Set<String> _visibleHeaders = {}; // 当前可见的日期头部
   Timer? _debounceTimer;
+
+  // StreamBuilder 刷新计数器
+  int _streamBuilderKey = 0;
+  int? _lastLedgerId;
 
   @override
   void initState() {
@@ -144,6 +149,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     final hide = ref.watch(hideAmountsProvider);
     final aiEnabledAsync = ref.watch(aiAssistantEnabledProvider);
     final aiEnabled = aiEnabledAsync.asData?.value ?? true; // 默认开启
+
+    // 检测账本切换，强制刷新 StreamBuilder
+    if (_lastLedgerId != null && _lastLedgerId != ledgerId) {
+      _streamBuilderKey++;
+      logger.info('HomePage', '账本切换: $_lastLedgerId → $ledgerId, 刷新StreamBuilder (key=$_streamBuilderKey)');
+    }
+    _lastLedgerId = ledgerId;
 
     // 监听滚动到顶部的信号
     ref.listen<int>(homeScrollToTopProvider, (previous, next) {
@@ -348,6 +360,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           const SizedBox(height: 0),
           Expanded(
             child: StreamBuilder<List<({Transaction t, Category? category})>>(
+              key: ValueKey('transactions_$_streamBuilderKey'), // 使用递增key强制重建
               stream: repo.transactionsWithCategoryAll(ledgerId: ledgerId),
               builder: (context, snapshot) {
                 // 优先使用流数据，否则使用缓存数据，避免显示loading

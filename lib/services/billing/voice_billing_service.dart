@@ -5,7 +5,7 @@ import '../../ai/tasks/bill_extraction_task.dart';
 import '../../ai/providers/bill_extraction_glm_provider.dart';
 import '../../ai/providers/speech_to_text_glm_provider.dart';
 import '../system/logger_service.dart';
-import '../../data/repository.dart';
+import '../../data/repositories/base_repository.dart';
 import '../../data/db.dart';
 
 /// 语音识别结果
@@ -53,7 +53,7 @@ class VoiceBillingService {
   /// 步骤2：从文字提取账单信息（较慢）
   Future<BillInfo?> extractBillFromText(
     String text, {
-    required BeeRepository repository,
+    required BaseRepository repository,
     required BeeDatabase db,
     required int ledgerId,
   }) async {
@@ -68,9 +68,7 @@ class VoiceBillingService {
       final incomeCategoryNames = incomeCategories.map((c) => c.name).toList();
 
       // 获取账本信息以确定币种
-      final ledger = await (db.select(db.ledgers)
-            ..where((t) => t.id.equals(ledgerId)))
-          .getSingleOrNull();
+      final ledger = await repository.getLedgerById(ledgerId);
 
       // 获取与账本币种相同的账户
       List<String> accountNames = [];
@@ -118,7 +116,7 @@ class VoiceBillingService {
   /// 返回包含识别文字和账单信息的结果
   Future<VoiceRecognitionResult> recognizeVoiceForBilling(
     File audioFile, {
-    required BeeRepository repository,
+    required BaseRepository repository,
     required BeeDatabase db,
     required int ledgerId,
   }) async {

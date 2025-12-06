@@ -8,7 +8,7 @@ import 'ai_bill_service.dart';
 import '../billing/bill_creation_service.dart';
 import '../billing/ocr_service.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
-import '../../data/db.dart';
+import '../../data/repositories/base_repository.dart';
 import '../system/logger_service.dart';
 
 /// AI配置验证结果
@@ -37,9 +37,9 @@ class AIConfigValidationResult {
 /// 2. 自由对话 - 使用智谱 GLM 进行对话
 class AIChatService {
   final AIBillService _aiBillService = AIBillService();
-  final BeeDatabase _db;
+  final BaseRepository _repo;
 
-  AIChatService({required BeeDatabase db}) : _db = db;
+  AIChatService({required BaseRepository repo}) : _repo = repo;
 
   /// 验证 API Key 是否有效（静态方法）
   static Future<AIConfigValidationResult> validateApiKey() async {
@@ -268,7 +268,7 @@ class AIChatService {
       ledgerId = bill.ledgerId!;
       logger.info('AIChat', '使用指定账本ID: $ledgerId');
     } else {
-      final ledgers = await (_db.select(_db.ledgers)).get();
+      final ledgers = await _repo.getAllLedgers();
       ledgerId = ledgers.first.id;
       logger.warning('AIChat', '未指定账本ID，使用第一个账本: $ledgerId');
     }
@@ -289,7 +289,7 @@ class AIChatService {
     );
 
     // 使用 BillCreationService 创建交易
-    final billCreationService = BillCreationService(_db);
+    final billCreationService = BillCreationService(_repo);
     final id = await billCreationService.createBillTransaction(
       result: ocrResult,
       ledgerId: ledgerId,
@@ -298,9 +298,7 @@ class AIChatService {
 
     if (id != null) {
       // 查询实际保存的交易，获取实际的分类和账户名称
-      final transaction = await (_db.select(_db.transactions)
-            ..where((t) => t.id.equals(id)))
-          .getSingleOrNull();
+      final transaction = await _repo.getTransactionById(id);
 
       String? actualCategoryName;
       String? actualAccountName;
@@ -308,17 +306,13 @@ class AIChatService {
       if (transaction != null) {
         // 获取实际分类名称
         if (transaction.categoryId != null) {
-          final category = await (_db.select(_db.categories)
-                ..where((c) => c.id.equals(transaction.categoryId!)))
-              .getSingleOrNull();
+          final category = await _repo.getCategoryById(transaction.categoryId!);
           actualCategoryName = category?.name;
         }
 
         // 获取实际账户名称
         if (transaction.accountId != null) {
-          final account = await (_db.select(_db.accounts)
-                ..where((a) => a.id.equals(transaction.accountId!)))
-              .getSingleOrNull();
+          final account = await _repo.getAccount(transaction.accountId!);
           actualAccountName = account?.name;
         }
       }
@@ -333,9 +327,7 @@ class AIChatService {
   /// 撤销记账
   Future<bool> undoTransaction(int transactionId) async {
     try {
-      await (_db.delete(_db.transactions)
-            ..where((t) => t.id.equals(transactionId)))
-          .go();
+      await _repo.deleteTransaction(transactionId);
       logger.info('AIChat', '撤销记账: id=$transactionId');
       return true;
     } catch (e, st) {

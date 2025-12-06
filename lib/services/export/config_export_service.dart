@@ -4,6 +4,7 @@ import 'package:yaml/yaml.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import 'package:drift/drift.dart' as d;
 import '../../data/db.dart';
+import '../../data/repositories/base_repository.dart';
 import '../system/logger_service.dart';
 
 // 导入 OrderingTerm
@@ -681,9 +682,9 @@ class CategoryItem {
 /// 配置导入导出服务
 class ConfigExportService {
   /// 导出配置到YAML字符串
-  /// [db] 数据库实例，用于导出周期账单等数据
+  /// [repository] 数据仓库实例，用于导出周期账单等数据
   /// [ledgerId] 账本ID，用于过滤导出的周期账单
-  static Future<String> exportToYaml({BeeDatabase? db, int? ledgerId}) async {
+  static Future<String> exportToYaml({BaseRepository? repository, int? ledgerId}) async {
     final prefs = await SharedPreferences.getInstance();
 
     // 读取Supabase配置
@@ -833,11 +834,9 @@ class ConfigExportService {
 
     // 读取周期账单配置（导出全部账本的周期记账）
     RecurringTransactionsConfig? recurringConfig;
-    if (db != null) {
+    if (repository != null) {
       try {
-        final recurringList = await (db.select(db.recurringTransactions)
-              ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
-            .get();
+        final recurringList = await repository.getAllRecurringTransactions();
 
         if (recurringList.isNotEmpty) {
           recurringConfig = RecurringTransactionsConfig(
@@ -853,11 +852,9 @@ class ConfigExportService {
 
     // 读取账户配置（导出全部账户）
     AccountsConfig? accountsConfig;
-    if (db != null) {
+    if (repository != null) {
       try {
-        final accountsList = await (db.select(db.accounts)
-              ..orderBy([(t) => OrderingTerm.asc(t.id)]))
-            .get();
+        final accountsList = await repository.getAllAccounts();
 
         if (accountsList.isNotEmpty) {
           accountsConfig = AccountsConfig(
@@ -873,11 +870,20 @@ class ConfigExportService {
 
     // 读取分类配置（导出全部分类）
     CategoriesConfig? categoriesConfig;
-    if (db != null) {
+    if (repository != null) {
       try {
-        final categoriesList = await (db.select(db.categories)
-              ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
-            .get();
+        // 获取所有分类（收入和支出）
+        final expenseCategories = await repository.getTopLevelCategories('expense');
+        final incomeCategories = await repository.getTopLevelCategories('income');
+        final categoriesList = <Category>[];
+        categoriesList.addAll(expenseCategories);
+        categoriesList.addAll(incomeCategories);
+
+        // 获取所有子分类
+        for (final category in [...expenseCategories, ...incomeCategories]) {
+          final subCategories = await repository.getSubCategories(category.id);
+          categoriesList.addAll(subCategories);
+        }
 
         if (categoriesList.isNotEmpty) {
           // 构建 ID 到分类的映射，用于查找父分类名称
@@ -1189,11 +1195,11 @@ class ConfigExportService {
 
   /// 从YAML字符串导入配置
   /// [yamlContent] YAML内容
-  /// [db] 数据库实例，用于导入周期账单等数据
+  /// [repository] 数据仓库实例，用于导入周期账单等数据
   /// [ledgerId] 账本ID，用于导入周期账单到指定账本
   static Future<void> importFromYaml(
     String yamlContent, {
-    BeeDatabase? db,
+    BaseRepository? repository,
     int? ledgerId,
   }) async {
     final doc = loadYaml(yamlContent);
@@ -1345,7 +1351,7 @@ class ConfigExportService {
     }
 
     // 导入周期账单
-    if (config.recurringTransactions != null && db != null) {
+    if (config.recurringTransactions != null && repository != null) {
       try {
         final items = config.recurringTransactions!.items;
 
@@ -1369,10 +1375,8 @@ class ConfigExportService {
           enabled: d.Value(item.enabled),
         )).toList();
 
-        // 使用 batch 批量插入
-        await db.batch((batch) {
-          batch.insertAll(db.recurringTransactions, recurringToInsert);
-        });
+        // 使用 repository 方法进行批量插入
+        await repository.batchInsertRecurringTransactions(recurringToInsert);
 
         logger.info('ConfigImport', '周期账单已批量导入: ${items.length}条');
       } catch (e) {
@@ -1381,7 +1385,7 @@ class ConfigExportService {
     }
 
     // 导入账户
-    if (config.accounts != null && db != null) {
+    if (config.accounts != null && repository != null) {
       try {
         final items = config.accounts!.items;
 
@@ -1397,10 +1401,8 @@ class ConfigExportService {
           updatedAt: d.Value(DateTime.now()),
         )).toList();
 
-        // 使用 batch 批量插入
-        await db.batch((batch) {
-          batch.insertAll(db.accounts, accountsToInsert);
-        });
+        // 使用 repository 方法进行批量插入
+        await repository.batchInsertAccounts(accountsToInsert);
 
         logger.info('ConfigImport', '账户已批量导入: ${items.length}条');
       } catch (e) {
@@ -1409,7 +1411,7 @@ class ConfigExportService {
     }
 
     // 导入分类
-    if (config.categories != null && db != null) {
+    if (config.categories != null && repository != null) {
       try {
         final items = config.categories!.items;
 
@@ -1425,13 +1427,11 @@ class ConfigExportService {
         )).toList();
 
         if (level1Companions.isNotEmpty) {
-          await db.batch((batch) {
-            batch.insertAll(db.categories, level1Companions);
-          });
+          await repository.batchInsertCategories(level1Companions);
         }
 
         // 第二步：在事务外查询刚插入的一级分类，构建名称到ID的映射
-        final allCategories = await db.select(db.categories).get();
+        final allCategories = await repository.getAllCategories();
         final nameToIdMap = <String, int>{
           for (var cat in allCategories) cat.name: cat.id
         };
@@ -1457,9 +1457,7 @@ class ConfigExportService {
         }
 
         if (level2Companions.isNotEmpty) {
-          await db.batch((batch) {
-            batch.insertAll(db.categories, level2Companions);
-          });
+          await repository.batchInsertCategories(level2Companions);
         }
 
         logger.info('ConfigImport', '分类已批量导入: 一级${level1Items.length}条, 二级${level2Companions.length}条');
@@ -1472,10 +1470,10 @@ class ConfigExportService {
   /// 导出配置到文件
   static Future<void> exportToFile(
     String filePath, {
-    BeeDatabase? db,
+    BaseRepository? repository,
     int? ledgerId,
   }) async {
-    final yamlContent = await exportToYaml(db: db, ledgerId: ledgerId);
+    final yamlContent = await exportToYaml(repository: repository, ledgerId: ledgerId);
     final file = File(filePath);
     await file.writeAsString(yamlContent);
     logger.info('ConfigExport', '配置已导出到: $filePath');
@@ -1484,7 +1482,7 @@ class ConfigExportService {
   /// 从文件导入配置
   static Future<void> importFromFile(
     String filePath, {
-    BeeDatabase? db,
+    BaseRepository? repository,
     int? ledgerId,
   }) async {
     final file = File(filePath);
@@ -1493,7 +1491,7 @@ class ConfigExportService {
     }
 
     final yamlContent = await file.readAsString();
-    await importFromYaml(yamlContent, db: db, ledgerId: ledgerId);
+    await importFromYaml(yamlContent, repository: repository, ledgerId: ledgerId);
     logger.info('ConfigImport', '配置已从文件导入: $filePath');
   }
 }

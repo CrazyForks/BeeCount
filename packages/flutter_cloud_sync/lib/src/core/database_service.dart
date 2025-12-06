@@ -140,27 +140,36 @@ abstract class CloudDatabaseService {
   /// Insert a record
   ///
   /// Returns the inserted record (with server-generated fields like id, timestamps).
+  ///
+  /// - [autoInjectUserId]: 自动注入当前用户ID (默认: true)
   Future<Map<String, dynamic>> insert({
     required String table,
     required Map<String, dynamic> data,
+    bool autoInjectUserId = true,
   });
 
   /// Update a record
   ///
   /// Uses [id] to identify the record to update.
   /// Returns the updated record.
+  ///
+  /// - [autoFilterByUser]: 自动添加用户过滤(防止修改其他用户数据, 默认: true)
   Future<Map<String, dynamic>> update({
     required String table,
     required String id,
     required Map<String, dynamic> data,
+    bool autoFilterByUser = true,
   });
 
   /// Delete a record
   ///
   /// Uses [id] to identify the record to delete.
+  ///
+  /// - [autoFilterByUser]: 自动添加用户过滤(防止删除其他用户数据, 默认: true)
   Future<void> delete({
     required String table,
     required String id,
+    bool autoFilterByUser = true,
   });
 
   /// Query records
@@ -170,6 +179,7 @@ abstract class CloudDatabaseService {
   /// - [descending]: Sort descending (default: false)
   /// - [limit]: Maximum number of records to return
   /// - [offset]: Number of records to skip
+  /// - [autoFilterByUser]: 自动添加用户过滤(默认: true)
   Future<List<Map<String, dynamic>>> query({
     required String table,
     List<QueryFilter>? filters,
@@ -177,6 +187,7 @@ abstract class CloudDatabaseService {
     bool descending = false,
     int? limit,
     int? offset,
+    bool autoFilterByUser = true,
   });
 
   /// Get a single record by ID

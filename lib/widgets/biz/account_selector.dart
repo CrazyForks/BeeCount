@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 import '../../data/db.dart';
 import '../../styles/tokens.dart';
 import '../../utils/lru_cache.dart';
 import '../../providers.dart';
+import '../../services/system/logger_service.dart';
 
 /// 账户选择器组件
 /// 横滑标签形式，支持 LRU 排序
 class AccountSelector extends ConsumerStatefulWidget {
-  final BeeDatabase db;
   final int? selectedAccountId;
   final ValueChanged<int?> onAccountSelected;
   final int ledgerId;
 
   const AccountSelector({
     super.key,
-    required this.db,
     required this.selectedAccountId,
     required this.onAccountSelected,
     required this.ledgerId,
@@ -64,7 +64,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
       // 获取 LRU 排序
       final lruOrder = await _lruCache.getOrderedIds();
 
-      print('[AccountSelector] 加载账户完成，初始选中: $_initialSelectedAccountId, LRU顺序: $lruOrder');
+      logger.debug('AccountSelector', '加载账户完成，初始选中: $_initialSelectedAccountId, LRU顺序: $lruOrder');
 
       if (mounted) {
         setState(() {
@@ -116,13 +116,13 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
   }
 
   void _onAccountTap(int? accountId) {
-    print('[AccountSelector] 点击账户: $accountId, 当前LRU顺序: $_lruOrder');
+    logger.debug('AccountSelector', '点击账户: $accountId, 当前LRU顺序: $_lruOrder');
     widget.onAccountSelected(accountId);
 
     // 只记录使用，不立即更新排序（下次加载时才生效）
     if (accountId != null) {
       _lruCache.recordUsage(accountId);
-      print('[AccountSelector] 已记录使用，但不更新当前排序');
+      logger.debug('AccountSelector', '已记录使用，但不更新当前排序');
     }
   }
 

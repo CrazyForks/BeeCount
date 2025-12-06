@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:collection/collection.dart';
 import '../../data/db.dart';
-import '../../data/repository.dart';
+import '../../data/repositories/base_repository.dart';
 import '../../data/category_node.dart';
 import '../system/logger_service.dart';
 import 'category_matcher.dart';
@@ -10,10 +11,10 @@ import 'ocr_service.dart';
 ///
 /// 提供统一的账单创建接口，供OCR手动扫描和自动记账使用
 class BillCreationService {
-  final BeeDatabase db;
+  final BaseRepository repo;
   static const _tag = 'BillCreation';
 
-  BillCreationService(this.db);
+  BillCreationService(this.repo);
 
   /// 匹配分类
   ///
@@ -111,9 +112,8 @@ class BillCreationService {
     }
 
     // 3. 获取账本信息以确定币种
-    final ledger = await (db.select(db.ledgers)
-          ..where((t) => t.id.equals(ledgerId)))
-        .getSingleOrNull();
+    final repository = repo;
+    final ledger = await repository.getLedgerById(ledgerId);
 
     if (ledger == null) {
       logger.debug(_tag, '[账户匹配] 账本不存在，跳过匹配');
@@ -121,7 +121,6 @@ class BillCreationService {
     }
 
     // 4. 查询与账本币种相同的所有账户
-    final repository = BeeRepository(db);
     final allAccounts = await repository.getAllAccounts();
     final matchingAccounts = allAccounts
         .where((a) => a.currency == ledger.currency)
@@ -190,13 +189,11 @@ class BillCreationService {
       }
 
       // 2. 获取账本币种
-      final ledger = await (db.select(db.ledgers)
-            ..where((t) => t.id.equals(ledgerId)))
-          .getSingleOrNull();
+      final repository = repo;
+      final ledger = await repository.getLedgerById(ledgerId);
       if (ledger == null) return null;
 
       // 3. 获取默认账户信息
-      final repository = BeeRepository(db);
       final account = await repository.getAccount(defaultAccountId);
       if (account == null) {
         logger.debug(_tag, '[默认账户] 账户不存在');
@@ -293,9 +290,15 @@ class BillCreationService {
     logger.debug(_tag, '[类型判断] $typeSource → ${transactionType == 'income' ? '收入' : '支出'}');
 
     // 3. 查询对应类型的所有分类
-    final allCategories = await (db.select(db.categories)
-          ..where((t) => t.kind.equals(transactionType)))
-        .get();
+    final repository = repo;
+    final topLevelCategories = await repository.getTopLevelCategories(transactionType);
+    final allCategories = <Category>[];
+    allCategories.addAll(topLevelCategories);
+    // 获取所有子分类
+    for (final category in topLevelCategories) {
+      final subCategories = await repository.getSubCategories(category.id);
+      allCategories.addAll(subCategories);
+    }
 
     // 3.1 过滤出可用于记账的分类（排除有子分类的父分类）
     final categories = CategoryHierarchy.getUsableCategories(allCategories);
@@ -322,7 +325,6 @@ class BillCreationService {
       categoryName = category?.name;
     }
     if (accountId != null) {
-      final repository = BeeRepository(db);
       final account = await repository.getAccount(accountId);
       accountName = account?.name;
     }
@@ -331,7 +333,6 @@ class BillCreationService {
     final finalNote = result.note ?? note;
 
     // 9. 使用Repository创建交易
-    final repository = BeeRepository(db);
     final finalAmount = result.amount!.abs();
     final transactionId = await repository.addTransaction(
       ledgerId: ledgerId,
@@ -371,7 +372,7 @@ class BillCreationService {
     for (final keyword in otherKeywords) {
       final otherCategory = categories.where(
         (c) => c.name.toLowerCase().contains(keyword.toLowerCase())
-      ).firstOrNull;
+      ).toList().firstOrNull;
       if (otherCategory != null) {
         logger.debug(_tag, '[分类兜底] 使用"${otherCategory.name}"(ID:${otherCategory.id})');
         return otherCategory.id;
@@ -388,7 +389,15 @@ class BillCreationService {
   ///
   /// [type] 'income' 或 'expense'
   Future<List<Category>> getCategoriesByType(String type) async {
-    return await (db.select(db.categories)..where((t) => t.kind.equals(type)))
-        .get();
+    final repository = repo;
+    final topLevelCategories = await repository.getTopLevelCategories(type);
+    final allCategories = <Category>[];
+    allCategories.addAll(topLevelCategories);
+    // 获取所有子分类
+    for (final category in topLevelCategories) {
+      final subCategories = await repository.getSubCategories(category.id);
+      allCategories.addAll(subCategories);
+    }
+    return allCategories;
   }
 }

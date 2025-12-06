@@ -1,0 +1,541 @@
+import 'package:drift/drift.dart' as d;
+
+import '../../db.dart';
+import '../../category_node.dart';
+import '../../../services/system/logger_service.dart';
+import '../category_repository.dart';
+
+/// 本地分类Repository实现
+/// 基于 Drift 数据库实现
+class LocalCategoryRepository implements CategoryRepository {
+  final BeeDatabase db;
+
+  LocalCategoryRepository(this.db);
+
+  @override
+  Future<int> createCategory({
+    required String name,
+    required String kind,
+    String? icon,
+  }) async {
+    return await db.into(db.categories).insert(
+      CategoriesCompanion.insert(
+        name: name,
+        kind: kind,
+        icon: d.Value(icon),
+      ),
+    );
+  }
+
+  @override
+  Future<int> createSubCategory({
+    required int parentId,
+    required String name,
+    required String kind,
+    String? icon,
+    int? sortOrder,
+  }) async {
+    return await db.into(db.categories).insert(
+      CategoriesCompanion.insert(
+        name: name,
+        kind: kind,
+        icon: d.Value(icon),
+        parentId: d.Value(parentId),
+        level: d.Value(2),
+        sortOrder: d.Value(sortOrder ?? 0),
+      ),
+    );
+  }
+
+  @override
+  Future<void> updateCategory(
+    int id, {
+    String? name,
+    String? icon,
+  }) async {
+    await (db.update(db.categories)..where((c) => c.id.equals(id))).write(
+      CategoriesCompanion(
+        name: name != null ? d.Value(name) : const d.Value.absent(),
+        icon: icon != null ? d.Value(icon) : const d.Value.absent(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> deleteCategory(int id) async {
+    await (db.delete(db.categories)..where((c) => c.id.equals(id))).go();
+  }
+
+  @override
+  Future<int> upsertCategory({
+    required String name,
+    required String kind,
+  }) async {
+    final existing = await (db.select(db.categories)
+          ..where((c) => c.name.equals(name) & c.kind.equals(kind)))
+        .getSingleOrNull();
+    if (existing != null) return existing.id;
+    return db.into(db.categories).insert(CategoriesCompanion.insert(
+        name: name, kind: kind, icon: const d.Value(null)));
+  }
+
+  @override
+  Future<Category?> getCategoryById(int categoryId) async {
+    return await (db.select(db.categories)
+          ..where((c) => c.id.equals(categoryId)))
+        .getSingleOrNull();
+  }
+
+  @override
+  Future<List<Category>> getTopLevelCategories(String kind) async {
+    return await (db.select(db.categories)
+          ..where((c) => c.kind.equals(kind) & c.level.equals(1) & c.parentId.isNull())
+          ..orderBy([(c) => d.OrderingTerm(expression: c.sortOrder)]))
+        .get();
+  }
+
+  @override
+  Future<List<Category>> getSubCategories(int parentId) async {
+    return await (db.select(db.categories)
+          ..where((c) => c.parentId.equals(parentId) & c.level.equals(2))
+          ..orderBy([(c) => d.OrderingTerm(expression: c.sortOrder)]))
+        .get();
+  }
+
+  @override
+  Future<List<Category>> getUsableCategories(String kind) async {
+    final allCategories = await (db.select(db.categories)
+          ..where((c) => c.kind.equals(kind))
+          ..orderBy([(c) => d.OrderingTerm(expression: c.sortOrder)]))
+        .get();
+    return CategoryHierarchy.getUsableCategories(allCategories);
+  }
+
+  @override
+  Future<bool> isCategoryNameDuplicate({
+    required String name,
+    int? excludeId,
+  }) async {
+    var expression = db.categories.name.equals(name);
+
+    if (excludeId != null) {
+      expression = expression & db.categories.id.equals(excludeId).not();
+    }
+
+    final query = db.select(db.categories)..where((c) => expression);
+    final results = await query.get();
+    return results.isNotEmpty;
+  }
+
+  @override
+  Future<bool> hasSubCategories(int categoryId) async {
+    final count = await db.customSelect(
+      'SELECT COUNT(*) as count FROM categories WHERE parent_id = ?',
+      variables: [d.Variable.withInt(categoryId)],
+      readsFrom: {db.categories},
+    ).getSingle();
+
+    final c = count.data['count'];
+    if (c is int) return c > 0;
+    if (c is BigInt) return c > BigInt.zero;
+    if (c is num) return c > 0;
+    return false;
+  }
+
+  @override
+  Future<int> getSubCategoryCount(int categoryId) async {
+    final result = await db.customSelect(
+      'SELECT COUNT(*) as count FROM categories WHERE parent_id = ?',
+      variables: [d.Variable.withInt(categoryId)],
+      readsFrom: {db.categories},
+    ).getSingle();
+
+    final count = result.data['count'];
+    if (count is int) return count;
+    if (count is BigInt) return count.toInt();
+    if (count is num) return count.toInt();
+    return 0;
+  }
+
+  @override
+  Future<int> getTransactionCountByCategory(int categoryId) async {
+    final result = await db.customSelect(
+      'SELECT COUNT(*) AS count FROM transactions WHERE category_id = ?1',
+      variables: [d.Variable.withInt(categoryId)],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    final count = result.data['count'];
+    if (count is int) return count;
+    if (count is BigInt) return count.toInt();
+    if (count is num) return count.toInt();
+    return 0;
+  }
+
+  @override
+  Future<Map<int, int>> getAllCategoryTransactionCounts() async {
+    final result = await db.customSelect(
+      '''
+      SELECT
+        c.id as category_id,
+        COALESCE(COUNT(t.id), 0) as transaction_count
+      FROM categories c
+      LEFT JOIN transactions t ON c.id = t.category_id
+      GROUP BY c.id
+      ''',
+      readsFrom: {db.categories, db.transactions},
+    ).get();
+
+    final Map<int, int> counts = {};
+    for (final row in result) {
+      final categoryId = row.data['category_id'];
+      final count = row.data['transaction_count'];
+
+      if (categoryId is int) {
+        int countInt = 0;
+        if (count is int) {
+          countInt = count;
+        } else if (count is BigInt) {
+          countInt = count.toInt();
+        } else if (count is num) {
+          countInt = count.toInt();
+        }
+
+        counts[categoryId] = countInt;
+      }
+    }
+
+    return counts;
+  }
+
+  @override
+  Future<({int totalCount, double totalAmount, double averageAmount})>
+      getCategorySummary(int categoryId) async {
+    final result = await db.customSelect(
+      '''
+      SELECT
+        COUNT(*) as count,
+        SUM(amount) as total,
+        AVG(amount) as average
+      FROM transactions
+      WHERE category_id = ?1
+      ''',
+      variables: [d.Variable.withInt(categoryId)],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    int parseCount(dynamic v) {
+      if (v is int) return v;
+      if (v is BigInt) return v.toInt();
+      if (v is num) return v.toInt();
+      return 0;
+    }
+
+    double parseAmount(dynamic v) {
+      if (v == null) return 0.0;
+      if (v is double) return v;
+      if (v is int) return v.toDouble();
+      if (v is BigInt) return v.toDouble();
+      if (v is num) return v.toDouble();
+      return 0.0;
+    }
+
+    final count = parseCount(result.data['count']);
+    final total = parseAmount(result.data['total']);
+    final average = parseAmount(result.data['average']);
+
+    return (
+      totalCount: count,
+      totalAmount: total,
+      averageAmount: average,
+    );
+  }
+
+  @override
+  Future<List<Transaction>> getTransactionsByCategory(int categoryId) async {
+    return await (db.select(db.transactions)
+      ..where((t) => t.categoryId.equals(categoryId))
+      ..orderBy([
+        (t) => d.OrderingTerm(
+          expression: t.happenedAt,
+          mode: d.OrderingMode.desc,
+        )
+      ])).get();
+  }
+
+  @override
+  Future<List<Transaction>> getTransactionsByCategoryWithSort(
+    int categoryId, {
+    String sortBy = 'time',
+    bool ascending = false,
+  }) async {
+    final query = db.select(db.transactions)..where((t) => t.categoryId.equals(categoryId));
+
+    if (sortBy == 'amount') {
+      query.orderBy([
+        (t) => d.OrderingTerm(
+          expression: t.amount,
+          mode: ascending ? d.OrderingMode.asc : d.OrderingMode.desc,
+        )
+      ]);
+    } else {
+      query.orderBy([
+        (t) => d.OrderingTerm(
+          expression: t.happenedAt,
+          mode: ascending ? d.OrderingMode.asc : d.OrderingMode.desc,
+        )
+      ]);
+    }
+
+    return await query.get();
+  }
+
+  @override
+  Future<int> migrateCategory({
+    required int fromCategoryId,
+    required int toCategoryId,
+  }) async {
+    final beforeCount = await getTransactionCountByCategory(fromCategoryId);
+
+    await (db.update(db.transactions)
+      ..where((t) => t.categoryId.equals(fromCategoryId))).write(
+      TransactionsCompanion(
+        categoryId: d.Value(toCategoryId),
+      ),
+    );
+
+    return beforeCount;
+  }
+
+  @override
+  Future<({int migratedTransactions, int migratedSubCategories})>
+      migrateCategoryTransactions({
+    required int fromCategoryId,
+    required int toCategoryId,
+  }) async {
+    return await db.transaction(() async {
+      final fromCategory = await (db.select(db.categories)
+            ..where((c) => c.id.equals(fromCategoryId)))
+          .getSingle();
+
+      int migratedTransactions = 0;
+      int migratedSubCategories = 0;
+
+      if (fromCategory.level == 1) {
+        // 一级分类：处理子分类
+        final subCategories = await getSubCategories(fromCategoryId);
+
+        if (subCategories.isNotEmpty) {
+          for (final sub in subCategories) {
+            // 检查目标分类是否已有同名子分类
+            final existingSub = await (db.select(db.categories)
+                  ..where((c) =>
+                      c.parentId.equals(toCategoryId) &
+                      c.name.equals(sub.name) &
+                      c.kind.equals(sub.kind)))
+                .getSingleOrNull();
+
+            if (existingSub != null) {
+              // 合并到已有的同名子分类
+              final count = await (db.update(db.transactions)
+                    ..where((t) => t.categoryId.equals(sub.id)))
+                  .write(TransactionsCompanion(
+                categoryId: d.Value(existingSub.id),
+              ));
+              migratedTransactions += count;
+
+              // 删除源子分类
+              await (db.delete(db.categories)..where((c) => c.id.equals(sub.id))).go();
+            } else {
+              // 将子分类移动到新的父分类下
+              await (db.update(db.categories)..where((c) => c.id.equals(sub.id)))
+                  .write(CategoriesCompanion(
+                parentId: d.Value(toCategoryId),
+              ));
+              migratedSubCategories++;
+            }
+          }
+        }
+
+        // 迁移一级分类自身的交易
+        final directCount = await (db.update(db.transactions)
+              ..where((t) => t.categoryId.equals(fromCategoryId)))
+            .write(TransactionsCompanion(
+          categoryId: d.Value(toCategoryId),
+        ));
+        migratedTransactions += directCount;
+      } else {
+        // 二级分类：直接迁移交易
+        final count = await (db.update(db.transactions)
+              ..where((t) => t.categoryId.equals(fromCategoryId)))
+            .write(TransactionsCompanion(
+          categoryId: d.Value(toCategoryId),
+        ));
+        migratedTransactions = count;
+      }
+
+      return (
+        migratedTransactions: migratedTransactions,
+        migratedSubCategories: migratedSubCategories,
+      );
+    });
+  }
+
+  @override
+  Future<({int transactionCount, bool canMigrate})> getCategoryMigrationInfo({
+    required int fromCategoryId,
+    required int toCategoryId,
+  }) async {
+    final transactionCount = await getTransactionCountByCategory(fromCategoryId);
+
+    final targetCategory = await (db.select(db.categories)
+      ..where((c) => c.id.equals(toCategoryId))).getSingleOrNull();
+
+    final canMigrate = transactionCount > 0 && targetCategory != null && fromCategoryId != toCategoryId;
+
+    return (transactionCount: transactionCount, canMigrate: canMigrate);
+  }
+
+  @override
+  Future<void> updateCategorySortOrders(
+      List<({int id, int sortOrder})> updates) async {
+    await db.transaction(() async {
+      for (final update in updates) {
+        await (db.update(db.categories)..where((c) => c.id.equals(update.id)))
+            .write(CategoriesCompanion(sortOrder: d.Value(update.sortOrder)));
+      }
+    });
+  }
+
+  @override
+  Future<String> getCategoryFullName(int categoryId) async {
+    final category = await (db.select(db.categories)
+          ..where((c) => c.id.equals(categoryId)))
+        .getSingle();
+
+    if (category.level == 1 || category.parentId == null) {
+      return category.name;
+    }
+
+    final parent = await (db.select(db.categories)
+          ..where((c) => c.id.equals(category.parentId!)))
+        .getSingle();
+
+    return '${parent.name} / ${category.name}';
+  }
+
+  @override
+  Stream<Category?> watchCategory(int categoryId) {
+    return (db.select(db.categories)
+      ..where((c) => c.id.equals(categoryId))
+    ).watchSingleOrNull();
+  }
+
+  @override
+  Stream<List<Transaction>> watchTransactionsByCategory(int categoryId, {int? ledgerId}) {
+    final query = db.select(db.transactions)
+      ..where((t) => t.categoryId.equals(categoryId));
+
+    if (ledgerId != null) {
+      query.where((t) => t.ledgerId.equals(ledgerId));
+    }
+
+    query.orderBy([
+      (t) => d.OrderingTerm(
+        expression: t.happenedAt,
+        mode: d.OrderingMode.desc,
+      )
+    ]);
+
+    return query.watch();
+  }
+
+  @override
+  Stream<List<Category>> watchCategoryWithSubs(int categoryId) {
+    return db.customSelect(
+      '''
+      SELECT * FROM categories
+      WHERE id = ? OR parent_id = ?
+      ORDER BY level, sort_order
+      ''',
+      variables: [d.Variable.withInt(categoryId), d.Variable.withInt(categoryId)],
+      readsFrom: {db.categories},
+    ).watch().map((rows) {
+      return rows.map((row) {
+        return Category(
+          id: row.read<int>('id'),
+          name: row.read<String>('name'),
+          kind: row.read<String>('kind'),
+          icon: row.read<String?>('icon'),
+          sortOrder: row.read<int>('sort_order'),
+          parentId: row.read<int?>('parent_id'),
+          level: row.read<int>('level'),
+        );
+      }).toList();
+    });
+  }
+
+  @override
+  Stream<List<({Category category, int transactionCount})>> watchCategoriesWithCount() async* {
+    await for (final rows in db.customSelect(
+      '''
+      SELECT
+        c.id as category_id,
+        c.name as category_name,
+        c.kind as category_kind,
+        c.icon as category_icon,
+        c.sort_order as category_sort_order,
+        c.parent_id as category_parent_id,
+        c.level as category_level,
+        COALESCE(COUNT(t.id), 0) as transaction_count
+      FROM categories c
+      LEFT JOIN transactions t ON t.category_id = c.id
+      GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order, c.parent_id, c.level
+      ORDER BY c.sort_order
+      ''',
+      readsFrom: {db.categories, db.transactions},
+    ).watch()) {
+      final startTime = DateTime.now();
+      final results = <({Category category, int transactionCount})>[];
+
+      for (final row in rows) {
+        final category = Category(
+          id: row.read<int>('category_id'),
+          name: row.read<String>('category_name'),
+          kind: row.read<String>('category_kind'),
+          icon: row.read<String?>('category_icon'),
+          sortOrder: row.read<int>('category_sort_order'),
+          parentId: row.read<int?>('category_parent_id'),
+          level: row.read<int>('category_level'),
+        );
+        final directCount = row.read<int>('transaction_count');
+
+        results.add((category: category, transactionCount: directCount));
+      }
+
+      final totalTime = DateTime.now().difference(startTime);
+      logger.debug('CategoryQuery', '分类数据查询完成，耗时: ${totalTime.inMilliseconds}ms, 返回${results.length}条记录');
+
+      yield results;
+    }
+  }
+
+  @override
+  Future<List<Category>> getAllCategories() async {
+    return await (db.select(db.categories)
+          ..orderBy([(c) => d.OrderingTerm(expression: c.sortOrder)]))
+        .get();
+  }
+
+  @override
+  Future<void> batchInsertCategories(List<CategoriesCompanion> categories) async {
+    await db.batch((batch) {
+      batch.insertAll(db.categories, categories);
+    });
+  }
+
+  @override
+  Future<int> insertCategory(CategoriesCompanion category) async {
+    return await db.into(db.categories).insert(category);
+  }
+}
