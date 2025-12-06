@@ -790,6 +790,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String importSkippedDuplicates(Object count) {
+    return '跳过 $count 条重复记录';
+  }
+
+  @override
   String importTransactionFailed(Object error) {
     return '导入失败，已回滚所有更改：$error';
   }
@@ -2136,6 +2141,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get exportCsvHeaderTime => '时间';
+
+  @override
+  String get exportCsvHeaderTags => '标签';
 
   @override
   String get exportShareText => 'BeeCount 导出文件';
@@ -5136,6 +5144,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String importSkippedDuplicates(Object count) {
+    return '跳過 $count 條重複記錄';
+  }
+
+  @override
   String importTransactionFailed(Object error) {
     return '匯入失敗，已回滾所有更改：$error';
   }
@@ -6482,6 +6495,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get exportCsvHeaderTime => '時間';
+
+  @override
+  String get exportCsvHeaderTags => '標籤';
 
   @override
   String get exportShareText => 'BeeCount 匯出檔案';

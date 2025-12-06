@@ -1518,6 +1518,12 @@ abstract class AppLocalizations {
   /// **'Skipped {count} non-transaction records (debts, etc.)'**
   String importSkippedNonTransactionTypes(Object count);
 
+  /// No description provided for @importSkippedDuplicates.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped {count} duplicate records'**
+  String importSkippedDuplicates(Object count);
+
   /// No description provided for @importTransactionFailed.
   ///
   /// In en, this message translates to:
@@ -4073,6 +4079,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time'**
   String get exportCsvHeaderTime;
+
+  /// No description provided for @exportCsvHeaderTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get exportCsvHeaderTags;
 
   /// No description provided for @exportShareText.
   ///

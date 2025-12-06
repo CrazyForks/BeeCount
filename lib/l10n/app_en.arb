@@ -362,6 +362,7 @@
   "importCancelled": "Import Cancelled",
   "importCompleted": "Import Completed{cancelled}, success {ok}, failed {fail}",
   "importSkippedNonTransactionTypes": "Skipped {count} non-transaction records (debts, etc.)",
+  "importSkippedDuplicates": "Skipped {count} duplicate records",
   "importTransactionFailed": "Import failed, all changes have been rolled back: {error}",
   "importFileOpenError": "Unable to open file picker: {error}",
   "@importFileOpenError": {
@@ -823,6 +824,7 @@
   "exportCsvHeaderToAccount": "To Account",
   "exportCsvHeaderNote": "Note",
   "exportCsvHeaderTime": "Time",
+  "exportCsvHeaderTags": "Tags",
   "exportShareText": "BeeCount Export File",
   "exportSuccessTitle": "Export Successful",
   "exportSuccessMessageIOS": "Saved and available in share history:\n{path}",

@@ -116,7 +116,12 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         l10n.exportCsvHeaderToAccount,   // 转入账户
         l10n.exportCsvHeaderNote,
         l10n.exportCsvHeaderTime,
+        l10n.exportCsvHeaderTags,
       ]);
+
+      // 批量获取所有交易的标签
+      final transactionIds = transactionsWithCategory.map((tx) => tx.t.id).toList();
+      final tagsMap = await repo.getTagsForTransactions(transactionIds);
 
       // 缓存所有账户信息，避免重复查询
       final allAccounts = await repo.getAllAccounts();
@@ -202,6 +207,10 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           }
         }
 
+        // 获取该交易的标签，用逗号分隔
+        final transactionTags = tagsMap[t.id] ?? [];
+        final tagsStr = transactionTags.map((tag) => tag.name).join(',');
+
         rows.add([
           typeStr,
           categoryName,
@@ -213,7 +222,8 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           fromAccountName,
           toAccountName,
           t.note ?? '',
-          timeStr
+          timeStr,
+          tagsStr,
         ]);
         if (i % 50 == 0) {
           setState(() => progress = (i + 1) / (total == 0 ? 1 : total));

@@ -790,6 +790,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String importSkippedDuplicates(Object count) {
+    return 'Skipped $count duplicate records';
+  }
+
+  @override
   String importTransactionFailed(Object error) {
     return 'Import failed, all changes have been rolled back: $error';
   }
@@ -2136,6 +2141,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportCsvHeaderTime => 'Time';
+
+  @override
+  String get exportCsvHeaderTags => 'Tags';
 
   @override
   String get exportShareText => 'BeeCount Export File';

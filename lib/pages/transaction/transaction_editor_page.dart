@@ -156,6 +156,7 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
                   initialAmount: widget.initialAmount,
                   initialNote: widget.initialNote,
                   initialDate: widget.initialDate,
+                  initialTagIds: widget.initialTagIds,
                 ),
               ],
             ),
