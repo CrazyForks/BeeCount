@@ -7841,6 +7841,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unknown Ledger'**
   String get billCardUnknownLedger;
+
+  /// No description provided for @aiPromptEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt Editor'**
+  String get aiPromptEditTitle;
+
+  /// No description provided for @aiPromptEditSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize AI bill recognition prompt'**
+  String get aiPromptEditSubtitle;
+
+  /// No description provided for @aiPromptAdvancedSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Settings'**
+  String get aiPromptAdvancedSettings;
+
+  /// No description provided for @aiPromptEditEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt Editor'**
+  String get aiPromptEditEntry;
+
+  /// No description provided for @aiPromptEditEntryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize AI bill recognition prompt, shareable with others'**
+  String get aiPromptEditEntryDesc;
+
+  /// No description provided for @aiPromptVariables.
+  ///
+  /// In en, this message translates to:
+  /// **'Variables'**
+  String get aiPromptVariables;
+
+  /// No description provided for @aiPromptVariablesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view available variables'**
+  String get aiPromptVariablesHint;
+
+  /// No description provided for @aiPromptContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt Content'**
+  String get aiPromptContent;
+
+  /// No description provided for @aiPromptUnsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved'**
+  String get aiPromptUnsaved;
+
+  /// No description provided for @aiPromptInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter prompt...'**
+  String get aiPromptInputHint;
+
+  /// No description provided for @aiPromptPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get aiPromptPreview;
+
+  /// No description provided for @aiPromptSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get aiPromptSave;
+
+  /// No description provided for @aiPromptSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt saved'**
+  String get aiPromptSaved;
+
+  /// No description provided for @aiPromptResetDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to Default'**
+  String get aiPromptResetDefault;
+
+  /// No description provided for @aiPromptResetConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to Default'**
+  String get aiPromptResetConfirmTitle;
+
+  /// No description provided for @aiPromptResetConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reset to default prompt? Your custom content will be lost.'**
+  String get aiPromptResetConfirmMessage;
+
+  /// No description provided for @aiPromptCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard, ready to share'**
+  String get aiPromptCopied;
+
+  /// No description provided for @aiPromptPasted.
+  ///
+  /// In en, this message translates to:
+  /// **'Pasted'**
+  String get aiPromptPasted;
+
+  /// No description provided for @aiPromptPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt Preview'**
+  String get aiPromptPreviewTitle;
+
+  /// No description provided for @aiPromptPreviewNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview uses sample data for variables. Real data will be used at runtime.'**
+  String get aiPromptPreviewNote;
+
+  /// No description provided for @aiPromptVarInputSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Input source description, e.g. \"From the following payment bill text\"'**
+  String get aiPromptVarInputSource;
+
+  /// No description provided for @aiPromptVarCurrentTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Current date and time, e.g. \"2025-01-15 14:30\"'**
+  String get aiPromptVarCurrentTime;
+
+  /// No description provided for @aiPromptVarCurrentDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Current date, e.g. \"2025-01-15\"'**
+  String get aiPromptVarCurrentDate;
+
+  /// No description provided for @aiPromptVarOcrText.
+  ///
+  /// In en, this message translates to:
+  /// **'User input or OCR recognized text content'**
+  String get aiPromptVarOcrText;
+
+  /// No description provided for @aiPromptVarCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense and income category list'**
+  String get aiPromptVarCategories;
+
+  /// No description provided for @aiPromptVarAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'User\'s account list (may be empty)'**
+  String get aiPromptVarAccounts;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

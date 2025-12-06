@@ -4096,4 +4096,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get billCardUnknownLedger => 'Unknown Ledger';
+
+  @override
+  String get aiPromptEditTitle => 'Prompt Editor';
+
+  @override
+  String get aiPromptEditSubtitle => 'Customize AI bill recognition prompt';
+
+  @override
+  String get aiPromptAdvancedSettings => 'Advanced Settings';
+
+  @override
+  String get aiPromptEditEntry => 'Prompt Editor';
+
+  @override
+  String get aiPromptEditEntryDesc => 'Customize AI bill recognition prompt, shareable with others';
+
+  @override
+  String get aiPromptVariables => 'Variables';
+
+  @override
+  String get aiPromptVariablesHint => 'Tap to view available variables';
+
+  @override
+  String get aiPromptContent => 'Prompt Content';
+
+  @override
+  String get aiPromptUnsaved => 'Unsaved';
+
+  @override
+  String get aiPromptInputHint => 'Enter prompt...';
+
+  @override
+  String get aiPromptPreview => 'Preview';
+
+  @override
+  String get aiPromptSave => 'Save';
+
+  @override
+  String get aiPromptSaved => 'Prompt saved';
+
+  @override
+  String get aiPromptResetDefault => 'Reset to Default';
+
+  @override
+  String get aiPromptResetConfirmTitle => 'Reset to Default';
+
+  @override
+  String get aiPromptResetConfirmMessage => 'Are you sure you want to reset to default prompt? Your custom content will be lost.';
+
+  @override
+  String get aiPromptCopied => 'Copied to clipboard, ready to share';
+
+  @override
+  String get aiPromptPasted => 'Pasted';
+
+  @override
+  String get aiPromptPreviewTitle => 'Prompt Preview';
+
+  @override
+  String get aiPromptPreviewNote => 'Preview uses sample data for variables. Real data will be used at runtime.';
+
+  @override
+  String get aiPromptVarInputSource => 'Input source description, e.g. \"From the following payment bill text\"';
+
+  @override
+  String get aiPromptVarCurrentTime => 'Current date and time, e.g. \"2025-01-15 14:30\"';
+
+  @override
+  String get aiPromptVarCurrentDate => 'Current date, e.g. \"2025-01-15\"';
+
+  @override
+  String get aiPromptVarOcrText => 'User input or OCR recognized text content';
+
+  @override
+  String get aiPromptVarCategories => 'Expense and income category list';
+
+  @override
+  String get aiPromptVarAccounts => 'User\'s account list (may be empty)';
 }

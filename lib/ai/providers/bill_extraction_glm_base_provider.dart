@@ -12,12 +12,14 @@ abstract class BillExtractionGLMBaseProvider implements AIProvider<String, BillI
   final List<String>? expenseCategories;
   final List<String>? incomeCategories;
   final List<String>? accounts;
+  final String? customPromptTemplate; // 用户自定义提示词模板
 
   BillExtractionGLMBaseProvider({
     required this.baseProvider,
     this.expenseCategories,
     this.incomeCategories,
     this.accounts,
+    this.customPromptTemplate,
   });
 
   @override
@@ -75,26 +77,14 @@ abstract class BillExtractionGLMBaseProvider implements AIProvider<String, BillI
   Future<double> estimateCost(AITask<String, BillInfo> task) =>
       baseProvider.estimateCost(_TextTask(task.input));
 
-  /// 构建Prompt（统一模板，由子类提供输入源描述）
-  String buildPrompt(String ocrText) {
-    final categoryHint = buildCategoryHint();
-    final accountHint = buildAccountHint();
-    final inputSource = getInputSourceDescription();
+  /// 默认提示词模板
+  static const String defaultPromptTemplate = '''{{INPUT_SOURCE}}提取记账信息，返回JSON。
 
-    // 获取当前日期时间
-    final now = DateTime.now();
-    final currentDate = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    final currentHour = now.hour.toString().padLeft(2, '0');
-    final currentMinute = now.minute.toString().padLeft(2, '0');
+当前时间：{{CURRENT_TIME}}
 
-    return '''
-$inputSource提取记账信息，返回JSON。
+{{OCR_TEXT}}
 
-当前时间：$currentDate $currentHour:$currentMinute
-
-$ocrText
-
-$categoryHint$accountHint
+{{CATEGORIES}}{{ACCOUNTS}}
 
 字段说明：
 1. amount: 金额（支出负数，收入正数）
@@ -114,12 +104,35 @@ $categoryHint$accountHint
 
 示例：
 输入"昨天中午吃饭50" → {"amount":-50,"time":"2025-11-24T12:00:00","category":"餐饮","type":"expense"}
-输入"早上在星巴克买咖啡30" → {"amount":-30,"time":"${currentDate}T09:00:00","note":"星巴克","category":"咖啡","type":"expense"}
-输入"向肯德基付款58.5元" → {"amount":-58.5,"time":"${currentDate}T$currentHour:$currentMinute:00","note":"肯德基","category":"餐饮","type":"expense"}
-输入"商品:2025春季新款黑色斜纹格纹不规则半身裙长裙 金额:￥299" → {"amount":-299,"note":"黑色半身裙","category":"服装","type":"expense"}
+输入"早上在星巴克买咖啡30" → {"amount":-30,"time":"{{CURRENT_DATE}}T09:00:00","note":"星巴克","category":"咖啡","type":"expense"}
+输入"商品:2025春季新款黑色半身裙 金额:￥299" → {"amount":-299,"note":"黑色半身裙","category":"服装","type":"expense"}
 
-注意：只返回JSON，尽量推断时间不要返回null，note必须≤15字（长标题要精简）
-''';
+注意：只返回JSON，尽量推断时间不要返回null，note必须≤15字（长标题要精简）''';
+
+  /// 构建Prompt（统一模板，由子类提供输入源描述）
+  String buildPrompt(String ocrText) {
+    final categoryHint = buildCategoryHint();
+    final accountHint = buildAccountHint();
+    final inputSource = getInputSourceDescription();
+
+    // 获取当前日期时间
+    final now = DateTime.now();
+    final currentDate = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final currentHour = now.hour.toString().padLeft(2, '0');
+    final currentMinute = now.minute.toString().padLeft(2, '0');
+    final currentTime = '$currentDate $currentHour:$currentMinute';
+
+    // 使用用户自定义模板或默认模板
+    final template = customPromptTemplate ?? defaultPromptTemplate;
+
+    // 替换变量
+    return template
+        .replaceAll('{{INPUT_SOURCE}}', inputSource)
+        .replaceAll('{{CURRENT_TIME}}', currentTime)
+        .replaceAll('{{CURRENT_DATE}}', currentDate)
+        .replaceAll('{{OCR_TEXT}}', ocrText)
+        .replaceAll('{{CATEGORIES}}', categoryHint)
+        .replaceAll('{{ACCOUNTS}}', accountHint);
   }
 
   /// 获取输入源描述（由子类实现）

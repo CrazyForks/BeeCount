@@ -11,6 +11,7 @@ import '../../providers/theme_providers.dart';
 import '../../providers/ui_state_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/ai/ai_chat_service.dart';
+import 'ai_prompt_edit_page.dart';
 
 /// AI智能识别设置页面
 class AISettingsPage extends ConsumerStatefulWidget {
@@ -149,6 +150,14 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
                 // 本地模型管理
                 _buildLocalModelSection(),
+
+                SizedBox(height: 8.0.scaled(context, ref)),
+
+                // 高级设置（提示词编辑）
+                _buildAdvancedSection(),
+
+                // 底部安全区域
+                SizedBox(height: 32.0.scaled(context, ref)),
               ],
             ),
           ),
@@ -222,70 +231,92 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
     );
   }
 
-  Widget _buildStrategySection() {
-    final l10n = AppLocalizations.of(context);
+  /// 获取当前策略的显示名称
+  String _getStrategyDisplayName(AppLocalizations l10n) {
+    switch (_strategy) {
+      case 'local_first':
+        return l10n.aiStrategyLocalFirst;
+      case 'cloud_first':
+        return l10n.aiStrategyCloudFirst;
+      case 'local_only':
+        return l10n.aiStrategyLocalOnly;
+      case 'cloud_only':
+        return l10n.aiStrategyCloudOnly;
+      default:
+        return l10n.aiStrategyCloudFirst;
+    }
+  }
 
-    return SectionCard(
-      margin: EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.auto_awesome,
-                  size: 20,
-                  color: ref.watch(primaryColorProvider),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.aiStrategyTitle,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+  /// 显示策略选择弹窗
+  void _showStrategyDialog() {
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.read(primaryColorProvider);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.aiStrategyTitle),
+        titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildStrategyDialogOption(
+              context,
+              'cloud_first',
+              l10n.aiStrategyCloudFirst,
+              l10n.aiStrategyCloudFirstDesc,
+              Icons.cloud,
+              primaryColor,
+              enabled: true,
             ),
-          ),
-          _buildStrategyOption(
-            'local_first',
-            l10n.aiStrategyLocalFirst,
-            l10n.aiStrategyLocalFirstDesc,
-            Icons.phone_android,
-            enabled: false, // 本地模型训练中
-          ),
-          _buildStrategyOption(
-            'cloud_first',
-            l10n.aiStrategyCloudFirst,
-            l10n.aiStrategyCloudFirstDesc,
-            Icons.cloud,
-          ),
-          _buildStrategyOption(
-            'local_only',
-            l10n.aiStrategyLocalOnly,
-            l10n.aiStrategyLocalOnlyDesc,
-            Icons.offline_bolt,
-            enabled: false, // 本地模型训练中
-          ),
-          _buildStrategyOption(
-            'cloud_only',
-            l10n.aiStrategyCloudOnly,
-            l10n.aiStrategyCloudOnlyDesc,
-            Icons.cloud_done,
+            _buildStrategyDialogOption(
+              context,
+              'cloud_only',
+              l10n.aiStrategyCloudOnly,
+              l10n.aiStrategyCloudOnlyDesc,
+              Icons.cloud_done,
+              primaryColor,
+              enabled: true,
+            ),
+            _buildStrategyDialogOption(
+              context,
+              'local_first',
+              l10n.aiStrategyLocalFirst,
+              l10n.aiStrategyLocalFirstDesc,
+              Icons.phone_android,
+              primaryColor,
+              enabled: false, // 本地模型训练中
+            ),
+            _buildStrategyDialogOption(
+              context,
+              'local_only',
+              l10n.aiStrategyLocalOnly,
+              l10n.aiStrategyLocalOnlyDesc,
+              Icons.offline_bolt,
+              primaryColor,
+              enabled: false, // 本地模型训练中
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.commonCancel),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStrategyOption(
+  Widget _buildStrategyDialogOption(
+    BuildContext dialogContext,
     String value,
     String title,
     String subtitle,
-    IconData icon, {
+    IconData icon,
+    Color primaryColor, {
     bool enabled = true,
   }) {
     final l10n = AppLocalizations.of(context);
@@ -294,74 +325,66 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
     return Opacity(
       opacity: enabled ? 1.0 : 0.5,
-      child: InkWell(
-        onTap: enabled ? () async {
-          setState(() => _strategy = value);
-
-          // 立即保存执行策略
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('ai_strategy', value);
-
-          if (mounted) {
-            showToast(context, l10n.aiStrategySwitched(title));
-          }
-        } : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                size: 24,
-                color: enabled && isSelected
-                    ? ref.watch(primaryColorProvider)
-                    : BeeTokens.textTertiary(context),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: enabled && isSelected ? ref.watch(primaryColorProvider) : BeeTokens.textPrimary(context),
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      displaySubtitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: enabled ? BeeTokens.textSecondary(context) : Colors.orange[700],
-                        fontStyle: enabled ? FontStyle.normal : FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Radio<String>(
-                value: value,
-                groupValue: _strategy,
-                onChanged: enabled ? (v) async {
-                  if (v == null) return;
-                  setState(() => _strategy = v);
-
-                  // 立即保存执行策略
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('ai_strategy', v);
-
-                  if (mounted) {
-                    showToast(context, l10n.aiStrategySwitched(title));
-                  }
-                } : null,
-                activeColor: ref.watch(primaryColorProvider),
-              ),
-            ],
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: enabled && isSelected ? primaryColor : BeeTokens.textTertiary(context),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: enabled && isSelected ? primaryColor : BeeTokens.textPrimary(context),
           ),
         ),
+        subtitle: Text(
+          displaySubtitle,
+          style: TextStyle(
+            fontSize: 12,
+            color: enabled ? BeeTokens.textSecondary(context) : Colors.orange[700],
+            fontStyle: enabled ? FontStyle.normal : FontStyle.italic,
+          ),
+        ),
+        trailing: isSelected
+            ? Icon(Icons.check_circle, color: primaryColor)
+            : null,
+        onTap: enabled
+            ? () async {
+                // 先关闭弹窗
+                Navigator.pop(dialogContext);
+
+                setState(() => _strategy = value);
+
+                // 立即保存执行策略
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString('ai_strategy', value);
+
+                if (mounted) {
+                  showToast(context, l10n.aiStrategySwitched(title));
+                }
+              }
+            : null,
+      ),
+    );
+  }
+
+  Widget _buildStrategySection() {
+    final l10n = AppLocalizations.of(context);
+
+    return SectionCard(
+      margin: EdgeInsets.zero,
+      child: ListTile(
+        leading: Icon(
+          Icons.auto_awesome,
+          color: ref.watch(primaryColorProvider),
+        ),
+        title: Text(
+          l10n.aiStrategyTitle,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(_getStrategyDisplayName(l10n)),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: _showStrategyDialog,
       ),
     );
   }
@@ -542,6 +565,51 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
               enabled: false,
               onTap: null,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdvancedSection() {
+    final l10n = AppLocalizations.of(context);
+
+    return SectionCard(
+      margin: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.tune,
+                  size: 20,
+                  color: ref.watch(primaryColorProvider),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  l10n.aiPromptAdvancedSettings,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.edit_note, color: ref.watch(primaryColorProvider)),
+            title: Text(l10n.aiPromptEditEntry),
+            subtitle: Text(l10n.aiPromptEditEntryDesc),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AIPromptEditPage()),
+              );
+            },
           ),
         ],
       ),

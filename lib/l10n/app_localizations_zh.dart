@@ -4096,6 +4096,84 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get billCardUnknownLedger => '未知账本';
+
+  @override
+  String get aiPromptEditTitle => '提示词编辑';
+
+  @override
+  String get aiPromptEditSubtitle => '自定义AI账单识别提示词';
+
+  @override
+  String get aiPromptAdvancedSettings => '高级设置';
+
+  @override
+  String get aiPromptEditEntry => '提示词编辑';
+
+  @override
+  String get aiPromptEditEntryDesc => '自定义AI账单识别提示词，可分享给其他用户';
+
+  @override
+  String get aiPromptVariables => '变量说明';
+
+  @override
+  String get aiPromptVariablesHint => '点击展开查看可用变量';
+
+  @override
+  String get aiPromptContent => '提示词内容';
+
+  @override
+  String get aiPromptUnsaved => '未保存';
+
+  @override
+  String get aiPromptInputHint => '输入提示词...';
+
+  @override
+  String get aiPromptPreview => '预览';
+
+  @override
+  String get aiPromptSave => '保存';
+
+  @override
+  String get aiPromptSaved => '提示词已保存';
+
+  @override
+  String get aiPromptResetDefault => '恢复默认';
+
+  @override
+  String get aiPromptResetConfirmTitle => '恢复默认';
+
+  @override
+  String get aiPromptResetConfirmMessage => '确定要恢复默认提示词吗？您的自定义内容将会丢失。';
+
+  @override
+  String get aiPromptCopied => '已复制到剪贴板，可分享给其他用户';
+
+  @override
+  String get aiPromptPasted => '已粘贴';
+
+  @override
+  String get aiPromptPreviewTitle => '提示词预览';
+
+  @override
+  String get aiPromptPreviewNote => '以上预览使用示例数据替换变量，实际运行时会使用真实数据';
+
+  @override
+  String get aiPromptVarInputSource => '输入来源描述，如\"从以下支付账单文本中\"';
+
+  @override
+  String get aiPromptVarCurrentTime => '当前日期和时间，如\"2025-01-15 14:30\"';
+
+  @override
+  String get aiPromptVarCurrentDate => '当前日期，如\"2025-01-15\"';
+
+  @override
+  String get aiPromptVarOcrText => '用户输入或OCR识别的文本内容';
+
+  @override
+  String get aiPromptVarCategories => '支出和收入分类列表';
+
+  @override
+  String get aiPromptVarAccounts => '用户的账户列表（可能为空）';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -8192,4 +8270,82 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get billCardUnknownLedger => '未知帳本';
+
+  @override
+  String get aiPromptEditTitle => '提示詞編輯';
+
+  @override
+  String get aiPromptEditSubtitle => '自訂 AI 帳單識別提示詞';
+
+  @override
+  String get aiPromptAdvancedSettings => '進階設定';
+
+  @override
+  String get aiPromptEditEntry => '提示詞編輯';
+
+  @override
+  String get aiPromptEditEntryDesc => '自訂 AI 帳單識別提示詞，可分享給其他使用者';
+
+  @override
+  String get aiPromptVariables => '變數說明';
+
+  @override
+  String get aiPromptVariablesHint => '點擊展開檢視可用變數';
+
+  @override
+  String get aiPromptContent => '提示詞內容';
+
+  @override
+  String get aiPromptUnsaved => '未儲存';
+
+  @override
+  String get aiPromptInputHint => '輸入提示詞...';
+
+  @override
+  String get aiPromptPreview => '預覽';
+
+  @override
+  String get aiPromptSave => '儲存';
+
+  @override
+  String get aiPromptSaved => '提示詞已儲存';
+
+  @override
+  String get aiPromptResetDefault => '恢復預設';
+
+  @override
+  String get aiPromptResetConfirmTitle => '恢復預設';
+
+  @override
+  String get aiPromptResetConfirmMessage => '確定要恢復預設提示詞嗎？您的自訂內容將會遺失。';
+
+  @override
+  String get aiPromptCopied => '已複製到剪貼簿，可分享給其他使用者';
+
+  @override
+  String get aiPromptPasted => '已貼上';
+
+  @override
+  String get aiPromptPreviewTitle => '提示詞預覽';
+
+  @override
+  String get aiPromptPreviewNote => '以上預覽使用範例資料替換變數，實際執行時會使用真實資料';
+
+  @override
+  String get aiPromptVarInputSource => '輸入來源描述，如「從以下支付帳單文字中」';
+
+  @override
+  String get aiPromptVarCurrentTime => '目前日期和時間，如「2025-01-15 14:30」';
+
+  @override
+  String get aiPromptVarCurrentDate => '目前日期，如「2025-01-15」';
+
+  @override
+  String get aiPromptVarOcrText => '使用者輸入或 OCR 識別的文字內容';
+
+  @override
+  String get aiPromptVarCategories => '支出和收入分類清單';
+
+  @override
+  String get aiPromptVarAccounts => '使用者的帳戶清單（可能為空）';
 }

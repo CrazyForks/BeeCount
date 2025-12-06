@@ -30,6 +30,9 @@ class AIBillService {
 
     final prefs = await SharedPreferences.getInstance();
 
+    // 读取用户自定义提示词
+    final customPrompt = prefs.getString('ai_custom_prompt');
+
     // 1. 注册智谱GLM Provider（如果配置了API Key）
     final glmApiKey = prefs.getString('ai_glm_api_key');
     if (glmApiKey != null && glmApiKey.isNotEmpty) {
@@ -44,6 +47,7 @@ class AIBillService {
           expenseCategories: expenseCategories,
           incomeCategories: incomeCategories,
           accounts: accounts,
+          customPromptTemplate: customPrompt,
           imageFile: imageFile,
         ));
       } else {
@@ -54,6 +58,7 @@ class AIBillService {
           expenseCategories: expenseCategories,
           incomeCategories: incomeCategories,
           accounts: accounts,
+          customPromptTemplate: customPrompt,
         ));
       }
     }

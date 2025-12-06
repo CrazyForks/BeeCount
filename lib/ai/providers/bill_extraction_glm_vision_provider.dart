@@ -15,6 +15,7 @@ class BillExtractionGLMVisionProvider extends BillExtractionGLMBaseProvider {
     super.expenseCategories,
     super.incomeCategories,
     super.accounts,
+    super.customPromptTemplate,
     this.imageFile,
   }) : super(
           baseProvider: ZhipuGLMProvider(
