@@ -7170,6 +7170,54 @@ abstract class AppLocalizations {
   /// **'Categories'**
   String get configIncludeCategories;
 
+  /// No description provided for @configIncludeTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get configIncludeTags;
+
+  /// No description provided for @configIncludeOtherSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Settings'**
+  String get configIncludeOtherSettings;
+
+  /// No description provided for @configIncludeOtherSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Including cloud service, AI config, app settings, etc.'**
+  String get configIncludeOtherSettingsSubtitle;
+
+  /// No description provided for @configExportSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Export Content'**
+  String get configExportSelectTitle;
+
+  /// No description provided for @configExportPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Preview'**
+  String get configExportPreviewTitle;
+
+  /// No description provided for @configExportConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Export'**
+  String get configExportConfirmTitle;
+
+  /// No description provided for @configImportSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Import Content'**
+  String get configImportSelectTitle;
+
+  /// No description provided for @configImportPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Preview'**
+  String get configImportPreviewTitle;
+
   /// No description provided for @ledgersConflictTitle.
   ///
   /// In en, this message translates to:

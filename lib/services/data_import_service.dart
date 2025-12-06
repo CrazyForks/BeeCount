@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as d;
 import '../data/db.dart';
 import '../data/repositories/base_repository.dart';
+import 'system/logger_service.dart';
 
 /// 统一的数据导入服务
 ///
@@ -294,21 +295,40 @@ class DataImportService {
 
     if (tags.isEmpty) return tagNameToId;
 
+    logger.info('TagImport', '开始导入标签: ${tags.length}个');
+
     try {
       // 获取所有现有标签
       final existingTags = await repo.getAllTags();
+      final existingTagMap = <String, Tag>{};
       for (final tag in existingTags) {
         tagNameToId[tag.name] = tag.id;
+        existingTagMap[tag.name] = tag;
       }
 
-      // 创建不存在的标签
+      // 创建不存在的标签，更新已存在标签的颜色
       for (final tag in tags) {
+        logger.info('TagImport', '处理标签: name="${tag.name}", color="${tag.color}"');
         if (!tagNameToId.containsKey(tag.name)) {
+          // 创建新标签
+          logger.info('TagImport', '创建新标签: name="${tag.name}", color="${tag.color}"');
           final id = await repo.createTag(name: tag.name, color: tag.color);
           tagNameToId[tag.name] = id;
+          // 验证创建结果
+          final created = await repo.getTagById(id);
+          logger.info('TagImport', '创建结果: id=$id, name="${created?.name}", color="${created?.color}"');
+        } else if (tag.color != null) {
+          // 标签已存在，检查是否需要更新颜色
+          final existingTag = existingTagMap[tag.name];
+          if (existingTag != null && existingTag.color != tag.color) {
+            logger.info('TagImport', '更新标签颜色: ${tag.name}, "${existingTag.color}" -> "${tag.color}"');
+            await repo.updateTag(existingTag.id, color: tag.color);
+          }
         }
       }
-    } catch (_) {
+      logger.info('TagImport', '标签导入完成');
+    } catch (e) {
+      logger.error('TagImport', '标签导入失败', e);
       // 标签导入失败不影响交易导入
     }
 

@@ -276,7 +276,7 @@ ImportData parseJsonToImportData(String jsonStr) {
     for (final tag in jsonTags.cast<Map<String, dynamic>>()) {
       tags.add(ImportTag(
         name: tag['name'] as String,
-        color: tag['color'] as String?,
+        color: tag['color']?.toString(),
       ));
     }
   }

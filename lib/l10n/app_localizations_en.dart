@@ -3744,6 +3744,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get configIncludeCategories => 'Categories';
 
   @override
+  String get configIncludeTags => 'Tags';
+
+  @override
+  String get configIncludeOtherSettings => 'Other Settings';
+
+  @override
+  String get configIncludeOtherSettingsSubtitle => 'Including cloud service, AI config, app settings, etc.';
+
+  @override
+  String get configExportSelectTitle => 'Select Export Content';
+
+  @override
+  String get configExportPreviewTitle => 'Export Preview';
+
+  @override
+  String get configExportConfirmTitle => 'Confirm Export';
+
+  @override
+  String get configImportSelectTitle => 'Select Import Content';
+
+  @override
+  String get configImportPreviewTitle => 'Import Preview';
+
+  @override
   String get ledgersConflictTitle => 'Sync Conflict';
 
   @override

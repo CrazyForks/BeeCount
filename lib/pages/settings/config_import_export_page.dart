@@ -48,6 +48,14 @@ class _ConfigImportExportPageState
   }
 
   Future<void> _exportConfig() async {
+    // Step 1: 显示选择导出内容对话框
+    final options = await showDialog<ExportOptions>(
+      context: context,
+      builder: (context) => _ExportOptionsDialog(ref: ref),
+    );
+
+    if (options == null || !mounted) return;
+
     setState(() {
       _isExporting = true;
       _lastExportedFilePath = null;
@@ -58,10 +66,27 @@ class _ConfigImportExportPageState
       final repo = ref.read(repositoryProvider);
       final ledgerId = ref.read(currentLedgerIdProvider);
 
+      // Step 2: 生成预览内容
       final yamlContent = await ConfigExportService.exportToYaml(
         repository: repo,
         ledgerId: ledgerId,
+        options: options,
       );
+
+      if (!mounted) return;
+
+      // Step 3: 显示预览并确认导出
+      final confirm = await showDialog<bool>(
+        context: context,
+        builder: (context) => _ExportPreviewDialog(yamlContent: yamlContent),
+      );
+
+      if (confirm != true || !mounted) {
+        setState(() => _isExporting = false);
+        return;
+      }
+
+      // Step 4: 执行导出
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
       final fileName = 'beecount_config_$timestamp.yml';
 
@@ -152,7 +177,7 @@ class _ConfigImportExportPageState
     setState(() => _isImporting = true);
 
     try {
-      // 使用 FileType.any 避免部分设备不支持 yaml/yml 扩展名过滤
+      // Step 1: 选择文件
       final result = await FilePicker.platform.pickFiles(
         type: FileType.any,
       );
@@ -177,34 +202,39 @@ class _ConfigImportExportPageState
         throw Exception('请选择 YAML 配置文件（.yml 或 .yaml）');
       }
 
-      // 读取并预览配置
+      // Step 2: 读取文件并检测可用内容
       if (!mounted) return;
       final file = File(filePath);
       final yamlContent = await file.readAsString();
 
-      // 显示预览对话框
+      // 检测文件中包含哪些配置项
+      final contentInfo = ConfigExportService.detectContent(yamlContent);
+
+      // Step 3: 显示预览并选择导入内容的对话框
       if (!mounted) return;
-      final confirm = await showDialog<bool>(
+      final options = await showDialog<ExportOptions>(
         context: context,
-        builder: (context) => _ConfigPreviewDialog(yamlContent: yamlContent),
+        builder: (context) => _ImportPreviewDialog(
+          ref: ref,
+          yamlContent: yamlContent,
+          contentInfo: contentInfo,
+        ),
       );
 
-      if (confirm != true) {
-        if (mounted) {
-          setState(() => _isImporting = false);
-        }
+      if (options == null || !mounted) {
+        setState(() => _isImporting = false);
         return;
       }
 
-      // 获取仓库和当前账本ID
+      // Step 4: 执行导入
       final repo = ref.read(repositoryProvider);
       final ledgerId = ref.read(currentLedgerIdProvider);
 
-      // 执行导入
       await ConfigExportService.importFromFile(
         filePath,
         repository: repo,
         ledgerId: ledgerId,
+        options: options,
       );
 
       if (!mounted) return;
@@ -452,6 +482,13 @@ class _ConfigImportExportPageState
                           ref,
                           Icons.category_outlined,
                           l10n.configIncludeCategories,
+                        ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.label_outline,
+                          l10n.configIncludeTags,
                         ),
                       ],
                     ),
@@ -716,6 +753,505 @@ class _ConfigPreviewDialogState extends State<_ConfigPreviewDialog> {
                 const SizedBox(width: 12),
                 FilledButton(
                   onPressed: () => Navigator.pop(context, true),
+                  child: Text(l10n.configImportConfirmTitle),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 导出选项选择对话框
+class _ExportOptionsDialog extends StatefulWidget {
+  final WidgetRef ref;
+
+  const _ExportOptionsDialog({required this.ref});
+
+  @override
+  State<_ExportOptionsDialog> createState() => _ExportOptionsDialogState();
+}
+
+class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
+  // 默认全选
+  bool _categories = true;
+  bool _accounts = true;
+  bool _tags = true;
+  bool _recurringTransactions = true;
+  bool _appSettings = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final primary = widget.ref.watch(primaryColorProvider);
+
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      backgroundColor: BeeTokens.surfaceElevated(context),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 标题栏
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeTokens.surfaceElevated(context),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.checklist_outlined),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.configExportSelectTitle,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          // 选项列表
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                CheckboxListTile(
+                  value: _categories,
+                  onChanged: (v) => setState(() => _categories = v ?? true),
+                  title: Text(l10n.configIncludeCategories),
+                  secondary: Icon(Icons.category_outlined, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                CheckboxListTile(
+                  value: _accounts,
+                  onChanged: (v) => setState(() => _accounts = v ?? true),
+                  title: Text(l10n.configIncludeAccounts),
+                  secondary: Icon(Icons.account_balance_wallet_outlined, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                CheckboxListTile(
+                  value: _tags,
+                  onChanged: (v) => setState(() => _tags = v ?? true),
+                  title: Text(l10n.configIncludeTags),
+                  secondary: Icon(Icons.label_outline, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                CheckboxListTile(
+                  value: _recurringTransactions,
+                  onChanged: (v) => setState(() => _recurringTransactions = v ?? true),
+                  title: Text(l10n.configIncludeRecurringTransactions),
+                  secondary: Icon(Icons.repeat, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                CheckboxListTile(
+                  value: _appSettings,
+                  onChanged: (v) => setState(() => _appSettings = v ?? true),
+                  title: Text(l10n.configIncludeOtherSettings),
+                  subtitle: Text(
+                    l10n.configIncludeOtherSettingsSubtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: BeeTokens.textSecondary(context),
+                    ),
+                  ),
+                  secondary: Icon(Icons.settings_outlined, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          // 底部按钮
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(l10n.commonCancel),
+                ),
+                const SizedBox(width: 12),
+                FilledButton(
+                  onPressed: () {
+                    final options = ExportOptions(
+                      categories: _categories,
+                      accounts: _accounts,
+                      tags: _tags,
+                      recurringTransactions: _recurringTransactions,
+                      appSettings: _appSettings,
+                    );
+                    Navigator.pop(context, options);
+                  },
+                  child: Text(l10n.commonNext),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 导出预览对话框
+class _ExportPreviewDialog extends StatelessWidget {
+  final String yamlContent;
+
+  const _ExportPreviewDialog({required this.yamlContent});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      backgroundColor: BeeTokens.surfaceElevated(context),
+      child: Column(
+        children: [
+          // 标题栏
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeTokens.surfaceElevated(context),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.preview_outlined),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.configExportPreviewTitle,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context, false),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          // 内容区域
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: BeeTokens.surface(context),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: BeeTokens.border(context)),
+                ),
+                child: SelectableText(
+                  yamlContent,
+                  style: TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 12,
+                    height: 1.5,
+                    color: BeeTokens.textPrimary(context),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // 底部按钮
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(l10n.commonCancel),
+                ),
+                const SizedBox(width: 12),
+                FilledButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(l10n.configExportConfirmTitle),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 导入预览对话框（先预览内容，再选择导入项）
+class _ImportPreviewDialog extends StatefulWidget {
+  final WidgetRef ref;
+  final String yamlContent;
+  final ConfigContentInfo contentInfo;
+
+  const _ImportPreviewDialog({
+    required this.ref,
+    required this.yamlContent,
+    required this.contentInfo,
+  });
+
+  @override
+  State<_ImportPreviewDialog> createState() => _ImportPreviewDialogState();
+}
+
+class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
+  // 默认全选（仅对文件中存在的项）
+  late bool _categories;
+  late bool _accounts;
+  late bool _tags;
+  late bool _recurringTransactions;
+  late bool _appSettings;
+
+  @override
+  void initState() {
+    super.initState();
+    _categories = widget.contentInfo.hasCategories;
+    _accounts = widget.contentInfo.hasAccounts;
+    _tags = widget.contentInfo.hasTags;
+    _recurringTransactions = widget.contentInfo.hasRecurringTransactions;
+    _appSettings = widget.contentInfo.hasAppSettings;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final primary = widget.ref.watch(primaryColorProvider);
+    final info = widget.contentInfo;
+
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      backgroundColor: BeeTokens.surfaceElevated(context),
+      child: Column(
+        children: [
+          // 标题栏
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeTokens.surfaceElevated(context),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.preview_outlined),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.configImportPreviewTitle,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          // YAML 内容预览
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 警告提示
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.orange.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.orange[700],
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            '导入将覆盖现有配置，建议先备份当前配置。',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.orange[900],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // YAML 内容
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    decoration: BoxDecoration(
+                      color: BeeTokens.surface(context),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: BeeTokens.border(context)),
+                    ),
+                    child: SingleChildScrollView(
+                      child: SelectableText(
+                        widget.yamlContent,
+                        style: TextStyle(
+                          fontFamily: 'monospace',
+                          fontSize: 12,
+                          height: 1.5,
+                          color: BeeTokens.textPrimary(context),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // 选择导入内容标题
+                  Text(
+                    l10n.configImportSelectTitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: BeeTokens.textPrimary(context),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // 选项列表
+                  if (info.hasCategories)
+                    CheckboxListTile(
+                      value: _categories,
+                      onChanged: (v) => setState(() => _categories = v ?? true),
+                      title: Text(l10n.configIncludeCategories),
+                      secondary: Icon(Icons.category_outlined, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
+                  if (info.hasAccounts)
+                    CheckboxListTile(
+                      value: _accounts,
+                      onChanged: (v) => setState(() => _accounts = v ?? true),
+                      title: Text(l10n.configIncludeAccounts),
+                      secondary: Icon(Icons.account_balance_wallet_outlined, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
+                  if (info.hasTags)
+                    CheckboxListTile(
+                      value: _tags,
+                      onChanged: (v) => setState(() => _tags = v ?? true),
+                      title: Text(l10n.configIncludeTags),
+                      secondary: Icon(Icons.label_outline, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
+                  if (info.hasRecurringTransactions)
+                    CheckboxListTile(
+                      value: _recurringTransactions,
+                      onChanged: (v) => setState(() => _recurringTransactions = v ?? true),
+                      title: Text(l10n.configIncludeRecurringTransactions),
+                      secondary: Icon(Icons.repeat, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
+                  if (info.hasAppSettings)
+                    CheckboxListTile(
+                      value: _appSettings,
+                      onChanged: (v) => setState(() => _appSettings = v ?? true),
+                      title: Text(l10n.configIncludeOtherSettings),
+                      subtitle: Text(
+                        l10n.configIncludeOtherSettingsSubtitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+                      ),
+                      secondary: Icon(Icons.settings_outlined, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
+                ],
+              ),
+            ),
+          ),
+          // 底部按钮
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: BeeTokens.surfaceElevated(context),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(l10n.commonCancel),
+                ),
+                const SizedBox(width: 12),
+                FilledButton(
+                  onPressed: () {
+                    final options = ExportOptions(
+                      categories: _categories,
+                      accounts: _accounts,
+                      tags: _tags,
+                      recurringTransactions: _recurringTransactions,
+                      appSettings: _appSettings,
+                    );
+                    Navigator.pop(context, options);
+                  },
                   child: Text(l10n.configImportConfirmTitle),
                 ),
               ],

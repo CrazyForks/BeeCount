@@ -10,6 +10,35 @@ import '../system/logger_service.dart';
 // 导入 OrderingTerm
 typedef OrderingTerm = d.OrderingTerm;
 
+/// 导出选项 - 控制导出哪些内容
+class ExportOptions {
+  final bool categories;
+  final bool accounts;
+  final bool tags;
+  final bool recurringTransactions;
+  final bool appSettings; // 包含云服务配置、AI配置等
+
+  const ExportOptions({
+    this.categories = true,
+    this.accounts = true,
+    this.tags = true,
+    this.recurringTransactions = true,
+    this.appSettings = true,
+  });
+
+  /// 全选
+  static const all = ExportOptions();
+
+  /// 全不选
+  static const none = ExportOptions(
+    categories: false,
+    accounts: false,
+    tags: false,
+    recurringTransactions: false,
+    appSettings: false,
+  );
+}
+
 /// 应用配置模型
 class AppConfig {
   final SupabaseConfig? supabase;
@@ -20,6 +49,7 @@ class AppConfig {
   final RecurringTransactionsConfig? recurringTransactions;
   final AccountsConfig? accounts;
   final CategoriesConfig? categories;
+  final TagsConfig? tags;
 
   const AppConfig({
     this.supabase,
@@ -30,6 +60,7 @@ class AppConfig {
     this.recurringTransactions,
     this.accounts,
     this.categories,
+    this.tags,
   });
 
   Map<String, dynamic> toYaml() {
@@ -67,6 +98,10 @@ class AppConfig {
       map['categories'] = categories!.toMap();
     }
 
+    if (tags != null) {
+      map['tags'] = tags!.toMap();
+    }
+
     return map;
   }
 
@@ -102,6 +137,10 @@ class AppConfig {
       categories: yaml.containsKey('categories')
           ? CategoriesConfig.fromMap(
               Map<String, dynamic>.from(yaml['categories'] as Map))
+          : null,
+      tags: yaml.containsKey('tags')
+          ? TagsConfig.fromMap(
+              Map<String, dynamic>.from(yaml['tags'] as Map))
           : null,
     );
   }
@@ -679,12 +718,116 @@ class CategoryItem {
   }
 }
 
+/// 标签配置
+class TagsConfig {
+  final List<TagItem> items;
+
+  const TagsConfig({required this.items});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'items': items.map((item) => item.toMap()).toList(),
+    };
+  }
+
+  static TagsConfig fromMap(Map<String, dynamic> map) {
+    final itemsList = map['items'] as List<dynamic>? ?? [];
+    return TagsConfig(
+      items: itemsList
+          .map((item) =>
+              TagItem.fromMap(Map<String, dynamic>.from(item as Map)))
+          .toList(),
+    );
+  }
+}
+
+/// 标签项
+class TagItem {
+  final String name;
+  final String? color;
+
+  const TagItem({
+    required this.name,
+    this.color,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'name': name,
+    };
+    if (color != null && color!.isNotEmpty) {
+      map['color'] = color;
+    }
+    return map;
+  }
+
+  static TagItem fromMap(Map<String, dynamic> map) {
+    return TagItem(
+      name: map['name'] as String,
+      color: map['color']?.toString(),
+    );
+  }
+
+  factory TagItem.fromDb(Tag tag) {
+    return TagItem(
+      name: tag.name,
+      color: tag.color,
+    );
+  }
+}
+
+/// 配置内容检测结果
+class ConfigContentInfo {
+  final bool hasCategories;
+  final bool hasAccounts;
+  final bool hasTags;
+  final bool hasRecurringTransactions;
+  final bool hasAppSettings; // 包含云服务配置、AI配置、应用设置中的任意一项
+
+  const ConfigContentInfo({
+    this.hasCategories = false,
+    this.hasAccounts = false,
+    this.hasTags = false,
+    this.hasRecurringTransactions = false,
+    this.hasAppSettings = false,
+  });
+}
+
 /// 配置导入导出服务
 class ConfigExportService {
+  /// 检测 YAML 内容中包含哪些配置项
+  static ConfigContentInfo detectContent(String yamlContent) {
+    try {
+      final doc = loadYaml(yamlContent);
+      if (doc is! Map) {
+        return const ConfigContentInfo();
+      }
+
+      return ConfigContentInfo(
+        hasCategories: doc.containsKey('categories'),
+        hasAccounts: doc.containsKey('accounts'),
+        hasTags: doc.containsKey('tags'),
+        hasRecurringTransactions: doc.containsKey('recurring_transactions'),
+        hasAppSettings: doc.containsKey('supabase') ||
+            doc.containsKey('webdav') ||
+            doc.containsKey('s3') ||
+            doc.containsKey('ai') ||
+            doc.containsKey('app_settings'),
+      );
+    } catch (_) {
+      return const ConfigContentInfo();
+    }
+  }
+
   /// 导出配置到YAML字符串
   /// [repository] 数据仓库实例，用于导出周期账单等数据
   /// [ledgerId] 账本ID，用于过滤导出的周期账单
-  static Future<String> exportToYaml({BaseRepository? repository, int? ledgerId}) async {
+  /// [options] 导出选项，控制导出哪些内容
+  static Future<String> exportToYaml({
+    BaseRepository? repository,
+    int? ledgerId,
+    ExportOptions options = ExportOptions.all,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
 
     // 读取Supabase配置
@@ -834,7 +977,7 @@ class ConfigExportService {
 
     // 读取周期账单配置（导出全部账本的周期记账）
     RecurringTransactionsConfig? recurringConfig;
-    if (repository != null) {
+    if (options.recurringTransactions && repository != null) {
       try {
         final recurringList = await repository.getAllRecurringTransactions();
 
@@ -852,7 +995,7 @@ class ConfigExportService {
 
     // 读取账户配置（导出全部账户）
     AccountsConfig? accountsConfig;
-    if (repository != null) {
+    if (options.accounts && repository != null) {
       try {
         final accountsList = await repository.getAllAccounts();
 
@@ -870,7 +1013,7 @@ class ConfigExportService {
 
     // 读取分类配置（导出全部分类）
     CategoriesConfig? categoriesConfig;
-    if (repository != null) {
+    if (options.categories && repository != null) {
       try {
         // 获取所有分类（收入和支出）
         final expenseCategories = await repository.getTopLevelCategories('expense');
@@ -907,15 +1050,39 @@ class ConfigExportService {
       }
     }
 
+    // 读取标签配置（导出全部标签）
+    TagsConfig? tagsConfig;
+    if (options.tags && repository != null) {
+      try {
+        final tagsList = await repository.getAllTags();
+
+        if (tagsList.isNotEmpty) {
+          tagsConfig = TagsConfig(
+            items: tagsList.map((tag) => TagItem.fromDb(tag)).toList(),
+          );
+        }
+      } catch (e) {
+        logger.warning('ConfigExport', '读取标签配置失败: $e');
+      }
+    }
+
+    // 根据选项过滤云服务和AI配置
+    final exportSupabase = options.appSettings ? supabaseConfig : null;
+    final exportWebdav = options.appSettings ? webdavConfig : null;
+    final exportS3 = options.appSettings ? s3Config : null;
+    final exportAi = options.appSettings ? aiConfig : null;
+    final exportAppSettings = options.appSettings ? appSettings : null;
+
     final config = AppConfig(
-      supabase: supabaseConfig,
-      webdav: webdavConfig,
-      s3: s3Config,
-      ai: aiConfig,
-      appSettings: appSettings,
+      supabase: exportSupabase,
+      webdav: exportWebdav,
+      s3: exportS3,
+      ai: exportAi,
+      appSettings: exportAppSettings,
       recurringTransactions: recurringConfig,
       accounts: accountsConfig,
       categories: categoriesConfig,
+      tags: tagsConfig,
     );
 
     // 转换为YAML格式
@@ -1190,6 +1357,26 @@ class ConfigExportService {
       buffer.writeln();
     }
 
+    // 标签
+    if (yamlMap.containsKey('tags')) {
+      buffer.writeln('# 标签');
+      buffer.writeln('tags:');
+      final tags = yamlMap['tags'] as Map<String, dynamic>;
+      final items = tags['items'] as List;
+
+      if (items.isNotEmpty) {
+        buffer.writeln('  items:');
+        for (final item in items) {
+          final itemMap = item as Map<String, dynamic>;
+          buffer.writeln('    - name: "${itemMap['name']}"');
+          if (itemMap.containsKey('color') && itemMap['color'] != null) {
+            buffer.writeln('      color: "${itemMap['color']}"');
+          }
+        }
+      }
+      buffer.writeln();
+    }
+
     return buffer.toString();
   }
 
@@ -1197,10 +1384,12 @@ class ConfigExportService {
   /// [yamlContent] YAML内容
   /// [repository] 数据仓库实例，用于导入周期账单等数据
   /// [ledgerId] 账本ID，用于导入周期账单到指定账本
+  /// [options] 导入选项，控制导入哪些内容
   static Future<void> importFromYaml(
     String yamlContent, {
     BaseRepository? repository,
     int? ledgerId,
+    ExportOptions options = ExportOptions.all,
   }) async {
     final doc = loadYaml(yamlContent);
 
@@ -1212,7 +1401,7 @@ class ConfigExportService {
     final prefs = await SharedPreferences.getInstance();
 
     // 导入Supabase配置
-    if (config.supabase != null) {
+    if (options.appSettings && config.supabase != null) {
       final supabaseCfg = CloudServiceConfig(
         type: CloudBackendType.supabase,
         name: 'Supabase',
@@ -1228,7 +1417,7 @@ class ConfigExportService {
     }
 
     // 导入WebDAV配置
-    if (config.webdav != null) {
+    if (options.appSettings && config.webdav != null) {
       final webdavCfg = CloudServiceConfig(
         type: CloudBackendType.webdav,
         name: 'WebDAV',
@@ -1242,7 +1431,7 @@ class ConfigExportService {
     }
 
     // 导入S3配置
-    if (config.s3 != null) {
+    if (options.appSettings && config.s3 != null) {
       final s3Cfg = CloudServiceConfig(
         type: CloudBackendType.s3,
         name: 'S3',
@@ -1259,7 +1448,7 @@ class ConfigExportService {
     }
 
     // 导入AI配置
-    if (config.ai != null) {
+    if (options.appSettings && config.ai != null) {
       if (config.ai!.glmApiKey != null) {
         await prefs.setString('ai_glm_api_key', config.ai!.glmApiKey!);
       }
@@ -1276,7 +1465,7 @@ class ConfigExportService {
     }
 
     // 导入应用设置
-    if (config.appSettings != null) {
+    if (options.appSettings && config.appSettings != null) {
       final settings = config.appSettings!;
 
       // 账户管理
@@ -1351,7 +1540,7 @@ class ConfigExportService {
     }
 
     // 导入周期账单
-    if (config.recurringTransactions != null && repository != null) {
+    if (options.recurringTransactions && config.recurringTransactions != null && repository != null) {
       try {
         final items = config.recurringTransactions!.items;
 
@@ -1385,7 +1574,7 @@ class ConfigExportService {
     }
 
     // 导入账户
-    if (config.accounts != null && repository != null) {
+    if (options.accounts && config.accounts != null && repository != null) {
       try {
         final items = config.accounts!.items;
 
@@ -1411,7 +1600,7 @@ class ConfigExportService {
     }
 
     // 导入分类
-    if (config.categories != null && repository != null) {
+    if (options.categories && config.categories != null && repository != null) {
       try {
         final items = config.categories!.items;
 
@@ -1465,6 +1654,26 @@ class ConfigExportService {
         logger.error('ConfigImport', '导入分类失败: $e');
       }
     }
+
+    // 导入标签
+    if (options.tags && config.tags != null && repository != null) {
+      try {
+        final items = config.tags!.items;
+
+        // 准备批量插入的数据
+        final tagsToInsert = items.map((item) => TagsCompanion.insert(
+          name: item.name,
+          color: d.Value(item.color),
+        )).toList();
+
+        // 使用 repository 方法进行批量插入
+        await repository.batchInsertTags(tagsToInsert);
+
+        logger.info('ConfigImport', '标签已批量导入: ${items.length}条');
+      } catch (e) {
+        logger.error('ConfigImport', '导入标签失败: $e');
+      }
+    }
   }
 
   /// 导出配置到文件
@@ -1472,8 +1681,13 @@ class ConfigExportService {
     String filePath, {
     BaseRepository? repository,
     int? ledgerId,
+    ExportOptions options = ExportOptions.all,
   }) async {
-    final yamlContent = await exportToYaml(repository: repository, ledgerId: ledgerId);
+    final yamlContent = await exportToYaml(
+      repository: repository,
+      ledgerId: ledgerId,
+      options: options,
+    );
     final file = File(filePath);
     await file.writeAsString(yamlContent);
     logger.info('ConfigExport', '配置已导出到: $filePath');
@@ -1484,6 +1698,7 @@ class ConfigExportService {
     String filePath, {
     BaseRepository? repository,
     int? ledgerId,
+    ExportOptions options = ExportOptions.all,
   }) async {
     final file = File(filePath);
     if (!await file.exists()) {
@@ -1491,7 +1706,7 @@ class ConfigExportService {
     }
 
     final yamlContent = await file.readAsString();
-    await importFromYaml(yamlContent, repository: repository, ledgerId: ledgerId);
+    await importFromYaml(yamlContent, repository: repository, ledgerId: ledgerId, options: options);
     logger.info('ConfigImport', '配置已从文件导入: $filePath');
   }
 }

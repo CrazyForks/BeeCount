@@ -3744,6 +3744,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configIncludeCategories => '分类';
 
   @override
+  String get configIncludeTags => '标签';
+
+  @override
+  String get configIncludeOtherSettings => '其他设置';
+
+  @override
+  String get configIncludeOtherSettingsSubtitle => '包含云服务配置、AI配置、应用设置等';
+
+  @override
+  String get configExportSelectTitle => '选择导出内容';
+
+  @override
+  String get configExportPreviewTitle => '导出预览';
+
+  @override
+  String get configExportConfirmTitle => '确认导出';
+
+  @override
+  String get configImportSelectTitle => '选择导入内容';
+
+  @override
+  String get configImportPreviewTitle => '导入预览';
+
+  @override
   String get ledgersConflictTitle => '同步冲突';
 
   @override
@@ -8096,6 +8120,30 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get configIncludeCategories => '分類';
+
+  @override
+  String get configIncludeTags => '標籤';
+
+  @override
+  String get configIncludeOtherSettings => '其他設定';
+
+  @override
+  String get configIncludeOtherSettingsSubtitle => '包含雲端服務配置、AI配置、應用程式設定等';
+
+  @override
+  String get configExportSelectTitle => '選擇匯出內容';
+
+  @override
+  String get configExportPreviewTitle => '匯出預覽';
+
+  @override
+  String get configExportConfirmTitle => '確認匯出';
+
+  @override
+  String get configImportSelectTitle => '選擇匯入內容';
+
+  @override
+  String get configImportPreviewTitle => '匯入預覽';
 
   @override
   String get ledgersConflictTitle => '同步衝突';
