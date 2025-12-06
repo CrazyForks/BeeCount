@@ -1746,11 +1746,15 @@
     }
   },
   "tagDetailTitle": "标签详情",
+  "tagDetailTotalCount": "交易笔数",
   "tagDetailTotalExpense": "总支出",
   "tagDetailTotalIncome": "总收入",
   "tagDetailTransactionCount": "交易笔数",
+  "tagDetailTransactionList": "关联交易",
   "tagDetailRelatedTransactions": "关联交易",
   "tagDetailNoTransactions": "暂无关联交易",
+  "tagDetailNoTransactionsHint": "使用此标签的交易将在此显示",
+  "tagNotFound": "标签不存在",
 
   "tagDefaultMeituan": "美团",
   "tagDefaultEleme": "饿了么",

@@ -26,7 +26,8 @@ class TransactionListItem extends ConsumerWidget {
   final bool showFullDate; // 是否显示完整日期（年-月-日 时:分）
 
   // 标签相关
-  final List<({String name, String? color})>? tags; // 关联的标签
+  final List<({int id, String name, String? color})>? tags; // 关联的标签
+  final void Function(int tagId, String tagName)? onTagTap; // 点击标签回调
 
   const TransactionListItem({
       super.key,
@@ -46,6 +47,7 @@ class TransactionListItem extends ConsumerWidget {
       this.onSelectionChanged,
       this.showFullDate = false,
       this.tags,
+      this.onTagTap,
   });
 
   /// 检查是否有次要信息需要显示（时间或账户）
@@ -195,6 +197,7 @@ class TransactionListItem extends ConsumerWidget {
                       maxDisplay: 2,
                       size: TagChipSize.small,
                       spacing: 4,
+                      onTagTap: onTagTap,
                     ),
                   ),
               ],

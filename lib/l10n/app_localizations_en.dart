@@ -4261,6 +4261,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagDetailTitle => 'Tag Details';
 
   @override
+  String get tagDetailTotalCount => 'Transactions';
+
+  @override
   String get tagDetailTotalExpense => 'Total Expense';
 
   @override
@@ -4270,10 +4273,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagDetailTransactionCount => 'Transactions';
 
   @override
+  String get tagDetailTransactionList => 'Related Transactions';
+
+  @override
   String get tagDetailRelatedTransactions => 'Related Transactions';
 
   @override
   String get tagDetailNoTransactions => 'No related transactions';
+
+  @override
+  String get tagDetailNoTransactionsHint => 'Transactions with this tag will appear here';
+
+  @override
+  String get tagNotFound => 'Tag not found';
 
   @override
   String get tagDefaultMeituan => 'Meituan';

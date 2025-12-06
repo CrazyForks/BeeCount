@@ -254,9 +254,13 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
               transactionId: transactionId,
               tagIds: res.tagIds,
             );
+            // 刷新标签列表缓存
+            ref.read(tagListRefreshProvider.notifier).state++;
           } else if (widget.editingTransactionId != null) {
             // 编辑模式：如果没有选择标签，清除原有标签
             await repo.removeAllTagsFromTransaction(transactionId);
+            // 刷新标签列表缓存
+            ref.read(tagListRefreshProvider.notifier).state++;
           }
           // 统一处理：自动/手动同步与状态刷新（后台静默）
           await handleLocalChange(ref, ledgerId: ledgerId, background: true);

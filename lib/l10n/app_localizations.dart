@@ -8160,6 +8160,12 @@ abstract class AppLocalizations {
   /// **'Tag Details'**
   String get tagDetailTitle;
 
+  /// No description provided for @tagDetailTotalCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get tagDetailTotalCount;
+
   /// No description provided for @tagDetailTotalExpense.
   ///
   /// In en, this message translates to:
@@ -8178,6 +8184,12 @@ abstract class AppLocalizations {
   /// **'Transactions'**
   String get tagDetailTransactionCount;
 
+  /// No description provided for @tagDetailTransactionList.
+  ///
+  /// In en, this message translates to:
+  /// **'Related Transactions'**
+  String get tagDetailTransactionList;
+
   /// No description provided for @tagDetailRelatedTransactions.
   ///
   /// In en, this message translates to:
@@ -8189,6 +8201,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No related transactions'**
   String get tagDetailNoTransactions;
+
+  /// No description provided for @tagDetailNoTransactionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions with this tag will appear here'**
+  String get tagDetailNoTransactionsHint;
+
+  /// No description provided for @tagNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag not found'**
+  String get tagNotFound;
 
   /// No description provided for @tagDefaultMeituan.
   ///

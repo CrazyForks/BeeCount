@@ -7,6 +7,7 @@ import '../../providers/database_providers.dart';
 import '../../services/data/tag_seed_service.dart';
 import '../../styles/tokens.dart';
 import '../../widgets/ui/ui.dart';
+import 'tag_detail_page.dart';
 import 'tag_edit_page.dart';
 
 /// 标签管理页面
@@ -133,7 +134,7 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
         return _TagCard(
           tag: item.tag,
           transactionCount: item.transactionCount,
-          onTap: () => _editTag(item.tag),
+          onTap: () => _viewTagDetail(item.tag),
           onDelete: () => _deleteTag(item.tag, l10n),
         );
       },
@@ -148,10 +149,13 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
     );
   }
 
-  void _editTag(Tag tag) async {
+  void _viewTagDetail(Tag tag) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => TagEditPage(tag: tag),
+        builder: (_) => TagDetailPage(
+          tagId: tag.id,
+          tagName: tag.name,
+        ),
       ),
     );
   }

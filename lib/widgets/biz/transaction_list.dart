@@ -13,6 +13,7 @@ import '../../utils/transaction_edit_utils.dart';
 import '../../utils/category_utils.dart';
 import '../category_icon.dart';
 import '../../pages/transaction/category_detail_page.dart';
+import '../../pages/tag/tag_detail_page.dart';
 import '../../l10n/app_localizations.dart';
 
 /// 可复用的交易列表组件
@@ -58,6 +59,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
   // 缓存标签数据
   Map<int, List<Tag>> _cachedTagsMap = {};
   List<int> _cachedTransactionIds = [];
+  int _lastTagRefreshVersion = 0;
 
   @override
   void initState() {
@@ -176,6 +178,14 @@ class TransactionListState extends ConsumerState<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
+    // 监听标签刷新信号，当标签变化时重新加载
+    final tagRefreshVersion = ref.watch(tagListRefreshProvider);
+    if (tagRefreshVersion != _lastTagRefreshVersion) {
+      _lastTagRefreshVersion = tagRefreshVersion;
+      // 延迟加载以避免在build中setState
+      Future.microtask(() => _loadTags());
+    }
+
     _buildFlatItems();
 
     // 无数据时展示空状态
@@ -311,7 +321,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                       // 获取该交易的标签（从缓存）
                       final transactionTags = _cachedTagsMap[it.t.id] ?? [];
                       final tagsList = transactionTags
-                          .map((t) => (name: t.name, color: t.color))
+                          .map((t) => (id: t.id, name: t.name, color: t.color))
                           .toList();
 
                       return TransactionListItem(
@@ -336,6 +346,16 @@ class TransactionListState extends ConsumerState<TransactionList> {
                               : null)
                           : accountName,
                         tags: tagsList.isNotEmpty ? tagsList : null,
+                        onTagTap: (tagId, tagName) async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => TagDetailPage(
+                                tagId: tagId,
+                                tagName: tagName,
+                              ),
+                            ),
+                          );
+                        },
                         onTap: () async {
                           await TransactionEditUtils.editTransaction(
                             context,

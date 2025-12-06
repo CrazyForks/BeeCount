@@ -160,14 +160,14 @@ enum TagChipSize {
 /// 标签列表组件
 /// 用于显示多个标签，支持省略显示
 class TagChipList extends StatelessWidget {
-  /// 标签列表
-  final List<({String name, String? color})> tags;
+  /// 标签列表（包含ID用于导航）
+  final List<({int id, String name, String? color})> tags;
 
   /// 最多显示数量，超出显示 +N
   final int maxDisplay;
 
-  /// 标签点击回调
-  final void Function(int index)? onTagTap;
+  /// 标签点击回调（传入标签ID和名称）
+  final void Function(int tagId, String tagName)? onTagTap;
 
   /// 点击 +N 的回调
   final VoidCallback? onMoreTap;
@@ -201,14 +201,12 @@ class TagChipList extends StatelessWidget {
       spacing: spacing,
       runSpacing: spacing,
       children: [
-        ...displayTags.asMap().entries.map((entry) {
-          final index = entry.key;
-          final tag = entry.value;
+        ...displayTags.map((tag) {
           return TagChip(
             name: tag.name,
             color: tag.color,
             size: size,
-            onTap: onTagTap != null ? () => onTagTap!(index) : null,
+            onTap: onTagTap != null ? () => onTagTap!(tag.id, tag.name) : null,
           );
         }),
         if (moreCount > 0)

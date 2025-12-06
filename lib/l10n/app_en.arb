@@ -1807,11 +1807,15 @@
     }
   },
   "tagDetailTitle": "Tag Details",
+  "tagDetailTotalCount": "Transactions",
   "tagDetailTotalExpense": "Total Expense",
   "tagDetailTotalIncome": "Total Income",
   "tagDetailTransactionCount": "Transactions",
+  "tagDetailTransactionList": "Related Transactions",
   "tagDetailRelatedTransactions": "Related Transactions",
   "tagDetailNoTransactions": "No related transactions",
+  "tagDetailNoTransactionsHint": "Transactions with this tag will appear here",
+  "tagNotFound": "Tag not found",
 
   "tagDefaultMeituan": "Meituan",
   "tagDefaultEleme": "Eleme",

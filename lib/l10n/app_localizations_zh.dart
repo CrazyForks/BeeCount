@@ -4261,6 +4261,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagDetailTitle => '标签详情';
 
   @override
+  String get tagDetailTotalCount => '交易笔数';
+
+  @override
   String get tagDetailTotalExpense => '总支出';
 
   @override
@@ -4270,10 +4273,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagDetailTransactionCount => '交易笔数';
 
   @override
+  String get tagDetailTransactionList => '关联交易';
+
+  @override
   String get tagDetailRelatedTransactions => '关联交易';
 
   @override
   String get tagDetailNoTransactions => '暂无关联交易';
+
+  @override
+  String get tagDetailNoTransactionsHint => '使用此标签的交易将在此显示';
+
+  @override
+  String get tagNotFound => '标签不存在';
 
   @override
   String get tagDefaultMeituan => '美团';
@@ -8595,6 +8607,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tagDetailTitle => '標籤詳情';
 
   @override
+  String get tagDetailTotalCount => '交易筆數';
+
+  @override
   String get tagDetailTotalExpense => '總支出';
 
   @override
@@ -8604,10 +8619,19 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tagDetailTransactionCount => '交易筆數';
 
   @override
+  String get tagDetailTransactionList => '關聯交易';
+
+  @override
   String get tagDetailRelatedTransactions => '關聯交易';
 
   @override
   String get tagDetailNoTransactions => '暫無關聯交易';
+
+  @override
+  String get tagDetailNoTransactionsHint => '使用此標籤的交易將在此顯示';
+
+  @override
+  String get tagNotFound => '標籤不存在';
 
   @override
   String get tagDefaultMeituan => '美團';
