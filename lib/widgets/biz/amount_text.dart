@@ -14,6 +14,7 @@ class AmountText extends ConsumerWidget {
   final bool showCurrency; // 是否显示币种符号(¥/$等),默认false
   final bool useCompactFormat; // 是否使用大金额缩写(万/千/k/M等),默认false
   final String? currencyCode; // 指定币种代码,null时自动获取当前账本币种
+  final bool colorizeIncome; // 是否给收入添加绿色,默认false
 
   const AmountText({
     super.key,
@@ -25,6 +26,7 @@ class AmountText extends ConsumerWidget {
     this.showCurrency = false,
     this.useCompactFormat = false,
     this.currencyCode,
+    this.colorizeIncome = false,
   });
 
   @override
@@ -87,16 +89,24 @@ class AmountText extends ConsumerWidget {
           formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
     }
 
+    // 计算最终样式：收入且开启着色时使用绿色
+    final isIncome = value > 0;
+    final baseStyle = style ??
+        Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: BeeTokens.textPrimary(context));
+
+    final finalStyle = (colorizeIncome && isIncome)
+        ? baseStyle?.copyWith(color: BeeTokens.chartIncome(context))
+        : baseStyle;
+
     return Text(
       displayText,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
-      style: style ??
-          Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: BeeTokens.textPrimary(context)),
+      style: finalStyle,
     );
   }
 

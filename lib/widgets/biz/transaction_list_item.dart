@@ -43,6 +43,48 @@ class TransactionListItem extends ConsumerWidget {
       this.showFullDate = false,
   });
 
+  /// 检查是否有次要信息需要显示（时间或账户）
+  bool _hasSecondaryInfo(WidgetRef ref) {
+    // 显示完整日期模式
+    if (showFullDate && happenedAt != null) return true;
+
+    // 显示时间（设置开启 + 有数据 + 不是00:00:00）
+    final showTime = ref.watch(showTransactionTimeProvider) &&
+        happenedAt != null &&
+        (happenedAt!.hour != 0 || happenedAt!.minute != 0 || happenedAt!.second != 0);
+
+    return showTime || accountName != null;
+  }
+
+  /// 构建次要信息文本（时间 · 账户）
+  String _buildSecondaryText(WidgetRef ref) {
+    final parts = <String>[];
+
+    // 时间部分
+    if (happenedAt != null) {
+      if (showFullDate) {
+        // 完整日期模式
+        parts.add(
+          '${happenedAt!.year}-${happenedAt!.month.toString().padLeft(2, '0')}-${happenedAt!.day.toString().padLeft(2, '0')} '
+          '${happenedAt!.hour.toString().padLeft(2, '0')}:${happenedAt!.minute.toString().padLeft(2, '0')}',
+        );
+      } else if (ref.watch(showTransactionTimeProvider) &&
+          (happenedAt!.hour != 0 || happenedAt!.minute != 0 || happenedAt!.second != 0)) {
+        // 完整时间模式（HH:mm:ss）
+        parts.add(
+          '${happenedAt!.hour.toString().padLeft(2, '0')}:${happenedAt!.minute.toString().padLeft(2, '0')}:${happenedAt!.second.toString().padLeft(2, '0')}',
+        );
+      }
+    }
+
+    // 账户部分
+    if (accountName != null) {
+      parts.add(accountName!);
+    }
+
+    return parts.join(' · ');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Widget child = InkWell(
@@ -78,80 +120,55 @@ class TransactionListItem extends ConsumerWidget {
                 ),
               ),
             const SizedBox(width: 12),
+            // 左侧：分类名称 + 备注 + 时间·账户
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: BeeTextTokens.title(context)),
-                      ),
-                      // 显示完整日期（如果showFullDate为true）
-                      if (showFullDate && happenedAt != null) ...[
-                        const SizedBox(width: 6),
-                        Text(
-                          '${happenedAt!.year}-${happenedAt!.month.toString().padLeft(2, '0')}-${happenedAt!.day.toString().padLeft(2, '0')} ${happenedAt!.hour.toString().padLeft(2, '0')}:${happenedAt!.minute.toString().padLeft(2, '0')}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: BeeTokens.textTertiary(context),
-                          ),
-                        ),
-                      ]
-                      // 显示时间（如果设置开启且有时间数据，且不显示完整日期）
-                      else if (ref.watch(showTransactionTimeProvider) && happenedAt != null) ...[
-                        const SizedBox(width: 6),
-                        Text(
-                          '${happenedAt!.hour.toString().padLeft(2, '0')}:${happenedAt!.minute.toString().padLeft(2, '0')}:${happenedAt!.second.toString().padLeft(2, '0')}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: BeeTokens.textTertiary(context),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  // 如果有分类名称且与标题不同，则显示分类名称
-                  if (categoryName != null && categoryName != title)
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 第一行：分类名称（始终显示）
                     GestureDetector(
                       onTap: onCategoryTap,
                       child: Text(
-                        categoryName!,
+                        categoryName ?? title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
+                        style: BeeTextTokens.title(context),
                       ),
                     ),
-                  // 如果有账户名称，则显示账户信息
-                  if (accountName != null)
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.account_balance_wallet_outlined,
-                          size: 12,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            accountName!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                    // 第二行：备注（当title与categoryName不同时显示）
+                    if (categoryName != null && categoryName != title)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: BeeTokens.textSecondary(context),
                           ),
                         ),
-                      ],
-                    ),
-                ],
+                      ),
+                    // 第三行：时间 · 账户
+                    if (_hasSecondaryInfo(ref))
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          _buildSecondaryText(ref),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: BeeTokens.textTertiary(context),
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(width: 8),
+            // 右侧：金额（垂直居中）
             AmountText(
                 value: isExpense ? -amount : amount,
                 hide: hide,
