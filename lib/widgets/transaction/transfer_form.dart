@@ -99,7 +99,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
       return;
     }
 
-    final db = ref.read(databaseProvider);
+    final repo = ref.read(repositoryProvider);
     final ledgerId = ref.read(currentLedgerIdProvider);
 
     if (!mounted) return;
@@ -114,22 +114,24 @@ class _TransferFormState extends ConsumerState<TransferForm> {
         initialAmount: widget.initialAmount,
         initialNote: widget.initialNote,
         showAccountPicker: false,
+        ledgerId: ledgerId,
         onSubmit: (result) async {
           try {
             if (widget.editingTransactionId != null) {
               // 编辑模式：更新现有转账记录
-              await (db.update(db.transactions)
-                    ..where((t) => t.id.equals(widget.editingTransactionId!)))
-                  .write(
-                TransactionsCompanion(
-                  type: drift.Value('transfer'),
-                  amount: drift.Value(result.amount),
-                  accountId: drift.Value(_fromAccountId),
-                  toAccountId: drift.Value(_toAccountId),
-                  categoryId: drift.Value(null), // 转账清空分类
-                  note: drift.Value(result.note),
-                  happenedAt: drift.Value(result.date),
-                ),
+              await repo.updateTransaction(
+                id: widget.editingTransactionId!,
+                type: 'transfer',
+                amount: result.amount,
+                categoryId: null, // 转账清空分类
+                note: result.note,
+                happenedAt: result.date,
+                accountId: _fromAccountId,
+              );
+              // 更新 toAccountId（使用专用方法）
+              await repo.updateTransactionFields(
+                id: widget.editingTransactionId!,
+                toAccountId: _toAccountId,
               );
 
               if (!context.mounted) return;
@@ -138,7 +140,6 @@ class _TransferFormState extends ConsumerState<TransferForm> {
               widget.onTransferComplete();
             } else {
               // 创建模式：新建转账记录
-              final repo = ref.read(repositoryProvider);
               await repo.addTransaction(
                 ledgerId: ledgerId,
                 type: 'transfer',
@@ -168,8 +169,6 @@ class _TransferFormState extends ConsumerState<TransferForm> {
             }
           }
         },
-        db: db,
-        ledgerId: ledgerId,
       ),
     );
   }

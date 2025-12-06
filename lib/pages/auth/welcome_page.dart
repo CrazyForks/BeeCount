@@ -635,6 +635,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
         final db = ref.read(databaseProvider);
 
         // 根据用户选择创建分类
+        // 注意: 使用 databaseProvider 直接访问数据库，因为 ensureSeed 是数据库初始化方法
         if (_categoryMode != 'none') {
           await db.ensureSeed(
             l10n: l10n,

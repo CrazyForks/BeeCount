@@ -1465,5 +1465,31 @@
         "type": "String"
       }
     }
-  }
+  },
+  "aiPromptEditTitle": "提示詞編輯",
+  "aiPromptEditSubtitle": "自訂 AI 帳單識別提示詞",
+  "aiPromptAdvancedSettings": "進階設定",
+  "aiPromptEditEntry": "提示詞編輯",
+  "aiPromptEditEntryDesc": "自訂 AI 帳單識別提示詞，可分享給其他使用者",
+  "aiPromptVariables": "變數說明",
+  "aiPromptVariablesHint": "點擊展開檢視可用變數",
+  "aiPromptContent": "提示詞內容",
+  "aiPromptUnsaved": "未儲存",
+  "aiPromptInputHint": "輸入提示詞...",
+  "aiPromptPreview": "預覽",
+  "aiPromptSave": "儲存",
+  "aiPromptSaved": "提示詞已儲存",
+  "aiPromptResetDefault": "恢復預設",
+  "aiPromptResetConfirmTitle": "恢復預設",
+  "aiPromptResetConfirmMessage": "確定要恢復預設提示詞嗎？您的自訂內容將會遺失。",
+  "aiPromptCopied": "已複製到剪貼簿，可分享給其他使用者",
+  "aiPromptPasted": "已貼上",
+  "aiPromptPreviewTitle": "提示詞預覽",
+  "aiPromptPreviewNote": "以上預覽使用範例資料替換變數，實際執行時會使用真實資料",
+  "aiPromptVarInputSource": "輸入來源描述，如「從以下支付帳單文字中」",
+  "aiPromptVarCurrentTime": "目前日期和時間，如「2025-01-15 14:30」",
+  "aiPromptVarCurrentDate": "目前日期，如「2025-01-15」",
+  "aiPromptVarOcrText": "使用者輸入或 OCR 識別的文字內容",
+  "aiPromptVarCategories": "支出和收入分類清單",
+  "aiPromptVarAccounts": "使用者的帳戶清單（可能為空）"
 }

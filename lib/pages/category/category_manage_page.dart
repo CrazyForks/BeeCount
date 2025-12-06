@@ -133,6 +133,7 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
         builder: (_) => CategoryEditPage(kind: kind),
       ),
     );
+    // 无需手动刷新，Repository 层会自动处理
   }
 }
 
@@ -302,17 +303,11 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
     });
 
     // 2. 批量保存到数据库
-    final database = ref.read(databaseProvider);
-    await database.batch((batch) {
-      for (var i = 0; i < reorderedItems.length; i++) {
-        final category = reorderedItems[i].category;
-        batch.update(
-          database.categories,
-          db.CategoriesCompanion(sortOrder: drift.Value(i)),
-          where: (c) => c.id.equals(category.id),
-        );
-      }
-    });
+    final repo = ref.read(repositoryProvider);
+    final updates = reorderedItems.asMap().entries.map((entry) {
+      return (id: entry.value.category.id, sortOrder: entry.key);
+    }).toList();
+    await repo.updateCategorySortOrders(updates);
 
     // 3. 刷新 provider 以同步其他地方的数据
     ref.invalidate(categoriesWithCountProvider);

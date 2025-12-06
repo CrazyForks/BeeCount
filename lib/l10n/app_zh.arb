@@ -1677,5 +1677,31 @@
         "type": "String"
       }
     }
-  }
+  },
+  "aiPromptEditTitle": "提示词编辑",
+  "aiPromptEditSubtitle": "自定义AI账单识别提示词",
+  "aiPromptAdvancedSettings": "高级设置",
+  "aiPromptEditEntry": "提示词编辑",
+  "aiPromptEditEntryDesc": "自定义AI账单识别提示词，可分享给其他用户",
+  "aiPromptVariables": "变量说明",
+  "aiPromptVariablesHint": "点击展开查看可用变量",
+  "aiPromptContent": "提示词内容",
+  "aiPromptUnsaved": "未保存",
+  "aiPromptInputHint": "输入提示词...",
+  "aiPromptPreview": "预览",
+  "aiPromptSave": "保存",
+  "aiPromptSaved": "提示词已保存",
+  "aiPromptResetDefault": "恢复默认",
+  "aiPromptResetConfirmTitle": "恢复默认",
+  "aiPromptResetConfirmMessage": "确定要恢复默认提示词吗？您的自定义内容将会丢失。",
+  "aiPromptCopied": "已复制到剪贴板，可分享给其他用户",
+  "aiPromptPasted": "已粘贴",
+  "aiPromptPreviewTitle": "提示词预览",
+  "aiPromptPreviewNote": "以上预览使用示例数据替换变量，实际运行时会使用真实数据",
+  "aiPromptVarInputSource": "输入来源描述，如\"从以下支付账单文本中\"",
+  "aiPromptVarCurrentTime": "当前日期和时间，如\"2025-01-15 14:30\"",
+  "aiPromptVarCurrentDate": "当前日期，如\"2025-01-15\"",
+  "aiPromptVarOcrText": "用户输入或OCR识别的文本内容",
+  "aiPromptVarCategories": "支出和收入分类列表",
+  "aiPromptVarAccounts": "用户的账户列表（可能为空）"
 }

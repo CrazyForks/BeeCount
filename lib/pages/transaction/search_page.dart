@@ -416,18 +416,15 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   /// 执行批量删除
   Future<void> _executeBatchDelete() async {
-    final db = ref.read(databaseProvider);
     final count = _selectedIds.length;
     final l10n = AppLocalizations.of(context);
 
     try {
-      // 使用数据库事务批量操作
-      await db.transaction(() async {
-        for (final id in _selectedIds) {
-          await (db.delete(db.transactions)..where((t) => t.id.equals(id)))
-              .go();
-        }
-      });
+      final repo = ref.read(repositoryProvider);
+      // 批量删除交易
+      for (final id in _selectedIds) {
+        await repo.deleteTransaction(id);
+      }
       await _refreshAfterBatchOperation(
           count, l10n.searchBatchDeleteSuccess(count));
     } catch (e) {
@@ -484,22 +481,28 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   /// 执行批量设置备注
   Future<void> _executeBatchSetNote(String note) async {
-    final db = ref.read(databaseProvider);
+    final repo = ref.read(repositoryProvider);
     final count = _selectedIds.length;
     final l10n = AppLocalizations.of(context);
 
     try {
-      // 使用数据库事务批量操作
-      await db.transaction(() async {
-        for (final id in _selectedIds) {
-          await (db.update(db.transactions)..where((t) => t.id.equals(id)))
-              .write(
-            TransactionsCompanion(
-              note: d.Value(note.isEmpty ? null : note),
-            ),
+      // 批量更新备注
+      for (final id in _selectedIds) {
+        // 先获取交易详情
+        final tx = await repo.getTransactionById(id);
+        if (tx != null) {
+          // 更新交易（保持其他字段不变）
+          await repo.updateTransaction(
+            id: id,
+            type: tx.type,
+            amount: tx.amount,
+            categoryId: tx.categoryId,
+            note: note.isEmpty ? null : note,
+            happenedAt: tx.happenedAt,
+            accountId: tx.accountId,
           );
         }
-      });
+      }
       await _refreshAfterBatchOperation(
           count, l10n.searchBatchSetNoteSuccess(count));
     } catch (e) {
@@ -551,22 +554,28 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   /// 执行批量调整分类
   Future<void> _executeBatchChangeCategory(int categoryId) async {
-    final db = ref.read(databaseProvider);
+    final repo = ref.read(repositoryProvider);
     final count = _selectedIds.length;
     final l10n = AppLocalizations.of(context);
 
     try {
-      // 使用数据库事务批量操作
-      await db.transaction(() async {
-        for (final id in _selectedIds) {
-          await (db.update(db.transactions)..where((t) => t.id.equals(id)))
-              .write(
-            TransactionsCompanion(
-              categoryId: d.Value(categoryId),
-            ),
+      // 批量更新分类
+      for (final id in _selectedIds) {
+        // 先获取交易详情
+        final tx = await repo.getTransactionById(id);
+        if (tx != null) {
+          // 更新交易（保持其他字段不变）
+          await repo.updateTransaction(
+            id: id,
+            type: tx.type,
+            amount: tx.amount,
+            categoryId: categoryId,
+            note: tx.note,
+            happenedAt: tx.happenedAt,
+            accountId: tx.accountId,
           );
         }
-      });
+      }
       await _refreshAfterBatchOperation(
           count, l10n.searchBatchChangeCategorySuccess(count));
     } catch (e) {

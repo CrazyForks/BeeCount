@@ -5,7 +5,6 @@ import 'package:beecount/widgets/ui/wheel_date_picker.dart';
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/data/note_history_service.dart';
-import '../../data/db.dart';
 import '../../providers.dart';
 import 'note_picker_dialog.dart';
 import 'account_selector.dart';
@@ -25,7 +24,6 @@ class AmountEditorSheet extends ConsumerStatefulWidget {
   final int? initialAccountId;
   final bool showAccountPicker; // 是否显示账户选择
   final ValueChanged<AmountEditorResult> onSubmit;
-  final BeeDatabase db;
   final int ledgerId;
 
   const AmountEditorSheet({
@@ -37,7 +35,6 @@ class AmountEditorSheet extends ConsumerStatefulWidget {
     this.initialAccountId,
     this.showAccountPicker = false,
     required this.onSubmit,
-    required this.db,
     required this.ledgerId,
   });
 
@@ -98,8 +95,9 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
   }
 
   Future<void> _loadRecentNotes() async {
+    final repo = ref.read(repositoryProvider);
     final notes = await NoteHistoryService.getFrequentNotes(
-      widget.db,
+      repo,
       widget.ledgerId,
       limit: 20,
     );
@@ -312,7 +310,6 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                           await showDialog(
                             context: context,
                             builder: (context) => NotePickerDialog(
-                              db: widget.db,
                               ledgerId: widget.ledgerId,
                               categoryId: null,
                               onNotePicked: (note) {
@@ -355,7 +352,6 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
 
                       // 使用新的横滑账户选择器
                       return AccountSelector(
-                        db: widget.db,
                         selectedAccountId: _selectedAccountId,
                         ledgerId: widget.ledgerId,
                         onAccountSelected: (accountId) {

@@ -67,10 +67,8 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
     if (widget.quickAdd && widget.initialCategoryId != null && widget.initialKind != 'transfer') {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted || _autoOpened) return;
-        final db = ref.read(databaseProvider);
-        final c = await (db.select(db.categories)
-              ..where((t) => t.id.equals(widget.initialCategoryId!)))
-            .getSingleOrNull();
+        final repo = ref.read(repositoryProvider);
+        final c = await repo.getCategoryById(widget.initialCategoryId!);
         if (c != null && mounted) {
           // 切换到对应的 tab
           final idx = c.kind == 'income' ? 1 : 0;
@@ -198,7 +196,6 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
       Navigator.pop(context, c);
       return;
     }
-    final db = ref.read(databaseProvider);
     final ledgerId = ref.read(currentLedgerIdProvider);
 
     // 确定初始账户ID（新建时使用默认账户，编辑时保持原值）
@@ -222,24 +219,19 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
         initialNote: widget.initialNote,
         initialAccountId: initialAccountId,
         showAccountPicker: true,
-        db: db,
         ledgerId: ledgerId,
         onSubmit: (res) async {
           final repo = ref.read(repositoryProvider);
           if (widget.editingTransactionId != null) {
-            // 编辑模式：从转账切换到收入/支出时，清空转账相关字段
-            await (db.update(db.transactions)
-                  ..where((t) => t.id.equals(widget.editingTransactionId!)))
-                .write(
-              TransactionsCompanion(
-                type: drift.Value(kind),
-                amount: drift.Value(res.amount),
-                categoryId: drift.Value(c.id),
-                note: drift.Value(res.note),
-                happenedAt: drift.Value(res.date),
-                accountId: drift.Value(res.accountId),
-                toAccountId: drift.Value(null), // 清空转账目标账户
-              ),
+            // 编辑模式：使用repository更新交易
+            await repo.updateTransaction(
+              id: widget.editingTransactionId!,
+              type: kind,
+              amount: res.amount,
+              categoryId: c.id,
+              note: res.note,
+              happenedAt: res.date,
+              accountId: res.accountId,
             );
           } else {
             await repo.addTransaction(

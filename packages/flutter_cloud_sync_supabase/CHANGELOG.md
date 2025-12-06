@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Database Service**: New `SupabaseDatabaseService` implementing `CloudDatabaseService`
+  - Direct database CRUD operations via Supabase REST API
+  - Support for complex queries with filters
+  - Batch insert operations
+  - Automatic type conversion and error handling
+- **Realtime Service**: New `SupabaseRealtimeService` implementing `CloudRealtimeService`
+  - WebSocket-based real-time subscriptions
+  - PostgreSQL CDC (Change Data Capture) support
+  - Channel management with automatic cleanup
+  - Filter-based subscriptions (eq, gt, lt, etc.)
+- Exposed `databaseService`, `realtimeService`, and `client` in `SupabaseProvider`
 - Initial release of flutter_cloud_sync_supabase
 - Full Supabase authentication integration
   - Email/password sign up and sign in

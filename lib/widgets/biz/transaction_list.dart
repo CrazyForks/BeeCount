@@ -247,10 +247,8 @@ class TransactionListState extends ConsumerState<TransactionList> {
                     false;
               },
               onDismissed: (direction) async {
-                final db = ref.read(databaseProvider);
-                await (db.delete(db.transactions)
-                      ..where((t) => t.id.equals(it.t.id)))
-                    .go();
+                final repo = ref.read(repositoryProvider);
+                await repo.deleteTransaction(it.t.id);
 
                 if (!context.mounted) return;
                 final curLedger = ref.read(currentLedgerIdProvider);

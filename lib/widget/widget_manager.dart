@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
-import '../data/repository.dart';
+import '../data/repositories/base_repository.dart';
 import 'home_widget_view.dart';
 
 class WidgetManager {
@@ -18,7 +18,7 @@ class WidgetManager {
 
   /// Update widget with latest transaction data for a specific ledger
   Future<void> updateWidget(
-    BeeRepository repository,
+    BaseRepository repository,
     int ledgerId,
     Color themeColor, {
     String appName = '蜜蜂记账',

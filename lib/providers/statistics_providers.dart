@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'database_providers.dart';
 import 'ui_state_providers.dart';
+import '../services/system/logger_service.dart';
 
 // 统计：账本数量
 final ledgerCountProvider = FutureProvider.autoDispose<int>((ref) async {
@@ -20,7 +21,7 @@ final countsForLedgerProvider = FutureProvider.family
   ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  return repo.countsForLedger(ledgerId: ledgerId);
+  return repo.getCountsForLedger(ledgerId: ledgerId);
 });
 
 // 统计刷新 tick（全局）：每次 +1 触发统计相关 Provider 重新获取
@@ -37,7 +38,7 @@ final countsAllProvider =
   ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  final res = await repo.countsAll();
+  final res = await repo.getCountsAll();
   // 写入最近一次成功值，供 UI 在刷新期间显示旧值
   ref.read(lastCountsAllProvider.notifier).state = res;
   return res;
@@ -97,11 +98,14 @@ final accountStatsProvider = FutureProvider.family
 final allAccountStatsProvider = FutureProvider.autoDispose<Map<int, ({double balance, double expense, double income})>>(
         (ref) async {
   final repo = ref.watch(repositoryProvider);
+  logger.info('AllAccountStats', '使用的 Repository 类型: ${repo.runtimeType}');
   // 依赖 tick 触发刷新
   ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  return repo.getAllAccountStats();
+  final stats = await repo.getAllAccountStats();
+  logger.info('AllAccountStats', '获取到 ${stats.length} 个账户的统计数据');
+  return stats;
 });
 
 // 统计：所有账户汇总统计（总余额、总支出、总收入）
@@ -109,9 +113,12 @@ final allAccountStatsProvider = FutureProvider.autoDispose<Map<int, ({double bal
 final allAccountsTotalStatsProvider = FutureProvider.autoDispose<({double totalBalance, double totalExpense, double totalIncome})>(
         (ref) async {
   final repo = ref.watch(repositoryProvider);
+  logger.info('AllAccountsTotalStats', '使用的 Repository 类型: ${repo.runtimeType}');
   // 依赖 tick 触发刷新
   ref.watch(statsRefreshProvider);
   final link = ref.keepAlive();
   ref.onDispose(() => link.close());
-  return repo.getAllAccountsTotalStats();
+  final stats = await repo.getAllAccountsTotalStats();
+  logger.info('AllAccountsTotalStats', '总余额: ${stats.totalBalance}, 总支出: ${stats.totalExpense}, 总收入: ${stats.totalIncome}');
+  return stats;
 });

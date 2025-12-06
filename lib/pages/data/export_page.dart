@@ -9,11 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../../providers.dart';
-import '../../data/repository.dart';
+import '../../data/repositories/base_repository.dart';
+import '../../data/db.dart';
 import '../../widgets/ui/ui.dart';
 import '../../utils/category_utils.dart';
-import '../../styles/tokens.dart';
-import 'package:drift/drift.dart' as d;
 
 class ExportPage extends ConsumerStatefulWidget {
   const ExportPage({super.key});
@@ -76,7 +75,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
     );
   }
 
-  Future<void> _export(BeeRepository repo, int ledgerId) async {
+  Future<void> _export(BaseRepository repo, int ledgerId) async {
     try {
       setState(() {
         exporting = true;
@@ -100,21 +99,9 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         directory = downloadPath;
       }
 
-      final q = (repo.db.select(repo.db.transactions)
-            ..where((t) => t.ledgerId.equals(ledgerId))
-            ..orderBy([
-              (t) => d.OrderingTerm(
-                  expression: t.happenedAt, mode: d.OrderingMode.desc)
-            ]))
-          .join([
-        d.leftOuterJoin(repo.db.categories,
-            repo.db.categories.id.equalsExp(repo.db.transactions.categoryId)),
-        d.leftOuterJoin(repo.db.accounts,
-            repo.db.accounts.id.equalsExp(repo.db.transactions.accountId)),
-      ]);
-
-      final rowsJoin = await q.get();
-      final total = rowsJoin.length;
+      // 获取交易和分类数据
+      final transactionsWithCategory = await repo.transactionsWithCategoryAll(ledgerId: ledgerId).first;
+      final total = transactionsWithCategory.length;
       final rows = <List<dynamic>>[];
       final l10n = AppLocalizations.of(context);
       rows.add([
@@ -132,18 +119,27 @@ class _ExportPageState extends ConsumerState<ExportPage> {
       ]);
 
       // 缓存所有账户信息，避免重复查询
-      final allAccounts = await repo.db.select(repo.db.accounts).get();
+      final allAccounts = await repo.getAllAccounts();
       final accountMap = {for (var acc in allAccounts) acc.id: acc};
 
       // 缓存所有分类信息（包括父分类）
-      final allCategories = await repo.db.select(repo.db.categories).get();
-      final categoryMap = {for (var cat in allCategories) cat.id: cat};
+      final incomeCategories = await repo.getTopLevelCategories('income');
+      final expenseCategories = await repo.getTopLevelCategories('expense');
+      final allCategories = <int, Category>{};
+      for (final cat in [...incomeCategories, ...expenseCategories]) {
+        allCategories[cat.id] = cat;
+        // 获取子分类
+        final subCategories = await repo.getSubCategories(cat.id);
+        for (final subCat in subCategories) {
+          allCategories[subCat.id] = subCat;
+        }
+      }
 
-      for (int i = 0; i < rowsJoin.length; i++) {
-        final r = rowsJoin[i];
-        final t = r.readTable(repo.db.transactions);
-        final c = r.readTableOrNull(repo.db.categories);
-        final a = r.readTableOrNull(repo.db.accounts);
+      for (int i = 0; i < transactionsWithCategory.length; i++) {
+        final txWithCat = transactionsWithCategory[i];
+        final t = txWithCat.t;
+        final c = txWithCat.category;
+        final a = t.accountId != null ? accountMap[t.accountId] : null;
         // 使用完整的时间格式，包含年份和秒，添加前导空格增加列宽
         final timeStr = () {
           try {
@@ -186,7 +182,7 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           if (c != null) {
             if (c.level == 2 && c.parentId != null) {
               // 二级分类：分类列填一级分类名称，二级分类列填当前分类名称
-              final parentCategory = categoryMap[c.parentId];
+              final parentCategory = allCategories[c.parentId];
               categoryName = CategoryUtils.getDisplayName(parentCategory?.name, context);
               subCategoryName = CategoryUtils.getDisplayName(c.name, context);
               categoryIcon = parentCategory?.icon ?? '';

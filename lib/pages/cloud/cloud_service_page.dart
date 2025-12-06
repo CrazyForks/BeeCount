@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import 'package:flutter_cloud_sync_icloud/flutter_cloud_sync_icloud.dart';
 import '../../providers/sync_providers.dart';
+import '../../providers/cloud_mode_providers.dart';
 import '../../services/system/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/section_card.dart';
@@ -106,6 +107,40 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                 return ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
+                    // 云端模式提示（已移除）
+                    if (false) ...[
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: BeeTokens.brandSupabase.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: BeeTokens.brandSupabase.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              color: BeeTokens.brandSupabase,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                '仅云端模式下仅支持 Supabase 云服务',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: BeeTokens.textPrimary(context),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
                     Text(
                       AppLocalizations.of(context).cloudSelectServiceType,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -115,7 +150,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                     ),
                     const SizedBox(height: 12),
 
-                    // 1. 本地存储 Card
+                    // 1. 本地存储 Card (云端模式下禁用)
                     _buildServiceCard(
                       context: context,
                       icon: Icons.phone_android,
@@ -123,18 +158,19 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                       title: AppLocalizations.of(context).cloudLocalStorageTitle,
                       subtitle: AppLocalizations.of(context).cloudLocalStorageSubtitle,
                       isSelected: active.type == CloudBackendType.local,
+                      isDisabled: false,
                       onTap: () => _switchService(CloudBackendType.local),
                     ),
 
-                    // 2. iCloud Card (仅 iOS)
+                    // 2. iCloud Card (仅 iOS，云端模式下禁用)
                     if (!kIsWeb && Platform.isIOS) ...[
                       const SizedBox(height: 12),
-                      _buildICloudCard(context, active),
+                      _buildICloudCard(context, active, isDisabled: false),
                     ],
 
                     const SizedBox(height: 12),
 
-                    // 3. 自定义 WebDAV Card
+                    // 3. 自定义 WebDAV Card (云端模式下禁用)
                     webdavAsync.when(
                       loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
                       error: (e, _) => const SizedBox.shrink(),
@@ -148,6 +184,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                             : AppLocalizations.of(context).cloudCustomWebdavSubtitle,
                         isSelected: active.type == CloudBackendType.webdav,
                         isConfigured: webdavCfg?.valid == true,
+                        isDisabled: false,
                         onTap: () => webdavCfg?.valid == true
                             ? _switchService(CloudBackendType.webdav)
                             : _configureService(CloudBackendType.webdav),
@@ -160,7 +197,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
                     const SizedBox(height: 12),
 
-                    // 4. S3 Protocol Storage Card
+                    // 4. S3 Protocol Storage Card (云端模式下禁用)
                     s3Async.when(
                       loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
                       error: (e, _) => const SizedBox.shrink(),
@@ -174,6 +211,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                             : AppLocalizations.of(context).cloudCustomS3Subtitle,
                         isSelected: active.type == CloudBackendType.s3,
                         isConfigured: s3Cfg?.valid == true,
+                        isDisabled: false,
                         onTap: () => s3Cfg?.valid == true
                             ? _switchService(CloudBackendType.s3)
                             : _configureService(CloudBackendType.s3),
@@ -186,7 +224,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
 
                     const SizedBox(height: 12),
 
-                    // 5. 自定义 Supabase Card
+                    // 5. 自定义 Supabase Card (云端模式唯一可用)
                     supabaseAsync.when(
                       loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
                       error: (e, _) => const SizedBox.shrink(),
@@ -200,6 +238,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                             : AppLocalizations.of(context).cloudCustomSupabaseSubtitle,
                         isSelected: active.type == CloudBackendType.supabase,
                         isConfigured: supabaseCfg?.valid == true,
+                        isDisabled: false, // Supabase 始终可用
                         onTap: () => supabaseCfg?.valid == true
                             ? _switchService(CloudBackendType.supabase)
                             : _configureService(CloudBackendType.supabase),
@@ -307,84 +346,242 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     required String subtitle,
     required bool isSelected,
     bool isConfigured = true,
+    bool isDisabled = false,
     required VoidCallback onTap,
     VoidCallback? onConfigure,
     VoidCallback? onShowGuide,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        border: isSelected ? Border.all(color: BeeTokens.success(context), width: 2) : null,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: SectionCard(
-        margin: EdgeInsets.zero,
-        child: InkWell(
-          onTap: onTap,
+    return Opacity(
+      opacity: isDisabled ? 0.5 : 1.0,
+      child: Container(
+        decoration: BoxDecoration(
+          border: isSelected ? Border.all(color: BeeTokens.success(context), width: 2) : null,
           borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    // 图标
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: iconColor.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+        ),
+        child: SectionCard(
+          margin: EdgeInsets.zero,
+          child: InkWell(
+            onTap: isDisabled ? null : onTap,
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      // 图标
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: iconColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(icon, color: iconColor, size: 24),
                       ),
-                      child: Icon(icon, color: iconColor, size: 24),
-                    ),
-                    const SizedBox(width: 16),
+                      const SizedBox(width: 16),
 
-                    // 文字信息
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      // 文字信息
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    title,
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                if (isDisabled)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: BeeTokens.textTertiary(context).withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      '不可用',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: BeeTokens.textTertiary(context),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              subtitle,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: BeeTokens.textSecondary(context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // 选中标记
+                      if (isSelected && !isDisabled)
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: BeeTokens.success(context),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.check, color: BeeTokens.textOnPrimary(context), size: 18),
+                        ),
+                    ],
+                  ),
+
+                  // 底部按钮行
+                  if (!isDisabled && ((isConfigured && onConfigure != null) || onShowGuide != null))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            title,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
+                          if (onShowGuide != null)
+                            TextButton.icon(
+                              onPressed: onShowGuide,
+                              icon: const Icon(Icons.help_outline, size: 16),
+                              label: Text(AppLocalizations.of(context).commonTutorial, style: const TextStyle(fontSize: 12)),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            subtitle,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: BeeTokens.textSecondary(context),
+                          if (isConfigured && onConfigure != null) ...[
+                            if (onShowGuide != null) const SizedBox(width: 8),
+                            TextButton.icon(
+                              onPressed: onConfigure,
+                              icon: const Icon(Icons.settings, size: 16),
+                              label: Text(AppLocalizations.of(context).commonConfigure, style: const TextStyle(fontSize: 12)),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-                    // 选中标记
-                    if (isSelected)
+  Widget _buildICloudCard(BuildContext context, CloudServiceConfig active, {bool isDisabled = false}) {
+    final isSelected = active.type == CloudBackendType.icloud;
+
+    return Opacity(
+      opacity: isDisabled ? 0.5 : 1.0,
+      child: Container(
+        decoration: BoxDecoration(
+          border: isSelected ? Border.all(color: BeeTokens.success(context), width: 2) : null,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: SectionCard(
+          margin: EdgeInsets.zero,
+          child: InkWell(
+            onTap: isDisabled ? null : () => _switchService(CloudBackendType.icloud),
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      // 图标
                       Container(
-                        width: 28,
-                        height: 28,
+                        width: 48,
+                        height: 48,
                         decoration: BoxDecoration(
-                          color: BeeTokens.success(context),
-                          shape: BoxShape.circle,
+                          color: BeeTokens.brandIcloud.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(Icons.check, color: BeeTokens.textOnPrimary(context), size: 18),
+                        child: Icon(Icons.cloud, color: BeeTokens.brandIcloud, size: 24),
                       ),
-                  ],
-                ),
+                      const SizedBox(width: 16),
 
-                // 底部按钮行
-                if ((isConfigured && onConfigure != null) || onShowGuide != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (onShowGuide != null)
+                      // 文字信息
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'iCloud',
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                if (isDisabled)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: BeeTokens.textTertiary(context).withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      '不可用',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: BeeTokens.textTertiary(context),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              isSelected
+                                  ? 'iCloud Drive'
+                                  : AppLocalizations.of(context).cloudIcloudSubtitle,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: BeeTokens.textSecondary(context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // 选中标记
+                      if (isSelected && !isDisabled)
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: BeeTokens.success(context),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.check, color: BeeTokens.textOnPrimary(context), size: 18),
+                        ),
+                    ],
+                  ),
+
+                  // 底部帮助按钮
+                  if (!isDisabled)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
                           TextButton.icon(
-                            onPressed: onShowGuide,
+                            onPressed: _showICloudHelpDialog,
                             icon: const Icon(Icons.help_outline, size: 16),
                             label: Text(AppLocalizations.of(context).commonTutorial, style: const TextStyle(fontSize: 12)),
                             style: TextButton.styleFrom(
@@ -393,23 +590,11 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                           ),
-                        if (isConfigured && onConfigure != null) ...[
-                          if (onShowGuide != null) const SizedBox(width: 8),
-                          TextButton.icon(
-                            onPressed: onConfigure,
-                            icon: const Icon(Icons.settings, size: 16),
-                            label: Text(AppLocalizations.of(context).commonConfigure, style: const TextStyle(fontSize: 12)),
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                          ),
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -417,101 +602,6 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
     );
   }
 
-  Widget _buildICloudCard(BuildContext context, CloudServiceConfig active) {
-    final isSelected = active.type == CloudBackendType.icloud;
-
-    return Container(
-      decoration: BoxDecoration(
-        border: isSelected ? Border.all(color: BeeTokens.success(context), width: 2) : null,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: SectionCard(
-        margin: EdgeInsets.zero,
-        child: InkWell(
-          onTap: () => _switchService(CloudBackendType.icloud),
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    // 图标
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: BeeTokens.brandIcloud.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(Icons.cloud, color: BeeTokens.brandIcloud, size: 24),
-                    ),
-                    const SizedBox(width: 16),
-
-                    // 文字信息
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'iCloud',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            isSelected
-                                ? 'iCloud Drive'
-                                : AppLocalizations.of(context).cloudIcloudSubtitle,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: BeeTokens.textSecondary(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // 选中标记
-                    if (isSelected)
-                      Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: BeeTokens.success(context),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(Icons.check, color: BeeTokens.textOnPrimary(context), size: 18),
-                      ),
-                  ],
-                ),
-
-                // 底部帮助按钮
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton.icon(
-                        onPressed: _showICloudHelpDialog,
-                        icon: const Icon(Icons.help_outline, size: 16),
-                        label: Text(AppLocalizations.of(context).commonTutorial, style: const TextStyle(fontSize: 12)),
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   void _showSupabaseHelpDialog() {
     final l10n = AppLocalizations.of(context);

@@ -54,12 +54,12 @@ class _ConfigImportExportPageState
     });
 
     try {
-      // 获取数据库和当前账本ID
-      final db = ref.read(databaseProvider);
+      // 获取仓库和当前账本ID
+      final repo = ref.read(repositoryProvider);
       final ledgerId = ref.read(currentLedgerIdProvider);
 
       final yamlContent = await ConfigExportService.exportToYaml(
-        db: db,
+        repository: repo,
         ledgerId: ledgerId,
       );
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
@@ -196,14 +196,14 @@ class _ConfigImportExportPageState
         return;
       }
 
-      // 获取数据库和当前账本ID
-      final db = ref.read(databaseProvider);
+      // 获取仓库和当前账本ID
+      final repo = ref.read(repositoryProvider);
       final ledgerId = ref.read(currentLedgerIdProvider);
 
       // 执行导入
       await ConfigExportService.importFromFile(
         filePath,
-        db: db,
+        repository: repo,
         ledgerId: ledgerId,
       );
 

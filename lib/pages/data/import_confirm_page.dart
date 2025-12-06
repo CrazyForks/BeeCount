@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:drift/drift.dart' as d;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as schema;
 import '../../l10n/app_localizations.dart';
-import '../../services/data/category_service.dart';
 import '../../services/import/csv_parser.dart';
 import '../../utils/category_utils.dart';
 import '../../services/import/bill_parser.dart';
@@ -401,9 +401,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     final ledgerId = ref.read(currentLedgerIdProvider);
 
     // v1.15.0: 获取当前账本的币种信息
-    final currentLedger = await (repo.db.select(repo.db.ledgers)
-          ..where((l) => l.id.equals(ledgerId)))
-        .getSingleOrNull();
+    final currentLedger = await repo.getLedgerById(ledgerId);
     final ledgerCurrency = currentLedger?.currency ?? 'CNY';
 
     final dataStart = widget.hasHeader ? (headerRow + 1) : 0;
@@ -532,30 +530,25 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     final Map<String, int> skippedTypes = {};
 
     try {
-      // 使用事务确保账户创建和记录导入的原子性
-      await repo.db.transaction(() async {
-        // 步骤1：批量创建账户
+      // 步骤1：批量创建账户（云模式下每个操作独立，本地模式也支持）
         if (uniqueAccountNames.isNotEmpty) {
           for (final accountName in uniqueAccountNames) {
             if (_cancelled) break;
             try {
               // v1.15.0: 全局按名称去重检查（不限定账本）
-              final existing = await (repo.db.select(repo.db.accounts)
-                    ..where((a) => a.name.equals(accountName)))
-                  .getSingleOrNull();
+              final allAccounts = await repo.getAllAccounts();
+              final existing = allAccounts.where((a) => a.name == accountName).firstOrNull;
 
               if (existing != null) {
                 accountNameToId[accountName] = existing.id;
               } else {
                 // v1.15.0: 创建新账户（继承账本币种，不绑定账本ID）
-                final accountId = await repo.db.into(repo.db.accounts).insert(
-                      schema.AccountsCompanion.insert(
-                        ledgerId: 0, // v1.15.0: 账户独立，不绑定账本
-                        name: accountName,
-                        currency: d.Value(ledgerCurrency), // v1.15.0: 从账本继承币种
-                        initialBalance: const d.Value(0.0), // 初始余额为0
-                      ),
-                    );
+                final accountId = await repo.createAccount(
+                  ledgerId: 0, // v1.15.0: 账户独立，不绑定账本
+                  name: accountName,
+                  currency: ledgerCurrency, // v1.15.0: 从账本继承币种
+                  initialBalance: 0.0, // 初始余额为0
+                );
                 accountNameToId[accountName] = accountId;
               }
             } catch (e) {
@@ -655,21 +648,17 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
             try {
               // 检查是否已存在
-              final existing = await (repo.db.select(repo.db.categories)
-                    ..where((c) => c.name.equals(name) & c.kind.equals(kind) & c.level.equals(1)))
-                  .getSingleOrNull();
+              final topLevelCategories = await repo.getTopLevelCategories(kind);
+              final existing = topLevelCategories.where((c) => c.name == name).firstOrNull;
 
               if (existing != null) {
                 categoryCache[key] = existing.id;
               } else {
                 // 创建新的一级分类
-                final id = await repo.db.into(repo.db.categories).insert(
-                  schema.CategoriesCompanion.insert(
-                    name: name,
-                    kind: kind,
-                    level: const d.Value(1),
-                    icon: d.Value(info.icon),
-                  ),
+                final id = await repo.createCategory(
+                  name: name,
+                  kind: kind,
+                  icon: info.icon,
                 );
                 categoryCache[key] = id;
               }
@@ -702,26 +691,18 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
             try {
               // 检查是否已存在
-              final existing = await (repo.db.select(repo.db.categories)
-                    ..where((c) =>
-                      c.name.equals(name) &
-                      c.kind.equals(kind) &
-                      c.level.equals(2) &
-                      c.parentId.equals(parentId)))
-                  .getSingleOrNull();
+              final subCategories = await repo.getSubCategories(parentId);
+              final existing = subCategories.where((c) => c.name == name).firstOrNull;
 
               if (existing != null) {
                 categoryCache[key] = existing.id;
               } else {
                 // 创建新的二级分类
-                final id = await repo.db.into(repo.db.categories).insert(
-                  schema.CategoriesCompanion.insert(
-                    name: name,
-                    kind: kind,
-                    level: const d.Value(2),
-                    parentId: d.Value(parentId),
-                    icon: d.Value(info.icon),
-                  ),
+                final id = await repo.createSubCategory(
+                  parentId: parentId,
+                  name: name,
+                  kind: kind,
+                  icon: info.icon,
                 );
                 categoryCache[key] = id;
               }
@@ -743,13 +724,13 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
           if (batch.isEmpty) return;
           try {
             final inserted = await repo.insertTransactionsBatch(batch);
-            ok += inserted;
+            ok += inserted as int;
           } catch (_) {
             // 回退到逐条插入，尽可能保留成功数
             for (final item in batch) {
               if (_cancelled) break;
               try {
-                await repo.db.into(repo.db.transactions).insert(item);
+                await repo.insertTransactionCompanion(item);
                 ok++;
               } catch (_) {
                 fail++;
@@ -927,11 +908,10 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       }
     }
 
-        // 刷新剩余缓冲
-        await flushBatch();
-      }); // 结束事务
+      // 刷新剩余缓冲
+      await flushBatch();
     } catch (e) {
-      // 事务失败，全部回滚
+      // 导入失败
       if (mounted) {
         showToast(context, AppLocalizations.of(context)!.importTransactionFailed('$e'));
       }
@@ -1062,14 +1042,21 @@ List<List<String>> _parseRowsIsolate(String input) {
 }
 
 Future<List<schema.Category>> _loadAllCategories(WidgetRef ref) async {
-  final db = ref.read(databaseProvider);
-  final expense = await (db.select(db.categories)
-        ..where((c) => c.kind.equals('expense')))
-      .get();
-  final income = await (db.select(db.categories)
-        ..where((c) => c.kind.equals('income')))
-      .get();
-  return [...expense, ...income];
+  final repo = ref.read(repositoryProvider);
+  final expenseTopLevel = await repo.getTopLevelCategories('expense');
+  final incomeTopLevel = await repo.getTopLevelCategories('income');
+
+  final allCategories = <schema.Category>[];
+  allCategories.addAll(expenseTopLevel);
+  allCategories.addAll(incomeTopLevel);
+
+  // 获取所有子分类
+  for (final category in [...expenseTopLevel, ...incomeTopLevel]) {
+    final subCategories = await repo.getSubCategories(category.id);
+    allCategories.addAll(subCategories);
+  }
+
+  return allCategories;
 }
 
 class _PreviewTable extends StatelessWidget {

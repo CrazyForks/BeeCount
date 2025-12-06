@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:drift/drift.dart' as d;
-
 import '../data/db.dart';
-import '../data/repository.dart';
+import '../data/repositories/base_repository.dart';
+import '../data/repositories/local/local_repository.dart';
 
 /// 账本交易数据的 JSON 导入导出工具
 ///
@@ -174,7 +173,7 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
 /// - inserted: 新增条数
 /// - skipped: 因重复而跳过的条数
 Future<({int inserted, int skipped})> importTransactionsJson(
-  BeeRepository repo,
+  BaseRepository repo,
   int ledgerId,
   String jsonStr, {
   void Function(int done, int total)? onProgress,
@@ -231,7 +230,7 @@ Future<({int inserted, int skipped})> importTransactionsJson(
   if (categories != null) {
     try {
       // 获取所有现有分类
-      final existingCategories = await repo.db.select(repo.db.categories).get();
+      final existingCategories = await ( repo as LocalRepository).db.select(repo.db.categories).get();
       final existingCategoryMap = <String, Category>{};
       for (final cat in existingCategories) {
         existingCategoryMap['${cat.kind}|${cat.name}'] = cat;
@@ -262,7 +261,7 @@ Future<({int inserted, int skipped})> importTransactionsJson(
           categoryCacheForImport[key] = existingCategoryMap[key]!.id;
         } else {
           // 创建新分类
-          final id = await repo.db.into(repo.db.categories).insert(
+          final id = await (repo as LocalRepository).db.into(repo.db.categories).insert(
             CategoriesCompanion.insert(
               name: name,
               kind: kind,
@@ -292,7 +291,7 @@ Future<({int inserted, int skipped})> importTransactionsJson(
 
           if (parentId != null) {
             // 创建二级分类
-            final id = await repo.db.into(repo.db.categories).insert(
+            final id = await (repo as LocalRepository).db.into(repo.db.categories).insert(
               CategoriesCompanion.insert(
                 name: name,
                 kind: kind,

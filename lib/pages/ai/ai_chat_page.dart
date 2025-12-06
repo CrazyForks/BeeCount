@@ -20,7 +20,6 @@ import '../../pages/transaction/transaction_editor_page.dart';
 import '../../pages/ai/ai_settings_page.dart';
 import '../../widgets/biz/ledger_selector_dialog.dart';
 import '../../data/db.dart';
-import '../../data/repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/ai_quick_command.dart';
 import '../../services/ui/avatar_service.dart';
@@ -124,25 +123,22 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
   }
 
   Future<void> _initConversation() async {
-    final db = ref.read(databaseProvider);
+    final repo = ref.read(repositoryProvider);
 
     // 查找全局活跃对话（不限制账本）
-    final conv = await (db.select(db.conversations)
-          ..orderBy([(c) => OrderingTerm.desc(c.updatedAt)])
-          ..limit(1))
-        .getSingleOrNull();
+    final conv = await repo.getActiveConversation();
 
     if (conv != null) {
       setState(() => _conversationId = conv.id);
     } else {
       // 创建新对话（全局对话，不关联账本）
-      final id = await db.into(db.conversations).insert(
-            ConversationsCompanion.insert(
-              title: const Value('AI对话'),
-              createdAt: Value(DateTime.now()),
-              updatedAt: Value(DateTime.now()),
-            ),
-          );
+      final id = await repo.createConversation(
+        ConversationsCompanion.insert(
+          title: const Value('AI对话'),
+          createdAt: Value(DateTime.now()),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
       setState(() => _conversationId = id);
     }
 
@@ -622,23 +618,23 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
     setState(() => _isLoading = true);
 
     try {
-      final db = ref.read(databaseProvider);
+      final repo = ref.read(repositoryProvider);
 
       // 保存用户消息（使用displayText作为显示内容，如果没有则使用text）
-      await db.into(db.messages).insert(
-            MessagesCompanion.insert(
-              conversationId: _conversationId!,
-              role: 'user',
-              content: displayText ?? text,
-              messageType: 'text',
-              createdAt: Value(DateTime.now()),
-            ),
-          );
+      await repo.createMessage(
+        MessagesCompanion.insert(
+          conversationId: _conversationId!,
+          role: 'user',
+          content: displayText ?? text,
+          messageType: 'text',
+          createdAt: Value(DateTime.now()),
+        ),
+      );
 
       _scrollToBottom();
 
       // 获取分类列表（使用 repository 过滤，排除有子分类的父分类）
-      final repository = BeeRepository(db);
+      final repository = repo;
       final expenseCategories = await repository.getUsableCategories('expense');
       final incomeCategories = await repository.getUsableCategories('income');
 
@@ -660,24 +656,24 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
       );
 
       // 保存 AI 回复
-      final messageId = await db.into(db.messages).insert(
-            MessagesCompanion.insert(
-              conversationId: _conversationId!,
-              role: 'assistant',
-              content: response.text,
-              messageType: response.type,
-              metadata: response.billInfo != null
-                  ? Value(jsonEncode({
-                      'billInfo': response.billInfo!.toJson(),
-                      'isUndone': false,
-                    }))
-                  : const Value.absent(),
-              transactionId: response.transactionId != null
-                  ? Value(response.transactionId)
-                  : const Value.absent(),
-              createdAt: Value(DateTime.now()),
-            ),
-          );
+      final messageId = await repo.createMessage(
+        MessagesCompanion.insert(
+          conversationId: _conversationId!,
+          role: 'assistant',
+          content: response.text,
+          messageType: response.type,
+          metadata: response.billInfo != null
+              ? Value(jsonEncode({
+                  'billInfo': response.billInfo!.toJson(),
+                  'isUndone': false,
+                }))
+              : const Value.absent(),
+          transactionId: response.transactionId != null
+              ? Value(response.transactionId)
+              : const Value.absent(),
+          createdAt: Value(DateTime.now()),
+        ),
+      );
 
       // 如果是记账成功，刷新统计信息
       if (response.type == 'bill_card' && response.transactionId != null) {
@@ -768,10 +764,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
   }
 
   Future<void> _clearHistory() async {
-    final db = ref.read(databaseProvider);
-    await (db.delete(db.messages)
-          ..where((m) => m.conversationId.equals(_conversationId!)))
-        .go();
+    final repo = ref.read(repositoryProvider);
+    await repo.deleteMessagesByConversation(_conversationId!);
 
     if (mounted) {
       showToast(context, AppLocalizations.of(context).aiChatHistoryCleared);
@@ -784,10 +778,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
     if (success) {
       // 更新消息的 metadata,标记为已撤销
-      final db = ref.read(databaseProvider);
-      final message = await (db.select(db.messages)
-            ..where((m) => m.id.equals(messageId)))
-          .getSingleOrNull();
+      final repo = ref.read(repositoryProvider);
+      final message = await repo.getMessageById(messageId);
 
       if (message != null && message.metadata != null) {
         final metadata = jsonDecode(message.metadata!) as Map<String, dynamic>;
@@ -798,8 +790,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
           'isUndone': true,
         };
 
-        await (db.update(db.messages)..where((m) => m.id.equals(messageId)))
-            .write(MessagesCompanion(
+        await repo.updateMessage(message.copyWith(
           metadata: Value(jsonEncode(updatedMetadata)),
         ));
 
@@ -811,7 +802,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         if (billInfo != null && billInfo['ledgerId'] != null) {
           final ledgerId = billInfo['ledgerId'] as int;
           await handleLocalChange(ref, ledgerId: ledgerId, background: true);
-          logger.info('AIChat', '撤销记账成功，已刷新统计信息和触发云同步');
+          logger.info('AIChat', '撤销记账成功,已刷新统计信息和触发云同步');
         }
       }
 
@@ -827,10 +818,9 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
   Future<void> _handleEdit(int transactionId) async {
     try {
-      final db = ref.read(databaseProvider);
-      final transaction = await (db.select(db.transactions)
-            ..where((t) => t.id.equals(transactionId)))
-          .getSingleOrNull();
+      final repo = ref.read(repositoryProvider);
+
+      final transaction = await repo.getTransactionById(transactionId);
 
       if (transaction == null) {
         if (mounted) {
@@ -859,7 +849,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
         // 从编辑页面返回后，无论是否保存，都刷新账单卡片
         if (mounted) {
-          logger.info('AIChat', '编辑页面返回，刷新账单卡片: transactionId=$transactionId');
+          logger.info('AIChat', '编辑页面返回,刷新账单卡片: transactionId=$transactionId');
           await _refreshBillCard(transactionId);
         }
       }
@@ -873,37 +863,29 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
   /// 刷新账单卡片信息
   Future<void> _refreshBillCard(int transactionId) async {
     try {
-      final db = ref.read(databaseProvider);
+      final repo = ref.read(repositoryProvider);
 
       // 找到包含此交易ID的消息
-      final message = await (db.select(db.messages)
-            ..where((m) => m.transactionId.equals(transactionId)))
-          .getSingleOrNull();
+      final message = await repo.getMessageByTransactionId(transactionId);
 
       if (message == null || message.metadata == null) return;
 
       // 重新加载最新的交易数据
-      final transaction = await (db.select(db.transactions)
-            ..where((t) => t.id.equals(transactionId)))
-          .getSingleOrNull();
+      final transaction = await repo.getTransactionById(transactionId);
 
       if (transaction == null) return;
 
       // 查询分类名称
       String? categoryName;
       if (transaction.categoryId != null) {
-        final category = await (db.select(db.categories)
-              ..where((c) => c.id.equals(transaction.categoryId!)))
-            .getSingleOrNull();
+        final category = await repo.getCategoryById(transaction.categoryId!);
         categoryName = category?.name;
       }
 
       // 查询账户名称
       String? accountName;
       if (transaction.accountId != null) {
-        final account = await (db.select(db.accounts)
-              ..where((a) => a.id.equals(transaction.accountId!)))
-            .getSingleOrNull();
+        final account = await repo.getAccount(transaction.accountId!);
         accountName = account?.name;
       }
 
@@ -929,8 +911,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         'isUndone': isUndone,
       };
 
-      await (db.update(db.messages)..where((m) => m.id.equals(message.id)))
-          .write(MessagesCompanion(
+      await repo.updateMessage(message.copyWith(
         metadata: Value(jsonEncode(updatedMetadata)),
       ));
 
@@ -943,12 +924,10 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
   /// 修改账本
   Future<void> _handleChangeLedger(int messageId, int transactionId) async {
     try {
-      final db = ref.read(databaseProvider);
+      final repo = ref.read(repositoryProvider);
 
       // 获取当前交易
-      final transaction = await (db.select(db.transactions)
-            ..where((t) => t.id.equals(transactionId)))
-          .getSingleOrNull();
+      final transaction = await repo.getTransactionById(transactionId);
 
       if (transaction == null) {
         if (mounted) {
@@ -972,14 +951,13 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
       }
 
       // 更新交易的账本
-      await (db.update(db.transactions)
-            ..where((t) => t.id.equals(transactionId)))
-          .write(TransactionsCompanion(ledgerId: Value(selectedLedgerId)));
+      await repo.updateTransactionLedger(
+        id: transactionId,
+        ledgerId: selectedLedgerId,
+      );
 
       // 更新消息的 metadata
-      final message = await (db.select(db.messages)
-            ..where((m) => m.id.equals(messageId)))
-          .getSingleOrNull();
+      final message = await repo.getMessageById(messageId);
 
       if (message != null && message.metadata != null) {
         final metadata = jsonDecode(message.metadata!) as Map<String, dynamic>;
@@ -993,8 +971,9 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
         final updatedMetadata = jsonEncode(metadata);
 
-        await (db.update(db.messages)..where((m) => m.id.equals(messageId)))
-            .write(MessagesCompanion(metadata: Value(updatedMetadata)));
+        await repo.updateMessage(message.copyWith(
+          metadata: Value(updatedMetadata),
+        ));
 
         // 刷新统计信息（修改账本后，需要刷新旧账本和新账本的统计）
         ref.read(statsRefreshProvider.notifier).state++;
@@ -1006,7 +985,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
             ledgerId: selectedLedgerId, background: true);
 
         logger.info('AIChat',
-            '修改账本成功: ${transaction.ledgerId} -> $selectedLedgerId，已刷新统计信息和触发云同步');
+            '修改账本成功: ${transaction.ledgerId} -> $selectedLedgerId,已刷新统计信息和触发云同步');
 
         if (mounted) {
           setState(() {}); // 触发重建以显示新的账本名称

@@ -10,7 +10,6 @@ import '../../widgets/analytics/analytics_summary.dart';
 import '../../widgets/analytics/category_rank_row.dart';
 import '../../widgets/ui/capsule_switcher.dart';
 import '../../l10n/app_localizations.dart';
-import '../../data/repository.dart';
 import '../../services/export/share_poster_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 
@@ -945,14 +944,14 @@ double _computeAverage(dynamic seriesRaw, String scope) {
 
 // 加载分类数据并聚合
 Future<List<dynamic>> _loadCategoryData(
-  BeeRepository repo,
+  dynamic repo,
   int ledgerId,
   String type,
   DateTime start,
   DateTime end,
   Future<dynamic> seriesFuture,
 ) async {
-  final results = await Future.wait([
+  final results = await Future.wait<dynamic>([
     repo.totalsByCategoryWithHierarchy(
         ledgerId: ledgerId, type: type, start: start, end: end),
     seriesFuture,
@@ -976,7 +975,7 @@ Future<List<dynamic>> _loadCategoryData(
 
 // 加载结余数据并聚合
 Future<List<dynamic>> _loadBalanceData(
-  BeeRepository repo,
+  dynamic repo,
   int ledgerId,
   DateTime start,
   DateTime end,
@@ -984,7 +983,7 @@ Future<List<dynamic>> _loadBalanceData(
   Future<dynamic> incomeSeriesFuture,
   Future<dynamic> expenseSeriesFuture,
 ) async {
-  final results = await Future.wait([
+  final results = await Future.wait<dynamic>([
     repo.totalsByCategoryWithHierarchy(
         ledgerId: ledgerId, type: 'expense', start: start, end: end),
     seriesFuture,
@@ -1030,7 +1029,7 @@ Future<List<({int? id, String name, String? icon, double total})>>
                   double total
                 })>
             hierarchyData,
-        BeeRepository repo) async {
+        dynamic repo) async {
   // 1. 先收集所有一级分类的基本信息
   final topLevelInfo = <int, ({String name, String? icon})>{};
   for (final item in hierarchyData) {

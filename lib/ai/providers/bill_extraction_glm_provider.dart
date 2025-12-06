@@ -10,6 +10,7 @@ class BillExtractionGLMProvider extends BillExtractionGLMBaseProvider {
     super.expenseCategories,
     super.incomeCategories,
     super.accounts,
+    super.customPromptTemplate,
   }) : super(
           baseProvider: ZhipuGLMProvider(
             apiKey: apiKey,

@@ -17,6 +17,7 @@ class Ledgers extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   TextColumn get currency => text().withDefault(const Constant('CNY'))();
+  TextColumn get type => text().withDefault(const Constant('personal'))();  // personal / shared
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
@@ -124,7 +125,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 8; // v8: AI 对话助手（添加 Conversations 和 Messages 表）
+  int get schemaVersion => 9; // v9: 为 ledgers 表添加 type 字段（支持家庭账本）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -279,6 +280,26 @@ class BeeDatabase extends _$BeeDatabase {
             await migrator.createTable(messages);
             logger.info('DB', 'v8 迁移完成: AI Chat tables created');
             print('[DB Migration] v8 迁移完成');
+          }
+          if (from < 9) {
+            // v9: 为 ledgers 表添加 type 字段（支持家庭账本）
+            print('[DB Migration] 开始迁移到 v9: 添加 ledgers.type 字段');
+
+            // 检查字段是否已存在，避免重复添加
+            final tableInfo =
+                await customSelect('PRAGMA table_info(ledgers)').get();
+            final hasType =
+                tableInfo.any((row) => row.data['name'] == 'type');
+
+            if (!hasType) {
+              await customStatement(
+                  'ALTER TABLE ledgers ADD COLUMN type TEXT NOT NULL DEFAULT \'personal\';');
+              logger.info('DB', 'v9 迁移完成: ledgers.type 字段已添加');
+            } else {
+              logger.info('DB', 'v9 迁移跳过: ledgers.type 字段已存在');
+            }
+
+            print('[DB Migration] v9 迁移完成');
           }
         },
       );

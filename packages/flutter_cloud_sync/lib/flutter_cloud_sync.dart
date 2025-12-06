@@ -72,7 +72,9 @@ library;
 export 'src/core/auth_service.dart';
 export 'src/core/cloud_provider.dart';
 export 'src/core/data_serializer.dart';
+export 'src/core/database_service.dart';
 export 'src/core/exceptions.dart';
+export 'src/core/realtime_service.dart';
 export 'src/core/storage_service.dart';
 export 'src/core/sync_status.dart';
 
@@ -88,3 +90,4 @@ export 'src/utils/retry_helper.dart';
 
 // Manager
 export 'src/manager/cloud_sync_manager.dart';
+export 'src/manager/database_sync_manager.dart';

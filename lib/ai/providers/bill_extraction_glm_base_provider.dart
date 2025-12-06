@@ -12,12 +12,14 @@ abstract class BillExtractionGLMBaseProvider implements AIProvider<String, BillI
   final List<String>? expenseCategories;
   final List<String>? incomeCategories;
   final List<String>? accounts;
+  final String? customPromptTemplate; // 用户自定义提示词模板
 
   BillExtractionGLMBaseProvider({
     required this.baseProvider,
     this.expenseCategories,
     this.incomeCategories,
     this.accounts,
+    this.customPromptTemplate,
   });
 
   @override
@@ -75,6 +77,38 @@ abstract class BillExtractionGLMBaseProvider implements AIProvider<String, BillI
   Future<double> estimateCost(AITask<String, BillInfo> task) =>
       baseProvider.estimateCost(_TextTask(task.input));
 
+  /// 默认提示词模板
+  static const String defaultPromptTemplate = '''{{INPUT_SOURCE}}提取记账信息，返回JSON。
+
+当前时间：{{CURRENT_TIME}}
+
+{{OCR_TEXT}}
+
+{{CATEGORIES}}{{ACCOUNTS}}
+
+字段说明：
+1. amount: 金额（支出负数，收入正数）
+2. time: ISO8601格式，尽量推断时间：
+   - 明确时间（如"14:30"、"2025-11-25"）→直接使用
+   - 相对日期（昨天、前天、上周）→推算具体日期
+   - 时间段（早上、中午、晚上）→使用合理时刻（早上09:00、中午12:00、晚上19:00）
+   - 完全没提时间→使用当前时间
+3. note: 备注（必须≤15字，超过则精简），提取优先级：
+   - 商家/店铺名（如"星巴克"、"肯德基"）
+   - 商品名称（长标题需简化，如"2025春季新款黑色斜纹格纹半身裙"→"黑色半身裙"）
+   - 用户描述（如"给女儿买"）
+   - 没有则留空
+4. category: 从分类列表选择
+5. type: income或expense
+6. account: 支付账户（可选）
+
+示例：
+输入"昨天中午吃饭50" → {"amount":-50,"time":"2025-11-24T12:00:00","category":"餐饮","type":"expense"}
+输入"早上在星巴克买咖啡30" → {"amount":-30,"time":"{{CURRENT_DATE}}T09:00:00","note":"星巴克","category":"咖啡","type":"expense"}
+输入"商品:2025春季新款黑色半身裙 金额:￥299" → {"amount":-299,"note":"黑色半身裙","category":"服装","type":"expense"}
+
+注意：只返回JSON，尽量推断时间不要返回null，note必须≤15字（长标题要精简）''';
+
   /// 构建Prompt（统一模板，由子类提供输入源描述）
   String buildPrompt(String ocrText) {
     final categoryHint = buildCategoryHint();
@@ -86,40 +120,19 @@ abstract class BillExtractionGLMBaseProvider implements AIProvider<String, BillI
     final currentDate = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     final currentHour = now.hour.toString().padLeft(2, '0');
     final currentMinute = now.minute.toString().padLeft(2, '0');
+    final currentTime = '$currentDate $currentHour:$currentMinute';
 
-    return '''
-$inputSource提取记账信息，返回JSON。
+    // 使用用户自定义模板或默认模板
+    final template = customPromptTemplate ?? defaultPromptTemplate;
 
-当前时间：$currentDate $currentHour:$currentMinute
-
-$ocrText
-
-$categoryHint$accountHint
-
-字段说明：
-1. amount: 金额（支出负数，收入正数）
-2. time: ISO8601格式，尽量推断时间：
-   - 明确时间（如"14:30"、"2025-11-25"）→直接使用
-   - 相对日期（昨天、前天、上周）→推算具体日期
-   - 时间段（早上、中午、晚上）→使用合理时刻（早上09:00、中午12:00、晚上19:00）
-   - 完全没提时间→使用当前时间
-3. note: 备注信息，优先提取以下内容（按优先级）：
-   - 用户明确说的备注或描述（如"给女儿买玩具"→"给女儿买玩具"）
-   - 收款方/商家名称（如"收款方：星巴克"→"星巴克"，"向肯德基付款"→"肯德基"）
-   - 店铺/公司名称（如"XX有限公司"→"XX有限公司"）
-   - 如果完全没有上述信息，省略或留空，不要返回"未知"
-4. category: 从分类列表选择
-5. type: income或expense
-6. account: 支付账户（可选）
-
-示例：
-输入"昨天中午吃饭50" → {"amount":-50,"time":"2025-11-24T12:00:00","category":"餐饮","type":"expense"}
-输入"早上在星巴克买咖啡30" → {"amount":-30,"time":"${currentDate}T09:00:00","note":"星巴克","category":"咖啡","type":"expense"}
-输入"向肯德基付款58.5元" → {"amount":-58.5,"time":"${currentDate}T$currentHour:$currentMinute:00","note":"肯德基","category":"餐饮","type":"expense"}
-输入"给女儿买件衣服200" → {"amount":-200,"time":"${currentDate}T$currentHour:$currentMinute:00","note":"给女儿买件衣服","category":"服装","type":"expense"}
-
-注意：只返回JSON，尽量推断时间不要返回null，note没有时省略或留空
-''';
+    // 替换变量
+    return template
+        .replaceAll('{{INPUT_SOURCE}}', inputSource)
+        .replaceAll('{{CURRENT_TIME}}', currentTime)
+        .replaceAll('{{CURRENT_DATE}}', currentDate)
+        .replaceAll('{{OCR_TEXT}}', ocrText)
+        .replaceAll('{{CATEGORIES}}', categoryHint)
+        .replaceAll('{{ACCOUNTS}}', accountHint);
   }
 
   /// 获取输入源描述（由子类实现）

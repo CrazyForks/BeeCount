@@ -1,14 +1,12 @@
 /// 分享海报数据计算服务
 library;
 
-import 'package:drift/drift.dart' as d;
-
-import '../../data/repository.dart';
+import '../../data/repositories/base_repository.dart';
 import 'share_poster_types.dart';
 
 /// 海报数据计算服务
 class SharePosterDataService {
-  final BeeRepository repository;
+  final BaseRepository repository;
 
   const SharePosterDataService(this.repository);
 
@@ -22,9 +20,7 @@ class SharePosterDataService {
     final endDate = DateTime(year + 1, 1, 1);
 
     // 1. 获取指定年份的所有交易记录(用于计算天数和笔数)
-    final yearTransactions = await (repository.db.select(repository.db.transactions)
-          ..where((t) => t.ledgerId.equals(ledgerId)))
-        .get();
+    final yearTransactions = await repository.getTransactionsByLedger(ledgerId);
 
     // 筛选出当年的交易
     final yearTxs = yearTransactions.where((tx) {
@@ -154,11 +150,11 @@ class SharePosterDataService {
     }
 
     // 3. 获取本月的记账笔数
-    final monthTransactions = await (repository.db.select(repository.db.transactions)
-          ..where((t) =>
-              t.ledgerId.equals(ledgerId) &
-              t.happenedAt.isBetweenValues(startDate, endDate)))
-        .get();
+    final monthTransactions = await repository.getTransactionsByLedgerInRange(
+      ledgerId: ledgerId,
+      start: startDate,
+      end: endDate,
+    );
     final recordCount = monthTransactions.length;
 
     // 4. 计算TOP分类
@@ -216,11 +212,9 @@ class SharePosterDataService {
     final ledgerStats = await repository.getLedgerStats(ledgerId: ledgerId);
     final recordCount = ledgerStats.transactionCount;
 
-    // 获取账本名称（通过查询ledgers表）
-    final ledgersQuery = repository.db.select(repository.db.ledgers)
-      ..where((l) => l.id.equals(ledgerId));
-    final ledgers = await ledgersQuery.get();
-    final ledgerName = ledgers.isNotEmpty ? ledgers.first.name : '默认账本';
+    // 获取账本名称
+    final ledger = await repository.getLedgerById(ledgerId);
+    final ledgerName = ledger?.name ?? '默认账本';
 
     // 使用年度序列来计算所有年份的收支
     final yearSeries = await repository.totalsByYearSeries(
@@ -264,30 +258,19 @@ class SharePosterDataService {
     DateTime? firstRecordDate;
     DateTime? lastRecordDate;
 
-    final countsResult = await repository.countsForLedger(ledgerId: ledgerId);
+    final countsResult = await repository.getCountsForLedger(ledgerId: ledgerId);
     recordDays = countsResult.dayCount;
 
     // 获取第一笔和最后一笔交易的时间
     if (recordCount > 0) {
-      // 查询最早的交易
-      final firstTx = await (repository.db.select(repository.db.transactions)
-            ..where((t) => t.ledgerId.equals(ledgerId))
-            ..orderBy([(t) => d.OrderingTerm.asc(t.happenedAt)])
-            ..limit(1))
-          .get();
+      final firstTx = await repository.getFirstTransactionByLedger(ledgerId);
+      final lastTx = await repository.getLastTransactionByLedger(ledgerId);
 
-      // 查询最晚的交易
-      final lastTx = await (repository.db.select(repository.db.transactions)
-            ..where((t) => t.ledgerId.equals(ledgerId))
-            ..orderBy([(t) => d.OrderingTerm.desc(t.happenedAt)])
-            ..limit(1))
-          .get();
-
-      if (firstTx.isNotEmpty) {
-        firstRecordDate = firstTx.first.happenedAt;
+      if (firstTx != null) {
+        firstRecordDate = firstTx.happenedAt;
       }
-      if (lastTx.isNotEmpty) {
-        lastRecordDate = lastTx.first.happenedAt;
+      if (lastTx != null) {
+        lastRecordDate = lastTx.happenedAt;
       }
     }
 
