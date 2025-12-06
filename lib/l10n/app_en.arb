@@ -1764,5 +1764,73 @@
   "aiPromptVarCurrentDate": "Current date, e.g. \"2025-01-15\"",
   "aiPromptVarOcrText": "User input or OCR recognized text content",
   "aiPromptVarCategories": "Expense and income category list",
-  "aiPromptVarAccounts": "User's account list (may be empty)"
+  "aiPromptVarAccounts": "User's account list (may be empty)",
+
+  "tagManageTitle": "Tags",
+  "tagManageSubtitle": "Manage transaction tags",
+  "tagManageEmpty": "No tags yet",
+  "tagManageEmptyHint": "Tap + to add a tag",
+  "tagManageGenerateDefault": "Generate Default Tags",
+  "tagManageGenerateDefaultConfirm": "Generate default tags? Existing tags with the same name will not be overwritten.",
+  "tagManageGenerateDefaultSuccess": "Default tags generated",
+  "tagEditTitle": "Edit Tag",
+  "tagAddTitle": "Add Tag",
+  "tagNameLabel": "Tag Name",
+  "tagNameHint": "Enter tag name",
+  "tagNameRequired": "Tag name is required",
+  "tagNameDuplicate": "Tag name already exists",
+  "tagColorLabel": "Tag Color",
+  "tagColorHint": "Select tag color",
+  "tagCreateSuccess": "Tag created",
+  "tagUpdateSuccess": "Tag updated",
+  "tagDeleteConfirmTitle": "Delete Tag",
+  "tagDeleteConfirmMessage": "Delete tag \"{name}\"? This will not affect associated transactions.",
+  "@tagDeleteConfirmMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tagDeleteSuccess": "Tag deleted",
+  "tagSelectTitle": "Select Tags",
+  "tagSelectHint": "Multiple selection",
+  "tagSelectCreateNew": "Create New Tag",
+  "tagSelectRecentlyUsed": "Recently Used",
+  "tagSelectAllTags": "All Tags",
+  "tagTransactionCount": "{count} transactions",
+  "@tagTransactionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagDetailTitle": "Tag Details",
+  "tagDetailTotalExpense": "Total Expense",
+  "tagDetailTotalIncome": "Total Income",
+  "tagDetailTransactionCount": "Transactions",
+  "tagDetailRelatedTransactions": "Related Transactions",
+  "tagDetailNoTransactions": "No related transactions",
+
+  "tagDefaultMeituan": "Meituan",
+  "tagDefaultEleme": "Eleme",
+  "tagDefaultTaobao": "Taobao",
+  "tagDefaultJD": "JD.com",
+  "tagDefaultPDD": "Pinduoduo",
+  "tagDefaultStarbucks": "Starbucks",
+  "tagDefaultLuckin": "Luckin Coffee",
+  "tagDefaultMcDonalds": "McDonald's",
+  "tagDefaultKFC": "KFC",
+  "tagDefaultHema": "Hema",
+  "tagDefaultSams": "Sam's Club",
+  "tagDefaultCostco": "Costco",
+  "tagDefaultBusinessTrip": "Business Trip",
+  "tagDefaultTravel": "Travel",
+  "tagDefaultDining": "Dining Out",
+  "tagDefaultOnlineShopping": "Online Shopping",
+  "tagDefaultDaily": "Daily",
+  "tagDefaultReimbursement": "Reimbursable",
+  "tagDefaultRefundable": "Refundable",
+  "tagDefaultRefunded": "Refunded"
 }

@@ -957,4 +957,173 @@ class CloudRepository extends BaseRepository {
     required int ledgerId,
   }) =>
       _transaction.updateTransactionLedger(id: id, ledgerId: ledgerId);
+
+  // ============================================
+  // TagRepository 接口实现（云端模式暂不支持标签功能）
+  // ============================================
+
+  @override
+  Future<int> createTag({
+    required String name,
+    String? color,
+    int sortOrder = 0,
+  }) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> updateTag(
+    int id, {
+    String? name,
+    String? color,
+    int? sortOrder,
+  }) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> deleteTag(int id) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<Tag?> getTagById(int id) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<Tag?> getTagByName(String name) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Tag>> getAllTags() async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> batchInsertTags(List<TagsCompanion> tags) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> addTagToTransaction({
+    required int transactionId,
+    required int tagId,
+  }) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> addTagsToTransaction({
+    required int transactionId,
+    required List<int> tagIds,
+  }) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> removeTagFromTransaction({
+    required int transactionId,
+    required int tagId,
+  }) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> removeAllTagsFromTransaction(int transactionId) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> updateTransactionTags({
+    required int transactionId,
+    required List<int> tagIds,
+  }) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Tag>> getTagsForTransaction(int transactionId) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<Map<int, List<Tag>>> getTagsForTransactions(List<int> transactionIds) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<int>> getTransactionIdsByTag(int tagId) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<int> getTransactionCountByTag(int tagId) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<Map<int, int>> getAllTagTransactionCounts() async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<({int count, double expense, double income})> getTagStats(int tagId) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Transaction>> getTransactionsByTag(int tagId) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Transaction>> getTransactionsByTagInRange({
+    required int tagId,
+    required DateTime start,
+    required DateTime end,
+  }) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<List<Tag>> watchAllTags() {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<List<({Tag tag, int transactionCount})>> watchTagsWithStats() {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<Tag?> watchTag(int tagId) {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<List<Tag>> watchTagsForTransaction(int transactionId) {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<List<Transaction>> watchTransactionsByTag(int tagId) {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<bool> isTagNameDuplicate({required String name, int? excludeId}) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> updateTagSortOrders(List<({int id, int sortOrder})> updates) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Tag>> getRecentlyUsedTags({int limit = 10}) async {
+    throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
 }

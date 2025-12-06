@@ -55,10 +55,54 @@ class TransactionListState extends ConsumerState<TransactionList> {
   List<dynamic> _flatItems = []; // 扁平化的项目列表
   final Map<String, int> _dateIndexMap = {}; // 日期到列表索引的映射
 
+  // 缓存标签数据
+  Map<int, List<Tag>> _cachedTagsMap = {};
+  List<int> _cachedTransactionIds = [];
+
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? FlutterListViewController();
+    _loadTags();
+  }
+
+  @override
+  void didUpdateWidget(covariant TransactionList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 检查交易列表是否变化
+    final newIds = widget.transactions.map((t) => t.t.id).toList();
+    if (!_listEquals(newIds, _cachedTransactionIds)) {
+      _loadTags();
+    }
+  }
+
+  bool _listEquals(List<int> a, List<int> b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  Future<void> _loadTags() async {
+    final transactionIds = widget.transactions.map((t) => t.t.id).toList();
+    if (transactionIds.isEmpty) {
+      setState(() {
+        _cachedTagsMap = {};
+        _cachedTransactionIds = [];
+      });
+      return;
+    }
+
+    final repo = ref.read(repositoryProvider);
+    final tagsMap = await repo.getTagsForTransactions(transactionIds);
+
+    if (mounted) {
+      setState(() {
+        _cachedTagsMap = tagsMap;
+        _cachedTransactionIds = transactionIds;
+      });
+    }
   }
 
   @override
@@ -262,47 +306,58 @@ class TransactionListState extends ConsumerState<TransactionList> {
               },
               child: Column(
                 children: [
-                  TransactionListItem(
-                    icon: isTransfer
-                      ? Icons.swap_horiz
-                      : getCategoryIconData(category: it.category, categoryName: categoryName),
-                    title: isTransfer
-                      ? (subtitle.isNotEmpty ? subtitle : AppLocalizations.of(context).transferTitle)
-                      : (subtitle.isNotEmpty ? subtitle : categoryName),
-                    categoryName: isTransfer
-                      ? (subtitle.isNotEmpty && accountName != null && toAccountName != null
-                          ? '$accountName → $toAccountName'
-                          : null)
-                      : (subtitle.isNotEmpty ? null : categoryName),
-                    amount: it.t.amount,
-                    isExpense: isExpense,
-                    hide: widget.hideAmounts,
-                    happenedAt: it.t.happenedAt,
-                    accountName: isTransfer
-                      ? (subtitle.isEmpty && accountName != null && toAccountName != null
-                          ? '$accountName → $toAccountName'
-                          : null)
-                      : accountName,
-                    onTap: () async {
-                      await TransactionEditUtils.editTransaction(
-                        context,
-                        ref,
-                        it.t,
-                        it.category,
+                  Builder(
+                    builder: (context) {
+                      // 获取该交易的标签（从缓存）
+                      final transactionTags = _cachedTagsMap[it.t.id] ?? [];
+                      final tagsList = transactionTags
+                          .map((t) => (name: t.name, color: t.color))
+                          .toList();
+
+                      return TransactionListItem(
+                        icon: isTransfer
+                          ? Icons.swap_horiz
+                          : getCategoryIconData(category: it.category, categoryName: categoryName),
+                        title: isTransfer
+                          ? (subtitle.isNotEmpty ? subtitle : AppLocalizations.of(context).transferTitle)
+                          : (subtitle.isNotEmpty ? subtitle : categoryName),
+                        categoryName: isTransfer
+                          ? (subtitle.isNotEmpty && accountName != null && toAccountName != null
+                              ? '$accountName → $toAccountName'
+                              : null)
+                          : (subtitle.isNotEmpty ? null : categoryName),
+                        amount: it.t.amount,
+                        isExpense: isExpense,
+                        hide: widget.hideAmounts,
+                        happenedAt: it.t.happenedAt,
+                        accountName: isTransfer
+                          ? (subtitle.isEmpty && accountName != null && toAccountName != null
+                              ? '$accountName → $toAccountName'
+                              : null)
+                          : accountName,
+                        tags: tagsList.isNotEmpty ? tagsList : null,
+                        onTap: () async {
+                          await TransactionEditUtils.editTransaction(
+                            context,
+                            ref,
+                            it.t,
+                            it.category,
+                          );
+                        },
+                        onCategoryTap: !isTransfer && it.category?.id != null
+                            ? () async {
+                                await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => CategoryDetailPage(
+                                      categoryId: it.category!.id,
+                                      categoryName: categoryName,
+                                    ),
+                                  ),
+                                );
+                              }
+                            : null,
                       );
                     },
-                    onCategoryTap: !isTransfer && it.category?.id != null
-                        ? () async {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => CategoryDetailPage(
-                                  categoryId: it.category!.id,
-                                  categoryName: categoryName,
-                                ),
-                              ),
-                            );
-                          }
-                        : null,
                   ),
                   if (!isLastInGroup)
                     BeeDivider.short(indent: 56 + 16, endIndent: 16),

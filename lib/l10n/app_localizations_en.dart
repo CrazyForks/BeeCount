@@ -4174,4 +4174,164 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiPromptVarAccounts => 'User\'s account list (may be empty)';
+
+  @override
+  String get tagManageTitle => 'Tags';
+
+  @override
+  String get tagManageSubtitle => 'Manage transaction tags';
+
+  @override
+  String get tagManageEmpty => 'No tags yet';
+
+  @override
+  String get tagManageEmptyHint => 'Tap + to add a tag';
+
+  @override
+  String get tagManageGenerateDefault => 'Generate Default Tags';
+
+  @override
+  String get tagManageGenerateDefaultConfirm => 'Generate default tags? Existing tags with the same name will not be overwritten.';
+
+  @override
+  String get tagManageGenerateDefaultSuccess => 'Default tags generated';
+
+  @override
+  String get tagEditTitle => 'Edit Tag';
+
+  @override
+  String get tagAddTitle => 'Add Tag';
+
+  @override
+  String get tagNameLabel => 'Tag Name';
+
+  @override
+  String get tagNameHint => 'Enter tag name';
+
+  @override
+  String get tagNameRequired => 'Tag name is required';
+
+  @override
+  String get tagNameDuplicate => 'Tag name already exists';
+
+  @override
+  String get tagColorLabel => 'Tag Color';
+
+  @override
+  String get tagColorHint => 'Select tag color';
+
+  @override
+  String get tagCreateSuccess => 'Tag created';
+
+  @override
+  String get tagUpdateSuccess => 'Tag updated';
+
+  @override
+  String get tagDeleteConfirmTitle => 'Delete Tag';
+
+  @override
+  String tagDeleteConfirmMessage(String name) {
+    return 'Delete tag \"$name\"? This will not affect associated transactions.';
+  }
+
+  @override
+  String get tagDeleteSuccess => 'Tag deleted';
+
+  @override
+  String get tagSelectTitle => 'Select Tags';
+
+  @override
+  String get tagSelectHint => 'Multiple selection';
+
+  @override
+  String get tagSelectCreateNew => 'Create New Tag';
+
+  @override
+  String get tagSelectRecentlyUsed => 'Recently Used';
+
+  @override
+  String get tagSelectAllTags => 'All Tags';
+
+  @override
+  String tagTransactionCount(int count) {
+    return '$count transactions';
+  }
+
+  @override
+  String get tagDetailTitle => 'Tag Details';
+
+  @override
+  String get tagDetailTotalExpense => 'Total Expense';
+
+  @override
+  String get tagDetailTotalIncome => 'Total Income';
+
+  @override
+  String get tagDetailTransactionCount => 'Transactions';
+
+  @override
+  String get tagDetailRelatedTransactions => 'Related Transactions';
+
+  @override
+  String get tagDetailNoTransactions => 'No related transactions';
+
+  @override
+  String get tagDefaultMeituan => 'Meituan';
+
+  @override
+  String get tagDefaultEleme => 'Eleme';
+
+  @override
+  String get tagDefaultTaobao => 'Taobao';
+
+  @override
+  String get tagDefaultJD => 'JD.com';
+
+  @override
+  String get tagDefaultPDD => 'Pinduoduo';
+
+  @override
+  String get tagDefaultStarbucks => 'Starbucks';
+
+  @override
+  String get tagDefaultLuckin => 'Luckin Coffee';
+
+  @override
+  String get tagDefaultMcDonalds => 'McDonald\'s';
+
+  @override
+  String get tagDefaultKFC => 'KFC';
+
+  @override
+  String get tagDefaultHema => 'Hema';
+
+  @override
+  String get tagDefaultSams => 'Sam\'s Club';
+
+  @override
+  String get tagDefaultCostco => 'Costco';
+
+  @override
+  String get tagDefaultBusinessTrip => 'Business Trip';
+
+  @override
+  String get tagDefaultTravel => 'Travel';
+
+  @override
+  String get tagDefaultDining => 'Dining Out';
+
+  @override
+  String get tagDefaultOnlineShopping => 'Online Shopping';
+
+  @override
+  String get tagDefaultDaily => 'Daily';
+
+  @override
+  String get tagDefaultReimbursement => 'Reimbursable';
+
+  @override
+  String get tagDefaultRefundable => 'Refundable';
+
+  @override
+  String get tagDefaultRefunded => 'Refunded';
 }

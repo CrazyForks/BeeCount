@@ -6,14 +6,17 @@ import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/data/note_history_service.dart';
 import '../../providers.dart';
+import '../../pages/tag/widgets/tag_selector.dart';
 import 'note_picker_dialog.dart';
 import 'account_selector.dart';
+import 'tag_chip.dart';
 
 typedef AmountEditorResult = ({
   double amount,
   String? note,
   DateTime date,
-  int? accountId
+  int? accountId,
+  List<int> tagIds,
 });
 
 class AmountEditorSheet extends ConsumerStatefulWidget {
@@ -22,6 +25,7 @@ class AmountEditorSheet extends ConsumerStatefulWidget {
   final double? initialAmount;
   final String? initialNote;
   final int? initialAccountId;
+  final List<int>? initialTagIds; // 初始标签ID列表
   final bool showAccountPicker; // 是否显示账户选择
   final ValueChanged<AmountEditorResult> onSubmit;
   final int ledgerId;
@@ -33,6 +37,7 @@ class AmountEditorSheet extends ConsumerStatefulWidget {
     this.initialAmount,
     this.initialNote,
     this.initialAccountId,
+    this.initialTagIds,
     this.showAccountPicker = false,
     required this.onSubmit,
     required this.ledgerId,
@@ -62,11 +67,15 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
   // 防重复提交标志
   bool _isSubmitting = false;
 
+  // 已选标签ID列表
+  late List<int> _selectedTagIds;
+
   @override
   void initState() {
     super.initState();
     _date = widget.initialDate;
     _selectedAccountId = widget.initialAccountId;
+    _selectedTagIds = List.from(widget.initialTagIds ?? []);
     // 保留原始小数（最多两位），避免编辑已有记录时小数被截断为整数
     final init = widget.initialAmount ?? 0;
     final s = init.toStringAsFixed(2);
@@ -367,6 +376,9 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                 },
               ),
             ],
+            // 标签选择区域
+            const SizedBox(height: 8),
+            _buildTagSelector(),
             const SizedBox(height: 10),
             // 数字键盘
             LayoutBuilder(builder: (ctx, c) {
@@ -467,6 +479,7 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                                     : _noteCtrl.text,
                                 date: _date,
                                 accountId: _selectedAccountId,
+                                tagIds: _selectedTagIds,
                               ));
 
                               // 注意：不需要在这里重置 _isSubmitting
@@ -565,4 +578,86 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
     );
   }
 
+  /// 构建标签选择区域
+  Widget _buildTagSelector() {
+    final l10n = AppLocalizations.of(context);
+    final allTagsAsync = ref.watch(allTagsProvider);
+
+    return allTagsAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+      data: (allTags) {
+        // 没有标签时不显示
+        if (allTags.isEmpty && _selectedTagIds.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        // 获取已选中的标签详情
+        final selectedTags = allTags
+            .where((t) => _selectedTagIds.contains(t.id))
+            .toList();
+
+        return GestureDetector(
+          onTap: () async {
+            final result = await TagSelector.show(
+              context,
+              selectedTagIds: _selectedTagIds,
+            );
+            if (result != null) {
+              setState(() {
+                _selectedTagIds = result;
+              });
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: BeeTokens.surfaceInput(context),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.label_outline,
+                  size: 18,
+                  color: BeeTokens.iconSecondary(context),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: selectedTags.isEmpty
+                      ? Text(
+                          l10n.tagSelectTitle,
+                          style: TextStyle(
+                            color: BeeTokens.textTertiary(context),
+                            fontSize: 14,
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: selectedTags.map((tag) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 6),
+                                child: TagChip(
+                                  name: tag.name,
+                                  color: tag.color,
+                                  size: TagChipSize.small,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  size: 18,
+                  color: BeeTokens.iconTertiary(context),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

@@ -112,6 +112,22 @@ class Messages extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
+// 标签表
+class Tags extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();                    // 标签名称
+  TextColumn get color => text().nullable()();        // 颜色值（如 #FF5722）
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();  // 排序
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+// 交易-标签关联表
+class TransactionTags extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get transactionId => integer()();         // 交易ID
+  IntColumn get tagId => integer()();                 // 标签ID
+}
+
 @DriftDatabase(tables: [
   Ledgers,
   Accounts,
@@ -120,12 +136,14 @@ class Messages extends Table {
   RecurringTransactions,
   Conversations,
   Messages,
+  Tags,
+  TransactionTags,
 ])
 class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 9; // v9: 为 ledgers 表添加 type 字段（支持家庭账本）
+  int get schemaVersion => 10; // v10: 添加标签功能（Tags、TransactionTags）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -300,6 +318,27 @@ class BeeDatabase extends _$BeeDatabase {
             }
 
             print('[DB Migration] v9 迁移完成');
+          }
+          if (from < 10) {
+            // v10: 添加标签功能
+            print('[DB Migration] 开始迁移到 v10: 添加标签功能');
+
+            // 创建 tags 表
+            await migrator.createTable(tags);
+            logger.info('DB', 'v10: tags 表已创建');
+
+            // 创建 transaction_tags 关联表
+            await migrator.createTable(transactionTags);
+            logger.info('DB', 'v10: transaction_tags 表已创建');
+
+            // 创建索引以提高查询性能
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_transaction_tags_transaction ON transaction_tags(transaction_id)');
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_transaction_tags_tag ON transaction_tags(tag_id)');
+            logger.info('DB', 'v10: 索引已创建');
+
+            print('[DB Migration] v10 迁移完成');
           }
         },
       );

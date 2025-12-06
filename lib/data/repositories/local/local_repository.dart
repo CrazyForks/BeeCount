@@ -7,6 +7,7 @@ import 'local_account_repository.dart';
 import 'local_statistics_repository.dart';
 import 'local_recurring_transaction_repository.dart';
 import 'local_ai_repository.dart';
+import 'local_tag_repository.dart';
 
 /// LocalRepository 本地数据库实现
 /// 基于 Drift 本地数据库实现所有 Repository 接口
@@ -24,6 +25,7 @@ class LocalRepository extends BaseRepository {
   late final LocalStatisticsRepository _statisticsRepo;
   late final LocalRecurringTransactionRepository _recurringTransactionRepo;
   late final LocalAIRepository _aiRepo;
+  late final LocalTagRepository _tagRepo;
 
   LocalRepository(this.db) {
     _ledgerRepo = LocalLedgerRepository(db);
@@ -33,6 +35,7 @@ class LocalRepository extends BaseRepository {
     _statisticsRepo = LocalStatisticsRepository(db);
     _recurringTransactionRepo = LocalRecurringTransactionRepository(db);
     _aiRepo = LocalAIRepository(db);
+    _tagRepo = LocalTagRepository(db);
   }
 
   // ============================================
@@ -840,4 +843,139 @@ class LocalRepository extends BaseRepository {
   @override
   Future<Message?> getMessageByTransactionId(int transactionId) =>
       _aiRepo.getMessageByTransactionId(transactionId);
+
+  // ============================================
+  // TagRepository 接口实现 - 委托给 LocalTagRepository
+  // ============================================
+
+  @override
+  Future<int> createTag({
+    required String name,
+    String? color,
+    int sortOrder = 0,
+  }) =>
+      _tagRepo.createTag(name: name, color: color, sortOrder: sortOrder);
+
+  @override
+  Future<void> updateTag(
+    int id, {
+    String? name,
+    String? color,
+    int? sortOrder,
+  }) =>
+      _tagRepo.updateTag(id, name: name, color: color, sortOrder: sortOrder);
+
+  @override
+  Future<void> deleteTag(int id) => _tagRepo.deleteTag(id);
+
+  @override
+  Future<Tag?> getTagById(int id) => _tagRepo.getTagById(id);
+
+  @override
+  Future<Tag?> getTagByName(String name) => _tagRepo.getTagByName(name);
+
+  @override
+  Future<List<Tag>> getAllTags() => _tagRepo.getAllTags();
+
+  @override
+  Future<void> batchInsertTags(List<TagsCompanion> tags) =>
+      _tagRepo.batchInsertTags(tags);
+
+  @override
+  Future<void> addTagToTransaction({
+    required int transactionId,
+    required int tagId,
+  }) =>
+      _tagRepo.addTagToTransaction(transactionId: transactionId, tagId: tagId);
+
+  @override
+  Future<void> addTagsToTransaction({
+    required int transactionId,
+    required List<int> tagIds,
+  }) =>
+      _tagRepo.addTagsToTransaction(transactionId: transactionId, tagIds: tagIds);
+
+  @override
+  Future<void> removeTagFromTransaction({
+    required int transactionId,
+    required int tagId,
+  }) =>
+      _tagRepo.removeTagFromTransaction(transactionId: transactionId, tagId: tagId);
+
+  @override
+  Future<void> removeAllTagsFromTransaction(int transactionId) =>
+      _tagRepo.removeAllTagsFromTransaction(transactionId);
+
+  @override
+  Future<void> updateTransactionTags({
+    required int transactionId,
+    required List<int> tagIds,
+  }) =>
+      _tagRepo.updateTransactionTags(transactionId: transactionId, tagIds: tagIds);
+
+  @override
+  Future<List<Tag>> getTagsForTransaction(int transactionId) =>
+      _tagRepo.getTagsForTransaction(transactionId);
+
+  @override
+  Future<Map<int, List<Tag>>> getTagsForTransactions(List<int> transactionIds) =>
+      _tagRepo.getTagsForTransactions(transactionIds);
+
+  @override
+  Future<List<int>> getTransactionIdsByTag(int tagId) =>
+      _tagRepo.getTransactionIdsByTag(tagId);
+
+  @override
+  Future<int> getTransactionCountByTag(int tagId) =>
+      _tagRepo.getTransactionCountByTag(tagId);
+
+  @override
+  Future<Map<int, int>> getAllTagTransactionCounts() =>
+      _tagRepo.getAllTagTransactionCounts();
+
+  @override
+  Future<({int count, double expense, double income})> getTagStats(int tagId) =>
+      _tagRepo.getTagStats(tagId);
+
+  @override
+  Future<List<Transaction>> getTransactionsByTag(int tagId) =>
+      _tagRepo.getTransactionsByTag(tagId);
+
+  @override
+  Future<List<Transaction>> getTransactionsByTagInRange({
+    required int tagId,
+    required DateTime start,
+    required DateTime end,
+  }) =>
+      _tagRepo.getTransactionsByTagInRange(tagId: tagId, start: start, end: end);
+
+  @override
+  Stream<List<Tag>> watchAllTags() => _tagRepo.watchAllTags();
+
+  @override
+  Stream<List<({Tag tag, int transactionCount})>> watchTagsWithStats() =>
+      _tagRepo.watchTagsWithStats();
+
+  @override
+  Stream<Tag?> watchTag(int tagId) => _tagRepo.watchTag(tagId);
+
+  @override
+  Stream<List<Tag>> watchTagsForTransaction(int transactionId) =>
+      _tagRepo.watchTagsForTransaction(transactionId);
+
+  @override
+  Stream<List<Transaction>> watchTransactionsByTag(int tagId) =>
+      _tagRepo.watchTransactionsByTag(tagId);
+
+  @override
+  Future<bool> isTagNameDuplicate({required String name, int? excludeId}) =>
+      _tagRepo.isTagNameDuplicate(name: name, excludeId: excludeId);
+
+  @override
+  Future<void> updateTagSortOrders(List<({int id, int sortOrder})> updates) =>
+      _tagRepo.updateTagSortOrders(updates);
+
+  @override
+  Future<List<Tag>> getRecentlyUsedTags({int limit = 10}) =>
+      _tagRepo.getRecentlyUsedTags(limit: limit);
 }

@@ -7997,6 +7997,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'User\'s account list (may be empty)'**
   String get aiPromptVarAccounts;
+
+  /// No description provided for @tagManageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tagManageTitle;
+
+  /// No description provided for @tagManageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage transaction tags'**
+  String get tagManageSubtitle;
+
+  /// No description provided for @tagManageEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet'**
+  String get tagManageEmpty;
+
+  /// No description provided for @tagManageEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add a tag'**
+  String get tagManageEmptyHint;
+
+  /// No description provided for @tagManageGenerateDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Default Tags'**
+  String get tagManageGenerateDefault;
+
+  /// No description provided for @tagManageGenerateDefaultConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate default tags? Existing tags with the same name will not be overwritten.'**
+  String get tagManageGenerateDefaultConfirm;
+
+  /// No description provided for @tagManageGenerateDefaultSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Default tags generated'**
+  String get tagManageGenerateDefaultSuccess;
+
+  /// No description provided for @tagEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Tag'**
+  String get tagEditTitle;
+
+  /// No description provided for @tagAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Tag'**
+  String get tagAddTitle;
+
+  /// No description provided for @tagNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag Name'**
+  String get tagNameLabel;
+
+  /// No description provided for @tagNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter tag name'**
+  String get tagNameHint;
+
+  /// No description provided for @tagNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag name is required'**
+  String get tagNameRequired;
+
+  /// No description provided for @tagNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag name already exists'**
+  String get tagNameDuplicate;
+
+  /// No description provided for @tagColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag Color'**
+  String get tagColorLabel;
+
+  /// No description provided for @tagColorHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select tag color'**
+  String get tagColorHint;
+
+  /// No description provided for @tagCreateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag created'**
+  String get tagCreateSuccess;
+
+  /// No description provided for @tagUpdateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag updated'**
+  String get tagUpdateSuccess;
+
+  /// No description provided for @tagDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Tag'**
+  String get tagDeleteConfirmTitle;
+
+  /// No description provided for @tagDeleteConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tag \"{name}\"? This will not affect associated transactions.'**
+  String tagDeleteConfirmMessage(String name);
+
+  /// No description provided for @tagDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag deleted'**
+  String get tagDeleteSuccess;
+
+  /// No description provided for @tagSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Tags'**
+  String get tagSelectTitle;
+
+  /// No description provided for @tagSelectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple selection'**
+  String get tagSelectHint;
+
+  /// No description provided for @tagSelectCreateNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Tag'**
+  String get tagSelectCreateNew;
+
+  /// No description provided for @tagSelectRecentlyUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently Used'**
+  String get tagSelectRecentlyUsed;
+
+  /// No description provided for @tagSelectAllTags.
+  ///
+  /// In en, this message translates to:
+  /// **'All Tags'**
+  String get tagSelectAllTags;
+
+  /// No description provided for @tagTransactionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} transactions'**
+  String tagTransactionCount(int count);
+
+  /// No description provided for @tagDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag Details'**
+  String get tagDetailTitle;
+
+  /// No description provided for @tagDetailTotalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get tagDetailTotalExpense;
+
+  /// No description provided for @tagDetailTotalIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Income'**
+  String get tagDetailTotalIncome;
+
+  /// No description provided for @tagDetailTransactionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get tagDetailTransactionCount;
+
+  /// No description provided for @tagDetailRelatedTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Related Transactions'**
+  String get tagDetailRelatedTransactions;
+
+  /// No description provided for @tagDetailNoTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No related transactions'**
+  String get tagDetailNoTransactions;
+
+  /// No description provided for @tagDefaultMeituan.
+  ///
+  /// In en, this message translates to:
+  /// **'Meituan'**
+  String get tagDefaultMeituan;
+
+  /// No description provided for @tagDefaultEleme.
+  ///
+  /// In en, this message translates to:
+  /// **'Eleme'**
+  String get tagDefaultEleme;
+
+  /// No description provided for @tagDefaultTaobao.
+  ///
+  /// In en, this message translates to:
+  /// **'Taobao'**
+  String get tagDefaultTaobao;
+
+  /// No description provided for @tagDefaultJD.
+  ///
+  /// In en, this message translates to:
+  /// **'JD.com'**
+  String get tagDefaultJD;
+
+  /// No description provided for @tagDefaultPDD.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinduoduo'**
+  String get tagDefaultPDD;
+
+  /// No description provided for @tagDefaultStarbucks.
+  ///
+  /// In en, this message translates to:
+  /// **'Starbucks'**
+  String get tagDefaultStarbucks;
+
+  /// No description provided for @tagDefaultLuckin.
+  ///
+  /// In en, this message translates to:
+  /// **'Luckin Coffee'**
+  String get tagDefaultLuckin;
+
+  /// No description provided for @tagDefaultMcDonalds.
+  ///
+  /// In en, this message translates to:
+  /// **'McDonald\'s'**
+  String get tagDefaultMcDonalds;
+
+  /// No description provided for @tagDefaultKFC.
+  ///
+  /// In en, this message translates to:
+  /// **'KFC'**
+  String get tagDefaultKFC;
+
+  /// No description provided for @tagDefaultHema.
+  ///
+  /// In en, this message translates to:
+  /// **'Hema'**
+  String get tagDefaultHema;
+
+  /// No description provided for @tagDefaultSams.
+  ///
+  /// In en, this message translates to:
+  /// **'Sam\'s Club'**
+  String get tagDefaultSams;
+
+  /// No description provided for @tagDefaultCostco.
+  ///
+  /// In en, this message translates to:
+  /// **'Costco'**
+  String get tagDefaultCostco;
+
+  /// No description provided for @tagDefaultBusinessTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Trip'**
+  String get tagDefaultBusinessTrip;
+
+  /// No description provided for @tagDefaultTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get tagDefaultTravel;
+
+  /// No description provided for @tagDefaultDining.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining Out'**
+  String get tagDefaultDining;
+
+  /// No description provided for @tagDefaultOnlineShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Online Shopping'**
+  String get tagDefaultOnlineShopping;
+
+  /// No description provided for @tagDefaultDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get tagDefaultDaily;
+
+  /// No description provided for @tagDefaultReimbursement.
+  ///
+  /// In en, this message translates to:
+  /// **'Reimbursable'**
+  String get tagDefaultReimbursement;
+
+  /// No description provided for @tagDefaultRefundable.
+  ///
+  /// In en, this message translates to:
+  /// **'Refundable'**
+  String get tagDefaultRefundable;
+
+  /// No description provided for @tagDefaultRefunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunded'**
+  String get tagDefaultRefunded;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

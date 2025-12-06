@@ -1703,5 +1703,73 @@
   "aiPromptVarCurrentDate": "当前日期，如\"2025-01-15\"",
   "aiPromptVarOcrText": "用户输入或OCR识别的文本内容",
   "aiPromptVarCategories": "支出和收入分类列表",
-  "aiPromptVarAccounts": "用户的账户列表（可能为空）"
+  "aiPromptVarAccounts": "用户的账户列表（可能为空）",
+
+  "tagManageTitle": "标签管理",
+  "tagManageSubtitle": "管理交易标签",
+  "tagManageEmpty": "暂无标签",
+  "tagManageEmptyHint": "点击右上角添加标签",
+  "tagManageGenerateDefault": "生成默认标签",
+  "tagManageGenerateDefaultConfirm": "确定要生成默认标签吗？已有同名标签不会被覆盖。",
+  "tagManageGenerateDefaultSuccess": "默认标签已生成",
+  "tagEditTitle": "编辑标签",
+  "tagAddTitle": "新增标签",
+  "tagNameLabel": "标签名称",
+  "tagNameHint": "请输入标签名称",
+  "tagNameRequired": "标签名称不能为空",
+  "tagNameDuplicate": "标签名称已存在",
+  "tagColorLabel": "标签颜色",
+  "tagColorHint": "选择标签颜色",
+  "tagCreateSuccess": "标签创建成功",
+  "tagUpdateSuccess": "标签更新成功",
+  "tagDeleteConfirmTitle": "删除标签",
+  "tagDeleteConfirmMessage": "确定要删除标签「{name}」吗？此操作不会影响已关联的交易记录。",
+  "@tagDeleteConfirmMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tagDeleteSuccess": "标签已删除",
+  "tagSelectTitle": "选择标签",
+  "tagSelectHint": "可多选",
+  "tagSelectCreateNew": "新建标签",
+  "tagSelectRecentlyUsed": "最近使用",
+  "tagSelectAllTags": "全部标签",
+  "tagTransactionCount": "{count}笔",
+  "@tagTransactionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagDetailTitle": "标签详情",
+  "tagDetailTotalExpense": "总支出",
+  "tagDetailTotalIncome": "总收入",
+  "tagDetailTransactionCount": "交易笔数",
+  "tagDetailRelatedTransactions": "关联交易",
+  "tagDetailNoTransactions": "暂无关联交易",
+
+  "tagDefaultMeituan": "美团",
+  "tagDefaultEleme": "饿了么",
+  "tagDefaultTaobao": "淘宝",
+  "tagDefaultJD": "京东",
+  "tagDefaultPDD": "拼多多",
+  "tagDefaultStarbucks": "星巴克",
+  "tagDefaultLuckin": "瑞幸咖啡",
+  "tagDefaultMcDonalds": "麦当劳",
+  "tagDefaultKFC": "肯德基",
+  "tagDefaultHema": "盒马",
+  "tagDefaultSams": "山姆",
+  "tagDefaultCostco": "Costco",
+  "tagDefaultBusinessTrip": "出差",
+  "tagDefaultTravel": "旅行",
+  "tagDefaultDining": "聚餐",
+  "tagDefaultOnlineShopping": "网购",
+  "tagDefaultDaily": "日常",
+  "tagDefaultReimbursement": "报销",
+  "tagDefaultRefundable": "可退款",
+  "tagDefaultRefunded": "已退款"
 }
