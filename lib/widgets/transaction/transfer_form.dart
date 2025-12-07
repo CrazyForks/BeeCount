@@ -6,6 +6,7 @@ import '../../data/db.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../styles/tokens.dart';
+import '../../utils/sync_helpers.dart';
 import '../biz/amount_editor_sheet.dart';
 import '../ui/ui.dart';
 
@@ -33,6 +34,9 @@ class TransferForm extends ConsumerStatefulWidget {
   /// 初始日期（可选）
   final DateTime? initialDate;
 
+  /// 初始标签ID列表（可选）
+  final List<int>? initialTagIds;
+
   const TransferForm({
     super.key,
     required this.onTransferComplete,
@@ -42,6 +46,7 @@ class TransferForm extends ConsumerStatefulWidget {
     this.initialAmount,
     this.initialNote,
     this.initialDate,
+    this.initialTagIds,
   });
 
   @override
@@ -113,6 +118,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
         initialDate: widget.initialDate ?? DateTime.now(),
         initialAmount: widget.initialAmount,
         initialNote: widget.initialNote,
+        initialTagIds: widget.initialTagIds,
         showAccountPicker: false,
         ledgerId: ledgerId,
         onSubmit: (result) async {
@@ -133,6 +139,25 @@ class _TransferFormState extends ConsumerState<TransferForm> {
                 id: widget.editingTransactionId!,
                 toAccountId: _toAccountId,
               );
+              // 更新标签
+              if (result.tagIds.isNotEmpty) {
+                await repo.updateTransactionTags(
+                  transactionId: widget.editingTransactionId!,
+                  tagIds: result.tagIds,
+                );
+                // 刷新标签列表缓存
+                ref.read(tagListRefreshProvider.notifier).state++;
+              } else {
+                // 编辑模式：如果没有选择标签，清除原有标签
+                await repo.removeAllTagsFromTransaction(widget.editingTransactionId!);
+                ref.read(tagListRefreshProvider.notifier).state++;
+              }
+
+              // 统一处理：自动/手动同步与状态刷新
+              await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+              // 刷新统计
+              ref.invalidate(countsForLedgerProvider(ledgerId));
+              ref.read(statsRefreshProvider.notifier).state++;
 
               if (!context.mounted) return;
               Navigator.of(context).pop(); // 关闭金额输入弹窗
@@ -140,7 +165,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
               widget.onTransferComplete();
             } else {
               // 创建模式：新建转账记录
-              await repo.addTransaction(
+              final txId = await repo.addTransaction(
                 ledgerId: ledgerId,
                 type: 'transfer',
                 amount: result.amount,
@@ -149,6 +174,22 @@ class _TransferFormState extends ConsumerState<TransferForm> {
                 note: result.note,
                 happenedAt: result.date,
               );
+
+              // 关联标签
+              if (result.tagIds.isNotEmpty) {
+                await repo.updateTransactionTags(
+                  transactionId: txId,
+                  tagIds: result.tagIds,
+                );
+                // 刷新标签列表缓存
+                ref.read(tagListRefreshProvider.notifier).state++;
+              }
+
+              // 统一处理：自动/手动同步与状态刷新
+              await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+              // 刷新统计
+              ref.invalidate(countsForLedgerProvider(ledgerId));
+              ref.read(statsRefreshProvider.notifier).state++;
 
               if (!context.mounted) return;
               Navigator.of(context).pop(); // 关闭金额输入弹窗

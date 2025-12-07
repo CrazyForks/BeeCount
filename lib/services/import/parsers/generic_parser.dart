@@ -140,8 +140,12 @@ class GenericBillParser implements BillParser {
     if (_containsAny(s, ['二级分类', '子分类', '次分类', 'Subcategory', 'Sub Category'])) {
       return 'sub_category';
     }
-    if (_containsAny(s, ['分类', '类别', '账目名称', '科目', '标签', '交易分类', '交易类型'])) {
+    if (_containsAny(s, ['分类', '类别', '账目名称', '科目', '交易分类', '交易类型'])) {
       return 'category';
+    }
+    // 标签匹配（注意：不要和分类混淆，"标签"单独作为tags字段）
+    if (noSpace == 'tags' || _containsAny(s, ['标签', 'Tags'])) {
+      return 'tags';
     }
     // 再匹配收支类型字段
     if (_containsAny(s, ['类型', '收支', '收/支', '方向'])) {

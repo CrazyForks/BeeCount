@@ -790,6 +790,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String importSkippedDuplicates(Object count) {
+    return '跳过 $count 条重复记录';
+  }
+
+  @override
   String importTransactionFailed(Object error) {
     return '导入失败，已回滚所有更改：$error';
   }
@@ -2136,6 +2141,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get exportCsvHeaderTime => '时间';
+
+  @override
+  String get exportCsvHeaderTags => '标签';
 
   @override
   String get exportShareText => 'BeeCount 导出文件';
@@ -3736,6 +3744,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configIncludeCategories => '分类';
 
   @override
+  String get configIncludeTags => '标签';
+
+  @override
+  String get configIncludeOtherSettings => '其他设置';
+
+  @override
+  String get configIncludeOtherSettingsSubtitle => '包含云服务配置、AI配置、应用设置等';
+
+  @override
+  String get configExportSelectTitle => '选择导出内容';
+
+  @override
+  String get configExportPreviewTitle => '导出预览';
+
+  @override
+  String get configExportConfirmTitle => '确认导出';
+
+  @override
+  String get configImportSelectTitle => '选择导入内容';
+
+  @override
+  String get configImportPreviewTitle => '导入预览';
+
+  @override
   String get ledgersConflictTitle => '同步冲突';
 
   @override
@@ -4174,6 +4206,178 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiPromptVarAccounts => '用户的账户列表（可能为空）';
+
+  @override
+  String get tagManageTitle => '标签管理';
+
+  @override
+  String get tagManageSubtitle => '管理交易标签';
+
+  @override
+  String get tagManageEmpty => '暂无标签';
+
+  @override
+  String get tagManageEmptyHint => '点击右上角添加标签';
+
+  @override
+  String get tagManageGenerateDefault => '生成默认标签';
+
+  @override
+  String get tagManageGenerateDefaultConfirm => '确定要生成默认标签吗？已有同名标签不会被覆盖。';
+
+  @override
+  String get tagManageGenerateDefaultSuccess => '默认标签已生成';
+
+  @override
+  String get tagEditTitle => '编辑标签';
+
+  @override
+  String get tagAddTitle => '新增标签';
+
+  @override
+  String get tagNameLabel => '标签名称';
+
+  @override
+  String get tagNameHint => '请输入标签名称';
+
+  @override
+  String get tagNameRequired => '标签名称不能为空';
+
+  @override
+  String get tagNameDuplicate => '标签名称已存在';
+
+  @override
+  String get tagColorLabel => '标签颜色';
+
+  @override
+  String get tagColorHint => '选择标签颜色';
+
+  @override
+  String get tagCreateSuccess => '标签创建成功';
+
+  @override
+  String get tagUpdateSuccess => '标签更新成功';
+
+  @override
+  String get tagDeleteConfirmTitle => '删除标签';
+
+  @override
+  String tagDeleteConfirmMessage(String name) {
+    return '确定要删除标签「$name」吗？此操作不会影响已关联的交易记录。';
+  }
+
+  @override
+  String get tagDeleteSuccess => '标签已删除';
+
+  @override
+  String get tagSelectTitle => '选择标签';
+
+  @override
+  String get tagSelectHint => '可多选';
+
+  @override
+  String get tagSelectCreateNew => '新建标签';
+
+  @override
+  String get tagSelectRecentlyUsed => '最近使用';
+
+  @override
+  String get tagSelectAllTags => '全部标签';
+
+  @override
+  String tagTransactionCount(int count) {
+    return '$count笔';
+  }
+
+  @override
+  String get tagDetailTitle => '标签详情';
+
+  @override
+  String get tagDetailTotalCount => '交易笔数';
+
+  @override
+  String get tagDetailTotalExpense => '总支出';
+
+  @override
+  String get tagDetailTotalIncome => '总收入';
+
+  @override
+  String get tagDetailTransactionCount => '交易笔数';
+
+  @override
+  String get tagDetailTransactionList => '关联交易';
+
+  @override
+  String get tagDetailRelatedTransactions => '关联交易';
+
+  @override
+  String get tagDetailNoTransactions => '暂无关联交易';
+
+  @override
+  String get tagDetailNoTransactionsHint => '使用此标签的交易将在此显示';
+
+  @override
+  String get tagNotFound => '标签不存在';
+
+  @override
+  String get tagDefaultMeituan => '美团';
+
+  @override
+  String get tagDefaultEleme => '饿了么';
+
+  @override
+  String get tagDefaultTaobao => '淘宝';
+
+  @override
+  String get tagDefaultJD => '京东';
+
+  @override
+  String get tagDefaultPDD => '拼多多';
+
+  @override
+  String get tagDefaultStarbucks => '星巴克';
+
+  @override
+  String get tagDefaultLuckin => '瑞幸咖啡';
+
+  @override
+  String get tagDefaultMcDonalds => '麦当劳';
+
+  @override
+  String get tagDefaultKFC => '肯德基';
+
+  @override
+  String get tagDefaultHema => '盒马';
+
+  @override
+  String get tagDefaultSams => '山姆';
+
+  @override
+  String get tagDefaultCostco => 'Costco';
+
+  @override
+  String get tagDefaultBusinessTrip => '出差';
+
+  @override
+  String get tagDefaultTravel => '旅行';
+
+  @override
+  String get tagDefaultDining => '聚餐';
+
+  @override
+  String get tagDefaultOnlineShopping => '网购';
+
+  @override
+  String get tagDefaultDaily => '日常';
+
+  @override
+  String get tagDefaultReimbursement => '报销';
+
+  @override
+  String get tagDefaultRefundable => '可退款';
+
+  @override
+  String get tagDefaultRefunded => '已退款';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4961,6 +5165,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String importSkippedNonTransactionTypes(Object count) {
     return '跳過 $count 條非收支記錄（債務等）';
+  }
+
+  @override
+  String importSkippedDuplicates(Object count) {
+    return '跳過 $count 條重複記錄';
   }
 
   @override
@@ -6310,6 +6519,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get exportCsvHeaderTime => '時間';
+
+  @override
+  String get exportCsvHeaderTags => '標籤';
 
   @override
   String get exportShareText => 'BeeCount 匯出檔案';
@@ -7910,6 +8122,30 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get configIncludeCategories => '分類';
 
   @override
+  String get configIncludeTags => '標籤';
+
+  @override
+  String get configIncludeOtherSettings => '其他設定';
+
+  @override
+  String get configIncludeOtherSettingsSubtitle => '包含雲端服務配置、AI配置、應用程式設定等';
+
+  @override
+  String get configExportSelectTitle => '選擇匯出內容';
+
+  @override
+  String get configExportPreviewTitle => '匯出預覽';
+
+  @override
+  String get configExportConfirmTitle => '確認匯出';
+
+  @override
+  String get configImportSelectTitle => '選擇匯入內容';
+
+  @override
+  String get configImportPreviewTitle => '匯入預覽';
+
+  @override
   String get ledgersConflictTitle => '同步衝突';
 
   @override
@@ -8348,4 +8584,176 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiPromptVarAccounts => '使用者的帳戶清單（可能為空）';
+
+  @override
+  String get tagManageTitle => '標籤管理';
+
+  @override
+  String get tagManageSubtitle => '管理交易標籤';
+
+  @override
+  String get tagManageEmpty => '暫無標籤';
+
+  @override
+  String get tagManageEmptyHint => '點擊右上角新增標籤';
+
+  @override
+  String get tagManageGenerateDefault => '產生預設標籤';
+
+  @override
+  String get tagManageGenerateDefaultConfirm => '確定要產生預設標籤嗎？已有同名標籤不會被覆蓋。';
+
+  @override
+  String get tagManageGenerateDefaultSuccess => '預設標籤已產生';
+
+  @override
+  String get tagEditTitle => '編輯標籤';
+
+  @override
+  String get tagAddTitle => '新增標籤';
+
+  @override
+  String get tagNameLabel => '標籤名稱';
+
+  @override
+  String get tagNameHint => '請輸入標籤名稱';
+
+  @override
+  String get tagNameRequired => '標籤名稱不能為空';
+
+  @override
+  String get tagNameDuplicate => '標籤名稱已存在';
+
+  @override
+  String get tagColorLabel => '標籤顏色';
+
+  @override
+  String get tagColorHint => '選擇標籤顏色';
+
+  @override
+  String get tagCreateSuccess => '標籤建立成功';
+
+  @override
+  String get tagUpdateSuccess => '標籤更新成功';
+
+  @override
+  String get tagDeleteConfirmTitle => '刪除標籤';
+
+  @override
+  String tagDeleteConfirmMessage(String name) {
+    return '確定要刪除標籤「$name」嗎？此操作不會影響已關聯的交易記錄。';
+  }
+
+  @override
+  String get tagDeleteSuccess => '標籤已刪除';
+
+  @override
+  String get tagSelectTitle => '選擇標籤';
+
+  @override
+  String get tagSelectHint => '可多選';
+
+  @override
+  String get tagSelectCreateNew => '新建標籤';
+
+  @override
+  String get tagSelectRecentlyUsed => '最近使用';
+
+  @override
+  String get tagSelectAllTags => '全部標籤';
+
+  @override
+  String tagTransactionCount(int count) {
+    return '$count筆';
+  }
+
+  @override
+  String get tagDetailTitle => '標籤詳情';
+
+  @override
+  String get tagDetailTotalCount => '交易筆數';
+
+  @override
+  String get tagDetailTotalExpense => '總支出';
+
+  @override
+  String get tagDetailTotalIncome => '總收入';
+
+  @override
+  String get tagDetailTransactionCount => '交易筆數';
+
+  @override
+  String get tagDetailTransactionList => '關聯交易';
+
+  @override
+  String get tagDetailRelatedTransactions => '關聯交易';
+
+  @override
+  String get tagDetailNoTransactions => '暫無關聯交易';
+
+  @override
+  String get tagDetailNoTransactionsHint => '使用此標籤的交易將在此顯示';
+
+  @override
+  String get tagNotFound => '標籤不存在';
+
+  @override
+  String get tagDefaultMeituan => '美團';
+
+  @override
+  String get tagDefaultEleme => '餓了麼';
+
+  @override
+  String get tagDefaultTaobao => '淘寶';
+
+  @override
+  String get tagDefaultJD => '京東';
+
+  @override
+  String get tagDefaultPDD => '拼多多';
+
+  @override
+  String get tagDefaultStarbucks => '星巴克';
+
+  @override
+  String get tagDefaultLuckin => '瑞幸咖啡';
+
+  @override
+  String get tagDefaultMcDonalds => '麥當勞';
+
+  @override
+  String get tagDefaultKFC => '肯德基';
+
+  @override
+  String get tagDefaultHema => '盒馬';
+
+  @override
+  String get tagDefaultSams => '山姆';
+
+  @override
+  String get tagDefaultCostco => 'Costco';
+
+  @override
+  String get tagDefaultBusinessTrip => '出差';
+
+  @override
+  String get tagDefaultTravel => '旅行';
+
+  @override
+  String get tagDefaultDining => '聚餐';
+
+  @override
+  String get tagDefaultOnlineShopping => '網購';
+
+  @override
+  String get tagDefaultDaily => '日常';
+
+  @override
+  String get tagDefaultReimbursement => '報銷';
+
+  @override
+  String get tagDefaultRefundable => '可退款';
+
+  @override
+  String get tagDefaultRefunded => '已退款';
 }

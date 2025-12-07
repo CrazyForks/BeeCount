@@ -29,3 +29,6 @@ export 'language_provider.dart';
 
 // 小组件相关
 export 'widget_provider.dart';
+
+// 标签相关
+export 'tag_providers.dart';

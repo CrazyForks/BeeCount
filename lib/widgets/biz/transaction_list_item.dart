@@ -4,6 +4,7 @@ import '../../styles/tokens.dart';
 import '../../widgets/ui/ui.dart';
 import '../../providers/theme_providers.dart';
 import 'amount_text.dart';
+import 'tag_chip.dart';
 
 class TransactionListItem extends ConsumerWidget {
   final IconData icon;
@@ -24,6 +25,10 @@ class TransactionListItem extends ConsumerWidget {
   final VoidCallback? onSelectionChanged; // 选中状态改变回调
   final bool showFullDate; // 是否显示完整日期（年-月-日 时:分）
 
+  // 标签相关
+  final List<({int id, String name, String? color})>? tags; // 关联的标签
+  final void Function(int tagId, String tagName)? onTagTap; // 点击标签回调
+
   const TransactionListItem({
       super.key,
       required this.icon,
@@ -41,6 +46,8 @@ class TransactionListItem extends ConsumerWidget {
       this.isSelected = false,
       this.onSelectionChanged,
       this.showFullDate = false,
+      this.tags,
+      this.onTagTap,
   });
 
   /// 检查是否有次要信息需要显示（时间或账户）
@@ -123,7 +130,7 @@ class TransactionListItem extends ConsumerWidget {
             // 左侧：分类名称 + 备注 + 时间·账户
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.only(right: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -168,13 +175,33 @@ class TransactionListItem extends ConsumerWidget {
                 ),
               ),
             ),
-            // 右侧：金额（垂直居中）
-            AmountText(
-                value: isExpense ? -amount : amount,
-                hide: hide,
-                signed: true,
-                decimals: 2,
-                style: BeeTextTokens.title(context)),
+            // 右侧：金额 + 标签
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 金额
+                AmountText(
+                    value: isExpense ? -amount : amount,
+                    hide: hide,
+                    signed: true,
+                    decimals: 2,
+                    style: BeeTextTokens.title(context)),
+                // 标签（显示在金额下方）
+                if (tags != null && tags!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: TagChipList(
+                      tags: tags!,
+                      maxDisplay: 2,
+                      size: TagChipSize.small,
+                      spacing: 4,
+                      onTagTap: onTagTap,
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
       ),

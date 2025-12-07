@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:drift/drift.dart' as drift show Value;
 import 'package:flutter/services.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -26,6 +25,7 @@ class TransactionEditorPage extends ConsumerStatefulWidget {
   final int? editingTransactionId;
   final int? initialAccountId;
   final int? initialToAccountId; // 转账时的目标账户
+  final List<int>? initialTagIds; // 初始标签ID列表
 
   const TransactionEditorPage({
     super.key,
@@ -38,6 +38,7 @@ class TransactionEditorPage extends ConsumerStatefulWidget {
     this.editingTransactionId,
     this.initialAccountId,
     this.initialToAccountId,
+    this.initialTagIds,
   });
 
   @override
@@ -155,6 +156,7 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
                   initialAmount: widget.initialAmount,
                   initialNote: widget.initialNote,
                   initialDate: widget.initialDate,
+                  initialTagIds: widget.initialTagIds,
                 ),
               ],
             ),
@@ -218,10 +220,12 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
         initialAmount: widget.initialAmount,
         initialNote: widget.initialNote,
         initialAccountId: initialAccountId,
+        initialTagIds: widget.initialTagIds,
         showAccountPicker: true,
         ledgerId: ledgerId,
         onSubmit: (res) async {
           final repo = ref.read(repositoryProvider);
+          int transactionId;
           if (widget.editingTransactionId != null) {
             // 编辑模式：使用repository更新交易
             await repo.updateTransaction(
@@ -233,8 +237,9 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
               happenedAt: res.date,
               accountId: res.accountId,
             );
+            transactionId = widget.editingTransactionId!;
           } else {
-            await repo.addTransaction(
+            transactionId = await repo.addTransaction(
               ledgerId: ledgerId,
               type: kind,
               amount: res.amount,
@@ -243,6 +248,20 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
               note: res.note,
               accountId: res.accountId,
             );
+          }
+          // 更新标签关联
+          if (res.tagIds.isNotEmpty) {
+            await repo.updateTransactionTags(
+              transactionId: transactionId,
+              tagIds: res.tagIds,
+            );
+            // 刷新标签列表缓存
+            ref.read(tagListRefreshProvider.notifier).state++;
+          } else if (widget.editingTransactionId != null) {
+            // 编辑模式：如果没有选择标签，清除原有标签
+            await repo.removeAllTagsFromTransaction(transactionId);
+            // 刷新标签列表缓存
+            ref.read(tagListRefreshProvider.notifier).state++;
           }
           // 统一处理：自动/手动同步与状态刷新（后台静默）
           await handleLocalChange(ref, ledgerId: ledgerId, background: true);

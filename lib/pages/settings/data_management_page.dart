@@ -9,6 +9,7 @@ import '../data/import_page.dart';
 import '../data/export_page.dart';
 import '../category/category_manage_page.dart';
 import '../category/category_migration_page.dart';
+import '../tag/tag_manage_page.dart';
 import '../settings/config_import_export_page.dart';
 import '../settings/storage_management_page.dart';
 import '../../l10n/app_localizations.dart';
@@ -90,7 +91,7 @@ class DataManagementPage extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(height: 8.0.scaled(context, ref)),
-                // 分类和账户管理
+                // 分类管理
                 SectionCard(
                   margin: EdgeInsets.zero,
                   child: Column(
@@ -119,6 +120,21 @@ class DataManagementPage extends ConsumerWidget {
                         },
                       ),
                     ],
+                  ),
+                ),
+                SizedBox(height: 8.0.scaled(context, ref)),
+                // 标签管理
+                SectionCard(
+                  margin: EdgeInsets.zero,
+                  child: AppListTile(
+                    leading: Icons.label_outline,
+                    title: AppLocalizations.of(context).tagManageTitle,
+                    subtitle: AppLocalizations.of(context).tagManageSubtitle,
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const TagManagePage()),
+                      );
+                    },
                   ),
                 ),
                 SizedBox(height: 8.0.scaled(context, ref)),

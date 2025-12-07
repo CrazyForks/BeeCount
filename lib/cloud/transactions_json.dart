@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:drift/drift.dart' as d;
 import '../data/db.dart';
 import '../data/repositories/base_repository.dart';
-import '../data/repositories/local/local_repository.dart';
+import '../services/data_import_service.dart';
 
 /// 账本交易数据的 JSON 导入导出工具
 ///
@@ -31,7 +30,7 @@ String _sanitizeString(String? input) {
 /// [ledgerId] - 账本ID
 ///
 /// 返回包含以下字段的 JSON：
-/// - version: 数据格式版本（当前为3）
+/// - version: 数据格式版本（当前为4）
 /// - exportedAt: 导出时间戳
 /// - ledgerId: 账本ID
 /// - ledgerName: 账本名称
@@ -39,7 +38,8 @@ String _sanitizeString(String? input) {
 /// - count: 交易条数
 /// - accounts: 账户列表（name, type, currency, initialBalance）
 /// - categories: 分类列表（name, kind, level, icon, parentName）
-/// - items: 交易明细（type, amount, categoryName, categoryKind, happenedAt, note）
+/// - tags: 标签列表（name, color）
+/// - items: 交易明细（type, amount, categoryName, categoryKind, happenedAt, note, tags）
 Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
   final txs = await (db.select(db.transactions)
         ..where((t) => t.ledgerId.equals(ledgerId)))
@@ -51,6 +51,37 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
     if (c != 0) return c;
     return a.id.compareTo(b.id);
   });
+
+  // 获取所有交易的标签（批量查询）
+  final txIds = txs.map((t) => t.id).toList();
+  final tagsMap = <int, List<Tag>>{}; // transactionId -> tags
+  final allUsedTags = <int, Tag>{}; // tagId -> tag（用于导出标签列表）
+
+  if (txIds.isNotEmpty) {
+    // 批量查询所有交易的标签关联
+    final tagRelations = await (db.select(db.transactionTags)
+          ..where((tt) => tt.transactionId.isIn(txIds)))
+        .get();
+
+    // 获取所有使用的标签ID
+    final usedTagIds = tagRelations.map((r) => r.tagId).toSet();
+    if (usedTagIds.isNotEmpty) {
+      final tags = await (db.select(db.tags)
+            ..where((t) => t.id.isIn(usedTagIds.toList())))
+          .get();
+      for (final tag in tags) {
+        allUsedTags[tag.id] = tag;
+      }
+
+      // 构建 transactionId -> tags 映射
+      for (final rel in tagRelations) {
+        final tag = allUsedTags[rel.tagId];
+        if (tag != null) {
+          tagsMap.putIfAbsent(rel.transactionId, () => []).add(tag);
+        }
+      }
+    }
+  }
 
   // Map categoryId -> name/kind for used categories
   final usedCatIds = txs.map((t) => t.categoryId).whereType<int>().toSet();
@@ -72,42 +103,73 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
     }
   }
 
-  final items = txs
-      .map((t) => {
-            'type': t.type,
-            'amount': t.amount,
-            'categoryName':
-                t.categoryId != null ? cats[t.categoryId]!['name'] : null,
-            'categoryKind':
-                t.categoryId != null ? cats[t.categoryId]!['kind'] : null,
-            'happenedAt': t.happenedAt.toUtc().toIso8601String(),
-            'note': _sanitizeString(t.note),
-          })
-      .toList();
-
-  // ledger meta
-  final ledger = await (db.select(db.ledgers)
-        ..where((l) => l.id.equals(ledgerId)))
-      .getSingleOrNull();
-
-  // v1.15.0: 导出该账本交易中使用的账户
-  final usedAccountIds = txs.map((t) => t.accountId).whereType<int>().toSet();
+  // v1.15.0: 导出该账本交易中使用的账户（包括转账的toAccountId）
+  // 需要在导出 items 之前查询，以便添加账户名称
+  final usedAccountIds = <int>{};
+  for (final t in txs) {
+    if (t.accountId != null) usedAccountIds.add(t.accountId!);
+    if (t.toAccountId != null) usedAccountIds.add(t.toAccountId!);
+  }
   final accounts = <Account>[];
+  final accountIdToName = <int, String>{}; // 账户ID -> 名称映射
   for (final aid in usedAccountIds) {
     final a = await (db.select(db.accounts)..where((a) => a.id.equals(aid)))
         .getSingleOrNull();
     if (a != null) {
       accounts.add(a);
+      accountIdToName[a.id] = _sanitizeString(a.name);
     }
   }
   final accountItems = accounts
       .map((a) => {
             'name': _sanitizeString(a.name),
             'type': a.type,
-            'currency': a.currency, // v1.15.0: 导出币种
+            'currency': a.currency,
             'initialBalance': a.initialBalance,
           })
       .toList();
+
+  final items = txs.map((t) {
+    final item = <String, dynamic>{
+      'type': t.type,
+      'amount': t.amount,
+      'categoryName':
+          t.categoryId != null ? cats[t.categoryId]!['name'] : null,
+      'categoryKind':
+          t.categoryId != null ? cats[t.categoryId]!['kind'] : null,
+      'happenedAt': t.happenedAt.toUtc().toIso8601String(),
+      'note': _sanitizeString(t.note),
+    };
+
+    // 添加账户信息
+    if (t.type == 'transfer') {
+      // 转账：添加转出账户和转入账户
+      if (t.accountId != null) {
+        item['fromAccountName'] = accountIdToName[t.accountId];
+      }
+      if (t.toAccountId != null) {
+        item['toAccountName'] = accountIdToName[t.toAccountId];
+      }
+    } else {
+      // 收入或支出：添加账户
+      if (t.accountId != null) {
+        item['accountName'] = accountIdToName[t.accountId];
+      }
+    }
+
+    // 添加标签（逗号分隔的标签名称）
+    final txTags = tagsMap[t.id];
+    if (txTags != null && txTags.isNotEmpty) {
+      item['tags'] = txTags.map((tag) => _sanitizeString(tag.name)).join(',');
+    }
+
+    return item;
+  }).toList();
+
+  // ledger meta
+  final ledger = await (db.select(db.ledgers)
+        ..where((l) => l.id.equals(ledgerId)))
+      .getSingleOrNull();
 
   // 构建 categories 数组（包含图标、层级、父分类信息）
   final categoryItems = <Map<String, dynamic>>[];
@@ -145,15 +207,27 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
     categoryItems.add(categoryItem);
   }
 
+  // 构建标签列表
+  final tagItems = allUsedTags.values.map((tag) {
+    final tagItem = <String, dynamic>{
+      'name': _sanitizeString(tag.name),
+    };
+    if (tag.color != null && tag.color!.isNotEmpty) {
+      tagItem['color'] = tag.color;
+    }
+    return tagItem;
+  }).toList();
+
   final payload = {
-    'version': 3, // 版本升级,新增分类信息
+    'version': 4, // 版本升级,新增标签信息
     'exportedAt': DateTime.now().toUtc().toIso8601String(),
     'ledgerId': ledgerId,
     'ledgerName': ledger?.name,
     'currency': ledger?.currency,
     'count': items.length,
     'accounts': accountItems,
-    'categories': categoryItems, // 新增：分类信息
+    'categories': categoryItems,
+    'tags': tagItems, // 新增：标签信息
     'items': items,
   };
 
@@ -161,6 +235,90 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
 }
 
 // --- 导入 ---
+
+/// 将 JSON 数据转换为统一的 ImportData 格式
+ImportData parseJsonToImportData(String jsonStr) {
+  final data = jsonDecode(jsonStr) as Map<String, dynamic>;
+
+  // 解析账户
+  final accounts = <ImportAccount>[];
+  final jsonAccounts = data['accounts'] as List?;
+  if (jsonAccounts != null) {
+    for (final acc in jsonAccounts.cast<Map<String, dynamic>>()) {
+      accounts.add(ImportAccount(
+        name: acc['name'] as String,
+        type: acc['type'] as String?,
+        currency: acc['currency'] as String?,
+        initialBalance: (acc['initialBalance'] as num?)?.toDouble(),
+      ));
+    }
+  }
+
+  // 解析分类
+  final categories = <ImportCategory>[];
+  final jsonCategories = data['categories'] as List?;
+  if (jsonCategories != null) {
+    for (final cat in jsonCategories.cast<Map<String, dynamic>>()) {
+      categories.add(ImportCategory(
+        name: cat['name'] as String,
+        kind: cat['kind'] as String,
+        level: cat['level'] as int? ?? 1,
+        icon: cat['icon'] as String?,
+        parentName: cat['parentName'] as String?,
+      ));
+    }
+  }
+
+  // 解析标签
+  final tags = <ImportTag>[];
+  final jsonTags = data['tags'] as List?;
+  if (jsonTags != null) {
+    for (final tag in jsonTags.cast<Map<String, dynamic>>()) {
+      tags.add(ImportTag(
+        name: tag['name'] as String,
+        color: tag['color']?.toString(),
+      ));
+    }
+  }
+
+  // 解析交易
+  final transactions = <ImportTransaction>[];
+  final jsonItems = data['items'] as List?;
+  if (jsonItems != null) {
+    for (final it in jsonItems.cast<Map<String, dynamic>>()) {
+      // 解析标签名称列表
+      List<String>? tagNames;
+      final tagsStr = it['tags'] as String?;
+      if (tagsStr != null && tagsStr.trim().isNotEmpty) {
+        tagNames = tagsStr.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+      }
+
+      final type = it['type'] as String;
+      transactions.add(ImportTransaction(
+        type: type,
+        amount: (it['amount'] as num).toDouble(),
+        categoryName: it['categoryName'] as String?,
+        categoryKind: it['categoryKind'] as String?,
+        happenedAt: DateTime.parse(it['happenedAt'] as String).toLocal(),
+        note: it['note'] as String?,
+        // 账户信息：转账用 fromAccountName/toAccountName，其他用 accountName
+        accountName: type != 'transfer' ? it['accountName'] as String? : null,
+        fromAccountName: type == 'transfer' ? it['fromAccountName'] as String? : null,
+        toAccountName: type == 'transfer' ? it['toAccountName'] as String? : null,
+        tagNames: tagNames,
+      ));
+    }
+  }
+
+  return ImportData(
+    accounts: accounts,
+    categories: categories,
+    tags: tags,
+    transactions: transactions,
+    ledgerName: data['ledgerName'] as String?,
+    currency: data['currency'] as String?,
+  );
+}
 
 /// 解析 JSON 并增量导入，使用签名去重（与本地现有数据合并）
 ///
@@ -178,223 +336,17 @@ Future<({int inserted, int skipped})> importTransactionsJson(
   String jsonStr, {
   void Function(int done, int total)? onProgress,
 }) async {
-  final data = jsonDecode(jsonStr) as Map<String, dynamic>;
-  final items = (data['items'] as List).cast<Map<String, dynamic>>();
+  // 1. 解析 JSON 为统一格式
+  final importData = parseJsonToImportData(jsonStr);
 
-  // optional: update local ledger name & currency if present
-  final ledgerName = data['ledgerName'] as String?;
-  final currency = data['currency'] as String?;
-  if (ledgerName != null || currency != null) {
-    try {
-      await repo.updateLedger(
-          id: ledgerId, name: ledgerName, currency: currency);
-    } catch (_) {}
-  }
+  // 2. 使用统一导入服务
+  final result = await dataImportService.importData(
+    repo,
+    ledgerId,
+    importData,
+    defaultCurrency: importData.currency ?? 'CNY',
+    onProgress: onProgress,
+  );
 
-  // 导入账户信息 (version 2+)
-  final accounts = data['accounts'] as List?;
-  if (accounts != null) {
-    try {
-      // v1.15.0: 获取所有现有账户（全局去重）
-      final existingAccounts = await repo.getAllAccounts();
-      final existingAccountNames =
-          existingAccounts.map((a) => a.name).toSet();
-
-      // v1.15.0: 只导入不存在的账户（按名称全局去重）
-      for (final acc in accounts.cast<Map<String, dynamic>>()) {
-        final name = acc['name'] as String;
-        if (!existingAccountNames.contains(name)) {
-          final type = acc['type'] as String? ?? 'cash';
-          final initialBalance =
-              (acc['initialBalance'] as num?)?.toDouble() ?? 0.0;
-          // v1.15.0: 优先使用账户自己的币种，否则使用账本币种
-          final accountCurrency = acc['currency'] as String? ?? currency ?? 'CNY';
-          await repo.createAccount(
-            ledgerId: 0, // v1.15.0: 账户独立，不绑定账本
-            name: name,
-            type: type,
-            currency: accountCurrency, // v1.15.0: 使用账户币种
-            initialBalance: initialBalance,
-          );
-        }
-      }
-    } catch (_) {
-      // 账户导入失败不影响交易导入
-    }
-  }
-
-  // 导入分类信息 (version 3+)
-  final categories = data['categories'] as List?;
-  final categoryCacheForImport = <String, int>{}; // key: kind|name -> id
-
-  if (categories != null) {
-    try {
-      // 获取所有现有分类
-      final existingCategories = await ( repo as LocalRepository).db.select(repo.db.categories).get();
-      final existingCategoryMap = <String, Category>{};
-      for (final cat in existingCategories) {
-        existingCategoryMap['${cat.kind}|${cat.name}'] = cat;
-      }
-
-      // 先导入一级分类，再导入二级分类
-      final level1Categories = <Map<String, dynamic>>[];
-      final level2Categories = <Map<String, dynamic>>[];
-
-      for (final cat in categories.cast<Map<String, dynamic>>()) {
-        final level = cat['level'] as int? ?? 1;
-        if (level == 1) {
-          level1Categories.add(cat);
-        } else {
-          level2Categories.add(cat);
-        }
-      }
-
-      // 导入一级分类
-      for (final cat in level1Categories) {
-        final name = cat['name'] as String;
-        final kind = cat['kind'] as String;
-        final icon = cat['icon'] as String?;
-        final key = '$kind|$name';
-
-        if (existingCategoryMap.containsKey(key)) {
-          // 分类已存在，使用现有ID
-          categoryCacheForImport[key] = existingCategoryMap[key]!.id;
-        } else {
-          // 创建新分类
-          final id = await (repo as LocalRepository).db.into(repo.db.categories).insert(
-            CategoriesCompanion.insert(
-              name: name,
-              kind: kind,
-              level: const d.Value(1),
-              icon: d.Value(icon),
-            ),
-          );
-          categoryCacheForImport[key] = id;
-        }
-      }
-
-      // 导入二级分类
-      for (final cat in level2Categories) {
-        final name = cat['name'] as String;
-        final kind = cat['kind'] as String;
-        final icon = cat['icon'] as String?;
-        final parentName = cat['parentName'] as String?;
-        final key = '$kind|$name';
-
-        if (existingCategoryMap.containsKey(key)) {
-          // 分类已存在，使用现有ID
-          categoryCacheForImport[key] = existingCategoryMap[key]!.id;
-        } else if (parentName != null) {
-          // 查找父分类ID
-          final parentKey = '$kind|$parentName';
-          final parentId = categoryCacheForImport[parentKey];
-
-          if (parentId != null) {
-            // 创建二级分类
-            final id = await (repo as LocalRepository).db.into(repo.db.categories).insert(
-              CategoriesCompanion.insert(
-                name: name,
-                kind: kind,
-                level: const d.Value(2),
-                parentId: d.Value(parentId),
-                icon: d.Value(icon),
-              ),
-            );
-            categoryCacheForImport[key] = id;
-          }
-        }
-      }
-    } catch (_) {
-      // 分类导入失败不影响交易导入
-    }
-  }
-
-  int inserted = 0;
-  int skipped = 0;
-  int processed = 0;
-  final total = items.length;
-
-  // 先构建现有签名集合，避免 N^2
-  final existing = await repo.signatureSetForLedger(ledgerId);
-
-  // 构建批量待插入列表，分批写入
-  final toInsert = <TransactionsCompanion>[];
-  const batchSize = 500;
-
-  // 预热：用于减少 upsertCategory 的重复查询
-  // 如果有 categories 数组，优先使用其中的分类信息
-  final categoryCache = <String, int>{}; // key: kind|name -> id
-  categoryCache.addAll(categoryCacheForImport); // 优先使用从 categories 导入的分类
-
-  for (final it in items) {
-    final type = it['type'] as String;
-    final amount = (it['amount'] as num).toDouble();
-    final categoryName = it['categoryName'] as String?;
-    final categoryKind = it['categoryKind'] as String?;
-    final happenedAt = DateTime.parse(it['happenedAt'] as String).toLocal();
-    final note = it['note'] as String?;
-
-    int? categoryId;
-    if (categoryName != null && categoryKind != null) {
-      final key = '$categoryKind|$categoryName';
-      final cached = categoryCache[key];
-      if (cached != null) {
-        categoryId = cached;
-      } else {
-        // 如果 categories 数组中没有，回退到 upsertCategory（兼容旧版本）
-        categoryId =
-            await repo.upsertCategory(name: categoryName, kind: categoryKind);
-        categoryCache[key] = categoryId;
-      }
-    }
-
-    final sig = repo.txSignature(
-      type: type,
-      amount: amount,
-      categoryId: categoryId,
-      happenedAt: happenedAt,
-      note: note,
-    );
-
-    if (existing.contains(sig)) {
-      skipped++;
-      processed++;
-      // 节流触发进度（每 200 条或最后）
-      if (onProgress != null && (processed % 200 == 0)) {
-        onProgress(processed, total);
-      }
-      continue;
-    }
-
-    toInsert.add(TransactionsCompanion.insert(
-      ledgerId: ledgerId,
-      type: type,
-      amount: amount,
-      categoryId: d.Value(categoryId),
-      accountId: const d.Value(null),
-      toAccountId: const d.Value(null),
-      happenedAt: d.Value(happenedAt),
-      note: d.Value(note),
-    ));
-    existing.add(sig);
-
-    // 批量写入达到阈值时落盘并更新进度
-    if (toInsert.length >= batchSize) {
-      final n = await repo.insertTransactionsBatch(List.of(toInsert));
-      toInsert.clear();
-      inserted += n;
-      processed += n;
-      if (onProgress != null) onProgress(processed, total);
-    }
-  }
-
-  if (toInsert.isNotEmpty) {
-    final n = await repo.insertTransactionsBatch(toInsert);
-    inserted += n;
-    processed += n;
-  }
-
-  if (onProgress != null) onProgress(processed, total);
-
-  return (inserted: inserted, skipped: skipped);
+  return (inserted: result.inserted, skipped: result.skipped);
 }
