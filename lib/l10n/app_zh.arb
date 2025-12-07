@@ -1793,8 +1793,9 @@
   "discoverBudget": "预算管理",
   "discoverBudgetSubtitle": "设置和追踪支出预算",
   "discoverBudgetEmpty": "设置预算，控制支出",
-  "discoverAssets": "资产总览",
-  "discoverAssetsSubtitle": "查看资产分布",
+  "discoverAccounts": "账户总览",
+  "discoverAccountsSubtitle": "管理资产与负债",
+  "discoverAccountsEmpty": "添加账户，追踪资金流向",
   "discoverReports": "数据报告",
   "discoverReportsSubtitle": "月度/年度财务报告",
   "discoverRecurring": "周期记账",
@@ -1802,9 +1803,96 @@
   "discoverLedgers": "账本管理",
   "discoverLedgersSubtitle": "管理多个账本",
   "discoverComingSoon": "功能开发中",
-  "discoverAccountsTotal": "净资产",
-  "discoverAccountsDebt": "负债",
+  "discoverAccountsTotal": "总余额",
+  "discoverAccountsCount": "{count} 个账户",
+  "@discoverAccountsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverMonthlyOverview": "本月概览",
+  "discoverComparedToLastMonth": "较上月",
+  "discoverUp": "↑{percent}",
+  "@discoverUp": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "discoverDown": "↓{percent}",
+  "@discoverDown": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "discoverNoChange": "持平",
+  "discoverTopCategories": "支出TOP3",
+  "discoverNoExpense": "本月暂无支出",
+  "discoverQuickActions": "快捷记账",
+  "discoverQuickCamera": "拍照",
+  "discoverQuickAlbum": "相册",
+  "discoverQuickVoice": "语音",
+  "greetingMorning": "早上好",
+  "greetingAfternoon": "下午好",
+  "greetingEvening": "晚上好",
+  "greetingNight": "夜深了",
+  "discoverSmartBilling": "智能记账",
+  "discoverCommonFeatures": "常用功能",
+  "discoverAISettings": "AI设置",
+  "discoverCategory": "分类管理",
+  "discoverReminder": "记账提醒",
+  "discoverTags": "标签管理",
+  "discoverImport": "导入",
+  "discoverExport": "导出",
+  "discoverBackup": "数据备份",
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
-  "homeNewLedger": "新建账本"
+  "homeNewLedger": "新建账本",
+
+  "budgetTitle": "预算管理",
+  "budgetEmptyHint": "还没有设置预算",
+  "budgetAddTotal": "添加总预算",
+  "budgetMonthlyBudget": "本月预算",
+  "budgetUsed": "已用",
+  "budgetRemaining": "剩余",
+  "budgetDaysRemaining": "剩余 {days} 天",
+  "@budgetDaysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "budgetDailyAvailable": "日均可用 ¥{amount}",
+  "@budgetDailyAvailable": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetCategoryBudgets": "分类预算",
+  "budgetEditTitle": "编辑预算",
+  "budgetAddTitle": "添加预算",
+  "budgetTypeTotalLabel": "总预算",
+  "budgetTypeCategoryLabel": "分类预算",
+  "budgetAmountLabel": "预算金额",
+  "budgetAmountHint": "请输入预算金额",
+  "budgetCategoryLabel": "选择分类",
+  "budgetCategoryHint": "请选择预算分类",
+  "budgetStartDayLabel": "起始日",
+  "budgetStartDayHint": "每月第几天开始计算",
+  "budgetPeriodLabel": "周期",
+  "budgetPeriodMonthly": "月度",
+  "budgetPeriodWeekly": "周度",
+  "budgetPeriodYearly": "年度",
+  "budgetSaveSuccess": "预算保存成功",
+  "budgetDeleteConfirm": "确定删除此预算？",
+  "budgetDeleteSuccess": "预算已删除",
+  "budgetExceededWarning": "此笔消费后将超出预算"
 }

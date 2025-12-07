@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/budget_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers.dart';
+import '../../providers/budget_providers.dart';
+import '../../services/data/category_service.dart';
 import '../../styles/tokens.dart';
+import '../../utils/image_billing_helper.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../widgets/ui/ui.dart';
+import '../../utils/voice_billing_helper.dart';
+import '../../widgets/biz/amount_text.dart';
+import '../../widgets/biz/ledger_picker_sheet.dart';
 import '../../widgets/biz/section_card.dart';
-import '../transaction/recurring_transaction_page.dart';
-import 'ledgers_page_new.dart';
+import '../../widgets/ui/ui.dart';
+import '../account/accounts_page.dart';
+import '../ai/ai_settings_page.dart';
+import '../budget/budget_page.dart';
+import '../category/category_manage_page.dart';
+import '../data/export_page.dart';
+import '../data/import_page.dart';
+import '../tag/tag_manage_page.dart';
 
 /// 发现页
 ///
-/// 包含预算、账户总览、周期记账、账本管理等功能入口
+/// 包含预算管理和账户总览功能入口
 class DiscoverPage extends ConsumerWidget {
   const DiscoverPage({super.key});
 
@@ -20,6 +32,7 @@ class DiscoverPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final primaryColor = ref.watch(primaryColorProvider);
+    final currentLedger = ref.watch(currentLedgerProvider);
 
     return Scaffold(
       backgroundColor: BeeTokens.scaffoldBackground(context),
@@ -28,6 +41,54 @@ class DiscoverPage extends ConsumerWidget {
           PrimaryHeader(
             title: l10n.discoverTitle,
             showBack: false,
+            actions: [
+              currentLedger.when(
+                data: (ledger) => GestureDetector(
+                  onTap: () => showLedgerPicker(context),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.0.scaled(context, ref),
+                      vertical: 6.0.scaled(context, ref),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.book_outlined,
+                          size: 14,
+                          color: BeeTokens.textPrimary(context),
+                        ),
+                        SizedBox(width: 4.0.scaled(context, ref)),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 80),
+                          child: Text(
+                            ledger?.name ?? '',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: BeeTokens.textPrimary(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(width: 2.0.scaled(context, ref)),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 14,
+                          color: BeeTokens.textPrimary(context).withValues(alpha: 0.6),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
+              ),
+            ],
           ),
           Expanded(
             child: ListView(
@@ -38,14 +99,14 @@ class DiscoverPage extends ConsumerWidget {
               children: [
                 // 预算管理卡片
                 _BudgetCard(primaryColor: primaryColor),
-                SizedBox(height: 12.0.scaled(context, ref)),
+                SizedBox(height: 10.0.scaled(context, ref)),
 
                 // 账户总览卡片
                 _AccountsCard(primaryColor: primaryColor),
-                SizedBox(height: 12.0.scaled(context, ref)),
+                SizedBox(height: 10.0.scaled(context, ref)),
 
-                // 更多功能入口
-                _MoreFeaturesCard(primaryColor: primaryColor),
+                // 快捷记账入口
+                _QuickActionsCard(primaryColor: primaryColor),
               ],
             ),
           ),
@@ -64,91 +125,325 @@ class _BudgetCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-
-    // TODO: 从 budgetProvider 获取数据
-    // 当前为占位状态，显示引导设置预算
+    final overviewAsync = ref.watch(budgetOverviewProvider);
 
     return GestureDetector(
       onTap: () {
-        // TODO: 跳转预算详情页
-        showToast(context, l10n.discoverComingSoon);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const BudgetPage()),
+        );
       },
       child: SectionCard(
         margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        child: Padding(
-          padding: EdgeInsets.all(16.0.scaled(context, ref)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 标题行
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8.0.scaled(context, ref)),
-                    decoration: BoxDecoration(
-                      color: primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.pie_chart_outline,
-                      color: primaryColor,
-                      size: 20,
-                    ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 标题行
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8.0.scaled(context, ref)),
+                  decoration: BoxDecoration(
+                    color: primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  SizedBox(width: 12.0.scaled(context, ref)),
-                  Expanded(
-                    child: Text(
-                      l10n.discoverBudget,
+                  child: Icon(
+                    Icons.pie_chart_rounded,
+                    color: primaryColor,
+                    size: 20,
+                  ),
+                ),
+                SizedBox(width: 10.0.scaled(context, ref)),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.discoverBudget,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: BeeTokens.textPrimary(context),
+                        ),
+                      ),
+                      Text(
+                        l10n.discoverBudgetSubtitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: BeeTokens.textTertiary(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: BeeTokens.iconTertiary(context),
+                  size: 20,
+                ),
+              ],
+            ),
+            SizedBox(height: 12.0.scaled(context, ref)),
+            // 预算内容区域
+            overviewAsync.when(
+              data: (overview) {
+                if (overview == null || overview.totalBudget == null) {
+                  return _buildEmptyState(context, ref, l10n);
+                }
+                return _buildBudgetContent(context, ref, overview, l10n);
+              },
+              loading: () => _buildEmptyState(context, ref, l10n),
+              error: (_, __) => _buildEmptyState(context, ref, l10n),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 20.0.scaled(context, ref)),
+      child: Column(
+        children: [
+          Icon(
+            Icons.add_circle_outline,
+            size: 36,
+            color: primaryColor.withValues(alpha: 0.4),
+          ),
+          SizedBox(height: 8.0.scaled(context, ref)),
+          Text(
+            l10n.discoverBudgetEmpty,
+            style: TextStyle(
+              fontSize: 13,
+              color: BeeTokens.textSecondary(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBudgetContent(
+    BuildContext context,
+    WidgetRef ref,
+    BudgetOverview overview,
+    AppLocalizations l10n,
+  ) {
+    final budget = overview.totalBudget!;
+    final rate = budget.budget > 0 ? (budget.used / budget.budget).clamp(0.0, 1.0) : 0.0;
+    final progressColor = _getProgressColor(context, rate);
+    final hideAmounts = ref.watch(hideAmountsProvider);
+
+    return Container(
+      padding: EdgeInsets.all(12.0.scaled(context, ref)),
+      decoration: BoxDecoration(
+        color: BeeTokens.scaffoldBackground(context),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 金额和进度
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              hideAmounts
+                  ? Text(
+                      '¥****',
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: BeeTokens.textPrimary(context),
+                      ),
+                    )
+                  : Text(
+                      '¥${budget.used.toStringAsFixed(0)}',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                         color: BeeTokens.textPrimary(context),
                       ),
                     ),
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    color: BeeTokens.iconTertiary(context),
-                    size: 20,
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: hideAmounts
+                    ? Text(
+                        ' / ****',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: BeeTokens.textTertiary(context),
+                        ),
+                      )
+                    : Text(
+                        ' / ¥${budget.budget.toStringAsFixed(0)}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: BeeTokens.textTertiary(context),
+                        ),
+                      ),
               ),
-              SizedBox(height: 16.0.scaled(context, ref)),
-              // 预算内容区域（占位）
+              const Spacer(),
               Container(
-                width: double.infinity,
                 padding: EdgeInsets.symmetric(
-                  horizontal: 16.0.scaled(context, ref),
-                  vertical: 24.0.scaled(context, ref),
+                  horizontal: 8.0.scaled(context, ref),
+                  vertical: 2.0.scaled(context, ref),
                 ),
                 decoration: BoxDecoration(
-                  color: BeeTokens.scaffoldBackground(context),
-                  borderRadius: BorderRadius.circular(12),
+                  color: progressColor.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.add_circle_outline,
-                      size: 40,
-                      color: primaryColor.withValues(alpha: 0.6),
+                child: Text(
+                  '${(rate * 100).toStringAsFixed(0)}%',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: progressColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.0.scaled(context, ref)),
+          // 进度条
+          ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(
+              value: rate,
+              backgroundColor: progressColor.withValues(alpha: 0.15),
+              valueColor: AlwaysStoppedAnimation(progressColor),
+              minHeight: 6,
+            ),
+          ),
+          SizedBox(height: 6.0.scaled(context, ref)),
+          // 剩余天数
+          Text(
+            l10n.budgetDaysRemaining(overview.daysRemaining),
+            style: TextStyle(
+              fontSize: 11,
+              color: BeeTokens.textTertiary(context),
+            ),
+          ),
+          // 分类预算（最多显示2个）
+          if (overview.categoryBudgets.isNotEmpty) ...[
+            SizedBox(height: 10.0.scaled(context, ref)),
+            _buildCategoryBudgets(context, ref, overview.categoryBudgets),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryBudgets(
+    BuildContext context,
+    WidgetRef ref,
+    List<CategoryBudgetUsage> categoryBudgets,
+  ) {
+    // 只显示前2个
+    final displayBudgets = categoryBudgets.take(2).toList();
+
+    return Column(
+      children: [
+        for (var i = 0; i < displayBudgets.length; i++) ...[
+          if (i > 0) SizedBox(height: 6.0.scaled(context, ref)),
+          _buildCategoryBudgetItem(context, ref, displayBudgets[i]),
+        ],
+        if (categoryBudgets.length > 2) ...[
+          SizedBox(height: 4.0.scaled(context, ref)),
+          Text(
+            '+${categoryBudgets.length - 2}',
+            style: TextStyle(
+              fontSize: 11,
+              color: BeeTokens.textTertiary(context),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildCategoryBudgetItem(
+    BuildContext context,
+    WidgetRef ref,
+    CategoryBudgetUsage usage,
+  ) {
+    final rate = usage.usage.budget > 0
+        ? (usage.usage.used / usage.usage.budget).clamp(0.0, 1.0)
+        : 0.0;
+    final color = _getProgressColor(context, rate);
+    final hideAmounts = ref.watch(hideAmountsProvider);
+
+    return Row(
+      children: [
+        Container(
+          width: 24.0.scaled(context, ref),
+          height: 24.0.scaled(context, ref),
+          decoration: BoxDecoration(
+            color: primaryColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Icon(
+            CategoryService.getCategoryIcon(usage.categoryIcon),
+            size: 14.0.scaled(context, ref),
+            color: primaryColor,
+          ),
+        ),
+        SizedBox(width: 8.0.scaled(context, ref)),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    usage.categoryName,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: BeeTokens.textPrimary(context),
                     ),
-                    SizedBox(height: 8.0.scaled(context, ref)),
-                    Text(
-                      l10n.discoverBudgetEmpty,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: BeeTokens.textSecondary(context),
-                      ),
-                    ),
-                  ],
+                  ),
+                  hideAmounts
+                      ? Text(
+                          '****',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: BeeTokens.textSecondary(context),
+                          ),
+                        )
+                      : Text(
+                          '¥${usage.usage.used.toStringAsFixed(0)}/${usage.usage.budget.toStringAsFixed(0)}',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: BeeTokens.textSecondary(context),
+                          ),
+                        ),
+                ],
+              ),
+              SizedBox(height: 3.0.scaled(context, ref)),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(2),
+                child: LinearProgressIndicator(
+                  value: rate,
+                  backgroundColor: color.withValues(alpha: 0.15),
+                  valueColor: AlwaysStoppedAnimation(color),
+                  minHeight: 4,
                 ),
               ),
             ],
           ),
         ),
-      ),
+      ],
     );
+  }
+
+  Color _getProgressColor(BuildContext context, double rate) {
+    if (rate >= 1.0) return BeeTokens.error(context);
+    if (rate >= 0.9) return BeeTokens.error(context);
+    if (rate >= 0.7) return BeeTokens.warning(context);
+    return BeeTokens.success(context);
   }
 }
 
@@ -158,186 +453,327 @@ class _AccountsCard extends ConsumerWidget {
 
   const _AccountsCard({required this.primaryColor});
 
+  IconData _getIconForType(String type) {
+    switch (type) {
+      case 'cash':
+        return Icons.payments_outlined;
+      case 'bank_card':
+        return Icons.credit_card;
+      case 'credit_card':
+        return Icons.credit_score;
+      case 'alipay':
+        return Icons.currency_yuan;
+      case 'wechat':
+        return Icons.chat;
+      case 'other':
+        return Icons.account_balance_outlined;
+      default:
+        return Icons.account_balance_wallet_outlined;
+    }
+  }
+
+  Color _getColorForType(String type) {
+    switch (type) {
+      case 'alipay':
+        return const Color(0xFF1677FF);
+      case 'wechat':
+        return const Color(0xFF07C160);
+      case 'cash':
+        return Colors.orange;
+      case 'bank_card':
+        return const Color(0xFF1890FF);
+      case 'credit_card':
+        return Colors.purple;
+      default:
+        return Colors.blue;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-
-    // TODO: 从 accountsProvider 获取数据
+    final accountsAsync = ref.watch(allAccountsStreamProvider);
+    final totalStatsAsync = ref.watch(allAccountsTotalStatsProvider);
+    final allStatsAsync = ref.watch(allAccountStatsProvider);
 
     return GestureDetector(
       onTap: () {
-        // TODO: 跳转账户管理页
-        showToast(context, l10n.discoverComingSoon);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AccountsPage()),
+        );
       },
       child: SectionCard(
         margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        child: Padding(
-          padding: EdgeInsets.all(16.0.scaled(context, ref)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 标题行
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8.0.scaled(context, ref)),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.account_balance_wallet_outlined,
-                      color: Colors.blue,
-                      size: 20,
-                    ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 标题行
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8.0.scaled(context, ref)),
+                  decoration: BoxDecoration(
+                    color: primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  SizedBox(width: 12.0.scaled(context, ref)),
-                  Expanded(
-                    child: Text(
-                      l10n.discoverAssets,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: BeeTokens.textPrimary(context),
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    color: BeeTokens.iconTertiary(context),
+                  child: Icon(
+                    Icons.account_balance_wallet_rounded,
+                    color: primaryColor,
                     size: 20,
+                  ),
+                ),
+                SizedBox(width: 10.0.scaled(context, ref)),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.discoverAccounts,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: BeeTokens.textPrimary(context),
+                        ),
+                      ),
+                      Text(
+                        l10n.accountsManageDesc,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: BeeTokens.textTertiary(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: BeeTokens.iconTertiary(context),
+                  size: 20,
+                ),
+              ],
+            ),
+            SizedBox(height: 12.0.scaled(context, ref)),
+            // 账户内容区域
+            accountsAsync.when(
+              data: (accounts) {
+                if (accounts.isEmpty) {
+                  return _buildEmptyState(context, ref, l10n);
+                }
+                return totalStatsAsync.when(
+                  data: (totalStats) => allStatsAsync.when(
+                    data: (accountStats) => _buildAccountsContent(
+                      context,
+                      ref,
+                      accounts,
+                      totalStats,
+                      accountStats,
+                      l10n,
+                    ),
+                    loading: () => _buildLoadingState(context, ref),
+                    error: (_, __) => _buildEmptyState(context, ref, l10n),
+                  ),
+                  loading: () => _buildLoadingState(context, ref),
+                  error: (_, __) => _buildEmptyState(context, ref, l10n),
+                );
+              },
+              loading: () => _buildLoadingState(context, ref),
+              error: (_, __) => _buildEmptyState(context, ref, l10n),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingState(BuildContext context, WidgetRef ref) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 20.0.scaled(context, ref)),
+      child: const Center(
+        child: SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 20.0.scaled(context, ref)),
+      child: Column(
+        children: [
+          Icon(
+            Icons.add_circle_outline,
+            size: 36,
+            color: primaryColor.withValues(alpha: 0.4),
+          ),
+          SizedBox(height: 8.0.scaled(context, ref)),
+          Text(
+            l10n.discoverAccountsEmpty,
+            style: TextStyle(
+              fontSize: 13,
+              color: BeeTokens.textSecondary(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAccountsContent(
+    BuildContext context,
+    WidgetRef ref,
+    List<dynamic> accounts,
+    ({double totalBalance, double totalExpense, double totalIncome}) totalStats,
+    Map<int, ({double balance, double expense, double income})> accountStats,
+    AppLocalizations l10n,
+  ) {
+    final useCompact = ref.watch(compactAmountProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 总余额区域
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 12.0.scaled(context, ref),
+            vertical: 8.0.scaled(context, ref),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.discoverAccountsTotal,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: BeeTokens.textSecondary(context),
+                    ),
+                  ),
+                  SizedBox(height: 2.0.scaled(context, ref)),
+                  AmountText(
+                    value: totalStats.totalBalance,
+                    signed: false,
+                    showCurrency: true,
+                    useCompactFormat: useCompact,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: totalStats.totalBalance >= 0
+                          ? BeeTokens.textPrimary(context)
+                          : Colors.red,
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 16.0.scaled(context, ref)),
-              // 账户概览区域（占位）
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.0.scaled(context, ref),
-                  vertical: 20.0.scaled(context, ref),
-                ),
-                decoration: BoxDecoration(
-                  color: BeeTokens.scaffoldBackground(context),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _AccountSummaryItem(
-                        label: l10n.discoverAccountsTotal,
-                        value: '¥0.00',
-                        valueColor: BeeTokens.textPrimary(context),
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 40,
-                      color: BeeTokens.divider(context),
-                    ),
-                    Expanded(
-                      child: _AccountSummaryItem(
-                        label: l10n.discoverAccountsDebt,
-                        value: '¥0.00',
-                        valueColor: Colors.orange,
-                      ),
-                    ),
-                  ],
+              Text(
+                l10n.discoverAccountsCount(accounts.length),
+                style: TextStyle(
+                  fontSize: 11,
+                  color: BeeTokens.textTertiary(context),
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// 账户概览项
-class _AccountSummaryItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color valueColor;
-
-  const _AccountSummaryItem({
-    required this.label,
-    required this.value,
-    required this.valueColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            color: BeeTokens.textSecondary(context),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: valueColor,
+        SizedBox(height: 8.0.scaled(context, ref)),
+        // 账户卡片横向滑动
+        SizedBox(
+          height: 72.0.scaled(context, ref),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 8.0.scaled(context, ref)),
+            itemCount: accounts.length,
+            itemBuilder: (context, index) {
+              final account = accounts[index];
+              final stats = accountStats[account.id];
+              final balance = stats?.balance ?? account.initialBalance ?? 0.0;
+              return Padding(
+                padding: EdgeInsets.only(right: 10.0.scaled(context, ref)),
+                child: _buildAccountCard(context, ref, account, balance),
+              );
+            },
           ),
         ),
       ],
     );
   }
-}
 
-/// 更多功能卡片
-class _MoreFeaturesCard extends ConsumerWidget {
-  final Color primaryColor;
+  Widget _buildAccountCard(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic account,
+    double balance,
+  ) {
+    final useCompact = ref.watch(compactAmountProvider);
+    final typeColor = _getColorForType(account.type);
 
-  const _MoreFeaturesCard({required this.primaryColor});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-
-    return SectionCard(
-      margin: EdgeInsets.zero,
-      padding: EdgeInsets.zero,
+    return Container(
+      width: 140.0.scaled(context, ref),
+      padding: EdgeInsets.all(12.0.scaled(context, ref)),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            typeColor,
+            typeColor.withValues(alpha: 0.75),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: typeColor.withValues(alpha: 0.25),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _FeatureItem(
-            icon: Icons.repeat_rounded,
-            iconColor: Colors.teal,
-            title: l10n.discoverRecurring,
-            subtitle: l10n.discoverRecurringSubtitle,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const RecurringTransactionPage(),
+          // 账户名和图标
+          Row(
+            children: [
+              Icon(
+                _getIconForType(account.type),
+                size: 16.0.scaled(context, ref),
+                color: Colors.white.withValues(alpha: 0.9),
+              ),
+              SizedBox(width: 6.0.scaled(context, ref)),
+              Expanded(
+                child: Text(
+                  account.name,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              );
-            },
+              ),
+            ],
           ),
-          Divider(
-            height: 1,
-            indent: 56.0.scaled(context, ref),
-            color: BeeTokens.divider(context),
-          ),
-          _FeatureItem(
-            icon: Icons.menu_book_outlined,
-            iconColor: Colors.purple,
-            title: l10n.discoverLedgers,
-            subtitle: l10n.discoverLedgersSubtitle,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const LedgersPageNew(),
-                ),
-              );
-            },
+          // 余额
+          AmountText(
+            value: balance,
+            signed: false,
+            showCurrency: true,
+            useCompactFormat: useCompact,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
@@ -345,76 +781,169 @@ class _MoreFeaturesCard extends ConsumerWidget {
   }
 }
 
-/// 功能入口项组件
-class _FeatureItem extends ConsumerWidget {
-  final IconData icon;
-  final Color iconColor;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
+/// 快捷入口卡片
+class _QuickActionsCard extends ConsumerWidget {
+  final Color primaryColor;
 
-  const _FeatureItem({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
+  const _QuickActionsCard({required this.primaryColor});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return InkWell(
+    final l10n = AppLocalizations.of(context);
+
+    return SectionCard(
+      margin: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 常用功能标题
+          Text(
+            l10n.discoverCommonFeatures,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: BeeTokens.textPrimary(context),
+            ),
+          ),
+          SizedBox(height: 12.0.scaled(context, ref)),
+          // 第一行：拍照、相册、语音、AI设置
+          Row(
+            children: [
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.camera_alt_rounded,
+                  label: l10n.discoverQuickCamera,
+                  onTap: () => ImageBillingHelper.openCameraForBilling(context, ref),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.photo_library_rounded,
+                  label: l10n.discoverQuickAlbum,
+                  onTap: () => ImageBillingHelper.pickImageForBilling(context, ref),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.mic_rounded,
+                  label: l10n.discoverQuickVoice,
+                  onTap: () => VoiceBillingHelper.startVoiceBilling(context, ref),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.smart_toy_outlined,
+                  label: l10n.discoverAISettings,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AISettingsPage()),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12.0.scaled(context, ref)),
+          // 第二行：分类管理、记账提醒、导入、导出
+          Row(
+            children: [
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.category_outlined,
+                  label: l10n.discoverCategory,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CategoryManagePage()),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.label_outlined,
+                  label: l10n.discoverTags,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const TagManagePage()),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.file_download_outlined,
+                  label: l10n.discoverImport,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ImportPage()),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.file_upload_outlined,
+                  label: l10n.discoverExport,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ExportPage()),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+    BuildContext context,
+    WidgetRef ref, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.0.scaled(context, ref),
-          vertical: 14.0.scaled(context, ref),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(6.0.scaled(context, ref)),
-              decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: iconColor,
-              ),
+      child: Column(
+        children: [
+          Container(
+            width: 48.0.scaled(context, ref),
+            height: 48.0.scaled(context, ref),
+            decoration: BoxDecoration(
+              color: primaryColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(14),
             ),
-            SizedBox(width: 12.0.scaled(context, ref)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: BeeTokens.textPrimary(context),
-                    ),
-                  ),
-                  SizedBox(height: 2.0.scaled(context, ref)),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: BeeTokens.textSecondary(context),
-                    ),
-                  ),
-                ],
-              ),
+            child: Icon(
+              icon,
+              size: 24.0.scaled(context, ref),
+              color: primaryColor,
             ),
-            Icon(
-              Icons.chevron_right,
-              color: BeeTokens.iconTertiary(context),
-              size: 20,
+          ),
+          SizedBox(height: 6.0.scaled(context, ref)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: BeeTokens.textSecondary(context),
             ),
-          ],
-        ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

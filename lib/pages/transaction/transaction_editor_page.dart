@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../providers.dart';
+import '../../providers/budget_providers.dart';
 import '../../data/db.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/amount_editor_sheet.dart';
@@ -268,6 +269,8 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
           // 刷新：账本笔数与全局统计
           ref.invalidate(countsForLedgerProvider(ledgerId));
           ref.read(statsRefreshProvider.notifier).state++;
+          // 刷新：预算数据
+          ref.read(budgetRefreshProvider.notifier).state++;
           // 更新小组件数据
           if (!mounted) return;
           await updateAppWidget(ref, context);

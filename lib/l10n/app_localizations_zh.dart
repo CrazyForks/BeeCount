@@ -4395,10 +4395,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverBudgetEmpty => '设置预算，控制支出';
 
   @override
-  String get discoverAssets => '资产总览';
+  String get discoverAccounts => '账户总览';
 
   @override
-  String get discoverAssetsSubtitle => '查看资产分布';
+  String get discoverAccountsSubtitle => '管理资产与负债';
+
+  @override
+  String get discoverAccountsEmpty => '添加账户，追踪资金流向';
 
   @override
   String get discoverReports => '数据报告';
@@ -4422,10 +4425,88 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverComingSoon => '功能开发中';
 
   @override
-  String get discoverAccountsTotal => '净资产';
+  String get discoverAccountsTotal => '总余额';
 
   @override
-  String get discoverAccountsDebt => '负债';
+  String discoverAccountsCount(int count) {
+    return '$count 个账户';
+  }
+
+  @override
+  String get discoverMonthlyOverview => '本月概览';
+
+  @override
+  String get discoverComparedToLastMonth => '较上月';
+
+  @override
+  String discoverUp(String percent) {
+    return '↑$percent';
+  }
+
+  @override
+  String discoverDown(String percent) {
+    return '↓$percent';
+  }
+
+  @override
+  String get discoverNoChange => '持平';
+
+  @override
+  String get discoverTopCategories => '支出TOP3';
+
+  @override
+  String get discoverNoExpense => '本月暂无支出';
+
+  @override
+  String get discoverQuickActions => '快捷记账';
+
+  @override
+  String get discoverQuickCamera => '拍照';
+
+  @override
+  String get discoverQuickAlbum => '相册';
+
+  @override
+  String get discoverQuickVoice => '语音';
+
+  @override
+  String get greetingMorning => '早上好';
+
+  @override
+  String get greetingAfternoon => '下午好';
+
+  @override
+  String get greetingEvening => '晚上好';
+
+  @override
+  String get greetingNight => '夜深了';
+
+  @override
+  String get discoverSmartBilling => '智能记账';
+
+  @override
+  String get discoverCommonFeatures => '常用功能';
+
+  @override
+  String get discoverAISettings => 'AI设置';
+
+  @override
+  String get discoverCategory => '分类管理';
+
+  @override
+  String get discoverReminder => '记账提醒';
+
+  @override
+  String get discoverTags => '标签管理';
+
+  @override
+  String get discoverImport => '导入';
+
+  @override
+  String get discoverExport => '导出';
+
+  @override
+  String get discoverBackup => '数据备份';
 
   @override
   String get homeSwitchLedger => '选择账本';
@@ -4435,6 +4516,91 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeNewLedger => '新建账本';
+
+  @override
+  String get budgetTitle => '预算管理';
+
+  @override
+  String get budgetEmptyHint => '还没有设置预算';
+
+  @override
+  String get budgetAddTotal => '添加总预算';
+
+  @override
+  String get budgetMonthlyBudget => '本月预算';
+
+  @override
+  String get budgetUsed => '已用';
+
+  @override
+  String get budgetRemaining => '剩余';
+
+  @override
+  String budgetDaysRemaining(int days) {
+    return '剩余 $days 天';
+  }
+
+  @override
+  String budgetDailyAvailable(String amount) {
+    return '日均可用 ¥$amount';
+  }
+
+  @override
+  String get budgetCategoryBudgets => '分类预算';
+
+  @override
+  String get budgetEditTitle => '编辑预算';
+
+  @override
+  String get budgetAddTitle => '添加预算';
+
+  @override
+  String get budgetTypeTotalLabel => '总预算';
+
+  @override
+  String get budgetTypeCategoryLabel => '分类预算';
+
+  @override
+  String get budgetAmountLabel => '预算金额';
+
+  @override
+  String get budgetAmountHint => '请输入预算金额';
+
+  @override
+  String get budgetCategoryLabel => '选择分类';
+
+  @override
+  String get budgetCategoryHint => '请选择预算分类';
+
+  @override
+  String get budgetStartDayLabel => '起始日';
+
+  @override
+  String get budgetStartDayHint => '每月第几天开始计算';
+
+  @override
+  String get budgetPeriodLabel => '周期';
+
+  @override
+  String get budgetPeriodMonthly => '月度';
+
+  @override
+  String get budgetPeriodWeekly => '周度';
+
+  @override
+  String get budgetPeriodYearly => '年度';
+
+  @override
+  String get budgetSaveSuccess => '预算保存成功';
+
+  @override
+  String get budgetDeleteConfirm => '确定删除此预算？';
+
+  @override
+  String get budgetDeleteSuccess => '预算已删除';
+
+  @override
+  String get budgetExceededWarning => '此笔消费后将超出预算';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -8830,12 +8996,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get discoverBudgetEmpty => '設定預算，控制支出';
 
   @override
-  String get discoverAssets => '資產總覽';
-
-  @override
-  String get discoverAssetsSubtitle => '查看資產分佈';
-
-  @override
   String get discoverReports => '數據報告';
 
   @override
@@ -8858,9 +9018,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get discoverAccountsTotal => '淨資產';
-
-  @override
-  String get discoverAccountsDebt => '負債';
 
   @override
   String get homeSwitchLedger => '選擇帳本';

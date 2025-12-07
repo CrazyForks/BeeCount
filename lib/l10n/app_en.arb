@@ -1854,8 +1854,9 @@
   "discoverBudget": "Budget",
   "discoverBudgetSubtitle": "Set and track spending budgets",
   "discoverBudgetEmpty": "Set budget to control spending",
-  "discoverAssets": "Assets",
-  "discoverAssetsSubtitle": "View asset distribution",
+  "discoverAccounts": "Accounts",
+  "discoverAccountsSubtitle": "Manage assets and liabilities",
+  "discoverAccountsEmpty": "Add accounts to track cash flow",
   "discoverReports": "Reports",
   "discoverReportsSubtitle": "Monthly/yearly financial reports",
   "discoverRecurring": "Recurring",
@@ -1863,9 +1864,96 @@
   "discoverLedgers": "Ledgers",
   "discoverLedgersSubtitle": "Manage multiple ledgers",
   "discoverComingSoon": "Coming soon",
-  "discoverAccountsTotal": "Net Assets",
-  "discoverAccountsDebt": "Liabilities",
+  "discoverAccountsTotal": "Total Balance",
+  "discoverAccountsCount": "{count} accounts",
+  "@discoverAccountsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverMonthlyOverview": "This Month",
+  "discoverComparedToLastMonth": "vs last month",
+  "discoverUp": "↑{percent}",
+  "@discoverUp": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "discoverDown": "↓{percent}",
+  "@discoverDown": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "discoverNoChange": "No change",
+  "discoverTopCategories": "Top 3 Expenses",
+  "discoverNoExpense": "No expenses this month",
+  "discoverQuickActions": "Quick Entry",
+  "discoverQuickCamera": "Camera",
+  "discoverQuickAlbum": "Album",
+  "discoverQuickVoice": "Voice",
+  "greetingMorning": "Good Morning",
+  "greetingAfternoon": "Good Afternoon",
+  "greetingEvening": "Good Evening",
+  "greetingNight": "Good Night",
+  "discoverSmartBilling": "Smart Billing",
+  "discoverCommonFeatures": "Features",
+  "discoverAISettings": "AI Settings",
+  "discoverCategory": "Categories",
+  "discoverReminder": "Reminder",
+  "discoverTags": "Tags",
+  "discoverImport": "Import",
+  "discoverExport": "Export",
+  "discoverBackup": "Backup",
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
-  "homeNewLedger": "New Ledger"
+  "homeNewLedger": "New Ledger",
+
+  "budgetTitle": "Budget",
+  "budgetEmptyHint": "No budget set yet",
+  "budgetAddTotal": "Add Total Budget",
+  "budgetMonthlyBudget": "Monthly Budget",
+  "budgetUsed": "Used",
+  "budgetRemaining": "Remaining",
+  "budgetDaysRemaining": "{days} days remaining",
+  "@budgetDaysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "budgetDailyAvailable": "Daily available ¥{amount}",
+  "@budgetDailyAvailable": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetCategoryBudgets": "Category Budgets",
+  "budgetEditTitle": "Edit Budget",
+  "budgetAddTitle": "Add Budget",
+  "budgetTypeTotalLabel": "Total Budget",
+  "budgetTypeCategoryLabel": "Category Budget",
+  "budgetAmountLabel": "Budget Amount",
+  "budgetAmountHint": "Enter budget amount",
+  "budgetCategoryLabel": "Select Category",
+  "budgetCategoryHint": "Select budget category",
+  "budgetStartDayLabel": "Start Day",
+  "budgetStartDayHint": "Day of month to start",
+  "budgetPeriodLabel": "Period",
+  "budgetPeriodMonthly": "Monthly",
+  "budgetPeriodWeekly": "Weekly",
+  "budgetPeriodYearly": "Yearly",
+  "budgetSaveSuccess": "Budget saved",
+  "budgetDeleteConfirm": "Delete this budget?",
+  "budgetDeleteSuccess": "Budget deleted",
+  "budgetExceededWarning": "This expense will exceed the budget"
 }

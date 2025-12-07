@@ -4395,10 +4395,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverBudgetEmpty => 'Set budget to control spending';
 
   @override
-  String get discoverAssets => 'Assets';
+  String get discoverAccounts => 'Accounts';
 
   @override
-  String get discoverAssetsSubtitle => 'View asset distribution';
+  String get discoverAccountsSubtitle => 'Manage assets and liabilities';
+
+  @override
+  String get discoverAccountsEmpty => 'Add accounts to track cash flow';
 
   @override
   String get discoverReports => 'Reports';
@@ -4422,10 +4425,88 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverComingSoon => 'Coming soon';
 
   @override
-  String get discoverAccountsTotal => 'Net Assets';
+  String get discoverAccountsTotal => 'Total Balance';
 
   @override
-  String get discoverAccountsDebt => 'Liabilities';
+  String discoverAccountsCount(int count) {
+    return '$count accounts';
+  }
+
+  @override
+  String get discoverMonthlyOverview => 'This Month';
+
+  @override
+  String get discoverComparedToLastMonth => 'vs last month';
+
+  @override
+  String discoverUp(String percent) {
+    return '↑$percent';
+  }
+
+  @override
+  String discoverDown(String percent) {
+    return '↓$percent';
+  }
+
+  @override
+  String get discoverNoChange => 'No change';
+
+  @override
+  String get discoverTopCategories => 'Top 3 Expenses';
+
+  @override
+  String get discoverNoExpense => 'No expenses this month';
+
+  @override
+  String get discoverQuickActions => 'Quick Entry';
+
+  @override
+  String get discoverQuickCamera => 'Camera';
+
+  @override
+  String get discoverQuickAlbum => 'Album';
+
+  @override
+  String get discoverQuickVoice => 'Voice';
+
+  @override
+  String get greetingMorning => 'Good Morning';
+
+  @override
+  String get greetingAfternoon => 'Good Afternoon';
+
+  @override
+  String get greetingEvening => 'Good Evening';
+
+  @override
+  String get greetingNight => 'Good Night';
+
+  @override
+  String get discoverSmartBilling => 'Smart Billing';
+
+  @override
+  String get discoverCommonFeatures => 'Features';
+
+  @override
+  String get discoverAISettings => 'AI Settings';
+
+  @override
+  String get discoverCategory => 'Categories';
+
+  @override
+  String get discoverReminder => 'Reminder';
+
+  @override
+  String get discoverTags => 'Tags';
+
+  @override
+  String get discoverImport => 'Import';
+
+  @override
+  String get discoverExport => 'Export';
+
+  @override
+  String get discoverBackup => 'Backup';
 
   @override
   String get homeSwitchLedger => 'Select Ledger';
@@ -4435,4 +4516,89 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeNewLedger => 'New Ledger';
+
+  @override
+  String get budgetTitle => 'Budget';
+
+  @override
+  String get budgetEmptyHint => 'No budget set yet';
+
+  @override
+  String get budgetAddTotal => 'Add Total Budget';
+
+  @override
+  String get budgetMonthlyBudget => 'Monthly Budget';
+
+  @override
+  String get budgetUsed => 'Used';
+
+  @override
+  String get budgetRemaining => 'Remaining';
+
+  @override
+  String budgetDaysRemaining(int days) {
+    return '$days days remaining';
+  }
+
+  @override
+  String budgetDailyAvailable(String amount) {
+    return 'Daily available ¥$amount';
+  }
+
+  @override
+  String get budgetCategoryBudgets => 'Category Budgets';
+
+  @override
+  String get budgetEditTitle => 'Edit Budget';
+
+  @override
+  String get budgetAddTitle => 'Add Budget';
+
+  @override
+  String get budgetTypeTotalLabel => 'Total Budget';
+
+  @override
+  String get budgetTypeCategoryLabel => 'Category Budget';
+
+  @override
+  String get budgetAmountLabel => 'Budget Amount';
+
+  @override
+  String get budgetAmountHint => 'Enter budget amount';
+
+  @override
+  String get budgetCategoryLabel => 'Select Category';
+
+  @override
+  String get budgetCategoryHint => 'Select budget category';
+
+  @override
+  String get budgetStartDayLabel => 'Start Day';
+
+  @override
+  String get budgetStartDayHint => 'Day of month to start';
+
+  @override
+  String get budgetPeriodLabel => 'Period';
+
+  @override
+  String get budgetPeriodMonthly => 'Monthly';
+
+  @override
+  String get budgetPeriodWeekly => 'Weekly';
+
+  @override
+  String get budgetPeriodYearly => 'Yearly';
+
+  @override
+  String get budgetSaveSuccess => 'Budget saved';
+
+  @override
+  String get budgetDeleteConfirm => 'Delete this budget?';
+
+  @override
+  String get budgetDeleteSuccess => 'Budget deleted';
+
+  @override
+  String get budgetExceededWarning => 'This expense will exceed the budget';
 }
