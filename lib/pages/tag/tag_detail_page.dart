@@ -299,14 +299,14 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
               final categoryName = CategoryUtils.getDisplayName(category?.name, context);
               final isTransfer = transaction.type == 'transfer';
 
+              // 和首页保持一致：有备注显示备注，无备注显示分类名称
+              final hasNote = transaction.note?.isNotEmpty == true;
               return TransactionListItem(
                 icon: isTransfer
                     ? Icons.swap_horiz
                     : getCategoryIconData(category: category, categoryName: categoryName),
-                title: transaction.note?.isNotEmpty == true
-                    ? transaction.note!
-                    : categoryName,
-                categoryName: transaction.note?.isNotEmpty == true ? categoryName : null,
+                title: hasNote ? transaction.note! : categoryName,
+                categoryName: hasNote ? null : categoryName,
                 amount: transaction.amount,
                 isExpense: transaction.type == 'expense',
                 happenedAt: transaction.happenedAt,

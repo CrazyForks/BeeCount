@@ -91,6 +91,9 @@ abstract class BudgetRepository {
   /// 获取账本的所有预算
   Future<List<Budget>> getAllBudgets(int ledgerId);
 
+  /// 获取所有账本的所有预算（用于导出）
+  Future<List<Budget>> getAllBudgetsForExport();
+
   // ============ 预算统计 ============
 
   /// 获取预算使用情况

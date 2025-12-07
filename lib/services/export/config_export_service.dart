@@ -16,6 +16,7 @@ class ExportOptions {
   final bool accounts;
   final bool tags;
   final bool recurringTransactions;
+  final bool budgets;
   final bool appSettings; // 包含云服务配置、AI配置等
 
   const ExportOptions({
@@ -23,6 +24,7 @@ class ExportOptions {
     this.accounts = true,
     this.tags = true,
     this.recurringTransactions = true,
+    this.budgets = true,
     this.appSettings = true,
   });
 
@@ -35,6 +37,7 @@ class ExportOptions {
     accounts: false,
     tags: false,
     recurringTransactions: false,
+    budgets: false,
     appSettings: false,
   );
 }
@@ -50,6 +53,7 @@ class AppConfig {
   final AccountsConfig? accounts;
   final CategoriesConfig? categories;
   final TagsConfig? tags;
+  final BudgetsConfig? budgets;
 
   const AppConfig({
     this.supabase,
@@ -61,6 +65,7 @@ class AppConfig {
     this.accounts,
     this.categories,
     this.tags,
+    this.budgets,
   });
 
   Map<String, dynamic> toYaml() {
@@ -102,6 +107,10 @@ class AppConfig {
       map['tags'] = tags!.toMap();
     }
 
+    if (budgets != null) {
+      map['budgets'] = budgets!.toMap();
+    }
+
     return map;
   }
 
@@ -141,6 +150,10 @@ class AppConfig {
       tags: yaml.containsKey('tags')
           ? TagsConfig.fromMap(
               Map<String, dynamic>.from(yaml['tags'] as Map))
+          : null,
+      budgets: yaml.containsKey('budgets')
+          ? BudgetsConfig.fromMap(
+              Map<String, dynamic>.from(yaml['budgets'] as Map))
           : null,
     );
   }
@@ -776,12 +789,74 @@ class TagItem {
   }
 }
 
+/// 预算配置
+class BudgetsConfig {
+  final List<BudgetItem> items;
+
+  const BudgetsConfig({required this.items});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'items': items.map((item) => item.toMap()).toList(),
+    };
+  }
+
+  static BudgetsConfig fromMap(Map<String, dynamic> map) {
+    final itemsList = map['items'] as List<dynamic>? ?? [];
+    return BudgetsConfig(
+      items: itemsList
+          .map((item) =>
+              BudgetItem.fromMap(Map<String, dynamic>.from(item as Map)))
+          .toList(),
+    );
+  }
+}
+
+/// 预算项
+class BudgetItem {
+  final String ledgerName; // 账本名称（用于导出/导入匹配）
+  final String type; // total / category
+  final String? categoryName; // 分类名称（用于导出/导入匹配）
+  final double amount;
+  final int startDay;
+
+  const BudgetItem({
+    required this.ledgerName,
+    required this.type,
+    this.categoryName,
+    required this.amount,
+    required this.startDay,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'ledger_name': ledgerName,
+      'type': type,
+      'amount': amount,
+      'start_day': startDay,
+    };
+    if (categoryName != null) map['category_name'] = categoryName;
+    return map;
+  }
+
+  static BudgetItem fromMap(Map<String, dynamic> map) {
+    return BudgetItem(
+      ledgerName: map['ledger_name'] as String,
+      type: map['type'] as String,
+      categoryName: map['category_name'] as String?,
+      amount: (map['amount'] as num).toDouble(),
+      startDay: map['start_day'] as int? ?? 1,
+    );
+  }
+}
+
 /// 配置内容检测结果
 class ConfigContentInfo {
   final bool hasCategories;
   final bool hasAccounts;
   final bool hasTags;
   final bool hasRecurringTransactions;
+  final bool hasBudgets;
   final bool hasAppSettings; // 包含云服务配置、AI配置、应用设置中的任意一项
 
   const ConfigContentInfo({
@@ -789,6 +864,7 @@ class ConfigContentInfo {
     this.hasAccounts = false,
     this.hasTags = false,
     this.hasRecurringTransactions = false,
+    this.hasBudgets = false,
     this.hasAppSettings = false,
   });
 }
@@ -808,6 +884,7 @@ class ConfigExportService {
         hasAccounts: doc.containsKey('accounts'),
         hasTags: doc.containsKey('tags'),
         hasRecurringTransactions: doc.containsKey('recurring_transactions'),
+        hasBudgets: doc.containsKey('budgets'),
         hasAppSettings: doc.containsKey('supabase') ||
             doc.containsKey('webdav') ||
             doc.containsKey('s3') ||
@@ -1066,6 +1143,37 @@ class ConfigExportService {
       }
     }
 
+    // 读取预算配置（导出全部预算）
+    BudgetsConfig? budgetsConfig;
+    if (options.budgets && repository != null) {
+      try {
+        final budgetsList = await repository.getAllBudgetsForExport();
+
+        if (budgetsList.isNotEmpty) {
+          // 获取账本和分类的名称映射
+          final ledgers = await repository.getAllLedgers();
+          final ledgerMap = {for (var l in ledgers) l.id: l.name};
+
+          final categories = await repository.getAllCategories();
+          final categoryMap = {for (var c in categories) c.id: c.name};
+
+          budgetsConfig = BudgetsConfig(
+            items: budgetsList.map((budget) => BudgetItem(
+              ledgerName: ledgerMap[budget.ledgerId] ?? 'Unknown',
+              type: budget.type,
+              categoryName: budget.categoryId != null
+                  ? categoryMap[budget.categoryId]
+                  : null,
+              amount: budget.amount,
+              startDay: budget.startDay,
+            )).toList(),
+          );
+        }
+      } catch (e) {
+        logger.warning('ConfigExport', '读取预算配置失败: $e');
+      }
+    }
+
     // 根据选项过滤云服务和AI配置
     final exportSupabase = options.appSettings ? supabaseConfig : null;
     final exportWebdav = options.appSettings ? webdavConfig : null;
@@ -1083,6 +1191,7 @@ class ConfigExportService {
       accounts: accountsConfig,
       categories: categoriesConfig,
       tags: tagsConfig,
+      budgets: budgetsConfig,
     );
 
     // 转换为YAML格式
@@ -1372,6 +1481,29 @@ class ConfigExportService {
           if (itemMap.containsKey('color') && itemMap['color'] != null) {
             buffer.writeln('      color: "${itemMap['color']}"');
           }
+        }
+      }
+      buffer.writeln();
+    }
+
+    // 预算
+    if (yamlMap.containsKey('budgets')) {
+      buffer.writeln('# 预算');
+      buffer.writeln('budgets:');
+      final budgets = yamlMap['budgets'] as Map<String, dynamic>;
+      final items = budgets['items'] as List;
+
+      if (items.isNotEmpty) {
+        buffer.writeln('  items:');
+        for (final item in items) {
+          final itemMap = item as Map<String, dynamic>;
+          buffer.writeln('    - ledger_name: "${itemMap['ledger_name']}"');
+          buffer.writeln('      type: "${itemMap['type']}"');
+          if (itemMap.containsKey('category_name') && itemMap['category_name'] != null) {
+            buffer.writeln('      category_name: "${itemMap['category_name']}"');
+          }
+          buffer.writeln('      amount: ${itemMap['amount']}');
+          buffer.writeln('      start_day: ${itemMap['start_day']}');
         }
       }
       buffer.writeln();
@@ -1672,6 +1804,59 @@ class ConfigExportService {
         logger.info('ConfigImport', '标签已批量导入: ${items.length}条');
       } catch (e) {
         logger.error('ConfigImport', '导入标签失败: $e');
+      }
+    }
+
+    // 导入预算
+    if (options.budgets && config.budgets != null && repository != null) {
+      try {
+        final items = config.budgets!.items;
+        int importedCount = 0;
+        int skippedCount = 0;
+
+        // 构建名称到 ID 的映射
+        final ledgers = await repository.getAllLedgers();
+        final ledgerNameToId = {for (var l in ledgers) l.name: l.id};
+
+        final categories = await repository.getAllCategories();
+        final categoryNameToId = {for (var c in categories) c.name: c.id};
+
+        for (final item in items) {
+          // 通过名称查找账本 ID
+          int? targetLedgerId = ledgerId; // 优先使用指定的账本
+          if (targetLedgerId == null) {
+            targetLedgerId = ledgerNameToId[item.ledgerName];
+            if (targetLedgerId == null) {
+              logger.warning('ConfigImport', '找不到账本: ${item.ledgerName}，跳过此预算');
+              skippedCount++;
+              continue;
+            }
+          }
+
+          // 通过名称查找分类 ID（仅分类预算需要）
+          int? categoryId;
+          if (item.type == 'category' && item.categoryName != null) {
+            categoryId = categoryNameToId[item.categoryName];
+            if (categoryId == null) {
+              logger.warning('ConfigImport', '找不到分类: ${item.categoryName}，跳过此预算');
+              skippedCount++;
+              continue;
+            }
+          }
+
+          await repository.createBudget(
+            ledgerId: targetLedgerId,
+            type: item.type,
+            categoryId: categoryId,
+            amount: item.amount,
+            startDay: item.startDay,
+          );
+          importedCount++;
+        }
+
+        logger.info('ConfigImport', '预算已导入: $importedCount条${skippedCount > 0 ? '，跳过: $skippedCount条' : ''}');
+      } catch (e) {
+        logger.error('ConfigImport', '导入预算失败: $e');
       }
     }
   }

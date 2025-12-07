@@ -1431,6 +1431,7 @@
   "configIncludeAccounts": "账户",
   "configIncludeCategories": "分类",
   "configIncludeTags": "标签",
+  "configIncludeBudgets": "预算",
   "configIncludeOtherSettings": "其他设置",
   "configIncludeOtherSettingsSubtitle": "包含云服务配置、AI配置、应用设置等",
   "configExportSelectTitle": "选择导出内容",

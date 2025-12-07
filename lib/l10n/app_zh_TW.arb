@@ -1207,6 +1207,7 @@
   "configIncludeAccounts": "帳戶",
   "configIncludeCategories": "分類",
   "configIncludeTags": "標籤",
+  "configIncludeBudgets": "預算",
   "configIncludeOtherSettings": "其他設定",
   "configIncludeOtherSettingsSubtitle": "包含雲端服務配置、AI配置、應用程式設定等",
   "configExportSelectTitle": "選擇匯出內容",

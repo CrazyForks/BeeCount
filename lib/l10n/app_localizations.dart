@@ -7176,6 +7176,12 @@ abstract class AppLocalizations {
   /// **'Tags'**
   String get configIncludeTags;
 
+  /// No description provided for @configIncludeBudgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get configIncludeBudgets;
+
   /// No description provided for @configIncludeOtherSettings.
   ///
   /// In en, this message translates to:

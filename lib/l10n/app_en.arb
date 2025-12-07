@@ -1558,6 +1558,7 @@
   "configIncludeAccounts": "Accounts",
   "configIncludeCategories": "Categories",
   "configIncludeTags": "Tags",
+  "configIncludeBudgets": "Budgets",
   "configIncludeOtherSettings": "Other Settings",
   "configIncludeOtherSettingsSubtitle": "Including cloud service, AI config, app settings, etc.",
   "configExportSelectTitle": "Select Export Content",

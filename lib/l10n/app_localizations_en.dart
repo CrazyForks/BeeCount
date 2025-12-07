@@ -3747,6 +3747,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get configIncludeTags => 'Tags';
 
   @override
+  String get configIncludeBudgets => 'Budgets';
+
+  @override
   String get configIncludeOtherSettings => 'Other Settings';
 
   @override

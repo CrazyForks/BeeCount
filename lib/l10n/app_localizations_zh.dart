@@ -3747,6 +3747,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configIncludeTags => '标签';
 
   @override
+  String get configIncludeBudgets => '预算';
+
+  @override
   String get configIncludeOtherSettings => '其他设置';
 
   @override
@@ -8346,6 +8349,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get configIncludeTags => '標籤';
+
+  @override
+  String get configIncludeBudgets => '預算';
 
   @override
   String get configIncludeOtherSettings => '其他設定';

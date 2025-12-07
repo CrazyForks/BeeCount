@@ -1032,6 +1032,9 @@ class LocalRepository extends BaseRepository {
   Future<List<Budget>> getAllBudgets(int ledgerId) => _budgetRepo.getAllBudgets(ledgerId);
 
   @override
+  Future<List<Budget>> getAllBudgetsForExport() => _budgetRepo.getAllBudgetsForExport();
+
+  @override
   Future<BudgetUsage> getBudgetUsage(int budgetId, DateTime month) =>
       _budgetRepo.getBudgetUsage(budgetId, month);
 

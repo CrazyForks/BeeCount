@@ -54,7 +54,22 @@ class LocalBudgetRepository implements BudgetRepository {
 
   @override
   Future<void> deleteBudget(int id) async {
-    await (db.delete(db.budgets)..where((b) => b.id.equals(id))).go();
+    // 先获取预算信息，判断是否为总预算
+    final budget = await (db.select(db.budgets)
+          ..where((b) => b.id.equals(id)))
+        .getSingleOrNull();
+
+    if (budget == null) return;
+
+    if (budget.type == 'total') {
+      // 删除总预算时，同时删除该账本的所有分类预算
+      await (db.delete(db.budgets)
+            ..where((b) => b.ledgerId.equals(budget.ledgerId)))
+          .go();
+    } else {
+      // 删除单个分类预算
+      await (db.delete(db.budgets)..where((b) => b.id.equals(id))).go();
+    }
   }
 
   @override
@@ -87,6 +102,17 @@ class LocalBudgetRepository implements BudgetRepository {
     return await (db.select(db.budgets)
           ..where((b) => b.ledgerId.equals(ledgerId))
           ..orderBy([
+            (b) => d.OrderingTerm(expression: b.type),
+            (b) => d.OrderingTerm(expression: b.createdAt),
+          ]))
+        .get();
+  }
+
+  @override
+  Future<List<Budget>> getAllBudgetsForExport() async {
+    return await (db.select(db.budgets)
+          ..orderBy([
+            (b) => d.OrderingTerm(expression: b.ledgerId),
             (b) => d.OrderingTerm(expression: b.type),
             (b) => d.OrderingTerm(expression: b.createdAt),
           ]))
