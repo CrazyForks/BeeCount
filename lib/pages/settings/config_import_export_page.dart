@@ -490,6 +490,13 @@ class _ConfigImportExportPageState
                           Icons.label_outline,
                           l10n.configIncludeTags,
                         ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.account_balance_outlined,
+                          l10n.configIncludeBudgets,
+                        ),
                       ],
                     ),
                   ),
@@ -779,6 +786,7 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
   bool _categories = true;
   bool _accounts = true;
   bool _tags = true;
+  bool _budgets = true;
   bool _recurringTransactions = true;
   bool _appSettings = true;
 
@@ -856,6 +864,14 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
                   contentPadding: EdgeInsets.zero,
                 ),
                 CheckboxListTile(
+                  value: _budgets,
+                  onChanged: (v) => setState(() => _budgets = v ?? true),
+                  title: Text(l10n.configIncludeBudgets),
+                  secondary: Icon(Icons.account_balance_outlined, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                CheckboxListTile(
                   value: _recurringTransactions,
                   onChanged: (v) => setState(() => _recurringTransactions = v ?? true),
                   title: Text(l10n.configIncludeRecurringTransactions),
@@ -899,6 +915,7 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
                       categories: _categories,
                       accounts: _accounts,
                       tags: _tags,
+                      budgets: _budgets,
                       recurringTransactions: _recurringTransactions,
                       appSettings: _appSettings,
                     );
@@ -1032,6 +1049,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
   late bool _categories;
   late bool _accounts;
   late bool _tags;
+  late bool _budgets;
   late bool _recurringTransactions;
   late bool _appSettings;
 
@@ -1041,6 +1059,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
     _categories = widget.contentInfo.hasCategories;
     _accounts = widget.contentInfo.hasAccounts;
     _tags = widget.contentInfo.hasTags;
+    _budgets = widget.contentInfo.hasBudgets;
     _recurringTransactions = widget.contentInfo.hasRecurringTransactions;
     _appSettings = widget.contentInfo.hasAppSettings;
   }
@@ -1192,6 +1211,16 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
                       contentPadding: EdgeInsets.zero,
                       dense: true,
                     ),
+                  if (info.hasBudgets)
+                    CheckboxListTile(
+                      value: _budgets,
+                      onChanged: (v) => setState(() => _budgets = v ?? true),
+                      title: Text(l10n.configIncludeBudgets),
+                      secondary: Icon(Icons.account_balance_outlined, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
                   if (info.hasRecurringTransactions)
                     CheckboxListTile(
                       value: _recurringTransactions,
@@ -1247,6 +1276,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
                       categories: _categories,
                       accounts: _accounts,
                       tags: _tags,
+                      budgets: _budgets,
                       recurringTransactions: _recurringTransactions,
                       appSettings: _appSettings,
                     );

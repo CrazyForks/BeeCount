@@ -2,6 +2,7 @@ import 'package:flutter_cloud_sync_supabase/flutter_cloud_sync_supabase.dart';
 
 import '../../db.dart';
 import '../base_repository.dart';
+import '../budget_repository.dart';
 import 'cloud_ledger_repository.dart';
 import 'cloud_transaction_repository.dart';
 import 'cloud_category_repository.dart';
@@ -1125,5 +1126,84 @@ class CloudRepository extends BaseRepository {
   @override
   Future<List<Tag>> getRecentlyUsedTags({int limit = 10}) async {
     throw UnimplementedError('标签功能在云端模式下暂不可用');
+  }
+
+  // ============================================
+  // BudgetRepository 接口实现（云端暂不支持）
+  // ============================================
+
+  @override
+  Future<int> createBudget({
+    required int ledgerId,
+    required String type,
+    int? categoryId,
+    required double amount,
+    String period = 'monthly',
+    int startDay = 1,
+  }) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> updateBudget(
+    int id, {
+    double? amount,
+    int? startDay,
+    bool? enabled,
+  }) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> deleteBudget(int id) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<Budget?> getTotalBudget(int ledgerId) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Budget>> getCategoryBudgets(int ledgerId) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<Budget?> getBudgetByCategory(int ledgerId, int categoryId) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Budget>> getAllBudgets(int ledgerId) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<Budget>> getAllBudgetsForExport() async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<BudgetUsage> getBudgetUsage(int budgetId, DateTime month) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<BudgetOverview> getBudgetOverview(int ledgerId, DateTime month) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<CategoryBudgetUsage>> getCategoryBudgetUsages(
+    int ledgerId,
+    DateTime month,
+  ) async {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<List<Budget>> watchBudgets(int ledgerId) {
+    throw UnimplementedError('预算功能在云端模式下暂不可用');
   }
 }

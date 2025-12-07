@@ -6,6 +6,7 @@ import 'statistics_repository.dart';
 import 'recurring_transaction_repository.dart';
 import 'ai_repository.dart';
 import 'tag_repository.dart';
+import 'budget_repository.dart';
 
 /// 基础 Repository 抽象类
 /// 组合所有 Repository 接口，用于类型约束
@@ -24,4 +25,5 @@ abstract class BaseRepository
         StatisticsRepository,
         RecurringTransactionRepository,
         AIRepository,
-        TagRepository {}
+        TagRepository,
+        BudgetRepository {}

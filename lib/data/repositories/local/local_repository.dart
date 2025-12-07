@@ -1,5 +1,6 @@
 import '../../db.dart';
 import '../base_repository.dart';
+import '../budget_repository.dart';
 import 'local_ledger_repository.dart';
 import 'local_transaction_repository.dart';
 import 'local_category_repository.dart';
@@ -8,6 +9,7 @@ import 'local_statistics_repository.dart';
 import 'local_recurring_transaction_repository.dart';
 import 'local_ai_repository.dart';
 import 'local_tag_repository.dart';
+import 'local_budget_repository.dart';
 
 /// LocalRepository 本地数据库实现
 /// 基于 Drift 本地数据库实现所有 Repository 接口
@@ -26,6 +28,7 @@ class LocalRepository extends BaseRepository {
   late final LocalRecurringTransactionRepository _recurringTransactionRepo;
   late final LocalAIRepository _aiRepo;
   late final LocalTagRepository _tagRepo;
+  late final LocalBudgetRepository _budgetRepo;
 
   LocalRepository(this.db) {
     _ledgerRepo = LocalLedgerRepository(db);
@@ -36,6 +39,7 @@ class LocalRepository extends BaseRepository {
     _recurringTransactionRepo = LocalRecurringTransactionRepository(db);
     _aiRepo = LocalAIRepository(db);
     _tagRepo = LocalTagRepository(db);
+    _budgetRepo = LocalBudgetRepository(db);
   }
 
   // ============================================
@@ -978,4 +982,70 @@ class LocalRepository extends BaseRepository {
   @override
   Future<List<Tag>> getRecentlyUsedTags({int limit = 10}) =>
       _tagRepo.getRecentlyUsedTags(limit: limit);
+
+  // ============================================
+  // BudgetRepository 接口实现 - 委托给 LocalBudgetRepository
+  // ============================================
+
+  @override
+  Future<int> createBudget({
+    required int ledgerId,
+    required String type,
+    int? categoryId,
+    required double amount,
+    String period = 'monthly',
+    int startDay = 1,
+  }) =>
+      _budgetRepo.createBudget(
+        ledgerId: ledgerId,
+        type: type,
+        categoryId: categoryId,
+        amount: amount,
+        period: period,
+        startDay: startDay,
+      );
+
+  @override
+  Future<void> updateBudget(
+    int id, {
+    double? amount,
+    int? startDay,
+    bool? enabled,
+  }) =>
+      _budgetRepo.updateBudget(id, amount: amount, startDay: startDay, enabled: enabled);
+
+  @override
+  Future<void> deleteBudget(int id) => _budgetRepo.deleteBudget(id);
+
+  @override
+  Future<Budget?> getTotalBudget(int ledgerId) => _budgetRepo.getTotalBudget(ledgerId);
+
+  @override
+  Future<List<Budget>> getCategoryBudgets(int ledgerId) =>
+      _budgetRepo.getCategoryBudgets(ledgerId);
+
+  @override
+  Future<Budget?> getBudgetByCategory(int ledgerId, int categoryId) =>
+      _budgetRepo.getBudgetByCategory(ledgerId, categoryId);
+
+  @override
+  Future<List<Budget>> getAllBudgets(int ledgerId) => _budgetRepo.getAllBudgets(ledgerId);
+
+  @override
+  Future<List<Budget>> getAllBudgetsForExport() => _budgetRepo.getAllBudgetsForExport();
+
+  @override
+  Future<BudgetUsage> getBudgetUsage(int budgetId, DateTime month) =>
+      _budgetRepo.getBudgetUsage(budgetId, month);
+
+  @override
+  Future<BudgetOverview> getBudgetOverview(int ledgerId, DateTime month) =>
+      _budgetRepo.getBudgetOverview(ledgerId, month);
+
+  @override
+  Future<List<CategoryBudgetUsage>> getCategoryBudgetUsages(int ledgerId, DateTime month) =>
+      _budgetRepo.getCategoryBudgetUsages(ledgerId, month);
+
+  @override
+  Stream<List<Budget>> watchBudgets(int ledgerId) => _budgetRepo.watchBudgets(ledgerId);
 }

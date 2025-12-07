@@ -1,15 +1,14 @@
-import 'package:beecount/widgets/biz/bee_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import '../../providers.dart';
 import '../settings/personalize_page.dart' show headerStyleProvider;
 import '../../data/db.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
+import '../../widgets/biz/bee_icon.dart';
 import '../../styles/tokens.dart';
 import '../transaction/search_page.dart';
 import '../ai/ai_chat_page.dart';
@@ -153,7 +152,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     // 检测账本切换，强制刷新 StreamBuilder
     if (_lastLedgerId != null && _lastLedgerId != ledgerId) {
       _streamBuilderKey++;
-      logger.info('HomePage', '账本切换: $_lastLedgerId → $ledgerId, 刷新StreamBuilder (key=$_streamBuilderKey)');
+      logger.info('HomePage',
+          '账本切换: $_lastLedgerId → $ledgerId, 刷新StreamBuilder (key=$_streamBuilderKey)');
     }
     _lastLedgerId = ledgerId;
 
@@ -290,8 +290,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             .textTheme
                                             .bodyMedium
                                             ?.color
-                                            ?.withOpacity(
-                                                0.6), // ⭐ 自适应次要文字颜色
+                                            ?.withOpacity(0.6), // ⭐ 自适应次要文字颜色
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500)),
                             const SizedBox(height: 2),
@@ -300,9 +299,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               children: [
                                 Text(
                                   AppLocalizations.of(context).homeMonth(
-                                      month.month
-                                          .toString()
-                                          .padLeft(2, '0')),
+                                      month.month.toString().padLeft(2, '0')),
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium

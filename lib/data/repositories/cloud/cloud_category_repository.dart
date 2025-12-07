@@ -110,6 +110,20 @@ class CloudCategoryRepository implements CategoryRepository {
 
   @override
   Future<void> deleteCategory(int id) async {
+    // 先查询并删除该分类下的所有子分类
+    final subCategories = await supabase.databaseService!.query(
+      table: 'categories',
+      filters: [
+        QueryFilter(column: 'parent_id', operator: 'eq', value: id),
+      ],
+    );
+    for (final sub in subCategories) {
+      await supabase.databaseService!.delete(
+        table: 'categories',
+        id: sub['id'].toString(),
+      );
+    }
+    // 再删除该分类本身
     await supabase.databaseService!.delete(
       table: 'categories',
       id: id.toString(),

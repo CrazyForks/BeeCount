@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/main/home_page.dart';
 import 'pages/main/analytics_page.dart';
-import 'pages/main/ledgers_page_new.dart';
+import 'pages/main/discover_page.dart';
 import 'pages/main/mine_page.dart';
 import 'pages/transaction/transaction_editor_page.dart';
 import 'providers.dart';
@@ -31,7 +31,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   final _pages = const [
     HomePage(),
     AnalyticsPage(),
-    LedgersPageNew(),
+    DiscoverPage(),
     MinePage(),
   ];
 
@@ -176,8 +176,8 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                     label = l10n.tabAnalytics;
                     break;
                   case 2:
-                    icon = Icons.menu_book_rounded;
-                    label = l10n.tabLedgers;
+                    icon = Icons.explore_rounded;
+                    label = l10n.tabDiscover;
                     break;
                   default:
                     icon = Icons.person_rounded;

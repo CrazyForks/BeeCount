@@ -128,6 +128,38 @@ class TransactionTags extends Table {
   IntColumn get tagId => integer()();                 // 标签ID
 }
 
+// 预算表
+class Budgets extends Table {
+  IntColumn get id => integer().autoIncrement()();
+
+  /// 关联账本ID
+  IntColumn get ledgerId => integer()();
+
+  /// 预算类型：total-总预算, category-分类预算
+  TextColumn get type => text().withDefault(const Constant('total'))();
+
+  /// 关联分类ID（仅分类预算有值）
+  IntColumn get categoryId => integer().nullable()();
+
+  /// 预算金额
+  RealColumn get amount => real()();
+
+  /// 预算周期：monthly-月度, weekly-周度, yearly-年度
+  TextColumn get period => text().withDefault(const Constant('monthly'))();
+
+  /// 周期起始日（1-31，月度预算；1-7，周度预算）
+  IntColumn get startDay => integer().withDefault(const Constant(1))();
+
+  /// 是否启用
+  BoolColumn get enabled => boolean().withDefault(const Constant(true))();
+
+  /// 创建时间
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  /// 更新时间
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
 @DriftDatabase(tables: [
   Ledgers,
   Accounts,
@@ -138,12 +170,13 @@ class TransactionTags extends Table {
   Messages,
   Tags,
   TransactionTags,
+  Budgets,
 ])
 class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 10; // v10: 添加标签功能（Tags、TransactionTags）
+  int get schemaVersion => 11; // v11: 添加预算功能（Budgets）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -339,6 +372,25 @@ class BeeDatabase extends _$BeeDatabase {
             logger.info('DB', 'v10: 索引已创建');
 
             print('[DB Migration] v10 迁移完成');
+          }
+          if (from < 11) {
+            // v11: 添加预算功能
+            print('[DB Migration] 开始迁移到 v11: 添加预算功能');
+
+            // 创建 budgets 表
+            await migrator.createTable(budgets);
+            logger.info('DB', 'v11: budgets 表已创建');
+
+            // 创建索引以提高查询性能
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_budgets_ledger ON budgets(ledger_id)');
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_budgets_category ON budgets(category_id)');
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_budgets_ledger_type ON budgets(ledger_id, type)');
+            logger.info('DB', 'v11: 预算索引已创建');
+
+            print('[DB Migration] v11 迁移完成');
           }
         },
       );

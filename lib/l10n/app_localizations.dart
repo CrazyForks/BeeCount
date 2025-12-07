@@ -7176,6 +7176,12 @@ abstract class AppLocalizations {
   /// **'Tags'**
   String get configIncludeTags;
 
+  /// No description provided for @configIncludeBudgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get configIncludeBudgets;
+
   /// No description provided for @configIncludeOtherSettings.
   ///
   /// In en, this message translates to:
@@ -8393,6 +8399,432 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refunded'**
   String get tagDefaultRefunded;
+
+  /// No description provided for @tabDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get tabDiscover;
+
+  /// No description provided for @discoverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get discoverTitle;
+
+  /// No description provided for @discoverBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get discoverBudget;
+
+  /// No description provided for @discoverBudgetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set and track spending budgets'**
+  String get discoverBudgetSubtitle;
+
+  /// No description provided for @discoverBudgetEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Set budget to control spending'**
+  String get discoverBudgetEmpty;
+
+  /// No description provided for @discoverAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get discoverAccounts;
+
+  /// No description provided for @discoverAccountsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage assets and liabilities'**
+  String get discoverAccountsSubtitle;
+
+  /// No description provided for @discoverAccountsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add accounts to track cash flow'**
+  String get discoverAccountsEmpty;
+
+  /// No description provided for @discoverReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get discoverReports;
+
+  /// No description provided for @discoverReportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly/yearly financial reports'**
+  String get discoverReportsSubtitle;
+
+  /// No description provided for @discoverRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring'**
+  String get discoverRecurring;
+
+  /// No description provided for @discoverRecurringSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage recurring transactions'**
+  String get discoverRecurringSubtitle;
+
+  /// No description provided for @discoverLedgers.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledgers'**
+  String get discoverLedgers;
+
+  /// No description provided for @discoverLedgersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage multiple ledgers'**
+  String get discoverLedgersSubtitle;
+
+  /// No description provided for @discoverComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get discoverComingSoon;
+
+  /// No description provided for @discoverAccountsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Balance'**
+  String get discoverAccountsTotal;
+
+  /// No description provided for @discoverAccountsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} accounts'**
+  String discoverAccountsCount(int count);
+
+  /// No description provided for @discoverMonthlyOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'This Month'**
+  String get discoverMonthlyOverview;
+
+  /// No description provided for @discoverComparedToLastMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'vs last month'**
+  String get discoverComparedToLastMonth;
+
+  /// No description provided for @discoverUp.
+  ///
+  /// In en, this message translates to:
+  /// **'↑{percent}'**
+  String discoverUp(String percent);
+
+  /// No description provided for @discoverDown.
+  ///
+  /// In en, this message translates to:
+  /// **'↓{percent}'**
+  String discoverDown(String percent);
+
+  /// No description provided for @discoverNoChange.
+  ///
+  /// In en, this message translates to:
+  /// **'No change'**
+  String get discoverNoChange;
+
+  /// No description provided for @discoverTopCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Top 3 Expenses'**
+  String get discoverTopCategories;
+
+  /// No description provided for @discoverNoExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses this month'**
+  String get discoverNoExpense;
+
+  /// No description provided for @discoverQuickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Entry'**
+  String get discoverQuickActions;
+
+  /// No description provided for @discoverQuickCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get discoverQuickCamera;
+
+  /// No description provided for @discoverQuickAlbum.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get discoverQuickAlbum;
+
+  /// No description provided for @discoverQuickVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get discoverQuickVoice;
+
+  /// No description provided for @greetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Morning'**
+  String get greetingMorning;
+
+  /// No description provided for @greetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Afternoon'**
+  String get greetingAfternoon;
+
+  /// No description provided for @greetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Evening'**
+  String get greetingEvening;
+
+  /// No description provided for @greetingNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Night'**
+  String get greetingNight;
+
+  /// No description provided for @discoverSmartBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Billing'**
+  String get discoverSmartBilling;
+
+  /// No description provided for @discoverCommonFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Features'**
+  String get discoverCommonFeatures;
+
+  /// No description provided for @discoverAISettings.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Settings'**
+  String get discoverAISettings;
+
+  /// No description provided for @discoverCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get discoverCategory;
+
+  /// No description provided for @discoverReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get discoverReminder;
+
+  /// No description provided for @discoverTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get discoverTags;
+
+  /// No description provided for @discoverImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get discoverImport;
+
+  /// No description provided for @discoverExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get discoverExport;
+
+  /// No description provided for @discoverBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get discoverBackup;
+
+  /// No description provided for @homeSwitchLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Ledger'**
+  String get homeSwitchLedger;
+
+  /// No description provided for @homeManageLedgers.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Ledgers'**
+  String get homeManageLedgers;
+
+  /// No description provided for @homeNewLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'New Ledger'**
+  String get homeNewLedger;
+
+  /// No description provided for @budgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get budgetTitle;
+
+  /// No description provided for @budgetEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No budget set yet'**
+  String get budgetEmptyHint;
+
+  /// No description provided for @budgetAddTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Total Budget'**
+  String get budgetAddTotal;
+
+  /// No description provided for @budgetMonthlyBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Budget'**
+  String get budgetMonthlyBudget;
+
+  /// No description provided for @budgetUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Used'**
+  String get budgetUsed;
+
+  /// No description provided for @budgetRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get budgetRemaining;
+
+  /// No description provided for @budgetDaysRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days remaining'**
+  String budgetDaysRemaining(int days);
+
+  /// No description provided for @budgetDailyAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily available ¥{amount}'**
+  String budgetDailyAvailable(String amount);
+
+  /// No description provided for @budgetCategoryBudgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Budgets'**
+  String get budgetCategoryBudgets;
+
+  /// No description provided for @budgetEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Budget'**
+  String get budgetEditTitle;
+
+  /// No description provided for @budgetAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Budget'**
+  String get budgetAddTitle;
+
+  /// No description provided for @budgetTypeTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Budget'**
+  String get budgetTypeTotalLabel;
+
+  /// No description provided for @budgetTypeCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Budget'**
+  String get budgetTypeCategoryLabel;
+
+  /// No description provided for @budgetAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Amount'**
+  String get budgetAmountLabel;
+
+  /// No description provided for @budgetAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter budget amount'**
+  String get budgetAmountHint;
+
+  /// No description provided for @budgetCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Category'**
+  String get budgetCategoryLabel;
+
+  /// No description provided for @budgetCategoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select budget category'**
+  String get budgetCategoryHint;
+
+  /// No description provided for @budgetStartDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Day'**
+  String get budgetStartDayLabel;
+
+  /// No description provided for @budgetStartDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of month to start'**
+  String get budgetStartDayHint;
+
+  /// No description provided for @budgetPeriodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get budgetPeriodLabel;
+
+  /// No description provided for @budgetPeriodMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get budgetPeriodMonthly;
+
+  /// No description provided for @budgetPeriodWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get budgetPeriodWeekly;
+
+  /// No description provided for @budgetPeriodYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get budgetPeriodYearly;
+
+  /// No description provided for @budgetSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget saved'**
+  String get budgetSaveSuccess;
+
+  /// No description provided for @budgetDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this budget?'**
+  String get budgetDeleteConfirm;
+
+  /// No description provided for @budgetDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget deleted'**
+  String get budgetDeleteSuccess;
+
+  /// No description provided for @budgetExceededWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This expense will exceed the budget'**
+  String get budgetExceededWarning;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
