@@ -62,7 +62,8 @@ class _TagEditPageState extends ConsumerState<TagEditPage> {
                   style: TextStyle(
                     color: _isSubmitting
                         ? BeeTokens.textTertiary(context)
-                        : Theme.of(context).colorScheme.primary,
+                        : BeeTokens.textPrimary(context),
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
