@@ -805,6 +805,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                             }
                           },
                           whiteBg: !BeeTokens.isDark(context),
+                          isDark: BeeTokens.isDark(context),
                           showGrid: false,
                           showDots: true,
                           annotate: true,

@@ -114,6 +114,19 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
   <img src="demo/preview/en/12-import-confirm.png" alt="Import Confirmation" width="200" />
 </div>
 
+### 🌙 Dark Mode
+
+<div align="center">
+  <img src="demo/preview/dark/01-home.png" alt="Home-Dark" width="200" />
+  <img src="demo/preview/dark/02-chart-analysis.png" alt="Chart Analysis-Dark" width="200" />
+  <img src="demo/preview/dark/03-discover.png" alt="Discover-Dark" width="200" />
+  <img src="demo/preview/dark/04-profile.png" alt="Profile-Dark" width="200" />
+</div>
+
+<div align="center">
+  <img src="demo/preview/dark/05-ai-chat.png" alt="AI Chat-Dark" width="200" />
+</div>
+
 </details>
 
 ## 🌟 Key Features
@@ -181,6 +194,9 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 - **Independent Account Management**: Support for cash, bank cards, credit cards and other account types, each account tracks balance independently
 - **Account Transfer Feature**: Support inter-account transfer records, auto-update balances for both accounts
 - **Hierarchical Category System**: Support parent-child category levels for more detailed transaction classification (choose between flat or hierarchical mode)
+- **Tag Management** (New!): Add custom tags to transactions, support multiple tags, color markers, flexible categorization and filtering
+- **Budget Management** (New!): Set monthly total and category budgets, real-time spending progress tracking, overspend alerts
+- **Recurring Transactions** (New!): Support daily/weekly/monthly/yearly automatic recording, suitable for fixed income/expenses (rent, salary, etc.)
 - **Chart Analysis**: Monthly reports, category rankings, trend analysis
 - **Data Import/Export**: CSV format, compatible with mainstream apps
 - **Home Screen Widgets**: iOS/Android widgets for quick overview of income and expenses

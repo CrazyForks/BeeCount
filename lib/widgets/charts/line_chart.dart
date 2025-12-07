@@ -28,6 +28,7 @@ class LineChart extends StatelessWidget {
   final double cornerRadius;
   final double xLabelFontSize;
   final double yLabelFontSize;
+  final bool isDark; // 是否暗黑模式
 
   const LineChart({
     super.key,
@@ -54,6 +55,7 @@ class LineChart extends StatelessWidget {
     this.cornerRadius = 12,
     this.xLabelFontSize = 10,
     this.yLabelFontSize = 10,
+    this.isDark = false,
   });
 
   @override
@@ -95,6 +97,7 @@ class LineChart extends StatelessWidget {
               cornerRadius: cornerRadius,
               xLabelFontSize: xLabelFontSize,
               yLabelFontSize: yLabelFontSize,
+              isDark: isDark,
             ),
           ),
           if (showHint)
@@ -224,6 +227,7 @@ class _LinePainter extends CustomPainter {
   final double cornerRadius;
   final double xLabelFontSize;
   final double yLabelFontSize;
+  final bool isDark;
 
   _LinePainter({
     required this.values,
@@ -242,7 +246,14 @@ class _LinePainter extends CustomPainter {
     this.cornerRadius = 12,
     this.xLabelFontSize = 10,
     this.yLabelFontSize = 10,
+    this.isDark = false,
   });
+
+  // 获取主文字颜色（暗黑模式感知）
+  Color get primaryTextColor => isDark ? Colors.white : BeeTokens.primaryTextStatic;
+
+  // 获取次要文字颜色（暗黑模式感知）
+  Color get secondaryTextColor => isDark ? Colors.white70 : BeeTokens.secondaryTextStatic;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -408,7 +419,7 @@ class _LinePainter extends CustomPainter {
 
       final avgSecY = yForSec(avgSecondaryV);
       final avgSecLinePaint = Paint()
-        ..color = secondaryColor!.withOpacity(0.55)
+        ..color = secondaryColor!.withValues(alpha: 0.55)
         ..strokeWidth = 1.0
         ..style = PaintingStyle.stroke;
       _drawDashedLine(canvas, Offset(8, avgSecY),
@@ -420,7 +431,7 @@ class _LinePainter extends CustomPainter {
     if (annotate) {
       // 主线标注
       final textStyle =
-          TextStyle(fontSize: yLabelFontSize - 1, color: BeeTokens.primaryTextStatic);
+          TextStyle(fontSize: yLabelFontSize - 1, color: primaryTextColor);
       for (final i in nzIndices) {
         final displayText = hideAmounts ? '**' : _fmt(values[i]);
         final tp = TextPainter(
@@ -464,10 +475,10 @@ class _LinePainter extends CustomPainter {
     // X 轴标签（保持原始标签与索引）
     if (xLabels.isNotEmpty) {
       final baseStyle =
-          TextStyle(fontSize: xLabelFontSize, color: BeeTokens.secondaryTextStatic);
+          TextStyle(fontSize: xLabelFontSize, color: secondaryTextColor);
       final hiStyle = TextStyle(
           fontSize: xLabelFontSize,
-          color: BeeTokens.primaryTextStatic,
+          color: primaryTextColor,
           fontWeight: FontWeight.w600);
       final n = xLabels.length;
       int step = (n / 8).ceil();
@@ -503,7 +514,8 @@ class _LinePainter extends CustomPainter {
         oldDelegate.whiteBg != whiteBg ||
         oldDelegate.showGrid != showGrid ||
         oldDelegate.showDots != showDots ||
-        oldDelegate.annotate != annotate;
+        oldDelegate.annotate != annotate ||
+        oldDelegate.isDark != isDark;
   }
 }
 

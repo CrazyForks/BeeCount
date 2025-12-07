@@ -122,6 +122,19 @@
   <img src="demo/preview/zh/12-import-confirm.png" alt="导入确认" width="200" />
 </div>
 
+### 🌙 暗黑模式
+
+<div align="center">
+  <img src="demo/preview/dark/01-home.png" alt="首页-暗黑" width="200" />
+  <img src="demo/preview/dark/02-chart-analysis.png" alt="图表分析-暗黑" width="200" />
+  <img src="demo/preview/dark/03-discover.png" alt="发现-暗黑" width="200" />
+  <img src="demo/preview/dark/04-profile.png" alt="我的-暗黑" width="200" />
+</div>
+
+<div align="center">
+  <img src="demo/preview/dark/05-ai-chat.png" alt="AI对话-暗黑" width="200" />
+</div>
+
 </details>
 
 ## 🌟 核心特性
@@ -189,8 +202,11 @@
 - **独立账户管理**：支持现金、银行卡、信用卡等多种账户类型，每个账户独立记录余额
 - **账户转账功能**：支持账户间转账记录，自动更新双方账户余额
 - **二级分类系统**：支持父子分类层级，更细致的账单归类（可选择一级或二级分类模式）
+- **标签管理**（New!）：为交易添加自定义标签，支持多标签、颜色标记，灵活归类和筛选
+- **预算管理**（New!）：设置月度总预算和分类预算，实时追踪支出进度，超支提醒
+- **周期记账**（New!）：支持每日/每周/每月/每年自动记账，适合固定收支（房租、工资等）
 - **图表分析**：月度报表、分类排行、趋势分析
-- **数据导入导出**：CSV 格式，兼容主流应用
+- **数据导入导出**：CSV 格式，兼容主流应用；支持配置导入导出（YAML 格式）
 - **桌面小组件**：iOS/Android 桌面小组件，快速查看收支情况
 
 ### 🎨 个性化与国际化
