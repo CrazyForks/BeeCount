@@ -1,4 +1,3 @@
-import 'package:beecount/widgets/biz/bee_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
@@ -10,6 +9,7 @@ import '../settings/personalize_page.dart' show headerStyleProvider;
 import '../../data/db.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
+import '../../widgets/biz/ledger_picker_sheet.dart';
 import '../../styles/tokens.dart';
 import '../transaction/search_page.dart';
 import '../ai/ai_chat_page.dart';
@@ -183,31 +183,54 @@ class _HomePageState extends ConsumerState<HomePage> {
                     height: 48, // IconButton默认高度
                     child: Stack(
                       children: [
-                        // 底层：居中的图标和文字
+                        // 底层：居中的账本名称（可点击切换账本）
                         Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              BeeIcon(
-                                color: Theme.of(context).colorScheme.primary,
-                                size: 32,
-                              ),
-                              Text(
-                                AppLocalizations.of(context).homeAppTitle,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
+                          child: Consumer(
+                            builder: (context, ref, _) {
+                              final ledgerAsync = ref.watch(currentLedgerProvider);
+                              final ledgerName = ledgerAsync.when(
+                                data: (ledger) => ledger?.name ?? '账本',
+                                loading: () => '...',
+                                error: (_, __) => '账本',
+                              );
+                              return GestureDetector(
+                                onTap: () => showLedgerPicker(context),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ConstrainedBox(
+                                      constraints: const BoxConstraints(maxWidth: 140),
+                                      child: Text(
+                                        ledgerName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.color,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 18,
                                       color: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge
-                                          ?.color,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
+                                          .bodyMedium
+                                          ?.color
+                                          ?.withValues(alpha: 0.6),
                                     ),
-                              ),
-                            ],
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
                         // 上层：左侧AI助手按钮（仅在开启时显示）

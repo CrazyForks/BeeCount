@@ -4378,4 +4378,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tagDefaultRefunded => 'Refunded';
+
+  @override
+  String get tabDiscover => 'Discover';
+
+  @override
+  String get discoverTitle => 'Discover';
+
+  @override
+  String get discoverBudget => 'Budget';
+
+  @override
+  String get discoverBudgetSubtitle => 'Set and track spending budgets';
+
+  @override
+  String get discoverBudgetEmpty => 'Set budget to control spending';
+
+  @override
+  String get discoverAssets => 'Assets';
+
+  @override
+  String get discoverAssetsSubtitle => 'View asset distribution';
+
+  @override
+  String get discoverReports => 'Reports';
+
+  @override
+  String get discoverReportsSubtitle => 'Monthly/yearly financial reports';
+
+  @override
+  String get discoverRecurring => 'Recurring';
+
+  @override
+  String get discoverRecurringSubtitle => 'Manage recurring transactions';
+
+  @override
+  String get discoverLedgers => 'Ledgers';
+
+  @override
+  String get discoverLedgersSubtitle => 'Manage multiple ledgers';
+
+  @override
+  String get discoverComingSoon => 'Coming soon';
+
+  @override
+  String get discoverAccountsTotal => 'Net Assets';
+
+  @override
+  String get discoverAccountsDebt => 'Liabilities';
+
+  @override
+  String get homeSwitchLedger => 'Select Ledger';
+
+  @override
+  String get homeManageLedgers => 'Manage Ledgers';
+
+  @override
+  String get homeNewLedger => 'New Ledger';
 }

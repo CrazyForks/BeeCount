@@ -8393,6 +8393,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refunded'**
   String get tagDefaultRefunded;
+
+  /// No description provided for @tabDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get tabDiscover;
+
+  /// No description provided for @discoverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get discoverTitle;
+
+  /// No description provided for @discoverBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get discoverBudget;
+
+  /// No description provided for @discoverBudgetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set and track spending budgets'**
+  String get discoverBudgetSubtitle;
+
+  /// No description provided for @discoverBudgetEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Set budget to control spending'**
+  String get discoverBudgetEmpty;
+
+  /// No description provided for @discoverAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets'**
+  String get discoverAssets;
+
+  /// No description provided for @discoverAssetsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View asset distribution'**
+  String get discoverAssetsSubtitle;
+
+  /// No description provided for @discoverReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get discoverReports;
+
+  /// No description provided for @discoverReportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly/yearly financial reports'**
+  String get discoverReportsSubtitle;
+
+  /// No description provided for @discoverRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring'**
+  String get discoverRecurring;
+
+  /// No description provided for @discoverRecurringSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage recurring transactions'**
+  String get discoverRecurringSubtitle;
+
+  /// No description provided for @discoverLedgers.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledgers'**
+  String get discoverLedgers;
+
+  /// No description provided for @discoverLedgersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage multiple ledgers'**
+  String get discoverLedgersSubtitle;
+
+  /// No description provided for @discoverComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get discoverComingSoon;
+
+  /// No description provided for @discoverAccountsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Assets'**
+  String get discoverAccountsTotal;
+
+  /// No description provided for @discoverAccountsDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Liabilities'**
+  String get discoverAccountsDebt;
+
+  /// No description provided for @homeSwitchLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Ledger'**
+  String get homeSwitchLedger;
+
+  /// No description provided for @homeManageLedgers.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Ledgers'**
+  String get homeManageLedgers;
+
+  /// No description provided for @homeNewLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'New Ledger'**
+  String get homeNewLedger;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

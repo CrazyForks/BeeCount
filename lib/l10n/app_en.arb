@@ -1847,5 +1847,25 @@
   "tagDefaultDaily": "Daily",
   "tagDefaultReimbursement": "Reimbursable",
   "tagDefaultRefundable": "Refundable",
-  "tagDefaultRefunded": "Refunded"
+  "tagDefaultRefunded": "Refunded",
+
+  "tabDiscover": "Discover",
+  "discoverTitle": "Discover",
+  "discoverBudget": "Budget",
+  "discoverBudgetSubtitle": "Set and track spending budgets",
+  "discoverBudgetEmpty": "Set budget to control spending",
+  "discoverAssets": "Assets",
+  "discoverAssetsSubtitle": "View asset distribution",
+  "discoverReports": "Reports",
+  "discoverReportsSubtitle": "Monthly/yearly financial reports",
+  "discoverRecurring": "Recurring",
+  "discoverRecurringSubtitle": "Manage recurring transactions",
+  "discoverLedgers": "Ledgers",
+  "discoverLedgersSubtitle": "Manage multiple ledgers",
+  "discoverComingSoon": "Coming soon",
+  "discoverAccountsTotal": "Net Assets",
+  "discoverAccountsDebt": "Liabilities",
+  "homeSwitchLedger": "Select Ledger",
+  "homeManageLedgers": "Manage Ledgers",
+  "homeNewLedger": "New Ledger"
 }

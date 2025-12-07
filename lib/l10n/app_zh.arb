@@ -1786,5 +1786,25 @@
   "tagDefaultDaily": "日常",
   "tagDefaultReimbursement": "报销",
   "tagDefaultRefundable": "可退款",
-  "tagDefaultRefunded": "已退款"
+  "tagDefaultRefunded": "已退款",
+
+  "tabDiscover": "发现",
+  "discoverTitle": "发现",
+  "discoverBudget": "预算管理",
+  "discoverBudgetSubtitle": "设置和追踪支出预算",
+  "discoverBudgetEmpty": "设置预算，控制支出",
+  "discoverAssets": "资产总览",
+  "discoverAssetsSubtitle": "查看资产分布",
+  "discoverReports": "数据报告",
+  "discoverReportsSubtitle": "月度/年度财务报告",
+  "discoverRecurring": "周期记账",
+  "discoverRecurringSubtitle": "管理定期交易",
+  "discoverLedgers": "账本管理",
+  "discoverLedgersSubtitle": "管理多个账本",
+  "discoverComingSoon": "功能开发中",
+  "discoverAccountsTotal": "净资产",
+  "discoverAccountsDebt": "负债",
+  "homeSwitchLedger": "选择账本",
+  "homeManageLedgers": "管理账本",
+  "homeNewLedger": "新建账本"
 }

@@ -4378,6 +4378,63 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tagDefaultRefunded => '已退款';
+
+  @override
+  String get tabDiscover => '发现';
+
+  @override
+  String get discoverTitle => '发现';
+
+  @override
+  String get discoverBudget => '预算管理';
+
+  @override
+  String get discoverBudgetSubtitle => '设置和追踪支出预算';
+
+  @override
+  String get discoverBudgetEmpty => '设置预算，控制支出';
+
+  @override
+  String get discoverAssets => '资产总览';
+
+  @override
+  String get discoverAssetsSubtitle => '查看资产分布';
+
+  @override
+  String get discoverReports => '数据报告';
+
+  @override
+  String get discoverReportsSubtitle => '月度/年度财务报告';
+
+  @override
+  String get discoverRecurring => '周期记账';
+
+  @override
+  String get discoverRecurringSubtitle => '管理定期交易';
+
+  @override
+  String get discoverLedgers => '账本管理';
+
+  @override
+  String get discoverLedgersSubtitle => '管理多个账本';
+
+  @override
+  String get discoverComingSoon => '功能开发中';
+
+  @override
+  String get discoverAccountsTotal => '净资产';
+
+  @override
+  String get discoverAccountsDebt => '负债';
+
+  @override
+  String get homeSwitchLedger => '选择账本';
+
+  @override
+  String get homeManageLedgers => '管理账本';
+
+  @override
+  String get homeNewLedger => '新建账本';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -8756,4 +8813,61 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tagDefaultRefunded => '已退款';
+
+  @override
+  String get tabDiscover => '發現';
+
+  @override
+  String get discoverTitle => '發現';
+
+  @override
+  String get discoverBudget => '預算管理';
+
+  @override
+  String get discoverBudgetSubtitle => '設定和追蹤支出預算';
+
+  @override
+  String get discoverBudgetEmpty => '設定預算，控制支出';
+
+  @override
+  String get discoverAssets => '資產總覽';
+
+  @override
+  String get discoverAssetsSubtitle => '查看資產分佈';
+
+  @override
+  String get discoverReports => '數據報告';
+
+  @override
+  String get discoverReportsSubtitle => '月度/年度財務報告';
+
+  @override
+  String get discoverRecurring => '週期記帳';
+
+  @override
+  String get discoverRecurringSubtitle => '管理定期交易';
+
+  @override
+  String get discoverLedgers => '帳本管理';
+
+  @override
+  String get discoverLedgersSubtitle => '管理多個帳本';
+
+  @override
+  String get discoverComingSoon => '功能開發中';
+
+  @override
+  String get discoverAccountsTotal => '淨資產';
+
+  @override
+  String get discoverAccountsDebt => '負債';
+
+  @override
+  String get homeSwitchLedger => '選擇帳本';
+
+  @override
+  String get homeManageLedgers => '管理帳本';
+
+  @override
+  String get homeNewLedger => '新建帳本';
 }
