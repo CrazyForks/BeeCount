@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
+[🌐 Website](https://f4b91a7e.beecount-website.pages.dev/en/) | [📖 Documentation](https://f4b91a7e.beecount-website.pages.dev/en/docs/intro) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
 
 </div>
 
