@@ -232,7 +232,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                         subtitle: AppLocalizations.of(context).mineHelpSubtitle,
                         onTap: () async {
                           final url =
-                              Uri.parse('https://f4b91a7e.beecount-website.pages.dev/docs/intro');
+                              Uri.parse('https://beecount-website.pages.dev/docs/intro');
                           await _tryOpenUrl(url);
                         },
                       ),
