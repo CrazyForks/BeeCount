@@ -643,7 +643,18 @@ All donation fund usage will be transparently disclosed here.
 
 Thank you to the following generous supporters (in chronological order):
 
-**\*Qiao** ¥12 &nbsp;&nbsp;·&nbsp;&nbsp; **\*Rui** ¥720 &nbsp;&nbsp;·&nbsp;&nbsp; **\*Hong** ¥50 &nbsp;&nbsp;·&nbsp;&nbsp; **\*Shao** ¥15 &nbsp;&nbsp;·&nbsp;&nbsp; **\*Ge** ¥6 &nbsp;&nbsp;·&nbsp;&nbsp; **\*Te** ¥15 &nbsp;&nbsp;·&nbsp;&nbsp; **\*Wen** ¥50 &nbsp;&nbsp;·&nbsp;&nbsp; **Anonymous** ¥50
+> 💡 Already donated? [Click here to submit your info](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml) to be featured in the supporters list!
+
+<p>
+  <a href="#" title="*Qiao ¥12"><img src="https://api.dicebear.com/7.x/initials/svg?seed=桥&radius=50&backgroundColor=9ca3af" width="50" alt="Qiao"/></a>
+  <a href="#" title="*Rui ¥720"><img src="https://api.dicebear.com/7.x/initials/svg?seed=睿&radius=50&backgroundColor=9ca3af" width="50" alt="Rui"/></a>
+  <a href="#" title="*Hong ¥50"><img src="https://api.dicebear.com/7.x/initials/svg?seed=泓&radius=50&backgroundColor=9ca3af" width="50" alt="Hong"/></a>
+  <a href="#" title="*Shao ¥15"><img src="https://api.dicebear.com/7.x/initials/svg?seed=邵&radius=50&backgroundColor=9ca3af" width="50" alt="Shao"/></a>
+  <a href="#" title="*Ge ¥6"><img src="https://api.dicebear.com/7.x/initials/svg?seed=哥&radius=50&backgroundColor=9ca3af" width="50" alt="Ge"/></a>
+  <a href="#" title="*Te ¥15"><img src="https://api.dicebear.com/7.x/initials/svg?seed=特&radius=50&backgroundColor=9ca3af" width="50" alt="Te"/></a>
+  <a href="#" title="*Wen ¥50"><img src="https://api.dicebear.com/7.x/initials/svg?seed=文&radius=50&backgroundColor=9ca3af" width="50" alt="Wen"/></a>
+  <a href="#" title="Anonymous ¥50"><img src="https://api.dicebear.com/7.x/initials/svg?seed=匿名&radius=50&backgroundColor=9ca3af" width="50" alt="Anonymous"/></a>
+</p>
 
 ---
 
@@ -681,6 +692,7 @@ See [LICENSE](LICENSE) for details.
 |------------|-------------|
 | [BeeCount-Website](https://github.com/TNT-Likely/BeeCount-Website) | Website & Documentation |
 | [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | HarmonyOS Version |
+| [BeeShot](https://github.com/TNT-Likely/BeeShot) | App Store Screenshot Generator |
 
 ---
 
