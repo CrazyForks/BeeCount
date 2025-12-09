@@ -641,14 +641,14 @@ A:
 > 💡 已捐赠？[点击这里提交您的信息](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml)，展示在支持者列表中！
 
 <p>
-  <a href="#" title="*桥 ¥12"><img src="https://api.dicebear.com/7.x/initials/svg?seed=桥&radius=50&backgroundColor=9ca3af" width="50" alt="桥"/></a>
-  <a href="#" title="*睿 ¥720"><img src="https://api.dicebear.com/7.x/initials/svg?seed=睿&radius=50&backgroundColor=9ca3af" width="50" alt="睿"/></a>
-  <a href="#" title="*泓 ¥50"><img src="https://api.dicebear.com/7.x/initials/svg?seed=泓&radius=50&backgroundColor=9ca3af" width="50" alt="泓"/></a>
-  <a href="#" title="*邵 ¥15"><img src="https://api.dicebear.com/7.x/initials/svg?seed=邵&radius=50&backgroundColor=9ca3af" width="50" alt="邵"/></a>
-  <a href="#" title="*哥 ¥6"><img src="https://api.dicebear.com/7.x/initials/svg?seed=哥&radius=50&backgroundColor=9ca3af" width="50" alt="哥"/></a>
-  <a href="#" title="*特 ¥15"><img src="https://api.dicebear.com/7.x/initials/svg?seed=特&radius=50&backgroundColor=9ca3af" width="50" alt="特"/></a>
-  <a href="#" title="*文 ¥50"><img src="https://api.dicebear.com/7.x/initials/svg?seed=文&radius=50&backgroundColor=9ca3af" width="50" alt="文"/></a>
-  <a href="#" title="匿名者 ¥50"><img src="https://api.dicebear.com/7.x/initials/svg?seed=匿名&radius=50&backgroundColor=9ca3af" width="50" alt="匿名"/></a>
+  <a href="#" title="*桥 ¥12"><img src="https://ui-avatars.com/api/?name=桥&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="桥"/></a>
+  <a href="#" title="*睿 ¥720"><img src="https://ui-avatars.com/api/?name=睿&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="睿"/></a>
+  <a href="#" title="*泓 ¥50"><img src="https://ui-avatars.com/api/?name=泓&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="泓"/></a>
+  <a href="#" title="*邵 ¥15"><img src="https://ui-avatars.com/api/?name=邵&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="邵"/></a>
+  <a href="#" title="*哥 ¥6"><img src="https://ui-avatars.com/api/?name=哥&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="哥"/></a>
+  <a href="#" title="*特 ¥15"><img src="https://ui-avatars.com/api/?name=特&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="特"/></a>
+  <a href="#" title="*文 ¥50"><img src="https://ui-avatars.com/api/?name=文&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="文"/></a>
+  <a href="#" title="匿名者 ¥50"><img src="https://ui-avatars.com/api/?name=匿名&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="匿名"/></a>
 </p>
 
 ---
