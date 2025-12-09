@@ -646,14 +646,14 @@ Thank you to the following generous supporters (in chronological order):
 > 💡 Already donated? [Click here to submit your info](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml) to be featured in the supporters list!
 
 <p>
-  <a href="#" title="*Qiao ¥12"><img src="https://ui-avatars.com/api/?name=Q&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Qiao"/></a>
-  <a href="#" title="*Rui ¥720"><img src="https://ui-avatars.com/api/?name=R&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Rui"/></a>
-  <a href="#" title="*Hong ¥50"><img src="https://ui-avatars.com/api/?name=H&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Hong"/></a>
-  <a href="#" title="*Shao ¥15"><img src="https://ui-avatars.com/api/?name=S&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Shao"/></a>
-  <a href="#" title="*Ge ¥6"><img src="https://ui-avatars.com/api/?name=G&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Ge"/></a>
-  <a href="#" title="*Te ¥15"><img src="https://ui-avatars.com/api/?name=T&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Te"/></a>
-  <a href="#" title="*Wen ¥50"><img src="https://ui-avatars.com/api/?name=W&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Wen"/></a>
-  <a href="#" title="Anonymous ¥50"><img src="https://ui-avatars.com/api/?name=A&background=9ca3af&color=fff&rounded=true&size=50" width="50" alt="Anonymous"/></a>
+  <a href="#" title="*Qiao ¥12"><img src="assets/avatars/qiao.svg" width="50" alt="Qiao"/></a>
+  <a href="#" title="*Rui ¥720"><img src="assets/avatars/rui.svg" width="50" alt="Rui"/></a>
+  <a href="#" title="*Hong ¥50"><img src="assets/avatars/hong.svg" width="50" alt="Hong"/></a>
+  <a href="#" title="*Shao ¥15"><img src="assets/avatars/shao.svg" width="50" alt="Shao"/></a>
+  <a href="#" title="*Ge ¥6"><img src="assets/avatars/ge.svg" width="50" alt="Ge"/></a>
+  <a href="#" title="*Te ¥15"><img src="assets/avatars/te.svg" width="50" alt="Te"/></a>
+  <a href="#" title="*Wen ¥50"><img src="assets/avatars/wen.svg" width="50" alt="Wen"/></a>
+  <a href="#" title="Anonymous ¥50"><img src="assets/avatars/anon.svg" width="50" alt="Anonymous"/></a>
 </p>
 
 ---
