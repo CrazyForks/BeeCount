@@ -1716,6 +1716,10 @@
   "aiPromptVarOcrText": "用户输入或OCR识别的文本内容",
   "aiPromptVarCategories": "支出和收入分类列表",
   "aiPromptVarAccounts": "用户的账户列表（可能为空）",
+  "aiModelSelectEntry": "AI模型选择",
+  "aiModelSelectEntryDesc": "允许选择不同的文本推理、视觉AI模型用于账单识别和对话",
+  "aiModelTitle": "文本推理模型",
+  "aiVisionModelTitle": "视觉模型",
 
   "tagManageTitle": "标签管理",
   "tagManageSubtitle": "管理交易标签",

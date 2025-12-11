@@ -1777,6 +1777,11 @@
   "aiPromptVarOcrText": "User input or OCR recognized text content",
   "aiPromptVarCategories": "Expense and income category list",
   "aiPromptVarAccounts": "User's account list (may be empty)",
+  "aiPromptVarAccounts": "User's account list (may be empty)",
+  "aiModelSelectEntry": "AI Model Selection",
+  "aiModelSelectEntryDesc": "Allows selection of visual and text reasoning models",
+  "aiModelTitle": "Text Reasoning Model",
+  "aiVisionModelTitle": "Vision Model",
 
   "tagManageTitle": "Tags",
   "tagManageSubtitle": "Manage transaction tags",

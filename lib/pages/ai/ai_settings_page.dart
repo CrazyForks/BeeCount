@@ -1,3 +1,4 @@
+import 'package:beecount/pages/ai/ai_model_selection_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,8 +25,6 @@ class AISettingsPage extends ConsumerStatefulWidget {
 class _AISettingsPageState extends ConsumerState<AISettingsPage> {
   String _strategy = 'local_first';
   String _glmApiKey = '';
-  String _glmModel = 'glm-4-flash';
-  String _glmVisionModel = 'glm-4.6v-flash';
   bool _aiEnabled = false; // AI增强开关
   bool _useVision = true; // 使用视觉模型开关（默认打开）
   bool _loading = true;
@@ -49,14 +48,10 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final apiKey = prefs.getString('ai_glm_api_key') ?? '';
-    final glmModel = prefs.getString('ai_glm_model') ?? _glmModel;
-    final glmVisionModel = prefs.getString('ai_glm_vision_model') ?? _glmVisionModel;
 
     setState(() {
       _strategy = prefs.getString('ai_strategy') ?? 'local_first';
       _glmApiKey = apiKey;
-      _glmModel = glmModel;
-      _glmVisionModel = glmVisionModel;
       _apiKeyController.text = apiKey;
       _aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
       _useVision = prefs.getBool('ai_use_vision') ?? true; // 默认打开
@@ -85,8 +80,6 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
     // 先保存
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('ai_glm_api_key', _glmApiKey);
-    await prefs.setString('ai_glm_model', _glmModel);
-    await prefs.setString('ai_glm_vision_model', _glmVisionModel);
 
     // 再测试
     final result = await AIChatService.validateApiKey();
@@ -235,35 +228,6 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
             ),
             activeColor: ref.watch(primaryColorProvider),
           ),
-          Center(
-            child: DropdownMenu(
-              label: const Text('视觉模型'),
-              initialSelection: _glmVisionModel,
-              dropdownMenuEntries: const [
-                DropdownMenuEntry(
-                    value: 'glm-4v-flash',
-                    label: 'GLM-4V-Flash（快速）',
-                  ),
-                  DropdownMenuEntry(
-                    value: 'glm-4.1v-thinking-flash',
-                    label: 'GLM-4.1V-Thinking-Flash（上下文更强）',
-                  ),
-                  DropdownMenuEntry(
-                    value: 'glm-4.6v-flash',
-                    label: 'GLM-4.6V-Flash（准确）',
-                  ),
-              ],
-              onSelected: (value) async {
-                setState(() {
-                  _glmVisionModel = value!;
-                });
-            
-                // 立即保存选择
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setString('ai_glm_vision_model', value!);
-              },
-            ),
-          )
         ],
       ),
     );
@@ -544,35 +508,6 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
               ],
             ),
           ),
-          Center(
-            child: DropdownMenu(
-              label: const Text('推理模型'),
-              initialSelection: _glmModel,
-              dropdownMenuEntries: const [
-                DropdownMenuEntry(
-                  value: 'glm-4-flash',
-                  label: 'GLM-4-Flash（快速）',
-                ),
-                DropdownMenuEntry(
-                  value: 'glm-4.5-flash',
-                  label: 'GLM-4.5-Flash（快速）',
-                ),
-                DropdownMenuEntry(
-                  value: 'glm-4.6v-flash',
-                  label: 'GLM-4.6V-Flash（准确）',
-                ),
-              ],
-              onSelected: (value) async {
-                setState(() {
-                  _glmModel = value!;
-                });
-            
-                // 立即保存选择
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setString('ai_glm_model', value!);
-              },
-            ),
-          ),
         ],
       ),
     );
@@ -675,6 +610,18 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const AIPromptEditPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.edit_note, color: ref.watch(primaryColorProvider)),
+            title: Text(l10n.aiModelSelectEntry),
+            subtitle: Text(l10n.aiModelSelectEntryDesc),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AIModelSelectionPage()),
               );
             },
           ),

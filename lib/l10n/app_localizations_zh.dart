@@ -4211,6 +4211,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiPromptVarAccounts => '用户的账户列表（可能为空）';
 
   @override
+  String get aiModelSelectEntry => 'AI模型选择';
+
+  @override
+  String get aiModelSelectEntryDesc => '允许选择不同的文本推理、视觉AI模型用于账单识别和对话';
+
+  @override
+  String get aiModelTitle => '文本推理模型';
+
+  @override
+  String get aiVisionModelTitle => '视觉模型';
+
+  @override
   String get tagManageTitle => '标签管理';
 
   @override

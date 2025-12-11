@@ -4211,6 +4211,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiPromptVarAccounts => 'User\'s account list (may be empty)';
 
   @override
+  String get aiModelSelectEntry => 'AI Model Selection';
+
+  @override
+  String get aiModelSelectEntryDesc => 'Allows selection of visual and text reasoning models';
+
+  @override
+  String get aiModelTitle => 'Text Reasoning Model';
+
+  @override
+  String get aiVisionModelTitle => 'Vision Model';
+
+  @override
   String get tagManageTitle => 'Tags';
 
   @override

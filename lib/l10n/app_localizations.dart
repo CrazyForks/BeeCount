@@ -8064,6 +8064,30 @@ abstract class AppLocalizations {
   /// **'User\'s account list (may be empty)'**
   String get aiPromptVarAccounts;
 
+  /// No description provided for @aiModelSelectEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Model Selection'**
+  String get aiModelSelectEntry;
+
+  /// No description provided for @aiModelSelectEntryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Allows selection of visual and text reasoning models'**
+  String get aiModelSelectEntryDesc;
+
+  /// No description provided for @aiModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Text Reasoning Model'**
+  String get aiModelTitle;
+
+  /// No description provided for @aiVisionModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vision Model'**
+  String get aiVisionModelTitle;
+
   /// No description provided for @tagManageTitle.
   ///
   /// In en, this message translates to:
