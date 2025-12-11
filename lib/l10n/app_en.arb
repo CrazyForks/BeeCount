@@ -1420,7 +1420,7 @@
   "aiCloudApiTitle": "Zhipu GLM API",
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "Enter your Zhipu AI API Key",
-  "aiCloudApiKeyHelper": "GLM-4-Flash model is completely free",
+  "aiCloudApiKeyHelper": "GLM-*-Flash model is completely free",
   "aiCloudApiKeySaved": "API Key saved",
   "aiCloudApiGetKey": "Get API Key",
   "aiCloudApiTestKey": "Test Connection",

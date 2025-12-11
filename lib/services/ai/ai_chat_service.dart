@@ -47,6 +47,7 @@ class AIChatService {
 
     final prefs = await SharedPreferences.getInstance();
     final apiKey = prefs.getString('ai_glm_api_key');
+    final glmModel = prefs.getString('ai_glm_model');
 
     // 检查是否配置了 API Key
     if (apiKey == null || apiKey.isEmpty) {
@@ -59,7 +60,7 @@ class AIChatService {
       final aiKit = FlutterAIKit();
       final zhipuProvider = ZhipuGLMProvider(
         apiKey: apiKey,
-        model: 'glm-4-flash',
+        model: glmModel!,
         temperature: 0.7,
       );
       aiKit.registerProvider(zhipuProvider);

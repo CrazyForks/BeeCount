@@ -999,7 +999,7 @@
   "aiCloudApiKeyRequired": "⚠️ 未設定 API Key，AI 對話和 AI 增強辨識功能將無法使用",
   "aiChatConfigWarning": "未設定或設定錯誤智譜 API Key，AI 功能不可用",
   "aiChatGoToSettings": "前往設定",
-  "aiCloudApiKeyHelper": "GLM-4-Flash 模型完全免費",
+  "aiCloudApiKeyHelper": "GLM-*-Flash 模型完全免費",
   "aiCloudApiKeyHint": "輸入智譜 AI 的 API Key",
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeySaved": "API Key 已儲存",

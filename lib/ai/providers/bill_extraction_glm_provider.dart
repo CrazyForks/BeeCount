@@ -3,10 +3,11 @@ import 'bill_extraction_glm_base_provider.dart';
 
 /// 账单提取专用GLM Provider（文本模型）
 ///
-/// 使用GLM-4-Flash文本模型进行账单信息提取（速度优化版）
+/// 使用GLM文本模型进行账单信息提取（速度优化版）
 class BillExtractionGLMProvider extends BillExtractionGLMBaseProvider {
   BillExtractionGLMProvider(
-    String apiKey, {
+    String apiKey, 
+    String model, {
     super.expenseCategories,
     super.incomeCategories,
     super.accounts,
@@ -14,7 +15,7 @@ class BillExtractionGLMProvider extends BillExtractionGLMBaseProvider {
   }) : super(
           baseProvider: ZhipuGLMProvider(
             apiKey: apiKey,
-            model: 'glm-4-flash', // 使用GLM-4-Flash模型（更快）
+            model: model,
           ),
         );
 

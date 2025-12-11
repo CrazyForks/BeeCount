@@ -6495,7 +6495,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiCloudApiKeyHelper.
   ///
   /// In en, this message translates to:
-  /// **'GLM-4-Flash model is completely free'**
+  /// **'GLM-*-Flash model is completely free'**
   String get aiCloudApiKeyHelper;
 
   /// No description provided for @aiCloudApiKeySaved.

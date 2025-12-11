@@ -1293,7 +1293,7 @@
   "aiCloudApiTitle": "智谱GLM API",
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "输入智谱AI的API Key",
-  "aiCloudApiKeyHelper": "GLM-4-Flash模型完全免费",
+  "aiCloudApiKeyHelper": "GLM-*-Flash模型完全免费",
   "aiCloudApiKeySaved": "API Key 已保存",
   "aiCloudApiGetKey": "获取API Key",
   "aiCloudApiTestKey": "测试连接",

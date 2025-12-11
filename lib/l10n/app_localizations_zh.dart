@@ -3399,7 +3399,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiCloudApiKeyHint => '输入智谱AI的API Key';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash模型完全免费';
+  String get aiCloudApiKeyHelper => 'GLM-*-Flash模型完全免费';
 
   @override
   String get aiCloudApiKeySaved => 'API Key 已保存';
@@ -8003,7 +8003,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiCloudApiKeyHint => '輸入智譜 AI 的 API Key';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash 模型完全免費';
+  String get aiCloudApiKeyHelper => 'GLM-*-Flash 模型完全免費';
 
   @override
   String get aiCloudApiKeySaved => 'API Key 已儲存';

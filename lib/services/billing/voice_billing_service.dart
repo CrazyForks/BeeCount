@@ -60,6 +60,7 @@ class VoiceBillingService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final apiKey = prefs.getString('ai_glm_api_key') ?? '';
+      final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4-flash';
 
       // 获取可用分类列表（排除有子分类的父分类，只获取叶子分类）
       final expenseCategories = await repository.getUsableCategories('expense');
@@ -83,6 +84,7 @@ class VoiceBillingService {
       // 使用GLM-4（文本模型）从文字提取账单信息
       _aiKit.registerProvider(BillExtractionGLMProvider(
         apiKey,
+        glmModel,
         expenseCategories: expenseCategoryNames,
         incomeCategories: incomeCategoryNames,
         accounts: accountNames,

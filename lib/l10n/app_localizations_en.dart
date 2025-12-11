@@ -3399,7 +3399,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiKeyHint => 'Enter your Zhipu AI API Key';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash model is completely free';
+  String get aiCloudApiKeyHelper => 'GLM-*-Flash model is completely free';
 
   @override
   String get aiCloudApiKeySaved => 'API Key saved';

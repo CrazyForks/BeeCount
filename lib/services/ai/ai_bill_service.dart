@@ -35,15 +35,18 @@ class AIBillService {
 
     // 1. 注册智谱GLM Provider（如果配置了API Key）
     final glmApiKey = prefs.getString('ai_glm_api_key');
+    final glmVisionModel = prefs.getString('ai_glm_vision_model') ?? 'glm-4.6v-flash';
+    final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4-flash';
     if (glmApiKey != null && glmApiKey.isNotEmpty) {
       // 检查是否启用图片上传
       final useVision = prefs.getBool('ai_use_vision') ?? true; // 默认开启
 
       if (useVision && imageFile != null) {
         // 使用Vision模型
-        print('📸 [AI服务] 使用GLM-4V-Flash视觉模型');
+        print('📸 [AI服务] 使用GLM视觉模型');
         _aiKit.registerProvider(BillExtractionGLMVisionProvider(
           glmApiKey,
+          glmVisionModel,
           expenseCategories: expenseCategories,
           incomeCategories: incomeCategories,
           accounts: accounts,
@@ -52,9 +55,10 @@ class AIBillService {
         ));
       } else {
         // 使用纯文本模型
-        print('📝 [AI服务] 使用GLM-4.6文本模型');
+        print('📝 [AI服务] 使用GLM文本模型');
         _aiKit.registerProvider(BillExtractionGLMProvider(
           glmApiKey,
+          glmModel,
           expenseCategories: expenseCategories,
           incomeCategories: incomeCategories,
           accounts: accounts,
