@@ -47,7 +47,7 @@
 >
 > 🍎 **iOS** - [App Store 正式版](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 15.5+
 >
-> 💡 在 App Store（外区）搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
+> 💡 在 App Store 搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
 >
 > 📱 **HarmonyOS** - 正在上架中 | 支持 HarmonyOS 5.0+ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
