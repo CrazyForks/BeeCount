@@ -1782,6 +1782,13 @@
   "aiModelSelectEntryDesc": "Allows selection of visual and text reasoning models",
   "aiModelTitle": "Text Reasoning Model",
   "aiVisionModelTitle": "Vision Model",
+  "aiModelFast": "Faster",
+  "aiModelAccurate": "Accurate",
+  "aiUsingVisionDesc": "Image recognition is enabled for higher recognition accuracy",
+  "aiUnUsingVisionDesc": "Image recognition turned off, OCR text only",
+  "aiUploadImage": "Upload images to AI",
+  "aiUseVisionDesc": "Use visual models for more accurate recognition",
+  "aiUnUseVisionDesc": "Analyze OCR results using only text models",
 
   "tagManageTitle": "Tags",
   "tagManageSubtitle": "Manage transaction tags",

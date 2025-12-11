@@ -213,18 +213,18 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
               if (mounted) {
                 showToast(
                   context,
-                  value ? '已启用图片识别，识别准确率更高' : '已关闭图片识别，仅使用OCR文本',
+                  value ? l10n.aiUsingVisionDesc : l10n.aiUnUsingVisionDesc,
                 );
               }
             } : null,
-            title: const Text(
-              '上传图片到AI',
+            title: Text(
+              l10n.aiUploadImage,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             subtitle: Text(
               _useVision
-                  ? '使用视觉模型，识别更准确'
-                  : '仅使用文本模型分析OCR结果',
+                  ? l10n.aiUseVisionDesc
+                  : l10n.aiUnUseVisionDesc
             ),
             activeColor: ref.watch(primaryColorProvider),
           ),

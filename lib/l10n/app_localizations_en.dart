@@ -4223,6 +4223,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiVisionModelTitle => 'Vision Model';
 
   @override
+  String get aiModelFast => 'Faster';
+
+  @override
+  String get aiModelAccurate => 'Accurate';
+
+  @override
+  String get aiUsingVisionDesc => 'Image recognition is enabled for higher recognition accuracy';
+
+  @override
+  String get aiUnUsingVisionDesc => 'Image recognition turned off, OCR text only';
+
+  @override
+  String get aiUploadImage => 'Upload images to AI';
+
+  @override
+  String get aiUseVisionDesc => 'Use visual models for more accurate recognition';
+
+  @override
+  String get aiUnUseVisionDesc => 'Analyze OCR results using only text models';
+
+  @override
   String get tagManageTitle => 'Tags';
 
   @override

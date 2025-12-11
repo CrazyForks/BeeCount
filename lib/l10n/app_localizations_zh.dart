@@ -4223,6 +4223,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiVisionModelTitle => '视觉模型';
 
   @override
+  String get aiModelFast => '快速';
+
+  @override
+  String get aiModelAccurate => '准确';
+
+  @override
+  String get aiUsingVisionDesc => '启用图像识别，以获得更高的识别精度';
+
+  @override
+  String get aiUnUsingVisionDesc => '已关闭图片识别，仅使用OCR文本';
+
+  @override
+  String get aiUploadImage => '上传图片到AI';
+
+  @override
+  String get aiUseVisionDesc => '使用视觉模型，识别更准确';
+
+  @override
+  String get aiUnUseVisionDesc => '仅使用文本模型分析OCR结果';
+
+  @override
   String get tagManageTitle => '标签管理';
 
   @override
@@ -8825,6 +8846,39 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiPromptVarAccounts => '使用者的帳戶清單（可能為空）';
+
+  @override
+  String get aiModelSelectEntry => 'AI模型選擇';
+
+  @override
+  String get aiModelSelectEntryDesc => '允許選擇不同的文字推理、視覺AI模型用於帳單識別和對話';
+
+  @override
+  String get aiModelTitle => '文字推理模型';
+
+  @override
+  String get aiVisionModelTitle => '視覺模型';
+
+  @override
+  String get aiModelFast => '快速';
+
+  @override
+  String get aiModelAccurate => '準確';
+
+  @override
+  String get aiUsingVisionDesc => '啟用影像識別，以獲得更高的識別精度';
+
+  @override
+  String get aiUnUsingVisionDesc => '已關閉圖片識別，僅使用OCR文字';
+
+  @override
+  String get aiUploadImage => '上傳圖片到AI';
+
+  @override
+  String get aiUseVisionDesc => '使用視覺模型，辨識更準確';
+
+  @override
+  String get aiUnUseVisionDesc => '僅使用文字模型分析OCR結果';
 
   @override
   String get tagManageTitle => '標籤管理';

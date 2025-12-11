@@ -100,18 +100,14 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
             child: DropdownMenu(
               label: Text(l10n.aiModelTitle),
               initialSelection: _glmModel,
-              dropdownMenuEntries: const [
+              dropdownMenuEntries: [
                 DropdownMenuEntry(
                   value: 'glm-4-flash',
-                  label: 'GLM-4-Flash（快速）',
-                ),
-                DropdownMenuEntry(
-                  value: 'glm-4.5-flash',
-                  label: 'GLM-4.5-Flash（快速）',
+                  label: 'GLM-4-Flash (${l10n.aiModelFast})',
                 ),
                 DropdownMenuEntry(
                   value: 'glm-4.6v-flash',
-                  label: 'GLM-4.6V-Flash（准确）',
+                  label: 'GLM-4.6V-Flash(${l10n.aiModelAccurate})',
                 ),
               ],
               onSelected: (value) async {
@@ -128,12 +124,12 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
           SizedBox(height: 16.0.scaled(context, ref)),
           Center(
             child: DropdownMenu(
-              label: const Text('视觉模型'),
+              label: Text(l10n.aiVisionModelTitle),
               initialSelection: _glmVisionModel,
-              dropdownMenuEntries: const [
+              dropdownMenuEntries: [
                 DropdownMenuEntry(
                     value: 'glm-4v-flash',
-                    label: 'GLM-4V-Flash（快速）',
+                    label: 'GLM-4V-Flash(${l10n.aiModelFast})',
                   ),
                   DropdownMenuEntry(
                     value: 'glm-4.1v-thinking-flash',
@@ -141,7 +137,7 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
                   ),
                   DropdownMenuEntry(
                     value: 'glm-4.6v-flash',
-                    label: 'GLM-4.6V-Flash（准确）',
+                    label: 'GLM-4.6V-Flash(${l10n.aiModelAccurate})',
                   ),
               ],
               onSelected: (value) async {

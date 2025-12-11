@@ -1508,6 +1508,13 @@
   "aiModelSelectEntryDesc": "允許選擇不同的文字推理、視覺AI模型用於帳單識別和對話",
   "aiModelTitle": "文字推理模型",
   "aiVisionModelTitle": "視覺模型",
+  "aiModelFast": "快速",
+  "aiModelAccurate": "準確",
+  "aiUsingVisionDesc": "啟用影像識別，以獲得更高的識別精度",
+  "aiUnUsingVisionDesc": "已關閉圖片識別，僅使用OCR文字",
+  "aiUploadImage": "上傳圖片到AI",
+  "aiUseVisionDesc": "使用視覺模型，辨識更準確",
+  "aiUnUseVisionDesc": "僅使用文字模型分析OCR結果",
 
   "tagManageTitle": "標籤管理",
   "tagManageSubtitle": "管理交易標籤",

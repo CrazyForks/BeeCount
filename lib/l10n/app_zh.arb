@@ -1720,6 +1720,13 @@
   "aiModelSelectEntryDesc": "允许选择不同的文本推理、视觉AI模型用于账单识别和对话",
   "aiModelTitle": "文本推理模型",
   "aiVisionModelTitle": "视觉模型",
+  "aiModelFast": "快速",
+  "aiModelAccurate": "准确",
+  "aiUsingVisionDesc": "启用图像识别，以获得更高的识别精度",
+  "aiUnUsingVisionDesc": "已关闭图片识别，仅使用OCR文本",
+  "aiUploadImage": "上传图片到AI",
+  "aiUseVisionDesc": "使用视觉模型，识别更准确",
+  "aiUnUseVisionDesc": "仅使用文本模型分析OCR结果",
 
   "tagManageTitle": "标签管理",
   "tagManageSubtitle": "管理交易标签",

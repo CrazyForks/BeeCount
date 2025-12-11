@@ -8088,6 +8088,48 @@ abstract class AppLocalizations {
   /// **'Vision Model'**
   String get aiVisionModelTitle;
 
+  /// No description provided for @aiModelFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Faster'**
+  String get aiModelFast;
+
+  /// No description provided for @aiModelAccurate.
+  ///
+  /// In en, this message translates to:
+  /// **'Accurate'**
+  String get aiModelAccurate;
+
+  /// No description provided for @aiUsingVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Image recognition is enabled for higher recognition accuracy'**
+  String get aiUsingVisionDesc;
+
+  /// No description provided for @aiUnUsingVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Image recognition turned off, OCR text only'**
+  String get aiUnUsingVisionDesc;
+
+  /// No description provided for @aiUploadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload images to AI'**
+  String get aiUploadImage;
+
+  /// No description provided for @aiUseVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use visual models for more accurate recognition'**
+  String get aiUseVisionDesc;
+
+  /// No description provided for @aiUnUseVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze OCR results using only text models'**
+  String get aiUnUseVisionDesc;
+
   /// No description provided for @tagManageTitle.
   ///
   /// In en, this message translates to:

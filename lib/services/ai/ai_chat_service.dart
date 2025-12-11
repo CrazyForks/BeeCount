@@ -217,7 +217,7 @@ class AIChatService {
       // 注册智谱 Provider (使用 glm-4 通用对话模型)
       final zhipuProvider = ZhipuGLMProvider(
         apiKey: apiKey,
-        model: 'glm-4',
+        model: prefs.getString('ai_glm_model') ?? 'glm-4.6v-flash',
         temperature: 0.7,
       );
       aiKit.registerProvider(zhipuProvider);
