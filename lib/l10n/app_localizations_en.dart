@@ -4005,6 +4005,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiChatHistoryCleared => 'Conversation history cleared';
 
   @override
+  String get aiChatCopy => 'Copy';
+
+  @override
+  String get aiChatCopied => 'Copied to clipboard';
+
+  @override
+  String get aiChatDeleteMessageConfirm => 'Are you sure you want to delete this message?';
+
+  @override
+  String get aiChatMessageDeleted => 'Message deleted';
+
+  @override
   String get aiChatUndone => 'Undone';
 
   @override

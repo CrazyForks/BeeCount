@@ -7656,6 +7656,30 @@ abstract class AppLocalizations {
   /// **'Conversation history cleared'**
   String get aiChatHistoryCleared;
 
+  /// No description provided for @aiChatCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get aiChatCopy;
+
+  /// No description provided for @aiChatCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get aiChatCopied;
+
+  /// No description provided for @aiChatDeleteMessageConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this message?'**
+  String get aiChatDeleteMessageConfirm;
+
+  /// No description provided for @aiChatMessageDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Message deleted'**
+  String get aiChatMessageDeleted;
+
   /// No description provided for @aiChatUndone.
   ///
   /// In en, this message translates to:

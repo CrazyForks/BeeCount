@@ -4005,6 +4005,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiChatHistoryCleared => '对话历史已清空';
 
   @override
+  String get aiChatCopy => '复制';
+
+  @override
+  String get aiChatCopied => '已复制到剪贴板';
+
+  @override
+  String get aiChatDeleteMessageConfirm => '确定要删除这条消息吗？';
+
+  @override
+  String get aiChatMessageDeleted => '消息已删除';
+
+  @override
   String get aiChatUndone => '已撤销';
 
   @override
