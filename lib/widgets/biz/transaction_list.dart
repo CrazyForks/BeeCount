@@ -324,6 +324,11 @@ class TransactionListState extends ConsumerState<TransactionList> {
                           .map((t) => (id: t.id, name: t.name, color: t.color))
                           .toList();
 
+                      // 转账账户信息
+                      final transferAccountInfo = (accountName != null && toAccountName != null)
+                          ? '$accountName → $toAccountName'
+                          : null;
+
                       return TransactionListItem(
                         icon: isTransfer
                           ? Icons.swap_horiz
@@ -332,18 +337,14 @@ class TransactionListState extends ConsumerState<TransactionList> {
                           ? (subtitle.isNotEmpty ? subtitle : AppLocalizations.of(context).transferTitle)
                           : (subtitle.isNotEmpty ? subtitle : categoryName),
                         categoryName: isTransfer
-                          ? (subtitle.isNotEmpty && accountName != null && toAccountName != null
-                              ? '$accountName → $toAccountName'
-                              : null)
+                          ? null  // 转账不显示第二行，保持布局一致
                           : (subtitle.isNotEmpty ? null : categoryName),
                         amount: it.t.amount,
                         isExpense: isExpense,
                         hide: widget.hideAmounts,
                         happenedAt: it.t.happenedAt,
                         accountName: isTransfer
-                          ? (subtitle.isEmpty && accountName != null && toAccountName != null
-                              ? '$accountName → $toAccountName'
-                              : null)
+                          ? transferAccountInfo  // 转账始终在第三行显示账户信息
                           : accountName,
                         tags: tagsList.isNotEmpty ? tagsList : null,
                         onTagTap: (tagId, tagName) async {
