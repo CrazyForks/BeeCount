@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 使用文档](#-使用说明) | [💝 捐赠支持](#-捐赠) | [🌐 English](README_EN.md)
+[🌐 官网](https://beecount-website.pages.dev) | [📖 使用文档](https://beecount-website.pages.dev/docs/intro) | [💝 捐赠支持](#-捐赠) | [🌐 English](README_EN.md)
 
 </div>
 
@@ -47,7 +47,7 @@
 >
 > 🍎 **iOS** - [App Store 正式版](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 15.5+
 >
-> 💡 在 App Store（外区）搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
+> 💡 在 App Store 搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
 >
 > 📱 **HarmonyOS** - 正在上架中 | 支持 HarmonyOS 5.0+ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
@@ -139,6 +139,9 @@
 
 ## 🌟 核心特性
 
+<details>
+<summary><b>查看核心特性</b></summary>
+
 ### ☁️ 自建云服务 - 核心差异化优势
 
 > **这是蜜蜂记账最大的特色：数据完全由你掌控！**
@@ -223,33 +226,9 @@
 
 > 💡 需要添加新语言？欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出！
 
-## 📖 使用说明
-
-### 基础操作
-
-- **添加记账**：点击首页底部的"+"按钮
-- **编辑记录**：点击任意交易记录进入编辑页面
-- **删除记录**：长按交易记录选择删除
-- **切换月份**：点击顶部日期或在列表中上下滑动翻页
-- **隐藏金额**：点击首页右上角眼睛图标
-
-### 数据管理
-
-- **导入数据**：个人中心 → 导入数据 → 选择 CSV 文件
-- **导出备份**：个人中心 → 导出数据 → 选择导出格式
-- **分类管理**：个人中心 → 分类管理 → 添加/编辑/删除分类
-- **账本切换**：底部导航 → 账本 → 选择或创建新账本
+</details>
 
 ## ☁️ 云备份配置（可选）
-
-蜜蜂记账支持多种云同步方案，数据完全由你掌控。根据需求选择最合适的方案：
-
-| 云同步方案 | 适用场景 | 特点 |
-|---------|---------|------|
-| **iCloud** | iOS 用户 | 🆕 零配置、原生集成、Apple 生态无缝同步 |
-| **Supabase** | 无 NAS 的用户 | 免费额度充足、配置简单、云端托管 |
-| **WebDAV** | 有 NAS 的用户 | 数据完全本地化、支持群晖/绿联云/Nextcloud |
-| **S3 协议** | 追求灵活性的用户 | 🆕 支持 Cloudflare R2/AWS S3/MinIO，免费额度大 |
 
 <details>
 <summary><b>📖 点击查看详细配置教程</b></summary>
@@ -657,21 +636,20 @@ A:
 
 ### 🌟 感谢支持者
 
-感谢以下朋友的慷慨支持（按捐赠时间排序）：
+感谢以下朋友的慷慨支持（按时间排序）：
 
-<!--
-捐赠后请在 Issue 中留言或发邮件告知，我会将您添加到感谢名单中
-格式：昵称 - 金额 - 日期
--->
+> 💡 已捐赠？[点击这里提交您的信息](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml)，展示在支持者列表中！
 
-- **\*桥** - ¥12 - 2025-10-27（微信）
-- **\*睿** - ¥720 - 2025-10-27（微信）
-- **\*泓** - ¥50 - 2025-11-07（支付宝）
-- **\*邵** - ¥15 - 2025-11-09（支付宝）
-- **\*哥** - ¥6 - 2025-11-17（微信）
-- **\*特** - ¥15 - 2025-11-17（微信）
-- **\*文** - ¥50 - 2025-11-29（支付宝）
-- **匿名者** - ¥50 - 2025-11-29（微信）
+<p>
+  <a href="#" title="*桥 ¥12"><img src="assets/avatars/qiao.svg" width="50" alt="桥"/></a>
+  <a href="#" title="*睿 ¥720"><img src="assets/avatars/rui.svg" width="50" alt="睿"/></a>
+  <a href="#" title="*泓 ¥50"><img src="assets/avatars/hong.svg" width="50" alt="泓"/></a>
+  <a href="#" title="*邵 ¥15"><img src="assets/avatars/shao.svg" width="50" alt="邵"/></a>
+  <a href="#" title="*哥 ¥6"><img src="assets/avatars/ge.svg" width="50" alt="哥"/></a>
+  <a href="#" title="*特 ¥15"><img src="assets/avatars/te.svg" width="50" alt="特"/></a>
+  <a href="#" title="*文 ¥50"><img src="assets/avatars/wen.svg" width="50" alt="文"/></a>
+  <a href="#" title="匿名者 ¥50"><img src="assets/avatars/anon.svg" width="50" alt="匿名"/></a>
+</p>
 
 ---
 
@@ -701,6 +679,16 @@ A:
 详见 [LICENSE](LICENSE) 文件。
 
 </details>
+
+---
+
+## 📦 相关仓库
+
+| 仓库 | 说明 |
+|------|------|
+| [BeeCount-Website](https://github.com/TNT-Likely/BeeCount-Website) | 官网/文档仓库 |
+| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | 鸿蒙版本仓库 |
+| [BeeShot](https://github.com/TNT-Likely/BeeShot) | App Store 截图生成器 |
 
 ---
 

@@ -47,6 +47,7 @@ class AIChatService {
 
     final prefs = await SharedPreferences.getInstance();
     final apiKey = prefs.getString('ai_glm_api_key');
+    final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4.6v-flash';
 
     // 检查是否配置了 API Key
     if (apiKey == null || apiKey.isEmpty) {
@@ -59,7 +60,7 @@ class AIChatService {
       final aiKit = FlutterAIKit();
       final zhipuProvider = ZhipuGLMProvider(
         apiKey: apiKey,
-        model: 'glm-4-flash',
+        model: glmModel,
         temperature: 0.7,
       );
       aiKit.registerProvider(zhipuProvider);
@@ -214,9 +215,11 @@ class AIChatService {
       final aiKit = FlutterAIKit();
 
       // 注册智谱 Provider (使用 glm-4 通用对话模型)
+      final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4.6v-flash';
+      logger.info('AIChat', '自由对话使用模型: $glmModel');
       final zhipuProvider = ZhipuGLMProvider(
         apiKey: apiKey,
-        model: 'glm-4',
+        model: glmModel,
         temperature: 0.7,
       );
       aiKit.registerProvider(zhipuProvider);

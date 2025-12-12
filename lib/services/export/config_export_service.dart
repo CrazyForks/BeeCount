@@ -286,12 +286,16 @@ class S3Config {
 /// AI配置
 class AIConfig {
   final String? glmApiKey;
+  final String? glmModel;
+  final String? glmVisionModel;
   final String? strategy;
   final bool? enabled;
   final bool? useVision;
 
   const AIConfig({
     this.glmApiKey,
+    this.glmModel,
+    this.glmVisionModel,
     this.strategy,
     this.enabled,
     this.useVision,
@@ -301,6 +305,12 @@ class AIConfig {
     final map = <String, dynamic>{};
     if (glmApiKey != null && glmApiKey!.isNotEmpty) {
       map['glm_api_key'] = glmApiKey;
+    }
+    if (glmModel != null && glmModel!.isNotEmpty) {
+      map['glm_api_key'] = glmModel;
+    }
+    if (glmVisionModel != null && glmVisionModel!.isNotEmpty) {
+      map['glm_api_key'] = glmVisionModel;
     }
     if (strategy != null && strategy!.isNotEmpty) {
       map['strategy'] = strategy;
@@ -316,6 +326,8 @@ class AIConfig {
 
   static AIConfig fromMap(Map<String, dynamic> map) => AIConfig(
         glmApiKey: map['glm_api_key'] as String?,
+        glmModel: map['ai_glm_model'] as String?,
+        glmVisionModel: map['ai_glm_vision_model'] as String?,
         strategy: map['strategy'] as String?,
         enabled: map['enabled'] as bool?,
         useVision: map['use_vision'] as bool?,
@@ -977,13 +989,17 @@ class ConfigExportService {
     // 读取AI配置
     AIConfig? aiConfig;
     final glmApiKey = prefs.getString('ai_glm_api_key');
+    final glmModel = prefs.getString('ai_glm_model');
+    final glmVisionModel = prefs.getString('ai_glm_vision_model');
     final aiStrategy = prefs.getString('ai_strategy');
     final aiEnabled = prefs.getBool('ai_bill_extraction_enabled');
     final aiUseVision = prefs.getBool('ai_use_vision');
 
-    if (glmApiKey != null || aiStrategy != null || aiEnabled != null || aiUseVision != null) {
+    if (glmApiKey != null || aiStrategy != null || aiEnabled != null || aiUseVision != null|| glmModel != null|| glmVisionModel != null) {
       aiConfig = AIConfig(
         glmApiKey: glmApiKey,
+        glmModel: glmModel,
+        glmVisionModel: glmVisionModel,
         strategy: aiStrategy,
         enabled: aiEnabled,
         useVision: aiUseVision,
@@ -1583,6 +1599,12 @@ class ConfigExportService {
     if (options.appSettings && config.ai != null) {
       if (config.ai!.glmApiKey != null) {
         await prefs.setString('ai_glm_api_key', config.ai!.glmApiKey!);
+      }
+      if (config.ai!.glmModel != null) {
+        await prefs.setString('ai_glm_model', config.ai!.glmModel!);
+      }
+      if (config.ai!.glmVisionModel != null) {
+        await prefs.setString('ai_glm_vision_model', config.ai!.glmVisionModel!);
       }
       if (config.ai!.strategy != null) {
         await prefs.setString('ai_strategy', config.ai!.strategy!);

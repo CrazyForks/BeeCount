@@ -227,17 +227,6 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                         }),
                       ],
                       AppListTile(
-                        leading: Icons.help_outline,
-                        title: AppLocalizations.of(context).mineHelp,
-                        subtitle: AppLocalizations.of(context).mineHelpSubtitle,
-                        onTap: () async {
-                          final url =
-                              Uri.parse('https://github.com/TNT-Likely/BeeCount/wiki');
-                          await _tryOpenUrl(url);
-                        },
-                      ),
-                      const Divider(height: 1, thickness: 0.5),
-                      AppListTile(
                         leading: Icons.favorite_border,
                         title: AppLocalizations.of(context).aboutSupportDevelopment,
                         subtitle: AppLocalizations.of(context).aboutSupportDevelopmentSubtitle,

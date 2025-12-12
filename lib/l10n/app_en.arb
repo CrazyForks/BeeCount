@@ -1420,7 +1420,7 @@
   "aiCloudApiTitle": "Zhipu GLM API",
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "Enter your Zhipu AI API Key",
-  "aiCloudApiKeyHelper": "GLM-4-Flash model is completely free",
+  "aiCloudApiKeyHelper": "GLM-*-Flash model is completely free",
   "aiCloudApiKeySaved": "API Key saved",
   "aiCloudApiGetKey": "Get API Key",
   "aiCloudApiTestKey": "Test Connection",
@@ -1702,6 +1702,10 @@
   "aiChatInputHint": "e.g.: Bought a coffee for $35",
   "aiChatThinking": "Thinking...",
   "aiChatHistoryCleared": "Conversation history cleared",
+  "aiChatCopy": "Copy",
+  "aiChatCopied": "Copied to clipboard",
+  "aiChatDeleteMessageConfirm": "Are you sure you want to delete this message?",
+  "aiChatMessageDeleted": "Message deleted",
   "aiChatUndone": "Undone",
   "aiChatUndoFailed": "Undo failed",
   "aiChatTransactionNotFound": "Transaction not found",
@@ -1777,6 +1781,27 @@
   "aiPromptVarOcrText": "User input or OCR recognized text content",
   "aiPromptVarCategories": "Expense and income category list",
   "aiPromptVarAccounts": "User's account list (may be empty)",
+  "aiPromptVarAccounts": "User's account list (may be empty)",
+  "aiModelSelectEntry": "AI Model Selection",
+  "aiModelSelectEntryDesc": "Allows selection of visual and text reasoning models",
+  "aiModelTitle": "Text Reasoning Model",
+  "aiVisionModelTitle": "Vision Model",
+  "aiModelFast": "Faster",
+  "aiModelAccurate": "Accurate",
+  "aiModelThinking": "Deep Thinking",
+  "aiModelSwitched": "Switched to {modelName}",
+  "@aiModelSwitched": {
+    "placeholders": {
+      "modelName": {
+        "type": "String"
+      }
+    }
+  },
+  "aiUsingVisionDesc": "Image recognition is enabled for higher recognition accuracy",
+  "aiUnUsingVisionDesc": "Image recognition turned off, OCR text only",
+  "aiUploadImage": "Upload images to AI",
+  "aiUseVisionDesc": "Use visual models for more accurate recognition",
+  "aiUnUseVisionDesc": "Analyze OCR results using only text models",
 
   "tagManageTitle": "Tags",
   "tagManageSubtitle": "Manage transaction tags",

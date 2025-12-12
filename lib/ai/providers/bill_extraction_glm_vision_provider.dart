@@ -11,7 +11,8 @@ class BillExtractionGLMVisionProvider extends BillExtractionGLMBaseProvider {
   final File? imageFile;
 
   BillExtractionGLMVisionProvider(
-    String apiKey, {
+    String apiKey, 
+    String model, {
     super.expenseCategories,
     super.incomeCategories,
     super.accounts,
@@ -20,7 +21,7 @@ class BillExtractionGLMVisionProvider extends BillExtractionGLMBaseProvider {
   }) : super(
           baseProvider: ZhipuGLMProvider(
             apiKey: apiKey,
-            model: 'glm-4v-flash', // 使用免费的视觉模型
+            model: model, // 使用免费的视觉模型
             imageFile: imageFile,
           ),
         );

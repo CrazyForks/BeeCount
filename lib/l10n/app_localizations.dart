@@ -6495,7 +6495,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiCloudApiKeyHelper.
   ///
   /// In en, this message translates to:
-  /// **'GLM-4-Flash model is completely free'**
+  /// **'GLM-*-Flash model is completely free'**
   String get aiCloudApiKeyHelper;
 
   /// No description provided for @aiCloudApiKeySaved.
@@ -7656,6 +7656,30 @@ abstract class AppLocalizations {
   /// **'Conversation history cleared'**
   String get aiChatHistoryCleared;
 
+  /// No description provided for @aiChatCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get aiChatCopy;
+
+  /// No description provided for @aiChatCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get aiChatCopied;
+
+  /// No description provided for @aiChatDeleteMessageConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this message?'**
+  String get aiChatDeleteMessageConfirm;
+
+  /// No description provided for @aiChatMessageDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Message deleted'**
+  String get aiChatMessageDeleted;
+
   /// No description provided for @aiChatUndone.
   ///
   /// In en, this message translates to:
@@ -8063,6 +8087,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'User\'s account list (may be empty)'**
   String get aiPromptVarAccounts;
+
+  /// No description provided for @aiModelSelectEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Model Selection'**
+  String get aiModelSelectEntry;
+
+  /// No description provided for @aiModelSelectEntryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Allows selection of visual and text reasoning models'**
+  String get aiModelSelectEntryDesc;
+
+  /// No description provided for @aiModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Text Reasoning Model'**
+  String get aiModelTitle;
+
+  /// No description provided for @aiVisionModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vision Model'**
+  String get aiVisionModelTitle;
+
+  /// No description provided for @aiModelFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Faster'**
+  String get aiModelFast;
+
+  /// No description provided for @aiModelAccurate.
+  ///
+  /// In en, this message translates to:
+  /// **'Accurate'**
+  String get aiModelAccurate;
+
+  /// No description provided for @aiModelThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Thinking'**
+  String get aiModelThinking;
+
+  /// No description provided for @aiModelSwitched.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to {modelName}'**
+  String aiModelSwitched(String modelName);
+
+  /// No description provided for @aiUsingVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Image recognition is enabled for higher recognition accuracy'**
+  String get aiUsingVisionDesc;
+
+  /// No description provided for @aiUnUsingVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Image recognition turned off, OCR text only'**
+  String get aiUnUsingVisionDesc;
+
+  /// No description provided for @aiUploadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload images to AI'**
+  String get aiUploadImage;
+
+  /// No description provided for @aiUseVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use visual models for more accurate recognition'**
+  String get aiUseVisionDesc;
+
+  /// No description provided for @aiUnUseVisionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze OCR results using only text models'**
+  String get aiUnUseVisionDesc;
 
   /// No description provided for @tagManageTitle.
   ///

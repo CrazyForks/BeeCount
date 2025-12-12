@@ -27,7 +27,7 @@
 <br/>
 <br/>
 
-[📖 Documentation](#-user-guide) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
+[🌐 Website](https://beecount-website.pages.dev/en/) | [📖 Documentation](https://beecount-website.pages.dev/en/docs/intro) | [💝 Donate](#-donate) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -131,6 +131,9 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 ## 🌟 Key Features
 
+<details>
+<summary><b>View Key Features</b></summary>
+
 ### ☁️ Self-Hosted Cloud Service - Core Differentiator
 
 > **This is BeeCount's biggest feature: Complete control over your data!**
@@ -215,33 +218,9 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 > 💡 Want to add a new language? Welcome to create an [Issue](https://github.com/TNT-Likely/BeeCount/issues)!
 
-## 📖 User Guide
-
-### Basic Operations
-
-- **Add Transaction**: Tap the "+" button at the bottom of the home screen
-- **Edit Record**: Tap any transaction record to enter edit page
-- **Delete Record**: Long press transaction record to select delete
-- **Switch Months**: Tap the date at the top or scroll up/down in the list to flip pages
-- **Hide Amounts**: Tap the eye icon in the top right of the home screen
-
-### Data Management
-
-- **Import Data**: Profile → Import Data → Select CSV file
-- **Export Backup**: Profile → Export Data → Select export format
-- **Category Management**: Profile → Category Management → Add/Edit/Delete categories
-- **Ledger Switching**: Bottom navigation → Ledgers → Select or create new ledger
+</details>
 
 ## ☁️ Cloud Backup Configuration (Optional)
-
-BeeCount supports multiple cloud sync solutions, giving you complete control over your data. Choose the most suitable solution based on your needs:
-
-| Solution | Best For | Features |
-|----------|----------|----------|
-| **iCloud** | iOS Users | 🆕 Zero config, native integration, seamless Apple ecosystem sync |
-| **Supabase** | Users without NAS | Free tier sufficient, easy setup, cloud-hosted |
-| **WebDAV** | Users with NAS | Fully localized data, supports Synology/UGREEN/Nextcloud |
-| **S3 Protocol** | Flexibility seekers | 🆕 Supports Cloudflare R2/AWS S3/MinIO, generous free tier |
 
 <details>
 <summary><b>📖 Click to view detailed configuration guide</b></summary>
@@ -664,19 +643,18 @@ All donation fund usage will be transparently disclosed here.
 
 Thank you to the following generous supporters (in chronological order):
 
-<!--
-After donating, please leave a message in Issues or send an email, and we'll add you to the list
-Format: Nickname - Amount - Date
--->
+> 💡 Already donated? [Click here to submit your info](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml) to be featured in the supporters list!
 
-- **\*Qiao** - ¥12 - 2025-10-27 (WeChat)
-- **\*Rui** - ¥720 - 2025-10-27 (WeChat)
-- **\*Hong** - ¥50 - 2025-11-07 (Alipay)
-- **\*Shao** - ¥15 - 2025-11-09 (Alipay)
-- **\*Ge** - ¥6 - 2025-11-17 (WeChat)
-- **\*Te** - ¥15 - 2025-11-17 (WeChat)
-- **\*Wen** - ¥50 - 2025-11-29 (Alipay)
-- **Anonymous** - ¥50 - 2025-11-29 (WeChat)
+<p>
+  <a href="#" title="*Qiao ¥12"><img src="assets/avatars/qiao.svg" width="50" alt="Qiao"/></a>
+  <a href="#" title="*Rui ¥720"><img src="assets/avatars/rui.svg" width="50" alt="Rui"/></a>
+  <a href="#" title="*Hong ¥50"><img src="assets/avatars/hong.svg" width="50" alt="Hong"/></a>
+  <a href="#" title="*Shao ¥15"><img src="assets/avatars/shao.svg" width="50" alt="Shao"/></a>
+  <a href="#" title="*Ge ¥6"><img src="assets/avatars/ge.svg" width="50" alt="Ge"/></a>
+  <a href="#" title="*Te ¥15"><img src="assets/avatars/te.svg" width="50" alt="Te"/></a>
+  <a href="#" title="*Wen ¥50"><img src="assets/avatars/wen.svg" width="50" alt="Wen"/></a>
+  <a href="#" title="Anonymous ¥50"><img src="assets/avatars/anon.svg" width="50" alt="Anonymous"/></a>
+</p>
 
 ---
 
@@ -705,6 +683,16 @@ For commercial use, please contact us via [GitHub Issues](https://github.com/TNT
 See [LICENSE](LICENSE) for details.
 
 </details>
+
+---
+
+## 📦 Related Repositories
+
+| Repository | Description |
+|------------|-------------|
+| [BeeCount-Website](https://github.com/TNT-Likely/BeeCount-Website) | Website & Documentation |
+| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | HarmonyOS Version |
+| [BeeShot](https://github.com/TNT-Likely/BeeShot) | App Store Screenshot Generator |
 
 ---
 

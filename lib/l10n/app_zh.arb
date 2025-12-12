@@ -1293,7 +1293,7 @@
   "aiCloudApiTitle": "智谱GLM API",
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "输入智谱AI的API Key",
-  "aiCloudApiKeyHelper": "GLM-4-Flash模型完全免费",
+  "aiCloudApiKeyHelper": "GLM-*-Flash模型完全免费",
   "aiCloudApiKeySaved": "API Key 已保存",
   "aiCloudApiGetKey": "获取API Key",
   "aiCloudApiTestKey": "测试连接",
@@ -1641,6 +1641,10 @@
   "aiChatInputHint": "例如: 买了杯咖啡35块",
   "aiChatThinking": "思考中...",
   "aiChatHistoryCleared": "对话历史已清空",
+  "aiChatCopy": "复制",
+  "aiChatCopied": "已复制到剪贴板",
+  "aiChatDeleteMessageConfirm": "确定要删除这条消息吗？",
+  "aiChatMessageDeleted": "消息已删除",
   "aiChatUndone": "已撤销",
   "aiChatUndoFailed": "撤销失败",
   "aiChatTransactionNotFound": "交易记录不存在",
@@ -1716,6 +1720,26 @@
   "aiPromptVarOcrText": "用户输入或OCR识别的文本内容",
   "aiPromptVarCategories": "支出和收入分类列表",
   "aiPromptVarAccounts": "用户的账户列表（可能为空）",
+  "aiModelSelectEntry": "AI模型选择",
+  "aiModelSelectEntryDesc": "允许选择不同的文本推理、视觉AI模型用于账单识别和对话",
+  "aiModelTitle": "文本推理模型",
+  "aiVisionModelTitle": "视觉模型",
+  "aiModelFast": "快速",
+  "aiModelAccurate": "准确",
+  "aiModelThinking": "深度思考",
+  "aiModelSwitched": "已切换到 {modelName}",
+  "@aiModelSwitched": {
+    "placeholders": {
+      "modelName": {
+        "type": "String"
+      }
+    }
+  },
+  "aiUsingVisionDesc": "启用图像识别，以获得更高的识别精度",
+  "aiUnUsingVisionDesc": "已关闭图片识别，仅使用OCR文本",
+  "aiUploadImage": "上传图片到AI",
+  "aiUseVisionDesc": "使用视觉模型，识别更准确",
+  "aiUnUseVisionDesc": "仅使用文本模型分析OCR结果",
 
   "tagManageTitle": "标签管理",
   "tagManageSubtitle": "管理交易标签",

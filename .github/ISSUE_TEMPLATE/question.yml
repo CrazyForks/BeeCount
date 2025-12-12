@@ -9,6 +9,17 @@ body:
         有任何疑问都可以在这里提出！
         Feel free to ask any questions here!
 
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 提交前确认 / Pre-submission Checklist
+      description: 请确认以下事项 / Please confirm the following
+      options:
+        - label: 我已查阅 [官方文档](https://beecount-website.pages.dev/docs/intro)，没有找到相关答案 / I have checked the [official docs](https://beecount-website.pages.dev/docs/intro) and couldn't find the answer
+          required: true
+        - label: 我已在 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 搜索过，没有找到相同的问题 / I have searched [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) and found no similar question
+          required: true
+
   - type: textarea
     id: question
     attributes:

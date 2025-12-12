@@ -9,6 +9,19 @@ body:
         感谢您花时间填写此错误报告！
         Thank you for taking the time to fill out this bug report!
 
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 提交前确认 / Pre-submission Checklist
+      description: 请确认以下事项 / Please confirm the following
+      options:
+        - label: 我已查阅 [官方文档](https://beecount-website.pages.dev/docs/intro)，确认这不是使用方式问题 / I have checked the [official docs](https://beecount-website.pages.dev/docs/intro) and confirmed this is not a usage issue
+          required: true
+        - label: 我已在 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 搜索过，没有找到相同的 Bug 报告 / I have searched [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) and found no similar bug report
+          required: true
+        - label: 我已升级到最新版本，问题仍然存在 / I have updated to the latest version and the issue persists
+          required: true
+
   - type: textarea
     id: description
     attributes:

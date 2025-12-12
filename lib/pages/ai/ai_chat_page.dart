@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' hide Column;
 
@@ -352,19 +353,25 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
       final isUndone = metadata['isUndone'] == true;
       final billInfo = BillInfo.fromJson(metadata['billInfo'] ?? metadata);
 
-      return BillCardWidget(
-        billInfo: billInfo,
-        transactionId: message.transactionId,
-        isUndone: isUndone,
-        onUndo: message.transactionId != null && !isUndone
-            ? () => _handleUndo(message.id, message.transactionId!)
-            : null,
-        onEdit: message.transactionId != null && !isUndone
-            ? () => _handleEdit(message.transactionId!)
-            : null,
-        onChangeLedger: message.transactionId != null && !isUndone
-            ? () => _handleChangeLedger(message.id, message.transactionId!)
-            : null,
+      return GestureDetector(
+        onLongPressStart: (details) => _showBillCardMenu(
+          details.globalPosition,
+          message,
+        ),
+        child: BillCardWidget(
+          billInfo: billInfo,
+          transactionId: message.transactionId,
+          isUndone: isUndone,
+          onUndo: message.transactionId != null && !isUndone
+              ? () => _handleUndo(message.id, message.transactionId!)
+              : null,
+          onEdit: message.transactionId != null && !isUndone
+              ? () => _handleEdit(message.transactionId!)
+              : null,
+          onChangeLedger: message.transactionId != null && !isUndone
+              ? () => _handleChangeLedger(message.id, message.transactionId!)
+              : null,
+        ),
       );
     }
 
@@ -383,49 +390,56 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
           ],
           // 消息气泡
           Flexible(
-            child: Container(
-              margin: EdgeInsets.only(
-                left: isUser ? 60.0.scaled(context, ref) : 0,
-                right: isUser ? 0 : 60.0.scaled(context, ref),
+            child: GestureDetector(
+              onLongPressStart: (details) => _showTextMessageMenu(
+                details.globalPosition,
+                message,
+                isUser,
               ),
-              padding: EdgeInsets.symmetric(
-                horizontal: 12.0.scaled(context, ref),
-                vertical: 10.0.scaled(context, ref),
-              ),
-              decoration: BoxDecoration(
-                color: isUser
-                    ? ref.watch(primaryColorProvider).withOpacity(0.1)
-                    : BeeTokens.surface(context),
-                borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
-                border: Border.all(
-                  color: isUser
-                      ? ref.watch(primaryColorProvider).withOpacity(0.3)
-                      : BeeTokens.border(context),
+              child: Container(
+                margin: EdgeInsets.only(
+                  left: isUser ? 60.0.scaled(context, ref) : 0,
+                  right: isUser ? 0 : 60.0.scaled(context, ref),
                 ),
-              ),
-              child: TypewriterText(
-                text: message.content,
-                animate: shouldAnimate, // 只对标记的消息启用动画
-                onTextChange: shouldAnimate
-                    ? () {
-                        // 每次文本更新时滚动到底部
-                        _scrollToBottomSmooth();
-                      }
-                    : null,
-                onComplete: shouldAnimate
-                    ? () {
-                        // 动画完成后清除标记
-                        if (mounted) {
-                          setState(() {
-                            _animatingMessageId = null;
-                          });
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.0.scaled(context, ref),
+                  vertical: 10.0.scaled(context, ref),
+                ),
+                decoration: BoxDecoration(
+                  color: isUser
+                      ? ref.watch(primaryColorProvider).withOpacity(0.1)
+                      : BeeTokens.surface(context),
+                  borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+                  border: Border.all(
+                    color: isUser
+                        ? ref.watch(primaryColorProvider).withOpacity(0.3)
+                        : BeeTokens.border(context),
+                  ),
+                ),
+                child: TypewriterText(
+                  text: message.content,
+                  animate: shouldAnimate, // 只对标记的消息启用动画
+                  onTextChange: shouldAnimate
+                      ? () {
+                          // 每次文本更新时滚动到底部
+                          _scrollToBottomSmooth();
                         }
-                      }
-                    : null,
-                style: TextStyle(
-                  color: BeeTokens.textPrimary(context),
-                  fontSize: 14.0.scaled(context, ref),
-                  height: 1.5,
+                      : null,
+                  onComplete: shouldAnimate
+                      ? () {
+                          // 动画完成后清除标记
+                          if (mounted) {
+                            setState(() {
+                              _animatingMessageId = null;
+                            });
+                          }
+                        }
+                      : null,
+                  style: TextStyle(
+                    color: BeeTokens.textPrimary(context),
+                    fontSize: 14.0.scaled(context, ref),
+                    height: 1.5,
+                  ),
                 ),
               ),
             ),
@@ -998,6 +1012,81 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
     } catch (e) {
       if (mounted) {
         showToast(context, AppLocalizations.of(context).commonFailed);
+      }
+    }
+  }
+
+  /// 显示文字消息的长按菜单
+  void _showTextMessageMenu(Offset position, Message message, bool isUser) {
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.read(primaryColorProvider);
+
+    MessagePopoverMenu.show(
+      context: context,
+      globalPosition: position,
+      primaryColor: primaryColor,
+      items: [
+        PopoverMenuItem(
+          icon: Icons.copy,
+          label: l10n.aiChatCopy,
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: message.content));
+            showToast(context, l10n.aiChatCopied);
+          },
+        ),
+        PopoverMenuItem(
+          icon: Icons.delete_outline,
+          label: l10n.commonDelete,
+          color: Colors.red,
+          onTap: () => _deleteMessage(message),
+        ),
+      ],
+    );
+  }
+
+  /// 显示记账卡片的长按菜单
+  void _showBillCardMenu(Offset position, Message message) {
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.read(primaryColorProvider);
+
+    MessagePopoverMenu.show(
+      context: context,
+      globalPosition: position,
+      primaryColor: primaryColor,
+      items: [
+        PopoverMenuItem(
+          icon: Icons.delete_outline,
+          label: l10n.commonDelete,
+          color: Colors.red,
+          onTap: () => _deleteMessage(message),
+        ),
+      ],
+    );
+  }
+
+  /// 删除单条消息
+  Future<void> _deleteMessage(Message message) async {
+    final l10n = AppLocalizations.of(context);
+
+    // 确认删除
+    final confirmed = await AppDialog.confirm<bool>(
+      context,
+      title: l10n.commonDelete,
+      message: l10n.aiChatDeleteMessageConfirm,
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final repo = ref.read(repositoryProvider);
+      await repo.deleteMessage(message.id);
+
+      if (mounted) {
+        showToast(context, l10n.aiChatMessageDeleted);
+      }
+    } catch (e) {
+      if (mounted) {
+        showToast(context, l10n.commonFailed);
       }
     }
   }

@@ -3399,7 +3399,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiCloudApiKeyHint => '输入智谱AI的API Key';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash模型完全免费';
+  String get aiCloudApiKeyHelper => 'GLM-*-Flash模型完全免费';
 
   @override
   String get aiCloudApiKeySaved => 'API Key 已保存';
@@ -4005,6 +4005,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiChatHistoryCleared => '对话历史已清空';
 
   @override
+  String get aiChatCopy => '复制';
+
+  @override
+  String get aiChatCopied => '已复制到剪贴板';
+
+  @override
+  String get aiChatDeleteMessageConfirm => '确定要删除这条消息吗？';
+
+  @override
+  String get aiChatMessageDeleted => '消息已删除';
+
+  @override
   String get aiChatUndone => '已撤销';
 
   @override
@@ -4209,6 +4221,47 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiPromptVarAccounts => '用户的账户列表（可能为空）';
+
+  @override
+  String get aiModelSelectEntry => 'AI模型选择';
+
+  @override
+  String get aiModelSelectEntryDesc => '允许选择不同的文本推理、视觉AI模型用于账单识别和对话';
+
+  @override
+  String get aiModelTitle => '文本推理模型';
+
+  @override
+  String get aiVisionModelTitle => '视觉模型';
+
+  @override
+  String get aiModelFast => '快速';
+
+  @override
+  String get aiModelAccurate => '准确';
+
+  @override
+  String get aiModelThinking => '深度思考';
+
+  @override
+  String aiModelSwitched(String modelName) {
+    return '已切换到 $modelName';
+  }
+
+  @override
+  String get aiUsingVisionDesc => '启用图像识别，以获得更高的识别精度';
+
+  @override
+  String get aiUnUsingVisionDesc => '已关闭图片识别，仅使用OCR文本';
+
+  @override
+  String get aiUploadImage => '上传图片到AI';
+
+  @override
+  String get aiUseVisionDesc => '使用视觉模型，识别更准确';
+
+  @override
+  String get aiUnUseVisionDesc => '仅使用文本模型分析OCR结果';
 
   @override
   String get tagManageTitle => '标签管理';
@@ -8003,7 +8056,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiCloudApiKeyHint => '輸入智譜 AI 的 API Key';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash 模型完全免費';
+  String get aiCloudApiKeyHelper => 'GLM-*-Flash 模型完全免費';
 
   @override
   String get aiCloudApiKeySaved => 'API Key 已儲存';
@@ -8813,6 +8866,39 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiPromptVarAccounts => '使用者的帳戶清單（可能為空）';
+
+  @override
+  String get aiModelSelectEntry => 'AI模型選擇';
+
+  @override
+  String get aiModelSelectEntryDesc => '允許選擇不同的文字推理、視覺AI模型用於帳單識別和對話';
+
+  @override
+  String get aiModelTitle => '文字推理模型';
+
+  @override
+  String get aiVisionModelTitle => '視覺模型';
+
+  @override
+  String get aiModelFast => '快速';
+
+  @override
+  String get aiModelAccurate => '準確';
+
+  @override
+  String get aiUsingVisionDesc => '啟用影像識別，以獲得更高的識別精度';
+
+  @override
+  String get aiUnUsingVisionDesc => '已關閉圖片識別，僅使用OCR文字';
+
+  @override
+  String get aiUploadImage => '上傳圖片到AI';
+
+  @override
+  String get aiUseVisionDesc => '使用視覺模型，辨識更準確';
+
+  @override
+  String get aiUnUseVisionDesc => '僅使用文字模型分析OCR結果';
 
   @override
   String get tagManageTitle => '標籤管理';
