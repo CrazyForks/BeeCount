@@ -4229,6 +4229,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiModelAccurate => '准确';
 
   @override
+  String get aiModelThinking => '深度思考';
+
+  @override
+  String aiModelSwitched(String modelName) {
+    return '已切换到 $modelName';
+  }
+
+  @override
   String get aiUsingVisionDesc => '启用图像识别，以获得更高的识别精度';
 
   @override

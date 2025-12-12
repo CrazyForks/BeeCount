@@ -1,12 +1,13 @@
 import 'package:beecount/utils/ui_scale_extensions.dart';
 import 'package:beecount/widgets/biz/section_card.dart';
-import 'package:beecount/widgets/ui/primary_header.dart';
+import 'package:beecount/widgets/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/theme_providers.dart';
 
 /// AI模型选择页
 class AIModelSelectionPage extends ConsumerStatefulWidget {
@@ -89,6 +90,191 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
 
 
 
+  /// 获取文本模型的显示名称
+  String _getModelDisplayName(String modelId, AppLocalizations l10n) {
+    switch (modelId) {
+      case 'glm-4-flash':
+        return 'GLM-4-Flash (${l10n.aiModelFast})';
+      case 'glm-4.6v-flash':
+        return 'GLM-4.6V-Flash (${l10n.aiModelAccurate})';
+      default:
+        return modelId;
+    }
+  }
+
+  /// 获取视觉模型的显示名称
+  String _getVisionModelDisplayName(String modelId, AppLocalizations l10n) {
+    switch (modelId) {
+      case 'glm-4v-flash':
+        return 'GLM-4V-Flash (${l10n.aiModelFast})';
+      case 'glm-4.1v-thinking-flash':
+        return 'GLM-4.1V-Thinking-Flash';
+      case 'glm-4.6v-flash':
+        return 'GLM-4.6V-Flash (${l10n.aiModelAccurate})';
+      default:
+        return modelId;
+    }
+  }
+
+  /// 显示文本模型选择弹窗
+  void _showModelDialog() {
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.read(primaryColorProvider);
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.aiModelTitle),
+        titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildModelDialogOption(
+              dialogContext,
+              'glm-4-flash',
+              'GLM-4-Flash',
+              l10n.aiModelFast,
+              Icons.bolt,
+              primaryColor,
+              isText: true,
+            ),
+            _buildModelDialogOption(
+              dialogContext,
+              'glm-4.6v-flash',
+              'GLM-4.6V-Flash',
+              l10n.aiModelAccurate,
+              Icons.psychology,
+              primaryColor,
+              isText: true,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n.commonCancel),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 显示视觉模型选择弹窗
+  void _showVisionModelDialog() {
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.read(primaryColorProvider);
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.aiVisionModelTitle),
+        titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildModelDialogOption(
+              dialogContext,
+              'glm-4v-flash',
+              'GLM-4V-Flash',
+              l10n.aiModelFast,
+              Icons.bolt,
+              primaryColor,
+              isText: false,
+            ),
+            _buildModelDialogOption(
+              dialogContext,
+              'glm-4.1v-thinking-flash',
+              'GLM-4.1V-Thinking-Flash',
+              l10n.aiModelThinking,
+              Icons.lightbulb_outline,
+              primaryColor,
+              isText: false,
+            ),
+            _buildModelDialogOption(
+              dialogContext,
+              'glm-4.6v-flash',
+              'GLM-4.6V-Flash',
+              l10n.aiModelAccurate,
+              Icons.psychology,
+              primaryColor,
+              isText: false,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n.commonCancel),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModelDialogOption(
+    BuildContext dialogContext,
+    String value,
+    String title,
+    String subtitle,
+    IconData icon,
+    Color primaryColor, {
+    required bool isText,
+  }) {
+    final l10n = AppLocalizations.of(context);
+    final isSelected = isText ? _glmModel == value : _glmVisionModel == value;
+
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: isSelected ? primaryColor : BeeTokens.textTertiary(context),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: isSelected ? primaryColor : BeeTokens.textPrimary(context),
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          fontSize: 12,
+          color: BeeTokens.textSecondary(context),
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(Icons.check_circle, color: primaryColor)
+          : null,
+      onTap: () async {
+        Navigator.pop(dialogContext);
+
+        setState(() {
+          if (isText) {
+            _glmModel = value;
+          } else {
+            _glmVisionModel = value;
+          }
+        });
+
+        // 立即保存选择
+        final prefs = await SharedPreferences.getInstance();
+        if (isText) {
+          await prefs.setString('ai_glm_model', value);
+        } else {
+          await prefs.setString('ai_glm_vision_model', value);
+        }
+
+        if (mounted) {
+          showToast(context, l10n.aiModelSwitched(title));
+        }
+      },
+    );
+  }
+
   Widget _buildModelSection() {
     final l10n = AppLocalizations.of(context);
 
@@ -96,61 +282,33 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
       margin: EdgeInsets.zero,
       child: Column(
         children: [
-          Center(
-            child: DropdownMenu(
-              label: Text(l10n.aiModelTitle),
-              initialSelection: _glmModel,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(
-                  value: 'glm-4-flash',
-                  label: 'GLM-4-Flash (${l10n.aiModelFast})',
-                ),
-                DropdownMenuEntry(
-                  value: 'glm-4.6v-flash',
-                  label: 'GLM-4.6V-Flash(${l10n.aiModelAccurate})',
-                ),
-              ],
-              onSelected: (value) async {
-                setState(() {
-                  _glmModel = value!;
-                });
-            
-                // 立即保存选择
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setString('ai_glm_model', value!);
-              },
+          ListTile(
+            leading: Icon(
+              Icons.chat_outlined,
+              color: ref.watch(primaryColorProvider),
             ),
+            title: Text(
+              l10n.aiModelTitle,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(_getModelDisplayName(_glmModel, l10n)),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: _showModelDialog,
           ),
-          SizedBox(height: 16.0.scaled(context, ref)),
-          Center(
-            child: DropdownMenu(
-              label: Text(l10n.aiVisionModelTitle),
-              initialSelection: _glmVisionModel,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(
-                    value: 'glm-4v-flash',
-                    label: 'GLM-4V-Flash(${l10n.aiModelFast})',
-                  ),
-                  DropdownMenuEntry(
-                    value: 'glm-4.1v-thinking-flash',
-                    label: 'GLM-4.1V-Thinking-Flash',
-                  ),
-                  DropdownMenuEntry(
-                    value: 'glm-4.6v-flash',
-                    label: 'GLM-4.6V-Flash(${l10n.aiModelAccurate})',
-                  ),
-              ],
-              onSelected: (value) async {
-                setState(() {
-                  _glmVisionModel = value!;
-                });
-            
-                // 立即保存选择
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setString('ai_glm_vision_model', value!);
-              },
+          BeeTokens.cardDivider(context),
+          ListTile(
+            leading: Icon(
+              Icons.image_search,
+              color: ref.watch(primaryColorProvider),
             ),
-          )
+            title: Text(
+              l10n.aiVisionModelTitle,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(_getVisionModelDisplayName(_glmVisionModel, l10n)),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: _showVisionModelDialog,
+          ),
         ],
       ),
     );

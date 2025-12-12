@@ -614,7 +614,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.edit_note, color: ref.watch(primaryColorProvider)),
+            leading: Icon(Icons.psychology_outlined, color: ref.watch(primaryColorProvider)),
             title: Text(l10n.aiModelSelectEntry),
             subtitle: Text(l10n.aiModelSelectEntryDesc),
             trailing: const Icon(Icons.chevron_right),

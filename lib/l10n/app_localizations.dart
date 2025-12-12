@@ -8100,6 +8100,18 @@ abstract class AppLocalizations {
   /// **'Accurate'**
   String get aiModelAccurate;
 
+  /// No description provided for @aiModelThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Thinking'**
+  String get aiModelThinking;
+
+  /// No description provided for @aiModelSwitched.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to {modelName}'**
+  String aiModelSwitched(String modelName);
+
   /// No description provided for @aiUsingVisionDesc.
   ///
   /// In en, this message translates to:

@@ -4229,6 +4229,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiModelAccurate => 'Accurate';
 
   @override
+  String get aiModelThinking => 'Deep Thinking';
+
+  @override
+  String aiModelSwitched(String modelName) {
+    return 'Switched to $modelName';
+  }
+
+  @override
   String get aiUsingVisionDesc => 'Image recognition is enabled for higher recognition accuracy';
 
   @override

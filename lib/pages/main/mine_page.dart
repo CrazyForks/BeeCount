@@ -374,6 +374,18 @@ class MinePage extends ConsumerWidget {
                         },
                       ),
                       BeeTokens.cardDivider(context),
+                      // 使用帮助
+                      AppListTile(
+                        leading: Icons.help_outline,
+                        title: AppLocalizations.of(context).mineHelp,
+                        subtitle: AppLocalizations.of(context).mineHelpSubtitle,
+                        onTap: () async {
+                          final url =
+                              Uri.parse('https://beecount-website.pages.dev/docs/intro');
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                      BeeTokens.cardDivider(context),
                       // 仅在iOS显示打赏入口
                       if (Platform.isIOS) ...[
                         Consumer(

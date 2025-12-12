@@ -1722,6 +1722,15 @@
   "aiVisionModelTitle": "视觉模型",
   "aiModelFast": "快速",
   "aiModelAccurate": "准确",
+  "aiModelThinking": "深度思考",
+  "aiModelSwitched": "已切换到 {modelName}",
+  "@aiModelSwitched": {
+    "placeholders": {
+      "modelName": {
+        "type": "String"
+      }
+    }
+  },
   "aiUsingVisionDesc": "启用图像识别，以获得更高的识别精度",
   "aiUnUsingVisionDesc": "已关闭图片识别，仅使用OCR文本",
   "aiUploadImage": "上传图片到AI",

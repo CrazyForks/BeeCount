@@ -6,6 +6,7 @@ import '../../ai/tasks/bill_extraction_task.dart';
 import '../../ai/providers/bill_extraction_glm_provider.dart';
 import '../../ai/providers/bill_extraction_glm_vision_provider.dart';
 import '../../ai/providers/bill_extraction_tflite_provider.dart';
+import '../system/logger_service.dart';
 
 /// AI账单提取服务
 ///
@@ -43,7 +44,7 @@ class AIBillService {
 
       if (useVision && imageFile != null) {
         // 使用Vision模型
-        print('📸 [AI服务] 使用GLM视觉模型');
+        logger.info('AIBillService', '使用GLM视觉模型: $glmVisionModel');
         _aiKit.registerProvider(BillExtractionGLMVisionProvider(
           glmApiKey,
           glmVisionModel,
@@ -55,7 +56,7 @@ class AIBillService {
         ));
       } else {
         // 使用纯文本模型
-        print('📝 [AI服务] 使用GLM文本模型');
+        logger.info('AIBillService', '使用GLM文本模型: $glmModel');
         _aiKit.registerProvider(BillExtractionGLMProvider(
           glmApiKey,
           glmModel,
