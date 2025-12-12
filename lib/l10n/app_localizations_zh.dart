@@ -4657,6 +4657,35 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get budgetExceededWarning => '此笔消费后将超出预算';
+
+  @override
+  String get attachmentAdd => '添加图片';
+
+  @override
+  String get attachmentTakePhoto => '拍照';
+
+  @override
+  String get attachmentChooseFromGallery => '从相册选择';
+
+  @override
+  String get attachmentMaxReached => '已达到最大附件数量';
+
+  @override
+  String get attachmentDeleteConfirm => '确定删除此附件？';
+
+  @override
+  String get attachmentTitle => '附件';
+
+  @override
+  String get attachmentPreviewTitle => '图片预览';
+
+  @override
+  String attachmentCount(int count) {
+    return '$count张图片';
+  }
+
+  @override
+  String get commonDeleted => '已删除';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -9119,4 +9148,33 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get homeNewLedger => '新建帳本';
+
+  @override
+  String get attachmentAdd => '添加圖片';
+
+  @override
+  String get attachmentTakePhoto => '拍照';
+
+  @override
+  String get attachmentChooseFromGallery => '從相簿選擇';
+
+  @override
+  String get attachmentMaxReached => '已達到最大附件數量';
+
+  @override
+  String get attachmentDeleteConfirm => '確定刪除此附件？';
+
+  @override
+  String get attachmentTitle => '附件';
+
+  @override
+  String get attachmentPreviewTitle => '圖片預覽';
+
+  @override
+  String attachmentCount(int count) {
+    return '$count張圖片';
+  }
+
+  @override
+  String get commonDeleted => '已刪除';
 }

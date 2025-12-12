@@ -1206,4 +1206,81 @@ class CloudRepository extends BaseRepository {
   Stream<List<Budget>> watchBudgets(int ledgerId) {
     throw UnimplementedError('预算功能在云端模式下暂不可用');
   }
+
+  // ============================================
+  // AttachmentRepository 接口实现（云端暂不支持附件文件存储）
+  // ============================================
+
+  @override
+  Future<int> createAttachment({
+    required int transactionId,
+    required String fileName,
+    String? originalName,
+    int? fileSize,
+    int? width,
+    int? height,
+    int sortOrder = 0,
+  }) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<TransactionAttachment?> getAttachmentById(int id) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<TransactionAttachment>> getAttachmentsByTransaction(int transactionId) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> deleteAttachment(int id) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> deleteAttachmentsByTransaction(int transactionId) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> updateAttachmentSortOrder(int id, int sortOrder) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> updateAttachmentSortOrders(List<({int id, int sortOrder})> updates) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<bool> attachmentExistsByFileName(String fileName) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<int> getAttachmentCountByTransaction(int transactionId) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<Map<int, int>> getAttachmentCountsForTransactions(List<int> transactionIds) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<int>> getTransactionIdsWithAttachments() async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<List<TransactionAttachment>> watchAttachmentsByTransaction(int transactionId) {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Stream<int> watchAttachmentCountByTransaction(int transactionId) {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
 }

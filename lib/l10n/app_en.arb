@@ -6,7 +6,6 @@
   },
   "tabHome": "Home",
   "tabAnalytics": "Charts",
-  "tabLedgers": "Ledgers",
   "tabMine": "Mine",
   "commonCancel": "Cancel",
   "commonConfirm": "Confirm",
@@ -1421,7 +1420,6 @@
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "Enter your Zhipu AI API Key",
   "aiCloudApiKeyHelper": "GLM-*-Flash model is completely free",
-  "aiCloudApiKeySaved": "API Key saved",
   "aiCloudApiGetKey": "Get API Key",
   "aiCloudApiTestKey": "Test Connection",
   "aiCloudApiKeyValid": "✅ API Key is valid, AI features are available",
@@ -1566,7 +1564,6 @@
   "configExportConfirmTitle": "Confirm Export",
   "configImportSelectTitle": "Select Import Content",
   "configImportPreviewTitle": "Import Preview",
-  "configImportConfirmTitle": "Confirm Import",
   "ledgersConflictTitle": "Sync Conflict",
   "ledgersConflictMessage": "Local and cloud ledger data are inconsistent, please choose an action:",
   "ledgersConflictLocalInfo": "Local: {count} transactions",
@@ -1771,7 +1768,6 @@
   "aiPromptResetDefault": "Reset to Default",
   "aiPromptResetConfirmTitle": "Reset to Default",
   "aiPromptResetConfirmMessage": "Are you sure you want to reset to default prompt? Your custom content will be lost.",
-  "aiPromptCopied": "Copied to clipboard, ready to share",
   "aiPromptPasted": "Pasted",
   "aiPromptPreviewTitle": "Prompt Preview",
   "aiPromptPreviewNote": "Preview uses sample data for variables. Real data will be used at runtime.",
@@ -1780,7 +1776,6 @@
   "aiPromptVarCurrentDate": "Current date, e.g. \"2025-01-15\"",
   "aiPromptVarOcrText": "User input or OCR recognized text content",
   "aiPromptVarCategories": "Expense and income category list",
-  "aiPromptVarAccounts": "User's account list (may be empty)",
   "aiPromptVarAccounts": "User's account list (may be empty)",
   "aiModelSelectEntry": "AI Model Selection",
   "aiModelSelectEntryDesc": "Allows selection of visual and text reasoning models",
@@ -1802,7 +1797,6 @@
   "aiUploadImage": "Upload images to AI",
   "aiUseVisionDesc": "Use visual models for more accurate recognition",
   "aiUnUseVisionDesc": "Analyze OCR results using only text models",
-
   "tagManageTitle": "Tags",
   "tagManageSubtitle": "Manage transaction tags",
   "tagManageEmpty": "No tags yet",
@@ -1817,7 +1811,6 @@
   "tagNameRequired": "Tag name is required",
   "tagNameDuplicate": "Tag name already exists",
   "tagColorLabel": "Tag Color",
-  "tagColorHint": "Select tag color",
   "tagCreateSuccess": "Tag created",
   "tagUpdateSuccess": "Tag updated",
   "tagDeleteConfirmTitle": "Delete Tag",
@@ -1847,13 +1840,10 @@
   "tagDetailTotalCount": "Transactions",
   "tagDetailTotalExpense": "Total Expense",
   "tagDetailTotalIncome": "Total Income",
-  "tagDetailTransactionCount": "Transactions",
   "tagDetailTransactionList": "Related Transactions",
-  "tagDetailRelatedTransactions": "Related Transactions",
   "tagDetailNoTransactions": "No related transactions",
   "tagDetailNoTransactionsHint": "Transactions with this tag will appear here",
   "tagNotFound": "Tag not found",
-
   "tagDefaultMeituan": "Meituan",
   "tagDefaultEleme": "Eleme",
   "tagDefaultTaobao": "Taobao",
@@ -1874,22 +1864,13 @@
   "tagDefaultReimbursement": "Reimbursable",
   "tagDefaultRefundable": "Refundable",
   "tagDefaultRefunded": "Refunded",
-
   "tabDiscover": "Discover",
   "discoverTitle": "Discover",
   "discoverBudget": "Budget",
   "discoverBudgetSubtitle": "Set and track spending budgets",
   "discoverBudgetEmpty": "Set budget to control spending",
   "discoverAccounts": "Accounts",
-  "discoverAccountsSubtitle": "Manage assets and liabilities",
   "discoverAccountsEmpty": "Add accounts to track cash flow",
-  "discoverReports": "Reports",
-  "discoverReportsSubtitle": "Monthly/yearly financial reports",
-  "discoverRecurring": "Recurring",
-  "discoverRecurringSubtitle": "Manage recurring transactions",
-  "discoverLedgers": "Ledgers",
-  "discoverLedgersSubtitle": "Manage multiple ledgers",
-  "discoverComingSoon": "Coming soon",
   "discoverAccountsTotal": "Total Balance",
   "discoverAccountsCount": "{count} accounts",
   "@discoverAccountsCount": {
@@ -1899,48 +1880,17 @@
       }
     }
   },
-  "discoverMonthlyOverview": "This Month",
-  "discoverComparedToLastMonth": "vs last month",
-  "discoverUp": "↑{percent}",
-  "@discoverUp": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverDown": "↓{percent}",
-  "@discoverDown": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverNoChange": "No change",
-  "discoverTopCategories": "Top 3 Expenses",
-  "discoverNoExpense": "No expenses this month",
-  "discoverQuickActions": "Quick Entry",
   "discoverQuickCamera": "Camera",
   "discoverQuickAlbum": "Album",
   "discoverQuickVoice": "Voice",
-  "greetingMorning": "Good Morning",
-  "greetingAfternoon": "Good Afternoon",
-  "greetingEvening": "Good Evening",
-  "greetingNight": "Good Night",
-  "discoverSmartBilling": "Smart Billing",
   "discoverCommonFeatures": "Features",
   "discoverAISettings": "AI Settings",
   "discoverCategory": "Categories",
-  "discoverReminder": "Reminder",
   "discoverTags": "Tags",
   "discoverImport": "Import",
   "discoverExport": "Export",
-  "discoverBackup": "Backup",
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
-  "homeNewLedger": "New Ledger",
-
   "budgetTitle": "Budget",
   "budgetEmptyHint": "No budget set yet",
   "budgetAddTotal": "Add Total Budget",
@@ -1973,13 +1923,22 @@
   "budgetCategoryLabel": "Select Category",
   "budgetCategoryHint": "Select budget category",
   "budgetStartDayLabel": "Start Day",
-  "budgetStartDayHint": "Day of month to start",
   "budgetPeriodLabel": "Period",
-  "budgetPeriodMonthly": "Monthly",
-  "budgetPeriodWeekly": "Weekly",
-  "budgetPeriodYearly": "Yearly",
   "budgetSaveSuccess": "Budget saved",
   "budgetDeleteConfirm": "Delete this budget?",
   "budgetDeleteSuccess": "Budget deleted",
-  "budgetExceededWarning": "This expense will exceed the budget"
+  "attachmentAdd": "Add Image",
+  "attachmentTakePhoto": "Take Photo",
+  "attachmentChooseFromGallery": "Choose from Gallery",
+  "attachmentMaxReached": "Maximum attachments reached",
+  "attachmentDeleteConfirm": "Delete this attachment?",
+  "attachmentCount": "{count} images",
+  "@attachmentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonDeleted": "Deleted"
 }

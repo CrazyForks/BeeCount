@@ -8927,6 +8927,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This expense will exceed the budget'**
   String get budgetExceededWarning;
+
+  /// No description provided for @attachmentAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Image'**
+  String get attachmentAdd;
+
+  /// No description provided for @attachmentTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get attachmentTakePhoto;
+
+  /// No description provided for @attachmentChooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get attachmentChooseFromGallery;
+
+  /// No description provided for @attachmentMaxReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum attachments reached'**
+  String get attachmentMaxReached;
+
+  /// No description provided for @attachmentDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this attachment?'**
+  String get attachmentDeleteConfirm;
+
+  /// No description provided for @attachmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments'**
+  String get attachmentTitle;
+
+  /// No description provided for @attachmentPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Preview'**
+  String get attachmentPreviewTitle;
+
+  /// No description provided for @attachmentCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} images'**
+  String attachmentCount(int count);
+
+  /// No description provided for @commonDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get commonDeleted;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

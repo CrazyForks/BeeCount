@@ -3,7 +3,6 @@
   "appTitle": "蜜蜂记账",
   "tabHome": "明细",
   "tabAnalytics": "图表",
-  "tabLedgers": "账本",
   "tabMine": "我的",
   "commonCancel": "取消",
   "commonConfirm": "确定",
@@ -1294,7 +1293,6 @@
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "输入智谱AI的API Key",
   "aiCloudApiKeyHelper": "GLM-*-Flash模型完全免费",
-  "aiCloudApiKeySaved": "API Key 已保存",
   "aiCloudApiGetKey": "获取API Key",
   "aiCloudApiTestKey": "测试连接",
   "aiCloudApiKeyValid": "✅ API Key 有效，AI功能可正常使用",
@@ -1439,7 +1437,6 @@
   "configExportConfirmTitle": "确认导出",
   "configImportSelectTitle": "选择导入内容",
   "configImportPreviewTitle": "导入预览",
-  "configImportConfirmTitle": "确认导入",
   "ledgersLocal": "本地账本",
   "ledgersRemote": "云端账本",
   "ledgersEmpty": "暂无账本",
@@ -1710,7 +1707,6 @@
   "aiPromptResetDefault": "恢复默认",
   "aiPromptResetConfirmTitle": "恢复默认",
   "aiPromptResetConfirmMessage": "确定要恢复默认提示词吗？您的自定义内容将会丢失。",
-  "aiPromptCopied": "已复制到剪贴板，可分享给其他用户",
   "aiPromptPasted": "已粘贴",
   "aiPromptPreviewTitle": "提示词预览",
   "aiPromptPreviewNote": "以上预览使用示例数据替换变量，实际运行时会使用真实数据",
@@ -1740,7 +1736,6 @@
   "aiUploadImage": "上传图片到AI",
   "aiUseVisionDesc": "使用视觉模型，识别更准确",
   "aiUnUseVisionDesc": "仅使用文本模型分析OCR结果",
-
   "tagManageTitle": "标签管理",
   "tagManageSubtitle": "管理交易标签",
   "tagManageEmpty": "暂无标签",
@@ -1755,7 +1750,6 @@
   "tagNameRequired": "标签名称不能为空",
   "tagNameDuplicate": "标签名称已存在",
   "tagColorLabel": "标签颜色",
-  "tagColorHint": "选择标签颜色",
   "tagCreateSuccess": "标签创建成功",
   "tagUpdateSuccess": "标签更新成功",
   "tagDeleteConfirmTitle": "删除标签",
@@ -1785,13 +1779,10 @@
   "tagDetailTotalCount": "交易笔数",
   "tagDetailTotalExpense": "总支出",
   "tagDetailTotalIncome": "总收入",
-  "tagDetailTransactionCount": "交易笔数",
   "tagDetailTransactionList": "关联交易",
-  "tagDetailRelatedTransactions": "关联交易",
   "tagDetailNoTransactions": "暂无关联交易",
   "tagDetailNoTransactionsHint": "使用此标签的交易将在此显示",
   "tagNotFound": "标签不存在",
-
   "tagDefaultMeituan": "美团",
   "tagDefaultEleme": "饿了么",
   "tagDefaultTaobao": "淘宝",
@@ -1812,22 +1803,13 @@
   "tagDefaultReimbursement": "报销",
   "tagDefaultRefundable": "可退款",
   "tagDefaultRefunded": "已退款",
-
   "tabDiscover": "发现",
   "discoverTitle": "发现",
   "discoverBudget": "预算管理",
   "discoverBudgetSubtitle": "设置和追踪支出预算",
   "discoverBudgetEmpty": "设置预算，控制支出",
   "discoverAccounts": "账户总览",
-  "discoverAccountsSubtitle": "管理资产与负债",
   "discoverAccountsEmpty": "添加账户，追踪资金流向",
-  "discoverReports": "数据报告",
-  "discoverReportsSubtitle": "月度/年度财务报告",
-  "discoverRecurring": "周期记账",
-  "discoverRecurringSubtitle": "管理定期交易",
-  "discoverLedgers": "账本管理",
-  "discoverLedgersSubtitle": "管理多个账本",
-  "discoverComingSoon": "功能开发中",
   "discoverAccountsTotal": "总余额",
   "discoverAccountsCount": "{count} 个账户",
   "@discoverAccountsCount": {
@@ -1837,48 +1819,17 @@
       }
     }
   },
-  "discoverMonthlyOverview": "本月概览",
-  "discoverComparedToLastMonth": "较上月",
-  "discoverUp": "↑{percent}",
-  "@discoverUp": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverDown": "↓{percent}",
-  "@discoverDown": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverNoChange": "持平",
-  "discoverTopCategories": "支出TOP3",
-  "discoverNoExpense": "本月暂无支出",
-  "discoverQuickActions": "快捷记账",
   "discoverQuickCamera": "拍照",
   "discoverQuickAlbum": "相册",
   "discoverQuickVoice": "语音",
-  "greetingMorning": "早上好",
-  "greetingAfternoon": "下午好",
-  "greetingEvening": "晚上好",
-  "greetingNight": "夜深了",
-  "discoverSmartBilling": "智能记账",
   "discoverCommonFeatures": "常用功能",
   "discoverAISettings": "AI设置",
   "discoverCategory": "分类管理",
-  "discoverReminder": "记账提醒",
   "discoverTags": "标签管理",
   "discoverImport": "导入",
   "discoverExport": "导出",
-  "discoverBackup": "数据备份",
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
-  "homeNewLedger": "新建账本",
-
   "budgetTitle": "预算管理",
   "budgetEmptyHint": "还没有设置预算",
   "budgetAddTotal": "添加总预算",
@@ -1911,13 +1862,22 @@
   "budgetCategoryLabel": "选择分类",
   "budgetCategoryHint": "请选择预算分类",
   "budgetStartDayLabel": "起始日",
-  "budgetStartDayHint": "每月第几天开始计算",
   "budgetPeriodLabel": "周期",
-  "budgetPeriodMonthly": "月度",
-  "budgetPeriodWeekly": "周度",
-  "budgetPeriodYearly": "年度",
   "budgetSaveSuccess": "预算保存成功",
   "budgetDeleteConfirm": "确定删除此预算？",
   "budgetDeleteSuccess": "预算已删除",
-  "budgetExceededWarning": "此笔消费后将超出预算"
+  "attachmentAdd": "添加图片",
+  "attachmentTakePhoto": "拍照",
+  "attachmentChooseFromGallery": "从相册选择",
+  "attachmentMaxReached": "已达到最大附件数量",
+  "attachmentDeleteConfirm": "确定删除此附件？",
+  "attachmentCount": "{count}张图片",
+  "@attachmentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonDeleted": "已删除"
 }

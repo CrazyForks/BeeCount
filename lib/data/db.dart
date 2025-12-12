@@ -128,6 +128,19 @@ class TransactionTags extends Table {
   IntColumn get tagId => integer()();                 // 标签ID
 }
 
+// 交易附件表
+class TransactionAttachments extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get transactionId => integer()(); // 关联的交易ID
+  TextColumn get fileName => text()();        // 文件名（不含路径）
+  TextColumn get originalName => text().nullable()(); // 原始文件名
+  IntColumn get fileSize => integer().nullable()();   // 文件大小（bytes）
+  IntColumn get width => integer().nullable()();      // 图片宽度
+  IntColumn get height => integer().nullable()();     // 图片高度
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))(); // 排序序号
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+
 // 预算表
 class Budgets extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -171,12 +184,13 @@ class Budgets extends Table {
   Tags,
   TransactionTags,
   Budgets,
+  TransactionAttachments,
 ])
 class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 11; // v11: 添加预算功能（Budgets）
+  int get schemaVersion => 12; // v12: 添加交易附件功能（TransactionAttachments）
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -391,6 +405,21 @@ class BeeDatabase extends _$BeeDatabase {
             logger.info('DB', 'v11: 预算索引已创建');
 
             print('[DB Migration] v11 迁移完成');
+          }
+          if (from < 12) {
+            // v12: 添加交易附件功能
+            print('[DB Migration] 开始迁移到 v12: 添加交易附件功能');
+
+            // 创建 transaction_attachments 表
+            await migrator.createTable(transactionAttachments);
+            logger.info('DB', 'v12: transaction_attachments 表已创建');
+
+            // 创建索引以提高查询性能
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_attachments_transaction ON transaction_attachments(transaction_id)');
+            logger.info('DB', 'v12: 附件索引已创建');
+
+            print('[DB Migration] v12 迁移完成');
           }
         },
       );

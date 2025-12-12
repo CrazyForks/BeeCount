@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:drift/drift.dart' as drift show Value;
 
 import '../../data/db.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../styles/tokens.dart';
 import '../../utils/sync_helpers.dart';
+import '../../services/attachment_service.dart';
 import '../biz/amount_editor_sheet.dart';
 import '../ui/ui.dart';
 
@@ -121,7 +121,9 @@ class _TransferFormState extends ConsumerState<TransferForm> {
         initialTagIds: widget.initialTagIds,
         showAccountPicker: false,
         ledgerId: ledgerId,
+        editingTransactionId: widget.editingTransactionId,
         onSubmit: (result) async {
+          final attachmentService = ref.read(attachmentServiceProvider);
           try {
             if (widget.editingTransactionId != null) {
               // 编辑模式：更新现有转账记录
@@ -151,6 +153,17 @@ class _TransferFormState extends ConsumerState<TransferForm> {
                 // 编辑模式：如果没有选择标签，清除原有标签
                 await repo.removeAllTagsFromTransaction(widget.editingTransactionId!);
                 ref.read(tagListRefreshProvider.notifier).state++;
+              }
+
+              // 保存待上传的附件
+              if (result.pendingAttachments.isNotEmpty) {
+                await attachmentService.saveAttachments(
+                  transactionId: widget.editingTransactionId!,
+                  sourceFiles: result.pendingAttachments,
+                  startIndex: 0,
+                );
+                // 刷新附件列表缓存
+                ref.read(attachmentListRefreshProvider.notifier).state++;
               }
 
               // 统一处理：自动/手动同步与状态刷新
@@ -183,6 +196,17 @@ class _TransferFormState extends ConsumerState<TransferForm> {
                 );
                 // 刷新标签列表缓存
                 ref.read(tagListRefreshProvider.notifier).state++;
+              }
+
+              // 保存待上传的附件
+              if (result.pendingAttachments.isNotEmpty) {
+                await attachmentService.saveAttachments(
+                  transactionId: txId,
+                  sourceFiles: result.pendingAttachments,
+                  startIndex: 0,
+                );
+                // 刷新附件列表缓存
+                ref.read(attachmentListRefreshProvider.notifier).state++;
               }
 
               // 统一处理：自动/手动同步与状态刷新
@@ -349,7 +373,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? primary.withOpacity(0.1) : Colors.white,
+          color: isSelected ? primary.withValues(alpha: 0.1) : Colors.white,
           border: Border.all(
             color: isSelected ? primary : Colors.grey[300]!,
             width: isSelected ? 2 : 1,

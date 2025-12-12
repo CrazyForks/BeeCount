@@ -4657,4 +4657,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get budgetExceededWarning => 'This expense will exceed the budget';
+
+  @override
+  String get attachmentAdd => 'Add Image';
+
+  @override
+  String get attachmentTakePhoto => 'Take Photo';
+
+  @override
+  String get attachmentChooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String get attachmentMaxReached => 'Maximum attachments reached';
+
+  @override
+  String get attachmentDeleteConfirm => 'Delete this attachment?';
+
+  @override
+  String get attachmentTitle => 'Attachments';
+
+  @override
+  String get attachmentPreviewTitle => 'Image Preview';
+
+  @override
+  String attachmentCount(int count) {
+    return '$count images';
+  }
+
+  @override
+  String get commonDeleted => 'Deleted';
 }
