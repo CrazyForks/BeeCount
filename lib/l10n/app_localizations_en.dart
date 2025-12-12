@@ -3399,7 +3399,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiKeyHint => 'Enter your Zhipu AI API Key';
 
   @override
-  String get aiCloudApiKeyHelper => 'GLM-4-Flash model is completely free';
+  String get aiCloudApiKeyHelper => 'GLM-*-Flash model is completely free';
 
   @override
   String get aiCloudApiKeySaved => 'API Key saved';
@@ -4209,6 +4209,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiPromptVarAccounts => 'User\'s account list (may be empty)';
+
+  @override
+  String get aiModelSelectEntry => 'AI Model Selection';
+
+  @override
+  String get aiModelSelectEntryDesc => 'Allows selection of visual and text reasoning models';
+
+  @override
+  String get aiModelTitle => 'Text Reasoning Model';
+
+  @override
+  String get aiVisionModelTitle => 'Vision Model';
+
+  @override
+  String get aiModelFast => 'Faster';
+
+  @override
+  String get aiModelAccurate => 'Accurate';
+
+  @override
+  String get aiUsingVisionDesc => 'Image recognition is enabled for higher recognition accuracy';
+
+  @override
+  String get aiUnUsingVisionDesc => 'Image recognition turned off, OCR text only';
+
+  @override
+  String get aiUploadImage => 'Upload images to AI';
+
+  @override
+  String get aiUseVisionDesc => 'Use visual models for more accurate recognition';
+
+  @override
+  String get aiUnUseVisionDesc => 'Analyze OCR results using only text models';
 
   @override
   String get tagManageTitle => 'Tags';

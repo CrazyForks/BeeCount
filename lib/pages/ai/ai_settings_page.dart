@@ -1,3 +1,4 @@
+import 'package:beecount/pages/ai/ai_model_selection_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -166,6 +167,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
     );
   }
 
+
   Widget _buildEnableSection() {
     final l10n = AppLocalizations.of(context);
 
@@ -211,18 +213,18 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
               if (mounted) {
                 showToast(
                   context,
-                  value ? '已启用图片识别，识别准确率更高' : '已关闭图片识别，仅使用OCR文本',
+                  value ? l10n.aiUsingVisionDesc : l10n.aiUnUsingVisionDesc,
                 );
               }
             } : null,
-            title: const Text(
-              '上传图片到AI',
+            title: Text(
+              l10n.aiUploadImage,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             subtitle: Text(
               _useVision
-                  ? '使用GLM-4V-Flash视觉模型，识别更准确（免费）'
-                  : '仅使用GLM-4.6文本模型分析OCR结果',
+                  ? l10n.aiUseVisionDesc
+                  : l10n.aiUnUseVisionDesc
             ),
             activeColor: ref.watch(primaryColorProvider),
           ),
@@ -608,6 +610,18 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const AIPromptEditPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.edit_note, color: ref.watch(primaryColorProvider)),
+            title: Text(l10n.aiModelSelectEntry),
+            subtitle: Text(l10n.aiModelSelectEntryDesc),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AIModelSelectionPage()),
               );
             },
           ),

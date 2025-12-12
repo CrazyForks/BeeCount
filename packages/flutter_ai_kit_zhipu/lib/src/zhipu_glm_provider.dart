@@ -11,7 +11,7 @@ import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 /// ```dart
 /// final provider = ZhipuGLMProvider(
 ///   apiKey: 'your_api_key',
-///   model: 'glm-4-flash', // 默认使用免费的glm-4-flash
+///   model: 'glm-4.6v-flash', // 默认使用免费的glm-4.6v-flash
 /// );
 /// ```
 class ZhipuGLMProvider implements AIProvider<String, String> {
@@ -46,7 +46,7 @@ class ZhipuGLMProvider implements AIProvider<String, String> {
 
   ZhipuGLMProvider({
     required this.apiKey,
-    this.model = 'glm-4-flash',
+    this.model = 'glm-4.6v-flash',
     this.temperature = 0.1,
     this.imageFile,
     this.audioFile,
