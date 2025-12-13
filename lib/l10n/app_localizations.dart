@@ -8891,6 +8891,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Import'**
   String get attachmentStartImport;
+
+  /// No description provided for @shortcutsGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcuts'**
+  String get shortcutsGuide;
+
+  /// No description provided for @shortcutsGuideDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick access to voice, camera billing, etc.'**
+  String get shortcutsGuideDesc;
+
+  /// No description provided for @shortcutsIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Billing'**
+  String get shortcutsIntroTitle;
+
+  /// No description provided for @shortcutsIntroDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use shortcuts to directly open voice billing, camera billing, and other features from your home screen without opening the app first.'**
+  String get shortcutsIntroDesc;
+
+  /// No description provided for @availableShortcuts.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Shortcuts'**
+  String get availableShortcuts;
+
+  /// No description provided for @shortcutVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Billing'**
+  String get shortcutVoice;
+
+  /// No description provided for @shortcutVoiceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Quickly record bills by voice'**
+  String get shortcutVoiceDesc;
+
+  /// No description provided for @shortcutImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Billing'**
+  String get shortcutImage;
+
+  /// No description provided for @shortcutImageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognize bills from gallery images'**
+  String get shortcutImageDesc;
+
+  /// No description provided for @shortcutCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Billing'**
+  String get shortcutCamera;
+
+  /// No description provided for @shortcutCameraDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photos to recognize bills'**
+  String get shortcutCameraDesc;
+
+  /// No description provided for @shortcutAiChat.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get shortcutAiChat;
+
+  /// No description provided for @shortcutAiChatDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Open AI billing assistant'**
+  String get shortcutAiChatDesc;
+
+  /// No description provided for @shortcutUrlCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'URL copied to clipboard'**
+  String get shortcutUrlCopied;
+
+  /// No description provided for @howToAddShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Add Shortcuts'**
+  String get howToAddShortcut;
+
+  /// No description provided for @iosShortcutStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Shortcuts app'**
+  String get iosShortcutStep1;
+
+  /// No description provided for @iosShortcutStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + in the upper right to create a new shortcut'**
+  String get iosShortcutStep2;
+
+  /// No description provided for @iosShortcutStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Add \'Open URL\' action'**
+  String get iosShortcutStep3;
+
+  /// No description provided for @iosShortcutStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the copied URL (e.g., beecount://voice)'**
+  String get iosShortcutStep4;
+
+  /// No description provided for @iosShortcutStep5.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and add to home screen'**
+  String get iosShortcutStep5;
+
+  /// No description provided for @androidShortcutStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a shortcut creator app (e.g., Shortcut Maker)'**
+  String get androidShortcutStep1;
+
+  /// No description provided for @androidShortcutStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Select \'URL Shortcut\''**
+  String get androidShortcutStep2;
+
+  /// No description provided for @androidShortcutStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the copied URL (e.g., beecount://voice)'**
+  String get androidShortcutStep3;
+
+  /// No description provided for @androidShortcutStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Set icon and name, then add to home screen'**
+  String get androidShortcutStep4;
+
+  /// No description provided for @shortcutsTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get shortcutsTip;
+
+  /// No description provided for @shortcutsTipDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcuts require AI features. Make sure AI is enabled and API Key is configured.'**
+  String get shortcutsTipDesc;
+
+  /// No description provided for @shortcutOpenShortcutsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Shortcuts App'**
+  String get shortcutOpenShortcutsApp;
+
+  /// No description provided for @shortcutAutoAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Billing API'**
+  String get shortcutAutoAdd;
+
+  /// No description provided for @shortcutAutoAddDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically create bills via URL parameters. Works great with Shortcuts and automation tools.'**
+  String get shortcutAutoAddDesc;
+
+  /// No description provided for @shortcutAutoAddExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example URL:'**
+  String get shortcutAutoAddExample;
+
+  /// No description provided for @shortcutAutoAddParams.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported parameters:'**
+  String get shortcutAutoAddParams;
+
+  /// No description provided for @shortcutParamAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (required)'**
+  String get shortcutParamAmount;
+
+  /// No description provided for @shortcutParamType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type: expense / income / transfer'**
+  String get shortcutParamType;
+
+  /// No description provided for @shortcutParamCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name (must match existing category)'**
+  String get shortcutParamCategory;
+
+  /// No description provided for @shortcutParamNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get shortcutParamNote;
+
+  /// No description provided for @shortcutParamAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name (must match existing account)'**
+  String get shortcutParamAccount;
+
+  /// No description provided for @shortcutParamTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags (comma separated)'**
+  String get shortcutParamTags;
+
+  /// No description provided for @shortcutParamDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date (ISO format, e.g., 2024-01-15)'**
+  String get shortcutParamDate;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

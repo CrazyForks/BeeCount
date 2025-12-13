@@ -7,6 +7,7 @@ import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import '../ai/ai_settings_page.dart';
 import '../automation/auto_billing_settings_page.dart';
+import 'shortcuts_guide_page.dart';
 import '../../l10n/app_localizations.dart';
 
 /// 智能记账二级页面
@@ -231,32 +232,48 @@ class SmartBillingPage extends ConsumerWidget {
                 // 截图自动记账
                 SectionCard(
                   margin: EdgeInsets.zero,
-                  child: AppListTile(
-                    leading: Icons.auto_fix_high,
-                    title: l10n.autoScreenshotBilling,
-                    subtitle: Platform.isAndroid
-                        ? l10n.autoScreenshotBillingDesc
-                        : l10n.autoScreenshotBillingIosDesc,
-                    trailing: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        'BETA',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
+                  child: Column(
+                    children: [
+                      AppListTile(
+                        leading: Icons.auto_fix_high,
+                        title: l10n.autoScreenshotBilling,
+                        subtitle: Platform.isAndroid
+                            ? l10n.autoScreenshotBillingDesc
+                            : l10n.autoScreenshotBillingIosDesc,
+                        trailing: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'BETA',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AutoBillingSettingsPage()),
+                          );
+                        },
                       ),
-                    ),
-                    onTap: () async {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const AutoBillingSettingsPage()),
-                      );
-                    },
+                      BeeTokens.cardDivider(context),
+                      // 快捷指令
+                      AppListTile(
+                        leading: Icons.app_shortcut,
+                        title: l10n.shortcutsGuide,
+                        subtitle: l10n.shortcutsGuideDesc,
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const ShortcutsGuidePage()),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],

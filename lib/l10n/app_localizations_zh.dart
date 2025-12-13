@@ -4647,6 +4647,120 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get attachmentStartImport => '开始导入';
+
+  @override
+  String get shortcutsGuide => '快捷指令';
+
+  @override
+  String get shortcutsGuideDesc => '快速打开语音、拍照等记账方式';
+
+  @override
+  String get shortcutsIntroTitle => '快速记账';
+
+  @override
+  String get shortcutsIntroDesc => '使用快捷指令，可以在桌面直接打开语音记账、拍照记账等功能，无需先打开 App。';
+
+  @override
+  String get availableShortcuts => '可用快捷指令';
+
+  @override
+  String get shortcutVoice => '语音记账';
+
+  @override
+  String get shortcutVoiceDesc => '通过语音快速记录账单';
+
+  @override
+  String get shortcutImage => '图片记账';
+
+  @override
+  String get shortcutImageDesc => '从相册选择图片识别账单';
+
+  @override
+  String get shortcutCamera => '拍照记账';
+
+  @override
+  String get shortcutCameraDesc => '拍照识别账单';
+
+  @override
+  String get shortcutAiChat => 'AI 助手';
+
+  @override
+  String get shortcutAiChatDesc => '打开 AI 记账助手';
+
+  @override
+  String get shortcutUrlCopied => '链接已复制到剪贴板';
+
+  @override
+  String get howToAddShortcut => '如何添加快捷指令';
+
+  @override
+  String get iosShortcutStep1 => '打开「快捷指令」App';
+
+  @override
+  String get iosShortcutStep2 => '点击右上角「+」新建快捷指令';
+
+  @override
+  String get iosShortcutStep3 => '添加「打开 URL」操作';
+
+  @override
+  String get iosShortcutStep4 => '粘贴上方复制的链接（如 beecount://voice）';
+
+  @override
+  String get iosShortcutStep5 => '保存后，可添加到桌面使用';
+
+  @override
+  String get androidShortcutStep1 => '下载支持创建快捷方式的应用（如 Shortcut Maker）';
+
+  @override
+  String get androidShortcutStep2 => '选择「URL 快捷方式」';
+
+  @override
+  String get androidShortcutStep3 => '粘贴上方复制的链接（如 beecount://voice）';
+
+  @override
+  String get androidShortcutStep4 => '设置图标和名称后添加到桌面';
+
+  @override
+  String get shortcutsTip => '小贴士';
+
+  @override
+  String get shortcutsTipDesc => '快捷指令需要配合 AI 功能使用。请确保已开启智能识别并配置好 API Key。';
+
+  @override
+  String get shortcutOpenShortcutsApp => '打开快捷指令 App';
+
+  @override
+  String get shortcutAutoAdd => '自动记账接口';
+
+  @override
+  String get shortcutAutoAddDesc => '通过 URL 参数自动创建账单，适合与快捷指令、自动化工具配合使用。';
+
+  @override
+  String get shortcutAutoAddExample => '示例链接：';
+
+  @override
+  String get shortcutAutoAddParams => '支持的参数：';
+
+  @override
+  String get shortcutParamAmount => '金额（必填）';
+
+  @override
+  String get shortcutParamType => '类型：expense（支出）/ income（收入）/ transfer（转账）';
+
+  @override
+  String get shortcutParamCategory => '分类名称（需与App中已有分类匹配）';
+
+  @override
+  String get shortcutParamNote => '备注';
+
+  @override
+  String get shortcutParamAccount => '账户名称（需与App中已有账户匹配）';
+
+  @override
+  String get shortcutParamTags => '标签（多个用逗号分隔）';
+
+  @override
+  String get shortcutParamDate => '日期（ISO格式，如 2024-01-15）';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

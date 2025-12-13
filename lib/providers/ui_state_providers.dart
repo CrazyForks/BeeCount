@@ -11,9 +11,13 @@ import '../data/db.dart';
 import '../services/data/recurring_transaction_service.dart';
 import '../services/system/logger_service.dart';
 import '../services/ai/ai_constants.dart';
+import '../services/platform/app_link_service.dart';
 
 // 底部导航索引（0: 明细, 1: 图表, 2: 账本, 3: 我的）
 final bottomTabIndexProvider = StateProvider<int>((ref) => 0);
+
+// AppLink 待处理动作（用于通知 UI 层执行导航）
+final pendingAppLinkActionProvider = StateProvider<AppLinkAction?>((ref) => null);
 
 // 首页滚动到顶部触发器（每次改变值时触发滚动）
 final homeScrollToTopProvider = StateProvider<int>((ref) => 0);

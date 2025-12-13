@@ -4647,4 +4647,118 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get attachmentStartImport => 'Start Import';
+
+  @override
+  String get shortcutsGuide => 'Shortcuts';
+
+  @override
+  String get shortcutsGuideDesc => 'Quick access to voice, camera billing, etc.';
+
+  @override
+  String get shortcutsIntroTitle => 'Quick Billing';
+
+  @override
+  String get shortcutsIntroDesc => 'Use shortcuts to directly open voice billing, camera billing, and other features from your home screen without opening the app first.';
+
+  @override
+  String get availableShortcuts => 'Available Shortcuts';
+
+  @override
+  String get shortcutVoice => 'Voice Billing';
+
+  @override
+  String get shortcutVoiceDesc => 'Quickly record bills by voice';
+
+  @override
+  String get shortcutImage => 'Image Billing';
+
+  @override
+  String get shortcutImageDesc => 'Recognize bills from gallery images';
+
+  @override
+  String get shortcutCamera => 'Camera Billing';
+
+  @override
+  String get shortcutCameraDesc => 'Take photos to recognize bills';
+
+  @override
+  String get shortcutAiChat => 'AI Assistant';
+
+  @override
+  String get shortcutAiChatDesc => 'Open AI billing assistant';
+
+  @override
+  String get shortcutUrlCopied => 'URL copied to clipboard';
+
+  @override
+  String get howToAddShortcut => 'How to Add Shortcuts';
+
+  @override
+  String get iosShortcutStep1 => 'Open the Shortcuts app';
+
+  @override
+  String get iosShortcutStep2 => 'Tap + in the upper right to create a new shortcut';
+
+  @override
+  String get iosShortcutStep3 => 'Add \'Open URL\' action';
+
+  @override
+  String get iosShortcutStep4 => 'Paste the copied URL (e.g., beecount://voice)';
+
+  @override
+  String get iosShortcutStep5 => 'Save and add to home screen';
+
+  @override
+  String get androidShortcutStep1 => 'Download a shortcut creator app (e.g., Shortcut Maker)';
+
+  @override
+  String get androidShortcutStep2 => 'Select \'URL Shortcut\'';
+
+  @override
+  String get androidShortcutStep3 => 'Paste the copied URL (e.g., beecount://voice)';
+
+  @override
+  String get androidShortcutStep4 => 'Set icon and name, then add to home screen';
+
+  @override
+  String get shortcutsTip => 'Tips';
+
+  @override
+  String get shortcutsTipDesc => 'Shortcuts require AI features. Make sure AI is enabled and API Key is configured.';
+
+  @override
+  String get shortcutOpenShortcutsApp => 'Open Shortcuts App';
+
+  @override
+  String get shortcutAutoAdd => 'Auto Billing API';
+
+  @override
+  String get shortcutAutoAddDesc => 'Automatically create bills via URL parameters. Works great with Shortcuts and automation tools.';
+
+  @override
+  String get shortcutAutoAddExample => 'Example URL:';
+
+  @override
+  String get shortcutAutoAddParams => 'Supported parameters:';
+
+  @override
+  String get shortcutParamAmount => 'Amount (required)';
+
+  @override
+  String get shortcutParamType => 'Type: expense / income / transfer';
+
+  @override
+  String get shortcutParamCategory => 'Category name (must match existing category)';
+
+  @override
+  String get shortcutParamNote => 'Note';
+
+  @override
+  String get shortcutParamAccount => 'Account name (must match existing account)';
+
+  @override
+  String get shortcutParamTags => 'Tags (comma separated)';
+
+  @override
+  String get shortcutParamDate => 'Date (ISO format, e.g., 2024-01-15)';
 }
