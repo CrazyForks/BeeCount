@@ -162,10 +162,26 @@ jobs:
           export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
+
+          # For Google Play: remove REQUEST_INSTALL_PACKAGES permission
+          # Google Play handles updates automatically, so in-app APK installation is not needed
+          mkdir -p android/app/src/prod
+          cat > android/app/src/prod/AndroidManifest.xml << 'MANIFEST_EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools">
+              <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"
+                  tools:node="remove" />
+          </manifest>
+          MANIFEST_EOF
+
           flutter build appbundle --release --flavor prod \
             --dart-define=CI_VERSION="$CI_VERSION" \
             --dart-define=GIT_COMMIT="$GIT_COMMIT" \
-            --dart-define=BUILD_TIME="$BUILD_TIME"
+            --dart-define=BUILD_TIME="$BUILD_TIME" \
+            --dart-define=GOOGLE_PLAY=true
+
+          # Cleanup: remove the temporary manifest so it doesn't affect other builds
+          rm -rf android/app/src/prod
 
       - name: List Android outputs (debug)
         run: |

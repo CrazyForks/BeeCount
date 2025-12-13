@@ -16,6 +16,9 @@ import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import 'log_center_page.dart';
 
+/// 是否为 Google Play 版本（通过 CI 构建时 --dart-define=GOOGLE_PLAY=true 注入）
+const _isGooglePlayBuild = bool.fromEnvironment('GOOGLE_PLAY', defaultValue: false);
+
 /// 关于页面
 class AboutPage extends ConsumerStatefulWidget {
   const AboutPage({super.key});
@@ -159,8 +162,8 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                   margin: EdgeInsets.zero,
                   child: Column(
                     children: [
-                      // iOS 平台隐藏检查更新功能（使用 App Store/TestFlight 分发）
-                      if (!Platform.isIOS) ...[
+                      // iOS 平台和 Google Play 版本隐藏检查更新功能（使用应用商店分发）
+                      if (!Platform.isIOS && !_isGooglePlayBuild) ...[
                         Consumer(builder: (context, ref2, child) {
                           final isLoading = ref2.watch(checkUpdateLoadingProvider);
                           final downloadProgress = ref2.watch(updateProgressProvider);
