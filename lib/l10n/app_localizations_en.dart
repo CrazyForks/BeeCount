@@ -2507,6 +2507,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateInstallConfirmMessage => 'New version has been downloaded. Install now?';
 
   @override
+  String get updateMirrorSelectTitle => 'Select Download Accelerator';
+
+  @override
+  String get updateMirrorSelectHint => 'If download is slow, select an accelerated mirror. Click \"Test\" to check latency.';
+
+  @override
+  String get updateMirrorTestButton => 'Test';
+
+  @override
+  String updateMirrorTesting(int completed, int total) {
+    return 'Testing $completed/$total...';
+  }
+
+  @override
+  String get updateMirrorDirectHint => 'For users with good network';
+
+  @override
+  String updateDownloadMirror(String mirror) {
+    return 'Source: $mirror';
+  }
+
+  @override
+  String get updateSelectMirror => 'Select Accelerator';
+
+  @override
+  String get updateMirrorSettingTitle => 'Download Accelerator';
+
+  @override
+  String get updateMirrorSettingSubtitle => 'Switch GitHub download source';
+
+  @override
   String get updateNotificationPermissionGuideText => 'Download progress notifications are disabled, but this doesn\'t affect download functionality. To view progress:';
 
   @override
@@ -4236,9 +4267,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiModelAccurate => 'Accurate';
 
   @override
-  String get aiModelThinking => 'Deep Thinking';
-
-  @override
   String aiModelSwitched(String modelName) {
     return 'Switched to $modelName';
   }
@@ -4620,9 +4648,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get attachmentImportSelectFile => 'Select a compressed file to import';
-
-  @override
   String get attachmentImportConflictStrategy => 'Conflict Strategy';
 
   @override
@@ -4637,9 +4662,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get attachmentImportSuccess => 'Attachments import completed';
-
-  @override
   String attachmentImportResult(int imported, int skipped, int overwritten, int failed) {
     return 'Imported $imported, Skipped $skipped, Overwritten $overwritten, Failed $failed';
   }
@@ -4650,11 +4672,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String attachmentArchiveInfo(int count, String date) {
     return '$count attachments, exported on $date';
-  }
-
-  @override
-  String attachmentArchiveSize(String size) {
-    return 'File size: $size';
   }
 
   @override
@@ -4692,12 +4709,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shortcutCameraDesc => 'Take photos to recognize bills';
-
-  @override
-  String get shortcutAiChat => 'AI Assistant';
-
-  @override
-  String get shortcutAiChatDesc => 'Open AI billing assistant';
 
   @override
   String get shortcutUrlCopied => 'URL copied to clipboard';

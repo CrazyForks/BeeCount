@@ -2507,6 +2507,37 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateInstallConfirmMessage => '新版本已下载完成，是否立即安装？';
 
   @override
+  String get updateMirrorSelectTitle => '选择下载加速器';
+
+  @override
+  String get updateMirrorSelectHint => '如果下载缓慢，可以选择一个加速镜像。点击「测速」检测各镜像延迟。';
+
+  @override
+  String get updateMirrorTestButton => '测速';
+
+  @override
+  String updateMirrorTesting(int completed, int total) {
+    return '正在测试 $completed/$total...';
+  }
+
+  @override
+  String get updateMirrorDirectHint => '适合网络通畅的用户';
+
+  @override
+  String updateDownloadMirror(String mirror) {
+    return '下载源: $mirror';
+  }
+
+  @override
+  String get updateSelectMirror => '选择加速器';
+
+  @override
+  String get updateMirrorSettingTitle => '下载加速器';
+
+  @override
+  String get updateMirrorSettingSubtitle => '切换 GitHub 下载源';
+
+  @override
   String get updateNotificationPermissionGuideText => '下载进度通知被关闭，但不影响下载功能。如需查看进度：';
 
   @override
@@ -4236,9 +4267,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiModelAccurate => '准确';
 
   @override
-  String get aiModelThinking => '深度思考';
-
-  @override
   String aiModelSwitched(String modelName) {
     return '已切换到 $modelName';
   }
@@ -4620,9 +4648,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get attachmentImportSelectFile => '选择要导入的压缩文件';
-
-  @override
   String get attachmentImportConflictStrategy => '冲突处理策略';
 
   @override
@@ -4637,9 +4662,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get attachmentImportSuccess => '附件导入完成';
-
-  @override
   String attachmentImportResult(int imported, int skipped, int overwritten, int failed) {
     return '导入 $imported 张，跳过 $skipped 张，覆盖 $overwritten 张，失败 $failed 张';
   }
@@ -4650,11 +4672,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String attachmentArchiveInfo(int count, String date) {
     return '$count 个附件，导出于 $date';
-  }
-
-  @override
-  String attachmentArchiveSize(String size) {
-    return '文件大小: $size';
   }
 
   @override
@@ -4692,12 +4709,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shortcutCameraDesc => '拍照识别账单';
-
-  @override
-  String get shortcutAiChat => 'AI 助手';
-
-  @override
-  String get shortcutAiChatDesc => '打开 AI 记账助手';
 
   @override
   String get shortcutUrlCopied => '链接已复制到剪贴板';
@@ -7280,6 +7291,37 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateInstallConfirmMessage => '新版本已下載完成，是否立即安裝？';
 
   @override
+  String get updateMirrorSelectTitle => '選擇下載加速器';
+
+  @override
+  String get updateMirrorSelectHint => '如果下載緩慢，可以選擇一個加速映像。點擊「測速」檢測各映像延遲。';
+
+  @override
+  String get updateMirrorTestButton => '測速';
+
+  @override
+  String updateMirrorTesting(int completed, int total) {
+    return '正在測試 $completed/$total...';
+  }
+
+  @override
+  String get updateMirrorDirectHint => '適合網路暢通的使用者';
+
+  @override
+  String updateDownloadMirror(String mirror) {
+    return '下載源: $mirror';
+  }
+
+  @override
+  String get updateSelectMirror => '選擇加速器';
+
+  @override
+  String get updateMirrorSettingTitle => '下載加速器';
+
+  @override
+  String get updateMirrorSettingSubtitle => '切換 GitHub 下載源';
+
+  @override
   String get updateNotificationPermissionGuideText => '下載進度通知被關閉，但不影響下載功能。如需檢視進度：';
 
   @override
@@ -9009,9 +9051,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiModelAccurate => '準確';
 
   @override
-  String get aiModelThinking => '深度思考';
-
-  @override
   String aiModelSwitched(String modelName) {
     return '已切換到 $modelName';
   }
@@ -9193,6 +9232,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tagDefaultRefunded => '已退款';
+
+  @override
+  String get tagDefaultVoiceBilling => '語音記帳';
+
+  @override
+  String get tagDefaultImageBilling => '圖片記帳';
+
+  @override
+  String get tagDefaultCameraBilling => '拍照記帳';
+
+  @override
+  String get tagDefaultAiBilling => 'AI記帳';
 
   @override
   String get tabDiscover => '發現';
@@ -9381,9 +9432,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get attachmentImportSelectFile => '選擇要匯入的壓縮檔案';
-
-  @override
   String get attachmentImportConflictStrategy => '衝突處理策略';
 
   @override
@@ -9396,9 +9444,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String attachmentImportProgress(int current, int total) {
     return '正在匯入附件 ($current/$total)';
   }
-
-  @override
-  String get attachmentImportSuccess => '附件匯入完成';
 
   @override
   String attachmentImportResult(int imported, int skipped, int overwritten, int failed) {
@@ -9414,10 +9459,113 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String attachmentArchiveSize(String size) {
-    return '檔案大小: $size';
-  }
+  String get attachmentStartImport => '開始匯入';
 
   @override
-  String get attachmentStartImport => '開始匯入';
+  String get shortcutsGuide => '快捷指令';
+
+  @override
+  String get shortcutsGuideDesc => '快速開啟語音、拍照等記帳方式';
+
+  @override
+  String get shortcutsIntroTitle => '快速記帳';
+
+  @override
+  String get shortcutsIntroDesc => '使用快捷指令，可以在桌面直接開啟語音記帳、拍照記帳等功能，無需先開啟 App。';
+
+  @override
+  String get availableShortcuts => '可用快捷指令';
+
+  @override
+  String get shortcutVoice => '語音記帳';
+
+  @override
+  String get shortcutVoiceDesc => '透過語音快速記錄帳單';
+
+  @override
+  String get shortcutImage => '圖片記帳';
+
+  @override
+  String get shortcutImageDesc => '從相簿選擇圖片識別帳單';
+
+  @override
+  String get shortcutCamera => '拍照記帳';
+
+  @override
+  String get shortcutCameraDesc => '拍照識別帳單';
+
+  @override
+  String get shortcutUrlCopied => '連結已複製到剪貼簿';
+
+  @override
+  String get howToAddShortcut => '如何新增快捷指令';
+
+  @override
+  String get iosShortcutStep1 => '開啟「捷徑」App';
+
+  @override
+  String get iosShortcutStep2 => '點擊右上角「+」新建捷徑';
+
+  @override
+  String get iosShortcutStep3 => '加入「開啟 URL」動作';
+
+  @override
+  String get iosShortcutStep4 => '貼上上方複製的連結（如 beecount://voice）';
+
+  @override
+  String get iosShortcutStep5 => '儲存後，可加入桌面使用';
+
+  @override
+  String get androidShortcutStep1 => '下載支援建立捷徑的應用程式（如 Shortcut Maker）';
+
+  @override
+  String get androidShortcutStep2 => '選擇「URL 捷徑」';
+
+  @override
+  String get androidShortcutStep3 => '貼上上方複製的連結（如 beecount://voice）';
+
+  @override
+  String get androidShortcutStep4 => '設定圖示和名稱後加入桌面';
+
+  @override
+  String get shortcutsTip => '小提示';
+
+  @override
+  String get shortcutsTipDesc => '快捷指令需要搭配 AI 功能使用。請確保已開啟智慧識別並設定好 API Key。';
+
+  @override
+  String get shortcutOpenShortcutsApp => '開啟捷徑 App';
+
+  @override
+  String get shortcutAutoAdd => '自動記帳介面';
+
+  @override
+  String get shortcutAutoAddDesc => '透過 URL 參數自動建立帳單，適合與快捷指令、自動化工具配合使用。';
+
+  @override
+  String get shortcutAutoAddExample => '範例連結：';
+
+  @override
+  String get shortcutAutoAddParams => '支援的參數：';
+
+  @override
+  String get shortcutParamAmount => '金額（必填）';
+
+  @override
+  String get shortcutParamType => '類型：expense（支出）/ income（收入）/ transfer（轉帳）';
+
+  @override
+  String get shortcutParamCategory => '分類名稱（需與App中已有分類相符）';
+
+  @override
+  String get shortcutParamNote => '備註';
+
+  @override
+  String get shortcutParamAccount => '帳戶名稱（需與App中已有帳戶相符）';
+
+  @override
+  String get shortcutParamTags => '標籤（多個用逗號分隔）';
+
+  @override
+  String get shortcutParamDate => '日期（ISO格式，如 2024-01-15）';
 }

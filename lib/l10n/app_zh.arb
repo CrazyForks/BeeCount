@@ -963,6 +963,26 @@
   "updateConfirmDownload": "立即下载并安装",
   "updateDownloadCompleteTitle": "下载完成",
   "updateInstallConfirmMessage": "新版本已下载完成，是否立即安装？",
+  "updateMirrorSelectTitle": "选择下载加速器",
+  "updateMirrorSelectHint": "如果下载缓慢，可以选择一个加速镜像。点击「测速」检测各镜像延迟。",
+  "updateMirrorTestButton": "测速",
+  "updateMirrorTesting": "正在测试 {completed}/{total}...",
+  "@updateMirrorTesting": {
+    "placeholders": {
+      "completed": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "updateMirrorDirectHint": "适合网络通畅的用户",
+  "updateDownloadMirror": "下载源: {mirror}",
+  "@updateDownloadMirror": {
+    "placeholders": {
+      "mirror": {"type": "String"}
+    }
+  },
+  "updateSelectMirror": "选择加速器",
+  "updateMirrorSettingTitle": "下载加速器",
+  "updateMirrorSettingSubtitle": "切换 GitHub 下载源",
   "currencyCNY": "人民币",
   "currencyUSD": "美元",
   "currencyEUR": "欧元",
@@ -1724,7 +1744,6 @@
   "aiVisionModelTitle": "视觉模型",
   "aiModelFast": "快速",
   "aiModelAccurate": "准确",
-  "aiModelThinking": "深度思考",
   "aiModelSwitched": "已切换到 {modelName}",
   "@aiModelSwitched": {
     "placeholders": {
@@ -1894,8 +1913,12 @@
   "attachmentExportProgress": "正在导出附件 ({current}/{total})",
   "@attachmentExportProgress": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "attachmentExportSuccess": "附件导出成功",
@@ -1903,46 +1926,55 @@
   "attachmentExportSavedTo": "已保存到: {path}",
   "@attachmentExportSavedTo": {
     "placeholders": {
-      "path": {"type": "String"}
+      "path": {
+        "type": "String"
+      }
     }
   },
-  "attachmentImportSelectFile": "选择要导入的压缩文件",
   "attachmentImportConflictStrategy": "冲突处理策略",
   "attachmentImportConflictSkip": "跳过已存在的附件",
   "attachmentImportConflictOverwrite": "覆盖已存在的附件",
   "attachmentImportProgress": "正在导入附件 ({current}/{total})",
   "@attachmentImportProgress": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-  "attachmentImportSuccess": "附件导入完成",
   "attachmentImportResult": "导入 {imported} 张，跳过 {skipped} 张，覆盖 {overwritten} 张，失败 {failed} 张",
   "@attachmentImportResult": {
     "placeholders": {
-      "imported": {"type": "int"},
-      "skipped": {"type": "int"},
-      "overwritten": {"type": "int"},
-      "failed": {"type": "int"}
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "overwritten": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
     }
   },
   "attachmentImportFailed": "附件导入失败",
   "attachmentArchiveInfo": "{count} 个附件，导出于 {date}",
   "@attachmentArchiveInfo": {
     "placeholders": {
-      "count": {"type": "int"},
-      "date": {"type": "String"}
-    }
-  },
-  "attachmentArchiveSize": "文件大小: {size}",
-  "@attachmentArchiveSize": {
-    "placeholders": {
-      "size": {"type": "String"}
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
     }
   },
   "attachmentStartImport": "开始导入",
-
   "shortcutsGuide": "快捷指令",
   "shortcutsGuideDesc": "快速打开语音、拍照等记账方式",
   "shortcutsIntroTitle": "快速记账",
@@ -1954,8 +1986,6 @@
   "shortcutImageDesc": "从相册选择图片识别账单",
   "shortcutCamera": "拍照记账",
   "shortcutCameraDesc": "拍照识别账单",
-  "shortcutAiChat": "AI 助手",
-  "shortcutAiChatDesc": "打开 AI 记账助手",
   "shortcutUrlCopied": "链接已复制到剪贴板",
   "howToAddShortcut": "如何添加快捷指令",
   "iosShortcutStep1": "打开「快捷指令」App",

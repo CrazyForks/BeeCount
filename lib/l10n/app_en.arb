@@ -1060,6 +1060,26 @@
   "updateConfirmDownload": "Download and Install Now",
   "updateDownloadCompleteTitle": "Download Complete",
   "updateInstallConfirmMessage": "New version has been downloaded. Install now?",
+  "updateMirrorSelectTitle": "Select Download Accelerator",
+  "updateMirrorSelectHint": "If download is slow, select an accelerated mirror. Click \"Test\" to check latency.",
+  "updateMirrorTestButton": "Test",
+  "updateMirrorTesting": "Testing {completed}/{total}...",
+  "@updateMirrorTesting": {
+    "placeholders": {
+      "completed": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "updateMirrorDirectHint": "For users with good network",
+  "updateDownloadMirror": "Source: {mirror}",
+  "@updateDownloadMirror": {
+    "placeholders": {
+      "mirror": {"type": "String"}
+    }
+  },
+  "updateSelectMirror": "Select Accelerator",
+  "updateMirrorSettingTitle": "Download Accelerator",
+  "updateMirrorSettingSubtitle": "Switch GitHub download source",
   "updateNotificationPermissionGuideText": "Download progress notifications are disabled, but this doesn't affect download functionality. To view progress:",
   "updateNotificationGuideStep1": "Go to System Settings > App Management",
   "updateNotificationGuideStep2": "Find \\\"BeeCount\\\" app",
@@ -1785,7 +1805,6 @@
   "aiVisionModelTitle": "Vision Model",
   "aiModelFast": "Faster",
   "aiModelAccurate": "Accurate",
-  "aiModelThinking": "Deep Thinking",
   "aiModelSwitched": "Switched to {modelName}",
   "@aiModelSwitched": {
     "placeholders": {
@@ -1955,8 +1974,12 @@
   "attachmentExportProgress": "Exporting attachments ({current}/{total})",
   "@attachmentExportProgress": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "attachmentExportSuccess": "Attachments exported successfully",
@@ -1964,46 +1987,55 @@
   "attachmentExportSavedTo": "Saved to: {path}",
   "@attachmentExportSavedTo": {
     "placeholders": {
-      "path": {"type": "String"}
+      "path": {
+        "type": "String"
+      }
     }
   },
-  "attachmentImportSelectFile": "Select a compressed file to import",
   "attachmentImportConflictStrategy": "Conflict Strategy",
   "attachmentImportConflictSkip": "Skip existing attachments",
   "attachmentImportConflictOverwrite": "Overwrite existing attachments",
   "attachmentImportProgress": "Importing attachments ({current}/{total})",
   "@attachmentImportProgress": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-  "attachmentImportSuccess": "Attachments import completed",
   "attachmentImportResult": "Imported {imported}, Skipped {skipped}, Overwritten {overwritten}, Failed {failed}",
   "@attachmentImportResult": {
     "placeholders": {
-      "imported": {"type": "int"},
-      "skipped": {"type": "int"},
-      "overwritten": {"type": "int"},
-      "failed": {"type": "int"}
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "overwritten": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
     }
   },
   "attachmentImportFailed": "Failed to import attachments",
   "attachmentArchiveInfo": "{count} attachments, exported on {date}",
   "@attachmentArchiveInfo": {
     "placeholders": {
-      "count": {"type": "int"},
-      "date": {"type": "String"}
-    }
-  },
-  "attachmentArchiveSize": "File size: {size}",
-  "@attachmentArchiveSize": {
-    "placeholders": {
-      "size": {"type": "String"}
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
     }
   },
   "attachmentStartImport": "Start Import",
-
   "shortcutsGuide": "Shortcuts",
   "shortcutsGuideDesc": "Quick access to voice, camera billing, etc.",
   "shortcutsIntroTitle": "Quick Billing",
@@ -2015,8 +2047,6 @@
   "shortcutImageDesc": "Recognize bills from gallery images",
   "shortcutCamera": "Camera Billing",
   "shortcutCameraDesc": "Take photos to recognize bills",
-  "shortcutAiChat": "AI Assistant",
-  "shortcutAiChatDesc": "Open AI billing assistant",
   "shortcutUrlCopied": "URL copied to clipboard",
   "howToAddShortcut": "How to Add Shortcuts",
   "iosShortcutStep1": "Open the Shortcuts app",

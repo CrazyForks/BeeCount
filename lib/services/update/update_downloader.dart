@@ -6,6 +6,7 @@ import '../system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import 'update_result.dart';
 import 'update_notifications.dart';
+import 'github_mirror_service.dart';
 
 /// 更新下载管理类
 class UpdateDownloader {
@@ -48,6 +49,13 @@ class UpdateDownloader {
     Function(double progress, String status)? onProgress,
   }) async {
     try {
+      // 获取选择的镜像并转换 URL
+      final mirror = await GitHubMirrorService.getSelectedMirror();
+      final downloadUrl = GitHubMirrorService.convertToMirrorUrl(url, mirror);
+      logger.info('UpdateDownloader', '使用镜像: ${mirror.name}');
+      logger.info('UpdateDownloader', '原始URL: $url');
+      logger.info('UpdateDownloader', '下载URL: $downloadUrl');
+
       // 获取下载目录
       Directory? downloadDir;
       if (Platform.isAndroid) {
@@ -69,6 +77,7 @@ class UpdateDownloader {
       double progress = 0.0;
       bool cancelled = false;
       late StateSetter dialogSetState;
+      String currentMirrorName = mirror.name;
 
       // 重置进度记录
       UpdateNotifications.resetProgress();
@@ -94,7 +103,13 @@ class UpdateDownloader {
                     Text(AppLocalizations.of(context).updateDownloading((progress * 100).toStringAsFixed(1))),
                     const SizedBox(height: 16),
                     LinearProgressIndicator(value: progress),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    // 显示当前使用的镜像
+                    Text(
+                      AppLocalizations.of(context).updateDownloadMirror(currentMirrorName),
+                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                    ),
+                    const SizedBox(height: 8),
                     Text(AppLocalizations.of(context).updateDownloadBackgroundHint,
                         style: TextStyle(fontSize: 12, color: Colors.grey)),
                   ],
@@ -121,9 +136,9 @@ class UpdateDownloader {
         );
       }
 
-      // 开始下载
+      // 开始下载（使用镜像 URL）
       await _dio.download(
-        url,
+        downloadUrl,
         filePath,
         options: Options(
           headers: {

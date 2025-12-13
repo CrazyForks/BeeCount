@@ -4752,6 +4752,60 @@ abstract class AppLocalizations {
   /// **'New version has been downloaded. Install now?'**
   String get updateInstallConfirmMessage;
 
+  /// No description provided for @updateMirrorSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Download Accelerator'**
+  String get updateMirrorSelectTitle;
+
+  /// No description provided for @updateMirrorSelectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If download is slow, select an accelerated mirror. Click \"Test\" to check latency.'**
+  String get updateMirrorSelectHint;
+
+  /// No description provided for @updateMirrorTestButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get updateMirrorTestButton;
+
+  /// No description provided for @updateMirrorTesting.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing {completed}/{total}...'**
+  String updateMirrorTesting(int completed, int total);
+
+  /// No description provided for @updateMirrorDirectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For users with good network'**
+  String get updateMirrorDirectHint;
+
+  /// No description provided for @updateDownloadMirror.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {mirror}'**
+  String updateDownloadMirror(String mirror);
+
+  /// No description provided for @updateSelectMirror.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Accelerator'**
+  String get updateSelectMirror;
+
+  /// No description provided for @updateMirrorSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Accelerator'**
+  String get updateMirrorSettingTitle;
+
+  /// No description provided for @updateMirrorSettingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch GitHub download source'**
+  String get updateMirrorSettingSubtitle;
+
   /// No description provided for @updateNotificationPermissionGuideText.
   ///
   /// In en, this message translates to:
@@ -8118,12 +8172,6 @@ abstract class AppLocalizations {
   /// **'Accurate'**
   String get aiModelAccurate;
 
-  /// No description provided for @aiModelThinking.
-  ///
-  /// In en, this message translates to:
-  /// **'Deep Thinking'**
-  String get aiModelThinking;
-
   /// No description provided for @aiModelSwitched.
   ///
   /// In en, this message translates to:
@@ -8850,12 +8898,6 @@ abstract class AppLocalizations {
   /// **'Saved to: {path}'**
   String attachmentExportSavedTo(String path);
 
-  /// No description provided for @attachmentImportSelectFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Select a compressed file to import'**
-  String get attachmentImportSelectFile;
-
   /// No description provided for @attachmentImportConflictStrategy.
   ///
   /// In en, this message translates to:
@@ -8880,12 +8922,6 @@ abstract class AppLocalizations {
   /// **'Importing attachments ({current}/{total})'**
   String attachmentImportProgress(int current, int total);
 
-  /// No description provided for @attachmentImportSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Attachments import completed'**
-  String get attachmentImportSuccess;
-
   /// No description provided for @attachmentImportResult.
   ///
   /// In en, this message translates to:
@@ -8903,12 +8939,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} attachments, exported on {date}'**
   String attachmentArchiveInfo(int count, String date);
-
-  /// No description provided for @attachmentArchiveSize.
-  ///
-  /// In en, this message translates to:
-  /// **'File size: {size}'**
-  String attachmentArchiveSize(String size);
 
   /// No description provided for @attachmentStartImport.
   ///
@@ -8981,18 +9011,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take photos to recognize bills'**
   String get shortcutCameraDesc;
-
-  /// No description provided for @shortcutAiChat.
-  ///
-  /// In en, this message translates to:
-  /// **'AI Assistant'**
-  String get shortcutAiChat;
-
-  /// No description provided for @shortcutAiChatDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Open AI billing assistant'**
-  String get shortcutAiChatDesc;
 
   /// No description provided for @shortcutUrlCopied.
   ///
