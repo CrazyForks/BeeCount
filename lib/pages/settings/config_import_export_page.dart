@@ -178,10 +178,18 @@ class _ConfigImportExportPageState
 
     try {
       // Step 1: 选择文件（仅限 yml/yaml 文件）
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['yml', 'yaml'],
-      );
+      // 部分 Android 设备不支持 yml/yaml 扩展名过滤，会抛出 PlatformException
+      // 所以先尝试过滤，失败则 fallback 到 FileType.any
+      FilePickerResult? result;
+      try {
+        result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['yml', 'yaml'],
+        );
+      } on PlatformException {
+        // 设备不支持扩展名过滤，fallback 到选择任意文件
+        result = await FilePicker.platform.pickFiles(type: FileType.any);
+      }
 
       if (result == null || result.files.isEmpty) {
         if (mounted) {
