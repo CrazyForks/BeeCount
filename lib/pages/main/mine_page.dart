@@ -380,8 +380,8 @@ class MinePage extends ConsumerWidget {
                         title: AppLocalizations.of(context).mineHelp,
                         subtitle: AppLocalizations.of(context).mineHelpSubtitle,
                         onTap: () async {
-                          final url =
-                              Uri.parse('https://beecount-website.pages.dev/docs/intro');
+                          final url = Uri.parse(
+                              'https://beecount-website.pages.dev/docs/intro');
                           await _tryOpenUrl(url);
                         },
                       ),
@@ -390,7 +390,8 @@ class MinePage extends ConsumerWidget {
                       if (Platform.isIOS) ...[
                         Consumer(
                           builder: (context, ref, _) {
-                            final primaryColor = ref.watch(primaryColorProvider);
+                            final primaryColor =
+                                ref.watch(primaryColorProvider);
                             return AppListTile(
                               leading: Icons.favorite,
                               leadingWidget: Container(
@@ -401,13 +402,13 @@ class MinePage extends ConsumerWidget {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
-                                  Icons.favorite,
+                                  Icons.favorite_border,
                                   color: primaryColor,
                                 ),
                               ),
                               title: AppLocalizations.of(context).donationTitle,
-                              subtitle:
-                                  AppLocalizations.of(context).donationEntrySubtitle,
+                              subtitle: AppLocalizations.of(context)
+                                  .donationEntrySubtitle,
                               trailing: Icon(Icons.chevron_right,
                                   color: BeeTokens.iconTertiary(context),
                                   size: 20),

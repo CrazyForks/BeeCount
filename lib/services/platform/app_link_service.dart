@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/base_repository.dart';
@@ -130,9 +133,18 @@ class AppLinkResult {
 /// - beecount://add?amount=100&type=expense&category=餐饮 - 自动记账
 /// - beecount://auto-billing?text=... - 文本自动记账（兼容旧版）
 /// - beecount://quick-billing - 快速记账（兼容旧版）
+///
+/// 同时监听 iOS AppIntents EventChannel 处理快捷指令传入的图片
 class AppLinkService {
   final ProviderContainer _container;
   late final AutoBillingService _autoBillingService;
+
+  /// iOS AppIntents 事件通道（用于接收快捷指令传入的图片路径）
+  static const EventChannel _eventChannel =
+      EventChannel('com.beecount.app_intents/events');
+
+  /// AppIntents 事件订阅
+  StreamSubscription<dynamic>? _appIntentSubscription;
 
   /// 导航回调，由外部设置
   void Function(AppLinkAction action, {AddTransactionParams? params})? onNavigate;
@@ -142,6 +154,66 @@ class AppLinkService {
 
   AppLinkService(this._container) {
     _autoBillingService = AutoBillingService(_container);
+    _initAppIntentsListener();
+  }
+
+  /// 初始化 iOS AppIntents 监听器
+  void _initAppIntentsListener() {
+    if (!Platform.isIOS) return;
+
+    logger.info('AppLink', '初始化 AppIntents 监听器');
+
+    _appIntentSubscription = _eventChannel.receiveBroadcastStream().listen(
+      (event) {
+        if (event is String) {
+          logger.info('AppLink', '收到 AppIntent 事件: $event');
+          _handleAppIntent(event);
+        }
+      },
+      onError: (error) {
+        logger.error('AppLink', 'AppIntent 事件监听错误', error);
+      },
+      onDone: () {
+        logger.info('AppLink', 'AppIntent 事件流关闭');
+      },
+    );
+  }
+
+  /// 处理 AppIntent 事件
+  Future<void> _handleAppIntent(String event) async {
+    try {
+      final data = jsonDecode(event) as Map<String, dynamic>;
+      final action = data['action'] as String?;
+
+      logger.info('AppLink', 'AppIntent action: $action');
+
+      if (action == 'auto-billing') {
+        final imagePath = data['imagePath'] as String?;
+        if (imagePath != null && imagePath.isNotEmpty) {
+          logger.info('AppLink', '处理快捷指令图片: $imagePath');
+          await _handleScreenshotBilling(imagePath);
+        } else {
+          logger.warning('AppLink', 'auto-billing 未提供图片路径');
+        }
+      } else {
+        logger.warning('AppLink', '未知的 AppIntent action: $action');
+      }
+    } catch (e, st) {
+      logger.error('AppLink', '解析 AppIntent 事件失败', e, st);
+    }
+  }
+
+  /// 处理快捷指令截图记账
+  Future<void> _handleScreenshotBilling(String imagePath) async {
+    try {
+      await _autoBillingService.processScreenshot(
+        imagePath,
+        showNotification: true,
+      );
+      logger.info('AppLink', '快捷指令截图记账完成');
+    } catch (e, st) {
+      logger.error('AppLink', '快捷指令截图记账失败', e, st);
+    }
   }
 
   /// 解析 URI 获取动作类型
@@ -381,6 +453,8 @@ class AppLinkService {
 
   /// 释放资源
   void dispose() {
+    _appIntentSubscription?.cancel();
+    _appIntentSubscription = null;
     _autoBillingService.dispose();
   }
 }
