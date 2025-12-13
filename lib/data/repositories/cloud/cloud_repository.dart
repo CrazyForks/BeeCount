@@ -1270,7 +1270,22 @@ class CloudRepository extends BaseRepository {
   }
 
   @override
+  Future<Map<int, List<TransactionAttachment>>> getAttachmentsForTransactions(List<int> transactionIds) async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
   Future<List<int>> getTransactionIdsWithAttachments() async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<List<TransactionAttachment>> getAllAttachments() async {
+    throw UnimplementedError('附件功能在云端模式下暂不可用');
+  }
+
+  @override
+  Future<void> deleteAttachmentByFileName(String fileName) async {
     throw UnimplementedError('附件功能在云端模式下暂不可用');
   }
 

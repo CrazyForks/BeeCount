@@ -16,9 +16,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tabAnalytics => '图表';
 
   @override
-  String get tabLedgers => '账本';
-
-  @override
   String get tabMine => '我的';
 
   @override
@@ -2146,6 +2143,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportCsvHeaderTags => '标签';
 
   @override
+  String get exportCsvHeaderAttachments => '附件';
+
+  @override
   String get exportShareText => 'BeeCount 导出文件';
 
   @override
@@ -3402,9 +3402,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiCloudApiKeyHelper => 'GLM-*-Flash模型完全免费';
 
   @override
-  String get aiCloudApiKeySaved => 'API Key 已保存';
-
-  @override
   String get aiCloudApiGetKey => '获取API Key';
 
   @override
@@ -3472,6 +3469,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudSyncPageSubtitle => '管理云服务和数据同步';
 
   @override
+  String get cloudSyncHint => '云同步只会同步账本数据（包括交易记录关联的账户、分类、标签），不包括未关联的分类、标签、账户，也不包括附件。附件请通过数据管理单独导入导出。';
+
+  @override
   String get dataManagement => '数据管理';
 
   @override
@@ -3482,6 +3482,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dataManagementPageSubtitle => '管理账单数据和分类';
+
+  @override
+  String get dataManagementAttachmentHint => '还原数据时，请先导入附件包，再导入账本数据（CSV或云同步），以确保附件正确关联。';
 
   @override
   String get smartBilling => '智能记账';
@@ -4193,9 +4196,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiPromptResetConfirmMessage => '确定要恢复默认提示词吗？您的自定义内容将会丢失。';
 
   @override
-  String get aiPromptCopied => '已复制到剪贴板，可分享给其他用户';
-
-  @override
   String get aiPromptPasted => '已粘贴';
 
   @override
@@ -4306,9 +4306,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagColorLabel => '标签颜色';
 
   @override
-  String get tagColorHint => '选择标签颜色';
-
-  @override
   String get tagCreateSuccess => '标签创建成功';
 
   @override
@@ -4358,13 +4355,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagDetailTotalIncome => '总收入';
 
   @override
-  String get tagDetailTransactionCount => '交易笔数';
-
-  @override
   String get tagDetailTransactionList => '关联交易';
-
-  @override
-  String get tagDetailRelatedTransactions => '关联交易';
 
   @override
   String get tagDetailNoTransactions => '暂无关联交易';
@@ -4454,31 +4445,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverAccounts => '账户总览';
 
   @override
-  String get discoverAccountsSubtitle => '管理资产与负债';
-
-  @override
   String get discoverAccountsEmpty => '添加账户，追踪资金流向';
-
-  @override
-  String get discoverReports => '数据报告';
-
-  @override
-  String get discoverReportsSubtitle => '月度/年度财务报告';
-
-  @override
-  String get discoverRecurring => '周期记账';
-
-  @override
-  String get discoverRecurringSubtitle => '管理定期交易';
-
-  @override
-  String get discoverLedgers => '账本管理';
-
-  @override
-  String get discoverLedgersSubtitle => '管理多个账本';
-
-  @override
-  String get discoverComingSoon => '功能开发中';
 
   @override
   String get discoverAccountsTotal => '总余额';
@@ -4487,34 +4454,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String discoverAccountsCount(int count) {
     return '$count 个账户';
   }
-
-  @override
-  String get discoverMonthlyOverview => '本月概览';
-
-  @override
-  String get discoverComparedToLastMonth => '较上月';
-
-  @override
-  String discoverUp(String percent) {
-    return '↑$percent';
-  }
-
-  @override
-  String discoverDown(String percent) {
-    return '↓$percent';
-  }
-
-  @override
-  String get discoverNoChange => '持平';
-
-  @override
-  String get discoverTopCategories => '支出TOP3';
-
-  @override
-  String get discoverNoExpense => '本月暂无支出';
-
-  @override
-  String get discoverQuickActions => '快捷记账';
 
   @override
   String get discoverQuickCamera => '拍照';
@@ -4526,21 +4465,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverQuickVoice => '语音';
 
   @override
-  String get greetingMorning => '早上好';
-
-  @override
-  String get greetingAfternoon => '下午好';
-
-  @override
-  String get greetingEvening => '晚上好';
-
-  @override
-  String get greetingNight => '夜深了';
-
-  @override
-  String get discoverSmartBilling => '智能记账';
-
-  @override
   String get discoverCommonFeatures => '常用功能';
 
   @override
@@ -4548,9 +4472,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get discoverCategory => '分类管理';
-
-  @override
-  String get discoverReminder => '记账提醒';
 
   @override
   String get discoverTags => '标签管理';
@@ -4562,16 +4483,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverExport => '导出';
 
   @override
-  String get discoverBackup => '数据备份';
-
-  @override
   String get homeSwitchLedger => '选择账本';
 
   @override
   String get homeManageLedgers => '管理账本';
-
-  @override
-  String get homeNewLedger => '新建账本';
 
   @override
   String get budgetTitle => '预算管理';
@@ -4632,19 +4547,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get budgetStartDayLabel => '起始日';
 
   @override
-  String get budgetStartDayHint => '每月第几天开始计算';
-
-  @override
   String get budgetPeriodLabel => '周期';
-
-  @override
-  String get budgetPeriodMonthly => '月度';
-
-  @override
-  String get budgetPeriodWeekly => '周度';
-
-  @override
-  String get budgetPeriodYearly => '年度';
 
   @override
   String get budgetSaveSuccess => '预算保存成功';
@@ -4654,9 +4557,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get budgetDeleteSuccess => '预算已删除';
-
-  @override
-  String get budgetExceededWarning => '此笔消费后将超出预算';
 
   @override
   String get attachmentAdd => '添加图片';
@@ -4674,18 +4574,84 @@ class AppLocalizationsZh extends AppLocalizations {
   String get attachmentDeleteConfirm => '确定删除此附件？';
 
   @override
-  String get attachmentTitle => '附件';
-
-  @override
-  String get attachmentPreviewTitle => '图片预览';
-
-  @override
   String attachmentCount(int count) {
     return '$count张图片';
   }
 
   @override
   String get commonDeleted => '已删除';
+
+  @override
+  String get attachmentExportTitle => '导出附件';
+
+  @override
+  String get attachmentExportSubtitle => '将所有附件打包导出为压缩文件';
+
+  @override
+  String get attachmentImportTitle => '导入附件';
+
+  @override
+  String get attachmentImportSubtitle => '从压缩文件导入附件';
+
+  @override
+  String get attachmentExportEmpty => '没有附件需要导出';
+
+  @override
+  String attachmentExportProgress(int current, int total) {
+    return '正在导出附件 ($current/$total)';
+  }
+
+  @override
+  String get attachmentExportSuccess => '附件导出成功';
+
+  @override
+  String get attachmentExportFailed => '附件导出失败';
+
+  @override
+  String attachmentExportSavedTo(String path) {
+    return '已保存到: $path';
+  }
+
+  @override
+  String get attachmentImportSelectFile => '选择要导入的压缩文件';
+
+  @override
+  String get attachmentImportConflictStrategy => '冲突处理策略';
+
+  @override
+  String get attachmentImportConflictSkip => '跳过已存在的附件';
+
+  @override
+  String get attachmentImportConflictOverwrite => '覆盖已存在的附件';
+
+  @override
+  String attachmentImportProgress(int current, int total) {
+    return '正在导入附件 ($current/$total)';
+  }
+
+  @override
+  String get attachmentImportSuccess => '附件导入完成';
+
+  @override
+  String attachmentImportResult(int imported, int skipped, int overwritten, int failed) {
+    return '导入 $imported 张，跳过 $skipped 张，覆盖 $overwritten 张，失败 $failed 张';
+  }
+
+  @override
+  String get attachmentImportFailed => '附件导入失败';
+
+  @override
+  String attachmentArchiveInfo(int count, String date) {
+    return '$count 个附件，导出于 $date';
+  }
+
+  @override
+  String attachmentArchiveSize(String size) {
+    return '文件大小: $size';
+  }
+
+  @override
+  String get attachmentStartImport => '开始导入';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4700,9 +4666,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tabAnalytics => '圖表';
-
-  @override
-  String get tabLedgers => '帳本';
 
   @override
   String get tabMine => '我的';
@@ -6832,6 +6795,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportCsvHeaderTags => '標籤';
 
   @override
+  String get exportCsvHeaderAttachments => '附件';
+
+  @override
   String get exportShareText => 'BeeCount 匯出檔案';
 
   @override
@@ -8088,9 +8054,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiCloudApiKeyHelper => 'GLM-*-Flash 模型完全免費';
 
   @override
-  String get aiCloudApiKeySaved => 'API Key 已儲存';
-
-  @override
   String get aiCloudApiGetKey => '取得 API Key';
 
   @override
@@ -8158,6 +8121,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudSyncPageSubtitle => '管理雲端服務和資料同步';
 
   @override
+  String get cloudSyncHint => '雲同步只會同步帳本資料（包括交易記錄關聯的帳戶、分類、標籤），不包括未關聯的分類、標籤、帳戶，也不包括附件。附件請通過資料管理單獨匯入匯出。';
+
+  @override
   String get dataManagement => '資料管理';
 
   @override
@@ -8168,6 +8134,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get dataManagementPageSubtitle => '管理帳單資料和分類';
+
+  @override
+  String get dataManagementAttachmentHint => '還原資料時，請先匯入附件包，再匯入帳本資料（CSV或雲同步），以確保附件正確關聯。';
 
   @override
   String get smartBilling => '智慧記帳';
@@ -8691,6 +8660,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiChatHistoryCleared => '對話歷史已清空';
 
   @override
+  String get aiChatCopy => '複製';
+
+  @override
+  String get aiChatCopied => '已複製到剪貼簿';
+
+  @override
+  String get aiChatDeleteMessageConfirm => '確定要刪除這條訊息嗎？';
+
+  @override
+  String get aiChatMessageDeleted => '訊息已刪除';
+
+  @override
   String get aiChatUndone => '已撤銷';
 
   @override
@@ -8867,9 +8848,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiPromptResetConfirmMessage => '確定要恢復預設提示詞嗎？您的自訂內容將會遺失。';
 
   @override
-  String get aiPromptCopied => '已複製到剪貼簿，可分享給其他使用者';
-
-  @override
   String get aiPromptPasted => '已貼上';
 
   @override
@@ -8913,6 +8891,14 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiModelAccurate => '準確';
+
+  @override
+  String get aiModelThinking => '深度思考';
+
+  @override
+  String aiModelSwitched(String modelName) {
+    return '已切換到 $modelName';
+  }
 
   @override
   String get aiUsingVisionDesc => '啟用影像識別，以獲得更高的識別精度';
@@ -8972,9 +8958,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tagColorLabel => '標籤顏色';
 
   @override
-  String get tagColorHint => '選擇標籤顏色';
-
-  @override
   String get tagCreateSuccess => '標籤建立成功';
 
   @override
@@ -9024,13 +9007,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tagDetailTotalIncome => '總收入';
 
   @override
-  String get tagDetailTransactionCount => '交易筆數';
-
-  @override
   String get tagDetailTransactionList => '關聯交易';
-
-  @override
-  String get tagDetailRelatedTransactions => '關聯交易';
 
   @override
   String get tagDetailNoTransactions => '暫無關聯交易';
@@ -9117,28 +9094,45 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get discoverBudgetEmpty => '設定預算，控制支出';
 
   @override
-  String get discoverReports => '數據報告';
+  String get discoverAccounts => '帳戶總覽';
 
   @override
-  String get discoverReportsSubtitle => '月度/年度財務報告';
-
-  @override
-  String get discoverRecurring => '週期記帳';
-
-  @override
-  String get discoverRecurringSubtitle => '管理定期交易';
-
-  @override
-  String get discoverLedgers => '帳本管理';
-
-  @override
-  String get discoverLedgersSubtitle => '管理多個帳本';
-
-  @override
-  String get discoverComingSoon => '功能開發中';
+  String get discoverAccountsEmpty => '新增帳戶，追蹤資金流向';
 
   @override
   String get discoverAccountsTotal => '淨資產';
+
+  @override
+  String discoverAccountsCount(int count) {
+    return '$count 個帳戶';
+  }
+
+  @override
+  String get discoverQuickCamera => '拍照';
+
+  @override
+  String get discoverQuickAlbum => '相簿';
+
+  @override
+  String get discoverQuickVoice => '語音';
+
+  @override
+  String get discoverCommonFeatures => '常用功能';
+
+  @override
+  String get discoverAISettings => 'AI 設定';
+
+  @override
+  String get discoverCategory => '分類管理';
+
+  @override
+  String get discoverTags => '標籤管理';
+
+  @override
+  String get discoverImport => '匯入';
+
+  @override
+  String get discoverExport => '匯出';
 
   @override
   String get homeSwitchLedger => '選擇帳本';
@@ -9147,7 +9141,74 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get homeManageLedgers => '管理帳本';
 
   @override
-  String get homeNewLedger => '新建帳本';
+  String get budgetTitle => '預算管理';
+
+  @override
+  String get budgetEmptyHint => '還沒有設定預算';
+
+  @override
+  String get budgetAddTotal => '新增總預算';
+
+  @override
+  String get budgetMonthlyBudget => '本月預算';
+
+  @override
+  String get budgetUsed => '已用';
+
+  @override
+  String get budgetRemaining => '剩餘';
+
+  @override
+  String budgetDaysRemaining(int days) {
+    return '剩餘 $days 天';
+  }
+
+  @override
+  String budgetDailyAvailable(String amount) {
+    return '日均可用 ¥$amount';
+  }
+
+  @override
+  String get budgetCategoryBudgets => '分類預算';
+
+  @override
+  String get budgetEditTitle => '編輯預算';
+
+  @override
+  String get budgetAddTitle => '新增預算';
+
+  @override
+  String get budgetTypeTotalLabel => '總預算';
+
+  @override
+  String get budgetTypeCategoryLabel => '分類預算';
+
+  @override
+  String get budgetAmountLabel => '預算金額';
+
+  @override
+  String get budgetAmountHint => '請輸入預算金額';
+
+  @override
+  String get budgetCategoryLabel => '選擇分類';
+
+  @override
+  String get budgetCategoryHint => '請選擇預算分類';
+
+  @override
+  String get budgetStartDayLabel => '起始日';
+
+  @override
+  String get budgetPeriodLabel => '週期';
+
+  @override
+  String get budgetSaveSuccess => '預算儲存成功';
+
+  @override
+  String get budgetDeleteConfirm => '確定刪除此預算？';
+
+  @override
+  String get budgetDeleteSuccess => '預算已刪除';
 
   @override
   String get attachmentAdd => '添加圖片';
@@ -9165,16 +9226,82 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get attachmentDeleteConfirm => '確定刪除此附件？';
 
   @override
-  String get attachmentTitle => '附件';
-
-  @override
-  String get attachmentPreviewTitle => '圖片預覽';
-
-  @override
   String attachmentCount(int count) {
     return '$count張圖片';
   }
 
   @override
   String get commonDeleted => '已刪除';
+
+  @override
+  String get attachmentExportTitle => '匯出附件';
+
+  @override
+  String get attachmentExportSubtitle => '將所有附件打包匯出為壓縮檔案';
+
+  @override
+  String get attachmentImportTitle => '匯入附件';
+
+  @override
+  String get attachmentImportSubtitle => '從壓縮檔案匯入附件';
+
+  @override
+  String get attachmentExportEmpty => '沒有附件需要匯出';
+
+  @override
+  String attachmentExportProgress(int current, int total) {
+    return '正在匯出附件 ($current/$total)';
+  }
+
+  @override
+  String get attachmentExportSuccess => '附件匯出成功';
+
+  @override
+  String get attachmentExportFailed => '附件匯出失敗';
+
+  @override
+  String attachmentExportSavedTo(String path) {
+    return '已儲存到: $path';
+  }
+
+  @override
+  String get attachmentImportSelectFile => '選擇要匯入的壓縮檔案';
+
+  @override
+  String get attachmentImportConflictStrategy => '衝突處理策略';
+
+  @override
+  String get attachmentImportConflictSkip => '跳過已存在的附件';
+
+  @override
+  String get attachmentImportConflictOverwrite => '覆蓋已存在的附件';
+
+  @override
+  String attachmentImportProgress(int current, int total) {
+    return '正在匯入附件 ($current/$total)';
+  }
+
+  @override
+  String get attachmentImportSuccess => '附件匯入完成';
+
+  @override
+  String attachmentImportResult(int imported, int skipped, int overwritten, int failed) {
+    return '匯入 $imported 張，跳過 $skipped 張，覆蓋 $overwritten 張，失敗 $failed 張';
+  }
+
+  @override
+  String get attachmentImportFailed => '附件匯入失敗';
+
+  @override
+  String attachmentArchiveInfo(int count, String date) {
+    return '$count 個附件，匯出於 $date';
+  }
+
+  @override
+  String attachmentArchiveSize(String size) {
+    return '檔案大小: $size';
+  }
+
+  @override
+  String get attachmentStartImport => '開始匯入';
 }

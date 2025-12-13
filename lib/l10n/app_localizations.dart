@@ -114,12 +114,6 @@ abstract class AppLocalizations {
   /// **'Charts'**
   String get tabAnalytics;
 
-  /// No description provided for @tabLedgers.
-  ///
-  /// In en, this message translates to:
-  /// **'Ledgers'**
-  String get tabLedgers;
-
   /// No description provided for @tabMine.
   ///
   /// In en, this message translates to:
@@ -4086,6 +4080,12 @@ abstract class AppLocalizations {
   /// **'Tags'**
   String get exportCsvHeaderTags;
 
+  /// No description provided for @exportCsvHeaderAttachments.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments'**
+  String get exportCsvHeaderAttachments;
+
   /// No description provided for @exportShareText.
   ///
   /// In en, this message translates to:
@@ -6498,12 +6498,6 @@ abstract class AppLocalizations {
   /// **'GLM-*-Flash model is completely free'**
   String get aiCloudApiKeyHelper;
 
-  /// No description provided for @aiCloudApiKeySaved.
-  ///
-  /// In en, this message translates to:
-  /// **'API Key saved'**
-  String get aiCloudApiKeySaved;
-
   /// No description provided for @aiCloudApiGetKey.
   ///
   /// In en, this message translates to:
@@ -6630,6 +6624,12 @@ abstract class AppLocalizations {
   /// **'Manage cloud services and data sync'**
   String get cloudSyncPageSubtitle;
 
+  /// No description provided for @cloudSyncHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud sync only syncs ledger data (including accounts, categories, and tags associated with transactions), not unassociated categories, tags, accounts, or attachments. Please import/export attachments separately via Data Management.'**
+  String get cloudSyncHint;
+
   /// No description provided for @dataManagement.
   ///
   /// In en, this message translates to:
@@ -6653,6 +6653,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage transaction data and categories'**
   String get dataManagementPageSubtitle;
+
+  /// No description provided for @dataManagementAttachmentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'When restoring data, please import the attachment package first, then import ledger data (CSV or cloud sync) to ensure attachments are correctly associated.'**
+  String get dataManagementAttachmentHint;
 
   /// No description provided for @smartBilling.
   ///
@@ -8028,12 +8034,6 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to reset to default prompt? Your custom content will be lost.'**
   String get aiPromptResetConfirmMessage;
 
-  /// No description provided for @aiPromptCopied.
-  ///
-  /// In en, this message translates to:
-  /// **'Copied to clipboard, ready to share'**
-  String get aiPromptCopied;
-
   /// No description provided for @aiPromptPasted.
   ///
   /// In en, this message translates to:
@@ -8250,12 +8250,6 @@ abstract class AppLocalizations {
   /// **'Tag Color'**
   String get tagColorLabel;
 
-  /// No description provided for @tagColorHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Select tag color'**
-  String get tagColorHint;
-
   /// No description provided for @tagCreateSuccess.
   ///
   /// In en, this message translates to:
@@ -8346,23 +8340,11 @@ abstract class AppLocalizations {
   /// **'Total Income'**
   String get tagDetailTotalIncome;
 
-  /// No description provided for @tagDetailTransactionCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Transactions'**
-  String get tagDetailTransactionCount;
-
   /// No description provided for @tagDetailTransactionList.
   ///
   /// In en, this message translates to:
   /// **'Related Transactions'**
   String get tagDetailTransactionList;
-
-  /// No description provided for @tagDetailRelatedTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Related Transactions'**
-  String get tagDetailRelatedTransactions;
 
   /// No description provided for @tagDetailNoTransactions.
   ///
@@ -8538,59 +8520,11 @@ abstract class AppLocalizations {
   /// **'Accounts'**
   String get discoverAccounts;
 
-  /// No description provided for @discoverAccountsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage assets and liabilities'**
-  String get discoverAccountsSubtitle;
-
   /// No description provided for @discoverAccountsEmpty.
   ///
   /// In en, this message translates to:
   /// **'Add accounts to track cash flow'**
   String get discoverAccountsEmpty;
-
-  /// No description provided for @discoverReports.
-  ///
-  /// In en, this message translates to:
-  /// **'Reports'**
-  String get discoverReports;
-
-  /// No description provided for @discoverReportsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly/yearly financial reports'**
-  String get discoverReportsSubtitle;
-
-  /// No description provided for @discoverRecurring.
-  ///
-  /// In en, this message translates to:
-  /// **'Recurring'**
-  String get discoverRecurring;
-
-  /// No description provided for @discoverRecurringSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage recurring transactions'**
-  String get discoverRecurringSubtitle;
-
-  /// No description provided for @discoverLedgers.
-  ///
-  /// In en, this message translates to:
-  /// **'Ledgers'**
-  String get discoverLedgers;
-
-  /// No description provided for @discoverLedgersSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage multiple ledgers'**
-  String get discoverLedgersSubtitle;
-
-  /// No description provided for @discoverComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Coming soon'**
-  String get discoverComingSoon;
 
   /// No description provided for @discoverAccountsTotal.
   ///
@@ -8603,54 +8537,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} accounts'**
   String discoverAccountsCount(int count);
-
-  /// No description provided for @discoverMonthlyOverview.
-  ///
-  /// In en, this message translates to:
-  /// **'This Month'**
-  String get discoverMonthlyOverview;
-
-  /// No description provided for @discoverComparedToLastMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'vs last month'**
-  String get discoverComparedToLastMonth;
-
-  /// No description provided for @discoverUp.
-  ///
-  /// In en, this message translates to:
-  /// **'↑{percent}'**
-  String discoverUp(String percent);
-
-  /// No description provided for @discoverDown.
-  ///
-  /// In en, this message translates to:
-  /// **'↓{percent}'**
-  String discoverDown(String percent);
-
-  /// No description provided for @discoverNoChange.
-  ///
-  /// In en, this message translates to:
-  /// **'No change'**
-  String get discoverNoChange;
-
-  /// No description provided for @discoverTopCategories.
-  ///
-  /// In en, this message translates to:
-  /// **'Top 3 Expenses'**
-  String get discoverTopCategories;
-
-  /// No description provided for @discoverNoExpense.
-  ///
-  /// In en, this message translates to:
-  /// **'No expenses this month'**
-  String get discoverNoExpense;
-
-  /// No description provided for @discoverQuickActions.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Entry'**
-  String get discoverQuickActions;
 
   /// No description provided for @discoverQuickCamera.
   ///
@@ -8670,36 +8556,6 @@ abstract class AppLocalizations {
   /// **'Voice'**
   String get discoverQuickVoice;
 
-  /// No description provided for @greetingMorning.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Morning'**
-  String get greetingMorning;
-
-  /// No description provided for @greetingAfternoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Afternoon'**
-  String get greetingAfternoon;
-
-  /// No description provided for @greetingEvening.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Evening'**
-  String get greetingEvening;
-
-  /// No description provided for @greetingNight.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Night'**
-  String get greetingNight;
-
-  /// No description provided for @discoverSmartBilling.
-  ///
-  /// In en, this message translates to:
-  /// **'Smart Billing'**
-  String get discoverSmartBilling;
-
   /// No description provided for @discoverCommonFeatures.
   ///
   /// In en, this message translates to:
@@ -8717,12 +8573,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Categories'**
   String get discoverCategory;
-
-  /// No description provided for @discoverReminder.
-  ///
-  /// In en, this message translates to:
-  /// **'Reminder'**
-  String get discoverReminder;
 
   /// No description provided for @discoverTags.
   ///
@@ -8742,12 +8592,6 @@ abstract class AppLocalizations {
   /// **'Export'**
   String get discoverExport;
 
-  /// No description provided for @discoverBackup.
-  ///
-  /// In en, this message translates to:
-  /// **'Backup'**
-  String get discoverBackup;
-
   /// No description provided for @homeSwitchLedger.
   ///
   /// In en, this message translates to:
@@ -8759,12 +8603,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage Ledgers'**
   String get homeManageLedgers;
-
-  /// No description provided for @homeNewLedger.
-  ///
-  /// In en, this message translates to:
-  /// **'New Ledger'**
-  String get homeNewLedger;
 
   /// No description provided for @budgetTitle.
   ///
@@ -8874,35 +8712,11 @@ abstract class AppLocalizations {
   /// **'Start Day'**
   String get budgetStartDayLabel;
 
-  /// No description provided for @budgetStartDayHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Day of month to start'**
-  String get budgetStartDayHint;
-
   /// No description provided for @budgetPeriodLabel.
   ///
   /// In en, this message translates to:
   /// **'Period'**
   String get budgetPeriodLabel;
-
-  /// No description provided for @budgetPeriodMonthly.
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly'**
-  String get budgetPeriodMonthly;
-
-  /// No description provided for @budgetPeriodWeekly.
-  ///
-  /// In en, this message translates to:
-  /// **'Weekly'**
-  String get budgetPeriodWeekly;
-
-  /// No description provided for @budgetPeriodYearly.
-  ///
-  /// In en, this message translates to:
-  /// **'Yearly'**
-  String get budgetPeriodYearly;
 
   /// No description provided for @budgetSaveSuccess.
   ///
@@ -8921,12 +8735,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Budget deleted'**
   String get budgetDeleteSuccess;
-
-  /// No description provided for @budgetExceededWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'This expense will exceed the budget'**
-  String get budgetExceededWarning;
 
   /// No description provided for @attachmentAdd.
   ///
@@ -8958,18 +8766,6 @@ abstract class AppLocalizations {
   /// **'Delete this attachment?'**
   String get attachmentDeleteConfirm;
 
-  /// No description provided for @attachmentTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Attachments'**
-  String get attachmentTitle;
-
-  /// No description provided for @attachmentPreviewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Image Preview'**
-  String get attachmentPreviewTitle;
-
   /// No description provided for @attachmentCount.
   ///
   /// In en, this message translates to:
@@ -8981,6 +8777,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deleted'**
   String get commonDeleted;
+
+  /// No description provided for @attachmentExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Attachments'**
+  String get attachmentExportTitle;
+
+  /// No description provided for @attachmentExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all attachments as a compressed file'**
+  String get attachmentExportSubtitle;
+
+  /// No description provided for @attachmentImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Attachments'**
+  String get attachmentImportTitle;
+
+  /// No description provided for @attachmentImportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import attachments from a compressed file'**
+  String get attachmentImportSubtitle;
+
+  /// No description provided for @attachmentExportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No attachments to export'**
+  String get attachmentExportEmpty;
+
+  /// No description provided for @attachmentExportProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting attachments ({current}/{total})'**
+  String attachmentExportProgress(int current, int total);
+
+  /// No description provided for @attachmentExportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments exported successfully'**
+  String get attachmentExportSuccess;
+
+  /// No description provided for @attachmentExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export attachments'**
+  String get attachmentExportFailed;
+
+  /// No description provided for @attachmentExportSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to: {path}'**
+  String attachmentExportSavedTo(String path);
+
+  /// No description provided for @attachmentImportSelectFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a compressed file to import'**
+  String get attachmentImportSelectFile;
+
+  /// No description provided for @attachmentImportConflictStrategy.
+  ///
+  /// In en, this message translates to:
+  /// **'Conflict Strategy'**
+  String get attachmentImportConflictStrategy;
+
+  /// No description provided for @attachmentImportConflictSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip existing attachments'**
+  String get attachmentImportConflictSkip;
+
+  /// No description provided for @attachmentImportConflictOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite existing attachments'**
+  String get attachmentImportConflictOverwrite;
+
+  /// No description provided for @attachmentImportProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing attachments ({current}/{total})'**
+  String attachmentImportProgress(int current, int total);
+
+  /// No description provided for @attachmentImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments import completed'**
+  String get attachmentImportSuccess;
+
+  /// No description provided for @attachmentImportResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {imported}, Skipped {skipped}, Overwritten {overwritten}, Failed {failed}'**
+  String attachmentImportResult(int imported, int skipped, int overwritten, int failed);
+
+  /// No description provided for @attachmentImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import attachments'**
+  String get attachmentImportFailed;
+
+  /// No description provided for @attachmentArchiveInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} attachments, exported on {date}'**
+  String attachmentArchiveInfo(int count, String date);
+
+  /// No description provided for @attachmentArchiveSize.
+  ///
+  /// In en, this message translates to:
+  /// **'File size: {size}'**
+  String attachmentArchiveSize(String size);
+
+  /// No description provided for @attachmentStartImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Import'**
+  String get attachmentStartImport;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

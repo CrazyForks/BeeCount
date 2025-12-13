@@ -163,6 +163,17 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                 return ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
+                    // 提示文案
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        AppLocalizations.of(context).cloudSyncHint,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: BeeTokens.textTertiary(context),
+                        ),
+                      ),
+                    ),
                     // 同步操作 Section
                     SectionCard(
                       margin: EdgeInsets.zero,

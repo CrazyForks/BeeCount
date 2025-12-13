@@ -16,9 +16,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabAnalytics => 'Charts';
 
   @override
-  String get tabLedgers => 'Ledgers';
-
-  @override
   String get tabMine => 'Mine';
 
   @override
@@ -2146,6 +2143,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportCsvHeaderTags => 'Tags';
 
   @override
+  String get exportCsvHeaderAttachments => 'Attachments';
+
+  @override
   String get exportShareText => 'BeeCount Export File';
 
   @override
@@ -3402,9 +3402,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiKeyHelper => 'GLM-*-Flash model is completely free';
 
   @override
-  String get aiCloudApiKeySaved => 'API Key saved';
-
-  @override
   String get aiCloudApiGetKey => 'Get API Key';
 
   @override
@@ -3472,6 +3469,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudSyncPageSubtitle => 'Manage cloud services and data sync';
 
   @override
+  String get cloudSyncHint => 'Cloud sync only syncs ledger data (including accounts, categories, and tags associated with transactions), not unassociated categories, tags, accounts, or attachments. Please import/export attachments separately via Data Management.';
+
+  @override
   String get dataManagement => 'Data Management';
 
   @override
@@ -3482,6 +3482,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataManagementPageSubtitle => 'Manage transaction data and categories';
+
+  @override
+  String get dataManagementAttachmentHint => 'When restoring data, please import the attachment package first, then import ledger data (CSV or cloud sync) to ensure attachments are correctly associated.';
 
   @override
   String get smartBilling => 'Smart Billing';
@@ -4193,9 +4196,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiPromptResetConfirmMessage => 'Are you sure you want to reset to default prompt? Your custom content will be lost.';
 
   @override
-  String get aiPromptCopied => 'Copied to clipboard, ready to share';
-
-  @override
   String get aiPromptPasted => 'Pasted';
 
   @override
@@ -4306,9 +4306,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagColorLabel => 'Tag Color';
 
   @override
-  String get tagColorHint => 'Select tag color';
-
-  @override
   String get tagCreateSuccess => 'Tag created';
 
   @override
@@ -4358,13 +4355,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagDetailTotalIncome => 'Total Income';
 
   @override
-  String get tagDetailTransactionCount => 'Transactions';
-
-  @override
   String get tagDetailTransactionList => 'Related Transactions';
-
-  @override
-  String get tagDetailRelatedTransactions => 'Related Transactions';
 
   @override
   String get tagDetailNoTransactions => 'No related transactions';
@@ -4454,31 +4445,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverAccounts => 'Accounts';
 
   @override
-  String get discoverAccountsSubtitle => 'Manage assets and liabilities';
-
-  @override
   String get discoverAccountsEmpty => 'Add accounts to track cash flow';
-
-  @override
-  String get discoverReports => 'Reports';
-
-  @override
-  String get discoverReportsSubtitle => 'Monthly/yearly financial reports';
-
-  @override
-  String get discoverRecurring => 'Recurring';
-
-  @override
-  String get discoverRecurringSubtitle => 'Manage recurring transactions';
-
-  @override
-  String get discoverLedgers => 'Ledgers';
-
-  @override
-  String get discoverLedgersSubtitle => 'Manage multiple ledgers';
-
-  @override
-  String get discoverComingSoon => 'Coming soon';
 
   @override
   String get discoverAccountsTotal => 'Total Balance';
@@ -4487,34 +4454,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String discoverAccountsCount(int count) {
     return '$count accounts';
   }
-
-  @override
-  String get discoverMonthlyOverview => 'This Month';
-
-  @override
-  String get discoverComparedToLastMonth => 'vs last month';
-
-  @override
-  String discoverUp(String percent) {
-    return '↑$percent';
-  }
-
-  @override
-  String discoverDown(String percent) {
-    return '↓$percent';
-  }
-
-  @override
-  String get discoverNoChange => 'No change';
-
-  @override
-  String get discoverTopCategories => 'Top 3 Expenses';
-
-  @override
-  String get discoverNoExpense => 'No expenses this month';
-
-  @override
-  String get discoverQuickActions => 'Quick Entry';
 
   @override
   String get discoverQuickCamera => 'Camera';
@@ -4526,21 +4465,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverQuickVoice => 'Voice';
 
   @override
-  String get greetingMorning => 'Good Morning';
-
-  @override
-  String get greetingAfternoon => 'Good Afternoon';
-
-  @override
-  String get greetingEvening => 'Good Evening';
-
-  @override
-  String get greetingNight => 'Good Night';
-
-  @override
-  String get discoverSmartBilling => 'Smart Billing';
-
-  @override
   String get discoverCommonFeatures => 'Features';
 
   @override
@@ -4548,9 +4472,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverCategory => 'Categories';
-
-  @override
-  String get discoverReminder => 'Reminder';
 
   @override
   String get discoverTags => 'Tags';
@@ -4562,16 +4483,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverExport => 'Export';
 
   @override
-  String get discoverBackup => 'Backup';
-
-  @override
   String get homeSwitchLedger => 'Select Ledger';
 
   @override
   String get homeManageLedgers => 'Manage Ledgers';
-
-  @override
-  String get homeNewLedger => 'New Ledger';
 
   @override
   String get budgetTitle => 'Budget';
@@ -4632,19 +4547,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budgetStartDayLabel => 'Start Day';
 
   @override
-  String get budgetStartDayHint => 'Day of month to start';
-
-  @override
   String get budgetPeriodLabel => 'Period';
-
-  @override
-  String get budgetPeriodMonthly => 'Monthly';
-
-  @override
-  String get budgetPeriodWeekly => 'Weekly';
-
-  @override
-  String get budgetPeriodYearly => 'Yearly';
 
   @override
   String get budgetSaveSuccess => 'Budget saved';
@@ -4654,9 +4557,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get budgetDeleteSuccess => 'Budget deleted';
-
-  @override
-  String get budgetExceededWarning => 'This expense will exceed the budget';
 
   @override
   String get attachmentAdd => 'Add Image';
@@ -4674,16 +4574,82 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attachmentDeleteConfirm => 'Delete this attachment?';
 
   @override
-  String get attachmentTitle => 'Attachments';
-
-  @override
-  String get attachmentPreviewTitle => 'Image Preview';
-
-  @override
   String attachmentCount(int count) {
     return '$count images';
   }
 
   @override
   String get commonDeleted => 'Deleted';
+
+  @override
+  String get attachmentExportTitle => 'Export Attachments';
+
+  @override
+  String get attachmentExportSubtitle => 'Export all attachments as a compressed file';
+
+  @override
+  String get attachmentImportTitle => 'Import Attachments';
+
+  @override
+  String get attachmentImportSubtitle => 'Import attachments from a compressed file';
+
+  @override
+  String get attachmentExportEmpty => 'No attachments to export';
+
+  @override
+  String attachmentExportProgress(int current, int total) {
+    return 'Exporting attachments ($current/$total)';
+  }
+
+  @override
+  String get attachmentExportSuccess => 'Attachments exported successfully';
+
+  @override
+  String get attachmentExportFailed => 'Failed to export attachments';
+
+  @override
+  String attachmentExportSavedTo(String path) {
+    return 'Saved to: $path';
+  }
+
+  @override
+  String get attachmentImportSelectFile => 'Select a compressed file to import';
+
+  @override
+  String get attachmentImportConflictStrategy => 'Conflict Strategy';
+
+  @override
+  String get attachmentImportConflictSkip => 'Skip existing attachments';
+
+  @override
+  String get attachmentImportConflictOverwrite => 'Overwrite existing attachments';
+
+  @override
+  String attachmentImportProgress(int current, int total) {
+    return 'Importing attachments ($current/$total)';
+  }
+
+  @override
+  String get attachmentImportSuccess => 'Attachments import completed';
+
+  @override
+  String attachmentImportResult(int imported, int skipped, int overwritten, int failed) {
+    return 'Imported $imported, Skipped $skipped, Overwritten $overwritten, Failed $failed';
+  }
+
+  @override
+  String get attachmentImportFailed => 'Failed to import attachments';
+
+  @override
+  String attachmentArchiveInfo(int count, String date) {
+    return '$count attachments, exported on $date';
+  }
+
+  @override
+  String attachmentArchiveSize(String size) {
+    return 'File size: $size';
+  }
+
+  @override
+  String get attachmentStartImport => 'Start Import';
 }

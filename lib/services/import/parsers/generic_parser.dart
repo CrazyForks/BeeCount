@@ -147,6 +147,10 @@ class GenericBillParser implements BillParser {
     if (noSpace == 'tags' || _containsAny(s, ['标签', 'Tags'])) {
       return 'tags';
     }
+    // 附件匹配
+    if (noSpace == 'attachments' || _containsAny(s, ['附件', 'Attachments'])) {
+      return 'attachments';
+    }
     // 再匹配收支类型字段
     if (_containsAny(s, ['类型', '收支', '收/支', '方向'])) {
       return 'type';
@@ -176,7 +180,6 @@ class GenericBillParser implements BillParser {
       '交易号',
       '相关图片',
       '图片',
-      '附件',
       '交易单号',
       '订单号'
     ])) {

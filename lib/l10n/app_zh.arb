@@ -822,6 +822,7 @@
   "exportCsvHeaderNote": "备注",
   "exportCsvHeaderTime": "时间",
   "exportCsvHeaderTags": "标签",
+  "exportCsvHeaderAttachments": "附件",
   "exportShareText": "BeeCount 导出文件",
   "exportSuccessTitle": "导出成功",
   "exportSuccessMessageIOS": "已保存并可在分享历史中找到：\n{path}",
@@ -1331,10 +1332,12 @@
   "aiTypeExpense": "支出",
   "cloudSyncPageTitle": "云同步与备份",
   "cloudSyncPageSubtitle": "管理云服务和数据同步",
+  "cloudSyncHint": "云同步只会同步账本数据（包括交易记录关联的账户、分类、标签），不包括未关联的分类、标签、账户，也不包括附件。附件请通过数据管理单独导入导出。",
   "dataManagement": "数据管理",
   "dataManagementDesc": "导入导出、分类账户管理",
   "dataManagementPageTitle": "数据管理",
   "dataManagementPageSubtitle": "管理账单数据和分类",
+  "dataManagementAttachmentHint": "还原数据时，请先导入附件包，再导入账本数据（CSV或云同步），以确保附件正确关联。",
   "smartBilling": "智能记账",
   "smartBillingDesc": "AI小助手、OCR扫描、自动记账",
   "smartBillingPageTitle": "智能记账",
@@ -1879,5 +1882,61 @@
       }
     }
   },
-  "commonDeleted": "已删除"
+  "commonDeleted": "已删除",
+  "attachmentExportTitle": "导出附件",
+  "attachmentExportSubtitle": "将所有附件打包导出为压缩文件",
+  "attachmentImportTitle": "导入附件",
+  "attachmentImportSubtitle": "从压缩文件导入附件",
+  "attachmentExportEmpty": "没有附件需要导出",
+  "attachmentExportProgress": "正在导出附件 ({current}/{total})",
+  "@attachmentExportProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "attachmentExportSuccess": "附件导出成功",
+  "attachmentExportFailed": "附件导出失败",
+  "attachmentExportSavedTo": "已保存到: {path}",
+  "@attachmentExportSavedTo": {
+    "placeholders": {
+      "path": {"type": "String"}
+    }
+  },
+  "attachmentImportSelectFile": "选择要导入的压缩文件",
+  "attachmentImportConflictStrategy": "冲突处理策略",
+  "attachmentImportConflictSkip": "跳过已存在的附件",
+  "attachmentImportConflictOverwrite": "覆盖已存在的附件",
+  "attachmentImportProgress": "正在导入附件 ({current}/{total})",
+  "@attachmentImportProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "attachmentImportSuccess": "附件导入完成",
+  "attachmentImportResult": "导入 {imported} 张，跳过 {skipped} 张，覆盖 {overwritten} 张，失败 {failed} 张",
+  "@attachmentImportResult": {
+    "placeholders": {
+      "imported": {"type": "int"},
+      "skipped": {"type": "int"},
+      "overwritten": {"type": "int"},
+      "failed": {"type": "int"}
+    }
+  },
+  "attachmentImportFailed": "附件导入失败",
+  "attachmentArchiveInfo": "{count} 个附件，导出于 {date}",
+  "@attachmentArchiveInfo": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "date": {"type": "String"}
+    }
+  },
+  "attachmentArchiveSize": "文件大小: {size}",
+  "@attachmentArchiveSize": {
+    "placeholders": {
+      "size": {"type": "String"}
+    }
+  },
+  "attachmentStartImport": "开始导入"
 }

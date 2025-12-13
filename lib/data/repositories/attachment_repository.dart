@@ -49,8 +49,17 @@ abstract class AttachmentRepository {
   /// 批量获取多个交易的附件数量
   Future<Map<int, int>> getAttachmentCountsForTransactions(List<int> transactionIds);
 
+  /// 批量获取多个交易的附件
+  Future<Map<int, List<TransactionAttachment>>> getAttachmentsForTransactions(List<int> transactionIds);
+
   /// 获取所有有附件的交易ID
   Future<List<int>> getTransactionIdsWithAttachments();
+
+  /// 获取所有附件
+  Future<List<TransactionAttachment>> getAllAttachments();
+
+  /// 根据文件名删除附件
+  Future<void> deleteAttachmentByFileName(String fileName);
 
   // ============================================
   // 响应式监听

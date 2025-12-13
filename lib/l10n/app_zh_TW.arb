@@ -609,6 +609,7 @@
   },
   "cloudSyncPageSubtitle": "管理雲端服務和資料同步",
   "cloudSyncPageTitle": "雲同步與備份",
+  "cloudSyncHint": "雲同步只會同步帳本資料（包括交易記錄關聯的帳戶、分類、標籤），不包括未關聯的分類、標籤、帳戶，也不包括附件。附件請通過資料管理單獨匯入匯出。",
   "cloudTest": "測試",
   "cloudTestConnection": "測試連線",
   "cloudTestError": "測試失敗",
@@ -755,6 +756,7 @@
   "currencyUSD": "美元",
   "currencyVND": "越南盾",
   "dataManagement": "資料管理",
+  "dataManagementAttachmentHint": "還原資料時，請先匯入附件包，再匯入帳本資料（CSV或雲同步），以確保附件正確關聯。",
   "dataManagementDesc": "匯入匯出、分類帳戶管理",
   "dataManagementPageSubtitle": "管理帳單資料和分類",
   "dataManagementPageTitle": "資料管理",
@@ -829,6 +831,7 @@
   "exportCsvHeaderSubCategory": "二級分類",
   "exportCsvHeaderSubCategoryIcon": "二級分類圖示",
   "exportCsvHeaderTags": "標籤",
+  "exportCsvHeaderAttachments": "附件",
   "exportCsvHeaderTime": "時間",
   "exportCsvHeaderToAccount": "轉入帳戶",
   "exportCsvHeaderType": "類型",
@@ -1687,5 +1690,75 @@
   "widgetPreview": "小組件預覽",
   "widgetPreviewDesc": "小組件会自動顯示當前帳本的實際數據，主題色跟隨應用設置",
   "widgetTodayExpense": "今日支出",
-  "widgetTodayIncome": "今日收入"
+  "widgetTodayIncome": "今日收入",
+  "attachmentAdd": "添加圖片",
+  "attachmentTakePhoto": "拍照",
+  "attachmentChooseFromGallery": "從相簿選擇",
+  "attachmentMaxReached": "已達到最大附件數量",
+  "attachmentDeleteConfirm": "確定刪除此附件？",
+  "attachmentCount": "{count}張圖片",
+  "@attachmentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonDeleted": "已刪除",
+  "attachmentExportTitle": "匯出附件",
+  "attachmentExportSubtitle": "將所有附件打包匯出為壓縮檔案",
+  "attachmentImportTitle": "匯入附件",
+  "attachmentImportSubtitle": "從壓縮檔案匯入附件",
+  "attachmentExportEmpty": "沒有附件需要匯出",
+  "attachmentExportProgress": "正在匯出附件 ({current}/{total})",
+  "@attachmentExportProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "attachmentExportSuccess": "附件匯出成功",
+  "attachmentExportFailed": "附件匯出失敗",
+  "attachmentExportSavedTo": "已儲存到: {path}",
+  "@attachmentExportSavedTo": {
+    "placeholders": {
+      "path": {"type": "String"}
+    }
+  },
+  "attachmentImportSelectFile": "選擇要匯入的壓縮檔案",
+  "attachmentImportConflictStrategy": "衝突處理策略",
+  "attachmentImportConflictSkip": "跳過已存在的附件",
+  "attachmentImportConflictOverwrite": "覆蓋已存在的附件",
+  "attachmentImportProgress": "正在匯入附件 ({current}/{total})",
+  "@attachmentImportProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "attachmentImportSuccess": "附件匯入完成",
+  "attachmentImportResult": "匯入 {imported} 張，跳過 {skipped} 張，覆蓋 {overwritten} 張，失敗 {failed} 張",
+  "@attachmentImportResult": {
+    "placeholders": {
+      "imported": {"type": "int"},
+      "skipped": {"type": "int"},
+      "overwritten": {"type": "int"},
+      "failed": {"type": "int"}
+    }
+  },
+  "attachmentImportFailed": "附件匯入失敗",
+  "attachmentArchiveInfo": "{count} 個附件，匯出於 {date}",
+  "@attachmentArchiveInfo": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "date": {"type": "String"}
+    }
+  },
+  "attachmentArchiveSize": "檔案大小: {size}",
+  "@attachmentArchiveSize": {
+    "placeholders": {
+      "size": {"type": "String"}
+    }
+  },
+  "attachmentStartImport": "開始匯入"
 }

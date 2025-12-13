@@ -824,6 +824,7 @@
   "exportCsvHeaderNote": "Note",
   "exportCsvHeaderTime": "Time",
   "exportCsvHeaderTags": "Tags",
+  "exportCsvHeaderAttachments": "Attachments",
   "exportShareText": "BeeCount Export File",
   "exportSuccessTitle": "Export Successful",
   "exportSuccessMessageIOS": "Saved and available in share history:\n{path}",
@@ -1458,10 +1459,12 @@
   "aiTypeExpense": "Expense",
   "cloudSyncPageTitle": "Cloud Sync & Backup",
   "cloudSyncPageSubtitle": "Manage cloud services and data sync",
+  "cloudSyncHint": "Cloud sync only syncs ledger data (including accounts, categories, and tags associated with transactions), not unassociated categories, tags, accounts, or attachments. Please import/export attachments separately via Data Management.",
   "dataManagement": "Data Management",
   "dataManagementDesc": "Import, export, categories and accounts",
   "dataManagementPageTitle": "Data Management",
   "dataManagementPageSubtitle": "Manage transaction data and categories",
+  "dataManagementAttachmentHint": "When restoring data, please import the attachment package first, then import ledger data (CSV or cloud sync) to ensure attachments are correctly associated.",
   "smartBilling": "Smart Billing",
   "smartBillingDesc": "AI Assistant, OCR scan, auto billing",
   "smartBillingPageTitle": "Smart Billing",
@@ -1940,5 +1943,61 @@
       }
     }
   },
-  "commonDeleted": "Deleted"
+  "commonDeleted": "Deleted",
+  "attachmentExportTitle": "Export Attachments",
+  "attachmentExportSubtitle": "Export all attachments as a compressed file",
+  "attachmentImportTitle": "Import Attachments",
+  "attachmentImportSubtitle": "Import attachments from a compressed file",
+  "attachmentExportEmpty": "No attachments to export",
+  "attachmentExportProgress": "Exporting attachments ({current}/{total})",
+  "@attachmentExportProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "attachmentExportSuccess": "Attachments exported successfully",
+  "attachmentExportFailed": "Failed to export attachments",
+  "attachmentExportSavedTo": "Saved to: {path}",
+  "@attachmentExportSavedTo": {
+    "placeholders": {
+      "path": {"type": "String"}
+    }
+  },
+  "attachmentImportSelectFile": "Select a compressed file to import",
+  "attachmentImportConflictStrategy": "Conflict Strategy",
+  "attachmentImportConflictSkip": "Skip existing attachments",
+  "attachmentImportConflictOverwrite": "Overwrite existing attachments",
+  "attachmentImportProgress": "Importing attachments ({current}/{total})",
+  "@attachmentImportProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "attachmentImportSuccess": "Attachments import completed",
+  "attachmentImportResult": "Imported {imported}, Skipped {skipped}, Overwritten {overwritten}, Failed {failed}",
+  "@attachmentImportResult": {
+    "placeholders": {
+      "imported": {"type": "int"},
+      "skipped": {"type": "int"},
+      "overwritten": {"type": "int"},
+      "failed": {"type": "int"}
+    }
+  },
+  "attachmentImportFailed": "Failed to import attachments",
+  "attachmentArchiveInfo": "{count} attachments, exported on {date}",
+  "@attachmentArchiveInfo": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "date": {"type": "String"}
+    }
+  },
+  "attachmentArchiveSize": "File size: {size}",
+  "@attachmentArchiveSize": {
+    "placeholders": {
+      "size": {"type": "String"}
+    }
+  },
+  "attachmentStartImport": "Start Import"
 }

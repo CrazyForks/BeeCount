@@ -1112,8 +1112,20 @@ class LocalRepository extends BaseRepository {
       _attachmentRepo.getAttachmentCountsForTransactions(transactionIds);
 
   @override
+  Future<Map<int, List<TransactionAttachment>>> getAttachmentsForTransactions(List<int> transactionIds) =>
+      _attachmentRepo.getAttachmentsForTransactions(transactionIds);
+
+  @override
   Future<List<int>> getTransactionIdsWithAttachments() =>
       _attachmentRepo.getTransactionIdsWithAttachments();
+
+  @override
+  Future<List<TransactionAttachment>> getAllAttachments() =>
+      _attachmentRepo.getAllAttachments();
+
+  @override
+  Future<void> deleteAttachmentByFileName(String fileName) =>
+      _attachmentRepo.deleteAttachmentByFileName(fileName);
 
   @override
   Stream<List<TransactionAttachment>> watchAttachmentsByTransaction(int transactionId) =>

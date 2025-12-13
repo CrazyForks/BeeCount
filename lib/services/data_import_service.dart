@@ -52,6 +52,25 @@ class ImportTag {
   });
 }
 
+/// 导入附件数据
+class ImportAttachment {
+  final String fileName;
+  final String? originalName;
+  final int? fileSize;
+  final int? width;
+  final int? height;
+  final int sortOrder;
+
+  const ImportAttachment({
+    required this.fileName,
+    this.originalName,
+    this.fileSize,
+    this.width,
+    this.height,
+    this.sortOrder = 0,
+  });
+}
+
 /// 导入交易数据
 class ImportTransaction {
   final String type; // 'income', 'expense', 'transfer'
@@ -65,6 +84,7 @@ class ImportTransaction {
   final String? toAccountName; // 转入账户（转账）
   final List<String>? tagNames; // 标签名称列表
   final int? categoryId; // 预解析的分类ID（优先于categoryName）
+  final List<ImportAttachment>? attachments; // 附件元数据列表
 
   const ImportTransaction({
     required this.type,
@@ -78,6 +98,7 @@ class ImportTransaction {
     this.toAccountName,
     this.tagNames,
     this.categoryId,
+    this.attachments,
   });
 }
 
@@ -473,21 +494,43 @@ class DataImportService {
         note: d.Value(tx.note),
       );
 
-      // 如果有标签，单独插入并关联
-      if (tagIds.isNotEmpty) {
+      // 如果有标签或附件，单独插入并关联
+      final hasAttachments = tx.attachments != null && tx.attachments!.isNotEmpty;
+      if (tagIds.isNotEmpty || hasAttachments) {
         try {
           final txId = await repo.insertTransactionCompanion(txCompanion);
-          await repo.updateTransactionTags(
-            transactionId: txId,
-            tagIds: tagIds,
-          );
+          // 关联标签
+          if (tagIds.isNotEmpty) {
+            await repo.updateTransactionTags(
+              transactionId: txId,
+              tagIds: tagIds,
+            );
+          }
+          // 创建附件元数据记录（注意：仅创建记录，实际图片文件需单独导入）
+          if (hasAttachments) {
+            for (final attachment in tx.attachments!) {
+              try {
+                await repo.createAttachment(
+                  transactionId: txId,
+                  fileName: attachment.fileName,
+                  originalName: attachment.originalName,
+                  fileSize: attachment.fileSize,
+                  width: attachment.width,
+                  height: attachment.height,
+                  sortOrder: attachment.sortOrder,
+                );
+              } catch (_) {
+                // 附件记录创建失败不影响交易导入
+              }
+            }
+          }
           inserted++;
         } catch (_) {
           failed++;
         }
         processed++;
       } else {
-        // 没有标签，批量插入
+        // 没有标签和附件，批量插入
         toInsert.add(txCompanion);
       }
       existing.add(sig);

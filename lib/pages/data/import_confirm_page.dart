@@ -49,6 +49,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     'to_account': null,
     'note': null,
     'tags': null,                // 标签（逗号分隔）
+    'attachments': null,         // 附件文件名（逗号分隔）
   };
   bool importing = false;
   int ok = 0, fail = 0, skipped = 0; // skipped: 跳过的非收支类型记录
@@ -189,6 +190,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                           'note', items()),
                       _mapRow(AppLocalizations.of(context)!.exportCsvHeaderTags,
                           'tags', items()),
+                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderAttachments,
+                          'attachments', items()),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -823,6 +826,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       final toAccountName = getBy('to_account');
       final note = getBy('note');
       final tagsStr = getBy('tags');
+      final attachmentsStr = getBy('attachments');
 
       // 类型识别
       final typeStr = typeRaw.trim().toLowerCase();
@@ -855,6 +859,18 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       List<String>? tagNames;
       if (tagsStr != null && tagsStr.isNotEmpty) {
         tagNames = tagsStr.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+      }
+
+      // 解析附件文件名列表
+      List<ImportAttachment>? attachments;
+      if (attachmentsStr != null && attachmentsStr.isNotEmpty) {
+        final fileNames = attachmentsStr.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+        if (fileNames.isNotEmpty) {
+          attachments = fileNames.asMap().entries.map((entry) => ImportAttachment(
+            fileName: entry.value,
+            sortOrder: entry.key,
+          )).toList();
+        }
       }
 
       // 处理分类：支持用户映射和二级分类
@@ -893,6 +909,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         fromAccountName: type == 'transfer' ? fromAccountName : null,
         toAccountName: type == 'transfer' ? toAccountName : null,
         tagNames: tagNames,
+        attachments: attachments,
       ));
     }
 

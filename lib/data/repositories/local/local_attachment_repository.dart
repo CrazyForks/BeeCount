@@ -143,6 +143,22 @@ class LocalAttachmentRepository implements AttachmentRepository {
   }
 
   @override
+  Future<Map<int, List<TransactionAttachment>>> getAttachmentsForTransactions(List<int> transactionIds) async {
+    if (transactionIds.isEmpty) return {};
+
+    final attachments = await (db.select(db.transactionAttachments)
+      ..where((t) => t.transactionId.isIn(transactionIds))
+      ..orderBy([(t) => d.OrderingTerm(expression: t.sortOrder)])).get();
+
+    final Map<int, List<TransactionAttachment>> result = {};
+    for (final attachment in attachments) {
+      result.putIfAbsent(attachment.transactionId, () => []).add(attachment);
+    }
+
+    return result;
+  }
+
+  @override
   Future<List<int>> getTransactionIdsWithAttachments() async {
     final result = await db.customSelect(
       'SELECT DISTINCT transaction_id FROM transaction_attachments',
@@ -155,6 +171,18 @@ class LocalAttachmentRepository implements AttachmentRepository {
       if (id is BigInt) return id.toInt();
       return 0;
     }).where((id) => id > 0).toList();
+  }
+
+  @override
+  Future<List<TransactionAttachment>> getAllAttachments() async {
+    return await (db.select(db.transactionAttachments)
+      ..orderBy([(t) => d.OrderingTerm(expression: t.createdAt, mode: d.OrderingMode.desc)])).get();
+  }
+
+  @override
+  Future<void> deleteAttachmentByFileName(String fileName) async {
+    await (db.delete(db.transactionAttachments)
+      ..where((t) => t.fileName.equals(fileName))).go();
   }
 
   // ============================================
