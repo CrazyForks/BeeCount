@@ -482,7 +482,6 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
     // 定义进度变量
     int done = 0;
-    int duplicateSkipped = 0; // 重复记录跳过数
 
     // 收集跳过的类型（用于提示用户）
     final Map<String, int> skippedTypes = {};
@@ -520,8 +519,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
       ok = result.inserted;
       fail = result.failed;
-      duplicateSkipped = result.skipped;
-      skipped = duplicateSkipped + skippedTypes.values.fold(0, (a, b) => a + b);
+      skipped = skippedTypes.values.fold(0, (a, b) => a + b);
       done = total;
     } catch (e) {
       // 导入失败
@@ -582,12 +580,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     bool hasSkipped = skipped > 0;
 
     if (hasSkipped) {
-      // 分别显示重复记录和类型不匹配
+      // 显示类型不匹配的跳过记录
       final typeSkipped = skippedTypes.values.fold(0, (a, b) => a + b);
 
-      if (duplicateSkipped > 0) {
-        message += '\n${l10nToast.importSkippedDuplicates(duplicateSkipped)}';
-      }
       if (typeSkipped > 0) {
         final skippedList = skippedTypes.entries
             .map((e) => '${e.key}(${e.value})')

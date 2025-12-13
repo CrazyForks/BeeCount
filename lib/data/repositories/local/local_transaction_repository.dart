@@ -270,66 +270,6 @@ class LocalTransactionRepository implements TransactionRepository {
   }
 
   @override
-  String txSignature({
-    required String type,
-    required double amount,
-    required int? categoryId,
-    required DateTime happenedAt,
-    required String? note,
-  }) {
-    final ts = happenedAt.millisecondsSinceEpoch;
-    final cat = categoryId?.toString() ?? '';
-    final n = note ?? '';
-    final amt = amount.toStringAsFixed(6);
-    return '$type|$amt|$cat|$ts|$n';
-  }
-
-  @override
-  Future<Set<String>> signatureSetForLedger(int ledgerId) async {
-    final rows = await (db.select(db.transactions)
-          ..where((t) => t.ledgerId.equals(ledgerId)))
-        .get();
-    final set = <String>{};
-    for (final t in rows) {
-      set.add(txSignature(
-          type: t.type,
-          amount: t.amount,
-          categoryId: t.categoryId,
-          happenedAt: t.happenedAt,
-          note: t.note));
-    }
-    return set;
-  }
-
-  @override
-  Future<int> deduplicateLedgerTransactions(int ledgerId) async {
-    final rows = await (db.select(db.transactions)
-          ..where((t) => t.ledgerId.equals(ledgerId))
-          ..orderBy([(t) => d.OrderingTerm(expression: t.id)]))
-        .get();
-    final firstIdForSig = <String, int>{};
-    final toDelete = <int>[];
-    for (final t in rows) {
-      final sig = txSignature(
-          type: t.type,
-          amount: t.amount,
-          categoryId: t.categoryId,
-          happenedAt: t.happenedAt,
-          note: t.note);
-      final id = t.id;
-      final existed = firstIdForSig[sig];
-      if (existed == null) {
-        firstIdForSig[sig] = id;
-      } else {
-        toDelete.add(id);
-      }
-    }
-    if (toDelete.isEmpty) return 0;
-    await (db.delete(db.transactions)..where((t) => t.id.isIn(toDelete))).go();
-    return toDelete.length;
-  }
-
-  @override
   Future<List<Transaction>> getTransactionsByLedger(int ledgerId) async {
     return await (db.select(db.transactions)
           ..where((t) => t.ledgerId.equals(ledgerId))

@@ -5,12 +5,11 @@
 abstract class SyncService {
   Future<void> uploadCurrentLedger({required int ledgerId});
 
-  /// 下载并导入到当前账本，带去重。
-  /// 返回 (inserted, skipped, deletedDup) 三元组：
+  /// 下载并导入到当前账本
+  /// 返回 (inserted, deletedDup) 二元组：
   /// - inserted: 新增条数
-  /// - skipped: 因重复而跳过的条数
-  /// - deletedDup: 导入后执行本地二次去重所删除的条数
-  Future<({int inserted, int skipped, int deletedDup})>
+  /// - deletedDup: 保留字段（目前始终为0）
+  Future<({int inserted, int deletedDup})>
       downloadAndRestoreToCurrentLedger({required int ledgerId});
 
   Future<SyncStatus> getStatus({required int ledgerId});
@@ -31,7 +30,7 @@ abstract class SyncService {
 
 class LocalOnlySyncService implements SyncService {
   @override
-  Future<({int inserted, int skipped, int deletedDup})>
+  Future<({int inserted, int deletedDup})>
       downloadAndRestoreToCurrentLedger({required int ledgerId}) async {
     throw UnsupportedError('Cloud sync not configured');
   }

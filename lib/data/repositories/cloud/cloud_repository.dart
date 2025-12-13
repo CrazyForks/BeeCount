@@ -272,30 +272,6 @@ class CloudRepository extends BaseRepository {
         end: end,
       );
 
-  @override
-  String txSignature({
-    required String type,
-    required double amount,
-    required int? categoryId,
-    required DateTime happenedAt,
-    required String? note,
-  }) =>
-      _transaction.txSignature(
-        type: type,
-        amount: amount,
-        categoryId: categoryId,
-        happenedAt: happenedAt,
-        note: note,
-      );
-
-  @override
-  Future<Set<String>> signatureSetForLedger(int ledgerId) =>
-      _transaction.signatureSetForLedger(ledgerId);
-
-  @override
-  Future<int> deduplicateLedgerTransactions(int ledgerId) =>
-      _transaction.deduplicateLedgerTransactions(ledgerId);
-
   // 其他接口方法同样暂时抛出未实现异常...
   // Category, Account, Statistics 等
 

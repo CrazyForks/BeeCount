@@ -170,7 +170,7 @@ class TransactionsSyncManager implements SyncService {
   }
 
   @override
-  Future<({int inserted, int skipped, int deletedDup})>
+  Future<({int inserted, int deletedDup})>
       downloadAndRestoreToCurrentLedger({required int ledgerId}) async {
     await _ensureInitialized();
 
@@ -187,17 +187,14 @@ class TransactionsSyncManager implements SyncService {
 
       if (jsonStr == null) {
         logger.warning('CloudSync', '云端备份不存在');
-        return (inserted: 0, skipped: 0, deletedDup: 0);
+        return (inserted: 0, deletedDup: 0);
       }
 
       // 导入数据
       final result = await importTransactionsJson(repo, ledgerId, jsonStr);
 
-      // 二次去重
-      final deletedDup = await repo.deduplicateLedgerTransactions(ledgerId);
-
       logger.info('CloudSync',
-          '下载完成: inserted=${result.inserted}, skipped=${result.skipped}, deletedDup=$deletedDup');
+          '下载完成: inserted=${result.inserted}');
 
       // 清除缓存
       _statusCache.remove(ledgerId);
@@ -206,8 +203,7 @@ class TransactionsSyncManager implements SyncService {
 
       return (
         inserted: result.inserted,
-        skipped: result.skipped,
-        deletedDup: deletedDup,
+        deletedDup: 0,
       );
     } catch (e, stack) {
       logger.error('CloudSync', '下载失败: $ledgerId', e);
@@ -215,7 +211,7 @@ class TransactionsSyncManager implements SyncService {
 
       // 如果是 404,返回空结果
       if (e.toString().contains('404') || e.toString().contains('not found')) {
-        return (inserted: 0, skipped: 0, deletedDup: 0);
+        return (inserted: 0, deletedDup: 0);
       }
 
       rethrow;
@@ -690,7 +686,7 @@ class TransactionsSyncManager implements SyncService {
       final result = await importTransactionsJson(repo, ledgerId, jsonStr);
 
       logger.info('CloudSync',
-          '下载完成: ledgerId=$ledgerId, inserted=${result.inserted}, skipped=${result.skipped}');
+          '下载完成: ledgerId=$ledgerId, inserted=${result.inserted}');
 
       // 删除旧的远程文件（只有在 ID 改变时才需要删除旧文件并上传新文件）
       if (reuseRemoteId) {

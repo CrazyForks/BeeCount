@@ -399,8 +399,7 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                         ledgerId: ledgerId);
                                 if (!context.mounted) return;
                                 final msg = AppLocalizations.of(context)
-                                    .mineDownloadResult(
-                                        res.inserted, res.skipped, res.deletedDup);
+                                    .mineDownloadResult(res.inserted);
                                 await AppDialog.info(context,
                                     title: AppLocalizations.of(context)
                                         .mineDownloadComplete,

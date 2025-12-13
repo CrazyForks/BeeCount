@@ -89,21 +89,6 @@ abstract class TransactionRepository {
     required DateTime end,
   });
 
-  /// 生成用于判重的签名
-  String txSignature({
-    required String type,
-    required double amount,
-    required int? categoryId,
-    required DateTime happenedAt,
-    required String? note,
-  });
-
-  /// 获取某账本下所有交易的签名集合
-  Future<Set<String>> signatureSetForLedger(int ledgerId);
-
-  /// 对指定账本执行去重，返回删除的条数
-  Future<int> deduplicateLedgerTransactions(int ledgerId);
-
   /// 获取账本的所有交易记录
   Future<List<Transaction>> getTransactionsByLedger(int ledgerId);
 

@@ -361,7 +361,6 @@
   "importCancelled": "Import Cancelled",
   "importCompleted": "Import Completed{cancelled}, success {ok}, failed {fail}",
   "importSkippedNonTransactionTypes": "Skipped {count} non-transaction records (debts, etc.)",
-  "importSkippedDuplicates": "Skipped {count} duplicate records",
   "importTransactionFailed": "Import failed, all changes have been rolled back: {error}",
   "importFileOpenError": "Unable to open file picker: {error}",
   "@importFileOpenError": {
@@ -474,7 +473,7 @@
   "mineDownloadTitle": "Download",
   "mineDownloadNeedCloudService": "Available in cloud service mode only",
   "mineDownloadComplete": "Complete",
-  "mineDownloadResult": "New imports: {inserted}\nExisting skipped: {skipped}\nDuplicates cleaned: {deleted}",
+  "mineDownloadResult": "New imports: {inserted}",
   "mineLoginTitle": "Login / Register",
   "mineLoginSubtitle": "Only needed for sync",
   "mineLoggedInEmail": "Logged in",

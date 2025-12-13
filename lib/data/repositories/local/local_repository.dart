@@ -237,30 +237,6 @@ class LocalRepository extends BaseRepository {
       );
 
   @override
-  String txSignature({
-    required String type,
-    required double amount,
-    required int? categoryId,
-    required DateTime happenedAt,
-    required String? note,
-  }) =>
-      _transactionRepo.txSignature(
-        type: type,
-        amount: amount,
-        categoryId: categoryId,
-        happenedAt: happenedAt,
-        note: note,
-      );
-
-  @override
-  Future<Set<String>> signatureSetForLedger(int ledgerId) =>
-      _transactionRepo.signatureSetForLedger(ledgerId);
-
-  @override
-  Future<int> deduplicateLedgerTransactions(int ledgerId) =>
-      _transactionRepo.deduplicateLedgerTransactions(ledgerId);
-
-  @override
   Future<List<Transaction>> getTransactionsByLedger(int ledgerId) =>
       _transactionRepo.getTransactionsByLedger(ledgerId);
 

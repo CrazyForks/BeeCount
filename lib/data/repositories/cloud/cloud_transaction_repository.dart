@@ -578,56 +578,6 @@ class CloudTransactionRepository implements TransactionRepository {
     return results.length;
   }
 
-  @override
-  String txSignature({
-    required String type,
-    required double amount,
-    required int? categoryId,
-    required DateTime happenedAt,
-    required String? note,
-  }) {
-    // 生成交易签名，用于去重
-    final parts = [
-      type,
-      amount.toStringAsFixed(2),
-      categoryId?.toString() ?? 'null',
-      happenedAt.toIso8601String(),
-      note ?? '',
-    ];
-    return parts.join('|');
-  }
-
-  @override
-  Future<Set<String>> signatureSetForLedger(int ledgerId) async {
-    final results = await supabase.databaseService!.query(
-      table: 'transactions',
-      filters: [
-        QueryFilter(column: 'ledger_id', operator: 'eq', value: ledgerId),
-      ],
-    );
-
-    final signatures = <String>{};
-    for (final data in results) {
-      final tx = _transactionFromJson(data);
-      final sig = txSignature(
-        type: tx.type,
-        amount: tx.amount,
-        categoryId: tx.categoryId,
-        happenedAt: tx.happenedAt,
-        note: tx.note,
-      );
-      signatures.add(sig);
-    }
-
-    return signatures;
-  }
-
-  @override
-  Future<int> deduplicateLedgerTransactions(int ledgerId) async {
-    // 云端去重比较复杂，暂不实现
-    throw UnimplementedError('云端去重暂不支持');
-  }
-
   // ============================================
   // 辅助方法：数据转换
   // ============================================

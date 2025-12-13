@@ -787,11 +787,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String importSkippedDuplicates(Object count) {
-    return 'Skipped $count duplicate records';
-  }
-
-  @override
   String importTransactionFailed(Object error) {
     return 'Import failed, all changes have been rolled back: $error';
   }
@@ -1127,8 +1122,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineDownloadComplete => 'Complete';
 
   @override
-  String mineDownloadResult(Object deleted, Object inserted, Object skipped) {
-    return 'New imports: $inserted\nExisting skipped: $skipped\nDuplicates cleaned: $deleted';
+  String mineDownloadResult(Object inserted) {
+    return 'New imports: $inserted';
   }
 
   @override

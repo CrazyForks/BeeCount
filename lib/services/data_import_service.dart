@@ -127,12 +127,10 @@ class ImportData {
 /// 导入结果
 class ImportResult {
   final int inserted;
-  final int skipped;
   final int failed;
 
   const ImportResult({
     required this.inserted,
-    required this.skipped,
     required this.failed,
   });
 }
@@ -145,7 +143,7 @@ class ImportResult {
 /// - 账户创建（全局按名称去重）
 /// - 分类创建（先一级后二级）
 /// - 标签创建
-/// - 交易插入（签名去重 + 批量写入）
+/// - 交易插入（批量写入）
 /// - 标签关联
 class DataImportService {
   /// 导入数据到指定账本
@@ -356,7 +354,7 @@ class DataImportService {
     return tagNameToId;
   }
 
-  /// 导入交易（签名去重 + 批量写入 + 标签关联）
+  /// 导入交易（批量写入 + 标签关联）
   Future<ImportResult> _importTransactions(
     BaseRepository repo,
     int ledgerId,
@@ -367,13 +365,9 @@ class DataImportService {
     void Function(int done, int total)? onProgress,
   }) async {
     int inserted = 0;
-    int skipped = 0;
     int failed = 0;
     int processed = 0;
     final total = transactions.length;
-
-    // 构建现有签名集合
-    final existing = await repo.signatureSetForLedger(ledgerId);
 
     // 批量待插入列表
     final toInsert = <TransactionsCompanion>[];
@@ -458,30 +452,6 @@ class DataImportService {
         }
       }
 
-      // 计算签名（包含标签信息，避免仅标签不同的记录被误判为重复）
-      final baseSig = repo.txSignature(
-        type: tx.type,
-        amount: tx.amount,
-        categoryId: categoryId,
-        happenedAt: tx.happenedAt,
-        note: tx.note,
-      );
-      // 将标签名称排序后加入签名
-      final tagPart = tx.tagNames != null && tx.tagNames!.isNotEmpty
-          ? (List<String>.from(tx.tagNames!)..sort()).join(',')
-          : '';
-      final sig = '$baseSig|$tagPart';
-
-      // 签名去重
-      if (existing.contains(sig)) {
-        skipped++;
-        processed++;
-        if (onProgress != null && (processed % 200 == 0)) {
-          onProgress(processed, total);
-        }
-        continue;
-      }
-
       // 构建交易记录
       final txCompanion = TransactionsCompanion.insert(
         ledgerId: ledgerId,
@@ -533,7 +503,6 @@ class DataImportService {
         // 没有标签和附件，批量插入
         toInsert.add(txCompanion);
       }
-      existing.add(sig);
 
       // 批量写入
       if (toInsert.length >= batchSize) {
@@ -564,7 +533,7 @@ class DataImportService {
 
     if (onProgress != null) onProgress(processed, total);
 
-    return ImportResult(inserted: inserted, skipped: skipped, failed: failed);
+    return ImportResult(inserted: inserted, failed: failed);
   }
 }
 

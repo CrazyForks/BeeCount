@@ -363,17 +363,16 @@ ImportData parseJsonToImportData(String jsonStr) {
   );
 }
 
-/// 解析 JSON 并增量导入，使用签名去重（与本地现有数据合并）
+/// 解析 JSON 并增量导入
 ///
 /// [repo] - 数据仓库
 /// [ledgerId] - 目标账本ID
 /// [jsonStr] - JSON 字符串
 /// [onProgress] - 进度回调 (已处理数, 总数)
 ///
-/// 返回 (inserted, skipped) 元组：
+/// 返回 (inserted,) 元组：
 /// - inserted: 新增条数
-/// - skipped: 因重复而跳过的条数
-Future<({int inserted, int skipped})> importTransactionsJson(
+Future<({int inserted})> importTransactionsJson(
   BaseRepository repo,
   int ledgerId,
   String jsonStr, {
@@ -391,5 +390,5 @@ Future<({int inserted, int skipped})> importTransactionsJson(
     onProgress: onProgress,
   );
 
-  return (inserted: result.inserted, skipped: result.skipped);
+  return (inserted: result.inserted,);
 }

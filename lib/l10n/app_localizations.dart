@@ -1512,12 +1512,6 @@ abstract class AppLocalizations {
   /// **'Skipped {count} non-transaction records (debts, etc.)'**
   String importSkippedNonTransactionTypes(Object count);
 
-  /// No description provided for @importSkippedDuplicates.
-  ///
-  /// In en, this message translates to:
-  /// **'Skipped {count} duplicate records'**
-  String importSkippedDuplicates(Object count);
-
   /// No description provided for @importTransactionFailed.
   ///
   /// In en, this message translates to:
@@ -2151,8 +2145,8 @@ abstract class AppLocalizations {
   /// No description provided for @mineDownloadResult.
   ///
   /// In en, this message translates to:
-  /// **'New imports: {inserted}\nExisting skipped: {skipped}\nDuplicates cleaned: {deleted}'**
-  String mineDownloadResult(Object deleted, Object inserted, Object skipped);
+  /// **'New imports: {inserted}'**
+  String mineDownloadResult(Object inserted);
 
   /// No description provided for @mineLoginTitle.
   ///

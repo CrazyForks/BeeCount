@@ -787,11 +787,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String importSkippedDuplicates(Object count) {
-    return '跳过 $count 条重复记录';
-  }
-
-  @override
   String importTransactionFailed(Object error) {
     return '导入失败，已回滚所有更改：$error';
   }
@@ -1127,8 +1122,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineDownloadComplete => '完成';
 
   @override
-  String mineDownloadResult(Object deleted, Object inserted, Object skipped) {
-    return '新增导入：$inserted 条\n已存在跳过：$skipped 条\n清理历史重复：$deleted 条';
+  String mineDownloadResult(Object inserted) {
+    return '新增导入：$inserted 条';
   }
 
   @override
@@ -5439,11 +5434,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String importSkippedDuplicates(Object count) {
-    return '跳過 $count 條重複記錄';
-  }
-
-  @override
   String importTransactionFailed(Object error) {
     return '匯入失敗，已回滾所有更改：$error';
   }
@@ -5779,8 +5769,8 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineDownloadComplete => '完成';
 
   @override
-  String mineDownloadResult(Object deleted, Object inserted, Object skipped) {
-    return '新增匯入：$inserted 條\n已存在跳過：$skipped 條\n清理歷史重複：$deleted 條';
+  String mineDownloadResult(Object inserted) {
+    return '新增匯入：$inserted 條';
   }
 
   @override
