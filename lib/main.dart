@@ -8,13 +8,14 @@ import 'theme.dart';
 import 'providers.dart';
 import 'providers/font_scale_provider.dart';
 import 'providers/cloud_mode_providers.dart';
+import 'providers/ui_state_providers.dart';
 import 'utils/notification_factory.dart';
 import 'pages/auth/splash_page.dart';
 import 'pages/auth/welcome_page.dart';
 import 'services/system/reminder_monitor_service.dart';
 import 'services/platform/screenshot_monitor_service.dart';
 import 'services/platform/image_share_handler_service.dart';
-import 'services/platform/shortcuts_handler_service.dart';
+import 'services/platform/app_link_service.dart';
 import 'services/system/logger_service.dart';
 import 'services/data/migration_service.dart';
 import 'data/db.dart';
@@ -23,6 +24,7 @@ import 'widget/widget_manager.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:app_links/app_links.dart';
 import 'dart:io';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -94,10 +96,8 @@ Future<void> main() async {
     _setupImageShareHandler(container);
   }
 
-  // 启动iOS URL监听（用于快捷指令自动记账）
-  if (Platform.isIOS) {
-    _setupUrlListener(container);
-  }
+  // 启动 URL 监听（用于快捷指令/AppLink 自动记账）
+  _setupUrlListener(container);
 
   runApp(ProviderScope(
     parent: container,
@@ -287,40 +287,44 @@ void _setupImageShareHandler(ProviderContainer container) {
   }
 }
 
-/// 设置iOS URL监听（用于快捷指令自动记账）
+/// 设置 URL 监听（用于 AppLink）
 ///
-/// 监听从快捷指令发来的 beecount:// URL Scheme调用
+/// 监听 beecount:// URL Scheme 调用
 /// 支持的URL格式:
-/// - beecount://auto-billing (自动处理最新截图)
-/// - beecount://quick-billing (打开相册选择)
+/// - beecount://voice - 语音记账
+/// - beecount://image - 图片记账（从相册）
+/// - beecount://camera - 拍照记账
+/// - beecount://ai-chat - AI 小助手
+/// - beecount://add?amount=100&type=expense - 自动记账
+/// - beecount://auto-billing?text=... - 文本自动记账（兼容旧版）
+/// - beecount://quick-billing - 快速记账（兼容旧版）
 void _setupUrlListener(ProviderContainer container) {
   try {
-    print('🔗 [iOS] 初始化URL监听...');
+    logger.info('AppLink', '初始化URL监听...');
 
     final appLinks = AppLinks();
-    final shortcutsHandler = ShortcutsHandlerService(container);
+    final appLinkService = AppLinkService(container);
+
+    // 设置导航回调
+    appLinkService.onNavigate = (action, {params}) {
+      logger.info('AppLink', '触发导航: $action');
+      container.read(pendingAppLinkActionProvider.notifier).state = action;
+    };
 
     // 监听URL（应用在后台时）
     appLinks.uriLinkStream.listen((uri) {
-      print('🔗 [iOS] 收到URL: $uri');
-      shortcutsHandler.handleUrl(uri);
+      logger.info('AppLink', '收到URL: $uri');
+      appLinkService.handleUrl(uri);
     }, onError: (err) {
-      print('❌ [iOS] URL监听错误: $err');
+      logger.error('AppLink', 'URL监听错误', err);
     });
 
-    // 检查应用启动时的URL（应用未运行时）
-    appLinks.getInitialLink().then((uri) {
-      if (uri != null) {
-        print('🔗 [iOS] 启动时收到URL: $uri');
-        shortcutsHandler.handleUrl(uri);
-      }
-    }).catchError((err) {
-      print('❌ [iOS] 获取初始URL失败: $err');
-    });
+    // 注意：不使用 getInitialLink/getLatestLink，因为它们会缓存旧链接
+    // 只依赖 uriLinkStream，它会在应用通过 URL 启动时立即触发
 
-    print('✅ [iOS] URL监听已启动');
+    logger.info('AppLink', 'URL监听已启动');
   } catch (e) {
-    print('❌ [iOS] URL监听初始化失败: $e');
+    logger.error('AppLink', 'URL监听初始化失败', e);
     // 不抛出异常，避免影响应用启动
   }
 }

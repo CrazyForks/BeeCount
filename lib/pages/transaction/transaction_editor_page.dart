@@ -12,6 +12,7 @@ import '../../widgets/category/category_selector.dart';
 import '../../widgets/transaction/transfer_form.dart';
 import '../../styles/tokens.dart';
 import '../../utils/sync_helpers.dart';
+import '../../services/attachment_service.dart';
 
 /// 交易编辑器页面
 /// 支持创建/编辑收入、支出和转账记录
@@ -224,8 +225,10 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
         initialTagIds: widget.initialTagIds,
         showAccountPicker: true,
         ledgerId: ledgerId,
+        editingTransactionId: widget.editingTransactionId,
         onSubmit: (res) async {
           final repo = ref.read(repositoryProvider);
+          final attachmentService = ref.read(attachmentServiceProvider);
           int transactionId;
           if (widget.editingTransactionId != null) {
             // 编辑模式：使用repository更新交易
@@ -249,6 +252,16 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
               note: res.note,
               accountId: res.accountId,
             );
+          }
+          // 保存待上传的附件
+          if (res.pendingAttachments.isNotEmpty) {
+            await attachmentService.saveAttachments(
+              transactionId: transactionId,
+              sourceFiles: res.pendingAttachments,
+              startIndex: 0,
+            );
+            // 刷新附件列表缓存
+            ref.read(attachmentListRefreshProvider.notifier).state++;
           }
           // 更新标签关联
           if (res.tagIds.isNotEmpty) {

@@ -114,12 +114,6 @@ abstract class AppLocalizations {
   /// **'Charts'**
   String get tabAnalytics;
 
-  /// No description provided for @tabLedgers.
-  ///
-  /// In en, this message translates to:
-  /// **'Ledgers'**
-  String get tabLedgers;
-
   /// No description provided for @tabMine.
   ///
   /// In en, this message translates to:
@@ -1518,12 +1512,6 @@ abstract class AppLocalizations {
   /// **'Skipped {count} non-transaction records (debts, etc.)'**
   String importSkippedNonTransactionTypes(Object count);
 
-  /// No description provided for @importSkippedDuplicates.
-  ///
-  /// In en, this message translates to:
-  /// **'Skipped {count} duplicate records'**
-  String importSkippedDuplicates(Object count);
-
   /// No description provided for @importTransactionFailed.
   ///
   /// In en, this message translates to:
@@ -2157,8 +2145,8 @@ abstract class AppLocalizations {
   /// No description provided for @mineDownloadResult.
   ///
   /// In en, this message translates to:
-  /// **'New imports: {inserted}\nExisting skipped: {skipped}\nDuplicates cleaned: {deleted}'**
-  String mineDownloadResult(Object deleted, Object inserted, Object skipped);
+  /// **'New imports: {inserted}'**
+  String mineDownloadResult(Object inserted);
 
   /// No description provided for @mineLoginTitle.
   ///
@@ -4086,6 +4074,12 @@ abstract class AppLocalizations {
   /// **'Tags'**
   String get exportCsvHeaderTags;
 
+  /// No description provided for @exportCsvHeaderAttachments.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments'**
+  String get exportCsvHeaderAttachments;
+
   /// No description provided for @exportShareText.
   ///
   /// In en, this message translates to:
@@ -4757,6 +4751,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New version has been downloaded. Install now?'**
   String get updateInstallConfirmMessage;
+
+  /// No description provided for @updateMirrorSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Download Accelerator'**
+  String get updateMirrorSelectTitle;
+
+  /// No description provided for @updateMirrorSelectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If download is slow, select an accelerated mirror. Click \"Test\" to check latency.'**
+  String get updateMirrorSelectHint;
+
+  /// No description provided for @updateMirrorTestButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get updateMirrorTestButton;
+
+  /// No description provided for @updateMirrorTesting.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing {completed}/{total}...'**
+  String updateMirrorTesting(int completed, int total);
+
+  /// No description provided for @updateMirrorDirectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For users with good network'**
+  String get updateMirrorDirectHint;
+
+  /// No description provided for @updateDownloadMirror.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {mirror}'**
+  String updateDownloadMirror(String mirror);
+
+  /// No description provided for @updateSelectMirror.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Accelerator'**
+  String get updateSelectMirror;
+
+  /// No description provided for @updateMirrorSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Accelerator'**
+  String get updateMirrorSettingTitle;
+
+  /// No description provided for @updateMirrorSettingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch GitHub download source'**
+  String get updateMirrorSettingSubtitle;
 
   /// No description provided for @updateNotificationPermissionGuideText.
   ///
@@ -6498,12 +6546,6 @@ abstract class AppLocalizations {
   /// **'GLM-*-Flash model is completely free'**
   String get aiCloudApiKeyHelper;
 
-  /// No description provided for @aiCloudApiKeySaved.
-  ///
-  /// In en, this message translates to:
-  /// **'API Key saved'**
-  String get aiCloudApiKeySaved;
-
   /// No description provided for @aiCloudApiGetKey.
   ///
   /// In en, this message translates to:
@@ -6630,6 +6672,12 @@ abstract class AppLocalizations {
   /// **'Manage cloud services and data sync'**
   String get cloudSyncPageSubtitle;
 
+  /// No description provided for @cloudSyncHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud sync only syncs ledger data (including accounts, categories, and tags associated with transactions), not unassociated categories, tags, accounts, or attachments. Please import/export attachments separately via Data Management.'**
+  String get cloudSyncHint;
+
   /// No description provided for @dataManagement.
   ///
   /// In en, this message translates to:
@@ -6653,6 +6701,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage transaction data and categories'**
   String get dataManagementPageSubtitle;
+
+  /// No description provided for @dataManagementAttachmentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'When restoring data, please import the attachment package first, then import ledger data (CSV or cloud sync) to ensure attachments are correctly associated.'**
+  String get dataManagementAttachmentHint;
 
   /// No description provided for @smartBilling.
   ///
@@ -8028,12 +8082,6 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to reset to default prompt? Your custom content will be lost.'**
   String get aiPromptResetConfirmMessage;
 
-  /// No description provided for @aiPromptCopied.
-  ///
-  /// In en, this message translates to:
-  /// **'Copied to clipboard, ready to share'**
-  String get aiPromptCopied;
-
   /// No description provided for @aiPromptPasted.
   ///
   /// In en, this message translates to:
@@ -8123,12 +8171,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Accurate'**
   String get aiModelAccurate;
-
-  /// No description provided for @aiModelThinking.
-  ///
-  /// In en, this message translates to:
-  /// **'Deep Thinking'**
-  String get aiModelThinking;
 
   /// No description provided for @aiModelSwitched.
   ///
@@ -8250,12 +8292,6 @@ abstract class AppLocalizations {
   /// **'Tag Color'**
   String get tagColorLabel;
 
-  /// No description provided for @tagColorHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Select tag color'**
-  String get tagColorHint;
-
   /// No description provided for @tagCreateSuccess.
   ///
   /// In en, this message translates to:
@@ -8346,23 +8382,11 @@ abstract class AppLocalizations {
   /// **'Total Income'**
   String get tagDetailTotalIncome;
 
-  /// No description provided for @tagDetailTransactionCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Transactions'**
-  String get tagDetailTransactionCount;
-
   /// No description provided for @tagDetailTransactionList.
   ///
   /// In en, this message translates to:
   /// **'Related Transactions'**
   String get tagDetailTransactionList;
-
-  /// No description provided for @tagDetailRelatedTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Related Transactions'**
-  String get tagDetailRelatedTransactions;
 
   /// No description provided for @tagDetailNoTransactions.
   ///
@@ -8502,6 +8526,30 @@ abstract class AppLocalizations {
   /// **'Refunded'**
   String get tagDefaultRefunded;
 
+  /// No description provided for @tagDefaultVoiceBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get tagDefaultVoiceBilling;
+
+  /// No description provided for @tagDefaultImageBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get tagDefaultImageBilling;
+
+  /// No description provided for @tagDefaultCameraBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get tagDefaultCameraBilling;
+
+  /// No description provided for @tagDefaultAiBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'AI'**
+  String get tagDefaultAiBilling;
+
   /// No description provided for @tabDiscover.
   ///
   /// In en, this message translates to:
@@ -8538,59 +8586,11 @@ abstract class AppLocalizations {
   /// **'Accounts'**
   String get discoverAccounts;
 
-  /// No description provided for @discoverAccountsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage assets and liabilities'**
-  String get discoverAccountsSubtitle;
-
   /// No description provided for @discoverAccountsEmpty.
   ///
   /// In en, this message translates to:
   /// **'Add accounts to track cash flow'**
   String get discoverAccountsEmpty;
-
-  /// No description provided for @discoverReports.
-  ///
-  /// In en, this message translates to:
-  /// **'Reports'**
-  String get discoverReports;
-
-  /// No description provided for @discoverReportsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly/yearly financial reports'**
-  String get discoverReportsSubtitle;
-
-  /// No description provided for @discoverRecurring.
-  ///
-  /// In en, this message translates to:
-  /// **'Recurring'**
-  String get discoverRecurring;
-
-  /// No description provided for @discoverRecurringSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage recurring transactions'**
-  String get discoverRecurringSubtitle;
-
-  /// No description provided for @discoverLedgers.
-  ///
-  /// In en, this message translates to:
-  /// **'Ledgers'**
-  String get discoverLedgers;
-
-  /// No description provided for @discoverLedgersSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage multiple ledgers'**
-  String get discoverLedgersSubtitle;
-
-  /// No description provided for @discoverComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Coming soon'**
-  String get discoverComingSoon;
 
   /// No description provided for @discoverAccountsTotal.
   ///
@@ -8603,54 +8603,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} accounts'**
   String discoverAccountsCount(int count);
-
-  /// No description provided for @discoverMonthlyOverview.
-  ///
-  /// In en, this message translates to:
-  /// **'This Month'**
-  String get discoverMonthlyOverview;
-
-  /// No description provided for @discoverComparedToLastMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'vs last month'**
-  String get discoverComparedToLastMonth;
-
-  /// No description provided for @discoverUp.
-  ///
-  /// In en, this message translates to:
-  /// **'↑{percent}'**
-  String discoverUp(String percent);
-
-  /// No description provided for @discoverDown.
-  ///
-  /// In en, this message translates to:
-  /// **'↓{percent}'**
-  String discoverDown(String percent);
-
-  /// No description provided for @discoverNoChange.
-  ///
-  /// In en, this message translates to:
-  /// **'No change'**
-  String get discoverNoChange;
-
-  /// No description provided for @discoverTopCategories.
-  ///
-  /// In en, this message translates to:
-  /// **'Top 3 Expenses'**
-  String get discoverTopCategories;
-
-  /// No description provided for @discoverNoExpense.
-  ///
-  /// In en, this message translates to:
-  /// **'No expenses this month'**
-  String get discoverNoExpense;
-
-  /// No description provided for @discoverQuickActions.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Entry'**
-  String get discoverQuickActions;
 
   /// No description provided for @discoverQuickCamera.
   ///
@@ -8670,36 +8622,6 @@ abstract class AppLocalizations {
   /// **'Voice'**
   String get discoverQuickVoice;
 
-  /// No description provided for @greetingMorning.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Morning'**
-  String get greetingMorning;
-
-  /// No description provided for @greetingAfternoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Afternoon'**
-  String get greetingAfternoon;
-
-  /// No description provided for @greetingEvening.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Evening'**
-  String get greetingEvening;
-
-  /// No description provided for @greetingNight.
-  ///
-  /// In en, this message translates to:
-  /// **'Good Night'**
-  String get greetingNight;
-
-  /// No description provided for @discoverSmartBilling.
-  ///
-  /// In en, this message translates to:
-  /// **'Smart Billing'**
-  String get discoverSmartBilling;
-
   /// No description provided for @discoverCommonFeatures.
   ///
   /// In en, this message translates to:
@@ -8717,12 +8639,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Categories'**
   String get discoverCategory;
-
-  /// No description provided for @discoverReminder.
-  ///
-  /// In en, this message translates to:
-  /// **'Reminder'**
-  String get discoverReminder;
 
   /// No description provided for @discoverTags.
   ///
@@ -8742,12 +8658,6 @@ abstract class AppLocalizations {
   /// **'Export'**
   String get discoverExport;
 
-  /// No description provided for @discoverBackup.
-  ///
-  /// In en, this message translates to:
-  /// **'Backup'**
-  String get discoverBackup;
-
   /// No description provided for @homeSwitchLedger.
   ///
   /// In en, this message translates to:
@@ -8759,12 +8669,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage Ledgers'**
   String get homeManageLedgers;
-
-  /// No description provided for @homeNewLedger.
-  ///
-  /// In en, this message translates to:
-  /// **'New Ledger'**
-  String get homeNewLedger;
 
   /// No description provided for @budgetTitle.
   ///
@@ -8874,35 +8778,11 @@ abstract class AppLocalizations {
   /// **'Start Day'**
   String get budgetStartDayLabel;
 
-  /// No description provided for @budgetStartDayHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Day of month to start'**
-  String get budgetStartDayHint;
-
   /// No description provided for @budgetPeriodLabel.
   ///
   /// In en, this message translates to:
   /// **'Period'**
   String get budgetPeriodLabel;
-
-  /// No description provided for @budgetPeriodMonthly.
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly'**
-  String get budgetPeriodMonthly;
-
-  /// No description provided for @budgetPeriodWeekly.
-  ///
-  /// In en, this message translates to:
-  /// **'Weekly'**
-  String get budgetPeriodWeekly;
-
-  /// No description provided for @budgetPeriodYearly.
-  ///
-  /// In en, this message translates to:
-  /// **'Yearly'**
-  String get budgetPeriodYearly;
 
   /// No description provided for @budgetSaveSuccess.
   ///
@@ -8922,11 +8802,365 @@ abstract class AppLocalizations {
   /// **'Budget deleted'**
   String get budgetDeleteSuccess;
 
-  /// No description provided for @budgetExceededWarning.
+  /// No description provided for @attachmentAdd.
   ///
   /// In en, this message translates to:
-  /// **'This expense will exceed the budget'**
-  String get budgetExceededWarning;
+  /// **'Add Image'**
+  String get attachmentAdd;
+
+  /// No description provided for @attachmentTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get attachmentTakePhoto;
+
+  /// No description provided for @attachmentChooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get attachmentChooseFromGallery;
+
+  /// No description provided for @attachmentMaxReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum attachments reached'**
+  String get attachmentMaxReached;
+
+  /// No description provided for @attachmentDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this attachment?'**
+  String get attachmentDeleteConfirm;
+
+  /// No description provided for @attachmentCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} images'**
+  String attachmentCount(int count);
+
+  /// No description provided for @commonDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get commonDeleted;
+
+  /// No description provided for @attachmentExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Attachments'**
+  String get attachmentExportTitle;
+
+  /// No description provided for @attachmentExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all attachments as a compressed file'**
+  String get attachmentExportSubtitle;
+
+  /// No description provided for @attachmentImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Attachments'**
+  String get attachmentImportTitle;
+
+  /// No description provided for @attachmentImportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import attachments from a compressed file'**
+  String get attachmentImportSubtitle;
+
+  /// No description provided for @attachmentExportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No attachments to export'**
+  String get attachmentExportEmpty;
+
+  /// No description provided for @attachmentExportProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting attachments ({current}/{total})'**
+  String attachmentExportProgress(int current, int total);
+
+  /// No description provided for @attachmentExportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments exported successfully'**
+  String get attachmentExportSuccess;
+
+  /// No description provided for @attachmentExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export attachments'**
+  String get attachmentExportFailed;
+
+  /// No description provided for @attachmentExportSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to: {path}'**
+  String attachmentExportSavedTo(String path);
+
+  /// No description provided for @attachmentImportConflictStrategy.
+  ///
+  /// In en, this message translates to:
+  /// **'Conflict Strategy'**
+  String get attachmentImportConflictStrategy;
+
+  /// No description provided for @attachmentImportConflictSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip existing attachments'**
+  String get attachmentImportConflictSkip;
+
+  /// No description provided for @attachmentImportConflictOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite existing attachments'**
+  String get attachmentImportConflictOverwrite;
+
+  /// No description provided for @attachmentImportProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing attachments ({current}/{total})'**
+  String attachmentImportProgress(int current, int total);
+
+  /// No description provided for @attachmentImportResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {imported}, Skipped {skipped}, Overwritten {overwritten}, Failed {failed}'**
+  String attachmentImportResult(int imported, int skipped, int overwritten, int failed);
+
+  /// No description provided for @attachmentImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import attachments'**
+  String get attachmentImportFailed;
+
+  /// No description provided for @attachmentArchiveInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} attachments, exported on {date}'**
+  String attachmentArchiveInfo(int count, String date);
+
+  /// No description provided for @attachmentStartImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Import'**
+  String get attachmentStartImport;
+
+  /// No description provided for @shortcutsGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcuts'**
+  String get shortcutsGuide;
+
+  /// No description provided for @shortcutsGuideDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick access to voice, camera billing, etc.'**
+  String get shortcutsGuideDesc;
+
+  /// No description provided for @shortcutsIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Billing'**
+  String get shortcutsIntroTitle;
+
+  /// No description provided for @shortcutsIntroDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use shortcuts to directly open voice billing, camera billing, and other features from your home screen without opening the app first.'**
+  String get shortcutsIntroDesc;
+
+  /// No description provided for @availableShortcuts.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Shortcuts'**
+  String get availableShortcuts;
+
+  /// No description provided for @shortcutVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Billing'**
+  String get shortcutVoice;
+
+  /// No description provided for @shortcutVoiceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Quickly record bills by voice'**
+  String get shortcutVoiceDesc;
+
+  /// No description provided for @shortcutImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Billing'**
+  String get shortcutImage;
+
+  /// No description provided for @shortcutImageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognize bills from gallery images'**
+  String get shortcutImageDesc;
+
+  /// No description provided for @shortcutCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Billing'**
+  String get shortcutCamera;
+
+  /// No description provided for @shortcutCameraDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photos to recognize bills'**
+  String get shortcutCameraDesc;
+
+  /// No description provided for @shortcutUrlCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'URL copied to clipboard'**
+  String get shortcutUrlCopied;
+
+  /// No description provided for @howToAddShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Add Shortcuts'**
+  String get howToAddShortcut;
+
+  /// No description provided for @iosShortcutStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Shortcuts app'**
+  String get iosShortcutStep1;
+
+  /// No description provided for @iosShortcutStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + in the upper right to create a new shortcut'**
+  String get iosShortcutStep2;
+
+  /// No description provided for @iosShortcutStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Add \'Open URL\' action'**
+  String get iosShortcutStep3;
+
+  /// No description provided for @iosShortcutStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the copied URL (e.g., beecount://voice)'**
+  String get iosShortcutStep4;
+
+  /// No description provided for @iosShortcutStep5.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and add to home screen'**
+  String get iosShortcutStep5;
+
+  /// No description provided for @androidShortcutStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a shortcut creator app (e.g., Shortcut Maker)'**
+  String get androidShortcutStep1;
+
+  /// No description provided for @androidShortcutStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Select \'URL Shortcut\''**
+  String get androidShortcutStep2;
+
+  /// No description provided for @androidShortcutStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the copied URL (e.g., beecount://voice)'**
+  String get androidShortcutStep3;
+
+  /// No description provided for @androidShortcutStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Set icon and name, then add to home screen'**
+  String get androidShortcutStep4;
+
+  /// No description provided for @shortcutsTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get shortcutsTip;
+
+  /// No description provided for @shortcutsTipDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcuts require AI features. Make sure AI is enabled and API Key is configured.'**
+  String get shortcutsTipDesc;
+
+  /// No description provided for @shortcutOpenShortcutsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Shortcuts App'**
+  String get shortcutOpenShortcutsApp;
+
+  /// No description provided for @shortcutAutoAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Billing API'**
+  String get shortcutAutoAdd;
+
+  /// No description provided for @shortcutAutoAddDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically create bills via URL parameters. Works great with Shortcuts and automation tools.'**
+  String get shortcutAutoAddDesc;
+
+  /// No description provided for @shortcutAutoAddExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example URL:'**
+  String get shortcutAutoAddExample;
+
+  /// No description provided for @shortcutAutoAddParams.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported parameters:'**
+  String get shortcutAutoAddParams;
+
+  /// No description provided for @shortcutParamAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (required)'**
+  String get shortcutParamAmount;
+
+  /// No description provided for @shortcutParamType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type: expense / income / transfer'**
+  String get shortcutParamType;
+
+  /// No description provided for @shortcutParamCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name (must match existing category)'**
+  String get shortcutParamCategory;
+
+  /// No description provided for @shortcutParamNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get shortcutParamNote;
+
+  /// No description provided for @shortcutParamAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name (must match existing account)'**
+  String get shortcutParamAccount;
+
+  /// No description provided for @shortcutParamTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags (comma separated)'**
+  String get shortcutParamTags;
+
+  /// No description provided for @shortcutParamDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date (ISO format, e.g., 2024-01-15)'**
+  String get shortcutParamDate;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

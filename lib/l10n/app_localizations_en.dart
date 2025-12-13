@@ -16,9 +16,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabAnalytics => 'Charts';
 
   @override
-  String get tabLedgers => 'Ledgers';
-
-  @override
   String get tabMine => 'Mine';
 
   @override
@@ -790,11 +787,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String importSkippedDuplicates(Object count) {
-    return 'Skipped $count duplicate records';
-  }
-
-  @override
   String importTransactionFailed(Object error) {
     return 'Import failed, all changes have been rolled back: $error';
   }
@@ -1130,8 +1122,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineDownloadComplete => 'Complete';
 
   @override
-  String mineDownloadResult(Object deleted, Object inserted, Object skipped) {
-    return 'New imports: $inserted\nExisting skipped: $skipped\nDuplicates cleaned: $deleted';
+  String mineDownloadResult(Object inserted) {
+    return 'New imports: $inserted';
   }
 
   @override
@@ -2146,6 +2138,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportCsvHeaderTags => 'Tags';
 
   @override
+  String get exportCsvHeaderAttachments => 'Attachments';
+
+  @override
   String get exportShareText => 'BeeCount Export File';
 
   @override
@@ -2510,6 +2505,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateInstallConfirmMessage => 'New version has been downloaded. Install now?';
+
+  @override
+  String get updateMirrorSelectTitle => 'Select Download Accelerator';
+
+  @override
+  String get updateMirrorSelectHint => 'If download is slow, select an accelerated mirror. Click \"Test\" to check latency.';
+
+  @override
+  String get updateMirrorTestButton => 'Test';
+
+  @override
+  String updateMirrorTesting(int completed, int total) {
+    return 'Testing $completed/$total...';
+  }
+
+  @override
+  String get updateMirrorDirectHint => 'For users with good network';
+
+  @override
+  String updateDownloadMirror(String mirror) {
+    return 'Source: $mirror';
+  }
+
+  @override
+  String get updateSelectMirror => 'Select Accelerator';
+
+  @override
+  String get updateMirrorSettingTitle => 'Download Accelerator';
+
+  @override
+  String get updateMirrorSettingSubtitle => 'Switch GitHub download source';
 
   @override
   String get updateNotificationPermissionGuideText => 'Download progress notifications are disabled, but this doesn\'t affect download functionality. To view progress:';
@@ -3402,9 +3428,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiKeyHelper => 'GLM-*-Flash model is completely free';
 
   @override
-  String get aiCloudApiKeySaved => 'API Key saved';
-
-  @override
   String get aiCloudApiGetKey => 'Get API Key';
 
   @override
@@ -3472,6 +3495,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudSyncPageSubtitle => 'Manage cloud services and data sync';
 
   @override
+  String get cloudSyncHint => 'Cloud sync only syncs ledger data (including accounts, categories, and tags associated with transactions), not unassociated categories, tags, accounts, or attachments. Please import/export attachments separately via Data Management.';
+
+  @override
   String get dataManagement => 'Data Management';
 
   @override
@@ -3482,6 +3508,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataManagementPageSubtitle => 'Manage transaction data and categories';
+
+  @override
+  String get dataManagementAttachmentHint => 'When restoring data, please import the attachment package first, then import ledger data (CSV or cloud sync) to ensure attachments are correctly associated.';
 
   @override
   String get smartBilling => 'Smart Billing';
@@ -4193,9 +4222,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiPromptResetConfirmMessage => 'Are you sure you want to reset to default prompt? Your custom content will be lost.';
 
   @override
-  String get aiPromptCopied => 'Copied to clipboard, ready to share';
-
-  @override
   String get aiPromptPasted => 'Pasted';
 
   @override
@@ -4239,9 +4265,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiModelAccurate => 'Accurate';
-
-  @override
-  String get aiModelThinking => 'Deep Thinking';
 
   @override
   String aiModelSwitched(String modelName) {
@@ -4306,9 +4329,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagColorLabel => 'Tag Color';
 
   @override
-  String get tagColorHint => 'Select tag color';
-
-  @override
   String get tagCreateSuccess => 'Tag created';
 
   @override
@@ -4358,13 +4378,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagDetailTotalIncome => 'Total Income';
 
   @override
-  String get tagDetailTransactionCount => 'Transactions';
-
-  @override
   String get tagDetailTransactionList => 'Related Transactions';
-
-  @override
-  String get tagDetailRelatedTransactions => 'Related Transactions';
 
   @override
   String get tagDetailNoTransactions => 'No related transactions';
@@ -4436,6 +4450,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagDefaultRefunded => 'Refunded';
 
   @override
+  String get tagDefaultVoiceBilling => 'Voice';
+
+  @override
+  String get tagDefaultImageBilling => 'Image';
+
+  @override
+  String get tagDefaultCameraBilling => 'Camera';
+
+  @override
+  String get tagDefaultAiBilling => 'AI';
+
+  @override
   String get tabDiscover => 'Discover';
 
   @override
@@ -4454,31 +4480,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverAccounts => 'Accounts';
 
   @override
-  String get discoverAccountsSubtitle => 'Manage assets and liabilities';
-
-  @override
   String get discoverAccountsEmpty => 'Add accounts to track cash flow';
-
-  @override
-  String get discoverReports => 'Reports';
-
-  @override
-  String get discoverReportsSubtitle => 'Monthly/yearly financial reports';
-
-  @override
-  String get discoverRecurring => 'Recurring';
-
-  @override
-  String get discoverRecurringSubtitle => 'Manage recurring transactions';
-
-  @override
-  String get discoverLedgers => 'Ledgers';
-
-  @override
-  String get discoverLedgersSubtitle => 'Manage multiple ledgers';
-
-  @override
-  String get discoverComingSoon => 'Coming soon';
 
   @override
   String get discoverAccountsTotal => 'Total Balance';
@@ -4487,34 +4489,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String discoverAccountsCount(int count) {
     return '$count accounts';
   }
-
-  @override
-  String get discoverMonthlyOverview => 'This Month';
-
-  @override
-  String get discoverComparedToLastMonth => 'vs last month';
-
-  @override
-  String discoverUp(String percent) {
-    return '↑$percent';
-  }
-
-  @override
-  String discoverDown(String percent) {
-    return '↓$percent';
-  }
-
-  @override
-  String get discoverNoChange => 'No change';
-
-  @override
-  String get discoverTopCategories => 'Top 3 Expenses';
-
-  @override
-  String get discoverNoExpense => 'No expenses this month';
-
-  @override
-  String get discoverQuickActions => 'Quick Entry';
 
   @override
   String get discoverQuickCamera => 'Camera';
@@ -4526,21 +4500,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverQuickVoice => 'Voice';
 
   @override
-  String get greetingMorning => 'Good Morning';
-
-  @override
-  String get greetingAfternoon => 'Good Afternoon';
-
-  @override
-  String get greetingEvening => 'Good Evening';
-
-  @override
-  String get greetingNight => 'Good Night';
-
-  @override
-  String get discoverSmartBilling => 'Smart Billing';
-
-  @override
   String get discoverCommonFeatures => 'Features';
 
   @override
@@ -4548,9 +4507,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverCategory => 'Categories';
-
-  @override
-  String get discoverReminder => 'Reminder';
 
   @override
   String get discoverTags => 'Tags';
@@ -4562,16 +4518,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverExport => 'Export';
 
   @override
-  String get discoverBackup => 'Backup';
-
-  @override
   String get homeSwitchLedger => 'Select Ledger';
 
   @override
   String get homeManageLedgers => 'Manage Ledgers';
-
-  @override
-  String get homeNewLedger => 'New Ledger';
 
   @override
   String get budgetTitle => 'Budget';
@@ -4632,19 +4582,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budgetStartDayLabel => 'Start Day';
 
   @override
-  String get budgetStartDayHint => 'Day of month to start';
-
-  @override
   String get budgetPeriodLabel => 'Period';
-
-  @override
-  String get budgetPeriodMonthly => 'Monthly';
-
-  @override
-  String get budgetPeriodWeekly => 'Weekly';
-
-  @override
-  String get budgetPeriodYearly => 'Yearly';
 
   @override
   String get budgetSaveSuccess => 'Budget saved';
@@ -4656,5 +4594,194 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budgetDeleteSuccess => 'Budget deleted';
 
   @override
-  String get budgetExceededWarning => 'This expense will exceed the budget';
+  String get attachmentAdd => 'Add Image';
+
+  @override
+  String get attachmentTakePhoto => 'Take Photo';
+
+  @override
+  String get attachmentChooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String get attachmentMaxReached => 'Maximum attachments reached';
+
+  @override
+  String get attachmentDeleteConfirm => 'Delete this attachment?';
+
+  @override
+  String attachmentCount(int count) {
+    return '$count images';
+  }
+
+  @override
+  String get commonDeleted => 'Deleted';
+
+  @override
+  String get attachmentExportTitle => 'Export Attachments';
+
+  @override
+  String get attachmentExportSubtitle => 'Export all attachments as a compressed file';
+
+  @override
+  String get attachmentImportTitle => 'Import Attachments';
+
+  @override
+  String get attachmentImportSubtitle => 'Import attachments from a compressed file';
+
+  @override
+  String get attachmentExportEmpty => 'No attachments to export';
+
+  @override
+  String attachmentExportProgress(int current, int total) {
+    return 'Exporting attachments ($current/$total)';
+  }
+
+  @override
+  String get attachmentExportSuccess => 'Attachments exported successfully';
+
+  @override
+  String get attachmentExportFailed => 'Failed to export attachments';
+
+  @override
+  String attachmentExportSavedTo(String path) {
+    return 'Saved to: $path';
+  }
+
+  @override
+  String get attachmentImportConflictStrategy => 'Conflict Strategy';
+
+  @override
+  String get attachmentImportConflictSkip => 'Skip existing attachments';
+
+  @override
+  String get attachmentImportConflictOverwrite => 'Overwrite existing attachments';
+
+  @override
+  String attachmentImportProgress(int current, int total) {
+    return 'Importing attachments ($current/$total)';
+  }
+
+  @override
+  String attachmentImportResult(int imported, int skipped, int overwritten, int failed) {
+    return 'Imported $imported, Skipped $skipped, Overwritten $overwritten, Failed $failed';
+  }
+
+  @override
+  String get attachmentImportFailed => 'Failed to import attachments';
+
+  @override
+  String attachmentArchiveInfo(int count, String date) {
+    return '$count attachments, exported on $date';
+  }
+
+  @override
+  String get attachmentStartImport => 'Start Import';
+
+  @override
+  String get shortcutsGuide => 'Shortcuts';
+
+  @override
+  String get shortcutsGuideDesc => 'Quick access to voice, camera billing, etc.';
+
+  @override
+  String get shortcutsIntroTitle => 'Quick Billing';
+
+  @override
+  String get shortcutsIntroDesc => 'Use shortcuts to directly open voice billing, camera billing, and other features from your home screen without opening the app first.';
+
+  @override
+  String get availableShortcuts => 'Available Shortcuts';
+
+  @override
+  String get shortcutVoice => 'Voice Billing';
+
+  @override
+  String get shortcutVoiceDesc => 'Quickly record bills by voice';
+
+  @override
+  String get shortcutImage => 'Image Billing';
+
+  @override
+  String get shortcutImageDesc => 'Recognize bills from gallery images';
+
+  @override
+  String get shortcutCamera => 'Camera Billing';
+
+  @override
+  String get shortcutCameraDesc => 'Take photos to recognize bills';
+
+  @override
+  String get shortcutUrlCopied => 'URL copied to clipboard';
+
+  @override
+  String get howToAddShortcut => 'How to Add Shortcuts';
+
+  @override
+  String get iosShortcutStep1 => 'Open the Shortcuts app';
+
+  @override
+  String get iosShortcutStep2 => 'Tap + in the upper right to create a new shortcut';
+
+  @override
+  String get iosShortcutStep3 => 'Add \'Open URL\' action';
+
+  @override
+  String get iosShortcutStep4 => 'Paste the copied URL (e.g., beecount://voice)';
+
+  @override
+  String get iosShortcutStep5 => 'Save and add to home screen';
+
+  @override
+  String get androidShortcutStep1 => 'Download a shortcut creator app (e.g., Shortcut Maker)';
+
+  @override
+  String get androidShortcutStep2 => 'Select \'URL Shortcut\'';
+
+  @override
+  String get androidShortcutStep3 => 'Paste the copied URL (e.g., beecount://voice)';
+
+  @override
+  String get androidShortcutStep4 => 'Set icon and name, then add to home screen';
+
+  @override
+  String get shortcutsTip => 'Tips';
+
+  @override
+  String get shortcutsTipDesc => 'Shortcuts require AI features. Make sure AI is enabled and API Key is configured.';
+
+  @override
+  String get shortcutOpenShortcutsApp => 'Open Shortcuts App';
+
+  @override
+  String get shortcutAutoAdd => 'Auto Billing API';
+
+  @override
+  String get shortcutAutoAddDesc => 'Automatically create bills via URL parameters. Works great with Shortcuts and automation tools.';
+
+  @override
+  String get shortcutAutoAddExample => 'Example URL:';
+
+  @override
+  String get shortcutAutoAddParams => 'Supported parameters:';
+
+  @override
+  String get shortcutParamAmount => 'Amount (required)';
+
+  @override
+  String get shortcutParamType => 'Type: expense / income / transfer';
+
+  @override
+  String get shortcutParamCategory => 'Category name (must match existing category)';
+
+  @override
+  String get shortcutParamNote => 'Note';
+
+  @override
+  String get shortcutParamAccount => 'Account name (must match existing account)';
+
+  @override
+  String get shortcutParamTags => 'Tags (comma separated)';
+
+  @override
+  String get shortcutParamDate => 'Date (ISO format, e.g., 2024-01-15)';
 }

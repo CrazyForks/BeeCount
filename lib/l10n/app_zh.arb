@@ -3,7 +3,6 @@
   "appTitle": "蜜蜂记账",
   "tabHome": "明细",
   "tabAnalytics": "图表",
-  "tabLedgers": "账本",
   "tabMine": "我的",
   "commonCancel": "取消",
   "commonConfirm": "确定",
@@ -419,7 +418,7 @@
   "mineDownloadTitle": "下载",
   "mineDownloadNeedCloudService": "仅限云服务模式可用",
   "mineDownloadComplete": "完成",
-  "mineDownloadResult": "新增导入：{inserted} 条\n已存在跳过：{skipped} 条\n清理历史重复：{deleted} 条",
+  "mineDownloadResult": "新增导入：{inserted} 条",
   "mineLoginTitle": "登录 / 注册",
   "mineLoginSubtitle": "仅在同步时需要",
   "mineLoggedInEmail": "已登录",
@@ -688,7 +687,6 @@
   "importCancelled": "（已取消）",
   "importCompleted": "导入完成{cancelled}：成功 {ok} 条，失败 {fail} 条",
   "importSkippedNonTransactionTypes": "跳过 {count} 条非收支记录（债务等）",
-  "importSkippedDuplicates": "跳过 {count} 条重复记录",
   "importTransactionFailed": "导入失败，已回滚所有更改：{error}",
   "mineImportCompleteAllSuccess": "全部成功",
   "mineCheckUpdateDetecting": "检测更新中...",
@@ -823,6 +821,7 @@
   "exportCsvHeaderNote": "备注",
   "exportCsvHeaderTime": "时间",
   "exportCsvHeaderTags": "标签",
+  "exportCsvHeaderAttachments": "附件",
   "exportShareText": "BeeCount 导出文件",
   "exportSuccessTitle": "导出成功",
   "exportSuccessMessageIOS": "已保存并可在分享历史中找到：\n{path}",
@@ -964,6 +963,26 @@
   "updateConfirmDownload": "立即下载并安装",
   "updateDownloadCompleteTitle": "下载完成",
   "updateInstallConfirmMessage": "新版本已下载完成，是否立即安装？",
+  "updateMirrorSelectTitle": "选择下载加速器",
+  "updateMirrorSelectHint": "如果下载缓慢，可以选择一个加速镜像。点击「测速」检测各镜像延迟。",
+  "updateMirrorTestButton": "测速",
+  "updateMirrorTesting": "正在测试 {completed}/{total}...",
+  "@updateMirrorTesting": {
+    "placeholders": {
+      "completed": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "updateMirrorDirectHint": "适合网络通畅的用户",
+  "updateDownloadMirror": "下载源: {mirror}",
+  "@updateDownloadMirror": {
+    "placeholders": {
+      "mirror": {"type": "String"}
+    }
+  },
+  "updateSelectMirror": "选择加速器",
+  "updateMirrorSettingTitle": "下载加速器",
+  "updateMirrorSettingSubtitle": "切换 GitHub 下载源",
   "currencyCNY": "人民币",
   "currencyUSD": "美元",
   "currencyEUR": "欧元",
@@ -1294,7 +1313,6 @@
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "输入智谱AI的API Key",
   "aiCloudApiKeyHelper": "GLM-*-Flash模型完全免费",
-  "aiCloudApiKeySaved": "API Key 已保存",
   "aiCloudApiGetKey": "获取API Key",
   "aiCloudApiTestKey": "测试连接",
   "aiCloudApiKeyValid": "✅ API Key 有效，AI功能可正常使用",
@@ -1333,10 +1351,12 @@
   "aiTypeExpense": "支出",
   "cloudSyncPageTitle": "云同步与备份",
   "cloudSyncPageSubtitle": "管理云服务和数据同步",
+  "cloudSyncHint": "云同步只会同步账本数据（包括交易记录关联的账户、分类、标签），不包括未关联的分类、标签、账户，也不包括附件。附件请通过数据管理单独导入导出。",
   "dataManagement": "数据管理",
   "dataManagementDesc": "导入导出、分类账户管理",
   "dataManagementPageTitle": "数据管理",
   "dataManagementPageSubtitle": "管理账单数据和分类",
+  "dataManagementAttachmentHint": "还原数据时，请先导入附件包，再导入账本数据（CSV或云同步），以确保附件正确关联。",
   "smartBilling": "智能记账",
   "smartBillingDesc": "AI小助手、OCR扫描、自动记账",
   "smartBillingPageTitle": "智能记账",
@@ -1439,7 +1459,6 @@
   "configExportConfirmTitle": "确认导出",
   "configImportSelectTitle": "选择导入内容",
   "configImportPreviewTitle": "导入预览",
-  "configImportConfirmTitle": "确认导入",
   "ledgersLocal": "本地账本",
   "ledgersRemote": "云端账本",
   "ledgersEmpty": "暂无账本",
@@ -1710,7 +1729,6 @@
   "aiPromptResetDefault": "恢复默认",
   "aiPromptResetConfirmTitle": "恢复默认",
   "aiPromptResetConfirmMessage": "确定要恢复默认提示词吗？您的自定义内容将会丢失。",
-  "aiPromptCopied": "已复制到剪贴板，可分享给其他用户",
   "aiPromptPasted": "已粘贴",
   "aiPromptPreviewTitle": "提示词预览",
   "aiPromptPreviewNote": "以上预览使用示例数据替换变量，实际运行时会使用真实数据",
@@ -1726,7 +1744,6 @@
   "aiVisionModelTitle": "视觉模型",
   "aiModelFast": "快速",
   "aiModelAccurate": "准确",
-  "aiModelThinking": "深度思考",
   "aiModelSwitched": "已切换到 {modelName}",
   "@aiModelSwitched": {
     "placeholders": {
@@ -1740,7 +1757,6 @@
   "aiUploadImage": "上传图片到AI",
   "aiUseVisionDesc": "使用视觉模型，识别更准确",
   "aiUnUseVisionDesc": "仅使用文本模型分析OCR结果",
-
   "tagManageTitle": "标签管理",
   "tagManageSubtitle": "管理交易标签",
   "tagManageEmpty": "暂无标签",
@@ -1755,7 +1771,6 @@
   "tagNameRequired": "标签名称不能为空",
   "tagNameDuplicate": "标签名称已存在",
   "tagColorLabel": "标签颜色",
-  "tagColorHint": "选择标签颜色",
   "tagCreateSuccess": "标签创建成功",
   "tagUpdateSuccess": "标签更新成功",
   "tagDeleteConfirmTitle": "删除标签",
@@ -1785,13 +1800,10 @@
   "tagDetailTotalCount": "交易笔数",
   "tagDetailTotalExpense": "总支出",
   "tagDetailTotalIncome": "总收入",
-  "tagDetailTransactionCount": "交易笔数",
   "tagDetailTransactionList": "关联交易",
-  "tagDetailRelatedTransactions": "关联交易",
   "tagDetailNoTransactions": "暂无关联交易",
   "tagDetailNoTransactionsHint": "使用此标签的交易将在此显示",
   "tagNotFound": "标签不存在",
-
   "tagDefaultMeituan": "美团",
   "tagDefaultEleme": "饿了么",
   "tagDefaultTaobao": "淘宝",
@@ -1812,22 +1824,17 @@
   "tagDefaultReimbursement": "报销",
   "tagDefaultRefundable": "可退款",
   "tagDefaultRefunded": "已退款",
-
+  "tagDefaultVoiceBilling": "语音记账",
+  "tagDefaultImageBilling": "图片记账",
+  "tagDefaultCameraBilling": "拍照记账",
+  "tagDefaultAiBilling": "AI记账",
   "tabDiscover": "发现",
   "discoverTitle": "发现",
   "discoverBudget": "预算管理",
   "discoverBudgetSubtitle": "设置和追踪支出预算",
   "discoverBudgetEmpty": "设置预算，控制支出",
   "discoverAccounts": "账户总览",
-  "discoverAccountsSubtitle": "管理资产与负债",
   "discoverAccountsEmpty": "添加账户，追踪资金流向",
-  "discoverReports": "数据报告",
-  "discoverReportsSubtitle": "月度/年度财务报告",
-  "discoverRecurring": "周期记账",
-  "discoverRecurringSubtitle": "管理定期交易",
-  "discoverLedgers": "账本管理",
-  "discoverLedgersSubtitle": "管理多个账本",
-  "discoverComingSoon": "功能开发中",
   "discoverAccountsTotal": "总余额",
   "discoverAccountsCount": "{count} 个账户",
   "@discoverAccountsCount": {
@@ -1837,48 +1844,17 @@
       }
     }
   },
-  "discoverMonthlyOverview": "本月概览",
-  "discoverComparedToLastMonth": "较上月",
-  "discoverUp": "↑{percent}",
-  "@discoverUp": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverDown": "↓{percent}",
-  "@discoverDown": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverNoChange": "持平",
-  "discoverTopCategories": "支出TOP3",
-  "discoverNoExpense": "本月暂无支出",
-  "discoverQuickActions": "快捷记账",
   "discoverQuickCamera": "拍照",
   "discoverQuickAlbum": "相册",
   "discoverQuickVoice": "语音",
-  "greetingMorning": "早上好",
-  "greetingAfternoon": "下午好",
-  "greetingEvening": "晚上好",
-  "greetingNight": "夜深了",
-  "discoverSmartBilling": "智能记账",
   "discoverCommonFeatures": "常用功能",
   "discoverAISettings": "AI设置",
   "discoverCategory": "分类管理",
-  "discoverReminder": "记账提醒",
   "discoverTags": "标签管理",
   "discoverImport": "导入",
   "discoverExport": "导出",
-  "discoverBackup": "数据备份",
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
-  "homeNewLedger": "新建账本",
-
   "budgetTitle": "预算管理",
   "budgetEmptyHint": "还没有设置预算",
   "budgetAddTotal": "添加总预算",
@@ -1911,13 +1887,128 @@
   "budgetCategoryLabel": "选择分类",
   "budgetCategoryHint": "请选择预算分类",
   "budgetStartDayLabel": "起始日",
-  "budgetStartDayHint": "每月第几天开始计算",
   "budgetPeriodLabel": "周期",
-  "budgetPeriodMonthly": "月度",
-  "budgetPeriodWeekly": "周度",
-  "budgetPeriodYearly": "年度",
   "budgetSaveSuccess": "预算保存成功",
   "budgetDeleteConfirm": "确定删除此预算？",
   "budgetDeleteSuccess": "预算已删除",
-  "budgetExceededWarning": "此笔消费后将超出预算"
+  "attachmentAdd": "添加图片",
+  "attachmentTakePhoto": "拍照",
+  "attachmentChooseFromGallery": "从相册选择",
+  "attachmentMaxReached": "已达到最大附件数量",
+  "attachmentDeleteConfirm": "确定删除此附件？",
+  "attachmentCount": "{count}张图片",
+  "@attachmentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonDeleted": "已删除",
+  "attachmentExportTitle": "导出附件",
+  "attachmentExportSubtitle": "将所有附件打包导出为压缩文件",
+  "attachmentImportTitle": "导入附件",
+  "attachmentImportSubtitle": "从压缩文件导入附件",
+  "attachmentExportEmpty": "没有附件需要导出",
+  "attachmentExportProgress": "正在导出附件 ({current}/{total})",
+  "@attachmentExportProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentExportSuccess": "附件导出成功",
+  "attachmentExportFailed": "附件导出失败",
+  "attachmentExportSavedTo": "已保存到: {path}",
+  "@attachmentExportSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "attachmentImportConflictStrategy": "冲突处理策略",
+  "attachmentImportConflictSkip": "跳过已存在的附件",
+  "attachmentImportConflictOverwrite": "覆盖已存在的附件",
+  "attachmentImportProgress": "正在导入附件 ({current}/{total})",
+  "@attachmentImportProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentImportResult": "导入 {imported} 张，跳过 {skipped} 张，覆盖 {overwritten} 张，失败 {failed} 张",
+  "@attachmentImportResult": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "overwritten": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentImportFailed": "附件导入失败",
+  "attachmentArchiveInfo": "{count} 个附件，导出于 {date}",
+  "@attachmentArchiveInfo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "attachmentStartImport": "开始导入",
+  "shortcutsGuide": "快捷指令",
+  "shortcutsGuideDesc": "快速打开语音、拍照等记账方式",
+  "shortcutsIntroTitle": "快速记账",
+  "shortcutsIntroDesc": "使用快捷指令，可以在桌面直接打开语音记账、拍照记账等功能，无需先打开 App。",
+  "availableShortcuts": "可用快捷指令",
+  "shortcutVoice": "语音记账",
+  "shortcutVoiceDesc": "通过语音快速记录账单",
+  "shortcutImage": "图片记账",
+  "shortcutImageDesc": "从相册选择图片识别账单",
+  "shortcutCamera": "拍照记账",
+  "shortcutCameraDesc": "拍照识别账单",
+  "shortcutUrlCopied": "链接已复制到剪贴板",
+  "howToAddShortcut": "如何添加快捷指令",
+  "iosShortcutStep1": "打开「快捷指令」App",
+  "iosShortcutStep2": "点击右上角「+」新建快捷指令",
+  "iosShortcutStep3": "添加「打开 URL」操作",
+  "iosShortcutStep4": "粘贴上方复制的链接（如 beecount://voice）",
+  "iosShortcutStep5": "保存后，可添加到桌面使用",
+  "androidShortcutStep1": "下载支持创建快捷方式的应用（如 Shortcut Maker）",
+  "androidShortcutStep2": "选择「URL 快捷方式」",
+  "androidShortcutStep3": "粘贴上方复制的链接（如 beecount://voice）",
+  "androidShortcutStep4": "设置图标和名称后添加到桌面",
+  "shortcutsTip": "小贴士",
+  "shortcutsTipDesc": "快捷指令需要配合 AI 功能使用。请确保已开启智能识别并配置好 API Key。",
+  "shortcutOpenShortcutsApp": "打开快捷指令 App",
+  "shortcutAutoAdd": "自动记账接口",
+  "shortcutAutoAddDesc": "通过 URL 参数自动创建账单，适合与快捷指令、自动化工具配合使用。",
+  "shortcutAutoAddExample": "示例链接：",
+  "shortcutAutoAddParams": "支持的参数：",
+  "shortcutParamAmount": "金额（必填）",
+  "shortcutParamType": "类型：expense（支出）/ income（收入）/ transfer（转账）",
+  "shortcutParamCategory": "分类名称（需与App中已有分类匹配）",
+  "shortcutParamNote": "备注",
+  "shortcutParamAccount": "账户名称（需与App中已有账户匹配）",
+  "shortcutParamTags": "标签（多个用逗号分隔）",
+  "shortcutParamDate": "日期（ISO格式，如 2024-01-15）"
 }

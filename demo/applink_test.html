@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>BeeCount 快捷指令测试</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 20px;
+            background: #f2f2f7;
+            margin: 0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 { color: #1c1c1e; font-size: 28px; margin-bottom: 20px; }
+        h2 { color: #3c3c43; font-size: 18px; margin: 25px 0 12px; }
+        .shortcut {
+            display: flex;
+            align-items: center;
+            background: white;
+            color: #1c1c1e;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .shortcut:active { background: #e5e5ea; }
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 20px;
+            color: white;
+        }
+        .voice .icon { background: #FF9500; }
+        .image .icon { background: #34C759; }
+        .camera .icon { background: #007AFF; }
+        .add .icon { background: #AF52DE; }
+        .content { flex: 1; }
+        .title { font-weight: 600; }
+        .desc { font-size: 13px; color: #8e8e93; margin-top: 2px; }
+    </style>
+</head>
+<body>
+    <h1>BeeCount 快捷指令</h1>
+
+    <h2>快捷记账</h2>
+
+    <a class="shortcut voice" href="beecount://voice">
+        <div class="icon">🎤</div>
+        <div class="content">
+            <div class="title">语音记账</div>
+            <div class="desc">说出金额自动记录</div>
+        </div>
+    </a>
+
+    <a class="shortcut image" href="beecount://image">
+        <div class="icon">🖼</div>
+        <div class="content">
+            <div class="title">图片记账</div>
+            <div class="desc">从相册选择账单图片</div>
+        </div>
+    </a>
+
+    <a class="shortcut camera" href="beecount://camera">
+        <div class="icon">📷</div>
+        <div class="content">
+            <div class="title">拍照记账</div>
+            <div class="desc">拍摄账单自动识别</div>
+        </div>
+    </a>
+
+    <h2>自动记账</h2>
+
+    <a class="shortcut add" href="beecount://add?amount=88.5&type=expense&category=餐饮&note=午餐&account=微信&tags=日常,外卖">
+        <div class="icon">💰</div>
+        <div class="content">
+            <div class="title">完整测试</div>
+            <div class="desc">88.5元 餐饮 午餐 微信 标签</div>
+        </div>
+    </a>
+
+    <a class="shortcut add" href="beecount://add?amount=100&type=expense">
+        <div class="icon">💸</div>
+        <div class="content">
+            <div class="title">简单支出</div>
+            <div class="desc">100元支出</div>
+        </div>
+    </a>
+
+    <a class="shortcut add" href="beecount://add?amount=5000&type=income&category=工资&note=月薪">
+        <div class="icon">💵</div>
+        <div class="content">
+            <div class="title">收入记录</div>
+            <div class="desc">5000元 工资 月薪</div>
+        </div>
+    </a>
+
+    <a class="shortcut add" href="beecount://add?amount=35&type=expense&category=交通&note=打车&account=支付宝">
+        <div class="icon">🚕</div>
+        <div class="content">
+            <div class="title">交通支出</div>
+            <div class="desc">35元 交通 打车 支付宝</div>
+        </div>
+    </a>
+
+</body>
+</html>

@@ -14,7 +14,9 @@ import '../../utils/category_utils.dart';
 import '../category_icon.dart';
 import '../../pages/transaction/category_detail_page.dart';
 import '../../pages/tag/tag_detail_page.dart';
+import '../../pages/attachment/attachment_preview_page.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/attachment_service.dart';
 
 /// 可复用的交易列表组件
 /// 支持显示分组的交易列表，包含日期头部和交易项
@@ -61,11 +63,16 @@ class TransactionListState extends ConsumerState<TransactionList> {
   List<int> _cachedTransactionIds = [];
   int _lastTagRefreshVersion = 0;
 
+  // 缓存附件数量
+  Map<int, int> _cachedAttachmentCounts = {};
+  int _lastAttachmentRefreshVersion = 0;
+
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? FlutterListViewController();
     _loadTags();
+    _loadAttachmentCounts();
   }
 
   @override
@@ -75,6 +82,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
     final newIds = widget.transactions.map((t) => t.t.id).toList();
     if (!_listEquals(newIds, _cachedTransactionIds)) {
       _loadTags();
+      _loadAttachmentCounts();
     }
   }
 
@@ -103,6 +111,25 @@ class TransactionListState extends ConsumerState<TransactionList> {
       setState(() {
         _cachedTagsMap = tagsMap;
         _cachedTransactionIds = transactionIds;
+      });
+    }
+  }
+
+  Future<void> _loadAttachmentCounts() async {
+    final transactionIds = widget.transactions.map((t) => t.t.id).toList();
+    if (transactionIds.isEmpty) {
+      setState(() {
+        _cachedAttachmentCounts = {};
+      });
+      return;
+    }
+
+    final repo = ref.read(repositoryProvider);
+    final countsMap = await repo.getAttachmentCountsForTransactions(transactionIds);
+
+    if (mounted) {
+      setState(() {
+        _cachedAttachmentCounts = countsMap;
       });
     }
   }
@@ -184,6 +211,13 @@ class TransactionListState extends ConsumerState<TransactionList> {
       _lastTagRefreshVersion = tagRefreshVersion;
       // 延迟加载以避免在build中setState
       Future.microtask(() => _loadTags());
+    }
+
+    // 监听附件刷新信号，当附件变化时重新加载
+    final attachmentRefreshVersion = ref.watch(attachmentListRefreshProvider);
+    if (attachmentRefreshVersion != _lastAttachmentRefreshVersion) {
+      _lastAttachmentRefreshVersion = attachmentRefreshVersion;
+      Future.microtask(() => _loadAttachmentCounts());
     }
 
     _buildFlatItems();
@@ -329,6 +363,9 @@ class TransactionListState extends ConsumerState<TransactionList> {
                           ? '$accountName → $toAccountName'
                           : null;
 
+                      // 获取附件数量（从缓存）
+                      final attachmentCount = _cachedAttachmentCounts[it.t.id] ?? 0;
+
                       return TransactionListItem(
                         icon: isTransfer
                           ? Icons.swap_horiz
@@ -347,6 +384,18 @@ class TransactionListState extends ConsumerState<TransactionList> {
                           ? transferAccountInfo  // 转账始终在第三行显示账户信息
                           : accountName,
                         tags: tagsList.isNotEmpty ? tagsList : null,
+                        attachmentCount: attachmentCount,
+                        onAttachmentTap: attachmentCount > 0
+                            ? () async {
+                                await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => AttachmentPreviewPage.fromTransaction(
+                                      transactionId: it.t.id,
+                                    ),
+                                  ),
+                                );
+                              }
+                            : null,
                         onTagTap: (tagId, tagName) async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(

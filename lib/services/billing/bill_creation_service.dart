@@ -3,7 +3,9 @@ import 'package:collection/collection.dart';
 import '../../data/db.dart';
 import '../../data/repositories/base_repository.dart';
 import '../../data/category_node.dart';
+import '../../l10n/app_localizations.dart';
 import '../system/logger_service.dart';
+import '../data/tag_seed_service.dart';
 import 'category_matcher.dart';
 import 'ocr_service.dart';
 
@@ -219,11 +221,15 @@ class BillCreationService {
   /// [result] OCR识别结果（包含AI增强）
   /// [ledgerId] 账本ID
   /// [note] 备注（可选）
+  /// [billingTypes] 记账方式列表，如 ['image', 'ai'] 表示开启AI的图片记账
+  /// [l10n] 国际化对象，用于获取标签名称
   /// 返回创建的交易ID，如果创建失败则返回null
   Future<int?> createBillTransaction({
     required OcrResult result,
     required int ledgerId,
     String? note,
+    List<String>? billingTypes,
+    AppLocalizations? l10n,
   }) async {
     // 1. 验证金额
     if (result.amount == null || result.amount!.abs() <= 0) {
@@ -344,16 +350,54 @@ class BillCreationService {
       note: finalNote,
     );
 
-    // 10. 打印最终交易信息汇总（一行）
+    // 10. 自动添加记账方式标签
+    if (billingTypes != null && billingTypes.isNotEmpty && l10n != null) {
+      await _addBillingTypeTags(transactionId, billingTypes, l10n);
+    }
+
+    // 11. 打印最终交易信息汇总（一行）
     final typeStr = transactionType == 'income' ? '收入' : '支出';
     final timeStr = _formatDateTime(happenedAt);
     final categoryStr = categoryName ?? '未设置';
     final accountStr = accountName ?? '未设置';
     final noteStr = finalNote ?? '无';
+    final tagsStr = billingTypes?.join(',') ?? '无';
 
-    logger.info(_tag, '[自动记账] 成功 | ID:$transactionId | $finalAmount元 | $typeStr | 分类:$categoryStr | 账户:$accountStr | 时间:$timeStr | 备注:$noteStr');
+    logger.info(_tag, '[自动记账] 成功 | ID:$transactionId | $finalAmount元 | $typeStr | 分类:$categoryStr | 账户:$accountStr | 时间:$timeStr | 备注:$noteStr | 标签:$tagsStr');
 
     return transactionId;
+  }
+
+  /// 为交易添加记账方式标签
+  Future<void> _addBillingTypeTags(int transactionId, List<String> billingTypes, AppLocalizations l10n) async {
+    try {
+      final tagNames = TagSeedService.getBillingTagNames(billingTypes, l10n);
+      if (tagNames.isEmpty) return;
+
+      final tagIds = <int>[];
+      for (final tagName in tagNames) {
+        // 查找标签，如果不存在则创建
+        var tag = await repo.getTagByName(tagName);
+        if (tag == null) {
+          // 标签不存在，创建它
+          final color = TagSeedService.getRandomColor();
+          final tagId = await repo.createTag(name: tagName, color: color);
+          tagIds.add(tagId);
+          logger.debug(_tag, '[标签] 创建新标签: $tagName (ID:$tagId)');
+        } else {
+          tagIds.add(tag.id);
+          logger.debug(_tag, '[标签] 使用已有标签: $tagName (ID:${tag.id})');
+        }
+      }
+
+      // 关联标签到交易
+      if (tagIds.isNotEmpty) {
+        await repo.addTagsToTransaction(transactionId: transactionId, tagIds: tagIds);
+        logger.info(_tag, '[标签] 已为交易 $transactionId 添加 ${tagIds.length} 个标签');
+      }
+    } catch (e, stackTrace) {
+      logger.error(_tag, '[标签] 添加标签失败', e, stackTrace);
+    }
   }
 
   /// 格式化日期时间

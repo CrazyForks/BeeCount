@@ -656,6 +656,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
       final chatService = ref.read(aiChatServiceProvider);
       final currentLocale = Localizations.localeOf(context);
       final ledgerId = ref.read(currentLedgerIdProvider);
+      final l10n = AppLocalizations.of(context);
 
       // 调试日志：确认当前账本ID
       logger.info('AIChat', '当前账本ID: $ledgerId');
@@ -667,6 +668,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         incomeCategories: incomeCategories.map((c) => c.name).toList(),
         languageCode: currentLocale.languageCode,
         forceChat: forceChat, // 快捷指令强制为自由对话
+        l10n: l10n,
       );
 
       // 保存 AI 回复

@@ -49,6 +49,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     'to_account': null,
     'note': null,
     'tags': null,                // 标签（逗号分隔）
+    'attachments': null,         // 附件文件名（逗号分隔）
   };
   bool importing = false;
   int ok = 0, fail = 0, skipped = 0; // skipped: 跳过的非收支类型记录
@@ -189,6 +190,8 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                           'note', items()),
                       _mapRow(AppLocalizations.of(context)!.exportCsvHeaderTags,
                           'tags', items()),
+                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderAttachments,
+                          'attachments', items()),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -479,7 +482,6 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
     // 定义进度变量
     int done = 0;
-    int duplicateSkipped = 0; // 重复记录跳过数
 
     // 收集跳过的类型（用于提示用户）
     final Map<String, int> skippedTypes = {};
@@ -517,8 +519,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
 
       ok = result.inserted;
       fail = result.failed;
-      duplicateSkipped = result.skipped;
-      skipped = duplicateSkipped + skippedTypes.values.fold(0, (a, b) => a + b);
+      skipped = skippedTypes.values.fold(0, (a, b) => a + b);
       done = total;
     } catch (e) {
       // 导入失败
@@ -579,12 +580,9 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     bool hasSkipped = skipped > 0;
 
     if (hasSkipped) {
-      // 分别显示重复记录和类型不匹配
+      // 显示类型不匹配的跳过记录
       final typeSkipped = skippedTypes.values.fold(0, (a, b) => a + b);
 
-      if (duplicateSkipped > 0) {
-        message += '\n${l10nToast.importSkippedDuplicates(duplicateSkipped)}';
-      }
       if (typeSkipped > 0) {
         final skippedList = skippedTypes.entries
             .map((e) => '${e.key}(${e.value})')
@@ -823,6 +821,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       final toAccountName = getBy('to_account');
       final note = getBy('note');
       final tagsStr = getBy('tags');
+      final attachmentsStr = getBy('attachments');
 
       // 类型识别
       final typeStr = typeRaw.trim().toLowerCase();
@@ -855,6 +854,18 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       List<String>? tagNames;
       if (tagsStr != null && tagsStr.isNotEmpty) {
         tagNames = tagsStr.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+      }
+
+      // 解析附件文件名列表
+      List<ImportAttachment>? attachments;
+      if (attachmentsStr != null && attachmentsStr.isNotEmpty) {
+        final fileNames = attachmentsStr.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+        if (fileNames.isNotEmpty) {
+          attachments = fileNames.asMap().entries.map((entry) => ImportAttachment(
+            fileName: entry.value,
+            sortOrder: entry.key,
+          )).toList();
+        }
       }
 
       // 处理分类：支持用户映射和二级分类
@@ -893,6 +904,7 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
         fromAccountName: type == 'transfer' ? fromAccountName : null,
         toAccountName: type == 'transfer' ? toAccountName : null,
         tagNames: tagNames,
+        attachments: attachments,
       ));
     }
 

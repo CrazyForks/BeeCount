@@ -10,6 +10,7 @@ import 'local_recurring_transaction_repository.dart';
 import 'local_ai_repository.dart';
 import 'local_tag_repository.dart';
 import 'local_budget_repository.dart';
+import 'local_attachment_repository.dart';
 
 /// LocalRepository 本地数据库实现
 /// 基于 Drift 本地数据库实现所有 Repository 接口
@@ -29,6 +30,7 @@ class LocalRepository extends BaseRepository {
   late final LocalAIRepository _aiRepo;
   late final LocalTagRepository _tagRepo;
   late final LocalBudgetRepository _budgetRepo;
+  late final LocalAttachmentRepository _attachmentRepo;
 
   LocalRepository(this.db) {
     _ledgerRepo = LocalLedgerRepository(db);
@@ -40,6 +42,7 @@ class LocalRepository extends BaseRepository {
     _aiRepo = LocalAIRepository(db);
     _tagRepo = LocalTagRepository(db);
     _budgetRepo = LocalBudgetRepository(db);
+    _attachmentRepo = LocalAttachmentRepository(db);
   }
 
   // ============================================
@@ -232,30 +235,6 @@ class LocalRepository extends BaseRepository {
         start: start,
         end: end,
       );
-
-  @override
-  String txSignature({
-    required String type,
-    required double amount,
-    required int? categoryId,
-    required DateTime happenedAt,
-    required String? note,
-  }) =>
-      _transactionRepo.txSignature(
-        type: type,
-        amount: amount,
-        categoryId: categoryId,
-        happenedAt: happenedAt,
-        note: note,
-      );
-
-  @override
-  Future<Set<String>> signatureSetForLedger(int ledgerId) =>
-      _transactionRepo.signatureSetForLedger(ledgerId);
-
-  @override
-  Future<int> deduplicateLedgerTransactions(int ledgerId) =>
-      _transactionRepo.deduplicateLedgerTransactions(ledgerId);
 
   @override
   Future<List<Transaction>> getTransactionsByLedger(int ledgerId) =>
@@ -1048,4 +1027,87 @@ class LocalRepository extends BaseRepository {
 
   @override
   Stream<List<Budget>> watchBudgets(int ledgerId) => _budgetRepo.watchBudgets(ledgerId);
+
+  // ============================================
+  // AttachmentRepository 接口实现 - 委托给 LocalAttachmentRepository
+  // ============================================
+
+  @override
+  Future<int> createAttachment({
+    required int transactionId,
+    required String fileName,
+    String? originalName,
+    int? fileSize,
+    int? width,
+    int? height,
+    int sortOrder = 0,
+  }) =>
+      _attachmentRepo.createAttachment(
+        transactionId: transactionId,
+        fileName: fileName,
+        originalName: originalName,
+        fileSize: fileSize,
+        width: width,
+        height: height,
+        sortOrder: sortOrder,
+      );
+
+  @override
+  Future<TransactionAttachment?> getAttachmentById(int id) =>
+      _attachmentRepo.getAttachmentById(id);
+
+  @override
+  Future<List<TransactionAttachment>> getAttachmentsByTransaction(int transactionId) =>
+      _attachmentRepo.getAttachmentsByTransaction(transactionId);
+
+  @override
+  Future<void> deleteAttachment(int id) => _attachmentRepo.deleteAttachment(id);
+
+  @override
+  Future<void> deleteAttachmentsByTransaction(int transactionId) =>
+      _attachmentRepo.deleteAttachmentsByTransaction(transactionId);
+
+  @override
+  Future<void> updateAttachmentSortOrder(int id, int sortOrder) =>
+      _attachmentRepo.updateAttachmentSortOrder(id, sortOrder);
+
+  @override
+  Future<void> updateAttachmentSortOrders(List<({int id, int sortOrder})> updates) =>
+      _attachmentRepo.updateAttachmentSortOrders(updates);
+
+  @override
+  Future<bool> attachmentExistsByFileName(String fileName) =>
+      _attachmentRepo.attachmentExistsByFileName(fileName);
+
+  @override
+  Future<int> getAttachmentCountByTransaction(int transactionId) =>
+      _attachmentRepo.getAttachmentCountByTransaction(transactionId);
+
+  @override
+  Future<Map<int, int>> getAttachmentCountsForTransactions(List<int> transactionIds) =>
+      _attachmentRepo.getAttachmentCountsForTransactions(transactionIds);
+
+  @override
+  Future<Map<int, List<TransactionAttachment>>> getAttachmentsForTransactions(List<int> transactionIds) =>
+      _attachmentRepo.getAttachmentsForTransactions(transactionIds);
+
+  @override
+  Future<List<int>> getTransactionIdsWithAttachments() =>
+      _attachmentRepo.getTransactionIdsWithAttachments();
+
+  @override
+  Future<List<TransactionAttachment>> getAllAttachments() =>
+      _attachmentRepo.getAllAttachments();
+
+  @override
+  Future<void> deleteAttachmentByFileName(String fileName) =>
+      _attachmentRepo.deleteAttachmentByFileName(fileName);
+
+  @override
+  Stream<List<TransactionAttachment>> watchAttachmentsByTransaction(int transactionId) =>
+      _attachmentRepo.watchAttachmentsByTransaction(transactionId);
+
+  @override
+  Stream<int> watchAttachmentCountByTransaction(int transactionId) =>
+      _attachmentRepo.watchAttachmentCountByTransaction(transactionId);
 }

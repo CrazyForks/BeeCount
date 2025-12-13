@@ -4218,6 +4218,474 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   }
 }
 
+class $TransactionAttachmentsTable extends TransactionAttachments
+    with TableInfo<$TransactionAttachmentsTable, TransactionAttachment> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TransactionAttachmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _transactionIdMeta =
+      const VerificationMeta('transactionId');
+  @override
+  late final GeneratedColumn<int> transactionId = GeneratedColumn<int>(
+      'transaction_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _fileNameMeta =
+      const VerificationMeta('fileName');
+  @override
+  late final GeneratedColumn<String> fileName = GeneratedColumn<String>(
+      'file_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _originalNameMeta =
+      const VerificationMeta('originalName');
+  @override
+  late final GeneratedColumn<String> originalName = GeneratedColumn<String>(
+      'original_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _fileSizeMeta =
+      const VerificationMeta('fileSize');
+  @override
+  late final GeneratedColumn<int> fileSize = GeneratedColumn<int>(
+      'file_size', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _widthMeta = const VerificationMeta('width');
+  @override
+  late final GeneratedColumn<int> width = GeneratedColumn<int>(
+      'width', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _heightMeta = const VerificationMeta('height');
+  @override
+  late final GeneratedColumn<int> height = GeneratedColumn<int>(
+      'height', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _sortOrderMeta =
+      const VerificationMeta('sortOrder');
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+      'sort_order', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        transactionId,
+        fileName,
+        originalName,
+        fileSize,
+        width,
+        height,
+        sortOrder,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'transaction_attachments';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TransactionAttachment> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('transaction_id')) {
+      context.handle(
+          _transactionIdMeta,
+          transactionId.isAcceptableOrUnknown(
+              data['transaction_id']!, _transactionIdMeta));
+    } else if (isInserting) {
+      context.missing(_transactionIdMeta);
+    }
+    if (data.containsKey('file_name')) {
+      context.handle(_fileNameMeta,
+          fileName.isAcceptableOrUnknown(data['file_name']!, _fileNameMeta));
+    } else if (isInserting) {
+      context.missing(_fileNameMeta);
+    }
+    if (data.containsKey('original_name')) {
+      context.handle(
+          _originalNameMeta,
+          originalName.isAcceptableOrUnknown(
+              data['original_name']!, _originalNameMeta));
+    }
+    if (data.containsKey('file_size')) {
+      context.handle(_fileSizeMeta,
+          fileSize.isAcceptableOrUnknown(data['file_size']!, _fileSizeMeta));
+    }
+    if (data.containsKey('width')) {
+      context.handle(
+          _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
+    }
+    if (data.containsKey('height')) {
+      context.handle(_heightMeta,
+          height.isAcceptableOrUnknown(data['height']!, _heightMeta));
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(_sortOrderMeta,
+          sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TransactionAttachment map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TransactionAttachment(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      transactionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}transaction_id'])!,
+      fileName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}file_name'])!,
+      originalName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}original_name']),
+      fileSize: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}file_size']),
+      width: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}width']),
+      height: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}height']),
+      sortOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $TransactionAttachmentsTable createAlias(String alias) {
+    return $TransactionAttachmentsTable(attachedDatabase, alias);
+  }
+}
+
+class TransactionAttachment extends DataClass
+    implements Insertable<TransactionAttachment> {
+  final int id;
+  final int transactionId;
+  final String fileName;
+  final String? originalName;
+  final int? fileSize;
+  final int? width;
+  final int? height;
+  final int sortOrder;
+  final DateTime createdAt;
+  const TransactionAttachment(
+      {required this.id,
+      required this.transactionId,
+      required this.fileName,
+      this.originalName,
+      this.fileSize,
+      this.width,
+      this.height,
+      required this.sortOrder,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['transaction_id'] = Variable<int>(transactionId);
+    map['file_name'] = Variable<String>(fileName);
+    if (!nullToAbsent || originalName != null) {
+      map['original_name'] = Variable<String>(originalName);
+    }
+    if (!nullToAbsent || fileSize != null) {
+      map['file_size'] = Variable<int>(fileSize);
+    }
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<int>(width);
+    }
+    if (!nullToAbsent || height != null) {
+      map['height'] = Variable<int>(height);
+    }
+    map['sort_order'] = Variable<int>(sortOrder);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  TransactionAttachmentsCompanion toCompanion(bool nullToAbsent) {
+    return TransactionAttachmentsCompanion(
+      id: Value(id),
+      transactionId: Value(transactionId),
+      fileName: Value(fileName),
+      originalName: originalName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(originalName),
+      fileSize: fileSize == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fileSize),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      height:
+          height == null && nullToAbsent ? const Value.absent() : Value(height),
+      sortOrder: Value(sortOrder),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory TransactionAttachment.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TransactionAttachment(
+      id: serializer.fromJson<int>(json['id']),
+      transactionId: serializer.fromJson<int>(json['transactionId']),
+      fileName: serializer.fromJson<String>(json['fileName']),
+      originalName: serializer.fromJson<String?>(json['originalName']),
+      fileSize: serializer.fromJson<int?>(json['fileSize']),
+      width: serializer.fromJson<int?>(json['width']),
+      height: serializer.fromJson<int?>(json['height']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'transactionId': serializer.toJson<int>(transactionId),
+      'fileName': serializer.toJson<String>(fileName),
+      'originalName': serializer.toJson<String?>(originalName),
+      'fileSize': serializer.toJson<int?>(fileSize),
+      'width': serializer.toJson<int?>(width),
+      'height': serializer.toJson<int?>(height),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  TransactionAttachment copyWith(
+          {int? id,
+          int? transactionId,
+          String? fileName,
+          Value<String?> originalName = const Value.absent(),
+          Value<int?> fileSize = const Value.absent(),
+          Value<int?> width = const Value.absent(),
+          Value<int?> height = const Value.absent(),
+          int? sortOrder,
+          DateTime? createdAt}) =>
+      TransactionAttachment(
+        id: id ?? this.id,
+        transactionId: transactionId ?? this.transactionId,
+        fileName: fileName ?? this.fileName,
+        originalName:
+            originalName.present ? originalName.value : this.originalName,
+        fileSize: fileSize.present ? fileSize.value : this.fileSize,
+        width: width.present ? width.value : this.width,
+        height: height.present ? height.value : this.height,
+        sortOrder: sortOrder ?? this.sortOrder,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  TransactionAttachment copyWithCompanion(
+      TransactionAttachmentsCompanion data) {
+    return TransactionAttachment(
+      id: data.id.present ? data.id.value : this.id,
+      transactionId: data.transactionId.present
+          ? data.transactionId.value
+          : this.transactionId,
+      fileName: data.fileName.present ? data.fileName.value : this.fileName,
+      originalName: data.originalName.present
+          ? data.originalName.value
+          : this.originalName,
+      fileSize: data.fileSize.present ? data.fileSize.value : this.fileSize,
+      width: data.width.present ? data.width.value : this.width,
+      height: data.height.present ? data.height.value : this.height,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TransactionAttachment(')
+          ..write('id: $id, ')
+          ..write('transactionId: $transactionId, ')
+          ..write('fileName: $fileName, ')
+          ..write('originalName: $originalName, ')
+          ..write('fileSize: $fileSize, ')
+          ..write('width: $width, ')
+          ..write('height: $height, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, transactionId, fileName, originalName,
+      fileSize, width, height, sortOrder, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TransactionAttachment &&
+          other.id == this.id &&
+          other.transactionId == this.transactionId &&
+          other.fileName == this.fileName &&
+          other.originalName == this.originalName &&
+          other.fileSize == this.fileSize &&
+          other.width == this.width &&
+          other.height == this.height &&
+          other.sortOrder == this.sortOrder &&
+          other.createdAt == this.createdAt);
+}
+
+class TransactionAttachmentsCompanion
+    extends UpdateCompanion<TransactionAttachment> {
+  final Value<int> id;
+  final Value<int> transactionId;
+  final Value<String> fileName;
+  final Value<String?> originalName;
+  final Value<int?> fileSize;
+  final Value<int?> width;
+  final Value<int?> height;
+  final Value<int> sortOrder;
+  final Value<DateTime> createdAt;
+  const TransactionAttachmentsCompanion({
+    this.id = const Value.absent(),
+    this.transactionId = const Value.absent(),
+    this.fileName = const Value.absent(),
+    this.originalName = const Value.absent(),
+    this.fileSize = const Value.absent(),
+    this.width = const Value.absent(),
+    this.height = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  TransactionAttachmentsCompanion.insert({
+    this.id = const Value.absent(),
+    required int transactionId,
+    required String fileName,
+    this.originalName = const Value.absent(),
+    this.fileSize = const Value.absent(),
+    this.width = const Value.absent(),
+    this.height = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  })  : transactionId = Value(transactionId),
+        fileName = Value(fileName);
+  static Insertable<TransactionAttachment> custom({
+    Expression<int>? id,
+    Expression<int>? transactionId,
+    Expression<String>? fileName,
+    Expression<String>? originalName,
+    Expression<int>? fileSize,
+    Expression<int>? width,
+    Expression<int>? height,
+    Expression<int>? sortOrder,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (transactionId != null) 'transaction_id': transactionId,
+      if (fileName != null) 'file_name': fileName,
+      if (originalName != null) 'original_name': originalName,
+      if (fileSize != null) 'file_size': fileSize,
+      if (width != null) 'width': width,
+      if (height != null) 'height': height,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  TransactionAttachmentsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? transactionId,
+      Value<String>? fileName,
+      Value<String?>? originalName,
+      Value<int?>? fileSize,
+      Value<int?>? width,
+      Value<int?>? height,
+      Value<int>? sortOrder,
+      Value<DateTime>? createdAt}) {
+    return TransactionAttachmentsCompanion(
+      id: id ?? this.id,
+      transactionId: transactionId ?? this.transactionId,
+      fileName: fileName ?? this.fileName,
+      originalName: originalName ?? this.originalName,
+      fileSize: fileSize ?? this.fileSize,
+      width: width ?? this.width,
+      height: height ?? this.height,
+      sortOrder: sortOrder ?? this.sortOrder,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (transactionId.present) {
+      map['transaction_id'] = Variable<int>(transactionId.value);
+    }
+    if (fileName.present) {
+      map['file_name'] = Variable<String>(fileName.value);
+    }
+    if (originalName.present) {
+      map['original_name'] = Variable<String>(originalName.value);
+    }
+    if (fileSize.present) {
+      map['file_size'] = Variable<int>(fileSize.value);
+    }
+    if (width.present) {
+      map['width'] = Variable<int>(width.value);
+    }
+    if (height.present) {
+      map['height'] = Variable<int>(height.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TransactionAttachmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('transactionId: $transactionId, ')
+          ..write('fileName: $fileName, ')
+          ..write('originalName: $originalName, ')
+          ..write('fileSize: $fileSize, ')
+          ..write('width: $width, ')
+          ..write('height: $height, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BeeDatabase extends GeneratedDatabase {
   _$BeeDatabase(QueryExecutor e) : super(e);
   $BeeDatabaseManager get managers => $BeeDatabaseManager(this);
@@ -4233,6 +4701,8 @@ abstract class _$BeeDatabase extends GeneratedDatabase {
   late final $TransactionTagsTable transactionTags =
       $TransactionTagsTable(this);
   late final $BudgetsTable budgets = $BudgetsTable(this);
+  late final $TransactionAttachmentsTable transactionAttachments =
+      $TransactionAttachmentsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4247,7 +4717,8 @@ abstract class _$BeeDatabase extends GeneratedDatabase {
         messages,
         tags,
         transactionTags,
-        budgets
+        budgets,
+        transactionAttachments
       ];
 }
 
@@ -6337,6 +6808,242 @@ typedef $$BudgetsTableProcessedTableManager = ProcessedTableManager<
     (Budget, BaseReferences<_$BeeDatabase, $BudgetsTable, Budget>),
     Budget,
     PrefetchHooks Function()>;
+typedef $$TransactionAttachmentsTableCreateCompanionBuilder
+    = TransactionAttachmentsCompanion Function({
+  Value<int> id,
+  required int transactionId,
+  required String fileName,
+  Value<String?> originalName,
+  Value<int?> fileSize,
+  Value<int?> width,
+  Value<int?> height,
+  Value<int> sortOrder,
+  Value<DateTime> createdAt,
+});
+typedef $$TransactionAttachmentsTableUpdateCompanionBuilder
+    = TransactionAttachmentsCompanion Function({
+  Value<int> id,
+  Value<int> transactionId,
+  Value<String> fileName,
+  Value<String?> originalName,
+  Value<int?> fileSize,
+  Value<int?> width,
+  Value<int?> height,
+  Value<int> sortOrder,
+  Value<DateTime> createdAt,
+});
+
+class $$TransactionAttachmentsTableFilterComposer
+    extends Composer<_$BeeDatabase, $TransactionAttachmentsTable> {
+  $$TransactionAttachmentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get transactionId => $composableBuilder(
+      column: $table.transactionId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get originalName => $composableBuilder(
+      column: $table.originalName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get fileSize => $composableBuilder(
+      column: $table.fileSize, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+      column: $table.sortOrder, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$TransactionAttachmentsTableOrderingComposer
+    extends Composer<_$BeeDatabase, $TransactionAttachmentsTable> {
+  $$TransactionAttachmentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get transactionId => $composableBuilder(
+      column: $table.transactionId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get originalName => $composableBuilder(
+      column: $table.originalName,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get fileSize => $composableBuilder(
+      column: $table.fileSize, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+      column: $table.sortOrder, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$TransactionAttachmentsTableAnnotationComposer
+    extends Composer<_$BeeDatabase, $TransactionAttachmentsTable> {
+  $$TransactionAttachmentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get transactionId => $composableBuilder(
+      column: $table.transactionId, builder: (column) => column);
+
+  GeneratedColumn<String> get fileName =>
+      $composableBuilder(column: $table.fileName, builder: (column) => column);
+
+  GeneratedColumn<String> get originalName => $composableBuilder(
+      column: $table.originalName, builder: (column) => column);
+
+  GeneratedColumn<int> get fileSize =>
+      $composableBuilder(column: $table.fileSize, builder: (column) => column);
+
+  GeneratedColumn<int> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<int> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$TransactionAttachmentsTableTableManager extends RootTableManager<
+    _$BeeDatabase,
+    $TransactionAttachmentsTable,
+    TransactionAttachment,
+    $$TransactionAttachmentsTableFilterComposer,
+    $$TransactionAttachmentsTableOrderingComposer,
+    $$TransactionAttachmentsTableAnnotationComposer,
+    $$TransactionAttachmentsTableCreateCompanionBuilder,
+    $$TransactionAttachmentsTableUpdateCompanionBuilder,
+    (
+      TransactionAttachment,
+      BaseReferences<_$BeeDatabase, $TransactionAttachmentsTable,
+          TransactionAttachment>
+    ),
+    TransactionAttachment,
+    PrefetchHooks Function()> {
+  $$TransactionAttachmentsTableTableManager(
+      _$BeeDatabase db, $TransactionAttachmentsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TransactionAttachmentsTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TransactionAttachmentsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TransactionAttachmentsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> transactionId = const Value.absent(),
+            Value<String> fileName = const Value.absent(),
+            Value<String?> originalName = const Value.absent(),
+            Value<int?> fileSize = const Value.absent(),
+            Value<int?> width = const Value.absent(),
+            Value<int?> height = const Value.absent(),
+            Value<int> sortOrder = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              TransactionAttachmentsCompanion(
+            id: id,
+            transactionId: transactionId,
+            fileName: fileName,
+            originalName: originalName,
+            fileSize: fileSize,
+            width: width,
+            height: height,
+            sortOrder: sortOrder,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int transactionId,
+            required String fileName,
+            Value<String?> originalName = const Value.absent(),
+            Value<int?> fileSize = const Value.absent(),
+            Value<int?> width = const Value.absent(),
+            Value<int?> height = const Value.absent(),
+            Value<int> sortOrder = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              TransactionAttachmentsCompanion.insert(
+            id: id,
+            transactionId: transactionId,
+            fileName: fileName,
+            originalName: originalName,
+            fileSize: fileSize,
+            width: width,
+            height: height,
+            sortOrder: sortOrder,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$TransactionAttachmentsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$BeeDatabase,
+        $TransactionAttachmentsTable,
+        TransactionAttachment,
+        $$TransactionAttachmentsTableFilterComposer,
+        $$TransactionAttachmentsTableOrderingComposer,
+        $$TransactionAttachmentsTableAnnotationComposer,
+        $$TransactionAttachmentsTableCreateCompanionBuilder,
+        $$TransactionAttachmentsTableUpdateCompanionBuilder,
+        (
+          TransactionAttachment,
+          BaseReferences<_$BeeDatabase, $TransactionAttachmentsTable,
+              TransactionAttachment>
+        ),
+        TransactionAttachment,
+        PrefetchHooks Function()>;
 
 class $BeeDatabaseManager {
   final _$BeeDatabase _db;
@@ -6360,4 +7067,7 @@ class $BeeDatabaseManager {
       $$TransactionTagsTableTableManager(_db, _db.transactionTags);
   $$BudgetsTableTableManager get budgets =>
       $$BudgetsTableTableManager(_db, _db.budgets);
+  $$TransactionAttachmentsTableTableManager get transactionAttachments =>
+      $$TransactionAttachmentsTableTableManager(
+          _db, _db.transactionAttachments);
 }

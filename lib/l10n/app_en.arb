@@ -6,7 +6,6 @@
   },
   "tabHome": "Home",
   "tabAnalytics": "Charts",
-  "tabLedgers": "Ledgers",
   "tabMine": "Mine",
   "commonCancel": "Cancel",
   "commonConfirm": "Confirm",
@@ -362,7 +361,6 @@
   "importCancelled": "Import Cancelled",
   "importCompleted": "Import Completed{cancelled}, success {ok}, failed {fail}",
   "importSkippedNonTransactionTypes": "Skipped {count} non-transaction records (debts, etc.)",
-  "importSkippedDuplicates": "Skipped {count} duplicate records",
   "importTransactionFailed": "Import failed, all changes have been rolled back: {error}",
   "importFileOpenError": "Unable to open file picker: {error}",
   "@importFileOpenError": {
@@ -475,7 +473,7 @@
   "mineDownloadTitle": "Download",
   "mineDownloadNeedCloudService": "Available in cloud service mode only",
   "mineDownloadComplete": "Complete",
-  "mineDownloadResult": "New imports: {inserted}\nExisting skipped: {skipped}\nDuplicates cleaned: {deleted}",
+  "mineDownloadResult": "New imports: {inserted}",
   "mineLoginTitle": "Login / Register",
   "mineLoginSubtitle": "Only needed for sync",
   "mineLoggedInEmail": "Logged in",
@@ -825,6 +823,7 @@
   "exportCsvHeaderNote": "Note",
   "exportCsvHeaderTime": "Time",
   "exportCsvHeaderTags": "Tags",
+  "exportCsvHeaderAttachments": "Attachments",
   "exportShareText": "BeeCount Export File",
   "exportSuccessTitle": "Export Successful",
   "exportSuccessMessageIOS": "Saved and available in share history:\n{path}",
@@ -1061,6 +1060,26 @@
   "updateConfirmDownload": "Download and Install Now",
   "updateDownloadCompleteTitle": "Download Complete",
   "updateInstallConfirmMessage": "New version has been downloaded. Install now?",
+  "updateMirrorSelectTitle": "Select Download Accelerator",
+  "updateMirrorSelectHint": "If download is slow, select an accelerated mirror. Click \"Test\" to check latency.",
+  "updateMirrorTestButton": "Test",
+  "updateMirrorTesting": "Testing {completed}/{total}...",
+  "@updateMirrorTesting": {
+    "placeholders": {
+      "completed": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "updateMirrorDirectHint": "For users with good network",
+  "updateDownloadMirror": "Source: {mirror}",
+  "@updateDownloadMirror": {
+    "placeholders": {
+      "mirror": {"type": "String"}
+    }
+  },
+  "updateSelectMirror": "Select Accelerator",
+  "updateMirrorSettingTitle": "Download Accelerator",
+  "updateMirrorSettingSubtitle": "Switch GitHub download source",
   "updateNotificationPermissionGuideText": "Download progress notifications are disabled, but this doesn't affect download functionality. To view progress:",
   "updateNotificationGuideStep1": "Go to System Settings > App Management",
   "updateNotificationGuideStep2": "Find \\\"BeeCount\\\" app",
@@ -1421,7 +1440,6 @@
   "aiCloudApiKeyLabel": "API Key",
   "aiCloudApiKeyHint": "Enter your Zhipu AI API Key",
   "aiCloudApiKeyHelper": "GLM-*-Flash model is completely free",
-  "aiCloudApiKeySaved": "API Key saved",
   "aiCloudApiGetKey": "Get API Key",
   "aiCloudApiTestKey": "Test Connection",
   "aiCloudApiKeyValid": "✅ API Key is valid, AI features are available",
@@ -1460,10 +1478,12 @@
   "aiTypeExpense": "Expense",
   "cloudSyncPageTitle": "Cloud Sync & Backup",
   "cloudSyncPageSubtitle": "Manage cloud services and data sync",
+  "cloudSyncHint": "Cloud sync only syncs ledger data (including accounts, categories, and tags associated with transactions), not unassociated categories, tags, accounts, or attachments. Please import/export attachments separately via Data Management.",
   "dataManagement": "Data Management",
   "dataManagementDesc": "Import, export, categories and accounts",
   "dataManagementPageTitle": "Data Management",
   "dataManagementPageSubtitle": "Manage transaction data and categories",
+  "dataManagementAttachmentHint": "When restoring data, please import the attachment package first, then import ledger data (CSV or cloud sync) to ensure attachments are correctly associated.",
   "smartBilling": "Smart Billing",
   "smartBillingDesc": "AI Assistant, OCR scan, auto billing",
   "smartBillingPageTitle": "Smart Billing",
@@ -1566,7 +1586,6 @@
   "configExportConfirmTitle": "Confirm Export",
   "configImportSelectTitle": "Select Import Content",
   "configImportPreviewTitle": "Import Preview",
-  "configImportConfirmTitle": "Confirm Import",
   "ledgersConflictTitle": "Sync Conflict",
   "ledgersConflictMessage": "Local and cloud ledger data are inconsistent, please choose an action:",
   "ledgersConflictLocalInfo": "Local: {count} transactions",
@@ -1771,7 +1790,6 @@
   "aiPromptResetDefault": "Reset to Default",
   "aiPromptResetConfirmTitle": "Reset to Default",
   "aiPromptResetConfirmMessage": "Are you sure you want to reset to default prompt? Your custom content will be lost.",
-  "aiPromptCopied": "Copied to clipboard, ready to share",
   "aiPromptPasted": "Pasted",
   "aiPromptPreviewTitle": "Prompt Preview",
   "aiPromptPreviewNote": "Preview uses sample data for variables. Real data will be used at runtime.",
@@ -1781,14 +1799,12 @@
   "aiPromptVarOcrText": "User input or OCR recognized text content",
   "aiPromptVarCategories": "Expense and income category list",
   "aiPromptVarAccounts": "User's account list (may be empty)",
-  "aiPromptVarAccounts": "User's account list (may be empty)",
   "aiModelSelectEntry": "AI Model Selection",
   "aiModelSelectEntryDesc": "Allows selection of visual and text reasoning models",
   "aiModelTitle": "Text Reasoning Model",
   "aiVisionModelTitle": "Vision Model",
   "aiModelFast": "Faster",
   "aiModelAccurate": "Accurate",
-  "aiModelThinking": "Deep Thinking",
   "aiModelSwitched": "Switched to {modelName}",
   "@aiModelSwitched": {
     "placeholders": {
@@ -1802,7 +1818,6 @@
   "aiUploadImage": "Upload images to AI",
   "aiUseVisionDesc": "Use visual models for more accurate recognition",
   "aiUnUseVisionDesc": "Analyze OCR results using only text models",
-
   "tagManageTitle": "Tags",
   "tagManageSubtitle": "Manage transaction tags",
   "tagManageEmpty": "No tags yet",
@@ -1817,7 +1832,6 @@
   "tagNameRequired": "Tag name is required",
   "tagNameDuplicate": "Tag name already exists",
   "tagColorLabel": "Tag Color",
-  "tagColorHint": "Select tag color",
   "tagCreateSuccess": "Tag created",
   "tagUpdateSuccess": "Tag updated",
   "tagDeleteConfirmTitle": "Delete Tag",
@@ -1847,13 +1861,10 @@
   "tagDetailTotalCount": "Transactions",
   "tagDetailTotalExpense": "Total Expense",
   "tagDetailTotalIncome": "Total Income",
-  "tagDetailTransactionCount": "Transactions",
   "tagDetailTransactionList": "Related Transactions",
-  "tagDetailRelatedTransactions": "Related Transactions",
   "tagDetailNoTransactions": "No related transactions",
   "tagDetailNoTransactionsHint": "Transactions with this tag will appear here",
   "tagNotFound": "Tag not found",
-
   "tagDefaultMeituan": "Meituan",
   "tagDefaultEleme": "Eleme",
   "tagDefaultTaobao": "Taobao",
@@ -1874,22 +1885,17 @@
   "tagDefaultReimbursement": "Reimbursable",
   "tagDefaultRefundable": "Refundable",
   "tagDefaultRefunded": "Refunded",
-
+  "tagDefaultVoiceBilling": "Voice",
+  "tagDefaultImageBilling": "Image",
+  "tagDefaultCameraBilling": "Camera",
+  "tagDefaultAiBilling": "AI",
   "tabDiscover": "Discover",
   "discoverTitle": "Discover",
   "discoverBudget": "Budget",
   "discoverBudgetSubtitle": "Set and track spending budgets",
   "discoverBudgetEmpty": "Set budget to control spending",
   "discoverAccounts": "Accounts",
-  "discoverAccountsSubtitle": "Manage assets and liabilities",
   "discoverAccountsEmpty": "Add accounts to track cash flow",
-  "discoverReports": "Reports",
-  "discoverReportsSubtitle": "Monthly/yearly financial reports",
-  "discoverRecurring": "Recurring",
-  "discoverRecurringSubtitle": "Manage recurring transactions",
-  "discoverLedgers": "Ledgers",
-  "discoverLedgersSubtitle": "Manage multiple ledgers",
-  "discoverComingSoon": "Coming soon",
   "discoverAccountsTotal": "Total Balance",
   "discoverAccountsCount": "{count} accounts",
   "@discoverAccountsCount": {
@@ -1899,48 +1905,17 @@
       }
     }
   },
-  "discoverMonthlyOverview": "This Month",
-  "discoverComparedToLastMonth": "vs last month",
-  "discoverUp": "↑{percent}",
-  "@discoverUp": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverDown": "↓{percent}",
-  "@discoverDown": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "discoverNoChange": "No change",
-  "discoverTopCategories": "Top 3 Expenses",
-  "discoverNoExpense": "No expenses this month",
-  "discoverQuickActions": "Quick Entry",
   "discoverQuickCamera": "Camera",
   "discoverQuickAlbum": "Album",
   "discoverQuickVoice": "Voice",
-  "greetingMorning": "Good Morning",
-  "greetingAfternoon": "Good Afternoon",
-  "greetingEvening": "Good Evening",
-  "greetingNight": "Good Night",
-  "discoverSmartBilling": "Smart Billing",
   "discoverCommonFeatures": "Features",
   "discoverAISettings": "AI Settings",
   "discoverCategory": "Categories",
-  "discoverReminder": "Reminder",
   "discoverTags": "Tags",
   "discoverImport": "Import",
   "discoverExport": "Export",
-  "discoverBackup": "Backup",
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
-  "homeNewLedger": "New Ledger",
-
   "budgetTitle": "Budget",
   "budgetEmptyHint": "No budget set yet",
   "budgetAddTotal": "Add Total Budget",
@@ -1973,13 +1948,128 @@
   "budgetCategoryLabel": "Select Category",
   "budgetCategoryHint": "Select budget category",
   "budgetStartDayLabel": "Start Day",
-  "budgetStartDayHint": "Day of month to start",
   "budgetPeriodLabel": "Period",
-  "budgetPeriodMonthly": "Monthly",
-  "budgetPeriodWeekly": "Weekly",
-  "budgetPeriodYearly": "Yearly",
   "budgetSaveSuccess": "Budget saved",
   "budgetDeleteConfirm": "Delete this budget?",
   "budgetDeleteSuccess": "Budget deleted",
-  "budgetExceededWarning": "This expense will exceed the budget"
+  "attachmentAdd": "Add Image",
+  "attachmentTakePhoto": "Take Photo",
+  "attachmentChooseFromGallery": "Choose from Gallery",
+  "attachmentMaxReached": "Maximum attachments reached",
+  "attachmentDeleteConfirm": "Delete this attachment?",
+  "attachmentCount": "{count} images",
+  "@attachmentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonDeleted": "Deleted",
+  "attachmentExportTitle": "Export Attachments",
+  "attachmentExportSubtitle": "Export all attachments as a compressed file",
+  "attachmentImportTitle": "Import Attachments",
+  "attachmentImportSubtitle": "Import attachments from a compressed file",
+  "attachmentExportEmpty": "No attachments to export",
+  "attachmentExportProgress": "Exporting attachments ({current}/{total})",
+  "@attachmentExportProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentExportSuccess": "Attachments exported successfully",
+  "attachmentExportFailed": "Failed to export attachments",
+  "attachmentExportSavedTo": "Saved to: {path}",
+  "@attachmentExportSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "attachmentImportConflictStrategy": "Conflict Strategy",
+  "attachmentImportConflictSkip": "Skip existing attachments",
+  "attachmentImportConflictOverwrite": "Overwrite existing attachments",
+  "attachmentImportProgress": "Importing attachments ({current}/{total})",
+  "@attachmentImportProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentImportResult": "Imported {imported}, Skipped {skipped}, Overwritten {overwritten}, Failed {failed}",
+  "@attachmentImportResult": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "overwritten": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentImportFailed": "Failed to import attachments",
+  "attachmentArchiveInfo": "{count} attachments, exported on {date}",
+  "@attachmentArchiveInfo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "attachmentStartImport": "Start Import",
+  "shortcutsGuide": "Shortcuts",
+  "shortcutsGuideDesc": "Quick access to voice, camera billing, etc.",
+  "shortcutsIntroTitle": "Quick Billing",
+  "shortcutsIntroDesc": "Use shortcuts to directly open voice billing, camera billing, and other features from your home screen without opening the app first.",
+  "availableShortcuts": "Available Shortcuts",
+  "shortcutVoice": "Voice Billing",
+  "shortcutVoiceDesc": "Quickly record bills by voice",
+  "shortcutImage": "Image Billing",
+  "shortcutImageDesc": "Recognize bills from gallery images",
+  "shortcutCamera": "Camera Billing",
+  "shortcutCameraDesc": "Take photos to recognize bills",
+  "shortcutUrlCopied": "URL copied to clipboard",
+  "howToAddShortcut": "How to Add Shortcuts",
+  "iosShortcutStep1": "Open the Shortcuts app",
+  "iosShortcutStep2": "Tap + in the upper right to create a new shortcut",
+  "iosShortcutStep3": "Add 'Open URL' action",
+  "iosShortcutStep4": "Paste the copied URL (e.g., beecount://voice)",
+  "iosShortcutStep5": "Save and add to home screen",
+  "androidShortcutStep1": "Download a shortcut creator app (e.g., Shortcut Maker)",
+  "androidShortcutStep2": "Select 'URL Shortcut'",
+  "androidShortcutStep3": "Paste the copied URL (e.g., beecount://voice)",
+  "androidShortcutStep4": "Set icon and name, then add to home screen",
+  "shortcutsTip": "Tips",
+  "shortcutsTipDesc": "Shortcuts require AI features. Make sure AI is enabled and API Key is configured.",
+  "shortcutOpenShortcutsApp": "Open Shortcuts App",
+  "shortcutAutoAdd": "Auto Billing API",
+  "shortcutAutoAddDesc": "Automatically create bills via URL parameters. Works great with Shortcuts and automation tools.",
+  "shortcutAutoAddExample": "Example URL:",
+  "shortcutAutoAddParams": "Supported parameters:",
+  "shortcutParamAmount": "Amount (required)",
+  "shortcutParamType": "Type: expense / income / transfer",
+  "shortcutParamCategory": "Category name (must match existing category)",
+  "shortcutParamNote": "Note",
+  "shortcutParamAccount": "Account name (must match existing account)",
+  "shortcutParamTags": "Tags (comma separated)",
+  "shortcutParamDate": "Date (ISO format, e.g., 2024-01-15)"
 }

@@ -5,6 +5,7 @@ import '../../ai/tasks/bill_extraction_task.dart';
 import '../../ai/providers/bill_extraction_glm_provider.dart';
 import '../../ai/providers/speech_to_text_glm_provider.dart';
 import '../system/logger_service.dart';
+import '../ai/ai_constants.dart';
 import '../../data/repositories/base_repository.dart';
 import '../../data/db.dart';
 
@@ -29,7 +30,7 @@ class VoiceBillingService {
   Future<String> convertVoiceToText(File audioFile) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final apiKey = prefs.getString('ai_glm_api_key') ?? '';
+      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
 
       if (apiKey.isEmpty) {
         throw Exception('未配置GLM API Key，请先在设置中配置');
@@ -59,8 +60,8 @@ class VoiceBillingService {
   }) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final apiKey = prefs.getString('ai_glm_api_key') ?? '';
-      final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4-flash';
+      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
+      final glmModel = prefs.getString(AIConstants.keyGlmModel) ?? AIConstants.defaultGlmModel;
 
       // 获取可用分类列表（排除有子分类的父分类，只获取叶子分类）
       final expenseCategories = await repository.getUsableCategories('expense');

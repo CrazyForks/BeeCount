@@ -3,6 +3,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../ai/ai_bill_service.dart';
+import '../ai/ai_constants.dart';
 import '../../data/repositories/base_repository.dart';
 import '../system/logger_service.dart';
 
@@ -173,7 +174,7 @@ class OcrService {
     try {
       // 检查是否启用AI
       final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
+      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
 
       if (!aiEnabled) {
         return baseResult;

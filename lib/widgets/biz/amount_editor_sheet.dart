@@ -1,15 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beecount/widgets/ui/wheel_date_picker.dart';
+import '../../data/db.dart';
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/data/note_history_service.dart';
+import '../../services/attachment_service.dart';
 import '../../providers.dart';
 import '../../pages/tag/widgets/tag_selector.dart';
 import 'note_picker_dialog.dart';
 import 'account_selector.dart';
 import 'tag_chip.dart';
+import '../../pages/attachment/attachment_preview_page.dart';
 
 typedef AmountEditorResult = ({
   double amount,
@@ -17,6 +22,7 @@ typedef AmountEditorResult = ({
   DateTime date,
   int? accountId,
   List<int> tagIds,
+  List<File> pendingAttachments,
 });
 
 class AmountEditorSheet extends ConsumerStatefulWidget {
@@ -29,6 +35,7 @@ class AmountEditorSheet extends ConsumerStatefulWidget {
   final bool showAccountPicker; // 是否显示账户选择
   final ValueChanged<AmountEditorResult> onSubmit;
   final int ledgerId;
+  final int? editingTransactionId; // 编辑模式时的交易ID，用于显示已有附件
 
   const AmountEditorSheet({
     super.key,
@@ -41,6 +48,7 @@ class AmountEditorSheet extends ConsumerStatefulWidget {
     this.showAccountPicker = false,
     required this.onSubmit,
     required this.ledgerId,
+    this.editingTransactionId,
   });
 
   @override
@@ -69,6 +77,9 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
 
   // 已选标签ID列表
   late List<int> _selectedTagIds;
+
+  // 待上传的附件列表（新建交易时）
+  List<File> _pendingAttachments = [];
 
   @override
   void initState() {
@@ -376,9 +387,9 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                 },
               ),
             ],
-            // 标签选择区域
+            // 标签和附件选择区域（一行）
             const SizedBox(height: 8),
-            _buildTagSelector(),
+            _buildTagAndAttachmentRow(),
             const SizedBox(height: 10),
             // 数字键盘
             LayoutBuilder(builder: (ctx, c) {
@@ -480,6 +491,7 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                                 date: _date,
                                 accountId: _selectedAccountId,
                                 tagIds: _selectedTagIds,
+                                pendingAttachments: _pendingAttachments,
                               ));
 
                               // 注意：不需要在这里重置 _isSubmitting
@@ -578,86 +590,231 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
     );
   }
 
-  /// 构建标签选择区域
-  Widget _buildTagSelector() {
-    final l10n = AppLocalizations.of(context);
+  /// 构建标签和附件选择行（一行显示）
+  Widget _buildTagAndAttachmentRow() {
     final allTagsAsync = ref.watch(allTagsProvider);
 
     return allTagsAsync.when(
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      loading: () => _buildRowContent([], 0, []),
+      error: (_, __) => _buildRowContent([], 0, []),
       data: (allTags) {
-        // 没有标签时不显示
-        if (allTags.isEmpty && _selectedTagIds.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
         // 获取已选中的标签详情
         final selectedTags = allTags
             .where((t) => _selectedTagIds.contains(t.id))
             .toList();
 
-        return GestureDetector(
-          onTap: () async {
-            final result = await TagSelector.show(
-              context,
-              selectedTagIds: _selectedTagIds,
-            );
-            if (result != null) {
-              setState(() {
-                _selectedTagIds = result;
-              });
-            }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: BeeTokens.surfaceInput(context),
-              borderRadius: BorderRadius.circular(12),
+        // 获取附件数量
+        if (widget.editingTransactionId != null) {
+          final attachmentsAsync = ref.watch(transactionAttachmentsProvider(widget.editingTransactionId!));
+          return attachmentsAsync.when(
+            data: (attachments) {
+              final totalCount = attachments.length + _pendingAttachments.length;
+              return _buildRowContent(selectedTags, totalCount, attachments);
+            },
+            loading: () => _buildRowContent(selectedTags, _pendingAttachments.length, []),
+            error: (_, __) => _buildRowContent(selectedTags, _pendingAttachments.length, []),
+          );
+        }
+        return _buildRowContent(selectedTags, _pendingAttachments.length, []);
+      },
+    );
+  }
+
+  Widget _buildRowContent(List<Tag> selectedTags, int attachmentCount, List<TransactionAttachment> savedAttachments) {
+    final l10n = AppLocalizations.of(context);
+    final hasAttachments = attachmentCount > 0;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: BeeTokens.surfaceInput(context),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          // 标签部分（可点击展开）
+          Expanded(
+            child: GestureDetector(
+              onTap: () async {
+                final result = await TagSelector.show(
+                  context,
+                  selectedTagIds: _selectedTagIds,
+                );
+                if (result != null) {
+                  setState(() {
+                    _selectedTagIds = result;
+                  });
+                }
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.label_outline,
+                    size: 18,
+                    color: BeeTokens.iconSecondary(context),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: selectedTags.isEmpty
+                        ? Text(
+                            l10n.tagSelectTitle,
+                            style: TextStyle(
+                              color: BeeTokens.textTertiary(context),
+                              fontSize: 14,
+                            ),
+                          )
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: selectedTags.map((tag) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 6),
+                                  child: TagChip(
+                                    name: tag.name,
+                                    color: tag.color,
+                                    size: TagChipSize.small,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
             ),
+          ),
+          // 分隔线
+          Container(
+            width: 1,
+            height: 20,
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            color: BeeTokens.divider(context),
+          ),
+          // 附件部分（图标 + 数字）
+          GestureDetector(
+            onTap: () => _handleAttachmentTap(savedAttachments),
+            behavior: HitTestBehavior.opaque,
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  Icons.label_outline,
+                  hasAttachments ? Icons.image : Icons.image_outlined,
                   size: 18,
-                  color: BeeTokens.iconSecondary(context),
+                  color: hasAttachments
+                      ? Theme.of(context).colorScheme.primary
+                      : BeeTokens.iconSecondary(context),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: selectedTags.isEmpty
-                      ? Text(
-                          l10n.tagSelectTitle,
-                          style: TextStyle(
-                            color: BeeTokens.textTertiary(context),
-                            fontSize: 14,
-                          ),
-                        )
-                      : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: selectedTags.map((tag) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 6),
-                                child: TagChip(
-                                  name: tag.name,
-                                  color: tag.color,
-                                  size: TagChipSize.small,
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                ),
-                Icon(
-                  Icons.chevron_right,
-                  size: 18,
-                  color: BeeTokens.iconTertiary(context),
-                ),
+                if (hasAttachments) ...[
+                  const SizedBox(width: 4),
+                  Text(
+                    '$attachmentCount',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
-        );
-      },
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleAttachmentTap(List<TransactionAttachment> savedAttachments) async {
+    final totalCount = savedAttachments.length + _pendingAttachments.length;
+
+    if (totalCount == 0) {
+      // 没有附件，直接添加
+      await _showAddAttachmentOptions();
+    } else {
+      // 有附件，打开预览页（支持添加和删除）
+      final result = await Navigator.push<List<File>?>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => AttachmentPreviewPage(
+            attachments: savedAttachments,
+            initialIndex: 0,
+            allowDelete: true,
+            allowAdd: true,
+            pendingFiles: _pendingAttachments,
+            transactionId: widget.editingTransactionId,
+          ),
+        ),
+      );
+      // 如果返回了新的待上传文件列表，更新状态
+      if (result != null) {
+        setState(() {
+          _pendingAttachments = result;
+        });
+      }
+    }
+  }
+
+  Future<void> _showAddAttachmentOptions() async {
+    final l10n = AppLocalizations.of(context);
+    final service = ref.read(attachmentServiceProvider);
+
+    await showModalBottomSheet(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: Text(l10n.attachmentTakePhoto),
+              onTap: () async {
+                Navigator.pop(context);
+                final file = await service.takePhoto();
+                if (file != null && mounted) {
+                  if (widget.editingTransactionId != null) {
+                    // 编辑模式：直接保存
+                    await service.saveAttachment(
+                      transactionId: widget.editingTransactionId!,
+                      sourceFile: file,
+                      index: 0,
+                    );
+                    ref.read(attachmentListRefreshProvider.notifier).state++;
+                  } else {
+                    // 新建模式：添加到待上传列表
+                    setState(() {
+                      _pendingAttachments = [..._pendingAttachments, file];
+                    });
+                  }
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: Text(l10n.attachmentChooseFromGallery),
+              onTap: () async {
+                Navigator.pop(context);
+                final files = await service.pickFromGallery(maxCount: 9 - _pendingAttachments.length);
+                if (files.isNotEmpty && mounted) {
+                  if (widget.editingTransactionId != null) {
+                    // 编辑模式：直接保存
+                    await service.saveAttachments(
+                      transactionId: widget.editingTransactionId!,
+                      sourceFiles: files,
+                      startIndex: 0,
+                    );
+                    ref.read(attachmentListRefreshProvider.notifier).state++;
+                  } else {
+                    // 新建模式：添加到待上传列表
+                    setState(() {
+                      _pendingAttachments = [..._pendingAttachments, ...files];
+                    });
+                  }
+                }
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

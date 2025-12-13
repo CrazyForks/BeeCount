@@ -166,6 +166,32 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
     return item;
   }).toList();
 
+  // v1.20.0: 导出附件元数据
+  final attachmentsMap = <int, List<Map<String, dynamic>>>{}; // transactionId -> attachments
+  if (txIds.isNotEmpty) {
+    final allAttachments = await (db.select(db.transactionAttachments)
+          ..where((a) => a.transactionId.isIn(txIds)))
+        .get();
+    for (final a in allAttachments) {
+      attachmentsMap.putIfAbsent(a.transactionId, () => []).add({
+        'fileName': a.fileName,
+        'originalName': a.originalName,
+        'fileSize': a.fileSize,
+        'width': a.width,
+        'height': a.height,
+        'sortOrder': a.sortOrder,
+      });
+    }
+  }
+
+  // 将附件信息添加到对应的交易 item 中
+  for (int i = 0; i < txs.length; i++) {
+    final txId = txs[i].id;
+    if (attachmentsMap.containsKey(txId)) {
+      items[i]['attachments'] = attachmentsMap[txId];
+    }
+  }
+
   // ledger meta
   final ledger = await (db.select(db.ledgers)
         ..where((l) => l.id.equals(ledgerId)))
@@ -219,7 +245,7 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
   }).toList();
 
   final payload = {
-    'version': 4, // 版本升级,新增标签信息
+    'version': 5, // 版本升级,新增附件元数据
     'exportedAt': DateTime.now().toUtc().toIso8601String(),
     'ledgerId': ledgerId,
     'ledgerName': ledger?.name,
@@ -293,6 +319,22 @@ ImportData parseJsonToImportData(String jsonStr) {
         tagNames = tagsStr.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
       }
 
+      // 解析附件元数据
+      List<ImportAttachment>? attachments;
+      final jsonAttachments = it['attachments'] as List?;
+      if (jsonAttachments != null && jsonAttachments.isNotEmpty) {
+        attachments = jsonAttachments.cast<Map<String, dynamic>>().map((a) {
+          return ImportAttachment(
+            fileName: a['fileName'] as String,
+            originalName: a['originalName'] as String?,
+            fileSize: a['fileSize'] as int?,
+            width: a['width'] as int?,
+            height: a['height'] as int?,
+            sortOrder: a['sortOrder'] as int? ?? 0,
+          );
+        }).toList();
+      }
+
       final type = it['type'] as String;
       transactions.add(ImportTransaction(
         type: type,
@@ -306,6 +348,7 @@ ImportData parseJsonToImportData(String jsonStr) {
         fromAccountName: type == 'transfer' ? it['fromAccountName'] as String? : null,
         toAccountName: type == 'transfer' ? it['toAccountName'] as String? : null,
         tagNames: tagNames,
+        attachments: attachments,
       ));
     }
   }
@@ -320,17 +363,16 @@ ImportData parseJsonToImportData(String jsonStr) {
   );
 }
 
-/// 解析 JSON 并增量导入，使用签名去重（与本地现有数据合并）
+/// 解析 JSON 并增量导入
 ///
 /// [repo] - 数据仓库
 /// [ledgerId] - 目标账本ID
 /// [jsonStr] - JSON 字符串
 /// [onProgress] - 进度回调 (已处理数, 总数)
 ///
-/// 返回 (inserted, skipped) 元组：
+/// 返回 (inserted,) 元组：
 /// - inserted: 新增条数
-/// - skipped: 因重复而跳过的条数
-Future<({int inserted, int skipped})> importTransactionsJson(
+Future<({int inserted})> importTransactionsJson(
   BaseRepository repo,
   int ledgerId,
   String jsonStr, {
@@ -348,5 +390,5 @@ Future<({int inserted, int skipped})> importTransactionsJson(
     onProgress: onProgress,
   );
 
-  return (inserted: result.inserted, skipped: result.skipped);
+  return (inserted: result.inserted,);
 }

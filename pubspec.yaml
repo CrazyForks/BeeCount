@@ -42,12 +42,14 @@ dependencies:
   home_widget: ^0.7.0
   google_mlkit_text_recognition: ^0.15.0
   image_picker: ^1.1.2
+  flutter_image_compress: ^2.3.0
   gbk_codec: ^0.4.0
   app_links: ^6.4.1
   record: ^5.1.2
   yaml: ^3.1.2
   qr_flutter: ^4.1.0
   gal: ^2.3.0
+  archive: ^3.6.1
   in_app_purchase: ^3.1.0
   in_app_purchase_storekit: ^0.3.6
   flutter_ai_kit:

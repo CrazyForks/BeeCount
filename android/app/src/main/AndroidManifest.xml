@@ -63,6 +63,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="image/*"/>
             </intent-filter>
+            <!-- URL Scheme: beecount:// -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="beecount"/>
+            </intent-filter>
         </activity>
         
         <!-- FileProvider for sharing APK files on Android 7.0+ -->

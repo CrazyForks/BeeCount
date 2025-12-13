@@ -11,6 +11,7 @@ import 'pages/main/discover_page.dart';
 import 'pages/main/mine_page.dart';
 import 'pages/transaction/transaction_editor_page.dart';
 import 'providers.dart';
+import 'providers/ui_state_providers.dart';
 import 'utils/ui_scale_extensions.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
@@ -19,6 +20,9 @@ import 'widgets/ui/speed_dial_fab.dart';
 import 'cloud/transactions_sync_manager.dart';
 import 'utils/voice_billing_helper.dart';
 import 'utils/image_billing_helper.dart';
+import 'services/ai/ai_constants.dart';
+import 'services/platform/app_link_service.dart';
+import 'services/system/logger_service.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -42,12 +46,42 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   // 双击返回退出：记录最后一次返回键按下时间
   DateTime? _lastBackPressTime;
 
+  // AppLink 监听订阅
+  ProviderSubscription<AppLinkAction?>? _appLinkSubscription;
+
+  // 防止 AppLink 动作重复执行（使用静态变量，跨实例共享）
+  static bool _isHandlingAppLink = false;
+  static DateTime? _lastAppLinkHandleTime;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     // 后台刷新账本同步状态
     _refreshLedgersStatusInBackground();
+    // 延迟监听 AppLink，确保 context 可用
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setupAppLinkListener();
+    });
+  }
+
+  /// 设置 AppLink 监听
+  void _setupAppLinkListener() {
+    logger.info('AppLink', 'BeeApp: 设置 AppLink 监听...');
+    _appLinkSubscription = ref.listenManual<AppLinkAction?>(
+      pendingAppLinkActionProvider,
+      (previous, next) {
+        logger.info('AppLink', 'BeeApp: 监听触发 previous=$previous, next=$next, mounted=$mounted');
+        if (next != null && mounted) {
+          logger.info('AppLink', 'BeeApp: 执行动作 $next');
+          _handleAppLinkAction(context, next);
+          // 清除待处理动作
+          ref.read(pendingAppLinkActionProvider.notifier).state = null;
+        }
+      },
+      fireImmediately: true,
+    );
+    logger.info('AppLink', 'BeeApp: AppLink 监听已设置');
   }
 
   /// 后台刷新账本同步状态
@@ -66,12 +100,49 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
     });
   }
 
+  /// 处理 AppLink 动作
+  void _handleAppLinkAction(BuildContext context, AppLinkAction action) {
+    // 防止重复执行（使用时间戳和标志双重检查）
+    final now = DateTime.now();
+    if (_isHandlingAppLink ||
+        (_lastAppLinkHandleTime != null &&
+            now.difference(_lastAppLinkHandleTime!) < const Duration(seconds: 1))) {
+      logger.info('AppLink', 'BeeApp: 忽略重复的动作 $action');
+      return;
+    }
+    _isHandlingAppLink = true;
+    _lastAppLinkHandleTime = now;
+
+    // 延迟重置标志，允许下一次动作
+    Future.delayed(const Duration(seconds: 1), () {
+      _isHandlingAppLink = false;
+    });
+
+    switch (action) {
+      case AppLinkAction.voice:
+        // 打开语音记账
+        VoiceBillingHelper.startVoiceBilling(context, ref);
+        break;
+      case AppLinkAction.image:
+        // 打开图片记账（从相册）
+        ImageBillingHelper.pickImageForBilling(context, ref);
+        break;
+      case AppLinkAction.camera:
+        // 打开拍照记账
+        ImageBillingHelper.openCameraForBilling(context, ref);
+        break;
+      default:
+        // 其他动作在 AppLinkService 中已处理
+        break;
+    }
+  }
+
   /// 检查语音识别是否可用（需要开启AI智能识别并配置GLM API Key）
   Future<bool> _checkGlmApiKeyConfigured() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
-      final apiKey = prefs.getString('ai_glm_api_key') ?? '';
+      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
+      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
       return aiEnabled && apiKey.isNotEmpty;
     } catch (e) {
       return false;
@@ -80,6 +151,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _appLinkSubscription?.close();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -110,7 +182,7 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // 将 4 个页面映射到 5 槽位（中间为“+”）：页面索引 0,1,2,3 对应视觉槽位 0,1,3,4（槽位 2 为 +）。
+    // 将 4 个页面映射到 5 槽位（中间为"+"）：页面索引 0,1,2,3 对应视觉槽位 0,1,3,4（槽位 2 为 +）。
     final idx = ref.watch(bottomTabIndexProvider);
     return PopScope(
       canPop: false,

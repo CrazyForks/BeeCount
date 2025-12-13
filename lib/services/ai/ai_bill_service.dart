@@ -7,6 +7,7 @@ import '../../ai/providers/bill_extraction_glm_provider.dart';
 import '../../ai/providers/bill_extraction_glm_vision_provider.dart';
 import '../../ai/providers/bill_extraction_tflite_provider.dart';
 import '../system/logger_service.dart';
+import 'ai_constants.dart';
 
 /// AI账单提取服务
 ///
@@ -32,15 +33,15 @@ class AIBillService {
     final prefs = await SharedPreferences.getInstance();
 
     // 读取用户自定义提示词
-    final customPrompt = prefs.getString('ai_custom_prompt');
+    final customPrompt = prefs.getString(AIConstants.keyAiCustomPrompt);
 
     // 1. 注册智谱GLM Provider（如果配置了API Key）
-    final glmApiKey = prefs.getString('ai_glm_api_key');
-    final glmVisionModel = prefs.getString('ai_glm_vision_model') ?? 'glm-4.6v-flash';
-    final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4.6v-flash';
+    final glmApiKey = prefs.getString(AIConstants.keyGlmApiKey);
+    final glmVisionModel = prefs.getString(AIConstants.keyGlmVisionModel) ?? AIConstants.defaultGlmVisionModel;
+    final glmModel = prefs.getString(AIConstants.keyGlmModel) ?? AIConstants.defaultGlmVisionModel;
     if (glmApiKey != null && glmApiKey.isNotEmpty) {
       // 检查是否启用图片上传
-      final useVision = prefs.getBool('ai_use_vision') ?? true; // 默认开启
+      final useVision = prefs.getBool(AIConstants.keyAiUseVision) ?? true; // 默认开启
 
       if (useVision && imageFile != null) {
         // 使用Vision模型
@@ -75,7 +76,7 @@ class AIBillService {
     }
 
     // 3. 设置执行策略（从用户配置读取）
-    final strategyType = prefs.getString('ai_strategy') ?? 'local_first';
+    final strategyType = prefs.getString(AIConstants.keyAiStrategy) ?? AIConstants.defaultStrategy;
     _aiKit.setStrategy(_getStrategy(strategyType));
 
     _initialized = true;

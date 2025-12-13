@@ -29,6 +29,10 @@ class TransactionListItem extends ConsumerWidget {
   final List<({int id, String name, String? color})>? tags; // 关联的标签
   final void Function(int tagId, String tagName)? onTagTap; // 点击标签回调
 
+  // 附件相关
+  final int attachmentCount; // 附件数量
+  final VoidCallback? onAttachmentTap; // 点击附件图标回调
+
   const TransactionListItem({
       super.key,
       required this.icon,
@@ -48,9 +52,11 @@ class TransactionListItem extends ConsumerWidget {
       this.showFullDate = false,
       this.tags,
       this.onTagTap,
+      this.attachmentCount = 0,
+      this.onAttachmentTap,
   });
 
-  /// 检查是否有次要信息需要显示（时间或账户）
+  /// 检查是否有次要信息需要显示（时间、账户或附件）
   bool _hasSecondaryInfo(WidgetRef ref) {
     // 显示完整日期模式
     if (showFullDate && happenedAt != null) return true;
@@ -60,11 +66,11 @@ class TransactionListItem extends ConsumerWidget {
         happenedAt != null &&
         (happenedAt!.hour != 0 || happenedAt!.minute != 0 || happenedAt!.second != 0);
 
-    return showTime || accountName != null;
+    return showTime || accountName != null || attachmentCount > 0;
   }
 
-  /// 构建次要信息文本（时间 · 账户）
-  String _buildSecondaryText(WidgetRef ref) {
+  /// 构建次要信息小部件（时间 · 账户 + 附件图标）
+  Widget _buildSecondaryInfo(BuildContext context, WidgetRef ref) {
     final parts = <String>[];
 
     // 时间部分
@@ -89,7 +95,54 @@ class TransactionListItem extends ConsumerWidget {
       parts.add(accountName!);
     }
 
-    return parts.join(' · ');
+    final textStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+      color: BeeTokens.textTertiary(context),
+      fontSize: 11,
+    );
+
+    // 构建附件图标部件（可点击）
+    Widget buildAttachmentWidget() {
+      final widget = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.image_outlined,
+            size: 12,
+            color: BeeTokens.textTertiary(context),
+          ),
+          const SizedBox(width: 2),
+          Text('$attachmentCount', style: textStyle),
+        ],
+      );
+      if (onAttachmentTap != null) {
+        return GestureDetector(
+          onTap: onAttachmentTap,
+          behavior: HitTestBehavior.opaque,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+            child: widget,
+          ),
+        );
+      }
+      return widget;
+    }
+
+    // 如果只有附件，没有其他信息
+    if (parts.isEmpty && attachmentCount > 0) {
+      return buildAttachmentWidget();
+    }
+
+    // 有其他信息时
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(parts.join(' · '), style: textStyle),
+        if (attachmentCount > 0) ...[
+          Text(' · ', style: textStyle),
+          buildAttachmentWidget(),
+        ],
+      ],
+    );
   }
 
   @override
@@ -137,14 +190,11 @@ class TransactionListItem extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // 第一行：分类名称（始终显示）
-                    GestureDetector(
-                      onTap: onCategoryTap,
-                      child: Text(
-                        categoryName ?? title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: BeeTextTokens.title(context),
-                      ),
+                    Text(
+                      categoryName ?? title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: BeeTextTokens.title(context),
                     ),
                     // 第二行：备注（当title与categoryName不同时显示）
                     if (categoryName != null && categoryName != title)
@@ -159,17 +209,11 @@ class TransactionListItem extends ConsumerWidget {
                           ),
                         ),
                       ),
-                    // 第三行：时间 · 账户
+                    // 第三行：时间 · 账户 · 附件
                     if (_hasSecondaryInfo(ref))
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
-                        child: Text(
-                          _buildSecondaryText(ref),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: BeeTokens.textTertiary(context),
-                            fontSize: 11,
-                          ),
-                        ),
+                        child: _buildSecondaryInfo(context, ref),
                       ),
                   ],
                 ),

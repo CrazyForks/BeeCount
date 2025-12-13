@@ -177,9 +177,10 @@ class _ConfigImportExportPageState
     setState(() => _isImporting = true);
 
     try {
-      // Step 1: 选择文件
+      // Step 1: 选择文件（仅限 yml/yaml 文件）
       final result = await FilePicker.platform.pickFiles(
-        type: FileType.any,
+        type: FileType.custom,
+        allowedExtensions: ['yml', 'yaml'],
       );
 
       if (result == null || result.files.isEmpty) {

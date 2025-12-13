@@ -6,6 +6,7 @@ import 'package:drift/drift.dart' as d;
 import '../../data/db.dart';
 import '../../data/repositories/base_repository.dart';
 import '../system/logger_service.dart';
+import '../ai/ai_constants.dart';
 
 // 导入 OrderingTerm
 typedef OrderingTerm = d.OrderingTerm;
@@ -304,33 +305,33 @@ class AIConfig {
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
     if (glmApiKey != null && glmApiKey!.isNotEmpty) {
-      map['glm_api_key'] = glmApiKey;
+      map[AIConstants.keyGlmApiKey] = glmApiKey;
     }
     if (glmModel != null && glmModel!.isNotEmpty) {
-      map['glm_api_key'] = glmModel;
+      map[AIConstants.keyGlmModel] = glmModel;
     }
     if (glmVisionModel != null && glmVisionModel!.isNotEmpty) {
-      map['glm_api_key'] = glmVisionModel;
+      map[AIConstants.keyGlmVisionModel] = glmVisionModel;
     }
     if (strategy != null && strategy!.isNotEmpty) {
-      map['strategy'] = strategy;
+      map[AIConstants.keyAiStrategy] = strategy;
     }
     if (enabled != null) {
-      map['enabled'] = enabled;
+      map[AIConstants.keyAiBillExtractionEnabled] = enabled;
     }
     if (useVision != null) {
-      map['use_vision'] = useVision;
+      map[AIConstants.keyAiUseVision] = useVision;
     }
     return map;
   }
 
   static AIConfig fromMap(Map<String, dynamic> map) => AIConfig(
-        glmApiKey: map['glm_api_key'] as String?,
-        glmModel: map['ai_glm_model'] as String?,
-        glmVisionModel: map['ai_glm_vision_model'] as String?,
-        strategy: map['strategy'] as String?,
-        enabled: map['enabled'] as bool?,
-        useVision: map['use_vision'] as bool?,
+        glmApiKey: map[AIConstants.keyGlmApiKey] as String?,
+        glmModel: map[AIConstants.keyGlmModel] as String?,
+        glmVisionModel: map[AIConstants.keyGlmVisionModel] as String?,
+        strategy: map[AIConstants.keyAiStrategy] as String?,
+        enabled: map[AIConstants.keyAiBillExtractionEnabled] as bool?,
+        useVision: map[AIConstants.keyAiUseVision] as bool?,
       );
 }
 
@@ -988,12 +989,12 @@ class ConfigExportService {
 
     // 读取AI配置
     AIConfig? aiConfig;
-    final glmApiKey = prefs.getString('ai_glm_api_key');
-    final glmModel = prefs.getString('ai_glm_model');
-    final glmVisionModel = prefs.getString('ai_glm_vision_model');
-    final aiStrategy = prefs.getString('ai_strategy');
-    final aiEnabled = prefs.getBool('ai_bill_extraction_enabled');
-    final aiUseVision = prefs.getBool('ai_use_vision');
+    final glmApiKey = prefs.getString(AIConstants.keyGlmApiKey);
+    final glmModel = prefs.getString(AIConstants.keyGlmModel);
+    final glmVisionModel = prefs.getString(AIConstants.keyGlmVisionModel);
+    final aiStrategy = prefs.getString(AIConstants.keyAiStrategy);
+    final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled);
+    final aiUseVision = prefs.getBool(AIConstants.keyAiUseVision);
 
     if (glmApiKey != null || aiStrategy != null || aiEnabled != null || aiUseVision != null|| glmModel != null|| glmVisionModel != null) {
       aiConfig = AIConfig(
@@ -1272,17 +1273,23 @@ class ConfigExportService {
     if (yamlMap.containsKey('ai')) {
       buffer.writeln('ai:');
       final ai = yamlMap['ai'] as Map<String, dynamic>;
-      if (ai.containsKey('glm_api_key')) {
-        buffer.writeln('  glm_api_key: "${ai['glm_api_key']}"');
+      if (ai.containsKey(AIConstants.keyGlmApiKey)) {
+        buffer.writeln('  ${AIConstants.keyGlmApiKey}: "${ai[AIConstants.keyGlmApiKey]}"');
       }
-      if (ai.containsKey('strategy')) {
-        buffer.writeln('  strategy: "${ai['strategy']}"');
+      if (ai.containsKey(AIConstants.keyGlmModel)) {
+        buffer.writeln('  ${AIConstants.keyGlmModel}: "${ai[AIConstants.keyGlmModel]}"');
       }
-      if (ai.containsKey('enabled')) {
-        buffer.writeln('  enabled: ${ai['enabled']}');
+      if (ai.containsKey(AIConstants.keyGlmVisionModel)) {
+        buffer.writeln('  ${AIConstants.keyGlmVisionModel}: "${ai[AIConstants.keyGlmVisionModel]}"');
       }
-      if (ai.containsKey('use_vision')) {
-        buffer.writeln('  use_vision: ${ai['use_vision']}');
+      if (ai.containsKey(AIConstants.keyAiStrategy)) {
+        buffer.writeln('  ${AIConstants.keyAiStrategy}: "${ai[AIConstants.keyAiStrategy]}"');
+      }
+      if (ai.containsKey(AIConstants.keyAiBillExtractionEnabled)) {
+        buffer.writeln('  ${AIConstants.keyAiBillExtractionEnabled}: ${ai[AIConstants.keyAiBillExtractionEnabled]}');
+      }
+      if (ai.containsKey(AIConstants.keyAiUseVision)) {
+        buffer.writeln('  ${AIConstants.keyAiUseVision}: ${ai[AIConstants.keyAiUseVision]}');
       }
       buffer.writeln();
     }
@@ -1598,22 +1605,22 @@ class ConfigExportService {
     // 导入AI配置
     if (options.appSettings && config.ai != null) {
       if (config.ai!.glmApiKey != null) {
-        await prefs.setString('ai_glm_api_key', config.ai!.glmApiKey!);
+        await prefs.setString(AIConstants.keyGlmApiKey, config.ai!.glmApiKey!);
       }
       if (config.ai!.glmModel != null) {
-        await prefs.setString('ai_glm_model', config.ai!.glmModel!);
+        await prefs.setString(AIConstants.keyGlmModel, config.ai!.glmModel!);
       }
       if (config.ai!.glmVisionModel != null) {
-        await prefs.setString('ai_glm_vision_model', config.ai!.glmVisionModel!);
+        await prefs.setString(AIConstants.keyGlmVisionModel, config.ai!.glmVisionModel!);
       }
       if (config.ai!.strategy != null) {
-        await prefs.setString('ai_strategy', config.ai!.strategy!);
+        await prefs.setString(AIConstants.keyAiStrategy, config.ai!.strategy!);
       }
       if (config.ai!.enabled != null) {
-        await prefs.setBool('ai_bill_extraction_enabled', config.ai!.enabled!);
+        await prefs.setBool(AIConstants.keyAiBillExtractionEnabled, config.ai!.enabled!);
       }
       if (config.ai!.useVision != null) {
-        await prefs.setBool('ai_use_vision', config.ai!.useVision!);
+        await prefs.setBool(AIConstants.keyAiUseVision, config.ai!.useVision!);
       }
       logger.info('ConfigImport', 'AI配置已导入');
     }

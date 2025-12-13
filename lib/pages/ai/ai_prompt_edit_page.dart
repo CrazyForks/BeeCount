@@ -11,6 +11,7 @@ import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../ai/providers/bill_extraction_glm_base_provider.dart';
+import '../../services/ai/ai_constants.dart';
 
 /// AI提示词编辑页面
 class AIPromptEditPage extends ConsumerStatefulWidget {
@@ -54,7 +55,7 @@ class _AIPromptEditPageState extends ConsumerState<AIPromptEditPage> {
 
   Future<void> _loadPrompt() async {
     final prefs = await SharedPreferences.getInstance();
-    final customPrompt = prefs.getString('ai_custom_prompt') ?? defaultPrompt;
+    final customPrompt = prefs.getString(AIConstants.keyAiCustomPrompt) ?? defaultPrompt;
 
     setState(() {
       _promptController.text = customPrompt;
@@ -65,7 +66,7 @@ class _AIPromptEditPageState extends ConsumerState<AIPromptEditPage> {
 
   Future<void> _savePrompt() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('ai_custom_prompt', _promptController.text);
+    await prefs.setString(AIConstants.keyAiCustomPrompt, _promptController.text);
 
     setState(() {
       _savedPrompt = _promptController.text;

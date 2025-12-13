@@ -9,11 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
 import '../services/system/logger_service.dart';
+import '../services/ai/ai_constants.dart';
 import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
 import '../services/billing/ocr_service.dart';
+import '../services/data/tag_seed_service.dart';
 import '../widgets/ui/ui.dart';
-import '../data/repositories/local/local_repository.dart';
 import '../styles/tokens.dart';
 
 /// 语音记账帮助类
@@ -28,8 +29,8 @@ class VoiceBillingHelper {
     try {
       // 0. 检查AI是否启用且GLM API key是否已配置
       final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
-      final apiKey = prefs.getString('ai_glm_api_key') ?? '';
+      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
+      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
 
       if (!aiEnabled || apiKey.isEmpty) {
         if (!context.mounted) return;
@@ -357,14 +358,18 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
       final transactionId = await billCreationService.createBillTransaction(
         result: ocrResult,
         ledgerId: currentLedger.id,
+        billingTypes: [TagSeedService.billingTypeVoice, TagSeedService.billingTypeAi],
+        l10n: l10n,
       );
 
       if (!mounted) return;
       Navigator.of(context).pop();
 
       if (transactionId != null) {
-        // 刷新统计信息
+        // 刷新列表、统计信息和标签列表
+        ref.read(ledgerListRefreshProvider.notifier).state++;
         ref.read(statsRefreshProvider.notifier).state++;
+        ref.read(tagListRefreshProvider.notifier).state++;
         showToast(context, l10n.voiceRecordingSuccess);
       } else {
         showToast(context, l10n.voiceRecordingNoInfo);
