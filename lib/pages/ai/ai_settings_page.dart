@@ -12,6 +12,7 @@ import '../../providers/theme_providers.dart';
 import '../../providers/ui_state_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/ai/ai_chat_service.dart';
+import '../../services/ai/ai_constants.dart';
 import 'ai_prompt_edit_page.dart';
 
 /// AI智能识别设置页面
@@ -47,14 +48,14 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    final apiKey = prefs.getString('ai_glm_api_key') ?? '';
+    final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
 
     setState(() {
-      _strategy = prefs.getString('ai_strategy') ?? 'local_first';
+      _strategy = prefs.getString(AIConstants.keyAiStrategy) ?? AIConstants.defaultStrategy;
       _glmApiKey = apiKey;
       _apiKeyController.text = apiKey;
-      _aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
-      _useVision = prefs.getBool('ai_use_vision') ?? true; // 默认打开
+      _aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
+      _useVision = prefs.getBool(AIConstants.keyAiUseVision) ?? true; // 默认打开
       _loading = false;
     });
   }
@@ -79,7 +80,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
     // 先保存
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('ai_glm_api_key', _glmApiKey);
+    await prefs.setString(AIConstants.keyGlmApiKey, _glmApiKey);
 
     // 再测试
     final result = await AIChatService.validateApiKey();
@@ -208,7 +209,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
               // 立即保存Vision开关状态
               final prefs = await SharedPreferences.getInstance();
-              await prefs.setBool('ai_use_vision', value);
+              await prefs.setBool(AIConstants.keyAiUseVision, value);
 
               if (mounted) {
                 showToast(
@@ -359,7 +360,7 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
                 // 立即保存执行策略
                 final prefs = await SharedPreferences.getInstance();
-                await prefs.setString('ai_strategy', value);
+                await prefs.setString(AIConstants.keyAiStrategy, value);
 
                 if (mounted) {
                   showToast(context, l10n.aiStrategySwitched(title));

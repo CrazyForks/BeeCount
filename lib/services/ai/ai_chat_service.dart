@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
 import 'ai_bill_service.dart';
+import 'ai_constants.dart';
 import '../billing/bill_creation_service.dart';
 import '../billing/ocr_service.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
@@ -42,12 +43,12 @@ class AIChatService {
   AIChatService({required BaseRepository repo}) : _repo = repo;
 
   /// 验证 API Key 是否有效（静态方法）
+  /// 使用快速文本模型 glm-4-flash 进行验证，速度快且免费
   static Future<AIConfigValidationResult> validateApiKey() async {
     logger.info('AIChat', '开始验证 API Key 配置');
 
     final prefs = await SharedPreferences.getInstance();
-    final apiKey = prefs.getString('ai_glm_api_key');
-    final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4.6v-flash';
+    final apiKey = prefs.getString(AIConstants.keyGlmApiKey);
 
     // 检查是否配置了 API Key
     if (apiKey == null || apiKey.isEmpty) {
@@ -56,17 +57,17 @@ class AIChatService {
     }
 
     try {
-      // 测试 API Key 是否有效
+      // 测试 API Key 是否有效（使用快速文本模型）
       final aiKit = FlutterAIKit();
       final zhipuProvider = ZhipuGLMProvider(
         apiKey: apiKey,
-        model: glmModel,
+        model: 'glm-4-flash', // 使用快速模型验证，速度快
         temperature: 0.7,
       );
       aiKit.registerProvider(zhipuProvider);
 
       // 创建简单的测试任务
-      final task = _SimpleChatTask('你好');
+      final task = _SimpleChatTask('hi');
       final result = await aiKit.execute(
         task,
         context: AIExecutionContext(
@@ -200,7 +201,7 @@ class AIChatService {
     logger.info('AIChat', '开始自由对话 (语言: ${languageCode ?? "默认"})');
 
     final prefs = await SharedPreferences.getInstance();
-    final apiKey = prefs.getString('ai_glm_api_key');
+    final apiKey = prefs.getString(AIConstants.keyGlmApiKey);
 
     if (apiKey == null || apiKey.isEmpty) {
       logger.warning('AIChat', 'API Key 未配置');
@@ -215,7 +216,7 @@ class AIChatService {
       final aiKit = FlutterAIKit();
 
       // 注册智谱 Provider (使用 glm-4 通用对话模型)
-      final glmModel = prefs.getString('ai_glm_model') ?? 'glm-4.6v-flash';
+      final glmModel = prefs.getString(AIConstants.keyGlmModel) ?? AIConstants.defaultGlmVisionModel;
       logger.info('AIChat', '自由对话使用模型: $glmModel');
       final zhipuProvider = ZhipuGLMProvider(
         apiKey: apiKey,

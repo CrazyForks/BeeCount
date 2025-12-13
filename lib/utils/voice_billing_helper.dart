@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
 import '../services/system/logger_service.dart';
+import '../services/ai/ai_constants.dart';
 import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
 import '../services/billing/ocr_service.dart';
@@ -28,8 +29,8 @@ class VoiceBillingHelper {
     try {
       // 0. 检查AI是否启用且GLM API key是否已配置
       final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
-      final apiKey = prefs.getString('ai_glm_api_key') ?? '';
+      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
+      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
 
       if (!aiEnabled || apiKey.isEmpty) {
         if (!context.mounted) return;

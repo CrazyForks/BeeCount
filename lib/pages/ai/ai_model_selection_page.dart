@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/theme_providers.dart';
+import '../../services/ai/ai_constants.dart';
 
 /// AI模型选择页
 class AIModelSelectionPage extends ConsumerStatefulWidget {
@@ -25,15 +26,15 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
   }
 
   bool _loading = true;
-  String _glmModel = 'glm-4.6v-flash';
-  String _glmVisionModel = 'glm-4.6v-flash';
+  String _glmModel = AIConstants.defaultGlmModel;
+  String _glmVisionModel = AIConstants.defaultGlmVisionModel;
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      _glmModel = prefs.getString('ai_glm_model') ?? _glmModel;
-      _glmVisionModel = prefs.getString('ai_glm_vision_model') ?? _glmVisionModel;
+      _glmModel = prefs.getString(AIConstants.keyGlmModel) ?? _glmModel;
+      _glmVisionModel = prefs.getString(AIConstants.keyGlmVisionModel) ?? _glmVisionModel;
       _loading = false;
     });
   }
@@ -93,10 +94,10 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
   /// 获取文本模型的显示名称
   String _getModelDisplayName(String modelId, AppLocalizations l10n) {
     switch (modelId) {
+      case 'glm-4.6':
+        return 'GLM-4.6 (${l10n.aiModelAccurate})';
       case 'glm-4-flash':
         return 'GLM-4-Flash (${l10n.aiModelFast})';
-      case 'glm-4.6v-flash':
-        return 'GLM-4.6V-Flash (${l10n.aiModelAccurate})';
       default:
         return modelId;
     }
@@ -105,12 +106,10 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
   /// 获取视觉模型的显示名称
   String _getVisionModelDisplayName(String modelId, AppLocalizations l10n) {
     switch (modelId) {
+      case 'glm-4.6v':
+        return 'GLM-4.6V (${l10n.aiModelAccurate})';
       case 'glm-4v-flash':
         return 'GLM-4V-Flash (${l10n.aiModelFast})';
-      case 'glm-4.1v-thinking-flash':
-        return 'GLM-4.1V-Thinking-Flash';
-      case 'glm-4.6v-flash':
-        return 'GLM-4.6V-Flash (${l10n.aiModelAccurate})';
       default:
         return modelId;
     }
@@ -133,19 +132,19 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
           children: [
             _buildModelDialogOption(
               dialogContext,
-              'glm-4-flash',
-              'GLM-4-Flash',
-              l10n.aiModelFast,
-              Icons.bolt,
+              'glm-4.6',
+              'GLM-4.6',
+              l10n.aiModelAccurate,
+              Icons.psychology,
               primaryColor,
               isText: true,
             ),
             _buildModelDialogOption(
               dialogContext,
-              'glm-4.6v-flash',
-              'GLM-4.6V-Flash',
-              l10n.aiModelAccurate,
-              Icons.psychology,
+              'glm-4-flash',
+              'GLM-4-Flash',
+              l10n.aiModelFast,
+              Icons.bolt,
               primaryColor,
               isText: true,
             ),
@@ -178,28 +177,19 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
           children: [
             _buildModelDialogOption(
               dialogContext,
+              'glm-4.6v',
+              'GLM-4.6V',
+              l10n.aiModelAccurate,
+              Icons.psychology,
+              primaryColor,
+              isText: false,
+            ),
+            _buildModelDialogOption(
+              dialogContext,
               'glm-4v-flash',
               'GLM-4V-Flash',
               l10n.aiModelFast,
               Icons.bolt,
-              primaryColor,
-              isText: false,
-            ),
-            _buildModelDialogOption(
-              dialogContext,
-              'glm-4.1v-thinking-flash',
-              'GLM-4.1V-Thinking-Flash',
-              l10n.aiModelThinking,
-              Icons.lightbulb_outline,
-              primaryColor,
-              isText: false,
-            ),
-            _buildModelDialogOption(
-              dialogContext,
-              'glm-4.6v-flash',
-              'GLM-4.6V-Flash',
-              l10n.aiModelAccurate,
-              Icons.psychology,
               primaryColor,
               isText: false,
             ),
@@ -263,9 +253,9 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
         // 立即保存选择
         final prefs = await SharedPreferences.getInstance();
         if (isText) {
-          await prefs.setString('ai_glm_model', value);
+          await prefs.setString(AIConstants.keyGlmModel, value);
         } else {
-          await prefs.setString('ai_glm_vision_model', value);
+          await prefs.setString(AIConstants.keyGlmVisionModel, value);
         }
 
         if (mounted) {

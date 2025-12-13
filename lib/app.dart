@@ -19,6 +19,7 @@ import 'widgets/ui/speed_dial_fab.dart';
 import 'cloud/transactions_sync_manager.dart';
 import 'utils/voice_billing_helper.dart';
 import 'utils/image_billing_helper.dart';
+import 'services/ai/ai_constants.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -70,8 +71,8 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   Future<bool> _checkGlmApiKeyConfigured() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool('ai_bill_extraction_enabled') ?? false;
-      final apiKey = prefs.getString('ai_glm_api_key') ?? '';
+      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
+      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
       return aiEnabled && apiKey.isNotEmpty;
     } catch (e) {
       return false;
