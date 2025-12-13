@@ -4422,6 +4422,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagDefaultRefunded => '已退款';
 
   @override
+  String get tagDefaultVoiceBilling => '语音记账';
+
+  @override
+  String get tagDefaultImageBilling => '图片记账';
+
+  @override
+  String get tagDefaultCameraBilling => '拍照记账';
+
+  @override
+  String get tagDefaultAiBilling => 'AI记账';
+
+  @override
   String get tabDiscover => '发现';
 
   @override

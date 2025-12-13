@@ -4422,6 +4422,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagDefaultRefunded => 'Refunded';
 
   @override
+  String get tagDefaultVoiceBilling => 'Voice';
+
+  @override
+  String get tagDefaultImageBilling => 'Image';
+
+  @override
+  String get tagDefaultCameraBilling => 'Camera';
+
+  @override
+  String get tagDefaultAiBilling => 'AI';
+
+  @override
   String get tabDiscover => 'Discover';
 
   @override

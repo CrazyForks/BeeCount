@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../data/repositories/base_repository.dart';
 import '../../providers/database_providers.dart';
@@ -134,7 +133,6 @@ class AppLinkResult {
 class AppLinkService {
   final ProviderContainer _container;
   late final AutoBillingService _autoBillingService;
-  final ImagePicker _imagePicker = ImagePicker();
 
   /// 导航回调，由外部设置
   void Function(AppLinkAction action, {AddTransactionParams? params})? onNavigate;
@@ -186,11 +184,13 @@ class AppLinkService {
 
       case AppLinkAction.image:
         logger.info('AppLink', '打开图片记账');
-        return await _handleImageBilling();
+        onNavigate?.call(AppLinkAction.image);
+        return AppLinkResult.success(message: '打开图片记账');
 
       case AppLinkAction.camera:
         logger.info('AppLink', '打开拍照记账');
-        return await _handleCameraBilling();
+        onNavigate?.call(AppLinkAction.camera);
+        return AppLinkResult.success(message: '打开拍照记账');
 
       case AppLinkAction.aiChat:
         logger.info('AppLink', '打开AI小助手');
@@ -206,70 +206,13 @@ class AppLinkService {
         return await _handleAutoBilling(queryParams);
 
       case AppLinkAction.quickBilling:
-        // 兼容旧版
-        return await _handleImageBilling();
+        // 兼容旧版，等同于图片记账
+        onNavigate?.call(AppLinkAction.image);
+        return AppLinkResult.success(message: '打开图片记账');
 
       case AppLinkAction.unknown:
         logger.warning('AppLink', '未知的action: ${uri.host}');
         return AppLinkResult.failure('未知的操作: ${uri.host}');
-    }
-  }
-
-  /// 处理图片记账（从相册选择）
-  Future<AppLinkResult> _handleImageBilling() async {
-    try {
-      final pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1920,
-        maxHeight: 1920,
-        imageQuality: 85,
-      );
-
-      if (pickedFile == null) {
-        logger.info('AppLink', '用户取消选择图片');
-        return AppLinkResult.failure('已取消');
-      }
-
-      logger.info('AppLink', '用户选择了图片: ${pickedFile.path}');
-
-      await _autoBillingService.processScreenshot(
-        pickedFile.path,
-        showNotification: true,
-      );
-
-      return AppLinkResult.success(message: '图片处理完成');
-    } catch (e, st) {
-      logger.error('AppLink', '图片记账失败', e, st);
-      return AppLinkResult.failure('图片记账失败: $e');
-    }
-  }
-
-  /// 处理拍照记账
-  Future<AppLinkResult> _handleCameraBilling() async {
-    try {
-      final pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: 1920,
-        maxHeight: 1920,
-        imageQuality: 85,
-      );
-
-      if (pickedFile == null) {
-        logger.info('AppLink', '用户取消拍照');
-        return AppLinkResult.failure('已取消');
-      }
-
-      logger.info('AppLink', '用户拍摄了照片: ${pickedFile.path}');
-
-      await _autoBillingService.processScreenshot(
-        pickedFile.path,
-        showNotification: true,
-      );
-
-      return AppLinkResult.success(message: '照片处理完成');
-    } catch (e, st) {
-      logger.error('AppLink', '拍照记账失败', e, st);
-      return AppLinkResult.failure('拍照记账失败: $e');
     }
   }
 

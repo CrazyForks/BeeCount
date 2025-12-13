@@ -59,6 +59,12 @@ class TagSeedService {
       (name: l10n.tagDefaultReimbursement, color: '#9C27B0'),
       (name: l10n.tagDefaultRefundable, color: '#CDDC39'),
       (name: l10n.tagDefaultRefunded, color: '#4CAF50'),
+
+      // 记账方式
+      (name: l10n.tagDefaultVoiceBilling, color: '#FF9800'),
+      (name: l10n.tagDefaultImageBilling, color: '#4CAF50'),
+      (name: l10n.tagDefaultCameraBilling, color: '#2196F3'),
+      (name: l10n.tagDefaultAiBilling, color: '#9C27B0'),
     ];
   }
 
@@ -114,5 +120,40 @@ class TagSeedService {
   /// 用于颜色选择器
   static List<String> getColorPalette() {
     return List.unmodifiable(_defaultColors);
+  }
+
+  /// 记账方式枚举
+  static const String billingTypeVoice = 'voice';
+  static const String billingTypeImage = 'image';
+  static const String billingTypeCamera = 'camera';
+  static const String billingTypeAi = 'ai';
+
+  /// 获取记账方式对应的标签名称
+  static String? getBillingTagName(String billingType, AppLocalizations l10n) {
+    switch (billingType) {
+      case billingTypeVoice:
+        return l10n.tagDefaultVoiceBilling;
+      case billingTypeImage:
+        return l10n.tagDefaultImageBilling;
+      case billingTypeCamera:
+        return l10n.tagDefaultCameraBilling;
+      case billingTypeAi:
+        return l10n.tagDefaultAiBilling;
+      default:
+        return null;
+    }
+  }
+
+  /// 获取记账方式对应的所有标签名称列表
+  /// [billingTypes] 记账方式列表，如 ['image', 'ai'] 表示开启AI的图片记账
+  static List<String> getBillingTagNames(List<String> billingTypes, AppLocalizations l10n) {
+    final tagNames = <String>[];
+    for (final type in billingTypes) {
+      final tagName = getBillingTagName(type, l10n);
+      if (tagName != null) {
+        tagNames.add(tagName);
+      }
+    }
+    return tagNames;
   }
 }

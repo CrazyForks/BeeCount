@@ -8478,6 +8478,30 @@ abstract class AppLocalizations {
   /// **'Refunded'**
   String get tagDefaultRefunded;
 
+  /// No description provided for @tagDefaultVoiceBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get tagDefaultVoiceBilling;
+
+  /// No description provided for @tagDefaultImageBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get tagDefaultImageBilling;
+
+  /// No description provided for @tagDefaultCameraBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get tagDefaultCameraBilling;
+
+  /// No description provided for @tagDefaultAiBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'AI'**
+  String get tagDefaultAiBilling;
+
   /// No description provided for @tabDiscover.
   ///
   /// In en, this message translates to:

@@ -319,15 +319,8 @@ void _setupUrlListener(ProviderContainer container) {
       logger.error('AppLink', 'URL监听错误', err);
     });
 
-    // 检查应用启动时的URL（应用未运行时）
-    appLinks.getInitialLink().then((uri) {
-      if (uri != null) {
-        logger.info('AppLink', '启动时收到URL: $uri');
-        appLinkService.handleUrl(uri);
-      }
-    }).catchError((err) {
-      logger.error('AppLink', '获取初始URL失败', err);
-    });
+    // 注意：不使用 getInitialLink/getLatestLink，因为它们会缓存旧链接
+    // 只依赖 uriLinkStream，它会在应用通过 URL 启动时立即触发
 
     logger.info('AppLink', 'URL监听已启动');
   } catch (e) {

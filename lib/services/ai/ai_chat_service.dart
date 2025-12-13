@@ -8,8 +8,10 @@ import 'ai_bill_service.dart';
 import 'ai_constants.dart';
 import '../billing/bill_creation_service.dart';
 import '../billing/ocr_service.dart';
+import '../data/tag_seed_service.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
 import '../../data/repositories/base_repository.dart';
+import '../../l10n/app_localizations.dart';
 import '../system/logger_service.dart';
 
 /// AI配置验证结果
@@ -97,6 +99,7 @@ class AIChatService {
     List<String>? incomeCategories,
     String? languageCode,
     bool forceChat = false, // 强制为自由对话，跳过意图检测
+    AppLocalizations? l10n, // 国际化对象，用于标签名称
   }) async {
     logger.info('AIChat', '收到消息: $userInput (forceChat: $forceChat)');
 
@@ -109,6 +112,7 @@ class AIChatService {
           ledgerId: ledgerId,
           expenseCategories: expenseCategories,
           incomeCategories: incomeCategories,
+          l10n: l10n,
         );
       } else {
         logger.debug('AIChat', '识别为自由对话');
@@ -138,6 +142,7 @@ class AIChatService {
     required int ledgerId,
     List<String>? expenseCategories,
     List<String>? incomeCategories,
+    AppLocalizations? l10n,
   }) async {
     logger.debug('AIChat', '识别为记账意图');
 
@@ -166,7 +171,7 @@ class AIChatService {
       logger.info('AIChat', '附加账本ID到BillInfo: ledgerId=$ledgerId');
 
       // 保存到数据库并获取实际的分类和账户名称
-      final (transactionId, actualCategory, actualAccount) = await _saveBill(billInfo);
+      final (transactionId, actualCategory, actualAccount) = await _saveBill(billInfo, l10n: l10n);
 
       // 使用实际的分类和账户名称更新 billInfo
       final updatedBillInfo = BillInfo(
@@ -263,7 +268,7 @@ class AIChatService {
 
   /// 保存账单 - 复用 BillCreationService 的逻辑
   /// 返回 (transactionId, actualCategoryName, actualAccountName)
-  Future<(int, String?, String?)> _saveBill(BillInfo bill) async {
+  Future<(int, String?, String?)> _saveBill(BillInfo bill, {AppLocalizations? l10n}) async {
     logger.info('AIChat', '开始保存账单: amount=${bill.amount}, category=${bill.category}, ledgerId=${bill.ledgerId}');
 
     // 使用 BillInfo 中的 ledgerId，如果为空则使用第一个账本
@@ -298,6 +303,8 @@ class AIChatService {
       result: ocrResult,
       ledgerId: ledgerId,
       note: bill.note,
+      billingTypes: [TagSeedService.billingTypeAi],
+      l10n: l10n,
     );
 
     if (id != null) {

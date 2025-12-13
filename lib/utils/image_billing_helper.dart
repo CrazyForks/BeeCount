@@ -6,6 +6,8 @@ import '../l10n/app_localizations.dart';
 import '../providers.dart';
 import '../services/billing/ocr_service.dart';
 import '../services/billing/bill_creation_service.dart';
+import '../services/data/tag_seed_service.dart';
+import '../services/attachment_service.dart';
 import '../widgets/ui/ui.dart';
 
 /// 图片识别记账帮助类
@@ -108,18 +110,43 @@ class ImageBillingHelper {
       final repo = ref.read(repositoryProvider);
       final billCreationService = BillCreationService(repo);
 
+      // 确定记账方式标签
+      final billingTypes = <String>[];
+      if (source == ImageSource.gallery) {
+        billingTypes.add(TagSeedService.billingTypeImage);
+      } else {
+        billingTypes.add(TagSeedService.billingTypeCamera);
+      }
+      // 如果使用了AI增强，添加AI标签
+      if (ocrResult.aiEnhanced) {
+        billingTypes.add(TagSeedService.billingTypeAi);
+      }
+
       final note = ocrResult.note ?? '';
       final transactionId = await billCreationService.createBillTransaction(
         result: ocrResult,
         ledgerId: currentLedger.id,
         note: note.isNotEmpty ? note : null,
+        billingTypes: billingTypes,
+        l10n: l10n,
       );
 
       if (!context.mounted) return;
 
       if (transactionId != null) {
-        // 刷新统计信息
+        // 自动保存图片附件
+        final attachmentService = ref.read(attachmentServiceProvider);
+        await attachmentService.saveAttachment(
+          transactionId: transactionId,
+          sourceFile: imageFile,
+          index: 0,
+        );
+
+        // 刷新列表、统计信息、标签和附件列表
+        ref.read(ledgerListRefreshProvider.notifier).state++;
         ref.read(statsRefreshProvider.notifier).state++;
+        ref.read(tagListRefreshProvider.notifier).state++;
+        ref.read(attachmentListRefreshProvider.notifier).state++;
         final transactionType = (ocrResult.aiType == 'income') ? 'income' : 'expense';
         final typeText = transactionType == 'income' ? l10n.aiTypeIncome : l10n.aiTypeExpense;
         final amount = ocrResult.amount!.abs().toStringAsFixed(2);
