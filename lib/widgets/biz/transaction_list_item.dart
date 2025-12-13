@@ -190,14 +190,11 @@ class TransactionListItem extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // 第一行：分类名称（始终显示）
-                    GestureDetector(
-                      onTap: onCategoryTap,
-                      child: Text(
-                        categoryName ?? title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: BeeTextTokens.title(context),
-                      ),
+                    Text(
+                      categoryName ?? title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: BeeTextTokens.title(context),
                     ),
                     // 第二行：备注（当title与categoryName不同时显示）
                     if (categoryName != null && categoryName != title)
