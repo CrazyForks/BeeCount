@@ -8,9 +8,6 @@ class CsvParser {
       text = text.substring(1);
     }
 
-    // 预处理：移除制表符（支付宝旧版CSV在字段中混入tab，会干扰分隔符检测）
-    text = text.replaceAll('\t', '');
-
     final lines = text
         .split('\n')
         .where((l) => l.trim().isNotEmpty)
@@ -20,11 +17,20 @@ class CsvParser {
     // 1. 先尝试自动检测常规分隔符（逗号/制表符/分号/竖线）
     final delimiter = _detectDelimiter(lines);
 
+    // 如果检测到的分隔符不是 Tab，则移除文本中的 Tab
+    // （支付宝旧版CSV在字段中混入tab，会干扰解析）
+    List<String> processedLines;
+    if (delimiter != '\t') {
+      processedLines = lines.map((l) => l.replaceAll('\t', '')).toList();
+    } else {
+      processedLines = lines;
+    }
+
     List<List<String>> parsed;
     if (delimiter == 'space') {
-      parsed = lines.map((l) => _splitSpaceSeparatedLine(l)).toList();
+      parsed = processedLines.map((l) => _splitSpaceSeparatedLine(l)).toList();
     } else {
-      parsed = lines.map((l) => _splitDelimitedLine(l, delimiter)).toList();
+      parsed = processedLines.map((l) => _splitDelimitedLine(l, delimiter)).toList();
     }
 
     // 2. 如果仍然全部只有 1 列（说明可能不是上述分隔符），且文本出现了连续双空格/制表符，再次尝试空白分隔
