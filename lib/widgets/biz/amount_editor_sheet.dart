@@ -719,50 +719,33 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                 }
               },
               behavior: HitTestBehavior.opaque,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.label_outline,
-                    size: 18,
-                    color: BeeTokens.iconSecondary(context),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: selectedTags.isEmpty
-                        ? Text(
-                            l10n.tagSelectTitle,
-                            style: TextStyle(
-                              color: BeeTokens.textTertiary(context),
-                              fontSize: 14,
+              child: selectedTags.isEmpty
+                  ? Text(
+                      l10n.tagSelectTitle,
+                      style: TextStyle(
+                        color: BeeTokens.textTertiary(context),
+                        fontSize: 14,
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: selectedTags.map((tag) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: TagChip(
+                              name: tag.name,
+                              color: tag.color,
+                              size: TagChipSize.small,
                             ),
-                          )
-                        : SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: selectedTags.map((tag) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 6),
-                                  child: TagChip(
-                                    name: tag.name,
-                                    color: tag.color,
-                                    size: TagChipSize.small,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                  ),
-                ],
-              ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
             ),
           ),
-          // 分隔线
-          Container(
-            width: 1,
-            height: 20,
-            margin: const EdgeInsets.symmetric(horizontal: 12),
-            color: BeeTokens.divider(context),
-          ),
+          // 间距代替分隔线
+          const SizedBox(width: 16),
           // 附件部分（图标 + 数字）
           GestureDetector(
             onTap: () => _handleAttachmentTap(savedAttachments),
