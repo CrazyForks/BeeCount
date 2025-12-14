@@ -25,6 +25,12 @@ abstract class TransactionRepository {
     required int ledgerId,
   });
 
+  /// 获取最近的交易记录（带分类信息）- 用于预加载
+  Future<List<({Transaction t, Category? category})>> getRecentTransactionsWithCategory({
+    required int ledgerId,
+    required int limit,
+  });
+
   /// 根据ID获取单条交易
   Future<Transaction?> getTransactionById(int id);
 

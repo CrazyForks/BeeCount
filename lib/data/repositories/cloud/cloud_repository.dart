@@ -201,6 +201,13 @@ class CloudRepository extends BaseRepository {
       _transaction.transactionsWithCategoryAll(ledgerId: ledgerId);
 
   @override
+  Future<List<({Transaction t, Category? category})>> getRecentTransactionsWithCategory({
+    required int ledgerId,
+    required int limit,
+  }) =>
+      _transaction.getRecentTransactionsWithCategory(ledgerId: ledgerId, limit: limit);
+
+  @override
   Future<int> addTransaction({
     required int ledgerId,
     required String type,
@@ -878,6 +885,10 @@ class CloudRepository extends BaseRepository {
   @override
   Future<void> batchInsertAccounts(List<AccountsCompanion> accounts) =>
       _account.batchInsertAccounts(accounts);
+
+  @override
+  Future<List<Account>> getAccountsByIds(List<int> accountIds) =>
+      _account.getAccountsByIds(accountIds);
 
   @override
   Future<void> batchInsertCategories(List<CategoriesCompanion> categories) =>

@@ -22,6 +22,9 @@ final pendingAppLinkActionProvider = StateProvider<AppLinkAction?>((ref) => null
 // 首页滚动到顶部触发器（每次改变值时触发滚动）
 final homeScrollToTopProvider = StateProvider<int>((ref) => 0);
 
+// 首页切换到 Stream 模式触发器（用户交互时触发）
+final homeSwitchToStreamProvider = StateProvider<int>((ref) => 0);
+
 // Currently selected month (first day), default to now
 final selectedMonthProvider = StateProvider<DateTime>((ref) {
   final now = DateTime.now();
@@ -141,99 +144,150 @@ final accountFeatureSetterProvider = Provider<AccountFeatureSetter>((ref) {
   return AccountFeatureSetter();
 });
 
-// 缓存的交易数据Provider（用于首屏快速展示）
+/// 完整的交易展示数据（含分类、标签、附件数量、账户名称）
+/// 用于首页列表一次性加载，避免二次查询闪烁
+typedef TransactionDisplayItem = ({
+  Transaction t,
+  Category? category,
+  List<Tag> tags,
+  int attachmentCount,
+  String? accountName,
+  String? toAccountName,
+});
+
+// 缓存的完整交易数据Provider（含标签、附件、账户，用于首屏快速展示）
+final cachedTransactionsProvider =
+    StateProvider<List<TransactionDisplayItem>?>((ref) => null);
+
+// 缓存的交易数据Provider（仅含分类，兼容旧版本）
 final cachedTransactionsWithCategoryProvider =
     StateProvider<List<({Transaction t, Category? category})>?>((ref) => null);
 
 // 应用初始化Provider - 管理数据预加载
 final appSplashInitProvider = FutureProvider<void>((ref) async {
-  print('🚀 开始启屏页预加载');
+  const tag = 'Splash';
+  logger.info(tag, '开始启屏页预加载');
   final startTime = DateTime.now();
+  var stepTime = startTime;
 
   try {
     // 确保基础providers已初始化
-    print('📱 初始化基础配置...');
+    logger.info(tag, '初始化基础配置...');
     await Future.wait([
-      // 等待主题色初始化
       ref.watch(primaryColorInitProvider.future),
-      // 等待主题模式初始化
       ref.watch(themeModeInitProvider.future),
-      // 等待暗黑模式图案样式初始化
       ref.watch(darkModePatternStyleInitProvider.future),
-      // 等待应用配置初始化
       ref.watch(appInitProvider.future),
-      // 等待字体缩放初始化
       ref.watch(fontScaleInitProvider.future),
-      // 等待隐私模式初始化
       ref.watch(hideAmountsInitProvider.future),
-      // 等待金额显示格式初始化
       ref.watch(compactAmountInitProvider.future),
-      // 等待交易时间显示初始化
       ref.watch(showTransactionTimeInitProvider.future),
     ]);
-    print('✅ 基础配置初始化完成');
+    logger.info(tag, '基础配置初始化完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms');
+    stepTime = DateTime.now();
 
-    // 获取 repository（会自动根据模式初始化）
+    // 获取 repository
     final repo = ref.read(repositoryProvider);
-    print('🗄️ Repository 初始化完成');
 
     // 预加载当前账本的关键数据
     final ledgerId = ref.read(currentLedgerIdProvider);
     final now = DateTime.now();
     final currentMonth = DateTime(now.year, now.month, 1);
-    print('📊 开始预加载账本数据, ledgerId=$ledgerId');
 
-    // 预加载本月统计数据
+    // 并行预加载：月度统计 + 交易列表（分别计时）
     final monthlyParams = (ledgerId: ledgerId, month: currentMonth);
-    final monthlyResult =
-        await ref.read(monthlyTotalsProvider(monthlyParams).future);
-    ref.read(lastMonthlyTotalsProvider(monthlyParams).notifier).state =
-        monthlyResult;
-    print('💰 月度统计预加载完成: $monthlyResult');
 
-    // 预加载账本总数统计
-    final countsResult =
-        await ref.read(countsForLedgerProvider(ledgerId).future);
-    print('🔢 账本统计预加载完成: $countsResult');
+    // 包装每个任务以记录各自耗时
+    Future<T> timed<T>(String name, Future<T> future) async {
+      final start = DateTime.now();
+      final result = await future;
+      logger.info(tag, '$name: ${DateTime.now().difference(start).inMilliseconds}ms');
+      return result;
+    }
 
-    // 预加载首屏交易数据（包含分类信息）
-    final recentTransactionsWithCategory =
-        await repo.transactionsWithCategoryAll(ledgerId: ledgerId).first;
-    ref.read(cachedTransactionsWithCategoryProvider.notifier).state =
-        recentTransactionsWithCategory;
-    print('💳 交易列表预加载完成: ${recentTransactionsWithCategory.length}条记录');
+    // 首屏预加载条数限制（只加载前 N 条，加快启动速度）
+    const preloadLimit = 20;
+
+    final results = await Future.wait([
+      timed('月度统计', ref.read(monthlyTotalsProvider(monthlyParams).future)),
+      // 只查询前 N 条，而非全部
+      timed('交易列表(前$preloadLimit条)', repo.getRecentTransactionsWithCategory(ledgerId: ledgerId, limit: preloadLimit)),
+    ]);
+
+    final monthlyResult = results[0] as (double, double);
+    final transactionsWithCategory = results[1] as List<({Transaction t, Category? category})>;
+
+    ref.read(lastMonthlyTotalsProvider(monthlyParams).notifier).state = monthlyResult;
+    // 不再预加载完整列表，让 Stream 自己加载
+    logger.info(tag, '并行预加载完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms, 首屏${transactionsWithCategory.length}条');
+    stepTime = DateTime.now();
+
+    // 只为首屏数据加载标签、附件数量和账户信息
+    final transactionIds = transactionsWithCategory.map((t) => t.t.id).toList();
+
+    // 收集所有需要查询的账户ID
+    final accountIds = <int>{};
+    for (final item in transactionsWithCategory) {
+      if (item.t.accountId != null) accountIds.add(item.t.accountId!);
+      if (item.t.toAccountId != null) accountIds.add(item.t.toAccountId!);
+    }
+
+    final detailResults = await Future.wait([
+      timed('标签数据', repo.getTagsForTransactions(transactionIds)),
+      timed('附件数量', repo.getAttachmentCountsForTransactions(transactionIds)),
+      timed('账户数据', repo.getAccountsByIds(accountIds.toList())),
+    ]);
+
+    final tagsMap = detailResults[0] as Map<int, List<Tag>>;
+    final attachmentCounts = detailResults[1] as Map<int, int>;
+    final accountsList = detailResults[2] as List<Account>;
+
+    // 构建账户ID到名称的映射
+    final accountNameMap = <int, String>{};
+    for (final account in accountsList) {
+      accountNameMap[account.id] = account.name;
+    }
+    logger.info(tag, '详情数据加载完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms');
+    stepTime = DateTime.now();
+
+    // 组装完整的交易展示数据
+    final fullTransactions = transactionsWithCategory.map((item) {
+      return (
+        t: item.t,
+        category: item.category,
+        tags: tagsMap[item.t.id] ?? <Tag>[],
+        attachmentCount: attachmentCounts[item.t.id] ?? 0,
+        accountName: item.t.accountId != null ? accountNameMap[item.t.accountId!] : null,
+        toAccountName: item.t.toAccountId != null ? accountNameMap[item.t.toAccountId!] : null,
+      );
+    }).toList();
+
+    ref.read(cachedTransactionsProvider.notifier).state = fullTransactions;
+
+    // 账本统计异步加载（不阻塞启动）
+    Future.microtask(() async {
+      final start = DateTime.now();
+      await ref.read(countsForLedgerProvider(ledgerId).future);
+      logger.info(tag, '账本统计(异步): ${DateTime.now().difference(start).inMilliseconds}ms');
+    });
 
     // 生成待处理的周期交易
-    print('🔄 开始生成待处理的周期交易...');
     try {
       await RecurringTransactionService.generatePendingTransactionsStatic(
         repository: repo,
-        verbose: true,
+        verbose: false,
       );
-      print('✅ 周期交易生成完成');
+      logger.info(tag, '周期交易生成完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms');
     } catch (e, stackTrace) {
-      print('❌ 周期交易生成失败: $e');
-      print('堆栈: $stackTrace');
+      logger.error(tag, '周期交易生成失败', e, stackTrace);
     }
-  } catch (e) {
-    print('❌ 预加载数据失败: $e');
+  } catch (e, stackTrace) {
+    logger.error(tag, '预加载数据失败', e, stackTrace);
   }
 
   // 计算数据预加载耗时
   final dataLoadTime = DateTime.now().difference(startTime);
-  print('⏱️ 数据预加载耗时: ${dataLoadTime.inMilliseconds}ms');
-
-  // 确保启屏页展示时间至少2秒
-  const minDisplayDuration = Duration(seconds: 2);
-  final remainingTime = minDisplayDuration - dataLoadTime;
-
-  if (remainingTime.inMilliseconds > 0) {
-    print('⏱️ 启屏页还需展示${remainingTime.inMilliseconds}ms以满足最小展示时间...');
-    await Future.delayed(remainingTime);
-  }
-
-  // 标记初始化完成
-  print('🎉 预加载完成，切换到主应用');
+  logger.info(tag, '预加载总耗时: ${dataLoadTime.inMilliseconds}ms，切换到主应用');
   ref.read(appInitStateProvider.notifier).state = AppInitState.ready;
 });
 

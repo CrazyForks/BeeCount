@@ -578,4 +578,18 @@ class CloudAccountRepository implements AccountRepository {
   Future<void> batchInsertAccounts(List<AccountsCompanion> accounts) async {
     throw UnimplementedError('云端批量插入账户暂不支持');
   }
+
+  @override
+  Future<List<Account>> getAccountsByIds(List<int> accountIds) async {
+    if (accountIds.isEmpty) return [];
+
+    final results = await supabase.databaseService!.query(
+      table: 'accounts',
+      filters: [
+        QueryFilter(column: 'id', operator: 'in', value: accountIds),
+      ],
+    );
+
+    return results.map((row) => _accountFromJson(row)).toList();
+  }
 }

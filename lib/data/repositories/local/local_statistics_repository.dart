@@ -194,16 +194,25 @@ class LocalStatisticsRepository implements StatisticsRepository {
     required DateTime start,
     required DateTime end,
   }) async {
-    final list = await (db.select(db.transactions)
-          ..where((t) =>
-              t.ledgerId.equals(ledgerId) &
-              t.happenedAt.isBetweenValues(start, end)))
-        .get();
-    double income = 0, expense = 0;
-    for (final t in list) {
-      if (t.type == 'income') income += t.amount;
-      if (t.type == 'expense') expense += t.amount;
-    }
+    // 使用 SQL 聚合查询，比查出全部数据再累加快得多
+    final result = await db.customSelect(
+      '''
+      SELECT
+        COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) AS income,
+        COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) AS expense
+      FROM transactions
+      WHERE ledger_id = ?1 AND happened_at >= ?2 AND happened_at < ?3
+      ''',
+      variables: [
+        d.Variable<int>(ledgerId),
+        d.Variable<DateTime>(start),
+        d.Variable<DateTime>(end),
+      ],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    final income = (result.data['income'] as num?)?.toDouble() ?? 0.0;
+    final expense = (result.data['expense'] as num?)?.toDouble() ?? 0.0;
     return (income, expense);
   }
 
@@ -214,16 +223,26 @@ class LocalStatisticsRepository implements StatisticsRepository {
   }) async {
     final start = DateTime(month.year, month.month, 1);
     final end = DateTime(month.year, month.month + 1, 1);
-    final list = await (db.select(db.transactions)
-          ..where((t) =>
-              t.ledgerId.equals(ledgerId) &
-              t.happenedAt.isBetweenValues(start, end)))
-        .get();
-    double income = 0, expense = 0;
-    for (final t in list) {
-      if (t.type == 'income') income += t.amount;
-      if (t.type == 'expense') expense += t.amount;
-    }
+
+    // 使用 SQL 聚合查询，比查出全部数据再累加快得多
+    final result = await db.customSelect(
+      '''
+      SELECT
+        COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) AS income,
+        COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) AS expense
+      FROM transactions
+      WHERE ledger_id = ?1 AND happened_at >= ?2 AND happened_at < ?3
+      ''',
+      variables: [
+        d.Variable<int>(ledgerId),
+        d.Variable<DateTime>(start),
+        d.Variable<DateTime>(end),
+      ],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    final income = (result.data['income'] as num?)?.toDouble() ?? 0.0;
+    final expense = (result.data['expense'] as num?)?.toDouble() ?? 0.0;
     return (income, expense);
   }
 
@@ -234,16 +253,26 @@ class LocalStatisticsRepository implements StatisticsRepository {
   }) async {
     final start = DateTime(year, 1, 1);
     final end = DateTime(year + 1, 1, 1);
-    final list = await (db.select(db.transactions)
-          ..where((t) =>
-              t.ledgerId.equals(ledgerId) &
-              t.happenedAt.isBetweenValues(start, end)))
-        .get();
-    double income = 0, expense = 0;
-    for (final t in list) {
-      if (t.type == 'income') income += t.amount;
-      if (t.type == 'expense') expense += t.amount;
-    }
+
+    // 使用 SQL 聚合查询，比查出全部数据再累加快得多
+    final result = await db.customSelect(
+      '''
+      SELECT
+        COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) AS income,
+        COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) AS expense
+      FROM transactions
+      WHERE ledger_id = ?1 AND happened_at >= ?2 AND happened_at < ?3
+      ''',
+      variables: [
+        d.Variable<int>(ledgerId),
+        d.Variable<DateTime>(start),
+        d.Variable<DateTime>(end),
+      ],
+      readsFrom: {db.transactions},
+    ).getSingle();
+
+    final income = (result.data['income'] as num?)?.toDouble() ?? 0.0;
+    final expense = (result.data['expense'] as num?)?.toDouble() ?? 0.0;
     return (income, expense);
   }
 }

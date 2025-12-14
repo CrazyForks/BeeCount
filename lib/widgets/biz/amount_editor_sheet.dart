@@ -63,7 +63,7 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
   final TextEditingController _noteCtrl = TextEditingController();
   // 运算缓存：支持简单 + / - 键入累计
   double _acc = 0;
-  String _op = '+'; // 最近一次运算符
+  String? _op; // 最近一次运算符，null 表示尚未进入运算模式
 
   // 高频备注列表（包含使用次数）
   List<({String note, int count})> _frequentNotes = [];
@@ -206,13 +206,39 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
 
     void applyOp(String op) {
       final cur = parsed();
-      if (_op == '+') {
+      if (_op == null) {
+        // 首次点击运算符，将当前值存入累加器
+        _acc = cur;
+      } else if (_op == '+') {
         _acc += cur;
       } else if (_op == '-') {
         _acc -= cur;
       }
       _op = op;
       _amountStr = '0';
+      HapticFeedback.selectionClick();
+      SystemSound.play(SystemSoundType.click);
+      setState(() {});
+    }
+
+    // 计算等号：完成当前运算，将结果存入 _amountStr，清空运算状态
+    void applyEquals() {
+      if (_op == null) return; // 没有运算符，不执行
+      final cur = parsed();
+      double total = _acc;
+      if (_op == '+') {
+        total += cur;
+      } else if (_op == '-') {
+        total -= cur;
+      }
+      // 格式化结果
+      final s = total.abs().toStringAsFixed(2);
+      final trimmed = s.contains('.')
+          ? s.replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '')
+          : s;
+      _amountStr = trimmed.isEmpty ? '0' : trimmed;
+      _acc = 0;
+      _op = null;
       HapticFeedback.selectionClick();
       SystemSound.play(SystemSoundType.click);
       setState(() {});
@@ -262,47 +288,83 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 金额单独一行（右对齐）
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            // 金额显示区域（表达式模式）
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // 运算状态符号（+ / -），更直观地展示当前累加/累减状态
-                Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: Text(
-                    _op == '-' ? '−' : '+',
-                    style: text.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: BeeTokens.textPrimary(context),
+                // 表达式行：显示 "累加值 运算符 当前输入" 或仅显示当前输入
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (_op != null) ...[
+                      // 显示累加值
+                      Text(
+                        (() {
+                          final s = _acc.abs().toStringAsFixed(2);
+                          final r1 = s.contains('.')
+                              ? s.replaceFirst(RegExp(r'0+$'), '')
+                              : s;
+                          return r1.endsWith('.') ? r1.substring(0, r1.length - 1) : r1;
+                        })(),
+                        style: text.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+                      ),
+                      // 显示运算符
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          _op == '-' ? '−' : '+',
+                          style: text.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                    // 当前输入值
+                    Text(
+                      _amountStr,
+                      style: text.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.0,
+                        color: BeeTokens.textPrimary(context),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                Text(
-                  (_negative ? '-' : '') +
-                      (() {
-                        final cur = parsed();
-                        final total = _op == '+' || _op == '-'
-                            ? (_acc + (_op == '+' ? cur : -cur))
-                            : cur;
-                        // 不显示多余 0
-                        final s = total.toStringAsFixed(2);
-                        final r1 = s.contains('.')
-                            ? s.replaceFirst(RegExp(r'0+$'), '')
-                            : s;
-                        final r2 = r1.endsWith('.')
-                            ? r1.substring(0, r1.length - 1)
-                            : r1;
-                        return r2.isEmpty ? '0' : r2;
-                      })(),
-                  textAlign: TextAlign.right,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: text.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.0,
-                    color: BeeTokens.textPrimary(context),
+                // 等号行：仅在有运算符时显示
+                if (_op != null) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '= ',
+                        style: text.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: BeeTokens.textTertiary(context),
+                        ),
+                      ),
+                      Text(
+                        (() {
+                          final cur = parsed();
+                          final total = _op == '+' ? _acc + cur : _acc - cur;
+                          final s = total.abs().toStringAsFixed(2);
+                          final r1 = s.contains('.')
+                              ? s.replaceFirst(RegExp(r'0+$'), '')
+                              : s;
+                          return r1.endsWith('.') ? r1.substring(0, r1.length - 1) : r1;
+                        })(),
+                        style: text.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: primary,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ],
             ),
             const SizedBox(height: 10),
@@ -458,15 +520,18 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
               Widget doneKey() {
                 // 计算当前总额以判断是否启用完成按钮
                 final cur = parsed();
-                double total = _acc;
+                double total;
                 if (_op == '+') {
-                  total += cur;
+                  total = _acc + cur;
                 } else if (_op == '-') {
-                  total -= cur;
+                  total = _acc - cur;
                 } else {
                   total = cur;
                 }
-                final isEnabled = total.abs() > 0 && !_isSubmitting;
+
+                // 判断是否处于运算模式
+                final isInCalcMode = _op != null;
+                final isEnabled = (isInCalcMode ? true : total.abs() > 0) && !_isSubmitting;
 
                 return Padding(
                   padding: const EdgeInsets.all(6),
@@ -477,6 +542,13 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                       borderRadius: BorderRadius.circular(12),
                       onTap: isEnabled
                           ? () async {
+                              if (isInCalcMode) {
+                                // 运算模式：点击等号计算结果
+                                applyEquals();
+                                return;
+                              }
+
+                              // 正常模式：提交
                               // 防重复点击
                               if (_isSubmitting) return;
                               setState(() => _isSubmitting = true);
@@ -511,10 +583,10 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                                   ),
                                 )
                               : Text(
-                                  AppLocalizations.of(context).commonFinish,
+                                  isInCalcMode ? '=' : AppLocalizations.of(context).commonFinish,
                                   style: TextStyle(
                                       color: isEnabled ? Colors.white : BeeTokens.textTertiary(context),
-                                      fontSize: 16,
+                                      fontSize: isInCalcMode ? 24 : 16,
                                       fontWeight: FontWeight.w700),
                                 ),
                         ),
@@ -593,31 +665,23 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
   /// 构建标签和附件选择行（一行显示）
   Widget _buildTagAndAttachmentRow() {
     final allTagsAsync = ref.watch(allTagsProvider);
+    // 使用 valueOrNull 保留上一次数据，避免 loading 时显示空列表导致闪烁
+    final allTags = allTagsAsync.valueOrNull ?? [];
 
-    return allTagsAsync.when(
-      loading: () => _buildRowContent([], 0, []),
-      error: (_, __) => _buildRowContent([], 0, []),
-      data: (allTags) {
-        // 获取已选中的标签详情
-        final selectedTags = allTags
-            .where((t) => _selectedTagIds.contains(t.id))
-            .toList();
+    // 获取已选中的标签详情
+    final selectedTags = allTags
+        .where((t) => _selectedTagIds.contains(t.id))
+        .toList();
 
-        // 获取附件数量
-        if (widget.editingTransactionId != null) {
-          final attachmentsAsync = ref.watch(transactionAttachmentsProvider(widget.editingTransactionId!));
-          return attachmentsAsync.when(
-            data: (attachments) {
-              final totalCount = attachments.length + _pendingAttachments.length;
-              return _buildRowContent(selectedTags, totalCount, attachments);
-            },
-            loading: () => _buildRowContent(selectedTags, _pendingAttachments.length, []),
-            error: (_, __) => _buildRowContent(selectedTags, _pendingAttachments.length, []),
-          );
-        }
-        return _buildRowContent(selectedTags, _pendingAttachments.length, []);
-      },
-    );
+    // 获取附件数量
+    if (widget.editingTransactionId != null) {
+      final attachmentsAsync = ref.watch(transactionAttachmentsProvider(widget.editingTransactionId!));
+      // 同样使用 valueOrNull 避免闪烁
+      final attachments = attachmentsAsync.valueOrNull ?? [];
+      final totalCount = attachments.length + _pendingAttachments.length;
+      return _buildRowContent(selectedTags, totalCount, attachments);
+    }
+    return _buildRowContent(selectedTags, _pendingAttachments.length, []);
   }
 
   Widget _buildRowContent(List<Tag> selectedTags, int attachmentCount, List<TransactionAttachment> savedAttachments) {
@@ -647,50 +711,33 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
                 }
               },
               behavior: HitTestBehavior.opaque,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.label_outline,
-                    size: 18,
-                    color: BeeTokens.iconSecondary(context),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: selectedTags.isEmpty
-                        ? Text(
-                            l10n.tagSelectTitle,
-                            style: TextStyle(
-                              color: BeeTokens.textTertiary(context),
-                              fontSize: 14,
+              child: selectedTags.isEmpty
+                  ? Text(
+                      l10n.tagSelectTitle,
+                      style: TextStyle(
+                        color: BeeTokens.textTertiary(context),
+                        fontSize: 14,
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: selectedTags.map((tag) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: TagChip(
+                              name: tag.name,
+                              color: tag.color,
+                              size: TagChipSize.small,
                             ),
-                          )
-                        : SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: selectedTags.map((tag) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 6),
-                                  child: TagChip(
-                                    name: tag.name,
-                                    color: tag.color,
-                                    size: TagChipSize.small,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                  ),
-                ],
-              ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
             ),
           ),
-          // 分隔线
-          Container(
-            width: 1,
-            height: 20,
-            margin: const EdgeInsets.symmetric(horizontal: 12),
-            color: BeeTokens.divider(context),
-          ),
+          // 间距代替分隔线
+          const SizedBox(width: 16),
           // 附件部分（图标 + 数字）
           GestureDetector(
             onTap: () => _handleAttachmentTap(savedAttachments),

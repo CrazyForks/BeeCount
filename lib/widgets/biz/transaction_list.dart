@@ -5,6 +5,7 @@ import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../data/db.dart';
 import '../../providers.dart';
+import '../../services/system/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
@@ -21,8 +22,11 @@ import '../../services/attachment_service.dart';
 /// 可复用的交易列表组件
 /// 支持显示分组的交易列表，包含日期头部和交易项
 class TransactionList extends ConsumerStatefulWidget {
-  /// 交易数据
-  final List<({Transaction t, Category? category})> transactions;
+  /// 完整交易数据（含标签、附件、账户，无需二次加载）
+  final List<TransactionDisplayItem>? transactionsWithDetails;
+
+  /// 交易数据（仅含分类，需二次加载标签和附件）
+  final List<({Transaction t, Category? category})>? transactions;
 
   /// 是否隐藏金额
   final bool hideAmounts;
@@ -41,13 +45,15 @@ class TransactionList extends ConsumerStatefulWidget {
 
   const TransactionList({
     super.key,
-    required this.transactions,
+    this.transactionsWithDetails,
+    this.transactions,
     required this.hideAmounts,
     this.enableVisibilityTracking = false,
     this.onDateVisibilityChanged,
     this.emptyWidget,
     this.controller,
-  });
+  }) : assert(transactionsWithDetails != null || transactions != null,
+            'Either transactionsWithDetails or transactions must be provided');
 
   @override
   ConsumerState<TransactionList> createState() => TransactionListState();
@@ -58,19 +64,43 @@ class TransactionListState extends ConsumerState<TransactionList> {
   List<dynamic> _flatItems = []; // 扁平化的项目列表
   final Map<String, int> _dateIndexMap = {}; // 日期到列表索引的映射
 
-  // 缓存标签数据
+  // 缓存标签数据（仅用于非预加载模式）
   Map<int, List<Tag>> _cachedTagsMap = {};
   List<int> _cachedTransactionIds = [];
   int _lastTagRefreshVersion = 0;
 
-  // 缓存附件数量
+  // 缓存附件数量（仅用于非预加载模式）
   Map<int, int> _cachedAttachmentCounts = {};
   int _lastAttachmentRefreshVersion = 0;
+
+  // 标记是否应使用预加载数据（当 Stream 数据与预加载数据不同时切换）
+  bool _usePreloadedData = true;
+
+  /// 是否使用完整预加载数据模式
+  /// 条件：1) 有预加载数据 2) 还没切换到 Stream 模式
+  bool get _hasFullDetails =>
+      widget.transactionsWithDetails != null && _usePreloadedData;
+
+  /// 获取统一格式的交易列表（用于内部处理）
+  /// 始终使用 transactions 作为列表数据源，预加载数据只用于详情（标签、附件、账户）
+  List<({Transaction t, Category? category})> get _transactionsList {
+    return widget.transactions ?? [];
+  }
+
+  /// 预加载数据的 ID 集合（用于快速判断某条交易是否有预加载详情）
+  Set<int>? _preloadedIds;
+  Set<int> get _preloadedIdSet {
+    if (_preloadedIds == null && widget.transactionsWithDetails != null) {
+      _preloadedIds = widget.transactionsWithDetails!.map((t) => t.t.id).toSet();
+    }
+    return _preloadedIds ?? {};
+  }
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? FlutterListViewController();
+    // 始终加载标签和附件（用于非预加载范围的交易）
     _loadTags();
     _loadAttachmentCounts();
   }
@@ -78,11 +108,22 @@ class TransactionListState extends ConsumerState<TransactionList> {
   @override
   void didUpdateWidget(covariant TransactionList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 检查交易列表是否变化
-    final newIds = widget.transactions.map((t) => t.t.id).toList();
-    if (!_listEquals(newIds, _cachedTransactionIds)) {
-      _loadTags();
-      _loadAttachmentCounts();
+
+    // 检测预加载数据是否变化（如账本切换），重置状态
+    if (widget.transactionsWithDetails != oldWidget.transactionsWithDetails) {
+      _preloadedIds = null; // 重置预加载 ID 缓存
+      if (widget.transactionsWithDetails != null) {
+        _usePreloadedData = true; // 重置为预加载模式
+      }
+    }
+
+    // 检查 transactions 数据变化，重新加载标签和附件
+    if (widget.transactions != null) {
+      final newIds = widget.transactions!.map((t) => t.t.id).toList();
+      if (!_listEquals(newIds, _cachedTransactionIds)) {
+        _loadTags();
+        _loadAttachmentCounts();
+      }
     }
   }
 
@@ -95,7 +136,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
   }
 
   Future<void> _loadTags() async {
-    final transactionIds = widget.transactions.map((t) => t.t.id).toList();
+    final transactionIds = _transactionsList.map((t) => t.t.id).toList();
     if (transactionIds.isEmpty) {
       setState(() {
         _cachedTagsMap = {};
@@ -116,7 +157,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
   }
 
   Future<void> _loadAttachmentCounts() async {
-    final transactionIds = widget.transactions.map((t) => t.t.id).toList();
+    final transactionIds = _transactionsList.map((t) => t.t.id).toList();
     if (transactionIds.isEmpty) {
       setState(() {
         _cachedAttachmentCounts = {};
@@ -134,6 +175,55 @@ class TransactionListState extends ConsumerState<TransactionList> {
     }
   }
 
+  /// 检查某条交易是否有预加载详情
+  bool _hasPreloadedDetails(int transactionId) {
+    return _usePreloadedData && _preloadedIdSet.contains(transactionId);
+  }
+
+  /// 获取预加载的交易详情
+  TransactionDisplayItem? _getPreloadedItem(int transactionId) {
+    if (!_hasPreloadedDetails(transactionId)) return null;
+    return widget.transactionsWithDetails!
+        .where((item) => item.t.id == transactionId)
+        .firstOrNull;
+  }
+
+  /// 获取交易的标签列表（优先使用预加载数据）
+  List<Tag> _getTagsForTransaction(int transactionId) {
+    final preloaded = _getPreloadedItem(transactionId);
+    if (preloaded != null) {
+      return preloaded.tags;
+    }
+    return _cachedTagsMap[transactionId] ?? [];
+  }
+
+  /// 获取交易的附件数量（优先使用预加载数据）
+  int _getAttachmentCountForTransaction(int transactionId) {
+    final preloaded = _getPreloadedItem(transactionId);
+    if (preloaded != null) {
+      return preloaded.attachmentCount;
+    }
+    return _cachedAttachmentCounts[transactionId] ?? 0;
+  }
+
+  /// 获取交易的账户名称（优先使用预加载数据）
+  String? _getAccountNameForTransaction(int transactionId) {
+    final preloaded = _getPreloadedItem(transactionId);
+    if (preloaded != null) {
+      return preloaded.accountName;
+    }
+    return null;
+  }
+
+  /// 获取交易的目标账户名称（优先使用预加载数据，用于转账）
+  String? _getToAccountNameForTransaction(int transactionId) {
+    final preloaded = _getPreloadedItem(transactionId);
+    if (preloaded != null) {
+      return preloaded.toAccountName;
+    }
+    return null;
+  }
+
   @override
   void dispose() {
     if (widget.controller == null) {
@@ -148,6 +238,23 @@ class TransactionListState extends ConsumerState<TransactionList> {
       _controller.sliverController.jumpToIndex(0);
     } catch (e) {
       // 跳转失败，忽略错误
+    }
+  }
+
+  /// 切换到 Stream 模式（在用户离开首页时调用）
+  /// 这样后续数据变化能正常刷新，且用户看不到切换过程
+  void switchToStreamMode() {
+    if (_usePreloadedData) {
+      // 延迟 100ms 再切换，等导航动画开始后用户看不到
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted && _usePreloadedData) {
+          logger.info('TransactionList', '用户交互，切换到Stream模式');
+          _usePreloadedData = false;
+          // 开始加载标签和附件（异步，不阻塞）
+          _loadTags();
+          _loadAttachmentCounts();
+        }
+      });
     }
   }
 
@@ -174,7 +281,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
 
   /// 构建扁平化的项目列表
   void _buildFlatItems() {
-    final transactions = widget.transactions;
+    final transactions = _transactionsList;
 
     // 按天分组
     final dateFmt = DateFormat('yyyy-MM-dd');
@@ -301,19 +408,25 @@ class TransactionListState extends ConsumerState<TransactionList> {
             final isLastInGroup = allItemsInDay.last.t.id == it.t.id;
 
             // 获取账户名称（仅在账户功能启用且有账户ID时）
-            final accountFeatureEnabled = ref.watch(accountFeatureEnabledProvider).value ?? false;
+            final accountFeatureEnabled = ref.watch(accountFeatureEnabledProvider).valueOrNull ?? true;
             String? accountName;
             String? toAccountName; // 转账目标账户名称
 
             if (accountFeatureEnabled && it.t.accountId != null) {
-              // 通过 ref.watch 获取账户名称
-              final accountAsync = ref.watch(accountByIdProvider(it.t.accountId!));
-              accountName = accountAsync.value?.name;
-
-              // 如果是转账，获取目标账户名称
+              // 优先使用预加载的账户名称
+              accountName = _getAccountNameForTransaction(it.t.id);
               if (isTransfer && it.t.toAccountId != null) {
+                toAccountName = _getToAccountNameForTransaction(it.t.id);
+              }
+
+              // 非预加载模式下通过 Provider 获取
+              if (accountName == null && !_hasFullDetails) {
+                final accountAsync = ref.watch(accountByIdProvider(it.t.accountId!));
+                accountName = accountAsync.valueOrNull?.name;
+              }
+              if (isTransfer && toAccountName == null && !_hasFullDetails && it.t.toAccountId != null) {
                 final toAccountAsync = ref.watch(accountByIdProvider(it.t.toAccountId!));
-                toAccountName = toAccountAsync.value?.name;
+                toAccountName = toAccountAsync.valueOrNull?.name;
               }
             }
 
@@ -352,8 +465,8 @@ class TransactionListState extends ConsumerState<TransactionList> {
                 children: [
                   Builder(
                     builder: (context) {
-                      // 获取该交易的标签（从缓存）
-                      final transactionTags = _cachedTagsMap[it.t.id] ?? [];
+                      // 获取该交易的标签（优先使用预加载数据）
+                      final transactionTags = _getTagsForTransaction(it.t.id);
                       final tagsList = transactionTags
                           .map((t) => (id: t.id, name: t.name, color: t.color))
                           .toList();
@@ -363,8 +476,8 @@ class TransactionListState extends ConsumerState<TransactionList> {
                           ? '$accountName → $toAccountName'
                           : null;
 
-                      // 获取附件数量（从缓存）
-                      final attachmentCount = _cachedAttachmentCounts[it.t.id] ?? 0;
+                      // 获取附件数量（优先使用预加载数据）
+                      final attachmentCount = _getAttachmentCountForTransaction(it.t.id);
 
                       return TransactionListItem(
                         icon: isTransfer
@@ -387,6 +500,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                         attachmentCount: attachmentCount,
                         onAttachmentTap: attachmentCount > 0
                             ? () async {
+                                switchToStreamMode(); // 用户交互，切换到 Stream 模式
                                 await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => AttachmentPreviewPage.fromTransaction(
@@ -397,6 +511,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                               }
                             : null,
                         onTagTap: (tagId, tagName) async {
+                          switchToStreamMode(); // 用户交互，切换到 Stream 模式
                           await Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => TagDetailPage(
@@ -407,6 +522,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                           );
                         },
                         onTap: () async {
+                          switchToStreamMode(); // 用户交互，切换到 Stream 模式
                           await TransactionEditUtils.editTransaction(
                             context,
                             ref,
@@ -416,6 +532,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                         },
                         onCategoryTap: !isTransfer && it.category?.id != null
                             ? () async {
+                                switchToStreamMode(); // 用户交互，切换到 Stream 模式
                                 await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => CategoryDetailPage(
