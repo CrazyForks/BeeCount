@@ -278,16 +278,17 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
             ref.read(tagListRefreshProvider.notifier).state++;
           }
           // 统一处理：自动/手动同步与状态刷新（后台静默）
-          await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+          handleLocalChange(ref, ledgerId: ledgerId, background: true);
           // 刷新：账本笔数与全局统计
           ref.invalidate(countsForLedgerProvider(ledgerId));
           ref.read(statsRefreshProvider.notifier).state++;
           // 刷新：预算数据
           ref.read(budgetRefreshProvider.notifier).state++;
-          // 更新小组件数据
-          if (!mounted) return;
-          await updateAppWidget(ref, context);
-          if (!mounted) return;
+          // 更新小组件数据（后台执行，不阻塞UI）
+          if (mounted) {
+            updateAppWidget(ref, context);
+          }
+          // 先关闭页面，再播放反馈
           if (ctx.mounted && Navigator.of(ctx).canPop()) Navigator.of(ctx).pop();
           if (context.mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();
           // 反馈：轻微触感 + 系统点击音

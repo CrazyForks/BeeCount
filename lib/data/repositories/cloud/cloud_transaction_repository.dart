@@ -263,6 +263,16 @@ class CloudTransactionRepository implements TransactionRepository {
       watchTransactionsWithCategoryAll(ledgerId: ledgerId);
 
   @override
+  Future<List<({Transaction t, Category? category})>> getRecentTransactionsWithCategory({
+    required int ledgerId,
+    required int limit,
+  }) async {
+    // 直接从 watchTransactionsWithCategoryAll 获取第一个值并截取
+    final all = await watchTransactionsWithCategoryAll(ledgerId: ledgerId).first;
+    return all.take(limit).toList();
+  }
+
+  @override
   Stream<List<({Transaction t, Category? category})>>
       watchTransactionsWithCategoryInMonth({
     required int ledgerId,

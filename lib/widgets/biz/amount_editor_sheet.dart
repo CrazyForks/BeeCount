@@ -665,31 +665,23 @@ class _AmountEditorSheetState extends ConsumerState<AmountEditorSheet> {
   /// 构建标签和附件选择行（一行显示）
   Widget _buildTagAndAttachmentRow() {
     final allTagsAsync = ref.watch(allTagsProvider);
+    // 使用 valueOrNull 保留上一次数据，避免 loading 时显示空列表导致闪烁
+    final allTags = allTagsAsync.valueOrNull ?? [];
 
-    return allTagsAsync.when(
-      loading: () => _buildRowContent([], 0, []),
-      error: (_, __) => _buildRowContent([], 0, []),
-      data: (allTags) {
-        // 获取已选中的标签详情
-        final selectedTags = allTags
-            .where((t) => _selectedTagIds.contains(t.id))
-            .toList();
+    // 获取已选中的标签详情
+    final selectedTags = allTags
+        .where((t) => _selectedTagIds.contains(t.id))
+        .toList();
 
-        // 获取附件数量
-        if (widget.editingTransactionId != null) {
-          final attachmentsAsync = ref.watch(transactionAttachmentsProvider(widget.editingTransactionId!));
-          return attachmentsAsync.when(
-            data: (attachments) {
-              final totalCount = attachments.length + _pendingAttachments.length;
-              return _buildRowContent(selectedTags, totalCount, attachments);
-            },
-            loading: () => _buildRowContent(selectedTags, _pendingAttachments.length, []),
-            error: (_, __) => _buildRowContent(selectedTags, _pendingAttachments.length, []),
-          );
-        }
-        return _buildRowContent(selectedTags, _pendingAttachments.length, []);
-      },
-    );
+    // 获取附件数量
+    if (widget.editingTransactionId != null) {
+      final attachmentsAsync = ref.watch(transactionAttachmentsProvider(widget.editingTransactionId!));
+      // 同样使用 valueOrNull 避免闪烁
+      final attachments = attachmentsAsync.valueOrNull ?? [];
+      final totalCount = attachments.length + _pendingAttachments.length;
+      return _buildRowContent(selectedTags, totalCount, attachments);
+    }
+    return _buildRowContent(selectedTags, _pendingAttachments.length, []);
   }
 
   Widget _buildRowContent(List<Tag> selectedTags, int attachmentCount, List<TransactionAttachment> savedAttachments) {

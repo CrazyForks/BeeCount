@@ -22,6 +22,9 @@ final pendingAppLinkActionProvider = StateProvider<AppLinkAction?>((ref) => null
 // 首页滚动到顶部触发器（每次改变值时触发滚动）
 final homeScrollToTopProvider = StateProvider<int>((ref) => 0);
 
+// 首页切换到 Stream 模式触发器（用户交互时触发）
+final homeSwitchToStreamProvider = StateProvider<int>((ref) => 0);
+
 // Currently selected month (first day), default to now
 final selectedMonthProvider = StateProvider<DateTime>((ref) {
   final now = DateTime.now();
@@ -141,7 +144,22 @@ final accountFeatureSetterProvider = Provider<AccountFeatureSetter>((ref) {
   return AccountFeatureSetter();
 });
 
-// 缓存的交易数据Provider（用于首屏快速展示）
+/// 完整的交易展示数据（含分类、标签、附件数量、账户名称）
+/// 用于首页列表一次性加载，避免二次查询闪烁
+typedef TransactionDisplayItem = ({
+  Transaction t,
+  Category? category,
+  List<Tag> tags,
+  int attachmentCount,
+  String? accountName,
+  String? toAccountName,
+});
+
+// 缓存的完整交易数据Provider（含标签、附件、账户，用于首屏快速展示）
+final cachedTransactionsProvider =
+    StateProvider<List<TransactionDisplayItem>?>((ref) => null);
+
+// 缓存的交易数据Provider（仅含分类，兼容旧版本）
 final cachedTransactionsWithCategoryProvider =
     StateProvider<List<({Transaction t, Category? category})>?>((ref) => null);
 
@@ -187,18 +205,64 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
       return result;
     }
 
+    // 首屏预加载条数限制（只加载前 N 条，加快启动速度）
+    const preloadLimit = 20;
+
     final results = await Future.wait([
       timed('月度统计', ref.read(monthlyTotalsProvider(monthlyParams).future)),
-      timed('交易列表', repo.transactionsWithCategoryAll(ledgerId: ledgerId).first),
+      // 只查询前 N 条，而非全部
+      timed('交易列表(前$preloadLimit条)', repo.getRecentTransactionsWithCategory(ledgerId: ledgerId, limit: preloadLimit)),
     ]);
 
     final monthlyResult = results[0] as (double, double);
-    final recentTransactionsWithCategory = results[1] as List<({Transaction t, Category? category})>;
+    final transactionsWithCategory = results[1] as List<({Transaction t, Category? category})>;
 
     ref.read(lastMonthlyTotalsProvider(monthlyParams).notifier).state = monthlyResult;
-    ref.read(cachedTransactionsWithCategoryProvider.notifier).state = recentTransactionsWithCategory;
-    logger.info(tag, '并行预加载总耗时: ${DateTime.now().difference(stepTime).inMilliseconds}ms, 交易${recentTransactionsWithCategory.length}条');
+    // 不再预加载完整列表，让 Stream 自己加载
+    logger.info(tag, '并行预加载完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms, 首屏${transactionsWithCategory.length}条');
     stepTime = DateTime.now();
+
+    // 只为首屏数据加载标签、附件数量和账户信息
+    final transactionIds = transactionsWithCategory.map((t) => t.t.id).toList();
+
+    // 收集所有需要查询的账户ID
+    final accountIds = <int>{};
+    for (final item in transactionsWithCategory) {
+      if (item.t.accountId != null) accountIds.add(item.t.accountId!);
+      if (item.t.toAccountId != null) accountIds.add(item.t.toAccountId!);
+    }
+
+    final detailResults = await Future.wait([
+      timed('标签数据', repo.getTagsForTransactions(transactionIds)),
+      timed('附件数量', repo.getAttachmentCountsForTransactions(transactionIds)),
+      timed('账户数据', repo.getAccountsByIds(accountIds.toList())),
+    ]);
+
+    final tagsMap = detailResults[0] as Map<int, List<Tag>>;
+    final attachmentCounts = detailResults[1] as Map<int, int>;
+    final accountsList = detailResults[2] as List<Account>;
+
+    // 构建账户ID到名称的映射
+    final accountNameMap = <int, String>{};
+    for (final account in accountsList) {
+      accountNameMap[account.id] = account.name;
+    }
+    logger.info(tag, '详情数据加载完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms');
+    stepTime = DateTime.now();
+
+    // 组装完整的交易展示数据
+    final fullTransactions = transactionsWithCategory.map((item) {
+      return (
+        t: item.t,
+        category: item.category,
+        tags: tagsMap[item.t.id] ?? <Tag>[],
+        attachmentCount: attachmentCounts[item.t.id] ?? 0,
+        accountName: item.t.accountId != null ? accountNameMap[item.t.accountId!] : null,
+        toAccountName: item.t.toAccountId != null ? accountNameMap[item.t.toAccountId!] : null,
+      );
+    }).toList();
+
+    ref.read(cachedTransactionsProvider.notifier).state = fullTransactions;
 
     // 账本统计异步加载（不阻塞启动）
     Future.microtask(() async {

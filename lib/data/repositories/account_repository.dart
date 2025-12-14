@@ -95,4 +95,7 @@ abstract class AccountRepository {
 
   /// 批量插入账户
   Future<void> batchInsertAccounts(List<AccountsCompanion> accounts);
+
+  /// 批量获取账户信息（通过ID列表）
+  Future<List<Account>> getAccountsByIds(List<int> accountIds);
 }

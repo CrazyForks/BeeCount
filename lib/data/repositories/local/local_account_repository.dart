@@ -455,4 +455,12 @@ class LocalAccountRepository implements AccountRepository {
       batch.insertAll(db.accounts, accounts);
     });
   }
+
+  @override
+  Future<List<Account>> getAccountsByIds(List<int> accountIds) async {
+    if (accountIds.isEmpty) return [];
+    return await (db.select(db.accounts)
+          ..where((a) => a.id.isIn(accountIds)))
+        .get();
+  }
 }

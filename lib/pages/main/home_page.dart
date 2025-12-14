@@ -142,7 +142,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final repo = ref.watch(repositoryProvider);
-    final cachedData = ref.watch(cachedTransactionsWithCategoryProvider);
+    // 预加载数据（含标签、附件、账户，仅前 N 条）
+    final cachedFullData = ref.watch(cachedTransactionsProvider);
     final ledgerId = ref.watch(currentLedgerIdProvider);
     final month = ref.watch(selectedMonthProvider);
     final hide = ref.watch(hideAmountsProvider);
@@ -162,6 +163,13 @@ class _HomePageState extends ConsumerState<HomePage> {
       if (previous != next) {
         // 滚动到列表顶部
         _transactionListKey.currentState?.jumpToTop();
+      }
+    });
+
+    // 监听切换到 Stream 模式的信号
+    ref.listen<int>(homeSwitchToStreamProvider, (previous, next) {
+      if (previous != next) {
+        _transactionListKey.currentState?.switchToStreamMode();
       }
     });
 
@@ -221,6 +229,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               onPressed: () {
+                                // 用户离开首页，切换到 Stream 模式
+                                _transactionListKey.currentState?.switchToStreamMode();
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => const AIChatPage(),
@@ -252,6 +262,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           child: IconButton(
                             tooltip: AppLocalizations.of(context).homeSearch,
                             onPressed: () {
+                              // 用户离开首页，切换到 Stream 模式
+                              _transactionListKey.currentState?.switchToStreamMode();
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => const SearchPage(),
@@ -360,14 +372,20 @@ class _HomePageState extends ConsumerState<HomePage> {
               key: ValueKey('transactions_$_streamBuilderKey'), // 使用递增key强制重建
               stream: repo.transactionsWithCategoryAll(ledgerId: ledgerId),
               builder: (context, snapshot) {
-                // 优先使用流数据，否则使用缓存数据，避免显示loading
-                final joined =
-                    snapshot.hasData ? snapshot.data! : (cachedData ?? []);
+                // Stream 数据到来前，使用预加载数据；到来后使用 Stream 数据
+                final streamData = snapshot.data;
+                final hasStreamData = streamData != null && streamData.isNotEmpty;
 
-                // 使用新的可复用TransactionList组件
+                // 如果 Stream 没数据，从预加载数据构建基础列表
+                final transactions = hasStreamData
+                    ? streamData
+                    : (cachedFullData?.map((item) => (t: item.t, category: item.category)).toList() ?? []);
+
                 return TransactionList(
                   key: _transactionListKey,
-                  transactions: joined,
+                  transactions: transactions,
+                  // 传入预加载数据供详情使用（标签、附件、账户）
+                  transactionsWithDetails: cachedFullData,
                   hideAmounts: hide,
                   enableVisibilityTracking: true,
                   onDateVisibilityChanged: _onHeaderVisibilityChanged,

@@ -223,6 +223,13 @@ class LocalRepository extends BaseRepository {
       _transactionRepo.transactionsWithCategoryAll(ledgerId: ledgerId);
 
   @override
+  Future<List<({Transaction t, Category? category})>> getRecentTransactionsWithCategory({
+    required int ledgerId,
+    required int limit,
+  }) =>
+      _transactionRepo.getRecentTransactionsWithCategory(ledgerId: ledgerId, limit: limit);
+
+  @override
   Future<int> countByTypeInRange({
     required int ledgerId,
     required String type,
@@ -559,6 +566,10 @@ class LocalRepository extends BaseRepository {
   @override
   Future<void> batchInsertAccounts(List<AccountsCompanion> accounts) =>
       _accountRepo.batchInsertAccounts(accounts);
+
+  @override
+  Future<List<Account>> getAccountsByIds(List<int> accountIds) =>
+      _accountRepo.getAccountsByIds(accountIds);
 
   // ============================================
   // StatisticsRepository 接口实现 - 委托给 LocalStatisticsRepository

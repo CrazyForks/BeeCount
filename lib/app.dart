@@ -321,6 +321,8 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                       foregroundColor: Colors.white,
                       // 短按：直接打开手动记账
                       onPressed: () async {
+                        // 用户交互，切换首页到 Stream 模式
+                        ref.read(homeSwitchToStreamProvider.notifier).state++;
                         await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => const TransactionEditorPage(
@@ -335,19 +337,28 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                         SpeedDialAction(
                           icon: Icons.camera_alt,
                           label: l10n.fabActionCamera,
-                          onTap: () => ImageBillingHelper.openCameraForBilling(context, ref),
+                          onTap: () {
+                            ref.read(homeSwitchToStreamProvider.notifier).state++;
+                            ImageBillingHelper.openCameraForBilling(context, ref);
+                          },
                         ),
                         SpeedDialAction(
                           icon: Icons.photo_library,
                           label: l10n.fabActionGallery,
-                          onTap: () => ImageBillingHelper.pickImageForBilling(context, ref),
+                          onTap: () {
+                            ref.read(homeSwitchToStreamProvider.notifier).state++;
+                            ImageBillingHelper.pickImageForBilling(context, ref);
+                          },
                         ),
                         SpeedDialAction(
                           icon: Icons.mic,
                           label: l10n.fabActionVoice,
                           enabled: isVoiceEnabled,
                           disabledTooltip: l10n.fabActionVoiceDisabled,
-                          onTap: () => VoiceBillingHelper.startVoiceBilling(context, ref),
+                          onTap: () {
+                            ref.read(homeSwitchToStreamProvider.notifier).state++;
+                            VoiceBillingHelper.startVoiceBilling(context, ref);
+                          },
                         ),
                       ],
                     );

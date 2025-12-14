@@ -246,6 +246,32 @@ class LocalTransactionRepository implements TransactionRepository {
           watchTransactionsWithCategoryAll(ledgerId: ledgerId);
 
   @override
+  Future<List<({Transaction t, Category? category})>>
+      getRecentTransactionsWithCategory({
+    required int ledgerId,
+    required int limit,
+  }) async {
+    final q = (db.select(db.transactions)
+          ..where((t) => t.ledgerId.equals(ledgerId))
+          ..orderBy([
+            (t) => d.OrderingTerm(
+                expression: t.happenedAt, mode: d.OrderingMode.desc)
+          ])
+          ..limit(limit))
+        .join([
+      d.leftOuterJoin(db.categories,
+          db.categories.id.equalsExp(db.transactions.categoryId)),
+    ]);
+    final rows = await q.get();
+    return rows
+        .map((r) => (
+              t: r.readTable(db.transactions),
+              category: r.readTableOrNull(db.categories)
+            ))
+        .toList();
+  }
+
+  @override
   Future<int> countByTypeInRange({
     required int ledgerId,
     required String type,
