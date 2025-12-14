@@ -21,7 +21,9 @@ import 'cloud/transactions_sync_manager.dart';
 import 'utils/voice_billing_helper.dart';
 import 'utils/image_billing_helper.dart';
 import 'services/ai/ai_constants.dart';
+import 'pages/ai/ai_chat_page.dart';
 import 'services/platform/app_link_service.dart';
+import 'services/platform/quick_actions_service.dart';
 import 'services/system/logger_service.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
@@ -49,6 +51,9 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   // AppLink 监听订阅
   ProviderSubscription<AppLinkAction?>? _appLinkSubscription;
 
+  // 快捷操作服务
+  final QuickActionsService _quickActionsService = QuickActionsService();
+
   // 防止 AppLink 动作重复执行（使用静态变量，跨实例共享）
   static bool _isHandlingAppLink = false;
   static DateTime? _lastAppLinkHandleTime;
@@ -62,7 +67,23 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
     // 延迟监听 AppLink，确保 context 可用
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setupAppLinkListener();
+      _setupQuickActions();
     });
+  }
+
+  /// 设置快捷操作
+  void _setupQuickActions() {
+    logger.info('QuickActions', 'BeeApp: 设置快捷操作服务...');
+    _quickActionsService.onNavigate = (action) {
+      if (mounted) {
+        logger.info('QuickActions', 'BeeApp: 执行快捷操作 $action');
+        _handleAppLinkAction(context, action);
+      }
+    };
+    _quickActionsService.initialize();
+    // 处理可能在初始化前就触发的快捷操作
+    _quickActionsService.processPendingAction();
+    logger.info('QuickActions', 'BeeApp: 快捷操作服务已设置');
   }
 
   /// 设置 AppLink 监听
@@ -130,6 +151,12 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
       case AppLinkAction.camera:
         // 打开拍照记账
         ImageBillingHelper.openCameraForBilling(context, ref);
+        break;
+      case AppLinkAction.aiChat:
+        // 打开 AI 小助手
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const AIChatPage()),
+        );
         break;
       default:
         // 其他动作在 AppLinkService 中已处理

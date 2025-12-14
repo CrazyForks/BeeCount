@@ -2071,5 +2071,9 @@
   "shortcutParamNote": "Note",
   "shortcutParamAccount": "Account name (must match existing account)",
   "shortcutParamTags": "Tags (comma separated)",
-  "shortcutParamDate": "Date (ISO format, e.g., 2024-01-15)"
+  "shortcutParamDate": "Date (ISO format, e.g., 2024-01-15)",
+  "quickActionImage": "Photo Billing",
+  "quickActionCamera": "Camera Billing",
+  "quickActionVoice": "Voice Billing",
+  "quickActionAiChat": "AI Assistant"
 }

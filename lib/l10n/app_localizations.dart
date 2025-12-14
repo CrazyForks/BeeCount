@@ -9161,6 +9161,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date (ISO format, e.g., 2024-01-15)'**
   String get shortcutParamDate;
+
+  /// No description provided for @quickActionImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo Billing'**
+  String get quickActionImage;
+
+  /// No description provided for @quickActionCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Billing'**
+  String get quickActionCamera;
+
+  /// No description provided for @quickActionVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Billing'**
+  String get quickActionVoice;
+
+  /// No description provided for @quickActionAiChat.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get quickActionAiChat;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

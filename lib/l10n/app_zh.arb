@@ -2010,5 +2010,9 @@
   "shortcutParamNote": "备注",
   "shortcutParamAccount": "账户名称（需与App中已有账户匹配）",
   "shortcutParamTags": "标签（多个用逗号分隔）",
-  "shortcutParamDate": "日期（ISO格式，如 2024-01-15）"
+  "shortcutParamDate": "日期（ISO格式，如 2024-01-15）",
+  "quickActionImage": "图片记账",
+  "quickActionCamera": "拍照记账",
+  "quickActionVoice": "语音记账",
+  "quickActionAiChat": "AI 小助手"
 }

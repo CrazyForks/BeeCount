@@ -4784,4 +4784,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shortcutParamDate => 'Date (ISO format, e.g., 2024-01-15)';
+
+  @override
+  String get quickActionImage => 'Photo Billing';
+
+  @override
+  String get quickActionCamera => 'Camera Billing';
+
+  @override
+  String get quickActionVoice => 'Voice Billing';
+
+  @override
+  String get quickActionAiChat => 'AI Assistant';
 }

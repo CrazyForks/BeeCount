@@ -4784,6 +4784,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shortcutParamDate => '日期（ISO格式，如 2024-01-15）';
+
+  @override
+  String get quickActionImage => '图片记账';
+
+  @override
+  String get quickActionCamera => '拍照记账';
+
+  @override
+  String get quickActionVoice => '语音记账';
+
+  @override
+  String get quickActionAiChat => 'AI 小助手';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
