@@ -223,15 +223,6 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
   final dataLoadTime = DateTime.now().difference(startTime);
   print('⏱️ 数据预加载耗时: ${dataLoadTime.inMilliseconds}ms');
 
-  // 确保启屏页展示时间至少2秒
-  const minDisplayDuration = Duration(seconds: 2);
-  final remainingTime = minDisplayDuration - dataLoadTime;
-
-  if (remainingTime.inMilliseconds > 0) {
-    print('⏱️ 启屏页还需展示${remainingTime.inMilliseconds}ms以满足最小展示时间...');
-    await Future.delayed(remainingTime);
-  }
-
   // 标记初始化完成
   print('🎉 预加载完成，切换到主应用');
   ref.read(appInitStateProvider.notifier).state = AppInitState.ready;
