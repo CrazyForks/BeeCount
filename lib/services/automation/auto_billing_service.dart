@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../billing/ocr_service.dart';
 import '../billing/category_matcher.dart';
 import '../billing/bill_creation_service.dart';
+import '../attachment_service.dart';
+import '../data/tag_seed_service.dart';
 import 'auto_billing_config.dart';
 import '../../providers.dart';
 import '../../data/db.dart';
 import '../../data/category_node.dart';
+import '../../l10n/app_localizations.dart';
 import '../system/logger_service.dart';
 
 /// 自动记账服务 - 通用核心逻辑
@@ -213,12 +217,36 @@ class AutoBillingService {
         try {
           final dbStartTime = DateTime.now().millisecondsSinceEpoch;
           print('⏱️ [性能] 开始创建交易记录');
-          final transactionId = await _createTransaction(result);
+          // 确定记账方式标签：图片记账 + AI（如果使用了AI增强）
+          final billingTypes = <String>[TagSeedService.billingTypeImage];
+          if (result.aiEnhanced) {
+            billingTypes.add(TagSeedService.billingTypeAi);
+          }
+          final transactionId = await _createTransaction(
+            result,
+            billingTypes: billingTypes,
+          );
           final dbElapsed = DateTime.now().millisecondsSinceEpoch - dbStartTime;
           print('⏱️ [性能] 交易记录创建完成, 耗时=${dbElapsed}ms');
 
           if (transactionId != null) {
             // 记账成功
+            // 保存图片附件
+            try {
+              final attachmentService = _container.read(attachmentServiceProvider);
+              await attachmentService.saveAttachment(
+                transactionId: transactionId,
+                sourceFile: file,
+                index: 0,
+              );
+              logger.info('AutoBilling', '截图附件保存成功', 'transactionId=$transactionId');
+              // 刷新附件列表
+              _container.read(attachmentListRefreshProvider.notifier).state++;
+            } catch (e, st) {
+              logger.error('AutoBilling', '保存截图附件失败', e, st);
+              // 附件保存失败不影响交易记录
+            }
+
             // 刷新统计信息
             _container.read(statsRefreshProvider.notifier).state++;
             if (showNotification) {
@@ -425,7 +453,11 @@ class AutoBillingService {
   }
 
   /// 创建交易记录
-  Future<int?> _createTransaction(OcrResult result) async {
+  /// [billingTypes] 记账方式列表，用于添加标签
+  Future<int?> _createTransaction(
+    OcrResult result, {
+    List<String>? billingTypes,
+  }) async {
     try {
       // 获取当前账本ID（优先从Provider读取，失败则从SharedPreferences读取，最后从数据库获取默认账本）
       int? ledgerId;
@@ -478,14 +510,24 @@ class AutoBillingService {
         note = result.note!;
       }
 
+      // 获取 l10n（使用系统语言设置）
+      final systemLocale = PlatformDispatcher.instance.locale;
+      final l10n = lookupAppLocalizations(systemLocale);
+
       final transactionId = await billCreationService.createBillTransaction(
         result: result,
         ledgerId: ledgerId,
         note: note,
+        billingTypes: billingTypes,
+        l10n: l10n,
       );
 
       if (transactionId != null) {
         print('✅ 交易记录已创建: ID=$transactionId');
+        // 刷新标签列表
+        if (billingTypes != null && billingTypes.isNotEmpty) {
+          _container.read(tagListRefreshProvider.notifier).state++;
+        }
       } else {
         print('❌ 创建交易记录失败');
       }
