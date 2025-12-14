@@ -326,7 +326,7 @@ class _BudgetCard extends ConsumerWidget {
               color: BeeTokens.textTertiary(context),
             ),
           ),
-          // 分类预算（最多显示2个）
+          // 分类预算（最多显示3个）
           if (overview.categoryBudgets.isNotEmpty) ...[
             SizedBox(height: 10.0.scaled(context, ref)),
             _buildCategoryBudgets(context, ref, overview.categoryBudgets),
@@ -341,8 +341,8 @@ class _BudgetCard extends ConsumerWidget {
     WidgetRef ref,
     List<CategoryBudgetUsage> categoryBudgets,
   ) {
-    // 只显示前2个
-    final displayBudgets = categoryBudgets.take(2).toList();
+    // 只显示前3个
+    final displayBudgets = categoryBudgets.take(3).toList();
 
     return Column(
       children: [
@@ -350,10 +350,10 @@ class _BudgetCard extends ConsumerWidget {
           if (i > 0) SizedBox(height: 6.0.scaled(context, ref)),
           _buildCategoryBudgetItem(context, ref, displayBudgets[i]),
         ],
-        if (categoryBudgets.length > 2) ...[
+        if (categoryBudgets.length > 3) ...[
           SizedBox(height: 4.0.scaled(context, ref)),
           Text(
-            '+${categoryBudgets.length - 2}',
+            '+${categoryBudgets.length - 3}',
             style: TextStyle(
               fontSize: 11,
               color: BeeTokens.textTertiary(context),
