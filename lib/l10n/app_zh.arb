@@ -979,20 +979,24 @@
   "updateMirrorTesting": "正在测试 {completed}/{total}...",
   "@updateMirrorTesting": {
     "placeholders": {
-      "completed": {"type": "int"},
-      "total": {"type": "int"}
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "updateMirrorDirectHint": "适合网络通畅的用户",
   "updateDownloadMirror": "下载源: {mirror}",
   "@updateDownloadMirror": {
     "placeholders": {
-      "mirror": {"type": "String"}
+      "mirror": {
+        "type": "String"
+      }
     }
   },
-  "updateSelectMirror": "选择加速器",
   "updateMirrorSettingTitle": "下载加速器",
-  "updateMirrorSettingSubtitle": "切换 GitHub 下载源",
   "currencyCNY": "人民币",
   "currencyUSD": "美元",
   "currencyEUR": "欧元",
@@ -1856,15 +1860,13 @@
       }
     }
   },
-  "discoverQuickCamera": "拍照",
-  "discoverQuickAlbum": "相册",
-  "discoverQuickVoice": "语音",
   "discoverCommonFeatures": "常用功能",
   "discoverAISettings": "AI设置",
   "discoverCategory": "分类管理",
   "discoverTags": "标签管理",
   "discoverImport": "导入",
   "discoverExport": "导出",
+  "discoverHelp": "使用帮助",
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
   "budgetTitle": "预算管理",

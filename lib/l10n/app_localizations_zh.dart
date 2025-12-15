@@ -2540,13 +2540,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get updateSelectMirror => '选择加速器';
-
-  @override
   String get updateMirrorSettingTitle => '下载加速器';
-
-  @override
-  String get updateMirrorSettingSubtitle => '切换 GitHub 下载源';
 
   @override
   String get updateNotificationPermissionGuideText => '下载进度通知被关闭，但不影响下载功能。如需查看进度：';
@@ -4508,15 +4502,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get discoverQuickCamera => '拍照';
-
-  @override
-  String get discoverQuickAlbum => '相册';
-
-  @override
-  String get discoverQuickVoice => '语音';
-
-  @override
   String get discoverCommonFeatures => '常用功能';
 
   @override
@@ -4533,6 +4518,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get discoverExport => '导出';
+
+  @override
+  String get discoverHelp => '使用帮助';
 
   @override
   String get homeSwitchLedger => '选择账本';
@@ -7353,13 +7341,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get updateSelectMirror => '選擇加速器';
-
-  @override
   String get updateMirrorSettingTitle => '下載加速器';
-
-  @override
-  String get updateMirrorSettingSubtitle => '切換 GitHub 下載源';
 
   @override
   String get updateNotificationPermissionGuideText => '下載進度通知被關閉，但不影響下載功能。如需檢視進度：';
@@ -9321,15 +9303,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get discoverQuickCamera => '拍照';
-
-  @override
-  String get discoverQuickAlbum => '相簿';
-
-  @override
-  String get discoverQuickVoice => '語音';
-
-  @override
   String get discoverCommonFeatures => '常用功能';
 
   @override
@@ -9346,6 +9319,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get discoverExport => '匯出';
+
+  @override
+  String get discoverHelp => '使用幫助';
 
   @override
   String get homeSwitchLedger => '選擇帳本';
@@ -9614,4 +9590,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get shortcutParamDate => '日期（ISO格式，如 2024-01-15）';
+
+  @override
+  String get quickActionImage => '圖片記帳';
+
+  @override
+  String get quickActionCamera => '拍照記帳';
+
+  @override
+  String get quickActionVoice => '語音記帳';
+
+  @override
+  String get quickActionAiChat => 'AI 小助手';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/repositories/budget_repository.dart';
 import '../../l10n/app_localizations.dart';
@@ -7,9 +8,8 @@ import '../../providers.dart';
 import '../../providers/budget_providers.dart';
 import '../../services/data/category_service.dart';
 import '../../styles/tokens.dart';
-import '../../utils/image_billing_helper.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../utils/voice_billing_helper.dart';
+import '../../utils/website_urls.dart';
 import '../../widgets/biz/amount_text.dart';
 import '../../widgets/biz/ledger_picker_sheet.dart';
 import '../../widgets/biz/section_card.dart';
@@ -860,7 +860,7 @@ class _QuickActionsCard extends ConsumerWidget {
             ],
           ),
           SizedBox(height: 12.0.scaled(context, ref)),
-          // 第二行：AI设置、语音记账、图片记账、拍照记账
+          // 第二行：AI设置、使用帮助
           Row(
             children: [
               Expanded(
@@ -879,29 +879,19 @@ class _QuickActionsCard extends ConsumerWidget {
                 child: _buildActionButton(
                   context,
                   ref,
-                  icon: Icons.mic_rounded,
-                  label: l10n.discoverQuickVoice,
-                  onTap: () => VoiceBillingHelper.startVoiceBilling(context, ref),
+                  icon: Icons.help_outline,
+                  label: l10n.discoverHelp,
+                  onTap: () async {
+                    final locale = Localizations.localeOf(context);
+                    final uri = Uri.parse(WebsiteUrls.docs(locale));
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    }
+                  },
                 ),
               ),
-              Expanded(
-                child: _buildActionButton(
-                  context,
-                  ref,
-                  icon: Icons.photo_library_rounded,
-                  label: l10n.discoverQuickAlbum,
-                  onTap: () => ImageBillingHelper.pickImageForBilling(context, ref),
-                ),
-              ),
-              Expanded(
-                child: _buildActionButton(
-                  context,
-                  ref,
-                  icon: Icons.camera_alt_rounded,
-                  label: l10n.discoverQuickCamera,
-                  onTap: () => ImageBillingHelper.openCameraForBilling(context, ref),
-                ),
-              ),
+              const Expanded(child: SizedBox()),
+              const Expanded(child: SizedBox()),
             ],
           ),
         ],

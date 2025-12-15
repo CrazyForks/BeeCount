@@ -779,10 +779,8 @@
   "discoverCategory": "分類管理",
   "discoverCommonFeatures": "常用功能",
   "discoverExport": "匯出",
+  "discoverHelp": "使用幫助",
   "discoverImport": "匯入",
-  "discoverQuickAlbum": "相簿",
-  "discoverQuickCamera": "拍照",
-  "discoverQuickVoice": "語音",
   "discoverTags": "標籤管理",
   "discoverTitle": "發現",
   "donationDescription": "說明",
@@ -1209,6 +1207,10 @@
   "personalizeTitle": "個性裝扮",
   "photosPermissionRequired": "需要相片權限才能監聽截圖",
   "privacyOpenSourceUrlError": "無法打開鏈接",
+  "quickActionAiChat": "AI 小助手",
+  "quickActionCamera": "拍照記帳",
+  "quickActionImage": "圖片記帳",
+  "quickActionVoice": "語音記帳",
   "recurringTransactionAdd": "新增週期帳單",
   "recurringTransactionDaily": "每天",
   "recurringTransactionDayOfMonth": "每月第幾天",
@@ -1600,20 +1602,24 @@
   "updateMirrorTesting": "正在測試 {completed}/{total}...",
   "@updateMirrorTesting": {
     "placeholders": {
-      "completed": {"type": "int"},
-      "total": {"type": "int"}
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "updateMirrorDirectHint": "適合網路暢通的使用者",
   "updateDownloadMirror": "下載源: {mirror}",
   "@updateDownloadMirror": {
     "placeholders": {
-      "mirror": {"type": "String"}
+      "mirror": {
+        "type": "String"
+      }
     }
   },
-  "updateSelectMirror": "選擇加速器",
   "updateMirrorSettingTitle": "下載加速器",
-  "updateMirrorSettingSubtitle": "切換 GitHub 下載源",
   "updateInstallFailed": "安裝失敗",
   "updateInstallFailedMessage": "無法啟動APK安裝程式，請檢查檔案權限。",
   "updateInstallFailedTitle": "安裝失敗",

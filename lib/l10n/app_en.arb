@@ -1076,20 +1076,24 @@
   "updateMirrorTesting": "Testing {completed}/{total}...",
   "@updateMirrorTesting": {
     "placeholders": {
-      "completed": {"type": "int"},
-      "total": {"type": "int"}
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "updateMirrorDirectHint": "For users with good network",
   "updateDownloadMirror": "Source: {mirror}",
   "@updateDownloadMirror": {
     "placeholders": {
-      "mirror": {"type": "String"}
+      "mirror": {
+        "type": "String"
+      }
     }
   },
-  "updateSelectMirror": "Select Accelerator",
   "updateMirrorSettingTitle": "Download Accelerator",
-  "updateMirrorSettingSubtitle": "Switch GitHub download source",
   "updateNotificationPermissionGuideText": "Download progress notifications are disabled, but this doesn't affect download functionality. To view progress:",
   "updateNotificationGuideStep1": "Go to System Settings > App Management",
   "updateNotificationGuideStep2": "Find \\\"BeeCount\\\" app",
@@ -1917,15 +1921,13 @@
       }
     }
   },
-  "discoverQuickCamera": "Camera",
-  "discoverQuickAlbum": "Album",
-  "discoverQuickVoice": "Voice",
   "discoverCommonFeatures": "Features",
   "discoverAISettings": "AI Settings",
   "discoverCategory": "Categories",
   "discoverTags": "Tags",
   "discoverImport": "Import",
   "discoverExport": "Export",
+  "discoverHelp": "Help",
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
   "budgetTitle": "Budget",

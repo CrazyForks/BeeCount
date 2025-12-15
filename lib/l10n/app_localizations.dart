@@ -4806,23 +4806,11 @@ abstract class AppLocalizations {
   /// **'Source: {mirror}'**
   String updateDownloadMirror(String mirror);
 
-  /// No description provided for @updateSelectMirror.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Accelerator'**
-  String get updateSelectMirror;
-
   /// No description provided for @updateMirrorSettingTitle.
   ///
   /// In en, this message translates to:
   /// **'Download Accelerator'**
   String get updateMirrorSettingTitle;
-
-  /// No description provided for @updateMirrorSettingSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch GitHub download source'**
-  String get updateMirrorSettingSubtitle;
 
   /// No description provided for @updateNotificationPermissionGuideText.
   ///
@@ -8634,24 +8622,6 @@ abstract class AppLocalizations {
   /// **'{count} accounts'**
   String discoverAccountsCount(int count);
 
-  /// No description provided for @discoverQuickCamera.
-  ///
-  /// In en, this message translates to:
-  /// **'Camera'**
-  String get discoverQuickCamera;
-
-  /// No description provided for @discoverQuickAlbum.
-  ///
-  /// In en, this message translates to:
-  /// **'Album'**
-  String get discoverQuickAlbum;
-
-  /// No description provided for @discoverQuickVoice.
-  ///
-  /// In en, this message translates to:
-  /// **'Voice'**
-  String get discoverQuickVoice;
-
   /// No description provided for @discoverCommonFeatures.
   ///
   /// In en, this message translates to:
@@ -8687,6 +8657,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Export'**
   String get discoverExport;
+
+  /// No description provided for @discoverHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get discoverHelp;
 
   /// No description provided for @homeSwitchLedger.
   ///

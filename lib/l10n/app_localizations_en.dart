@@ -2540,13 +2540,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get updateSelectMirror => 'Select Accelerator';
-
-  @override
   String get updateMirrorSettingTitle => 'Download Accelerator';
-
-  @override
-  String get updateMirrorSettingSubtitle => 'Switch GitHub download source';
 
   @override
   String get updateNotificationPermissionGuideText => 'Download progress notifications are disabled, but this doesn\'t affect download functionality. To view progress:';
@@ -4508,15 +4502,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get discoverQuickCamera => 'Camera';
-
-  @override
-  String get discoverQuickAlbum => 'Album';
-
-  @override
-  String get discoverQuickVoice => 'Voice';
-
-  @override
   String get discoverCommonFeatures => 'Features';
 
   @override
@@ -4533,6 +4518,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverExport => 'Export';
+
+  @override
+  String get discoverHelp => 'Help';
 
   @override
   String get homeSwitchLedger => 'Select Ledger';
