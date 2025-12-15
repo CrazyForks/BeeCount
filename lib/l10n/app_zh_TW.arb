@@ -4,6 +4,7 @@
   "aboutDesc": "版本資訊、說明與回饋",
   "aboutDouyin": "抖音",
   "aboutGitHubRepo": "GitHub 儲存庫",
+  "aboutWebsite": "官方網站",
   "aboutPageLoadingVersion": "載入版本號中...",
   "aboutPageSubtitle": "應用程式資訊和說明",
   "aboutPageTitle": "關於",
@@ -79,6 +80,7 @@
   "aiChatUndoFailed": "撤銷失敗",
   "aiChatUndone": "已撤銷",
   "aiCloudApiGetKey": "取得 API Key",
+  "aiCloudApiTutorial": "詳細教學",
   "aiCloudApiKeyHelper": "GLM-*-Flash 模型完全免費",
   "aiCloudApiKeyHint": "輸入智譜 AI 的 API Key",
   "aiCloudApiKeyInvalid": "❌ API Key 無效，請檢查後重新輸入",
@@ -785,7 +787,7 @@
   "discoverTitle": "發現",
   "donationDescription": "說明",
   "donationDescriptionDetail": "感謝您使用蜜蜂記帳！如果這個應用對您有幫助，歡迎請開發者喝杯咖啡作為鼓勵。您的支持是我持續改進的動力。",
-  "donationEntrySubtitle": "感謝您的支持 ☕",
+  "donationEntrySubtitle": "支持應用持續開發",
   "donationNoFeatures": "注：打賞不會解鎖任何功能，所有功能繼續完全免費。",
   "donationNoProducts": "暫無可用商品",
   "donationSubtitle": "請我喝杯咖啡",
@@ -798,7 +800,7 @@
     }
   },
   "donationThankYouTitle": "感謝支持！",
-  "donationTitle": "支持開發者",
+  "donationTitle": "捐贈",
   "enableFailed": "啟用失敗",
   "enableSuccess": "自動記帳已啟用",
   "enabled": "已啟用",
@@ -1124,8 +1126,18 @@
   "mineShareGenerating": "正在生成分享海報...",
   "mineShareWithFriends": "和好友分享蜜蜂記帳",
   "mineSlogan": "蜜蜂記帳，一筆一蜜",
-  "mineSupportAuthor": "支持作者",
-  "mineSupportAuthorSubtitle": "在GitHub上為專案點讚",
+  "mineSupportAuthor": "給專案 Star ⭐️",
+  "mineSupportAuthorSubtitle": "開源免費，已有 {count} 人 Star",
+  "@mineSupportAuthorSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "githubStarGuideTitle": "如何給專案 Star",
+  "githubStarGuideContent": "點擊下方按鈕開啟 GitHub 頁面後，點擊圖中標註的位置即可完成 Star",
+  "githubStarGuideButton": "前往 GitHub",
   "mineSyncCloudFingerprint": "雲端指紋: {fingerprint}",
   "mineSyncCloudLatest": "雲端最新記帳時間: {time}",
   "mineSyncCloudNewer": "雲端較新 (建議下載並合併)",

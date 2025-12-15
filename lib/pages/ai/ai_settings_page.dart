@@ -13,6 +13,7 @@ import '../../providers/ui_state_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/ai/ai_chat_service.dart';
 import '../../services/ai/ai_constants.dart';
+import '../../utils/website_urls.dart';
 import 'ai_prompt_edit_page.dart';
 
 /// AI智能识别设置页面
@@ -62,7 +63,15 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
 
   Future<void> _openGlmWebsite() async {
-    final uri = Uri.parse('https://open.bigmodel.cn/');
+    final uri = Uri.parse('https://open.bigmodel.cn/usercenter/proj-mgmt/apikeys');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _openTutorial() async {
+    final locale = Localizations.localeOf(context);
+    final uri = Uri.parse(WebsiteUrls.docsAi('overview', locale));
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
@@ -464,13 +473,26 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
                   },
                 ),
                 const SizedBox(height: 12),
-                TextButton.icon(
-                  onPressed: _openGlmWebsite,
-                  icon: const Icon(Icons.open_in_new, size: 18),
-                  label: Text(l10n.aiCloudApiGetKey),
-                  style: TextButton.styleFrom(
-                    foregroundColor: ref.watch(primaryColorProvider),
-                  ),
+                Row(
+                  children: [
+                    TextButton.icon(
+                      onPressed: _openGlmWebsite,
+                      icon: const Icon(Icons.open_in_new, size: 18),
+                      label: Text(l10n.aiCloudApiGetKey),
+                      style: TextButton.styleFrom(
+                        foregroundColor: ref.watch(primaryColorProvider),
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton.icon(
+                      onPressed: _openTutorial,
+                      icon: const Icon(Icons.help_outline, size: 18),
+                      label: Text(l10n.aiCloudApiTutorial),
+                      style: TextButton.styleFrom(
+                        foregroundColor: ref.watch(primaryColorProvider),
+                      ),
+                    ),
+                  ],
                 ),
                 // API Key未配置提示
                 if (_glmApiKey.isEmpty) ...[

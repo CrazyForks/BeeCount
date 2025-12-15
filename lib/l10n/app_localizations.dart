@@ -2337,14 +2337,32 @@ abstract class AppLocalizations {
   /// No description provided for @mineSupportAuthor.
   ///
   /// In en, this message translates to:
-  /// **'Support Author'**
+  /// **'Star the Project ⭐️'**
   String get mineSupportAuthor;
 
   /// No description provided for @mineSupportAuthorSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Star the project on GitHub'**
-  String get mineSupportAuthorSubtitle;
+  /// **'Open source, {count} stars'**
+  String mineSupportAuthorSubtitle(String count);
+
+  /// No description provided for @githubStarGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Star the Project'**
+  String get githubStarGuideTitle;
+
+  /// No description provided for @githubStarGuideContent.
+  ///
+  /// In en, this message translates to:
+  /// **'After tapping the button below to open GitHub, tap the area marked in the image to complete the Star'**
+  String get githubStarGuideContent;
+
+  /// No description provided for @githubStarGuideButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to GitHub'**
+  String get githubStarGuideButton;
 
   /// No description provided for @categoryEditTitle.
   ///
@@ -6552,6 +6570,12 @@ abstract class AppLocalizations {
   /// **'Get API Key'**
   String get aiCloudApiGetKey;
 
+  /// No description provided for @aiCloudApiTutorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutorial'**
+  String get aiCloudApiTutorial;
+
   /// No description provided for @aiCloudApiTestKey.
   ///
   /// In en, this message translates to:
@@ -6899,6 +6923,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading version...'**
   String get aboutPageLoadingVersion;
+
+  /// No description provided for @aboutWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Website'**
+  String get aboutWebsite;
 
   /// No description provided for @aboutGitHubRepo.
   ///
@@ -7821,7 +7851,7 @@ abstract class AppLocalizations {
   /// No description provided for @donationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Support Developer'**
+  /// **'Donate'**
   String get donationTitle;
 
   /// No description provided for @donationSubtitle.
@@ -7833,7 +7863,7 @@ abstract class AppLocalizations {
   /// No description provided for @donationEntrySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Thank you for your support ☕'**
+  /// **'Support continued development'**
   String get donationEntrySubtitle;
 
   /// No description provided for @donationDescription.

@@ -1222,10 +1222,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineHelpSubtitle => 'View documentation and FAQ';
 
   @override
-  String get mineSupportAuthor => 'Support Author';
+  String get mineSupportAuthor => 'Star the Project ⭐️';
 
   @override
-  String get mineSupportAuthorSubtitle => 'Star the project on GitHub';
+  String mineSupportAuthorSubtitle(String count) {
+    return 'Open source, $count stars';
+  }
+
+  @override
+  String get githubStarGuideTitle => 'How to Star the Project';
+
+  @override
+  String get githubStarGuideContent => 'After tapping the button below to open GitHub, tap the area marked in the image to complete the Star';
+
+  @override
+  String get githubStarGuideButton => 'Go to GitHub';
 
   @override
   String get categoryEditTitle => 'Edit Category';
@@ -3431,6 +3442,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiGetKey => 'Get API Key';
 
   @override
+  String get aiCloudApiTutorial => 'Tutorial';
+
+  @override
   String get aiCloudApiTestKey => 'Test Connection';
 
   @override
@@ -3607,6 +3621,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutPageLoadingVersion => 'Loading version...';
+
+  @override
+  String get aboutWebsite => 'Official Website';
 
   @override
   String get aboutGitHubRepo => 'GitHub Repository';
@@ -4088,13 +4105,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get billCardEdit => 'Edit';
 
   @override
-  String get donationTitle => 'Support Developer';
+  String get donationTitle => 'Donate';
 
   @override
   String get donationSubtitle => 'Buy me a coffee';
 
   @override
-  String get donationEntrySubtitle => 'Thank you for your support ☕';
+  String get donationEntrySubtitle => 'Support continued development';
 
   @override
   String get donationDescription => 'Description';

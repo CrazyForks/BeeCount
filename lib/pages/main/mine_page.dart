@@ -28,6 +28,8 @@ import '../settings/widget_management_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import '../ai/ai_settings_page.dart';
 import '../cloud/cloud_sync_page.dart';
+import '../../utils/website_urls.dart';
+import '../../providers/github_star_provider.dart';
 import '../settings/data_management_page.dart';
 import '../settings/appearance_settings_page.dart';
 import '../settings/smart_billing_page.dart';
@@ -352,7 +354,7 @@ class MinePage extends ConsumerWidget {
                     ],
                   ),
                 ),
-                // 支持与关于
+                // 帮助与信息
                 SizedBox(height: 8.0.scaled(context, ref)),
                 SectionCard(
                   margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
@@ -365,7 +367,7 @@ class MinePage extends ConsumerWidget {
                         subtitle: AppLocalizations.of(context).aboutDesc,
                         trailing: Icon(Icons.chevron_right,
                             color: BeeTokens.iconTertiary(context),
-                            size: 20), // ⭐ 使用 Token
+                            size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -380,12 +382,21 @@ class MinePage extends ConsumerWidget {
                         title: AppLocalizations.of(context).mineHelp,
                         subtitle: AppLocalizations.of(context).mineHelpSubtitle,
                         onTap: () async {
-                          final url = Uri.parse(
-                              'https://beecount-website.pages.dev/docs/intro');
+                          final locale = Localizations.localeOf(context);
+                          final url = Uri.parse(WebsiteUrls.docs(locale));
                           await _tryOpenUrl(url);
                         },
                       ),
-                      BeeTokens.cardDivider(context),
+                    ],
+                  ),
+                ),
+                // 支持我们
+                SizedBox(height: 8.0.scaled(context, ref)),
+                SectionCard(
+                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
+                      12.0.scaled(context, ref), 0),
+                  child: Column(
+                    children: [
                       // 仅在iOS显示打赏入口
                       if (Platform.isIOS) ...[
                         Consumer(
@@ -423,27 +434,20 @@ class MinePage extends ConsumerWidget {
                         ),
                         BeeTokens.cardDivider(context),
                       ],
-                      AppListTile(
-                        leading: Icons.feedback_outlined,
-                        title: AppLocalizations.of(context).mineFeedback,
-                        subtitle:
-                            AppLocalizations.of(context).mineFeedbackSubtitle,
-                        onTap: () async {
-                          final url = Uri.parse(
-                              'https://github.com/TNT-Likely/BeeCount/issues');
-                          await _tryOpenUrl(url);
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
-                      AppListTile(
-                        leading: Icons.star_outline,
-                        title: AppLocalizations.of(context).mineSupportAuthor,
-                        subtitle: AppLocalizations.of(context)
-                            .mineSupportAuthorSubtitle,
-                        onTap: () async {
-                          final url = Uri.parse(
-                              'https://github.com/TNT-Likely/BeeCount');
-                          await _tryOpenUrl(url);
+                      // GitHub Star
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final starCountAsync =
+                              ref.watch(githubStarCountProvider);
+                          final starCount = starCountAsync.valueOrNull ?? 800;
+                          return AppListTile(
+                            leading: Icons.star_outline,
+                            title:
+                                AppLocalizations.of(context).mineSupportAuthor,
+                            subtitle: AppLocalizations.of(context)
+                                .mineSupportAuthorSubtitle(starCount.toString()),
+                            onTap: () => _showGitHubStarGuide(context),
+                          );
                         },
                       ),
                       BeeTokens.cardDivider(context),
@@ -591,6 +595,56 @@ Future<bool> _tryOpenUrl(Uri url) async {
     logger.error('MinePage', '打开URL失败: $url', e);
     return false;
   }
+}
+
+/// 显示 GitHub Star 引导弹窗
+void _showGitHubStarGuide(BuildContext context) {
+  final l10n = AppLocalizations.of(context);
+  final screenHeight = MediaQuery.of(context).size.height;
+
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(l10n.githubStarGuideTitle),
+      content: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: screenHeight * 0.5,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.githubStarGuideContent,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 引导图片
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  'assets/images/github_star_guide.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        FilledButton(
+          onPressed: () {
+            Navigator.pop(context);
+            _tryOpenUrl(Uri.parse('https://github.com/TNT-Likely/BeeCount'));
+          },
+          child: Text(l10n.githubStarGuideButton),
+        ),
+      ],
+    ),
+  );
 }
 
 /// 请求应用评分

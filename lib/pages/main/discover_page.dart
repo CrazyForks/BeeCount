@@ -806,54 +806,33 @@ class _QuickActionsCard extends ConsumerWidget {
             ),
           ),
           SizedBox(height: 12.0.scaled(context, ref)),
-          // 第一行：拍照、相册、语音、AI设置
+          // 第一行：导入、导出、分类管理、标签管理
           Row(
             children: [
               Expanded(
                 child: _buildActionButton(
                   context,
                   ref,
-                  icon: Icons.camera_alt_rounded,
-                  label: l10n.discoverQuickCamera,
-                  onTap: () => ImageBillingHelper.openCameraForBilling(context, ref),
-                ),
-              ),
-              Expanded(
-                child: _buildActionButton(
-                  context,
-                  ref,
-                  icon: Icons.photo_library_rounded,
-                  label: l10n.discoverQuickAlbum,
-                  onTap: () => ImageBillingHelper.pickImageForBilling(context, ref),
-                ),
-              ),
-              Expanded(
-                child: _buildActionButton(
-                  context,
-                  ref,
-                  icon: Icons.mic_rounded,
-                  label: l10n.discoverQuickVoice,
-                  onTap: () => VoiceBillingHelper.startVoiceBilling(context, ref),
-                ),
-              ),
-              Expanded(
-                child: _buildActionButton(
-                  context,
-                  ref,
-                  icon: Icons.smart_toy_outlined,
-                  label: l10n.discoverAISettings,
+                  icon: Icons.file_download_outlined,
+                  label: l10n.discoverImport,
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const AISettingsPage()),
+                    MaterialPageRoute(builder: (_) => const ImportPage()),
                   ),
                 ),
               ),
-            ],
-          ),
-          SizedBox(height: 12.0.scaled(context, ref)),
-          // 第二行：分类管理、记账提醒、导入、导出
-          Row(
-            children: [
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.file_upload_outlined,
+                  label: l10n.discoverExport,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ExportPage()),
+                  ),
+                ),
+              ),
               Expanded(
                 child: _buildActionButton(
                   context,
@@ -878,15 +857,21 @@ class _QuickActionsCard extends ConsumerWidget {
                   ),
                 ),
               ),
+            ],
+          ),
+          SizedBox(height: 12.0.scaled(context, ref)),
+          // 第二行：AI设置、语音记账、图片记账、拍照记账
+          Row(
+            children: [
               Expanded(
                 child: _buildActionButton(
                   context,
                   ref,
-                  icon: Icons.file_download_outlined,
-                  label: l10n.discoverImport,
+                  icon: Icons.smart_toy_outlined,
+                  label: l10n.discoverAISettings,
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const ImportPage()),
+                    MaterialPageRoute(builder: (_) => const AISettingsPage()),
                   ),
                 ),
               ),
@@ -894,12 +879,27 @@ class _QuickActionsCard extends ConsumerWidget {
                 child: _buildActionButton(
                   context,
                   ref,
-                  icon: Icons.file_upload_outlined,
-                  label: l10n.discoverExport,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ExportPage()),
-                  ),
+                  icon: Icons.mic_rounded,
+                  label: l10n.discoverQuickVoice,
+                  onTap: () => VoiceBillingHelper.startVoiceBilling(context, ref),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.photo_library_rounded,
+                  label: l10n.discoverQuickAlbum,
+                  onTap: () => ImageBillingHelper.pickImageForBilling(context, ref),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.camera_alt_rounded,
+                  label: l10n.discoverQuickCamera,
+                  onTap: () => ImageBillingHelper.openCameraForBilling(context, ref),
                 ),
               ),
             ],

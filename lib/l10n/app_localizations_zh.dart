@@ -1222,10 +1222,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineHelpSubtitle => '查看使用文档和常见问题';
 
   @override
-  String get mineSupportAuthor => '支持作者';
+  String get mineSupportAuthor => '给项目 Star ⭐️';
 
   @override
-  String get mineSupportAuthorSubtitle => '在GitHub上为项目点赞';
+  String mineSupportAuthorSubtitle(String count) {
+    return '开源免费，已有 $count 人 Star';
+  }
+
+  @override
+  String get githubStarGuideTitle => '如何给项目 Star';
+
+  @override
+  String get githubStarGuideContent => '点击下方按钮打开 GitHub 页面后，点击图中标注的位置即可完成 Star';
+
+  @override
+  String get githubStarGuideButton => '前往 GitHub';
 
   @override
   String get categoryEditTitle => '编辑分类';
@@ -3431,6 +3442,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiCloudApiGetKey => '获取API Key';
 
   @override
+  String get aiCloudApiTutorial => '详细教程';
+
+  @override
   String get aiCloudApiTestKey => '测试连接';
 
   @override
@@ -3607,6 +3621,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aboutPageLoadingVersion => '加载版本号中...';
+
+  @override
+  String get aboutWebsite => '官方网站';
 
   @override
   String get aboutGitHubRepo => 'GitHub 仓库';
@@ -4088,13 +4105,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get billCardEdit => '修改';
 
   @override
-  String get donationTitle => '支持开发者';
+  String get donationTitle => '捐赠';
 
   @override
   String get donationSubtitle => '请我喝杯咖啡';
 
   @override
-  String get donationEntrySubtitle => '感谢您的支持 ☕';
+  String get donationEntrySubtitle => '支持应用持续开发';
 
   @override
   String get donationDescription => '说明';
@@ -6018,10 +6035,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineHelpSubtitle => '查看使用文件和常見問題';
 
   @override
-  String get mineSupportAuthor => '支持作者';
+  String get mineSupportAuthor => '給專案 Star ⭐️';
 
   @override
-  String get mineSupportAuthorSubtitle => '在GitHub上為專案點讚';
+  String mineSupportAuthorSubtitle(String count) {
+    return '開源免費，已有 $count 人 Star';
+  }
+
+  @override
+  String get githubStarGuideTitle => '如何給專案 Star';
+
+  @override
+  String get githubStarGuideContent => '點擊下方按鈕開啟 GitHub 頁面後，點擊圖中標註的位置即可完成 Star';
+
+  @override
+  String get githubStarGuideButton => '前往 GitHub';
 
   @override
   String get categoryEditTitle => '編輯分類';
@@ -8227,6 +8255,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiCloudApiGetKey => '取得 API Key';
 
   @override
+  String get aiCloudApiTutorial => '詳細教學';
+
+  @override
   String get aiCloudApiTestKey => '測試連線';
 
   @override
@@ -8403,6 +8434,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aboutPageLoadingVersion => '載入版本號中...';
+
+  @override
+  String get aboutWebsite => '官方網站';
 
   @override
   String get aboutGitHubRepo => 'GitHub 儲存庫';
@@ -8884,13 +8918,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get billCardEdit => '修改';
 
   @override
-  String get donationTitle => '支持開發者';
+  String get donationTitle => '捐贈';
 
   @override
   String get donationSubtitle => '請我喝杯咖啡';
 
   @override
-  String get donationEntrySubtitle => '感謝您的支持 ☕';
+  String get donationEntrySubtitle => '支持應用持續開發';
 
   @override
   String get donationDescription => '說明';

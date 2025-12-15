@@ -14,6 +14,7 @@ import '../../services/system/update_service.dart';
 import '../../services/system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
+import '../../utils/website_urls.dart';
 import 'log_center_page.dart';
 
 /// 是否为 Google Play 版本（通过 CI 构建时 --dart-define=GOOGLE_PLAY=true 注入）
@@ -100,6 +101,16 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                   margin: EdgeInsets.zero,
                   child: Column(
                     children: [
+                      AppListTile(
+                        leading: Icons.language_outlined,
+                        title: AppLocalizations.of(context).aboutWebsite,
+                        onTap: () async {
+                          final locale = Localizations.localeOf(context);
+                          final url = Uri.parse(WebsiteUrls.home(locale));
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
                       AppListTile(
                         leading: Icons.code_outlined,
                         title: AppLocalizations.of(context).aboutGitHubRepo,
@@ -244,6 +255,17 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                       ),
                       const Divider(height: 1, thickness: 0.5),
                       AppListTile(
+                        leading: Icons.feedback_outlined,
+                        title: AppLocalizations.of(context).mineFeedback,
+                        subtitle: AppLocalizations.of(context).mineFeedbackSubtitle,
+                        onTap: () async {
+                          final url = Uri.parse(
+                              'https://github.com/TNT-Likely/BeeCount/issues');
+                          await _tryOpenUrl(url);
+                        },
+                      ),
+                      const Divider(height: 1, thickness: 0.5),
+                      AppListTile(
                         leading: Icons.bug_report_outlined,
                         title: AppLocalizations.of(context).logCenterTitle,
                         subtitle: AppLocalizations.of(context).logCenterSubtitle,
@@ -259,6 +281,21 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                     ],
                   ),
                 ),
+                // ICP 备案号（仅简体中文显示）
+                if (Localizations.localeOf(context).languageCode == 'zh' &&
+                    Localizations.localeOf(context).countryCode != 'TW') ...[
+                  SizedBox(height: 24.0.scaled(context, ref)),
+                  Center(
+                    child: Text(
+                      '浙ICP备2025214907号-2A',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: BeeTokens.textTertiary(context),
+                            fontSize: 11,
+                          ),
+                    ),
+                  ),
+                  SizedBox(height: 16.0.scaled(context, ref)),
+                ],
               ],
             ),
           ),

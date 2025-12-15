@@ -505,8 +505,18 @@
   "mineFeedbackSubtitle": "Report issues or suggestions",
   "mineHelp": "Help",
   "mineHelpSubtitle": "View documentation and FAQ",
-  "mineSupportAuthor": "Support Author",
-  "mineSupportAuthorSubtitle": "Star the project on GitHub",
+  "mineSupportAuthor": "Star the Project ⭐️",
+  "mineSupportAuthorSubtitle": "Open source, {count} stars",
+  "@mineSupportAuthorSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "githubStarGuideTitle": "How to Star the Project",
+  "githubStarGuideContent": "After tapping the button below to open GitHub, tap the area marked in the image to complete the Star",
+  "githubStarGuideButton": "Go to GitHub",
   "categoryEditTitle": "Edit Category",
   "categoryNewTitle": "New Category",
   "categoryDetailTooltip": "Category Details",
@@ -1441,6 +1451,7 @@
   "aiCloudApiKeyHint": "Enter your Zhipu AI API Key",
   "aiCloudApiKeyHelper": "GLM-*-Flash model is completely free",
   "aiCloudApiGetKey": "Get API Key",
+  "aiCloudApiTutorial": "Tutorial",
   "aiCloudApiTestKey": "Test Connection",
   "aiCloudApiKeyValid": "✅ API Key is valid, AI features are available",
   "aiCloudApiKeyInvalid": "❌ API Key is invalid, please check and re-enter",
@@ -1516,6 +1527,7 @@
   "aboutPageTitle": "About",
   "aboutPageSubtitle": "App information and help",
   "aboutPageLoadingVersion": "Loading version...",
+  "aboutWebsite": "Official Website",
   "aboutGitHubRepo": "GitHub Repository",
   "aboutContactEmail": "Contact Email",
   "aboutWeChatGroup": "WeChat Group",
@@ -1739,9 +1751,9 @@
   "billCardAccount": "💳 Account",
   "billCardUndo": "Undo",
   "billCardEdit": "Edit",
-  "donationTitle": "Support Developer",
+  "donationTitle": "Donate",
   "donationSubtitle": "Buy me a coffee",
-  "donationEntrySubtitle": "Thank you for your support ☕",
+  "donationEntrySubtitle": "Support continued development",
   "donationDescription": "Description",
   "donationDescriptionDetail": "Thank you for using BeeCount! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.",
   "donationNoFeatures": "Note: Donations will not unlock any features. All features remain completely free.",

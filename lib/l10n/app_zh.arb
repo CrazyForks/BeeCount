@@ -450,8 +450,18 @@
   "mineFeedbackSubtitle": "提交问题或建议",
   "mineHelp": "使用帮助",
   "mineHelpSubtitle": "查看使用文档和常见问题",
-  "mineSupportAuthor": "支持作者",
-  "mineSupportAuthorSubtitle": "在GitHub上为项目点赞",
+  "mineSupportAuthor": "给项目 Star ⭐️",
+  "mineSupportAuthorSubtitle": "开源免费，已有 {count} 人 Star",
+  "@mineSupportAuthorSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "githubStarGuideTitle": "如何给项目 Star",
+  "githubStarGuideContent": "点击下方按钮打开 GitHub 页面后，点击图中标注的位置即可完成 Star",
+  "githubStarGuideButton": "前往 GitHub",
   "categoryEditTitle": "编辑分类",
   "categoryNewTitle": "新建分类",
   "categoryDetailTooltip": "分类详情",
@@ -1314,6 +1324,7 @@
   "aiCloudApiKeyHint": "输入智谱AI的API Key",
   "aiCloudApiKeyHelper": "GLM-*-Flash模型完全免费",
   "aiCloudApiGetKey": "获取API Key",
+  "aiCloudApiTutorial": "详细教程",
   "aiCloudApiTestKey": "测试连接",
   "aiCloudApiKeyValid": "✅ API Key 有效，AI功能可正常使用",
   "aiCloudApiKeyInvalid": "❌ API Key 无效，请检查后重新输入",
@@ -1389,6 +1400,7 @@
   "mineRateApp": "给应用评分",
   "mineRateAppSubtitle": "在App Store上为我们打分",
   "aboutPageLoadingVersion": "加载版本号中...",
+  "aboutWebsite": "官方网站",
   "aboutGitHubRepo": "GitHub 仓库",
   "aboutContactEmail": "联系邮箱",
   "aboutWeChatGroup": "微信群",
@@ -1697,9 +1709,9 @@
   "billCardUndo": "撤销",
   "billCardEdit": "修改",
   "billCardUnknownLedger": "未知账本",
-  "donationTitle": "支持开发者",
+  "donationTitle": "捐赠",
   "donationSubtitle": "请我喝杯咖啡",
-  "donationEntrySubtitle": "感谢您的支持 ☕",
+  "donationEntrySubtitle": "支持应用持续开发",
   "donationDescription": "说明",
   "donationDescriptionDetail": "感谢您使用蜜蜂记账！如果这个应用对您有帮助，欢迎请开发者喝杯咖啡作为鼓励。您的支持是我持续改进的动力。",
   "donationNoFeatures": "注: 打赏不会解锁任何功能，所有功能继续完全免费。",
