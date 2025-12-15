@@ -120,6 +120,14 @@
     }
   },
   "homeNoRecordsSubtext": "Tap the plus button at the bottom to add a record",
+  "homeLastMonthReportTitle": "{month} report is ready",
+  "@homeLastMonthReportTitle": {
+    "placeholders": {
+      "month": {"type": "String"}
+    }
+  },
+  "homeLastMonthReportSubtitle": "View and share last month's report",
+  "homeLastMonthReportView": "View",
   "widgetTodayExpense": "Today's Expense",
   "widgetTodayIncome": "Today's Income",
   "widgetMonthExpense": "Month's Expense",
@@ -405,6 +413,12 @@
   "sharePosterHideIncome": "Hide Income",
   "sharePosterShowIncome": "Show Income",
   "sharePosterSaveSuccess": "Saved to gallery",
+  "shareGuidanceTitle": "Share to Social Media",
+  "shareGuidanceMessage": "Poster saved! Copy the text and share on your favorite social media~",
+  "shareGuidanceCopyText": "Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount",
+  "shareGuidanceCopyButton": "Copy Share Text",
+  "shareGuidanceCopied": "Text copied",
+  "shareGuidanceDone": "Done",
   "sharePosterSaveFailed": "Failed to save",
   "sharePosterPermissionDenied": "Gallery permission denied, please enable in settings",
   "sharePosterGenerating": "Generating...",
@@ -431,6 +445,7 @@
   "sharePosterCompareLastMonth": "vs Last Month",
   "sharePosterIncreaseRate": "Increase",
   "sharePosterDecreaseRate": "Decrease",
+  "sharePosterSavedMoneyTitle": "Congrats! You saved this month",
   "sharePosterLedgerName": "Ledger Name",
   "sharePosterUnitDay": "days",
   "sharePosterUnitCount": "",
@@ -1930,6 +1945,27 @@
   "discoverHelp": "Help",
   "discoverConfigManagement": "Config",
   "discoverAttachmentExport": "Attachments",
+  "discoverMonthlyReport": "Monthly Report",
+  "discoverMonthlyReportSubtitle": "View and share your monthly report",
+  "discoverShare": "Share",
+  "discoverSavedMoney": "Saved ¥{amount}",
+  "@discoverSavedMoney": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "discoverExpenseIncreased": "{percent} more than last month",
+  "@discoverExpenseIncreased": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "discoverExpenseDecreased": "{percent} less than last month",
+  "@discoverExpenseDecreased": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
   "budgetTitle": "Budget",

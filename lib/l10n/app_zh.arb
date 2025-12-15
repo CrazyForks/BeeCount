@@ -103,6 +103,14 @@
   "homeYear": "{year}年",
   "homeMonth": "{month}月",
   "homeNoRecordsSubtext": "点击底部加号，马上记一笔",
+  "homeLastMonthReportTitle": "{month}消费报告已生成",
+  "@homeLastMonthReportTitle": {
+    "placeholders": {
+      "month": {"type": "String"}
+    }
+  },
+  "homeLastMonthReportSubtitle": "查看上月消费报告并分享",
+  "homeLastMonthReportView": "查看",
   "widgetTodayExpense": "今日支出",
   "widgetTodayIncome": "今日收入",
   "widgetMonthExpense": "本月支出",
@@ -350,6 +358,12 @@
   "sharePosterHideIncome": "隐藏收入",
   "sharePosterShowIncome": "显示收入",
   "sharePosterSaveSuccess": "已保存到相册",
+  "shareGuidanceTitle": "分享到朋友圈",
+  "shareGuidanceMessage": "海报已保存，复制文案后打开微信分享吧~",
+  "shareGuidanceCopyText": "用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount",
+  "shareGuidanceCopyButton": "一键复制文案",
+  "shareGuidanceCopied": "文案已复制",
+  "shareGuidanceDone": "完成",
   "sharePosterSaveFailed": "保存失败",
   "sharePosterPermissionDenied": "相册权限被拒绝，请在设置中开启",
   "sharePosterGenerating": "生成中...",
@@ -376,6 +390,7 @@
   "sharePosterCompareLastMonth": "环比上月",
   "sharePosterIncreaseRate": "较上月增长",
   "sharePosterDecreaseRate": "较上月减少",
+  "sharePosterSavedMoneyTitle": "恭喜！本月比上月省了",
   "sharePosterLedgerName": "账本名称",
   "sharePosterUnitDay": "天",
   "sharePosterUnitCount": "笔",
@@ -1869,6 +1884,27 @@
   "discoverHelp": "使用帮助",
   "discoverConfigManagement": "配置管理",
   "discoverAttachmentExport": "附件导出",
+  "discoverMonthlyReport": "月度报告",
+  "discoverMonthlyReportSubtitle": "查看本月消费报告并分享",
+  "discoverShare": "分享",
+  "discoverSavedMoney": "省了¥{amount}",
+  "@discoverSavedMoney": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "discoverExpenseIncreased": "比上月增加{percent}",
+  "@discoverExpenseIncreased": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "discoverExpenseDecreased": "比上月减少{percent}",
+  "@discoverExpenseDecreased": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
   "budgetTitle": "预算管理",

@@ -504,6 +504,24 @@ abstract class AppLocalizations {
   /// **'Tap the plus button at the bottom to add a record'**
   String get homeNoRecordsSubtext;
 
+  /// No description provided for @homeLastMonthReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{month} report is ready'**
+  String homeLastMonthReportTitle(String month);
+
+  /// No description provided for @homeLastMonthReportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View and share last month\'s report'**
+  String get homeLastMonthReportSubtitle;
+
+  /// No description provided for @homeLastMonthReportView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get homeLastMonthReportView;
+
   /// No description provided for @widgetTodayExpense.
   ///
   /// In en, this message translates to:
@@ -1734,6 +1752,42 @@ abstract class AppLocalizations {
   /// **'Saved to gallery'**
   String get sharePosterSaveSuccess;
 
+  /// No description provided for @shareGuidanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share to Social Media'**
+  String get shareGuidanceTitle;
+
+  /// No description provided for @shareGuidanceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Poster saved! Copy the text and share on your favorite social media~'**
+  String get shareGuidanceMessage;
+
+  /// No description provided for @shareGuidanceCopyText.
+  ///
+  /// In en, this message translates to:
+  /// **'Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount'**
+  String get shareGuidanceCopyText;
+
+  /// No description provided for @shareGuidanceCopyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Share Text'**
+  String get shareGuidanceCopyButton;
+
+  /// No description provided for @shareGuidanceCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Text copied'**
+  String get shareGuidanceCopied;
+
+  /// No description provided for @shareGuidanceDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get shareGuidanceDone;
+
   /// No description provided for @sharePosterSaveFailed.
   ///
   /// In en, this message translates to:
@@ -1889,6 +1943,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Decrease'**
   String get sharePosterDecreaseRate;
+
+  /// No description provided for @sharePosterSavedMoneyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Congrats! You saved this month'**
+  String get sharePosterSavedMoneyTitle;
 
   /// No description provided for @sharePosterLedgerName.
   ///
@@ -8675,6 +8735,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attachments'**
   String get discoverAttachmentExport;
+
+  /// No description provided for @discoverMonthlyReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Report'**
+  String get discoverMonthlyReport;
+
+  /// No description provided for @discoverMonthlyReportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View and share your monthly report'**
+  String get discoverMonthlyReportSubtitle;
+
+  /// No description provided for @discoverShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get discoverShare;
+
+  /// No description provided for @discoverSavedMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved ¥{amount}'**
+  String discoverSavedMoney(String amount);
+
+  /// No description provided for @discoverExpenseIncreased.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} more than last month'**
+  String discoverExpenseIncreased(String percent);
+
+  /// No description provided for @discoverExpenseDecreased.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} less than last month'**
+  String discoverExpenseDecreased(String percent);
 
   /// No description provided for @homeSwitchLedger.
   ///

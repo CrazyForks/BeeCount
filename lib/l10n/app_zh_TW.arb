@@ -782,6 +782,27 @@
   "discoverHelp": "使用幫助",
   "discoverConfigManagement": "配置管理",
   "discoverAttachmentExport": "附件導出",
+  "discoverMonthlyReport": "月度報告",
+  "discoverMonthlyReportSubtitle": "查看本月消費報告並分享",
+  "discoverShare": "分享",
+  "discoverSavedMoney": "省了¥{amount}",
+  "@discoverSavedMoney": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "discoverExpenseIncreased": "比上月增加{percent}",
+  "@discoverExpenseIncreased": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "discoverExpenseDecreased": "比上月減少{percent}",
+  "@discoverExpenseDecreased": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
   "discoverImport": "匯入",
   "discoverTags": "標籤管理",
   "discoverTitle": "發現",
@@ -902,6 +923,14 @@
   "homeMonth": "{month}月",
   "homeNoRecords": "還沒有記帳",
   "homeNoRecordsSubtext": "點擊底部加號，馬上記一筆",
+  "homeLastMonthReportTitle": "{month}消費報告已生成",
+  "@homeLastMonthReportTitle": {
+    "placeholders": {
+      "month": {"type": "String"}
+    }
+  },
+  "homeLastMonthReportSubtitle": "查看上月消費報告並分享",
+  "homeLastMonthReportView": "查看",
   "homeSearch": "搜尋",
   "homeSelectDate": "選擇日期",
   "homeSwitchLedger": "選擇帳本",
@@ -1340,6 +1369,12 @@
   "searchSelectedCount": "已選擇 {count} 項",
   "searchStartDate": "開始日期",
   "searchTitle": "搜尋",
+  "shareGuidanceCopied": "文案已複製",
+  "shareGuidanceCopyButton": "一鍵複製文案",
+  "shareGuidanceCopyText": "用蜜蜂記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount",
+  "shareGuidanceDone": "完成",
+  "shareGuidanceMessage": "海報已儲存，複製文案後開啟微信分享吧~",
+  "shareGuidanceTitle": "分享到朋友圈",
   "sharePosterAppName": "蜜蜂記帳",
   "sharePosterAvgDailyExpense": "日均支出",
   "sharePosterAvgMonthlyExpense": "月均支出",
@@ -1370,6 +1405,7 @@
   "sharePosterSave": "儲存到相簿",
   "sharePosterSaveFailed": "儲存失敗",
   "sharePosterSaveSuccess": "已儲存到相簿",
+  "sharePosterSavedMoneyTitle": "恭喜！本月比上月省了",
   "sharePosterScanText": "掃碼訪問開源專案",
   "sharePosterShare": "分享",
   "sharePosterShowIncome": "顯示收入",

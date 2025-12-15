@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import '../../providers.dart';
 import '../settings/personalize_page.dart' show headerStyleProvider;
@@ -14,6 +16,7 @@ import '../transaction/search_page.dart';
 import '../ai/ai_chat_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/system/logger_service.dart';
+import '../../services/export/share_poster_service.dart';
 
 // 优化版首页 - 使用FlutterListView实现精准定位和丝滑跳转
 class HomePage extends ConsumerStatefulWidget {
@@ -37,10 +40,49 @@ class _HomePageState extends ConsumerState<HomePage> {
   int _streamBuilderKey = 0;
   int? _lastLedgerId;
 
+  // 月初提醒状态
+  bool _showLastMonthReminder = false;
+  static const String _reminderDismissedKey = 'last_month_reminder_dismissed';
+
   @override
   void initState() {
     super.initState();
     _listController = FlutterListViewController();
+    _checkLastMonthReminder();
+  }
+
+  // 检查是否应该显示上月报告提醒
+  Future<void> _checkLastMonthReminder() async {
+    final now = DateTime.now();
+    // 只在每月前7天显示提醒
+    if (now.day > 7) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final dismissedMonth = prefs.getString(_reminderDismissedKey);
+    final currentMonth = '${now.year}-${now.month}';
+
+    // 如果当月已经关闭过，不再显示
+    if (dismissedMonth == currentMonth) return;
+
+    if (mounted) {
+      setState(() {
+        _showLastMonthReminder = true;
+      });
+    }
+  }
+
+  // 关闭上月报告提醒
+  Future<void> _dismissLastMonthReminder() async {
+    final now = DateTime.now();
+    final currentMonth = '${now.year}-${now.month}';
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_reminderDismissedKey, currentMonth);
+
+    if (mounted) {
+      setState(() {
+        _showLastMonthReminder = false;
+      });
+    }
   }
 
   @override
@@ -137,6 +179,127 @@ class _HomePageState extends ConsumerState<HomePage> {
       // 使用FlutterListView的精准跳转
       await _jumpToTargetMonth(targetMonth);
     }
+  }
+
+  // 构建月初提醒卡片
+  Widget _buildLastMonthReminderCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final now = DateTime.now();
+    final lastMonth = DateTime(now.year, now.month - 1, 1);
+    final monthFormat = DateFormat.MMMM(l10n.localeName);
+    final primaryColor = ref.watch(primaryColorProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
+          children: [
+            // 左侧装饰条
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 4,
+                color: primaryColor,
+              ),
+            ),
+            // 主体内容
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+              child: Row(
+                children: [
+                  // 文案
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.auto_awesome,
+                          color: primaryColor,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: monthFormat.format(lastMonth),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' ${l10n.homeLastMonthReportSubtitle}',
+                                  style: TextStyle(
+                                    color: isDark ? Colors.white70 : Colors.black54,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // 查看按钮（查看后本次隐藏，下次打开app还会显示）
+                  GestureDetector(
+                    onTap: () {
+                      SharePosterService.showPosterCarouselPreview(
+                        context,
+                        year: lastMonth.year,
+                        month: lastMonth.month,
+                      );
+                      // 只临时隐藏，不保存到 prefs
+                      setState(() {
+                        _showLastMonthReminder = false;
+                      });
+                    },
+                    child: Text(
+                      l10n.homeLastMonthReportView,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: primaryColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // 关闭按钮（关闭后当月不再显示）
+                  GestureDetector(
+                    onTap: _dismissLastMonthReminder,
+                    behavior: HitTestBehavior.opaque,
+                    child: Icon(
+                      Icons.close,
+                      size: 18,
+                      color: isDark ? Colors.white38 : Colors.black26,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -367,6 +530,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             );
           }),
           const SizedBox(height: 0),
+          // 月初提醒卡片
+          if (_showLastMonthReminder)
+            _buildLastMonthReminderCard(context),
           Expanded(
             child: StreamBuilder<List<({Transaction t, Category? category})>>(
               key: ValueKey('transactions_$_streamBuilderKey'), // 使用递增key强制重建

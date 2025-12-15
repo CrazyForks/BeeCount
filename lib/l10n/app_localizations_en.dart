@@ -225,6 +225,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNoRecordsSubtext => 'Tap the plus button at the bottom to add a record';
 
   @override
+  String homeLastMonthReportTitle(String month) {
+    return '$month report is ready';
+  }
+
+  @override
+  String get homeLastMonthReportSubtitle => 'View and share last month\'s report';
+
+  @override
+  String get homeLastMonthReportView => 'View';
+
+  @override
   String get widgetTodayExpense => 'Today\'s Expense';
 
   @override
@@ -902,6 +913,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharePosterSaveSuccess => 'Saved to gallery';
 
   @override
+  String get shareGuidanceTitle => 'Share to Social Media';
+
+  @override
+  String get shareGuidanceMessage => 'Poster saved! Copy the text and share on your favorite social media~';
+
+  @override
+  String get shareGuidanceCopyText => 'Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount';
+
+  @override
+  String get shareGuidanceCopyButton => 'Copy Share Text';
+
+  @override
+  String get shareGuidanceCopied => 'Text copied';
+
+  @override
+  String get shareGuidanceDone => 'Done';
+
+  @override
   String get sharePosterSaveFailed => 'Failed to save';
 
   @override
@@ -978,6 +1007,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharePosterDecreaseRate => 'Decrease';
+
+  @override
+  String get sharePosterSavedMoneyTitle => 'Congrats! You saved this month';
 
   @override
   String get sharePosterLedgerName => 'Ledger Name';
@@ -4527,6 +4559,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverAttachmentExport => 'Attachments';
+
+  @override
+  String get discoverMonthlyReport => 'Monthly Report';
+
+  @override
+  String get discoverMonthlyReportSubtitle => 'View and share your monthly report';
+
+  @override
+  String get discoverShare => 'Share';
+
+  @override
+  String discoverSavedMoney(String amount) {
+    return 'Saved ¥$amount';
+  }
+
+  @override
+  String discoverExpenseIncreased(String percent) {
+    return '$percent more than last month';
+  }
+
+  @override
+  String discoverExpenseDecreased(String percent) {
+    return '$percent less than last month';
+  }
 
   @override
   String get homeSwitchLedger => 'Select Ledger';

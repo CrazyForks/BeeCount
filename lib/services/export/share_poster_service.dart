@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gal/gal.dart';
 import 'package:share_plus/share_plus.dart';
@@ -304,6 +305,14 @@ class SharePosterService {
       ),
     );
   }
+
+  /// 显示分享引导对话框
+  static Future<void> showShareGuidanceDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) => const _ShareGuidanceDialog(),
+    );
+  }
 }
 
 /// 海报预览对话框
@@ -336,6 +345,10 @@ class _PosterPreviewDialogState extends State<_PosterPreviewDialog> {
       case SavePosterResult.success:
         showToast(context, widget.l10n.sharePosterSaveSuccess);
         Navigator.pop(context);
+        // 显示分享引导对话框
+        if (context.mounted) {
+          await SharePosterService.showShareGuidanceDialog(context);
+        }
         break;
       case SavePosterResult.accessDenied:
         // 权限被拒绝
@@ -695,6 +708,10 @@ class _PosterCarouselPreviewDialogState
       case SavePosterResult.success:
         showToast(context, l10n.sharePosterSaveSuccess);
         Navigator.pop(context);
+        // 显示分享引导对话框
+        if (context.mounted) {
+          await SharePosterService.showShareGuidanceDialog(context);
+        }
         break;
       case SavePosterResult.accessDenied:
         showToast(context, l10n.sharePosterPermissionDenied);
@@ -1090,6 +1107,10 @@ class _DynamicPosterPreviewDialogState
       case SavePosterResult.success:
         showToast(context, l10n.sharePosterSaveSuccess);
         Navigator.pop(context);
+        // 显示分享引导对话框
+        if (context.mounted) {
+          await SharePosterService.showShareGuidanceDialog(context);
+        }
         break;
       case SavePosterResult.accessDenied:
         showToast(context, l10n.sharePosterPermissionDenied);
@@ -1286,6 +1307,146 @@ class _DynamicPosterPreviewDialogState
           ),
         ],
       ),
+    );
+  }
+}
+
+/// 分享引导对话框
+class _ShareGuidanceDialog extends StatelessWidget {
+  const _ShareGuidanceDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Consumer(
+      builder: (context, ref, child) {
+        final primaryColor = ref.watch(primaryColorProvider);
+        final isDark = BeeTokens.isDark(context);
+
+        return Dialog(
+          backgroundColor: BeeTokens.surface(context),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: isDark
+                ? BorderSide(color: BeeTokens.border(context))
+                : BorderSide.none,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 标题
+                Row(
+                  children: [
+                    Icon(
+                      Icons.share_outlined,
+                      color: primaryColor,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      l10n.shareGuidanceTitle,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: BeeTokens.textPrimary(context),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // 提示信息
+                Text(
+                  l10n.shareGuidanceMessage,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: BeeTokens.textSecondary(context),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // 分享文案预览卡片
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? BeeTokens.scaffoldBackground(context)
+                        : Colors.grey[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: BeeTokens.border(context),
+                    ),
+                  ),
+                  child: Text(
+                    l10n.shareGuidanceCopyText,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: BeeTokens.textPrimary(context),
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // 按钮
+                Row(
+                  children: [
+                    // 完成按钮
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: BeeTokens.textSecondary(context),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          side: BorderSide(
+                            color: BeeTokens.border(context),
+                          ),
+                        ),
+                        child: Text(l10n.shareGuidanceDone),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    // 一键复制按钮
+                    Expanded(
+                      flex: 2,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          await Clipboard.setData(
+                            ClipboardData(text: l10n.shareGuidanceCopyText),
+                          );
+                          if (context.mounted) {
+                            showToast(context, l10n.shareGuidanceCopied);
+                            Navigator.pop(context);
+                          }
+                        },
+                        icon: const Icon(Icons.copy, size: 18),
+                        label: Text(l10n.shareGuidanceCopyButton),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

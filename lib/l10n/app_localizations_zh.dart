@@ -225,6 +225,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeNoRecordsSubtext => '点击底部加号，马上记一笔';
 
   @override
+  String homeLastMonthReportTitle(String month) {
+    return '$month消费报告已生成';
+  }
+
+  @override
+  String get homeLastMonthReportSubtitle => '查看上月消费报告并分享';
+
+  @override
+  String get homeLastMonthReportView => '查看';
+
+  @override
   String get widgetTodayExpense => '今日支出';
 
   @override
@@ -902,6 +913,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterSaveSuccess => '已保存到相册';
 
   @override
+  String get shareGuidanceTitle => '分享到朋友圈';
+
+  @override
+  String get shareGuidanceMessage => '海报已保存，复制文案后打开微信分享吧~';
+
+  @override
+  String get shareGuidanceCopyText => '用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount';
+
+  @override
+  String get shareGuidanceCopyButton => '一键复制文案';
+
+  @override
+  String get shareGuidanceCopied => '文案已复制';
+
+  @override
+  String get shareGuidanceDone => '完成';
+
+  @override
   String get sharePosterSaveFailed => '保存失败';
 
   @override
@@ -978,6 +1007,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterDecreaseRate => '较上月减少';
+
+  @override
+  String get sharePosterSavedMoneyTitle => '恭喜！本月比上月省了';
 
   @override
   String get sharePosterLedgerName => '账本名称';
@@ -4529,6 +4561,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverAttachmentExport => '附件导出';
 
   @override
+  String get discoverMonthlyReport => '月度报告';
+
+  @override
+  String get discoverMonthlyReportSubtitle => '查看本月消费报告并分享';
+
+  @override
+  String get discoverShare => '分享';
+
+  @override
+  String discoverSavedMoney(String amount) {
+    return '省了¥$amount';
+  }
+
+  @override
+  String discoverExpenseIncreased(String percent) {
+    return '比上月增加$percent';
+  }
+
+  @override
+  String discoverExpenseDecreased(String percent) {
+    return '比上月减少$percent';
+  }
+
+  @override
   String get homeSwitchLedger => '选择账本';
 
   @override
@@ -5030,6 +5086,17 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get homeNoRecordsSubtext => '點擊底部加號，馬上記一筆';
+
+  @override
+  String homeLastMonthReportTitle(String month) {
+    return '$month消費報告已生成';
+  }
+
+  @override
+  String get homeLastMonthReportSubtitle => '查看上月消費報告並分享';
+
+  @override
+  String get homeLastMonthReportView => '查看';
 
   @override
   String get widgetTodayExpense => '今日支出';
@@ -5709,6 +5776,24 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterSaveSuccess => '已儲存到相簿';
 
   @override
+  String get shareGuidanceTitle => '分享到朋友圈';
+
+  @override
+  String get shareGuidanceMessage => '海報已儲存，複製文案後開啟微信分享吧~';
+
+  @override
+  String get shareGuidanceCopyText => '用蜜蜂記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount';
+
+  @override
+  String get shareGuidanceCopyButton => '一鍵複製文案';
+
+  @override
+  String get shareGuidanceCopied => '文案已複製';
+
+  @override
+  String get shareGuidanceDone => '完成';
+
+  @override
   String get sharePosterSaveFailed => '儲存失敗';
 
   @override
@@ -5785,6 +5870,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterDecreaseRate => '較上月減少';
+
+  @override
+  String get sharePosterSavedMoneyTitle => '恭喜！本月比上月省了';
 
   @override
   String get sharePosterLedgerName => '帳本名稱';
@@ -9334,6 +9422,30 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get discoverAttachmentExport => '附件導出';
+
+  @override
+  String get discoverMonthlyReport => '月度報告';
+
+  @override
+  String get discoverMonthlyReportSubtitle => '查看本月消費報告並分享';
+
+  @override
+  String get discoverShare => '分享';
+
+  @override
+  String discoverSavedMoney(String amount) {
+    return '省了¥$amount';
+  }
+
+  @override
+  String discoverExpenseIncreased(String percent) {
+    return '比上月增加$percent';
+  }
+
+  @override
+  String discoverExpenseDecreased(String percent) {
+    return '比上月減少$percent';
+  }
 
   @override
   String get homeSwitchLedger => '選擇帳本';
