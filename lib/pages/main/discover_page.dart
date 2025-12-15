@@ -20,6 +20,8 @@ import '../budget/budget_page.dart';
 import '../category/category_manage_page.dart';
 import '../data/export_page.dart';
 import '../data/import_page.dart';
+import '../settings/config_import_export_page.dart';
+import '../settings/data_management_page.dart';
 import '../tag/tag_manage_page.dart';
 
 /// 发现页
@@ -79,7 +81,8 @@ class DiscoverPage extends ConsumerWidget {
                         Icon(
                           Icons.keyboard_arrow_down,
                           size: 14,
-                          color: BeeTokens.textPrimary(context).withValues(alpha: 0.6),
+                          color: BeeTokens.textPrimary(context)
+                              .withValues(alpha: 0.6),
                         ),
                       ],
                     ),
@@ -202,7 +205,8 @@ class _BudgetCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+  Widget _buildEmptyState(
+      BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 20.0.scaled(context, ref)),
@@ -233,7 +237,8 @@ class _BudgetCard extends ConsumerWidget {
     AppLocalizations l10n,
   ) {
     final budget = overview.totalBudget!;
-    final rate = budget.budget > 0 ? (budget.used / budget.budget).clamp(0.0, 1.0) : 0.0;
+    final rate =
+        budget.budget > 0 ? (budget.used / budget.budget).clamp(0.0, 1.0) : 0.0;
     final progressColor = _getProgressColor(context, rate);
     final hideAmounts = ref.watch(hideAmountsProvider);
 
@@ -600,7 +605,8 @@ class _AccountsCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+  Widget _buildEmptyState(
+      BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 20.0.scaled(context, ref)),
@@ -841,7 +847,8 @@ class _QuickActionsCard extends ConsumerWidget {
                   label: l10n.discoverCategory,
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const CategoryManagePage()),
+                    MaterialPageRoute(
+                        builder: (_) => const CategoryManagePage()),
                   ),
                 ),
               ),
@@ -860,14 +867,14 @@ class _QuickActionsCard extends ConsumerWidget {
             ],
           ),
           SizedBox(height: 12.0.scaled(context, ref)),
-          // 第二行：AI设置、使用帮助
+          // 第二行：AI设置、使用帮助、配置管理、附件导出
           Row(
             children: [
               Expanded(
                 child: _buildActionButton(
                   context,
                   ref,
-                  icon: Icons.smart_toy_outlined,
+                  icon: Icons.psychology_outlined,
                   label: l10n.discoverAISettings,
                   onTap: () => Navigator.push(
                     context,
@@ -885,13 +892,38 @@ class _QuickActionsCard extends ConsumerWidget {
                     final locale = Localizations.localeOf(context);
                     final uri = Uri.parse(WebsiteUrls.docs(locale));
                     if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
                     }
                   },
                 ),
               ),
-              const Expanded(child: SizedBox()),
-              const Expanded(child: SizedBox()),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.settings_backup_restore,
+                  label: l10n.discoverConfigManagement,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const ConfigImportExportPage()),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: _buildActionButton(
+                  context,
+                  ref,
+                  icon: Icons.upload_file,
+                  label: l10n.discoverAttachmentExport,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const DataManagementPage()),
+                  ),
+                ),
+              ),
             ],
           ),
         ],

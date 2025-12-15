@@ -4523,6 +4523,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverHelp => 'Help';
 
   @override
+  String get discoverConfigManagement => 'Config';
+
+  @override
+  String get discoverAttachmentExport => 'Attachments';
+
+  @override
   String get homeSwitchLedger => 'Select Ledger';
 
   @override

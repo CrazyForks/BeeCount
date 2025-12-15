@@ -1867,6 +1867,8 @@
   "discoverImport": "导入",
   "discoverExport": "导出",
   "discoverHelp": "使用帮助",
+  "discoverConfigManagement": "配置管理",
+  "discoverAttachmentExport": "附件导出",
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
   "budgetTitle": "预算管理",

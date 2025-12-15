@@ -4523,6 +4523,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverHelp => '使用帮助';
 
   @override
+  String get discoverConfigManagement => '配置管理';
+
+  @override
+  String get discoverAttachmentExport => '附件导出';
+
+  @override
   String get homeSwitchLedger => '选择账本';
 
   @override
@@ -9322,6 +9328,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get discoverHelp => '使用幫助';
+
+  @override
+  String get discoverConfigManagement => '配置管理';
+
+  @override
+  String get discoverAttachmentExport => '附件導出';
 
   @override
   String get homeSwitchLedger => '選擇帳本';

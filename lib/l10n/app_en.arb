@@ -1928,6 +1928,8 @@
   "discoverImport": "Import",
   "discoverExport": "Export",
   "discoverHelp": "Help",
+  "discoverConfigManagement": "Config",
+  "discoverAttachmentExport": "Attachments",
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
   "budgetTitle": "Budget",

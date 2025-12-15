@@ -8664,6 +8664,18 @@ abstract class AppLocalizations {
   /// **'Help'**
   String get discoverHelp;
 
+  /// No description provided for @discoverConfigManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Config'**
+  String get discoverConfigManagement;
+
+  /// No description provided for @discoverAttachmentExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments'**
+  String get discoverAttachmentExport;
+
   /// No description provided for @homeSwitchLedger.
   ///
   /// In en, this message translates to:

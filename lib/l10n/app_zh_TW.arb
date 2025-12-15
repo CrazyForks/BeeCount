@@ -780,6 +780,8 @@
   "discoverCommonFeatures": "常用功能",
   "discoverExport": "匯出",
   "discoverHelp": "使用幫助",
+  "discoverConfigManagement": "配置管理",
+  "discoverAttachmentExport": "附件導出",
   "discoverImport": "匯入",
   "discoverTags": "標籤管理",
   "discoverTitle": "發現",
