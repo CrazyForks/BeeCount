@@ -292,6 +292,7 @@ class _ConfigImportExportPageState
               children: [
                 // 说明卡片
                 SectionCard(
+                  margin: EdgeInsets.zero,
                   child: Padding(
                     padding: EdgeInsets.all(12.0.scaled(context, ref)),
                     child: Column(
@@ -331,6 +332,7 @@ class _ConfigImportExportPageState
                 SizedBox(height: 8.0.scaled(context, ref)),
                 // 功能按钮
                 SectionCard(
+                  margin: EdgeInsets.zero,
                   child: Column(
                     children: [
                       // 导出配置
@@ -423,6 +425,7 @@ class _ConfigImportExportPageState
                 SizedBox(height: 8.0.scaled(context, ref)),
                 // 包含的配置项
                 SectionCard(
+                  margin: EdgeInsets.zero,
                   child: Padding(
                     padding: EdgeInsets.all(12.0.scaled(context, ref)),
                     child: Column(

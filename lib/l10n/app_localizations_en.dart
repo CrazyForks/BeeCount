@@ -225,15 +225,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNoRecordsSubtext => 'Tap the plus button at the bottom to add a record';
 
   @override
-  String homeLastMonthReportTitle(String month) {
-    return '$month report is ready';
-  }
-
-  @override
   String get homeLastMonthReportSubtitle => 'View and share last month\'s report';
 
   @override
   String get homeLastMonthReportView => 'View';
+
+  @override
+  String homeAnnualReportReminder(int year) {
+    return 'Your $year Annual Report is ready';
+  }
+
+  @override
+  String get homeAnnualReportView => 'View';
 
   @override
   String get widgetTodayExpense => 'Today\'s Expense';
@@ -862,10 +865,125 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineAvatarDelete => 'Delete Avatar';
 
   @override
+  String get annualReportTitle => 'Annual Report';
+
+  @override
+  String annualReportSubtitle(int year) {
+    return 'Review your $year financial journey';
+  }
+
+  @override
+  String get annualReportEntrySubtitle => 'Create your personalized annual report to share';
+
+  @override
+  String annualReportNoData(int year) {
+    return 'No data for $year';
+  }
+
+  @override
+  String get annualReportPage1Title => 'Annual Overview';
+
+  @override
+  String annualReportPage1Subtitle(int year) {
+    return 'Your $year bookkeeping journey';
+  }
+
+  @override
+  String get annualReportTotalDays => 'Days Tracked';
+
+  @override
+  String get annualReportTotalRecords => 'Total Records';
+
+  @override
+  String get annualReportTotalIncome => 'Total Income';
+
+  @override
+  String get annualReportTotalExpense => 'Total Expense';
+
+  @override
+  String get annualReportNetSavings => 'Net Savings';
+
+  @override
+  String get annualReportPage2Title => 'Expense Analysis';
+
+  @override
+  String get annualReportPage2Subtitle => 'Where your money went';
+
+  @override
+  String get annualReportPage3Title => 'Monthly Trends';
+
+  @override
+  String get annualReportPage3Subtitle => '12 months of income & expense';
+
+  @override
+  String get annualReportHighestMonth => 'Highest Spending Month';
+
+  @override
+  String get annualReportLowestMonth => 'Lowest Spending Month';
+
+  @override
+  String get annualReportPage4Title => 'Special Moments';
+
+  @override
+  String get annualReportPage4Subtitle => 'Memorable transactions';
+
+  @override
+  String get annualReportLargestExpense => 'Largest Expense';
+
+  @override
+  String get annualReportLargestIncome => 'Largest Income';
+
+  @override
+  String get annualReportFirstRecord => 'First Record';
+
+  @override
+  String get annualReportPage5Title => 'Achievements';
+
+  @override
+  String get annualReportPage5Subtitle => 'Your bookkeeping badges';
+
+  @override
+  String get annualReportAchievementConsistent => 'Consistent';
+
+  @override
+  String annualReportAchievementConsistentDesc(int days) {
+    return 'Tracked for over $days days straight';
+  }
+
+  @override
+  String get annualReportAchievementSaver => 'Saver';
+
+  @override
+  String get annualReportAchievementSaverDesc => 'Positive net savings this year';
+
+  @override
+  String get annualReportAchievementDetail => 'Detail-Oriented';
+
+  @override
+  String annualReportAchievementDetailDesc(int count) {
+    return 'Over $count records tracked';
+  }
+
+  @override
+  String get annualReportShareButton => 'Generate Share Poster';
+
+  @override
+  String get annualReportGenerating => 'Generating annual report...';
+
+  @override
+  String get annualReportSaveSuccess => 'Annual report poster saved';
+
+  @override
   String get mineShareApp => 'Share App';
 
   @override
   String get mineShareWithFriends => 'Share BeeCount with friends';
+
+  @override
+  String get mineCopyPromoText => 'Copy Promo Text';
+
+  @override
+  String get mineCopyPromoSubtitle => 'Copy and share with friends';
 
   @override
   String get mineShareGenerating => 'Generating share poster...';
@@ -913,22 +1031,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharePosterSaveSuccess => 'Saved to gallery';
 
   @override
-  String get shareGuidanceTitle => 'Share to Social Media';
-
-  @override
-  String get shareGuidanceMessage => 'Poster saved! Copy the text and share on your favorite social media~';
-
-  @override
   String get shareGuidanceCopyText => 'Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount';
 
   @override
-  String get shareGuidanceCopyButton => 'Copy Share Text';
-
-  @override
   String get shareGuidanceCopied => 'Text copied';
-
-  @override
-  String get shareGuidanceDone => 'Done';
 
   @override
   String get sharePosterSaveFailed => 'Failed to save';
@@ -4559,30 +4665,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverAttachmentExport => 'Attachments';
-
-  @override
-  String get discoverMonthlyReport => 'Monthly Report';
-
-  @override
-  String get discoverMonthlyReportSubtitle => 'View and share your monthly report';
-
-  @override
-  String get discoverShare => 'Share';
-
-  @override
-  String discoverSavedMoney(String amount) {
-    return 'Saved ¥$amount';
-  }
-
-  @override
-  String discoverExpenseIncreased(String percent) {
-    return '$percent more than last month';
-  }
-
-  @override
-  String discoverExpenseDecreased(String percent) {
-    return '$percent less than last month';
-  }
 
   @override
   String get homeSwitchLedger => 'Select Ledger';

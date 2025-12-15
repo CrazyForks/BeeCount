@@ -1,5 +1,6 @@
 import 'dart:io' show Platform, File;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beecount/widgets/biz/bee_icon.dart';
 
@@ -35,6 +36,7 @@ import '../settings/appearance_settings_page.dart';
 import '../settings/smart_billing_page.dart';
 import '../settings/automation_page.dart';
 import '../settings/about_page.dart';
+import '../report/annual_report_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -451,6 +453,22 @@ class MinePage extends ConsumerWidget {
                         },
                       ),
                       BeeTokens.cardDivider(context),
+                      // 年度账单
+                      AppListTile(
+                        leading: Icons.auto_graph_rounded,
+                        title: AppLocalizations.of(context).annualReportTitle,
+                        subtitle:
+                            AppLocalizations.of(context).annualReportEntrySubtitle,
+                        trailing: Icon(Icons.chevron_right,
+                            color: BeeTokens.iconTertiary(context), size: 20),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => const AnnualReportPage()),
+                          );
+                        },
+                      ),
+                      BeeTokens.cardDivider(context),
                       // 分享海报
                       AppListTile(
                         leading: Icons.ios_share_rounded,
@@ -462,6 +480,23 @@ class MinePage extends ConsumerWidget {
                         onTap: () {
                           // 打开海报轮播预览对话框（支持年度、月度、总览3种海报）
                           SharePosterService.showPosterCarouselPreview(context);
+                        },
+                      ),
+                      BeeTokens.cardDivider(context),
+                      // 复制推广文案
+                      AppListTile(
+                        leading: Icons.content_copy_rounded,
+                        title: AppLocalizations.of(context).mineCopyPromoText,
+                        subtitle:
+                            AppLocalizations.of(context).mineCopyPromoSubtitle,
+                        onTap: () async {
+                          final l10n = AppLocalizations.of(context);
+                          await Clipboard.setData(
+                            ClipboardData(text: l10n.shareGuidanceCopyText),
+                          );
+                          if (context.mounted) {
+                            showToast(context, l10n.shareGuidanceCopied);
+                          }
                         },
                       ),
                       // 只在iOS上显示评分入口（Android还未上架）

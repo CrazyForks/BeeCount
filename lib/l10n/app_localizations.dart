@@ -504,12 +504,6 @@ abstract class AppLocalizations {
   /// **'Tap the plus button at the bottom to add a record'**
   String get homeNoRecordsSubtext;
 
-  /// No description provided for @homeLastMonthReportTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{month} report is ready'**
-  String homeLastMonthReportTitle(String month);
-
   /// No description provided for @homeLastMonthReportSubtitle.
   ///
   /// In en, this message translates to:
@@ -521,6 +515,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View'**
   String get homeLastMonthReportView;
+
+  /// No description provided for @homeAnnualReportReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {year} Annual Report is ready'**
+  String homeAnnualReportReminder(int year);
+
+  /// No description provided for @homeAnnualReportView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get homeAnnualReportView;
 
   /// No description provided for @widgetTodayExpense.
   ///
@@ -1650,6 +1656,204 @@ abstract class AppLocalizations {
   /// **'Delete Avatar'**
   String get mineAvatarDelete;
 
+  /// No description provided for @annualReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Report'**
+  String get annualReportTitle;
+
+  /// No description provided for @annualReportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your {year} financial journey'**
+  String annualReportSubtitle(int year);
+
+  /// No description provided for @annualReportEntrySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your personalized annual report to share'**
+  String get annualReportEntrySubtitle;
+
+  /// No description provided for @annualReportNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data for {year}'**
+  String annualReportNoData(int year);
+
+  /// No description provided for @annualReportPage1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Overview'**
+  String get annualReportPage1Title;
+
+  /// No description provided for @annualReportPage1Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {year} bookkeeping journey'**
+  String annualReportPage1Subtitle(int year);
+
+  /// No description provided for @annualReportTotalDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days Tracked'**
+  String get annualReportTotalDays;
+
+  /// No description provided for @annualReportTotalRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Records'**
+  String get annualReportTotalRecords;
+
+  /// No description provided for @annualReportTotalIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Income'**
+  String get annualReportTotalIncome;
+
+  /// No description provided for @annualReportTotalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get annualReportTotalExpense;
+
+  /// No description provided for @annualReportNetSavings.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Savings'**
+  String get annualReportNetSavings;
+
+  /// No description provided for @annualReportPage2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense Analysis'**
+  String get annualReportPage2Title;
+
+  /// No description provided for @annualReportPage2Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where your money went'**
+  String get annualReportPage2Subtitle;
+
+  /// No description provided for @annualReportPage3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Trends'**
+  String get annualReportPage3Title;
+
+  /// No description provided for @annualReportPage3Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'12 months of income & expense'**
+  String get annualReportPage3Subtitle;
+
+  /// No description provided for @annualReportHighestMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest Spending Month'**
+  String get annualReportHighestMonth;
+
+  /// No description provided for @annualReportLowestMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest Spending Month'**
+  String get annualReportLowestMonth;
+
+  /// No description provided for @annualReportPage4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Special Moments'**
+  String get annualReportPage4Title;
+
+  /// No description provided for @annualReportPage4Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorable transactions'**
+  String get annualReportPage4Subtitle;
+
+  /// No description provided for @annualReportLargestExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest Expense'**
+  String get annualReportLargestExpense;
+
+  /// No description provided for @annualReportLargestIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest Income'**
+  String get annualReportLargestIncome;
+
+  /// No description provided for @annualReportFirstRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'First Record'**
+  String get annualReportFirstRecord;
+
+  /// No description provided for @annualReportPage5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get annualReportPage5Title;
+
+  /// No description provided for @annualReportPage5Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bookkeeping badges'**
+  String get annualReportPage5Subtitle;
+
+  /// No description provided for @annualReportAchievementConsistent.
+  ///
+  /// In en, this message translates to:
+  /// **'Consistent'**
+  String get annualReportAchievementConsistent;
+
+  /// No description provided for @annualReportAchievementConsistentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracked for over {days} days straight'**
+  String annualReportAchievementConsistentDesc(int days);
+
+  /// No description provided for @annualReportAchievementSaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Saver'**
+  String get annualReportAchievementSaver;
+
+  /// No description provided for @annualReportAchievementSaverDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Positive net savings this year'**
+  String get annualReportAchievementSaverDesc;
+
+  /// No description provided for @annualReportAchievementDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail-Oriented'**
+  String get annualReportAchievementDetail;
+
+  /// No description provided for @annualReportAchievementDetailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Over {count} records tracked'**
+  String annualReportAchievementDetailDesc(int count);
+
+  /// No description provided for @annualReportShareButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Share Poster'**
+  String get annualReportShareButton;
+
+  /// No description provided for @annualReportGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating annual report...'**
+  String get annualReportGenerating;
+
+  /// No description provided for @annualReportSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual report poster saved'**
+  String get annualReportSaveSuccess;
+
   /// No description provided for @mineShareApp.
   ///
   /// In en, this message translates to:
@@ -1661,6 +1865,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share BeeCount with friends'**
   String get mineShareWithFriends;
+
+  /// No description provided for @mineCopyPromoText.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Promo Text'**
+  String get mineCopyPromoText;
+
+  /// No description provided for @mineCopyPromoSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy and share with friends'**
+  String get mineCopyPromoSubtitle;
 
   /// No description provided for @mineShareGenerating.
   ///
@@ -1752,41 +1968,17 @@ abstract class AppLocalizations {
   /// **'Saved to gallery'**
   String get sharePosterSaveSuccess;
 
-  /// No description provided for @shareGuidanceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Share to Social Media'**
-  String get shareGuidanceTitle;
-
-  /// No description provided for @shareGuidanceMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Poster saved! Copy the text and share on your favorite social media~'**
-  String get shareGuidanceMessage;
-
   /// No description provided for @shareGuidanceCopyText.
   ///
   /// In en, this message translates to:
   /// **'Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount'**
   String get shareGuidanceCopyText;
 
-  /// No description provided for @shareGuidanceCopyButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy Share Text'**
-  String get shareGuidanceCopyButton;
-
   /// No description provided for @shareGuidanceCopied.
   ///
   /// In en, this message translates to:
   /// **'Text copied'**
   String get shareGuidanceCopied;
-
-  /// No description provided for @shareGuidanceDone.
-  ///
-  /// In en, this message translates to:
-  /// **'Done'**
-  String get shareGuidanceDone;
 
   /// No description provided for @sharePosterSaveFailed.
   ///
@@ -8735,42 +8927,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attachments'**
   String get discoverAttachmentExport;
-
-  /// No description provided for @discoverMonthlyReport.
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly Report'**
-  String get discoverMonthlyReport;
-
-  /// No description provided for @discoverMonthlyReportSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'View and share your monthly report'**
-  String get discoverMonthlyReportSubtitle;
-
-  /// No description provided for @discoverShare.
-  ///
-  /// In en, this message translates to:
-  /// **'Share'**
-  String get discoverShare;
-
-  /// No description provided for @discoverSavedMoney.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved ¥{amount}'**
-  String discoverSavedMoney(String amount);
-
-  /// No description provided for @discoverExpenseIncreased.
-  ///
-  /// In en, this message translates to:
-  /// **'{percent} more than last month'**
-  String discoverExpenseIncreased(String percent);
-
-  /// No description provided for @discoverExpenseDecreased.
-  ///
-  /// In en, this message translates to:
-  /// **'{percent} less than last month'**
-  String discoverExpenseDecreased(String percent);
 
   /// No description provided for @homeSwitchLedger.
   ///

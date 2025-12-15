@@ -120,14 +120,17 @@
     }
   },
   "homeNoRecordsSubtext": "Tap the plus button at the bottom to add a record",
-  "homeLastMonthReportTitle": "{month} report is ready",
-  "@homeLastMonthReportTitle": {
-    "placeholders": {
-      "month": {"type": "String"}
-    }
-  },
   "homeLastMonthReportSubtitle": "View and share last month's report",
   "homeLastMonthReportView": "View",
+  "homeAnnualReportReminder": "Your {year} Annual Report is ready",
+  "@homeAnnualReportReminder": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAnnualReportView": "View",
   "widgetTodayExpense": "Today's Expense",
   "widgetTodayIncome": "Today's Income",
   "widgetMonthExpense": "Month's Expense",
@@ -396,8 +399,78 @@
   "mineAvatarFromGallery": "Choose from Gallery",
   "mineAvatarFromCamera": "Take Photo",
   "mineAvatarDelete": "Delete Avatar",
+  "annualReportTitle": "Annual Report",
+  "annualReportSubtitle": "Review your {year} financial journey",
+  "@annualReportSubtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportEntrySubtitle": "Create your personalized annual report to share",
+  "annualReportNoData": "No data for {year}",
+  "@annualReportNoData": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportPage1Title": "Annual Overview",
+  "annualReportPage1Subtitle": "Your {year} bookkeeping journey",
+  "@annualReportPage1Subtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportTotalDays": "Days Tracked",
+  "annualReportTotalRecords": "Total Records",
+  "annualReportTotalIncome": "Total Income",
+  "annualReportTotalExpense": "Total Expense",
+  "annualReportNetSavings": "Net Savings",
+  "annualReportPage2Title": "Expense Analysis",
+  "annualReportPage2Subtitle": "Where your money went",
+  "annualReportPage3Title": "Monthly Trends",
+  "annualReportPage3Subtitle": "12 months of income & expense",
+  "annualReportHighestMonth": "Highest Spending Month",
+  "annualReportLowestMonth": "Lowest Spending Month",
+  "annualReportPage4Title": "Special Moments",
+  "annualReportPage4Subtitle": "Memorable transactions",
+  "annualReportLargestExpense": "Largest Expense",
+  "annualReportLargestIncome": "Largest Income",
+  "annualReportFirstRecord": "First Record",
+  "annualReportPage5Title": "Achievements",
+  "annualReportPage5Subtitle": "Your bookkeeping badges",
+  "annualReportAchievementConsistent": "Consistent",
+  "annualReportAchievementConsistentDesc": "Tracked for over {days} days straight",
+  "@annualReportAchievementConsistentDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportAchievementSaver": "Saver",
+  "annualReportAchievementSaverDesc": "Positive net savings this year",
+  "annualReportAchievementDetail": "Detail-Oriented",
+  "annualReportAchievementDetailDesc": "Over {count} records tracked",
+  "@annualReportAchievementDetailDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportShareButton": "Generate Share Poster",
+  "annualReportGenerating": "Generating annual report...",
+  "annualReportSaveSuccess": "Annual report poster saved",
   "mineShareApp": "Share App",
   "mineShareWithFriends": "Share BeeCount with friends",
+  "mineCopyPromoText": "Copy Promo Text",
+  "mineCopyPromoSubtitle": "Copy and share with friends",
   "mineShareGenerating": "Generating share poster...",
   "sharePosterAppName": "BeeCount",
   "sharePosterSlogan": "Smart Accounting, Beautiful Life",
@@ -413,12 +486,8 @@
   "sharePosterHideIncome": "Hide Income",
   "sharePosterShowIncome": "Show Income",
   "sharePosterSaveSuccess": "Saved to gallery",
-  "shareGuidanceTitle": "Share to Social Media",
-  "shareGuidanceMessage": "Poster saved! Copy the text and share on your favorite social media~",
   "shareGuidanceCopyText": "Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount",
-  "shareGuidanceCopyButton": "Copy Share Text",
   "shareGuidanceCopied": "Text copied",
-  "shareGuidanceDone": "Done",
   "sharePosterSaveFailed": "Failed to save",
   "sharePosterPermissionDenied": "Gallery permission denied, please enable in settings",
   "sharePosterGenerating": "Generating...",
@@ -1945,27 +2014,6 @@
   "discoverHelp": "Help",
   "discoverConfigManagement": "Config",
   "discoverAttachmentExport": "Attachments",
-  "discoverMonthlyReport": "Monthly Report",
-  "discoverMonthlyReportSubtitle": "View and share your monthly report",
-  "discoverShare": "Share",
-  "discoverSavedMoney": "Saved ¥{amount}",
-  "@discoverSavedMoney": {
-    "placeholders": {
-      "amount": {"type": "String"}
-    }
-  },
-  "discoverExpenseIncreased": "{percent} more than last month",
-  "@discoverExpenseIncreased": {
-    "placeholders": {
-      "percent": {"type": "String"}
-    }
-  },
-  "discoverExpenseDecreased": "{percent} less than last month",
-  "@discoverExpenseDecreased": {
-    "placeholders": {
-      "percent": {"type": "String"}
-    }
-  },
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
   "budgetTitle": "Budget",

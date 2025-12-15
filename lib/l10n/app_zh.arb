@@ -103,14 +103,17 @@
   "homeYear": "{year}年",
   "homeMonth": "{month}月",
   "homeNoRecordsSubtext": "点击底部加号，马上记一笔",
-  "homeLastMonthReportTitle": "{month}消费报告已生成",
-  "@homeLastMonthReportTitle": {
-    "placeholders": {
-      "month": {"type": "String"}
-    }
-  },
   "homeLastMonthReportSubtitle": "查看上月消费报告并分享",
   "homeLastMonthReportView": "查看",
+  "homeAnnualReportReminder": "{year}年度账单已生成，回顾你的财务足迹",
+  "@homeAnnualReportReminder": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAnnualReportView": "查看",
   "widgetTodayExpense": "今日支出",
   "widgetTodayIncome": "今日收入",
   "widgetMonthExpense": "本月支出",
@@ -341,8 +344,78 @@
   "mineAvatarFromGallery": "从相册选择",
   "mineAvatarFromCamera": "拍照",
   "mineAvatarDelete": "删除头像",
+  "annualReportTitle": "年度账单",
+  "annualReportSubtitle": "回顾你的{year}年财务足迹",
+  "@annualReportSubtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportEntrySubtitle": "生成专属年度报告，分享你的记账故事",
+  "annualReportNoData": "暂无{year}年数据",
+  "@annualReportNoData": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportPage1Title": "年度总览",
+  "annualReportPage1Subtitle": "{year}年记账之旅",
+  "@annualReportPage1Subtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportTotalDays": "记账天数",
+  "annualReportTotalRecords": "记账笔数",
+  "annualReportTotalIncome": "总收入",
+  "annualReportTotalExpense": "总支出",
+  "annualReportNetSavings": "年度结余",
+  "annualReportPage2Title": "支出分析",
+  "annualReportPage2Subtitle": "你的钱花在哪了",
+  "annualReportPage3Title": "月度趋势",
+  "annualReportPage3Subtitle": "12个月的收支变化",
+  "annualReportHighestMonth": "支出最高月份",
+  "annualReportLowestMonth": "支出最低月份",
+  "annualReportPage4Title": "特别时刻",
+  "annualReportPage4Subtitle": "那些值得铭记的账单",
+  "annualReportLargestExpense": "年度最大支出",
+  "annualReportLargestIncome": "年度最大收入",
+  "annualReportFirstRecord": "第一笔记录",
+  "annualReportPage5Title": "年度成就",
+  "annualReportPage5Subtitle": "你的记账成就徽章",
+  "annualReportAchievementConsistent": "持之以恒",
+  "annualReportAchievementConsistentDesc": "连续记账超过{days}天",
+  "@annualReportAchievementConsistentDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportAchievementSaver": "精打细算",
+  "annualReportAchievementSaverDesc": "年度结余为正",
+  "annualReportAchievementDetail": "明察秋毫",
+  "annualReportAchievementDetailDesc": "记账笔数超过{count}笔",
+  "@annualReportAchievementDetailDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportShareButton": "生成分享海报",
+  "annualReportGenerating": "正在生成年度报告...",
+  "annualReportSaveSuccess": "年度报告海报已保存",
   "mineShareApp": "分享应用",
   "mineShareWithFriends": "和好友分享蜜蜂记账",
+  "mineCopyPromoText": "复制推广文案",
+  "mineCopyPromoSubtitle": "一键复制分享给好友",
   "mineShareGenerating": "正在生成分享海报...",
   "sharePosterAppName": "蜜蜂记账",
   "sharePosterSlogan": "一笔一蜜，记录美好生活",
@@ -358,12 +431,8 @@
   "sharePosterHideIncome": "隐藏收入",
   "sharePosterShowIncome": "显示收入",
   "sharePosterSaveSuccess": "已保存到相册",
-  "shareGuidanceTitle": "分享到朋友圈",
-  "shareGuidanceMessage": "海报已保存，复制文案后打开微信分享吧~",
   "shareGuidanceCopyText": "用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount",
-  "shareGuidanceCopyButton": "一键复制文案",
   "shareGuidanceCopied": "文案已复制",
-  "shareGuidanceDone": "完成",
   "sharePosterSaveFailed": "保存失败",
   "sharePosterPermissionDenied": "相册权限被拒绝，请在设置中开启",
   "sharePosterGenerating": "生成中...",
@@ -1884,27 +1953,6 @@
   "discoverHelp": "使用帮助",
   "discoverConfigManagement": "配置管理",
   "discoverAttachmentExport": "附件导出",
-  "discoverMonthlyReport": "月度报告",
-  "discoverMonthlyReportSubtitle": "查看本月消费报告并分享",
-  "discoverShare": "分享",
-  "discoverSavedMoney": "省了¥{amount}",
-  "@discoverSavedMoney": {
-    "placeholders": {
-      "amount": {"type": "String"}
-    }
-  },
-  "discoverExpenseIncreased": "比上月增加{percent}",
-  "@discoverExpenseIncreased": {
-    "placeholders": {
-      "percent": {"type": "String"}
-    }
-  },
-  "discoverExpenseDecreased": "比上月减少{percent}",
-  "@discoverExpenseDecreased": {
-    "placeholders": {
-      "percent": {"type": "String"}
-    }
-  },
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
   "budgetTitle": "预算管理",

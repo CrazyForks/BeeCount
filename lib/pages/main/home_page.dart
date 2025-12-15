@@ -17,6 +17,7 @@ import '../ai/ai_chat_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/system/logger_service.dart';
 import '../../services/export/share_poster_service.dart';
+import '../report/annual_report_page.dart';
 
 // 优化版首页 - 使用FlutterListView实现精准定位和丝滑跳转
 class HomePage extends ConsumerStatefulWidget {
@@ -44,11 +45,16 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _showLastMonthReminder = false;
   static const String _reminderDismissedKey = 'last_month_reminder_dismissed';
 
+  // 年度账单提醒状态（12月15日 - 次年1月31日显示）
+  bool _showAnnualReportReminder = false;
+  static const String _annualReportDismissedKey = 'annual_report_reminder_dismissed';
+
   @override
   void initState() {
     super.initState();
     _listController = FlutterListViewController();
     _checkLastMonthReminder();
+    _checkAnnualReportReminder();
   }
 
   // 检查是否应该显示上月报告提醒
@@ -81,6 +87,45 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (mounted) {
       setState(() {
         _showLastMonthReminder = false;
+      });
+    }
+  }
+
+  // 检查是否应该显示年度账单提醒（12月15日 - 次年1月31日）
+  Future<void> _checkAnnualReportReminder() async {
+    final now = DateTime.now();
+
+    // 判断是否在提醒时间范围内：12月15日 - 次年1月31日
+    final isInRange = (now.month == 12 && now.day >= 15) || now.month == 1;
+    if (!isInRange) return;
+
+    // 确定要展示的年度（12月展示当年，1月展示上一年）
+    final reportYear = now.month == 1 ? now.year - 1 : now.year;
+
+    final prefs = await SharedPreferences.getInstance();
+    final dismissedYear = prefs.getInt(_annualReportDismissedKey);
+
+    // 如果这个年度已经关闭过，不再显示
+    if (dismissedYear == reportYear) return;
+
+    if (mounted) {
+      setState(() {
+        _showAnnualReportReminder = true;
+      });
+    }
+  }
+
+  // 关闭年度账单提醒
+  Future<void> _dismissAnnualReportReminder() async {
+    final now = DateTime.now();
+    final reportYear = now.month == 1 ? now.year - 1 : now.year;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_annualReportDismissedKey, reportYear);
+
+    if (mounted) {
+      setState(() {
+        _showAnnualReportReminder = false;
       });
     }
   }
@@ -286,6 +331,113 @@ class _HomePageState extends ConsumerState<HomePage> {
                   // 关闭按钮（关闭后当月不再显示）
                   GestureDetector(
                     onTap: _dismissLastMonthReminder,
+                    behavior: HitTestBehavior.opaque,
+                    child: Icon(
+                      Icons.close,
+                      size: 18,
+                      color: isDark ? Colors.white38 : Colors.black26,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 年度账单提醒卡片（样式与月初提醒一致）
+  Widget _buildAnnualReportReminderCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final now = DateTime.now();
+    final reportYear = now.month == 1 ? now.year - 1 : now.year;
+    final primaryColor = ref.watch(primaryColorProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
+          children: [
+            // 左侧装饰条
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 4,
+                color: primaryColor,
+              ),
+            ),
+            // 主体内容
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+              child: Row(
+                children: [
+                  // 文案
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.auto_graph_rounded,
+                          color: primaryColor,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            l10n.homeAnnualReportReminder(reportYear),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: isDark ? Colors.white70 : Colors.black54,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // 查看按钮
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const AnnualReportPage(),
+                        ),
+                      );
+                      // 临时隐藏
+                      setState(() {
+                        _showAnnualReportReminder = false;
+                      });
+                    },
+                    child: Text(
+                      l10n.homeAnnualReportView,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: primaryColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // 关闭按钮
+                  GestureDetector(
+                    onTap: _dismissAnnualReportReminder,
                     behavior: HitTestBehavior.opaque,
                     child: Icon(
                       Icons.close,
@@ -533,6 +685,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           // 月初提醒卡片
           if (_showLastMonthReminder)
             _buildLastMonthReminderCard(context),
+          // 年度账单提醒卡片（12月15日 - 次年1月31日）
+          if (_showAnnualReportReminder)
+            _buildAnnualReportReminderCard(context),
           Expanded(
             child: StreamBuilder<List<({Transaction t, Category? category})>>(
               key: ValueKey('transactions_$_streamBuilderKey'), // 使用递增key强制重建

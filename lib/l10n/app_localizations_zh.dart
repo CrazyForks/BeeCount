@@ -225,15 +225,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeNoRecordsSubtext => '点击底部加号，马上记一笔';
 
   @override
-  String homeLastMonthReportTitle(String month) {
-    return '$month消费报告已生成';
-  }
-
-  @override
   String get homeLastMonthReportSubtitle => '查看上月消费报告并分享';
 
   @override
   String get homeLastMonthReportView => '查看';
+
+  @override
+  String homeAnnualReportReminder(int year) {
+    return '$year年度账单已生成，回顾你的财务足迹';
+  }
+
+  @override
+  String get homeAnnualReportView => '查看';
 
   @override
   String get widgetTodayExpense => '今日支出';
@@ -862,10 +865,125 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineAvatarDelete => '删除头像';
 
   @override
+  String get annualReportTitle => '年度账单';
+
+  @override
+  String annualReportSubtitle(int year) {
+    return '回顾你的$year年财务足迹';
+  }
+
+  @override
+  String get annualReportEntrySubtitle => '生成专属年度报告，分享你的记账故事';
+
+  @override
+  String annualReportNoData(int year) {
+    return '暂无$year年数据';
+  }
+
+  @override
+  String get annualReportPage1Title => '年度总览';
+
+  @override
+  String annualReportPage1Subtitle(int year) {
+    return '$year年记账之旅';
+  }
+
+  @override
+  String get annualReportTotalDays => '记账天数';
+
+  @override
+  String get annualReportTotalRecords => '记账笔数';
+
+  @override
+  String get annualReportTotalIncome => '总收入';
+
+  @override
+  String get annualReportTotalExpense => '总支出';
+
+  @override
+  String get annualReportNetSavings => '年度结余';
+
+  @override
+  String get annualReportPage2Title => '支出分析';
+
+  @override
+  String get annualReportPage2Subtitle => '你的钱花在哪了';
+
+  @override
+  String get annualReportPage3Title => '月度趋势';
+
+  @override
+  String get annualReportPage3Subtitle => '12个月的收支变化';
+
+  @override
+  String get annualReportHighestMonth => '支出最高月份';
+
+  @override
+  String get annualReportLowestMonth => '支出最低月份';
+
+  @override
+  String get annualReportPage4Title => '特别时刻';
+
+  @override
+  String get annualReportPage4Subtitle => '那些值得铭记的账单';
+
+  @override
+  String get annualReportLargestExpense => '年度最大支出';
+
+  @override
+  String get annualReportLargestIncome => '年度最大收入';
+
+  @override
+  String get annualReportFirstRecord => '第一笔记录';
+
+  @override
+  String get annualReportPage5Title => '年度成就';
+
+  @override
+  String get annualReportPage5Subtitle => '你的记账成就徽章';
+
+  @override
+  String get annualReportAchievementConsistent => '持之以恒';
+
+  @override
+  String annualReportAchievementConsistentDesc(int days) {
+    return '连续记账超过$days天';
+  }
+
+  @override
+  String get annualReportAchievementSaver => '精打细算';
+
+  @override
+  String get annualReportAchievementSaverDesc => '年度结余为正';
+
+  @override
+  String get annualReportAchievementDetail => '明察秋毫';
+
+  @override
+  String annualReportAchievementDetailDesc(int count) {
+    return '记账笔数超过$count笔';
+  }
+
+  @override
+  String get annualReportShareButton => '生成分享海报';
+
+  @override
+  String get annualReportGenerating => '正在生成年度报告...';
+
+  @override
+  String get annualReportSaveSuccess => '年度报告海报已保存';
+
+  @override
   String get mineShareApp => '分享应用';
 
   @override
   String get mineShareWithFriends => '和好友分享蜜蜂记账';
+
+  @override
+  String get mineCopyPromoText => '复制推广文案';
+
+  @override
+  String get mineCopyPromoSubtitle => '一键复制分享给好友';
 
   @override
   String get mineShareGenerating => '正在生成分享海报...';
@@ -913,22 +1031,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterSaveSuccess => '已保存到相册';
 
   @override
-  String get shareGuidanceTitle => '分享到朋友圈';
-
-  @override
-  String get shareGuidanceMessage => '海报已保存，复制文案后打开微信分享吧~';
-
-  @override
   String get shareGuidanceCopyText => '用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount';
 
   @override
-  String get shareGuidanceCopyButton => '一键复制文案';
-
-  @override
   String get shareGuidanceCopied => '文案已复制';
-
-  @override
-  String get shareGuidanceDone => '完成';
 
   @override
   String get sharePosterSaveFailed => '保存失败';
@@ -4561,30 +4667,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverAttachmentExport => '附件导出';
 
   @override
-  String get discoverMonthlyReport => '月度报告';
-
-  @override
-  String get discoverMonthlyReportSubtitle => '查看本月消费报告并分享';
-
-  @override
-  String get discoverShare => '分享';
-
-  @override
-  String discoverSavedMoney(String amount) {
-    return '省了¥$amount';
-  }
-
-  @override
-  String discoverExpenseIncreased(String percent) {
-    return '比上月增加$percent';
-  }
-
-  @override
-  String discoverExpenseDecreased(String percent) {
-    return '比上月减少$percent';
-  }
-
-  @override
   String get homeSwitchLedger => '选择账本';
 
   @override
@@ -5088,15 +5170,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get homeNoRecordsSubtext => '點擊底部加號，馬上記一筆';
 
   @override
-  String homeLastMonthReportTitle(String month) {
-    return '$month消費報告已生成';
-  }
-
-  @override
   String get homeLastMonthReportSubtitle => '查看上月消費報告並分享';
 
   @override
   String get homeLastMonthReportView => '查看';
+
+  @override
+  String homeAnnualReportReminder(int year) {
+    return '$year年度帳單已生成，回顧你的財務足跡';
+  }
+
+  @override
+  String get homeAnnualReportView => '查看';
 
   @override
   String get widgetTodayExpense => '今日支出';
@@ -5725,10 +5810,125 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineAvatarDelete => '刪除頭像';
 
   @override
+  String get annualReportTitle => '年度帳單';
+
+  @override
+  String annualReportSubtitle(int year) {
+    return '回顧你的$year年財務足跡';
+  }
+
+  @override
+  String get annualReportEntrySubtitle => '生成專屬年度報告，分享你的記帳故事';
+
+  @override
+  String annualReportNoData(int year) {
+    return '暫無$year年資料';
+  }
+
+  @override
+  String get annualReportPage1Title => '年度總覽';
+
+  @override
+  String annualReportPage1Subtitle(int year) {
+    return '$year年記帳之旅';
+  }
+
+  @override
+  String get annualReportTotalDays => '記帳天數';
+
+  @override
+  String get annualReportTotalRecords => '記帳筆數';
+
+  @override
+  String get annualReportTotalIncome => '總收入';
+
+  @override
+  String get annualReportTotalExpense => '總支出';
+
+  @override
+  String get annualReportNetSavings => '年度結餘';
+
+  @override
+  String get annualReportPage2Title => '支出分析';
+
+  @override
+  String get annualReportPage2Subtitle => '你的錢花在哪了';
+
+  @override
+  String get annualReportPage3Title => '月度趨勢';
+
+  @override
+  String get annualReportPage3Subtitle => '12個月的收支變化';
+
+  @override
+  String get annualReportHighestMonth => '支出最高月份';
+
+  @override
+  String get annualReportLowestMonth => '支出最低月份';
+
+  @override
+  String get annualReportPage4Title => '特別時刻';
+
+  @override
+  String get annualReportPage4Subtitle => '那些值得銘記的帳單';
+
+  @override
+  String get annualReportLargestExpense => '年度最大支出';
+
+  @override
+  String get annualReportLargestIncome => '年度最大收入';
+
+  @override
+  String get annualReportFirstRecord => '第一筆記錄';
+
+  @override
+  String get annualReportPage5Title => '年度成就';
+
+  @override
+  String get annualReportPage5Subtitle => '你的記帳成就徽章';
+
+  @override
+  String get annualReportAchievementConsistent => '持之以恆';
+
+  @override
+  String annualReportAchievementConsistentDesc(int days) {
+    return '連續記帳超過$days天';
+  }
+
+  @override
+  String get annualReportAchievementSaver => '精打細算';
+
+  @override
+  String get annualReportAchievementSaverDesc => '年度結餘為正';
+
+  @override
+  String get annualReportAchievementDetail => '明察秋毫';
+
+  @override
+  String annualReportAchievementDetailDesc(int count) {
+    return '記帳筆數超過$count筆';
+  }
+
+  @override
+  String get annualReportShareButton => '生成分享海報';
+
+  @override
+  String get annualReportGenerating => '正在生成年度報告...';
+
+  @override
+  String get annualReportSaveSuccess => '年度報告海報已儲存';
+
+  @override
   String get mineShareApp => '分享應用程式';
 
   @override
   String get mineShareWithFriends => '和好友分享蜜蜂記帳';
+
+  @override
+  String get mineCopyPromoText => '複製推廣文案';
+
+  @override
+  String get mineCopyPromoSubtitle => '一鍵複製分享給好友';
 
   @override
   String get mineShareGenerating => '正在生成分享海報...';
@@ -5776,22 +5976,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterSaveSuccess => '已儲存到相簿';
 
   @override
-  String get shareGuidanceTitle => '分享到朋友圈';
-
-  @override
-  String get shareGuidanceMessage => '海報已儲存，複製文案後開啟微信分享吧~';
-
-  @override
   String get shareGuidanceCopyText => '用蜜蜂記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount';
 
   @override
-  String get shareGuidanceCopyButton => '一鍵複製文案';
-
-  @override
   String get shareGuidanceCopied => '文案已複製';
-
-  @override
-  String get shareGuidanceDone => '完成';
 
   @override
   String get sharePosterSaveFailed => '儲存失敗';
@@ -9422,30 +9610,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get discoverAttachmentExport => '附件導出';
-
-  @override
-  String get discoverMonthlyReport => '月度報告';
-
-  @override
-  String get discoverMonthlyReportSubtitle => '查看本月消費報告並分享';
-
-  @override
-  String get discoverShare => '分享';
-
-  @override
-  String discoverSavedMoney(String amount) {
-    return '省了¥$amount';
-  }
-
-  @override
-  String discoverExpenseIncreased(String percent) {
-    return '比上月增加$percent';
-  }
-
-  @override
-  String discoverExpenseDecreased(String percent) {
-    return '比上月減少$percent';
-  }
 
   @override
   String get homeSwitchLedger => '選擇帳本';
