@@ -328,7 +328,7 @@ class AppLinkService {
       final transactionId = await repo.addTransaction(
         ledgerId: ledgerId,
         type: txParams.type,
-        amount: txParams.type == 'expense' ? -txParams.amount.abs() : txParams.amount.abs(),
+        amount: txParams.amount.abs(),
         categoryId: categoryId,
         accountId: accountId,
         toAccountId: toAccountId,
