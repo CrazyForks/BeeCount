@@ -307,16 +307,16 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                       }
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.0.scaled(context, ref),
-                        horizontal: 4.0.scaled(context, ref),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 6.0,
+                        horizontal: 4.0,
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(icon, color: color, size: 24),
-                          SizedBox(height: 4.0.scaled(context, ref)),
+                          const SizedBox(height: 2),
                           Text(label,
                               style: TextStyle(
                                   fontSize: 11,
