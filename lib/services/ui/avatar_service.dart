@@ -9,9 +9,45 @@ class AvatarService {
   static const String _avatarPathKey = 'user_avatar_path';
 
   /// 获取用户头像路径
+  ///
+  /// 注意：存储的是相对路径，读取时动态拼接 Documents 目录
+  /// 这样即使 iOS 应用更新后 UUID 变化，头像也不会丢失
   static Future<String?> getAvatarPath() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_avatarPathKey);
+    final relativePath = prefs.getString(_avatarPathKey);
+    if (relativePath == null) return null;
+
+    // 兼容旧版本存储的绝对路径
+    if (relativePath.startsWith('/')) {
+      // 尝试从绝对路径中提取相对路径并迁移
+      final match = RegExp(r'avatars/avatar_\d+\.\w+$').firstMatch(relativePath);
+      if (match != null) {
+        final extracted = match.group(0)!;
+        // 检查文件是否在新位置存在
+        final appDir = await getApplicationDocumentsDirectory();
+        final newPath = p.join(appDir.path, extracted);
+        if (await File(newPath).exists()) {
+          // 迁移到相对路径
+          await prefs.setString(_avatarPathKey, extracted);
+          return newPath;
+        }
+      }
+      // 旧路径文件不存在，清除设置
+      await prefs.remove(_avatarPathKey);
+      return null;
+    }
+
+    // 拼接完整路径
+    final appDir = await getApplicationDocumentsDirectory();
+    final fullPath = p.join(appDir.path, relativePath);
+
+    // 验证文件存在
+    if (!await File(fullPath).exists()) {
+      await prefs.remove(_avatarPathKey);
+      return null;
+    }
+
+    return fullPath;
   }
 
   /// 选择并保存头像
@@ -39,15 +75,17 @@ class AvatarService {
     // 生成新文件名（使用时间戳避免缓存问题）
     final ext = p.extension(image.path);
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final newPath = p.join(avatarDir.path, 'avatar_$timestamp$ext');
+    final fileName = 'avatar_$timestamp$ext';
+    final relativePath = 'avatars/$fileName';
+    final newPath = p.join(avatarDir.path, fileName);
 
     // 复制文件
     final file = File(image.path);
     await file.copy(newPath);
 
-    // 保存路径到SharedPreferences
+    // 保存相对路径到SharedPreferences（避免iOS更新后UUID变化导致路径失效）
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_avatarPathKey, newPath);
+    await prefs.setString(_avatarPathKey, relativePath);
 
     return newPath;
   }
@@ -77,15 +115,17 @@ class AvatarService {
     // 生成新文件名（使用时间戳避免缓存问题）
     final ext = p.extension(image.path);
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final newPath = p.join(avatarDir.path, 'avatar_$timestamp$ext');
+    final fileName = 'avatar_$timestamp$ext';
+    final relativePath = 'avatars/$fileName';
+    final newPath = p.join(avatarDir.path, fileName);
 
     // 复制文件
     final file = File(image.path);
     await file.copy(newPath);
 
-    // 保存路径到SharedPreferences
+    // 保存相对路径到SharedPreferences（避免iOS更新后UUID变化导致路径失效）
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_avatarPathKey, newPath);
+    await prefs.setString(_avatarPathKey, relativePath);
 
     return newPath;
   }
