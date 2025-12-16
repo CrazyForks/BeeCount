@@ -641,14 +641,14 @@ A:
 > 💡 已捐赠？[点击这里提交您的信息](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml)，展示在支持者列表中！
 
 <p>
-  <a href="#" title="*桥 ¥12"><img src="assets/avatars/qiao.svg" width="50" alt="桥"/></a>
-  <a href="#" title="*睿 ¥720"><img src="assets/avatars/rui.svg" width="50" alt="睿"/></a>
-  <a href="#" title="*泓 ¥50"><img src="assets/avatars/hong.svg" width="50" alt="泓"/></a>
-  <a href="#" title="*邵 ¥15"><img src="assets/avatars/shao.svg" width="50" alt="邵"/></a>
-  <a href="#" title="*哥 ¥6"><img src="assets/avatars/ge.svg" width="50" alt="哥"/></a>
-  <a href="#" title="*特 ¥15"><img src="assets/avatars/te.svg" width="50" alt="特"/></a>
-  <a href="#" title="*文 ¥50"><img src="assets/avatars/wen.svg" width="50" alt="文"/></a>
-  <a href="#" title="匿名者 ¥50"><img src="assets/avatars/anon.svg" width="50" alt="匿名"/></a>
+  <a href="#" title="*桥 ¥12"><img src="assets/avatars/qiao.svg" width="50" style="border-radius:50%" alt="桥"/></a>
+  <a href="#" title="*睿 ¥720"><img src="assets/avatars/rui.svg" width="50" style="border-radius:50%" alt="睿"/></a>
+  <a href="https://github.com/fishdivinity" title="fishdivinity ¥50"><img src="assets/avatars/fishdivinity.png" width="50" style="border-radius:50%" alt="fishdivinity"/></a>
+  <a href="#" title="*邵 ¥15"><img src="assets/avatars/shao.svg" width="50" style="border-radius:50%" alt="邵"/></a>
+  <a href="#" title="*哥 ¥6"><img src="assets/avatars/ge.svg" width="50" style="border-radius:50%" alt="哥"/></a>
+  <a href="#" title="*特 ¥15"><img src="assets/avatars/te.svg" width="50" style="border-radius:50%" alt="特"/></a>
+  <a href="#" title="*文 ¥50"><img src="assets/avatars/wen.svg" width="50" style="border-radius:50%" alt="文"/></a>
+  <a href="#" title="匿名者 ¥50"><img src="assets/avatars/anon.svg" width="50" style="border-radius:50%" alt="匿名"/></a>
 </p>
 
 ---
