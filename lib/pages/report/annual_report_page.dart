@@ -494,8 +494,8 @@ class _AnnualReportPageState extends ConsumerState<AnnualReportPage> {
       await showDialog(
         context: context,
         builder: (dialogContext) => _AnnualReportPosterPreview(
-          imageBytes: pngBytes,
-          l10n: l10n,
+          initialImageBytes: pngBytes,
+          data: data,
           primaryColor: primaryColor,
         ),
       );
@@ -1697,19 +1697,99 @@ class _AnnualReportPageState extends ConsumerState<AnnualReportPage> {
 }
 
 /// 年度账单海报预览对话框
-class _AnnualReportPosterPreview extends StatelessWidget {
-  final Uint8List imageBytes;
-  final AppLocalizations l10n;
+class _AnnualReportPosterPreview extends StatefulWidget {
+  final Uint8List initialImageBytes;
+  final AnnualReportData data;
   final Color primaryColor;
 
   const _AnnualReportPosterPreview({
-    required this.imageBytes,
-    required this.l10n,
+    required this.initialImageBytes,
+    required this.data,
     required this.primaryColor,
   });
 
   @override
+  State<_AnnualReportPosterPreview> createState() => _AnnualReportPosterPreviewState();
+}
+
+class _AnnualReportPosterPreviewState extends State<_AnnualReportPosterPreview> {
+  late Uint8List _imageBytes;
+  bool _hideIncome = false;
+  bool _isGenerating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _imageBytes = widget.initialImageBytes;
+  }
+
+  Future<void> _toggleHideIncome() async {
+    setState(() {
+      _hideIncome = !_hideIncome;
+      _isGenerating = true;
+    });
+
+    try {
+      // 重新生成海报
+      final posterKey = GlobalKey();
+      final poster = RepaintBoundary(
+        key: posterKey,
+        child: AnnualReportPoster(
+          data: widget.data,
+          primaryColor: widget.primaryColor,
+          hideIncome: _hideIncome,
+        ),
+      );
+
+      final pngBytes = await _renderPosterToImage(poster, posterKey);
+
+      if (mounted) {
+        setState(() {
+          _imageBytes = pngBytes;
+          _isGenerating = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isGenerating = false);
+        showToast(context, AppLocalizations.of(context).commonError);
+      }
+    }
+  }
+
+  Future<Uint8List> _renderPosterToImage(Widget poster, GlobalKey key) async {
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: -10000,
+        child: Material(
+          color: Colors.transparent,
+          child: poster,
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry);
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    try {
+      final boundary = key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      if (boundary == null) {
+        throw Exception('Failed to find render boundary');
+      }
+
+      final image = await boundary.toImage(pixelRatio: 2.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      return byteData!.buffer.asUint8List();
+    } finally {
+      overlayEntry.remove();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.all(16),
@@ -1722,13 +1802,74 @@ class _AnnualReportPosterPreview extends StatelessWidget {
               Flexible(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: InteractiveViewer(
-                    minScale: 0.5,
-                    maxScale: 3.0,
-                    child: Image.memory(
-                      imageBytes,
-                      fit: BoxFit.contain,
-                    ),
+                  child: Stack(
+                    children: [
+                      InteractiveViewer(
+                        minScale: 0.5,
+                        maxScale: 3.0,
+                        child: Image.memory(
+                          _imageBytes,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      // 生成中的加载指示器
+                      if (_isGenerating)
+                        Positioned.fill(
+                          child: Container(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                valueColor: AlwaysStoppedAnimation(Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      // 隐藏收入切换按钮
+                      if (!_isGenerating)
+                        Positioned(
+                          top: 16,
+                          right: 16,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: _toggleHideIncome,
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withValues(alpha: 0.5),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      _hideIncome
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      _hideIncome ? l10n.sharePosterShowIncome : l10n.sharePosterHideIncome,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -1742,7 +1883,7 @@ class _AnnualReportPosterPreview extends StatelessWidget {
                     context: context,
                     icon: Icons.save_alt,
                     label: l10n.sharePosterSave,
-                    onTap: () => _savePoster(context),
+                    onTap: _isGenerating ? null : () => _savePoster(context),
                     isPrimary: true,
                   ),
                   const SizedBox(width: 16),
@@ -1751,7 +1892,7 @@ class _AnnualReportPosterPreview extends StatelessWidget {
                     context: context,
                     icon: Icons.share,
                     label: l10n.sharePosterShare,
-                    onTap: () => _sharePoster(context),
+                    onTap: _isGenerating ? null : () => _sharePoster(context),
                     isPrimary: false,
                   ),
                 ],
@@ -1788,49 +1929,57 @@ class _AnnualReportPosterPreview extends StatelessWidget {
     required BuildContext context,
     required IconData icon,
     required String label,
-    required VoidCallback onTap,
+    required VoidCallback? onTap,
     required bool isPrimary,
   }) {
+    final isDisabled = onTap == null;
+    final bgColor = isPrimary ? widget.primaryColor : Colors.white;
+    final fgColor = isPrimary ? Colors.white : widget.primaryColor;
+
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        decoration: BoxDecoration(
-          color: isPrimary ? primaryColor : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 20,
-              color: isPrimary ? Colors.white : primaryColor,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: isPrimary ? Colors.white : primaryColor,
+      child: Opacity(
+        opacity: isDisabled ? 0.5 : 1.0,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
-            ),
-          ],
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 20,
+                color: fgColor,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: fgColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future<void> _savePoster(BuildContext context) async {
-    final result = await SharePosterService.savePosterToGallery(imageBytes);
+    final l10n = AppLocalizations.of(context);
+    final result = await SharePosterService.savePosterToGallery(_imageBytes);
 
     if (!context.mounted) return;
 
@@ -1849,6 +1998,6 @@ class _AnnualReportPosterPreview extends StatelessWidget {
   }
 
   Future<void> _sharePoster(BuildContext context) async {
-    await SharePosterService.sharePoster(imageBytes);
+    await SharePosterService.sharePoster(_imageBytes);
   }
 }
