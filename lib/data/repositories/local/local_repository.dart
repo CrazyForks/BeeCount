@@ -315,6 +315,10 @@ class LocalRepository extends BaseRepository {
   Future<void> deleteCategory(int id) => _categoryRepo.deleteCategory(id);
 
   @override
+  Future<void> deleteCategoriesByIds(List<int> ids) =>
+      _categoryRepo.deleteCategoriesByIds(ids);
+
+  @override
   Future<int> upsertCategory({required String name, required String kind}) =>
       _categoryRepo.upsertCategory(name: name, kind: kind);
 

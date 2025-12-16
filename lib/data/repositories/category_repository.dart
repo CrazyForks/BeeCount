@@ -33,6 +33,9 @@ abstract class CategoryRepository {
   /// 删除分类
   Future<void> deleteCategory(int id);
 
+  /// 批量删除分类
+  Future<void> deleteCategoriesByIds(List<int> ids);
+
   /// Upsert分类（根据名称和kind查找或创建）
   Future<int> upsertCategory({
     required String name,

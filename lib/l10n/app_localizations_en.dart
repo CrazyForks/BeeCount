@@ -37,6 +37,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonEdit => 'Edit';
 
   @override
+  String get commonMore => 'More';
+
+  @override
   String get commonOk => 'OK';
 
   @override
@@ -1482,13 +1485,82 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get categoryCannotConvert => 'Cannot convert';
+  String get categoryShare => 'Share Categories';
 
   @override
-  String get categoryHasSubCategories => 'This category has subcategories. Please delete or move them first before converting to a subcategory.';
+  String get categoryImport => 'Import Categories';
 
   @override
-  String get categoryHasSubCategoriesHint => 'Has subcategories, cannot convert';
+  String get categoryClearUnused => 'Clear Unused Categories';
+
+  @override
+  String get categoryClearUnusedTitle => 'Clear Unused Categories';
+
+  @override
+  String categoryClearUnusedMessage(Object count) {
+    return 'Are you sure you want to delete $count unused categories? This action cannot be undone.';
+  }
+
+  @override
+  String get categoryClearUnusedEmpty => 'No unused categories';
+
+  @override
+  String categoryClearUnusedSuccess(Object count) {
+    return 'Deleted $count categories';
+  }
+
+  @override
+  String get categoryClearUnusedFailed => 'Clear failed';
+
+  @override
+  String get categoryShareScopeTitle => 'Select Scope';
+
+  @override
+  String get categoryShareScopeExpense => 'Expense categories only';
+
+  @override
+  String get categoryShareScopeIncome => 'Income categories only';
+
+  @override
+  String get categoryShareScopeAll => 'All categories';
+
+  @override
+  String categoryShareSuccess(Object path) {
+    return 'Saved to $path';
+  }
+
+  @override
+  String get categoryShareSubject => 'BeeCount Category Configuration';
+
+  @override
+  String get categoryShareFailed => 'Share failed';
+
+  @override
+  String get categoryImportInvalidFile => 'Please select a YAML configuration file';
+
+  @override
+  String get categoryImportNoCategories => 'No category data in file';
+
+  @override
+  String get categoryImportModeTitle => 'Select Import Mode';
+
+  @override
+  String get categoryImportModeMerge => 'Merge';
+
+  @override
+  String get categoryImportModeMergeDesc => 'Keep existing, add new ones';
+
+  @override
+  String get categoryImportModeOverwrite => 'Overwrite';
+
+  @override
+  String get categoryImportModeOverwriteDesc => 'Clear unused categories then import';
+
+  @override
+  String get categoryImportSuccess => 'Import successful';
+
+  @override
+  String get categoryImportFailed => 'Import failed';
 
   @override
   String get categoryDeleteConfirmTitle => 'Delete Category';
@@ -1523,9 +1595,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categorySelectParentTitle => 'Select Parent Category';
-
-  @override
-  String get categorySelectParentDescription => 'Only categories without transaction records can be selected as parent';
 
   @override
   String categorySubCategoryCreated(Object name) {

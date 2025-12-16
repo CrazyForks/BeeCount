@@ -10,6 +10,7 @@
   "commonDelete": "删除",
   "commonAdd": "添加",
   "commonEdit": "编辑",
+  "commonMore": "更多",
   "commonOk": "确定",
   "commonKnow": "知道了",
   "commonNo": "否",
@@ -579,9 +580,51 @@
   "categoryCreated": "分类\"{name}\"已创建",
   "categoryCannotDelete": "无法删除",
   "categoryCannotDeleteMessage": "该分类下还有 {count} 笔交易记录，请先处理这些记录。",
-  "categoryCannotConvert": "无法转换",
-  "categoryHasSubCategories": "该分类下还有子分类，无法转换为二级分类。请先删除或移动子分类。",
-  "categoryHasSubCategoriesHint": "该分类下有子分类，无法转为二级",
+  "categoryShare": "分享分类",
+  "categoryImport": "导入分类",
+  "categoryClearUnused": "清空未使用分类",
+  "categoryClearUnusedTitle": "清空未使用分类",
+  "categoryClearUnusedMessage": "确定要删除 {count} 个未使用的分类吗？此操作无法撤销。",
+  "@categoryClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryClearUnusedEmpty": "没有未使用的分类",
+  "categoryClearUnusedSuccess": "已删除 {count} 个分类",
+  "@categoryClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryClearUnusedFailed": "清空失败",
+  "categoryShareScopeTitle": "选择分享范围",
+  "categoryShareScopeExpense": "仅支出分类",
+  "categoryShareScopeIncome": "仅收入分类",
+  "categoryShareScopeAll": "全部分类",
+  "categoryShareSuccess": "已保存到 {path}",
+  "@categoryShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryShareSubject": "BeeCount 分类配置",
+  "categoryShareFailed": "分享失败",
+  "categoryImportInvalidFile": "请选择 YAML 配置文件",
+  "categoryImportNoCategories": "文件中没有分类数据",
+  "categoryImportModeTitle": "选择导入模式",
+  "categoryImportModeMerge": "合并",
+  "categoryImportModeMergeDesc": "保留现有分类，新增不存在的",
+  "categoryImportModeOverwrite": "覆盖",
+  "categoryImportModeOverwriteDesc": "清空未使用分类后导入",
+  "categoryImportSuccess": "导入成功",
+  "categoryImportFailed": "导入失败",
   "categoryDeleteConfirmTitle": "删除分类",
   "categoryDeleteConfirmMessage": "确定要删除分类\"{name}\"吗？此操作无法撤销。",
   "categoryDeleteError": "删除失败",
@@ -592,7 +635,6 @@
   "categoryParentCategoryTitle": "父分类",
   "categoryParentCategoryHint": "请选择父分类",
   "categorySelectParentTitle": "选择父分类",
-  "categorySelectParentDescription": "只能选择没有交易记录的分类作为父分类",
   "categorySubCategoryCreated": "已添加二级分类：{name}",
   "categoryParentRequired": "请选择父分类",
   "categoryParentRequiredTitle": "错误",

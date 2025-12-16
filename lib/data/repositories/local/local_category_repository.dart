@@ -77,6 +77,15 @@ class LocalCategoryRepository implements CategoryRepository {
   }
 
   @override
+  Future<void> deleteCategoriesByIds(List<int> ids) async {
+    if (ids.isEmpty) return;
+    // 先删除这些分类下的所有子分类
+    await (db.delete(db.categories)..where((c) => c.parentId.isIn(ids))).go();
+    // 再删除这些分类本身
+    await (db.delete(db.categories)..where((c) => c.id.isIn(ids))).go();
+  }
+
+  @override
   Future<int> upsertCategory({
     required String name,
     required String kind,

@@ -1,12 +1,16 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../providers.dart';
-import '../../providers/database_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as db;
 import '../../services/data/category_service.dart';
+import '../../services/export/config_export_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 import '../../styles/tokens.dart';
@@ -49,19 +53,22 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
   @override
   Widget build(BuildContext context) {
     final categoriesWithCountAsync = ref.watch(categoriesWithCountProvider);
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.watch(primaryColorProvider);
 
     return Scaffold(
       body: Column(
         children: [
           PrimaryHeader(
-            title: AppLocalizations.of(context).categoryTitle,
+            title: l10n.categoryTitle,
             showBack: true,
             actions: [
               IconButton(
-                onPressed: () => _addCategory(),
-                icon: const Icon(Icons.add),
-                tooltip: AppLocalizations.of(context).categoryNew,
+                onPressed: _shareCategories,
+                icon: const Icon(Icons.share_outlined),
+                tooltip: l10n.categoryShare,
               ),
+              _buildMoreMenu(context, l10n, primaryColor),
             ],
           ),
           TabBar(
@@ -69,52 +76,25 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
             labelColor: BeeTokens.textPrimary(context),
             unselectedLabelColor: BeeTokens.textSecondary(context),
             tabs: [
-              Tab(text: AppLocalizations.of(context).categoryExpense),
-              Tab(text: AppLocalizations.of(context).categoryIncome),
+              Tab(text: l10n.categoryExpense),
+              Tab(text: l10n.categoryIncome),
             ],
           ),
           Expanded(
             child: categoriesWithCountAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(child: Text(AppLocalizations.of(context).categoryLoadFailed(error.toString()))),
+              error: (error, stack) => Center(child: Text(l10n.categoryLoadFailed(error.toString()))),
               data: (categoriesWithCount) {
-                return Column(
+                return TabBarView(
+                  controller: _tabController,
                   children: [
-                    // 提示信息
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      color: BeeTokens.isDark(context) ? Colors.blue[900]!.withValues(alpha: 0.3) : Colors.blue[50],
-                      child: Row(
-                        children: [
-                          Icon(Icons.info_outline, size: 16, color: BeeTokens.isDark(context) ? Colors.blue[300] : Colors.blue[700]),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              AppLocalizations.of(context).categoryReorderTip,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: BeeTokens.isDark(context) ? Colors.blue[300] : Colors.blue[700],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    _CategoryGridView(
+                      categoriesWithCount: categoriesWithCount,
+                      kind: 'expense',
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          _CategoryGridView(
-                            categoriesWithCount: categoriesWithCount,
-                            kind: 'expense',
-                          ),
-                          _CategoryGridView(
-                            categoriesWithCount: categoriesWithCount,
-                            kind: 'income',
-                          ),
-                        ],
-                      ),
+                    _CategoryGridView(
+                      categoriesWithCount: categoriesWithCount,
+                      kind: 'income',
                     ),
                   ],
                 );
@@ -134,6 +114,388 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
       ),
     );
     // 无需手动刷新，Repository 层会自动处理
+  }
+
+  /// 构建美化的更多菜单
+  Widget _buildMoreMenu(BuildContext context, AppLocalizations l10n, Color primaryColor) {
+    return BeePopupMenu(
+      tooltip: l10n.commonMore,
+      primaryColor: primaryColor,
+      items: [
+        BeeMenuItem.tip(label: l10n.categoryReorderTip),
+        const BeeMenuItem.divider(),
+        BeeMenuItem.action(
+          value: 'add',
+          icon: Icons.add_circle_outline,
+          label: l10n.categoryNew,
+        ),
+        BeeMenuItem.action(
+          value: 'import',
+          icon: Icons.download_outlined,
+          label: l10n.categoryImport,
+        ),
+        const BeeMenuItem.divider(),
+        BeeMenuItem.action(
+          value: 'clear_unused',
+          icon: Icons.delete_sweep_outlined,
+          label: l10n.categoryClearUnused,
+          isDanger: true,
+        ),
+      ],
+      onSelected: (value) {
+        switch (value) {
+          case 'add':
+            _addCategory();
+            break;
+          case 'import':
+            _importCategories();
+            break;
+          case 'clear_unused':
+            _clearUnusedCategories();
+            break;
+        }
+      },
+    );
+  }
+
+  /// 分享分类
+  Future<void> _shareCategories() async {
+    final l10n = AppLocalizations.of(context);
+
+    // 选择分享范围
+    final scope = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.categoryShareScopeTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.filter_list),
+              title: Text(_tabController.index == 0
+                  ? l10n.categoryShareScopeExpense
+                  : l10n.categoryShareScopeIncome),
+              onTap: () => Navigator.pop(context, 'current'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.all_inclusive),
+              title: Text(l10n.categoryShareScopeAll),
+              onTap: () => Navigator.pop(context, 'all'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.commonCancel),
+          ),
+        ],
+      ),
+    );
+
+    if (scope == null || !mounted) return;
+
+    try {
+      final repo = ref.read(repositoryProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+
+      // 生成只包含分类的配置
+      final options = ExportOptions(
+        categories: true,
+        accounts: false,
+        tags: false,
+        budgets: false,
+        recurringTransactions: false,
+        appSettings: false,
+      );
+
+      final yamlContent = await ConfigExportService.exportToYaml(
+        repository: repo,
+        ledgerId: ledgerId,
+        options: options,
+      );
+
+      // 如果只导出当前类型，过滤内容
+      String finalContent = yamlContent;
+      if (scope == 'current') {
+        final currentKind = _tabController.index == 0 ? 'expense' : 'income';
+        finalContent = await _filterCategoriesByKind(yamlContent, currentKind);
+      }
+
+      if (!mounted) return;
+
+      // 生成文件并分享
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
+      final fileName = 'beecount_categories_$timestamp.yml';
+
+      if (Platform.isAndroid) {
+        final downloadPath = '/storage/emulated/0/Download/BeeCount';
+        final dir = Directory(downloadPath);
+        if (!await dir.exists()) {
+          await dir.create(recursive: true);
+        }
+        final filePath = '$downloadPath/$fileName';
+        final file = File(filePath);
+        await file.writeAsString(finalContent);
+
+        if (!mounted) return;
+        showToast(context, l10n.categoryShareSuccess(filePath.replaceAll('/storage/emulated/0/', '')));
+      } else {
+        final tempDir = await getTemporaryDirectory();
+        final filePath = '${tempDir.path}/$fileName';
+        final file = File(filePath);
+        await file.writeAsString(finalContent);
+
+        if (!mounted) return;
+        await Share.shareXFiles(
+          [XFile(filePath)],
+          subject: l10n.categoryShareSubject,
+        );
+      }
+    } catch (e) {
+      logger.error('CategoryManage', '分享分类失败: $e');
+      if (!mounted) return;
+      showToast(context, l10n.categoryShareFailed);
+    }
+  }
+
+  /// 过滤只保留指定类型的分类
+  Future<String> _filterCategoriesByKind(String yamlContent, String kind) async {
+    // 简单处理：解析 YAML，过滤分类，重新生成
+    // 由于 YAML 结构相对简单，这里用字符串处理
+    final lines = yamlContent.split('\n');
+    final filteredLines = <String>[];
+    bool inCategories = false;
+    bool skipCategory = false;
+    int categoryIndent = 0;
+
+    for (final line in lines) {
+      if (line.trim() == 'categories:') {
+        inCategories = true;
+        filteredLines.add(line);
+        continue;
+      }
+
+      if (inCategories) {
+        if (line.trim().startsWith('- name:')) {
+          categoryIndent = line.indexOf('-');
+          // 检查下一行是否是我们要的 kind
+          skipCategory = false;
+          filteredLines.add(line);
+        } else if (line.trim().startsWith('kind:')) {
+          final lineKind = line.split(':').last.trim();
+          if (lineKind != kind) {
+            skipCategory = true;
+            // 移除上一行（- name:）
+            if (filteredLines.isNotEmpty) {
+              filteredLines.removeLast();
+            }
+          } else {
+            filteredLines.add(line);
+          }
+        } else if (skipCategory) {
+          // 跳过当前分类的其他行
+          if (line.trim().startsWith('- name:') || !line.startsWith(' ' * (categoryIndent + 2))) {
+            skipCategory = false;
+            if (line.trim().startsWith('- name:')) {
+              filteredLines.add(line);
+            } else if (!line.trim().startsWith('-') && line.contains(':')) {
+              inCategories = false;
+              filteredLines.add(line);
+            }
+          }
+        } else {
+          if (!line.trim().startsWith('-') && line.contains(':') && !line.startsWith(' ')) {
+            inCategories = false;
+          }
+          filteredLines.add(line);
+        }
+      } else {
+        filteredLines.add(line);
+      }
+    }
+
+    return filteredLines.join('\n');
+  }
+
+  /// 导入分类
+  Future<void> _importCategories() async {
+    final l10n = AppLocalizations.of(context);
+
+    try {
+      // 选择文件
+      FilePickerResult? result;
+      try {
+        result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['yml', 'yaml'],
+        );
+      } catch (e) {
+        result = await FilePicker.platform.pickFiles(type: FileType.any);
+      }
+
+      if (result == null || result.files.isEmpty || !mounted) return;
+
+      final filePath = result.files.first.path;
+      if (filePath == null) {
+        showToast(context, l10n.configImportNoFilePath);
+        return;
+      }
+
+      // 验证文件扩展名
+      final fileName = filePath.toLowerCase();
+      if (!fileName.endsWith('.yml') && !fileName.endsWith('.yaml')) {
+        showToast(context, l10n.categoryImportInvalidFile);
+        return;
+      }
+
+      // 读取文件
+      final file = File(filePath);
+      final yamlContent = await file.readAsString();
+
+      // 检测内容
+      final contentInfo = ConfigExportService.detectContent(yamlContent);
+      if (!contentInfo.hasCategories) {
+        if (!mounted) return;
+        showToast(context, l10n.categoryImportNoCategories);
+        return;
+      }
+
+      if (!mounted) return;
+
+      // 选择导入模式
+      final mode = await showDialog<String>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.categoryImportModeTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.merge_type),
+                title: Text(l10n.categoryImportModeMerge),
+                subtitle: Text(l10n.categoryImportModeMergeDesc),
+                onTap: () => Navigator.pop(context, 'merge'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.restart_alt),
+                title: Text(l10n.categoryImportModeOverwrite),
+                subtitle: Text(l10n.categoryImportModeOverwriteDesc),
+                onTap: () => Navigator.pop(context, 'overwrite'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.commonCancel),
+            ),
+          ],
+        ),
+      );
+
+      if (mode == null || !mounted) return;
+
+      // 执行导入
+      final repo = ref.read(repositoryProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+
+      final options = ExportOptions(
+        categories: true,
+        accounts: false,
+        tags: false,
+        budgets: false,
+        recurringTransactions: false,
+        appSettings: false,
+      );
+
+      if (mode == 'overwrite') {
+        // 覆盖模式：先清空未使用的分类
+        // 注意：有交易记录的分类不会被删除
+        await _clearUnusedCategoriesSilent();
+      }
+
+      await ConfigExportService.importFromFile(
+        filePath,
+        repository: repo,
+        ledgerId: ledgerId,
+        options: options,
+      );
+
+      if (!mounted) return;
+      showToast(context, l10n.categoryImportSuccess);
+      ref.invalidate(categoriesWithCountProvider);
+    } catch (e) {
+      logger.error('CategoryManage', '导入分类失败: $e');
+      if (!mounted) return;
+      showToast(context, l10n.categoryImportFailed);
+    }
+  }
+
+  /// 清空未使用的分类
+  Future<void> _clearUnusedCategories() async {
+    final l10n = AppLocalizations.of(context);
+    final categoriesWithCount = ref.read(categoriesWithCountProvider).valueOrNull ?? [];
+
+    // 找出交易数为0的分类
+    final unusedCategories = categoriesWithCount
+        .where((item) => item.transactionCount == 0)
+        .toList();
+
+    if (unusedCategories.isEmpty) {
+      showToast(context, l10n.categoryClearUnusedEmpty);
+      return;
+    }
+
+    // 确认对话框
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.categoryClearUnusedTitle),
+        content: Text(l10n.categoryClearUnusedMessage(unusedCategories.length)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text(l10n.commonDelete),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true || !mounted) return;
+
+    try {
+      final repo = ref.read(repositoryProvider);
+      final ids = unusedCategories.map((item) => item.category.id).toList();
+      await repo.deleteCategoriesByIds(ids);
+
+      if (!mounted) return;
+      showToast(context, l10n.categoryClearUnusedSuccess(ids.length));
+      ref.invalidate(categoriesWithCountProvider);
+    } catch (e) {
+      logger.error('CategoryManage', '清空未使用分类失败: $e');
+      if (!mounted) return;
+      showToast(context, l10n.categoryClearUnusedFailed);
+    }
+  }
+
+  /// 静默清空未使用的分类（用于覆盖导入）
+  Future<void> _clearUnusedCategoriesSilent() async {
+    final categoriesWithCount = ref.read(categoriesWithCountProvider).valueOrNull ?? [];
+    final unusedCategories = categoriesWithCount
+        .where((item) => item.transactionCount == 0)
+        .toList();
+
+    if (unusedCategories.isEmpty) return;
+
+    final repo = ref.read(repositoryProvider);
+    final ids = unusedCategories.map((item) => item.category.id).toList();
+    await repo.deleteCategoriesByIds(ids);
   }
 }
 

@@ -156,6 +156,12 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get commonEdit;
 
+  /// No description provided for @commonMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get commonMore;
+
   /// No description provided for @commonOk.
   ///
   /// In en, this message translates to:
@@ -2814,23 +2820,149 @@ abstract class AppLocalizations {
   /// **'This category has {count} transaction records. Please handle them first.'**
   String categoryCannotDeleteMessage(Object count);
 
-  /// No description provided for @categoryCannotConvert.
+  /// No description provided for @categoryShare.
   ///
   /// In en, this message translates to:
-  /// **'Cannot convert'**
-  String get categoryCannotConvert;
+  /// **'Share Categories'**
+  String get categoryShare;
 
-  /// No description provided for @categoryHasSubCategories.
+  /// No description provided for @categoryImport.
   ///
   /// In en, this message translates to:
-  /// **'This category has subcategories. Please delete or move them first before converting to a subcategory.'**
-  String get categoryHasSubCategories;
+  /// **'Import Categories'**
+  String get categoryImport;
 
-  /// No description provided for @categoryHasSubCategoriesHint.
+  /// No description provided for @categoryClearUnused.
   ///
   /// In en, this message translates to:
-  /// **'Has subcategories, cannot convert'**
-  String get categoryHasSubCategoriesHint;
+  /// **'Clear Unused Categories'**
+  String get categoryClearUnused;
+
+  /// No description provided for @categoryClearUnusedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Unused Categories'**
+  String get categoryClearUnusedTitle;
+
+  /// No description provided for @categoryClearUnusedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {count} unused categories? This action cannot be undone.'**
+  String categoryClearUnusedMessage(Object count);
+
+  /// No description provided for @categoryClearUnusedEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No unused categories'**
+  String get categoryClearUnusedEmpty;
+
+  /// No description provided for @categoryClearUnusedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {count} categories'**
+  String categoryClearUnusedSuccess(Object count);
+
+  /// No description provided for @categoryClearUnusedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear failed'**
+  String get categoryClearUnusedFailed;
+
+  /// No description provided for @categoryShareScopeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Scope'**
+  String get categoryShareScopeTitle;
+
+  /// No description provided for @categoryShareScopeExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense categories only'**
+  String get categoryShareScopeExpense;
+
+  /// No description provided for @categoryShareScopeIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income categories only'**
+  String get categoryShareScopeIncome;
+
+  /// No description provided for @categoryShareScopeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get categoryShareScopeAll;
+
+  /// No description provided for @categoryShareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to {path}'**
+  String categoryShareSuccess(Object path);
+
+  /// No description provided for @categoryShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount Category Configuration'**
+  String get categoryShareSubject;
+
+  /// No description provided for @categoryShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Share failed'**
+  String get categoryShareFailed;
+
+  /// No description provided for @categoryImportInvalidFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a YAML configuration file'**
+  String get categoryImportInvalidFile;
+
+  /// No description provided for @categoryImportNoCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'No category data in file'**
+  String get categoryImportNoCategories;
+
+  /// No description provided for @categoryImportModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Import Mode'**
+  String get categoryImportModeTitle;
+
+  /// No description provided for @categoryImportModeMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge'**
+  String get categoryImportModeMerge;
+
+  /// No description provided for @categoryImportModeMergeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep existing, add new ones'**
+  String get categoryImportModeMergeDesc;
+
+  /// No description provided for @categoryImportModeOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite'**
+  String get categoryImportModeOverwrite;
+
+  /// No description provided for @categoryImportModeOverwriteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear unused categories then import'**
+  String get categoryImportModeOverwriteDesc;
+
+  /// No description provided for @categoryImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Import successful'**
+  String get categoryImportSuccess;
+
+  /// No description provided for @categoryImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get categoryImportFailed;
 
   /// No description provided for @categoryDeleteConfirmTitle.
   ///
@@ -2891,12 +3023,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Parent Category'**
   String get categorySelectParentTitle;
-
-  /// No description provided for @categorySelectParentDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Only categories without transaction records can be selected as parent'**
-  String get categorySelectParentDescription;
 
   /// No description provided for @categorySubCategoryCreated.
   ///

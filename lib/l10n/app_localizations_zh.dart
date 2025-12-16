@@ -37,6 +37,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonEdit => '编辑';
 
   @override
+  String get commonMore => '更多';
+
+  @override
   String get commonOk => '确定';
 
   @override
@@ -1482,13 +1485,82 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get categoryCannotConvert => '无法转换';
+  String get categoryShare => '分享分类';
 
   @override
-  String get categoryHasSubCategories => '该分类下还有子分类，无法转换为二级分类。请先删除或移动子分类。';
+  String get categoryImport => '导入分类';
 
   @override
-  String get categoryHasSubCategoriesHint => '该分类下有子分类，无法转为二级';
+  String get categoryClearUnused => '清空未使用分类';
+
+  @override
+  String get categoryClearUnusedTitle => '清空未使用分类';
+
+  @override
+  String categoryClearUnusedMessage(Object count) {
+    return '确定要删除 $count 个未使用的分类吗？此操作无法撤销。';
+  }
+
+  @override
+  String get categoryClearUnusedEmpty => '没有未使用的分类';
+
+  @override
+  String categoryClearUnusedSuccess(Object count) {
+    return '已删除 $count 个分类';
+  }
+
+  @override
+  String get categoryClearUnusedFailed => '清空失败';
+
+  @override
+  String get categoryShareScopeTitle => '选择分享范围';
+
+  @override
+  String get categoryShareScopeExpense => '仅支出分类';
+
+  @override
+  String get categoryShareScopeIncome => '仅收入分类';
+
+  @override
+  String get categoryShareScopeAll => '全部分类';
+
+  @override
+  String categoryShareSuccess(Object path) {
+    return '已保存到 $path';
+  }
+
+  @override
+  String get categoryShareSubject => 'BeeCount 分类配置';
+
+  @override
+  String get categoryShareFailed => '分享失败';
+
+  @override
+  String get categoryImportInvalidFile => '请选择 YAML 配置文件';
+
+  @override
+  String get categoryImportNoCategories => '文件中没有分类数据';
+
+  @override
+  String get categoryImportModeTitle => '选择导入模式';
+
+  @override
+  String get categoryImportModeMerge => '合并';
+
+  @override
+  String get categoryImportModeMergeDesc => '保留现有分类，新增不存在的';
+
+  @override
+  String get categoryImportModeOverwrite => '覆盖';
+
+  @override
+  String get categoryImportModeOverwriteDesc => '清空未使用分类后导入';
+
+  @override
+  String get categoryImportSuccess => '导入成功';
+
+  @override
+  String get categoryImportFailed => '导入失败';
 
   @override
   String get categoryDeleteConfirmTitle => '删除分类';
@@ -1523,9 +1595,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categorySelectParentTitle => '选择父分类';
-
-  @override
-  String get categorySelectParentDescription => '只能选择没有交易记录的分类作为父分类';
 
   @override
   String categorySubCategoryCreated(Object name) {
@@ -6436,15 +6505,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get categoryCannotConvert => '無法轉換';
-
-  @override
-  String get categoryHasSubCategories => '該分類下還有子分類，無法轉換為二級分類。請先刪除或移動子分類。';
-
-  @override
-  String get categoryHasSubCategoriesHint => '該分類下有子分類，無法轉為二級';
-
-  @override
   String get categoryDeleteConfirmTitle => '刪除分類';
 
   @override
@@ -6477,9 +6537,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categorySelectParentTitle => '選擇父分類';
-
-  @override
-  String get categorySelectParentDescription => '只能選擇沒有交易記錄的分類作為父分類';
 
   @override
   String categorySubCategoryCreated(Object name) {

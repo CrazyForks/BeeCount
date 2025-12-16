@@ -138,6 +138,15 @@ class CloudCategoryRepository implements CategoryRepository {
   }
 
   @override
+  Future<void> deleteCategoriesByIds(List<int> ids) async {
+    if (ids.isEmpty) return;
+    // 云端暂时使用循环删除
+    for (final id in ids) {
+      await deleteCategory(id);
+    }
+  }
+
+  @override
   Future<int> upsertCategory({
     required String name,
     required String kind,

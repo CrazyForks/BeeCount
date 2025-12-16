@@ -331,6 +331,10 @@ class CloudRepository extends BaseRepository {
       _category.deleteCategory(id);
 
   @override
+  Future<void> deleteCategoriesByIds(List<int> ids) =>
+      _category.deleteCategoriesByIds(ids);
+
+  @override
   Future<int> upsertCategory({
     required String name,
     required String kind,
