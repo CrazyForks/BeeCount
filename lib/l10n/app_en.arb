@@ -2013,6 +2013,47 @@
   "tagDefaultImageBilling": "Image",
   "tagDefaultCameraBilling": "Camera",
   "tagDefaultAiBilling": "AI",
+  "tagShare": "Share Tags",
+  "tagImport": "Import Tags",
+  "tagClearUnused": "Clear Unused",
+  "tagShareSuccess": "Saved to {path}",
+  "@tagShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "tagShareSubject": "BeeCount Tags Configuration",
+  "tagShareFailed": "Share failed",
+  "tagImportInvalidFile": "Please select a YAML file",
+  "tagImportNoTags": "No tags found in file",
+  "tagImportModeTitle": "Select Import Mode",
+  "tagImportModeMerge": "Merge",
+  "tagImportModeMergeDesc": "Keep existing tags, add new ones",
+  "tagImportModeOverwrite": "Overwrite",
+  "tagImportModeOverwriteDesc": "Clear unused tags before import",
+  "tagImportSuccess": "Import successful",
+  "tagImportFailed": "Import failed",
+  "tagClearUnusedEmpty": "No unused tags",
+  "tagClearUnusedTitle": "Clear Unused Tags",
+  "tagClearUnusedMessage": "Delete {count} unused tags?",
+  "@tagClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedSuccess": "Deleted {count} tags",
+  "@tagClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedFailed": "Clear failed",
   "tabDiscover": "Discover",
   "discoverTitle": "Discover",
   "discoverBudget": "Budget",

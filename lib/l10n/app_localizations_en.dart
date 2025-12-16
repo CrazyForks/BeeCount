@@ -4689,6 +4689,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagDefaultAiBilling => 'AI';
 
   @override
+  String get tagShare => 'Share Tags';
+
+  @override
+  String get tagImport => 'Import Tags';
+
+  @override
+  String get tagClearUnused => 'Clear Unused';
+
+  @override
+  String tagShareSuccess(String path) {
+    return 'Saved to $path';
+  }
+
+  @override
+  String get tagShareSubject => 'BeeCount Tags Configuration';
+
+  @override
+  String get tagShareFailed => 'Share failed';
+
+  @override
+  String get tagImportInvalidFile => 'Please select a YAML file';
+
+  @override
+  String get tagImportNoTags => 'No tags found in file';
+
+  @override
+  String get tagImportModeTitle => 'Select Import Mode';
+
+  @override
+  String get tagImportModeMerge => 'Merge';
+
+  @override
+  String get tagImportModeMergeDesc => 'Keep existing tags, add new ones';
+
+  @override
+  String get tagImportModeOverwrite => 'Overwrite';
+
+  @override
+  String get tagImportModeOverwriteDesc => 'Clear unused tags before import';
+
+  @override
+  String get tagImportSuccess => 'Import successful';
+
+  @override
+  String get tagImportFailed => 'Import failed';
+
+  @override
+  String get tagClearUnusedEmpty => 'No unused tags';
+
+  @override
+  String get tagClearUnusedTitle => 'Clear Unused Tags';
+
+  @override
+  String tagClearUnusedMessage(int count) {
+    return 'Delete $count unused tags?';
+  }
+
+  @override
+  String tagClearUnusedSuccess(int count) {
+    return 'Deleted $count tags';
+  }
+
+  @override
+  String get tagClearUnusedFailed => 'Clear failed';
+
+  @override
   String get tabDiscover => 'Discover';
 
   @override

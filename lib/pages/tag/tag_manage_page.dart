@@ -1,10 +1,15 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../data/db.dart';
 import '../../l10n/app_localizations.dart';
-import '../../providers/tag_providers.dart';
-import '../../providers/database_providers.dart';
+import '../../providers.dart';
 import '../../services/data/tag_seed_service.dart';
+import '../../services/export/config_export_service.dart';
+import '../../services/system/logger_service.dart';
 import '../../styles/tokens.dart';
 import '../../widgets/ui/ui.dart';
 import 'tag_detail_page.dart';
@@ -23,6 +28,7 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final tagsAsync = ref.watch(tagsWithStatsProvider);
+    final primaryColor = ref.watch(primaryColorProvider);
 
     return Scaffold(
       backgroundColor: BeeTokens.scaffoldBackground(context),
@@ -34,30 +40,11 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
             showBack: true,
             actions: [
               IconButton(
-                onPressed: _addTag,
-                icon: const Icon(Icons.add),
-                tooltip: l10n.tagAddTitle,
+                onPressed: _shareTags,
+                icon: const Icon(Icons.share_outlined),
+                tooltip: l10n.tagShare,
               ),
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert),
-                onSelected: (value) {
-                  if (value == 'generate_default') {
-                    _generateDefaultTags();
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'generate_default',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.auto_fix_high, size: 20),
-                        const SizedBox(width: 12),
-                        Text(l10n.tagManageGenerateDefault),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              _buildMoreMenu(context, l10n, primaryColor),
             ],
           ),
           Expanded(
@@ -195,6 +182,296 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
       if (mounted) {
         showToast(context, l10n.tagManageGenerateDefaultSuccess);
       }
+    }
+  }
+
+  /// 构建更多菜单
+  Widget _buildMoreMenu(BuildContext context, AppLocalizations l10n, Color primaryColor) {
+    return BeePopupMenu(
+      tooltip: l10n.commonMore,
+      primaryColor: primaryColor,
+      items: [
+        BeeMenuItem.action(
+          value: 'add',
+          icon: Icons.add_circle_outline,
+          label: l10n.tagAddTitle,
+        ),
+        BeeMenuItem.action(
+          value: 'generate_default',
+          icon: Icons.auto_fix_high,
+          label: l10n.tagManageGenerateDefault,
+        ),
+        BeeMenuItem.action(
+          value: 'import',
+          icon: Icons.download_outlined,
+          label: l10n.tagImport,
+        ),
+        const BeeMenuItem.divider(),
+        BeeMenuItem.action(
+          value: 'clear_unused',
+          icon: Icons.delete_sweep_outlined,
+          label: l10n.tagClearUnused,
+          isDanger: true,
+        ),
+      ],
+      onSelected: (value) {
+        switch (value) {
+          case 'add':
+            _addTag();
+            break;
+          case 'generate_default':
+            _generateDefaultTags();
+            break;
+          case 'import':
+            _importTags();
+            break;
+          case 'clear_unused':
+            _clearUnusedTags();
+            break;
+        }
+      },
+    );
+  }
+
+  /// 分享标签
+  Future<void> _shareTags() async {
+    final l10n = AppLocalizations.of(context);
+
+    try {
+      final repo = ref.read(repositoryProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+
+      // 生成只包含标签的配置
+      final options = ExportOptions(
+        categories: false,
+        accounts: false,
+        tags: true,
+        budgets: false,
+        recurringTransactions: false,
+        appSettings: false,
+      );
+
+      final yamlContent = await ConfigExportService.exportToYaml(
+        repository: repo,
+        ledgerId: ledgerId,
+        options: options,
+      );
+
+      if (!mounted) return;
+
+      // 生成文件并分享
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
+      final fileName = 'beecount_tags_$timestamp.yml';
+
+      if (Platform.isAndroid) {
+        final downloadPath = '/storage/emulated/0/Download/BeeCount';
+        final dir = Directory(downloadPath);
+        if (!await dir.exists()) {
+          await dir.create(recursive: true);
+        }
+        final filePath = '$downloadPath/$fileName';
+        final file = File(filePath);
+        await file.writeAsString(yamlContent);
+
+        if (!mounted) return;
+        showToast(context, l10n.tagShareSuccess(filePath.replaceAll('/storage/emulated/0/', '')));
+      } else {
+        final tempDir = await getTemporaryDirectory();
+        final filePath = '${tempDir.path}/$fileName';
+        final file = File(filePath);
+        await file.writeAsString(yamlContent);
+
+        if (!mounted) return;
+        await Share.shareXFiles(
+          [XFile(filePath)],
+          subject: l10n.tagShareSubject,
+        );
+      }
+    } catch (e) {
+      logger.error('TagManage', '分享标签失败: $e');
+      if (!mounted) return;
+      showToast(context, l10n.tagShareFailed);
+    }
+  }
+
+  /// 导入标签
+  Future<void> _importTags() async {
+    final l10n = AppLocalizations.of(context);
+
+    try {
+      // 选择文件
+      FilePickerResult? result;
+      try {
+        result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['yml', 'yaml'],
+        );
+      } catch (e) {
+        result = await FilePicker.platform.pickFiles(type: FileType.any);
+      }
+
+      if (result == null || result.files.isEmpty || !mounted) return;
+
+      final filePath = result.files.first.path;
+      if (filePath == null) {
+        showToast(context, l10n.configImportNoFilePath);
+        return;
+      }
+
+      // 验证文件扩展名
+      final fileName = filePath.toLowerCase();
+      if (!fileName.endsWith('.yml') && !fileName.endsWith('.yaml')) {
+        showToast(context, l10n.tagImportInvalidFile);
+        return;
+      }
+
+      // 读取文件
+      final file = File(filePath);
+      final yamlContent = await file.readAsString();
+
+      // 检测内容
+      final contentInfo = ConfigExportService.detectContent(yamlContent);
+      if (!contentInfo.hasTags) {
+        if (!mounted) return;
+        showToast(context, l10n.tagImportNoTags);
+        return;
+      }
+
+      if (!mounted) return;
+
+      // 选择导入模式
+      final mode = await showDialog<String>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.tagImportModeTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.merge_type),
+                title: Text(l10n.tagImportModeMerge),
+                subtitle: Text(l10n.tagImportModeMergeDesc),
+                onTap: () => Navigator.pop(context, 'merge'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.restart_alt),
+                title: Text(l10n.tagImportModeOverwrite),
+                subtitle: Text(l10n.tagImportModeOverwriteDesc),
+                onTap: () => Navigator.pop(context, 'overwrite'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.commonCancel),
+            ),
+          ],
+        ),
+      );
+
+      if (mode == null || !mounted) return;
+
+      // 执行导入
+      final repo = ref.read(repositoryProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+
+      final options = ExportOptions(
+        categories: false,
+        accounts: false,
+        tags: true,
+        budgets: false,
+        recurringTransactions: false,
+        appSettings: false,
+      );
+
+      if (mode == 'overwrite') {
+        // 覆盖模式：先清空未使用的标签
+        await _clearUnusedTagsSilent();
+      }
+
+      await ConfigExportService.importFromFile(
+        filePath,
+        repository: repo,
+        ledgerId: ledgerId,
+        options: options,
+      );
+
+      if (!mounted) return;
+      showToast(context, l10n.tagImportSuccess);
+      ref.read(tagListRefreshProvider.notifier).state++;
+    } catch (e) {
+      logger.error('TagManage', '导入标签失败: $e');
+      if (!mounted) return;
+      showToast(context, l10n.tagImportFailed);
+    }
+  }
+
+  /// 清空未使用的标签
+  Future<void> _clearUnusedTags() async {
+    final l10n = AppLocalizations.of(context);
+    final tagsWithStats = ref.read(tagsWithStatsProvider).valueOrNull ?? [];
+
+    // 找出交易数为0的标签
+    final unusedTags = tagsWithStats
+        .where((item) => item.transactionCount == 0)
+        .toList();
+
+    if (unusedTags.isEmpty) {
+      showToast(context, l10n.tagClearUnusedEmpty);
+      return;
+    }
+
+    // 确认对话框
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.tagClearUnusedTitle),
+        content: Text(l10n.tagClearUnusedMessage(unusedTags.length)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text(l10n.commonDelete),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true || !mounted) return;
+
+    try {
+      final repo = ref.read(repositoryProvider);
+      for (final item in unusedTags) {
+        await repo.deleteTag(item.tag.id);
+      }
+
+      if (!mounted) return;
+      showToast(context, l10n.tagClearUnusedSuccess(unusedTags.length));
+      ref.read(tagListRefreshProvider.notifier).state++;
+    } catch (e) {
+      logger.error('TagManage', '清空未使用标签失败: $e');
+      if (!mounted) return;
+      showToast(context, l10n.tagClearUnusedFailed);
+    }
+  }
+
+  /// 静默清空未使用的标签（用于覆盖导入）
+  Future<void> _clearUnusedTagsSilent() async {
+    final tagsWithStats = ref.read(tagsWithStatsProvider).valueOrNull ?? [];
+    final unusedTags = tagsWithStats
+        .where((item) => item.transactionCount == 0)
+        .toList();
+
+    if (unusedTags.isEmpty) return;
+
+    final repo = ref.read(repositoryProvider);
+    for (final item in unusedTags) {
+      await repo.deleteTag(item.tag.id);
     }
   }
 }

@@ -1821,16 +1821,29 @@ class ConfigExportService {
       try {
         final items = config.tags!.items;
 
-        // 准备批量插入的数据
-        final tagsToInsert = items.map((item) => TagsCompanion.insert(
-          name: item.name,
-          color: d.Value(item.color),
-        )).toList();
+        // 获取现有标签名称集合
+        final existingTags = await repository.getAllTags();
+        final existingNames = existingTags.map((t) => t.name.toLowerCase()).toSet();
 
-        // 使用 repository 方法进行批量插入
-        await repository.batchInsertTags(tagsToInsert);
+        // 过滤掉已存在的标签（按名称去重）
+        final newItems = items.where((item) =>
+          !existingNames.contains(item.name.toLowerCase())
+        ).toList();
 
-        logger.info('ConfigImport', '标签已批量导入: ${items.length}条');
+        if (newItems.isNotEmpty) {
+          // 准备批量插入的数据
+          final tagsToInsert = newItems.map((item) => TagsCompanion.insert(
+            name: item.name,
+            color: d.Value(item.color),
+          )).toList();
+
+          // 使用 repository 方法进行批量插入
+          await repository.batchInsertTags(tagsToInsert);
+
+          logger.info('ConfigImport', '标签已导入: ${newItems.length}条 (跳过已存在: ${items.length - newItems.length}条)');
+        } else {
+          logger.info('ConfigImport', '标签全部已存在，跳过导入');
+        }
       } catch (e) {
         logger.error('ConfigImport', '导入标签失败: $e');
       }

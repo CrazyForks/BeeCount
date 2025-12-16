@@ -1973,6 +1973,47 @@
   "tagDefaultImageBilling": "图片记账",
   "tagDefaultCameraBilling": "拍照记账",
   "tagDefaultAiBilling": "AI记账",
+  "tagShare": "分享标签",
+  "tagImport": "导入标签",
+  "tagClearUnused": "清理未使用",
+  "tagShareSuccess": "已保存到 {path}",
+  "@tagShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "tagShareSubject": "BeeCount 标签配置",
+  "tagShareFailed": "分享失败",
+  "tagImportInvalidFile": "请选择 YAML 配置文件",
+  "tagImportNoTags": "文件中没有标签数据",
+  "tagImportModeTitle": "选择导入模式",
+  "tagImportModeMerge": "合并",
+  "tagImportModeMergeDesc": "保留现有标签，新增不存在的",
+  "tagImportModeOverwrite": "覆盖",
+  "tagImportModeOverwriteDesc": "清空未使用标签后导入",
+  "tagImportSuccess": "导入成功",
+  "tagImportFailed": "导入失败",
+  "tagClearUnusedEmpty": "没有未使用的标签",
+  "tagClearUnusedTitle": "清理未使用标签",
+  "tagClearUnusedMessage": "确定要删除 {count} 个未使用的标签吗？",
+  "@tagClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedSuccess": "已删除 {count} 个标签",
+  "@tagClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedFailed": "清理失败",
   "tabDiscover": "发现",
   "discoverTitle": "发现",
   "discoverBudget": "预算管理",

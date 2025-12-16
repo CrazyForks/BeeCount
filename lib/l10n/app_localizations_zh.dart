@@ -4689,6 +4689,72 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagDefaultAiBilling => 'AI记账';
 
   @override
+  String get tagShare => '分享标签';
+
+  @override
+  String get tagImport => '导入标签';
+
+  @override
+  String get tagClearUnused => '清理未使用';
+
+  @override
+  String tagShareSuccess(String path) {
+    return '已保存到 $path';
+  }
+
+  @override
+  String get tagShareSubject => 'BeeCount 标签配置';
+
+  @override
+  String get tagShareFailed => '分享失败';
+
+  @override
+  String get tagImportInvalidFile => '请选择 YAML 配置文件';
+
+  @override
+  String get tagImportNoTags => '文件中没有标签数据';
+
+  @override
+  String get tagImportModeTitle => '选择导入模式';
+
+  @override
+  String get tagImportModeMerge => '合并';
+
+  @override
+  String get tagImportModeMergeDesc => '保留现有标签，新增不存在的';
+
+  @override
+  String get tagImportModeOverwrite => '覆盖';
+
+  @override
+  String get tagImportModeOverwriteDesc => '清空未使用标签后导入';
+
+  @override
+  String get tagImportSuccess => '导入成功';
+
+  @override
+  String get tagImportFailed => '导入失败';
+
+  @override
+  String get tagClearUnusedEmpty => '没有未使用的标签';
+
+  @override
+  String get tagClearUnusedTitle => '清理未使用标签';
+
+  @override
+  String tagClearUnusedMessage(int count) {
+    return '确定要删除 $count 个未使用的标签吗？';
+  }
+
+  @override
+  String tagClearUnusedSuccess(int count) {
+    return '已删除 $count 个标签';
+  }
+
+  @override
+  String get tagClearUnusedFailed => '清理失败';
+
+  @override
   String get tabDiscover => '发现';
 
   @override
@@ -9629,6 +9695,72 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tagDefaultAiBilling => 'AI記帳';
+
+  @override
+  String get tagShare => '分享標籤';
+
+  @override
+  String get tagImport => '匯入標籤';
+
+  @override
+  String get tagClearUnused => '清理未使用';
+
+  @override
+  String tagShareSuccess(String path) {
+    return '已儲存到 $path';
+  }
+
+  @override
+  String get tagShareSubject => 'BeeCount 標籤配置';
+
+  @override
+  String get tagShareFailed => '分享失敗';
+
+  @override
+  String get tagImportInvalidFile => '請選擇 YAML 配置檔案';
+
+  @override
+  String get tagImportNoTags => '檔案中沒有標籤資料';
+
+  @override
+  String get tagImportModeTitle => '選擇匯入模式';
+
+  @override
+  String get tagImportModeMerge => '合併';
+
+  @override
+  String get tagImportModeMergeDesc => '保留現有標籤，新增不存在的';
+
+  @override
+  String get tagImportModeOverwrite => '覆蓋';
+
+  @override
+  String get tagImportModeOverwriteDesc => '清空未使用標籤後匯入';
+
+  @override
+  String get tagImportSuccess => '匯入成功';
+
+  @override
+  String get tagImportFailed => '匯入失敗';
+
+  @override
+  String get tagClearUnusedEmpty => '沒有未使用的標籤';
+
+  @override
+  String get tagClearUnusedTitle => '清理未使用標籤';
+
+  @override
+  String tagClearUnusedMessage(int count) {
+    return '確定要刪除 $count 個未使用的標籤嗎？';
+  }
+
+  @override
+  String tagClearUnusedSuccess(int count) {
+    return '已刪除 $count 個標籤';
+  }
+
+  @override
+  String get tagClearUnusedFailed => '清理失敗';
 
   @override
   String get tabDiscover => '發現';

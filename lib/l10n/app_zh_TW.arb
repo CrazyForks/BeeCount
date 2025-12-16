@@ -1587,6 +1587,47 @@
   "tagDefaultCameraBilling": "拍照記帳",
   "tagDefaultImageBilling": "圖片記帳",
   "tagDefaultAiBilling": "AI記帳",
+  "tagShare": "分享標籤",
+  "tagImport": "匯入標籤",
+  "tagClearUnused": "清理未使用",
+  "tagShareSuccess": "已儲存到 {path}",
+  "@tagShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "tagShareSubject": "BeeCount 標籤配置",
+  "tagShareFailed": "分享失敗",
+  "tagImportInvalidFile": "請選擇 YAML 配置檔案",
+  "tagImportNoTags": "檔案中沒有標籤資料",
+  "tagImportModeTitle": "選擇匯入模式",
+  "tagImportModeMerge": "合併",
+  "tagImportModeMergeDesc": "保留現有標籤，新增不存在的",
+  "tagImportModeOverwrite": "覆蓋",
+  "tagImportModeOverwriteDesc": "清空未使用標籤後匯入",
+  "tagImportSuccess": "匯入成功",
+  "tagImportFailed": "匯入失敗",
+  "tagClearUnusedEmpty": "沒有未使用的標籤",
+  "tagClearUnusedTitle": "清理未使用標籤",
+  "tagClearUnusedMessage": "確定要刪除 {count} 個未使用的標籤嗎？",
+  "@tagClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedSuccess": "已刪除 {count} 個標籤",
+  "@tagClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedFailed": "清理失敗",
   "tagDeleteConfirmMessage": "確定要刪除標籤「{name}」嗎？此操作不會影響已關聯的交易記錄。",
   "@tagDeleteConfirmMessage": {
     "placeholders": {

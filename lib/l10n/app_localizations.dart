@@ -8964,6 +8964,126 @@ abstract class AppLocalizations {
   /// **'AI'**
   String get tagDefaultAiBilling;
 
+  /// No description provided for @tagShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Tags'**
+  String get tagShare;
+
+  /// No description provided for @tagImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Tags'**
+  String get tagImport;
+
+  /// No description provided for @tagClearUnused.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Unused'**
+  String get tagClearUnused;
+
+  /// No description provided for @tagShareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to {path}'**
+  String tagShareSuccess(String path);
+
+  /// No description provided for @tagShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount Tags Configuration'**
+  String get tagShareSubject;
+
+  /// No description provided for @tagShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Share failed'**
+  String get tagShareFailed;
+
+  /// No description provided for @tagImportInvalidFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a YAML file'**
+  String get tagImportInvalidFile;
+
+  /// No description provided for @tagImportNoTags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags found in file'**
+  String get tagImportNoTags;
+
+  /// No description provided for @tagImportModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Import Mode'**
+  String get tagImportModeTitle;
+
+  /// No description provided for @tagImportModeMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge'**
+  String get tagImportModeMerge;
+
+  /// No description provided for @tagImportModeMergeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep existing tags, add new ones'**
+  String get tagImportModeMergeDesc;
+
+  /// No description provided for @tagImportModeOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite'**
+  String get tagImportModeOverwrite;
+
+  /// No description provided for @tagImportModeOverwriteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear unused tags before import'**
+  String get tagImportModeOverwriteDesc;
+
+  /// No description provided for @tagImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Import successful'**
+  String get tagImportSuccess;
+
+  /// No description provided for @tagImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get tagImportFailed;
+
+  /// No description provided for @tagClearUnusedEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No unused tags'**
+  String get tagClearUnusedEmpty;
+
+  /// No description provided for @tagClearUnusedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Unused Tags'**
+  String get tagClearUnusedTitle;
+
+  /// No description provided for @tagClearUnusedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} unused tags?'**
+  String tagClearUnusedMessage(int count);
+
+  /// No description provided for @tagClearUnusedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {count} tags'**
+  String tagClearUnusedSuccess(int count);
+
+  /// No description provided for @tagClearUnusedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear failed'**
+  String get tagClearUnusedFailed;
+
   /// No description provided for @tabDiscover.
   ///
   /// In en, this message translates to:
