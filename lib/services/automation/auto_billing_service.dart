@@ -217,6 +217,10 @@ class AutoBillingService {
         try {
           final dbStartTime = DateTime.now().millisecondsSinceEpoch;
           print('⏱️ [性能] 开始创建交易记录');
+          // 读取智能记账设置
+          final autoAddTags = _container.read(smartBillingAutoTagsProvider);
+          final autoAddAttachment = _container.read(smartBillingAutoAttachmentProvider);
+
           // 确定记账方式标签：图片记账 + AI（如果使用了AI增强）
           final billingTypes = <String>[TagSeedService.billingTypeImage];
           if (result.aiEnhanced) {
@@ -225,26 +229,29 @@ class AutoBillingService {
           final transactionId = await _createTransaction(
             result,
             billingTypes: billingTypes,
+            autoAddTags: autoAddTags,
           );
           final dbElapsed = DateTime.now().millisecondsSinceEpoch - dbStartTime;
           print('⏱️ [性能] 交易记录创建完成, 耗时=${dbElapsed}ms');
 
           if (transactionId != null) {
             // 记账成功
-            // 保存图片附件
-            try {
-              final attachmentService = _container.read(attachmentServiceProvider);
-              await attachmentService.saveAttachment(
-                transactionId: transactionId,
-                sourceFile: file,
-                index: 0,
-              );
-              logger.info('AutoBilling', '截图附件保存成功', 'transactionId=$transactionId');
-              // 刷新附件列表
-              _container.read(attachmentListRefreshProvider.notifier).state++;
-            } catch (e, st) {
-              logger.error('AutoBilling', '保存截图附件失败', e, st);
-              // 附件保存失败不影响交易记录
+            // 保存图片附件（根据设置开关）
+            if (autoAddAttachment) {
+              try {
+                final attachmentService = _container.read(attachmentServiceProvider);
+                await attachmentService.saveAttachment(
+                  transactionId: transactionId,
+                  sourceFile: file,
+                  index: 0,
+                );
+                logger.info('AutoBilling', '截图附件保存成功', 'transactionId=$transactionId');
+                // 刷新附件列表
+                _container.read(attachmentListRefreshProvider.notifier).state++;
+              } catch (e, st) {
+                logger.error('AutoBilling', '保存截图附件失败', e, st);
+                // 附件保存失败不影响交易记录
+              }
             }
 
             // 刷新统计信息
@@ -454,9 +461,11 @@ class AutoBillingService {
 
   /// 创建交易记录
   /// [billingTypes] 记账方式列表，用于添加标签
+  /// [autoAddTags] 是否自动添加标签
   Future<int?> _createTransaction(
     OcrResult result, {
     List<String>? billingTypes,
+    bool autoAddTags = true,
   }) async {
     try {
       // 获取当前账本ID（优先从Provider读取，失败则从SharedPreferences读取，最后从数据库获取默认账本）
@@ -520,6 +529,7 @@ class AutoBillingService {
         note: note,
         billingTypes: billingTypes,
         l10n: l10n,
+        autoAddTags: autoAddTags,
       );
 
       if (transactionId != null) {

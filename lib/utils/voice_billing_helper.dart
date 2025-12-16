@@ -354,12 +354,16 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
         aiEnhanced: true,
       );
 
+      // 读取智能记账设置
+      final autoAddTags = ref.read(smartBillingAutoTagsProvider);
+
       final billCreationService = BillCreationService(repo);
       final transactionId = await billCreationService.createBillTransaction(
         result: ocrResult,
         ledgerId: currentLedger.id,
         billingTypes: [TagSeedService.billingTypeVoice, TagSeedService.billingTypeAi],
         l10n: l10n,
+        autoAddTags: autoAddTags,
       );
 
       if (!mounted) return;

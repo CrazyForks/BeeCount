@@ -297,6 +297,10 @@ class AIChatService {
       aiType: transactionType,
     );
 
+    // 读取智能记账设置
+    final prefs = await SharedPreferences.getInstance();
+    final autoAddTags = prefs.getBool('smartBillingAutoTags') ?? true;
+
     // 使用 BillCreationService 创建交易
     final billCreationService = BillCreationService(_repo);
     final id = await billCreationService.createBillTransaction(
@@ -305,6 +309,7 @@ class AIChatService {
       note: bill.note,
       billingTypes: [TagSeedService.billingTypeAi],
       l10n: l10n,
+      autoAddTags: autoAddTags,
     );
 
     if (id != null) {

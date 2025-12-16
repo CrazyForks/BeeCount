@@ -7,6 +7,7 @@ import 'font_scale_provider.dart';
 import 'update_providers.dart';
 import 'cloud_mode_providers.dart';
 import 'supabase_providers.dart';
+import 'smart_billing_providers.dart';
 import '../data/db.dart';
 import '../services/data/recurring_transaction_service.dart';
 import '../services/system/logger_service.dart';
@@ -182,6 +183,8 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
       ref.watch(hideAmountsInitProvider.future),
       ref.watch(compactAmountInitProvider.future),
       ref.watch(showTransactionTimeInitProvider.future),
+      ref.watch(smartBillingAutoTagsInitProvider.future),
+      ref.watch(smartBillingAutoAttachmentInitProvider.future),
     ]);
     logger.info(tag, '基础配置初始化完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms');
     stepTime = DateTime.now();

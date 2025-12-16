@@ -3785,6 +3785,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get smartBillingAIRequired => '语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置';
 
   @override
+  String get smartBillingAutoTags => '自动关联标签';
+
+  @override
+  String get smartBillingAutoTagsDesc => '智能记账时自动根据分类关联常用标签';
+
+  @override
+  String get smartBillingAutoAttachment => '自动添加附件';
+
+  @override
+  String get smartBillingAutoAttachmentDesc => '图片/拍照记账时自动将原图添加为附件';
+
+  @override
   String get autoScreenshotBillingIosDesc => '通过快捷指令实现截图自动识别记账';
 
   @override
@@ -8791,6 +8803,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get smartBillingAIRequired => '語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定';
+
+  @override
+  String get smartBillingAutoTags => '自動關聯標籤';
+
+  @override
+  String get smartBillingAutoTagsDesc => '智慧記帳時自動根據分類關聯常用標籤';
+
+  @override
+  String get smartBillingAutoAttachment => '自動新增附件';
+
+  @override
+  String get smartBillingAutoAttachmentDesc => '圖片/拍照記帳時自動將原圖新增為附件';
 
   @override
   String get autoScreenshotBillingIosDesc => '透過快捷指令實現截圖自動識別記帳';

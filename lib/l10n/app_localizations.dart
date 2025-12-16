@@ -7212,6 +7212,30 @@ abstract class AppLocalizations {
   /// **'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first'**
   String get smartBillingAIRequired;
 
+  /// No description provided for @smartBillingAutoTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-associate Tags'**
+  String get smartBillingAutoTags;
+
+  /// No description provided for @smartBillingAutoTagsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically associate frequently used tags based on category'**
+  String get smartBillingAutoTagsDesc;
+
+  /// No description provided for @smartBillingAutoAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-add Attachment'**
+  String get smartBillingAutoAttachment;
+
+  /// No description provided for @smartBillingAutoAttachmentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically add original image as attachment for photo billing'**
+  String get smartBillingAutoAttachmentDesc;
+
   /// No description provided for @autoScreenshotBillingIosDesc.
   ///
   /// In en, this message translates to:

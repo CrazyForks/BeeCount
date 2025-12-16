@@ -3785,6 +3785,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get smartBillingAIRequired => 'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first';
 
   @override
+  String get smartBillingAutoTags => 'Auto-associate Tags';
+
+  @override
+  String get smartBillingAutoTagsDesc => 'Automatically associate frequently used tags based on category';
+
+  @override
+  String get smartBillingAutoAttachment => 'Auto-add Attachment';
+
+  @override
+  String get smartBillingAutoAttachmentDesc => 'Automatically add original image as attachment for photo billing';
+
+  @override
   String get autoScreenshotBillingIosDesc => 'Auto-recognize payment screenshots via Shortcuts';
 
   @override
