@@ -94,10 +94,17 @@ class CloudCategoryRepository implements CategoryRepository {
     int id, {
     String? name,
     String? icon,
+    int? parentId,
+    int? level,
   }) async {
     final data = <String, dynamic>{};
     if (name != null) data['name'] = name;
     if (icon != null) data['icon'] = icon;
+    // parentId: -1 表示清空父分类，其他值表示设置父分类
+    if (parentId != null) {
+      data['parent_id'] = parentId == -1 ? null : parentId;
+    }
+    if (level != null) data['level'] = level;
 
     if (data.isNotEmpty) {
       await supabase.databaseService!.update(

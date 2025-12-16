@@ -52,11 +52,18 @@ class LocalCategoryRepository implements CategoryRepository {
     int id, {
     String? name,
     String? icon,
+    int? parentId,
+    int? level,
   }) async {
     await (db.update(db.categories)..where((c) => c.id.equals(id))).write(
       CategoriesCompanion(
         name: name != null ? d.Value(name) : const d.Value.absent(),
         icon: icon != null ? d.Value(icon) : const d.Value.absent(),
+        // parentId: -1 表示清空父分类，其他值表示设置父分类
+        parentId: parentId != null
+            ? (parentId == -1 ? const d.Value(null) : d.Value(parentId))
+            : const d.Value.absent(),
+        level: level != null ? d.Value(level) : const d.Value.absent(),
       ),
     );
   }

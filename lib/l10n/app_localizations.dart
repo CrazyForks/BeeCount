@@ -2814,6 +2814,24 @@ abstract class AppLocalizations {
   /// **'This category has {count} transaction records. Please handle them first.'**
   String categoryCannotDeleteMessage(Object count);
 
+  /// No description provided for @categoryCannotConvert.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot convert'**
+  String get categoryCannotConvert;
+
+  /// No description provided for @categoryHasSubCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'This category has subcategories. Please delete or move them first before converting to a subcategory.'**
+  String get categoryHasSubCategories;
+
+  /// No description provided for @categoryHasSubCategoriesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Has subcategories, cannot convert'**
+  String get categoryHasSubCategoriesHint;
+
   /// No description provided for @categoryDeleteConfirmTitle.
   ///
   /// In en, this message translates to:

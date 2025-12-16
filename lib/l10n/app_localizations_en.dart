@@ -1482,6 +1482,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get categoryCannotConvert => 'Cannot convert';
+
+  @override
+  String get categoryHasSubCategories => 'This category has subcategories. Please delete or move them first before converting to a subcategory.';
+
+  @override
+  String get categoryHasSubCategoriesHint => 'Has subcategories, cannot convert';
+
+  @override
   String get categoryDeleteConfirmTitle => 'Delete Category';
 
   @override

@@ -46,15 +46,17 @@ class LocalTransactionRepository implements TransactionRepository {
   @override
   Stream<List<({Transaction t, Category? category})>>
       watchTransactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   }) {
-    final q = (db.select(db.transactions)
-          ..where((t) => t.ledgerId.equals(ledgerId))
-          ..orderBy([
-            (t) => d.OrderingTerm(
-                expression: t.happenedAt, mode: d.OrderingMode.desc)
-          ]))
-        .join([
+    final select = db.select(db.transactions);
+    if (ledgerId != null) {
+      select.where((t) => t.ledgerId.equals(ledgerId));
+    }
+    select.orderBy([
+      (t) => d.OrderingTerm(
+          expression: t.happenedAt, mode: d.OrderingMode.desc)
+    ]);
+    final q = select.join([
       d.leftOuterJoin(db.categories,
           db.categories.id.equalsExp(db.transactions.categoryId)),
     ]);
@@ -241,7 +243,7 @@ class LocalTransactionRepository implements TransactionRepository {
   @override
   Stream<List<({Transaction t, Category? category})>>
       transactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   }) =>
           watchTransactionsWithCategoryAll(ledgerId: ledgerId);
 

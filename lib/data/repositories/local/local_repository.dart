@@ -129,7 +129,7 @@ class LocalRepository extends BaseRepository {
       _transactionRepo.watchTransactionsInMonth(ledgerId: ledgerId, month: month);
 
   @override
-  Stream<List<({Transaction t, Category? category})>> watchTransactionsWithCategoryAll({required int ledgerId}) =>
+  Stream<List<({Transaction t, Category? category})>> watchTransactionsWithCategoryAll({int? ledgerId}) =>
       _transactionRepo.watchTransactionsWithCategoryAll(ledgerId: ledgerId);
 
   @override
@@ -219,7 +219,7 @@ class LocalRepository extends BaseRepository {
       _transactionRepo.insertTransactionCompanion(item);
 
   @override
-  Stream<List<({Transaction t, Category? category})>> transactionsWithCategoryAll({required int ledgerId}) =>
+  Stream<List<({Transaction t, Category? category})>> transactionsWithCategoryAll({int? ledgerId}) =>
       _transactionRepo.transactionsWithCategoryAll(ledgerId: ledgerId);
 
   @override
@@ -308,8 +308,8 @@ class LocalRepository extends BaseRepository {
       );
 
   @override
-  Future<void> updateCategory(int id, {String? name, String? icon}) =>
-      _categoryRepo.updateCategory(id, name: name, icon: icon);
+  Future<void> updateCategory(int id, {String? name, String? icon, int? parentId, int? level}) =>
+      _categoryRepo.updateCategory(id, name: name, icon: icon, parentId: parentId, level: level);
 
   @override
   Future<void> deleteCategory(int id) => _categoryRepo.deleteCategory(id);

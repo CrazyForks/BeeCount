@@ -136,7 +136,7 @@ class CloudRepository extends BaseRepository {
   @override
   Stream<List<({Transaction t, Category? category})>>
       watchTransactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   }) =>
           _transaction.watchTransactionsWithCategoryAll(ledgerId: ledgerId);
 
@@ -196,7 +196,7 @@ class CloudRepository extends BaseRepository {
   /// 兼容旧方法名
   @override
   Stream<List<({Transaction t, Category? category})>> transactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   }) =>
       _transaction.transactionsWithCategoryAll(ledgerId: ledgerId);
 
@@ -315,11 +315,15 @@ class CloudRepository extends BaseRepository {
     int id, {
     String? name,
     String? icon,
+    int? parentId,
+    int? level,
   }) =>
       _category.updateCategory(
         id,
         name: name,
         icon: icon,
+        parentId: parentId,
+        level: level,
       );
 
   @override

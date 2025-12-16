@@ -20,10 +20,14 @@ abstract class CategoryRepository {
   });
 
   /// 更新分类
+  /// [parentId] 传入具体值表示设置父分类，传入 -1 表示清空父分类（变为一级分类）
+  /// [level] 传入 1 或 2 表示修改分类层级
   Future<void> updateCategory(
     int id, {
     String? name,
     String? icon,
+    int? parentId,
+    int? level,
   });
 
   /// 删除分类

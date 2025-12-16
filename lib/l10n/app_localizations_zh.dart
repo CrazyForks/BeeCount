@@ -1482,6 +1482,15 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get categoryCannotConvert => '无法转换';
+
+  @override
+  String get categoryHasSubCategories => '该分类下还有子分类，无法转换为二级分类。请先删除或移动子分类。';
+
+  @override
+  String get categoryHasSubCategoriesHint => '该分类下有子分类，无法转为二级';
+
+  @override
   String get categoryDeleteConfirmTitle => '删除分类';
 
   @override
@@ -6425,6 +6434,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String categoryCannotDeleteMessage(Object count) {
     return '該分類下還有 $count 筆交易記錄，請先處理這些記錄。';
   }
+
+  @override
+  String get categoryCannotConvert => '無法轉換';
+
+  @override
+  String get categoryHasSubCategories => '該分類下還有子分類，無法轉換為二級分類。請先刪除或移動子分類。';
+
+  @override
+  String get categoryHasSubCategoriesHint => '該分類下有子分類，無法轉為二級';
 
   @override
   String get categoryDeleteConfirmTitle => '刪除分類';
