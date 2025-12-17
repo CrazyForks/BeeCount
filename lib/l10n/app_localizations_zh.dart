@@ -37,6 +37,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonEdit => '编辑';
 
   @override
+  String get commonMore => '更多';
+
+  @override
   String get commonOk => '确定';
 
   @override
@@ -223,6 +226,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeNoRecordsSubtext => '点击底部加号，马上记一笔';
+
+  @override
+  String get homeLastMonthReportSubtitle => '查看上月消费报告并分享';
+
+  @override
+  String get homeLastMonthReportView => '查看';
+
+  @override
+  String homeAnnualReportReminder(int year) {
+    return '$year年度账单已生成，回顾你的财务足迹';
+  }
+
+  @override
+  String get homeAnnualReportView => '查看';
 
   @override
   String get widgetTodayExpense => '今日支出';
@@ -851,10 +868,125 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineAvatarDelete => '删除头像';
 
   @override
+  String get annualReportTitle => '年度账单';
+
+  @override
+  String annualReportSubtitle(int year) {
+    return '回顾你的$year年财务足迹';
+  }
+
+  @override
+  String get annualReportEntrySubtitle => '生成专属年度报告，分享你的记账故事';
+
+  @override
+  String annualReportNoData(int year) {
+    return '暂无$year年数据';
+  }
+
+  @override
+  String get annualReportPage1Title => '年度总览';
+
+  @override
+  String annualReportPage1Subtitle(int year) {
+    return '$year年记账之旅';
+  }
+
+  @override
+  String get annualReportTotalDays => '记账天数';
+
+  @override
+  String get annualReportTotalRecords => '记账笔数';
+
+  @override
+  String get annualReportTotalIncome => '总收入';
+
+  @override
+  String get annualReportTotalExpense => '总支出';
+
+  @override
+  String get annualReportNetSavings => '年度结余';
+
+  @override
+  String get annualReportPage2Title => '支出分析';
+
+  @override
+  String get annualReportPage2Subtitle => '你的钱花在哪了';
+
+  @override
+  String get annualReportPage3Title => '月度趋势';
+
+  @override
+  String get annualReportPage3Subtitle => '12个月的收支变化';
+
+  @override
+  String get annualReportHighestMonth => '支出最高月份';
+
+  @override
+  String get annualReportLowestMonth => '支出最低月份';
+
+  @override
+  String get annualReportPage4Title => '特别时刻';
+
+  @override
+  String get annualReportPage4Subtitle => '那些值得铭记的账单';
+
+  @override
+  String get annualReportLargestExpense => '年度最大支出';
+
+  @override
+  String get annualReportLargestIncome => '年度最大收入';
+
+  @override
+  String get annualReportFirstRecord => '第一笔记录';
+
+  @override
+  String get annualReportPage5Title => '年度成就';
+
+  @override
+  String get annualReportPage5Subtitle => '你的记账成就徽章';
+
+  @override
+  String get annualReportAchievementConsistent => '持之以恒';
+
+  @override
+  String annualReportAchievementConsistentDesc(int days) {
+    return '连续记账超过$days天';
+  }
+
+  @override
+  String get annualReportAchievementSaver => '精打细算';
+
+  @override
+  String get annualReportAchievementSaverDesc => '年度结余为正';
+
+  @override
+  String get annualReportAchievementDetail => '明察秋毫';
+
+  @override
+  String annualReportAchievementDetailDesc(int count) {
+    return '记账笔数超过$count笔';
+  }
+
+  @override
+  String get annualReportShareButton => '生成分享海报';
+
+  @override
+  String get annualReportGenerating => '正在生成年度报告...';
+
+  @override
+  String get annualReportSaveSuccess => '年度报告海报已保存';
+
+  @override
   String get mineShareApp => '分享应用';
 
   @override
   String get mineShareWithFriends => '和好友分享蜜蜂记账';
+
+  @override
+  String get mineCopyPromoText => '复制推广文案';
+
+  @override
+  String get mineCopyPromoSubtitle => '一键复制分享给好友';
 
   @override
   String get mineShareGenerating => '正在生成分享海报...';
@@ -900,6 +1032,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterSaveSuccess => '已保存到相册';
+
+  @override
+  String get shareGuidanceCopyText => '用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount';
+
+  @override
+  String get shareGuidanceCopied => '文案已复制';
 
   @override
   String get sharePosterSaveFailed => '保存失败';
@@ -978,6 +1116,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterDecreaseRate => '较上月减少';
+
+  @override
+  String get sharePosterSavedMoneyTitle => '恭喜！本月比上月省了';
 
   @override
   String get sharePosterLedgerName => '账本名称';
@@ -1344,6 +1485,84 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get categoryShare => '分享分类';
+
+  @override
+  String get categoryImport => '导入分类';
+
+  @override
+  String get categoryClearUnused => '清空未使用分类';
+
+  @override
+  String get categoryClearUnusedTitle => '清空未使用分类';
+
+  @override
+  String categoryClearUnusedMessage(Object count) {
+    return '确定要删除 $count 个未使用的分类吗？此操作无法撤销。';
+  }
+
+  @override
+  String get categoryClearUnusedEmpty => '没有未使用的分类';
+
+  @override
+  String categoryClearUnusedSuccess(Object count) {
+    return '已删除 $count 个分类';
+  }
+
+  @override
+  String get categoryClearUnusedFailed => '清空失败';
+
+  @override
+  String get categoryShareScopeTitle => '选择分享范围';
+
+  @override
+  String get categoryShareScopeExpense => '仅支出分类';
+
+  @override
+  String get categoryShareScopeIncome => '仅收入分类';
+
+  @override
+  String get categoryShareScopeAll => '全部分类';
+
+  @override
+  String categoryShareSuccess(Object path) {
+    return '已保存到 $path';
+  }
+
+  @override
+  String get categoryShareSubject => 'BeeCount 分类配置';
+
+  @override
+  String get categoryShareFailed => '分享失败';
+
+  @override
+  String get categoryImportInvalidFile => '请选择 YAML 配置文件';
+
+  @override
+  String get categoryImportNoCategories => '文件中没有分类数据';
+
+  @override
+  String get categoryImportModeTitle => '选择导入模式';
+
+  @override
+  String get categoryImportModeMerge => '合并';
+
+  @override
+  String get categoryImportModeMergeDesc => '保留现有分类，新增不存在的';
+
+  @override
+  String get categoryImportModeOverwrite => '覆盖';
+
+  @override
+  String get categoryImportModeOverwriteDesc => '清空未使用分类后导入';
+
+  @override
+  String get categoryImportSuccess => '导入成功';
+
+  @override
+  String get categoryImportFailed => '导入失败';
+
+  @override
   String get categoryDeleteConfirmTitle => '删除分类';
 
   @override
@@ -1376,9 +1595,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categorySelectParentTitle => '选择父分类';
-
-  @override
-  String get categorySelectParentDescription => '只能选择没有交易记录的分类作为父分类';
 
   @override
   String categorySubCategoryCreated(Object name) {
@@ -3569,6 +3785,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get smartBillingAIRequired => '语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置';
 
   @override
+  String get smartBillingAutoTags => '自动关联标签';
+
+  @override
+  String get smartBillingAutoTagsDesc => '智能记账时自动根据分类关联常用标签';
+
+  @override
+  String get smartBillingAutoAttachment => '自动添加附件';
+
+  @override
+  String get smartBillingAutoAttachmentDesc => '图片/拍照记账时自动将原图添加为附件';
+
+  @override
   String get autoScreenshotBillingIosDesc => '通过快捷指令实现截图自动识别记账';
 
   @override
@@ -3758,6 +3986,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get configExportReadFileFailed => '读取文件失败';
+
+  @override
+  String get configIncludeLedgers => '账本';
 
   @override
   String get configIncludeSupabase => 'Supabase 云服务配置';
@@ -4473,6 +4704,72 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagDefaultAiBilling => 'AI记账';
 
   @override
+  String get tagShare => '分享标签';
+
+  @override
+  String get tagImport => '导入标签';
+
+  @override
+  String get tagClearUnused => '清理未使用';
+
+  @override
+  String tagShareSuccess(String path) {
+    return '已保存到 $path';
+  }
+
+  @override
+  String get tagShareSubject => 'BeeCount 标签配置';
+
+  @override
+  String get tagShareFailed => '分享失败';
+
+  @override
+  String get tagImportInvalidFile => '请选择 YAML 配置文件';
+
+  @override
+  String get tagImportNoTags => '文件中没有标签数据';
+
+  @override
+  String get tagImportModeTitle => '选择导入模式';
+
+  @override
+  String get tagImportModeMerge => '合并';
+
+  @override
+  String get tagImportModeMergeDesc => '保留现有标签，新增不存在的';
+
+  @override
+  String get tagImportModeOverwrite => '覆盖';
+
+  @override
+  String get tagImportModeOverwriteDesc => '清空未使用标签后导入';
+
+  @override
+  String get tagImportSuccess => '导入成功';
+
+  @override
+  String get tagImportFailed => '导入失败';
+
+  @override
+  String get tagClearUnusedEmpty => '没有未使用的标签';
+
+  @override
+  String get tagClearUnusedTitle => '清理未使用标签';
+
+  @override
+  String tagClearUnusedMessage(int count) {
+    return '确定要删除 $count 个未使用的标签吗？';
+  }
+
+  @override
+  String tagClearUnusedSuccess(int count) {
+    return '已删除 $count 个标签';
+  }
+
+  @override
+  String get tagClearUnusedFailed => '清理失败';
+
+  @override
   String get tabDiscover => '发现';
 
   @override
@@ -5030,6 +5327,20 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get homeNoRecordsSubtext => '點擊底部加號，馬上記一筆';
+
+  @override
+  String get homeLastMonthReportSubtitle => '查看上月消費報告並分享';
+
+  @override
+  String get homeLastMonthReportView => '查看';
+
+  @override
+  String homeAnnualReportReminder(int year) {
+    return '$year年度帳單已生成，回顧你的財務足跡';
+  }
+
+  @override
+  String get homeAnnualReportView => '查看';
 
   @override
   String get widgetTodayExpense => '今日支出';
@@ -5658,10 +5969,125 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineAvatarDelete => '刪除頭像';
 
   @override
+  String get annualReportTitle => '年度帳單';
+
+  @override
+  String annualReportSubtitle(int year) {
+    return '回顧你的$year年財務足跡';
+  }
+
+  @override
+  String get annualReportEntrySubtitle => '生成專屬年度報告，分享你的記帳故事';
+
+  @override
+  String annualReportNoData(int year) {
+    return '暫無$year年資料';
+  }
+
+  @override
+  String get annualReportPage1Title => '年度總覽';
+
+  @override
+  String annualReportPage1Subtitle(int year) {
+    return '$year年記帳之旅';
+  }
+
+  @override
+  String get annualReportTotalDays => '記帳天數';
+
+  @override
+  String get annualReportTotalRecords => '記帳筆數';
+
+  @override
+  String get annualReportTotalIncome => '總收入';
+
+  @override
+  String get annualReportTotalExpense => '總支出';
+
+  @override
+  String get annualReportNetSavings => '年度結餘';
+
+  @override
+  String get annualReportPage2Title => '支出分析';
+
+  @override
+  String get annualReportPage2Subtitle => '你的錢花在哪了';
+
+  @override
+  String get annualReportPage3Title => '月度趨勢';
+
+  @override
+  String get annualReportPage3Subtitle => '12個月的收支變化';
+
+  @override
+  String get annualReportHighestMonth => '支出最高月份';
+
+  @override
+  String get annualReportLowestMonth => '支出最低月份';
+
+  @override
+  String get annualReportPage4Title => '特別時刻';
+
+  @override
+  String get annualReportPage4Subtitle => '那些值得銘記的帳單';
+
+  @override
+  String get annualReportLargestExpense => '年度最大支出';
+
+  @override
+  String get annualReportLargestIncome => '年度最大收入';
+
+  @override
+  String get annualReportFirstRecord => '第一筆記錄';
+
+  @override
+  String get annualReportPage5Title => '年度成就';
+
+  @override
+  String get annualReportPage5Subtitle => '你的記帳成就徽章';
+
+  @override
+  String get annualReportAchievementConsistent => '持之以恆';
+
+  @override
+  String annualReportAchievementConsistentDesc(int days) {
+    return '連續記帳超過$days天';
+  }
+
+  @override
+  String get annualReportAchievementSaver => '精打細算';
+
+  @override
+  String get annualReportAchievementSaverDesc => '年度結餘為正';
+
+  @override
+  String get annualReportAchievementDetail => '明察秋毫';
+
+  @override
+  String annualReportAchievementDetailDesc(int count) {
+    return '記帳筆數超過$count筆';
+  }
+
+  @override
+  String get annualReportShareButton => '生成分享海報';
+
+  @override
+  String get annualReportGenerating => '正在生成年度報告...';
+
+  @override
+  String get annualReportSaveSuccess => '年度報告海報已儲存';
+
+  @override
   String get mineShareApp => '分享應用程式';
 
   @override
   String get mineShareWithFriends => '和好友分享蜜蜂記帳';
+
+  @override
+  String get mineCopyPromoText => '複製推廣文案';
+
+  @override
+  String get mineCopyPromoSubtitle => '一鍵複製分享給好友';
 
   @override
   String get mineShareGenerating => '正在生成分享海報...';
@@ -5707,6 +6133,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterSaveSuccess => '已儲存到相簿';
+
+  @override
+  String get shareGuidanceCopyText => '用蜜蜂記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount';
+
+  @override
+  String get shareGuidanceCopied => '文案已複製';
 
   @override
   String get sharePosterSaveFailed => '儲存失敗';
@@ -5785,6 +6217,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterDecreaseRate => '較上月減少';
+
+  @override
+  String get sharePosterSavedMoneyTitle => '恭喜！本月比上月省了';
 
   @override
   String get sharePosterLedgerName => '帳本名稱';
@@ -6183,9 +6618,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categorySelectParentTitle => '選擇父分類';
-
-  @override
-  String get categorySelectParentDescription => '只能選擇沒有交易記錄的分類作為父分類';
 
   @override
   String categorySubCategoryCreated(Object name) {
@@ -8376,6 +8808,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get smartBillingAIRequired => '語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定';
 
   @override
+  String get smartBillingAutoTags => '自動關聯標籤';
+
+  @override
+  String get smartBillingAutoTagsDesc => '智慧記帳時自動根據分類關聯常用標籤';
+
+  @override
+  String get smartBillingAutoAttachment => '自動新增附件';
+
+  @override
+  String get smartBillingAutoAttachmentDesc => '圖片/拍照記帳時自動將原圖新增為附件';
+
+  @override
   String get autoScreenshotBillingIosDesc => '透過快捷指令實現截圖自動識別記帳';
 
   @override
@@ -8565,6 +9009,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get configExportReadFileFailed => '讀取檔案失敗';
+
+  @override
+  String get configIncludeLedgers => '帳本';
 
   @override
   String get configIncludeSupabase => 'Supabase 雲端服務配置';
@@ -9278,6 +9725,72 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tagDefaultAiBilling => 'AI記帳';
+
+  @override
+  String get tagShare => '分享標籤';
+
+  @override
+  String get tagImport => '匯入標籤';
+
+  @override
+  String get tagClearUnused => '清理未使用';
+
+  @override
+  String tagShareSuccess(String path) {
+    return '已儲存到 $path';
+  }
+
+  @override
+  String get tagShareSubject => 'BeeCount 標籤配置';
+
+  @override
+  String get tagShareFailed => '分享失敗';
+
+  @override
+  String get tagImportInvalidFile => '請選擇 YAML 配置檔案';
+
+  @override
+  String get tagImportNoTags => '檔案中沒有標籤資料';
+
+  @override
+  String get tagImportModeTitle => '選擇匯入模式';
+
+  @override
+  String get tagImportModeMerge => '合併';
+
+  @override
+  String get tagImportModeMergeDesc => '保留現有標籤，新增不存在的';
+
+  @override
+  String get tagImportModeOverwrite => '覆蓋';
+
+  @override
+  String get tagImportModeOverwriteDesc => '清空未使用標籤後匯入';
+
+  @override
+  String get tagImportSuccess => '匯入成功';
+
+  @override
+  String get tagImportFailed => '匯入失敗';
+
+  @override
+  String get tagClearUnusedEmpty => '沒有未使用的標籤';
+
+  @override
+  String get tagClearUnusedTitle => '清理未使用標籤';
+
+  @override
+  String tagClearUnusedMessage(int count) {
+    return '確定要刪除 $count 個未使用的標籤嗎？';
+  }
+
+  @override
+  String tagClearUnusedSuccess(int count) {
+    return '已刪除 $count 個標籤';
+  }
+
+  @override
+  String get tagClearUnusedFailed => '清理失敗';
 
   @override
   String get tabDiscover => '發現';

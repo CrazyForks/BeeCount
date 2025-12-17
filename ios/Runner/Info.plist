@@ -51,6 +51,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<!-- Query URL Schemes - Required for opening other apps -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>weixin</string>
+		<string>wechat</string>
+	</array>
 	<!-- Privacy - Photo Library Usage Description -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>蜜蜂记账需要访问您的照片库，以便导入或分享账单数据文件</string>

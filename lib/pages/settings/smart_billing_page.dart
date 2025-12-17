@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
+import '../../providers/smart_billing_providers.dart';
+import '../../providers/theme_providers.dart';
 import '../ai/ai_settings_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import 'shortcuts_guide_page.dart';
@@ -272,6 +274,44 @@ class SmartBillingPage extends ConsumerWidget {
                             MaterialPageRoute(builder: (_) => const ShortcutsGuidePage()),
                           );
                         },
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // 智能记账通用设置
+                SectionCard(
+                  margin: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      // 自动关联标签
+                      AppListTile(
+                        leading: Icons.label_outline,
+                        title: l10n.smartBillingAutoTags,
+                        subtitle: l10n.smartBillingAutoTagsDesc,
+                        trailing: Switch.adaptive(
+                          value: ref.watch(smartBillingAutoTagsProvider),
+                          activeColor: ref.watch(primaryColorProvider),
+                          onChanged: (value) {
+                            ref.read(smartBillingAutoTagsProvider.notifier).state = value;
+                          },
+                        ),
+                      ),
+                      BeeTokens.cardDivider(context),
+                      // 自动添加附件
+                      AppListTile(
+                        leading: Icons.attachment_outlined,
+                        title: l10n.smartBillingAutoAttachment,
+                        subtitle: l10n.smartBillingAutoAttachmentDesc,
+                        trailing: Switch.adaptive(
+                          value: ref.watch(smartBillingAutoAttachmentProvider),
+                          activeColor: ref.watch(primaryColorProvider),
+                          onChanged: (value) {
+                            ref.read(smartBillingAutoAttachmentProvider.notifier).state = value;
+                          },
+                        ),
                       ),
                     ],
                   ),

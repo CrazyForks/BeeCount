@@ -13,6 +13,7 @@
   "commonDelete": "Delete",
   "commonAdd": "Add",
   "commonEdit": "Edit",
+  "commonMore": "More",
   "commonOk": "OK",
   "commonKnow": "Got it",
   "commonNo": "No",
@@ -120,6 +121,17 @@
     }
   },
   "homeNoRecordsSubtext": "Tap the plus button at the bottom to add a record",
+  "homeLastMonthReportSubtitle": "View and share last month's report",
+  "homeLastMonthReportView": "View",
+  "homeAnnualReportReminder": "Your {year} Annual Report is ready",
+  "@homeAnnualReportReminder": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAnnualReportView": "View",
   "widgetTodayExpense": "Today's Expense",
   "widgetTodayIncome": "Today's Income",
   "widgetMonthExpense": "Month's Expense",
@@ -388,8 +400,78 @@
   "mineAvatarFromGallery": "Choose from Gallery",
   "mineAvatarFromCamera": "Take Photo",
   "mineAvatarDelete": "Delete Avatar",
+  "annualReportTitle": "Annual Report",
+  "annualReportSubtitle": "Review your {year} financial journey",
+  "@annualReportSubtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportEntrySubtitle": "Create your personalized annual report to share",
+  "annualReportNoData": "No data for {year}",
+  "@annualReportNoData": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportPage1Title": "Annual Overview",
+  "annualReportPage1Subtitle": "Your {year} bookkeeping journey",
+  "@annualReportPage1Subtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportTotalDays": "Days Tracked",
+  "annualReportTotalRecords": "Total Records",
+  "annualReportTotalIncome": "Total Income",
+  "annualReportTotalExpense": "Total Expense",
+  "annualReportNetSavings": "Net Savings",
+  "annualReportPage2Title": "Expense Analysis",
+  "annualReportPage2Subtitle": "Where your money went",
+  "annualReportPage3Title": "Monthly Trends",
+  "annualReportPage3Subtitle": "12 months of income & expense",
+  "annualReportHighestMonth": "Highest Spending Month",
+  "annualReportLowestMonth": "Lowest Spending Month",
+  "annualReportPage4Title": "Special Moments",
+  "annualReportPage4Subtitle": "Memorable transactions",
+  "annualReportLargestExpense": "Largest Expense",
+  "annualReportLargestIncome": "Largest Income",
+  "annualReportFirstRecord": "First Record",
+  "annualReportPage5Title": "Achievements",
+  "annualReportPage5Subtitle": "Your bookkeeping badges",
+  "annualReportAchievementConsistent": "Consistent",
+  "annualReportAchievementConsistentDesc": "Tracked for over {days} days straight",
+  "@annualReportAchievementConsistentDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportAchievementSaver": "Saver",
+  "annualReportAchievementSaverDesc": "Positive net savings this year",
+  "annualReportAchievementDetail": "Detail-Oriented",
+  "annualReportAchievementDetailDesc": "Over {count} records tracked",
+  "@annualReportAchievementDetailDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportShareButton": "Generate Share Poster",
+  "annualReportGenerating": "Generating annual report...",
+  "annualReportSaveSuccess": "Annual report poster saved",
   "mineShareApp": "Share App",
   "mineShareWithFriends": "Share BeeCount with friends",
+  "mineCopyPromoText": "Copy Promo Text",
+  "mineCopyPromoSubtitle": "Copy and share with friends",
   "mineShareGenerating": "Generating share poster...",
   "sharePosterAppName": "BeeCount",
   "sharePosterSlogan": "Smart Accounting, Beautiful Life",
@@ -405,6 +487,8 @@
   "sharePosterHideIncome": "Hide Income",
   "sharePosterShowIncome": "Show Income",
   "sharePosterSaveSuccess": "Saved to gallery",
+  "shareGuidanceCopyText": "Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount",
+  "shareGuidanceCopied": "Text copied",
   "sharePosterSaveFailed": "Failed to save",
   "sharePosterPermissionDenied": "Gallery permission denied, please enable in settings",
   "sharePosterGenerating": "Generating...",
@@ -431,6 +515,7 @@
   "sharePosterCompareLastMonth": "vs Last Month",
   "sharePosterIncreaseRate": "Increase",
   "sharePosterDecreaseRate": "Decrease",
+  "sharePosterSavedMoneyTitle": "Congrats! You saved this month",
   "sharePosterLedgerName": "Ledger Name",
   "sharePosterUnitDay": "days",
   "sharePosterUnitCount": "",
@@ -550,6 +635,30 @@
   "categoryCreated": "Category \"{name}\" created",
   "categoryCannotDelete": "Cannot delete",
   "categoryCannotDeleteMessage": "This category has {count} transaction records. Please handle them first.",
+  "categoryShare": "Share Categories",
+  "categoryImport": "Import Categories",
+  "categoryClearUnused": "Clear Unused Categories",
+  "categoryClearUnusedTitle": "Clear Unused Categories",
+  "categoryClearUnusedMessage": "Are you sure you want to delete {count} unused categories? This action cannot be undone.",
+  "categoryClearUnusedEmpty": "No unused categories",
+  "categoryClearUnusedSuccess": "Deleted {count} categories",
+  "categoryClearUnusedFailed": "Clear failed",
+  "categoryShareScopeTitle": "Select Scope",
+  "categoryShareScopeExpense": "Expense categories only",
+  "categoryShareScopeIncome": "Income categories only",
+  "categoryShareScopeAll": "All categories",
+  "categoryShareSuccess": "Saved to {path}",
+  "categoryShareSubject": "BeeCount Category Configuration",
+  "categoryShareFailed": "Share failed",
+  "categoryImportInvalidFile": "Please select a YAML configuration file",
+  "categoryImportNoCategories": "No category data in file",
+  "categoryImportModeTitle": "Select Import Mode",
+  "categoryImportModeMerge": "Merge",
+  "categoryImportModeMergeDesc": "Keep existing, add new ones",
+  "categoryImportModeOverwrite": "Overwrite",
+  "categoryImportModeOverwriteDesc": "Clear unused categories then import",
+  "categoryImportSuccess": "Import successful",
+  "categoryImportFailed": "Import failed",
   "categoryDeleteConfirmTitle": "Delete Category",
   "categoryDeleteConfirmMessage": "Are you sure you want to delete category \"{name}\"? This action cannot be undone.",
   "categoryDeleteError": "Delete failed",
@@ -560,7 +669,6 @@
   "categoryParentCategoryTitle": "Parent Category",
   "categoryParentCategoryHint": "Please select parent category",
   "categorySelectParentTitle": "Select Parent Category",
-  "categorySelectParentDescription": "Only categories without transaction records can be selected as parent",
   "categorySubCategoryCreated": "Subcategory added: {name}",
   "categoryParentRequired": "Please select parent category",
   "categoryParentRequiredTitle": "Error",
@@ -1515,6 +1623,10 @@
   "smartBillingVoiceBillingDesc": "Quick billing through voice input",
   "smartBillingVoiceBillingGuide": "Long press the + button at the bottom center of the home page and select 'Voice' to use voice billing. Voice billing requires AI to convert speech to text and extract bill information.",
   "smartBillingAIRequired": "Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first",
+  "smartBillingAutoTags": "Auto-associate Tags",
+  "smartBillingAutoTagsDesc": "Automatically associate frequently used tags based on category",
+  "smartBillingAutoAttachment": "Auto-add Attachment",
+  "smartBillingAutoAttachmentDesc": "Automatically add original image as attachment for photo billing",
   "autoScreenshotBillingIosDesc": "Auto-recognize payment screenshots via Shortcuts",
   "automation": "Automation",
   "automationDesc": "Recurring transactions and reminders",
@@ -1585,6 +1697,7 @@
       }
     }
   },
+  "configIncludeLedgers": "Ledgers",
   "configIncludeSupabase": "Supabase cloud service config",
   "configIncludeWebdav": "WebDAV cloud service config",
   "configIncludeS3": "S3 cloud service config",
@@ -1905,6 +2018,47 @@
   "tagDefaultImageBilling": "Image",
   "tagDefaultCameraBilling": "Camera",
   "tagDefaultAiBilling": "AI",
+  "tagShare": "Share Tags",
+  "tagImport": "Import Tags",
+  "tagClearUnused": "Clear Unused",
+  "tagShareSuccess": "Saved to {path}",
+  "@tagShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "tagShareSubject": "BeeCount Tags Configuration",
+  "tagShareFailed": "Share failed",
+  "tagImportInvalidFile": "Please select a YAML file",
+  "tagImportNoTags": "No tags found in file",
+  "tagImportModeTitle": "Select Import Mode",
+  "tagImportModeMerge": "Merge",
+  "tagImportModeMergeDesc": "Keep existing tags, add new ones",
+  "tagImportModeOverwrite": "Overwrite",
+  "tagImportModeOverwriteDesc": "Clear unused tags before import",
+  "tagImportSuccess": "Import successful",
+  "tagImportFailed": "Import failed",
+  "tagClearUnusedEmpty": "No unused tags",
+  "tagClearUnusedTitle": "Clear Unused Tags",
+  "tagClearUnusedMessage": "Delete {count} unused tags?",
+  "@tagClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedSuccess": "Deleted {count} tags",
+  "@tagClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedFailed": "Clear failed",
   "tabDiscover": "Discover",
   "discoverTitle": "Discover",
   "discoverBudget": "Budget",

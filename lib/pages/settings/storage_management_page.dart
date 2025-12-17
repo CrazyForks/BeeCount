@@ -211,6 +211,7 @@ class _StorageManagementPageState extends ConsumerState<StorageManagementPage> {
                     children: [
                       // AI模型
                       SectionCard(
+                        margin: EdgeInsets.zero,
                         child: AppListTile(
                           leading: Icons.psychology_outlined,
                           title: l10n.storageAIModels,
@@ -235,6 +236,7 @@ class _StorageManagementPageState extends ConsumerState<StorageManagementPage> {
                       if (Platform.isAndroid) ...[
                         SizedBox(height: 8.0.scaled(context, ref)),
                         SectionCard(
+                          margin: EdgeInsets.zero,
                           child: AppListTile(
                             leading: Icons.android,
                             title: l10n.storageAPKFiles,

@@ -10,6 +10,7 @@
   "commonDelete": "删除",
   "commonAdd": "添加",
   "commonEdit": "编辑",
+  "commonMore": "更多",
   "commonOk": "确定",
   "commonKnow": "知道了",
   "commonNo": "否",
@@ -103,6 +104,17 @@
   "homeYear": "{year}年",
   "homeMonth": "{month}月",
   "homeNoRecordsSubtext": "点击底部加号，马上记一笔",
+  "homeLastMonthReportSubtitle": "查看上月消费报告并分享",
+  "homeLastMonthReportView": "查看",
+  "homeAnnualReportReminder": "{year}年度账单已生成，回顾你的财务足迹",
+  "@homeAnnualReportReminder": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAnnualReportView": "查看",
   "widgetTodayExpense": "今日支出",
   "widgetTodayIncome": "今日收入",
   "widgetMonthExpense": "本月支出",
@@ -333,8 +345,78 @@
   "mineAvatarFromGallery": "从相册选择",
   "mineAvatarFromCamera": "拍照",
   "mineAvatarDelete": "删除头像",
+  "annualReportTitle": "年度账单",
+  "annualReportSubtitle": "回顾你的{year}年财务足迹",
+  "@annualReportSubtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportEntrySubtitle": "生成专属年度报告，分享你的记账故事",
+  "annualReportNoData": "暂无{year}年数据",
+  "@annualReportNoData": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportPage1Title": "年度总览",
+  "annualReportPage1Subtitle": "{year}年记账之旅",
+  "@annualReportPage1Subtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportTotalDays": "记账天数",
+  "annualReportTotalRecords": "记账笔数",
+  "annualReportTotalIncome": "总收入",
+  "annualReportTotalExpense": "总支出",
+  "annualReportNetSavings": "年度结余",
+  "annualReportPage2Title": "支出分析",
+  "annualReportPage2Subtitle": "你的钱花在哪了",
+  "annualReportPage3Title": "月度趋势",
+  "annualReportPage3Subtitle": "12个月的收支变化",
+  "annualReportHighestMonth": "支出最高月份",
+  "annualReportLowestMonth": "支出最低月份",
+  "annualReportPage4Title": "特别时刻",
+  "annualReportPage4Subtitle": "那些值得铭记的账单",
+  "annualReportLargestExpense": "年度最大支出",
+  "annualReportLargestIncome": "年度最大收入",
+  "annualReportFirstRecord": "第一笔记录",
+  "annualReportPage5Title": "年度成就",
+  "annualReportPage5Subtitle": "你的记账成就徽章",
+  "annualReportAchievementConsistent": "持之以恒",
+  "annualReportAchievementConsistentDesc": "连续记账超过{days}天",
+  "@annualReportAchievementConsistentDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportAchievementSaver": "精打细算",
+  "annualReportAchievementSaverDesc": "年度结余为正",
+  "annualReportAchievementDetail": "明察秋毫",
+  "annualReportAchievementDetailDesc": "记账笔数超过{count}笔",
+  "@annualReportAchievementDetailDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportShareButton": "生成分享海报",
+  "annualReportGenerating": "正在生成年度报告...",
+  "annualReportSaveSuccess": "年度报告海报已保存",
   "mineShareApp": "分享应用",
   "mineShareWithFriends": "和好友分享蜜蜂记账",
+  "mineCopyPromoText": "复制推广文案",
+  "mineCopyPromoSubtitle": "一键复制分享给好友",
   "mineShareGenerating": "正在生成分享海报...",
   "sharePosterAppName": "蜜蜂记账",
   "sharePosterSlogan": "一笔一蜜，记录美好生活",
@@ -350,6 +432,8 @@
   "sharePosterHideIncome": "隐藏收入",
   "sharePosterShowIncome": "显示收入",
   "sharePosterSaveSuccess": "已保存到相册",
+  "shareGuidanceCopyText": "用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount",
+  "shareGuidanceCopied": "文案已复制",
   "sharePosterSaveFailed": "保存失败",
   "sharePosterPermissionDenied": "相册权限被拒绝，请在设置中开启",
   "sharePosterGenerating": "生成中...",
@@ -376,6 +460,7 @@
   "sharePosterCompareLastMonth": "环比上月",
   "sharePosterIncreaseRate": "较上月增长",
   "sharePosterDecreaseRate": "较上月减少",
+  "sharePosterSavedMoneyTitle": "恭喜！本月比上月省了",
   "sharePosterLedgerName": "账本名称",
   "sharePosterUnitDay": "天",
   "sharePosterUnitCount": "笔",
@@ -495,6 +580,51 @@
   "categoryCreated": "分类\"{name}\"已创建",
   "categoryCannotDelete": "无法删除",
   "categoryCannotDeleteMessage": "该分类下还有 {count} 笔交易记录，请先处理这些记录。",
+  "categoryShare": "分享分类",
+  "categoryImport": "导入分类",
+  "categoryClearUnused": "清空未使用分类",
+  "categoryClearUnusedTitle": "清空未使用分类",
+  "categoryClearUnusedMessage": "确定要删除 {count} 个未使用的分类吗？此操作无法撤销。",
+  "@categoryClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryClearUnusedEmpty": "没有未使用的分类",
+  "categoryClearUnusedSuccess": "已删除 {count} 个分类",
+  "@categoryClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryClearUnusedFailed": "清空失败",
+  "categoryShareScopeTitle": "选择分享范围",
+  "categoryShareScopeExpense": "仅支出分类",
+  "categoryShareScopeIncome": "仅收入分类",
+  "categoryShareScopeAll": "全部分类",
+  "categoryShareSuccess": "已保存到 {path}",
+  "@categoryShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryShareSubject": "BeeCount 分类配置",
+  "categoryShareFailed": "分享失败",
+  "categoryImportInvalidFile": "请选择 YAML 配置文件",
+  "categoryImportNoCategories": "文件中没有分类数据",
+  "categoryImportModeTitle": "选择导入模式",
+  "categoryImportModeMerge": "合并",
+  "categoryImportModeMergeDesc": "保留现有分类，新增不存在的",
+  "categoryImportModeOverwrite": "覆盖",
+  "categoryImportModeOverwriteDesc": "清空未使用分类后导入",
+  "categoryImportSuccess": "导入成功",
+  "categoryImportFailed": "导入失败",
   "categoryDeleteConfirmTitle": "删除分类",
   "categoryDeleteConfirmMessage": "确定要删除分类\"{name}\"吗？此操作无法撤销。",
   "categoryDeleteError": "删除失败",
@@ -505,7 +635,6 @@
   "categoryParentCategoryTitle": "父分类",
   "categoryParentCategoryHint": "请选择父分类",
   "categorySelectParentTitle": "选择父分类",
-  "categorySelectParentDescription": "只能选择没有交易记录的分类作为父分类",
   "categorySubCategoryCreated": "已添加二级分类：{name}",
   "categoryParentRequired": "请选择父分类",
   "categoryParentRequiredTitle": "错误",
@@ -1388,6 +1517,10 @@
   "smartBillingVoiceBillingDesc": "通过语音输入快速记账",
   "smartBillingVoiceBillingGuide": "在首页长按底部中间的 + 按钮，选择「语音」即可使用语音记账功能。语音记账需要通过AI将语音转为文字并提取账单信息。",
   "smartBillingAIRequired": "语音记账必须配置 AI（智谱 GLM API），请先在上方配置 AI 设置",
+  "smartBillingAutoTags": "自动关联标签",
+  "smartBillingAutoTagsDesc": "智能记账时自动根据分类关联常用标签",
+  "smartBillingAutoAttachment": "自动添加附件",
+  "smartBillingAutoAttachmentDesc": "图片/拍照记账时自动将原图添加为附件",
   "autoScreenshotBillingIosDesc": "通过快捷指令实现截图自动识别记账",
   "automation": "自动化",
   "automationDesc": "周期记账、记账提醒",
@@ -1458,6 +1591,7 @@
       }
     }
   },
+  "configIncludeLedgers": "账本",
   "configIncludeSupabase": "Supabase 云服务配置",
   "configIncludeWebdav": "WebDAV 云服务配置",
   "configIncludeS3": "S3 云服务配置",
@@ -1844,6 +1978,47 @@
   "tagDefaultImageBilling": "图片记账",
   "tagDefaultCameraBilling": "拍照记账",
   "tagDefaultAiBilling": "AI记账",
+  "tagShare": "分享标签",
+  "tagImport": "导入标签",
+  "tagClearUnused": "清理未使用",
+  "tagShareSuccess": "已保存到 {path}",
+  "@tagShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "tagShareSubject": "BeeCount 标签配置",
+  "tagShareFailed": "分享失败",
+  "tagImportInvalidFile": "请选择 YAML 配置文件",
+  "tagImportNoTags": "文件中没有标签数据",
+  "tagImportModeTitle": "选择导入模式",
+  "tagImportModeMerge": "合并",
+  "tagImportModeMergeDesc": "保留现有标签，新增不存在的",
+  "tagImportModeOverwrite": "覆盖",
+  "tagImportModeOverwriteDesc": "清空未使用标签后导入",
+  "tagImportSuccess": "导入成功",
+  "tagImportFailed": "导入失败",
+  "tagClearUnusedEmpty": "没有未使用的标签",
+  "tagClearUnusedTitle": "清理未使用标签",
+  "tagClearUnusedMessage": "确定要删除 {count} 个未使用的标签吗？",
+  "@tagClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedSuccess": "已删除 {count} 个标签",
+  "@tagClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedFailed": "清理失败",
   "tabDiscover": "发现",
   "discoverTitle": "发现",
   "discoverBudget": "预算管理",

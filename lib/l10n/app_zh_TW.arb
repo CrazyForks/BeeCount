@@ -458,7 +458,6 @@
   "categoryParentRequiredTitle": "錯誤",
   "categoryReorderTip": "長按分類可拖曳調整順序",
   "categorySaveError": "儲存失敗",
-  "categorySelectParentDescription": "只能選擇沒有交易記錄的分類作為父分類",
   "categorySelectParentTitle": "選擇父分類",
   "categorySubCategoryCreated": "已新增二級分類：{name}",
   "categorySubCategoryDescriptionDisabled": "此分類為獨立的一級分類",
@@ -722,6 +721,7 @@
   "configIncludeOtherSettingsSubtitle": "包含雲端服務配置、AI配置、應用程式設定等",
   "configIncludeRecurringTransactions": "週期帳單",
   "configIncludeS3": "S3 雲端服務配置",
+  "configIncludeLedgers": "帳本",
   "configIncludeSupabase": "Supabase 雲端服務配置",
   "configIncludeTags": "標籤",
   "configIncludeWebdav": "WebDAV 雲端服務配置",
@@ -902,6 +902,17 @@
   "homeMonth": "{month}月",
   "homeNoRecords": "還沒有記帳",
   "homeNoRecordsSubtext": "點擊底部加號，馬上記一筆",
+  "homeLastMonthReportSubtitle": "查看上月消費報告並分享",
+  "homeLastMonthReportView": "查看",
+  "homeAnnualReportReminder": "{year}年度帳單已生成，回顧你的財務足跡",
+  "@homeAnnualReportReminder": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAnnualReportView": "查看",
   "homeSearch": "搜尋",
   "homeSelectDate": "選擇日期",
   "homeSwitchLedger": "選擇帳本",
@@ -1122,9 +1133,79 @@
   "mineReminder": "提醒設定",
   "mineReminderSettings": "記帳提醒",
   "mineReminderSettingsSubtitle": "設定每日記帳提醒",
+  "annualReportTitle": "年度帳單",
+  "annualReportSubtitle": "回顧你的{year}年財務足跡",
+  "@annualReportSubtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportEntrySubtitle": "生成專屬年度報告，分享你的記帳故事",
+  "annualReportNoData": "暫無{year}年資料",
+  "@annualReportNoData": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportPage1Title": "年度總覽",
+  "annualReportPage1Subtitle": "{year}年記帳之旅",
+  "@annualReportPage1Subtitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportTotalDays": "記帳天數",
+  "annualReportTotalRecords": "記帳筆數",
+  "annualReportTotalIncome": "總收入",
+  "annualReportTotalExpense": "總支出",
+  "annualReportNetSavings": "年度結餘",
+  "annualReportPage2Title": "支出分析",
+  "annualReportPage2Subtitle": "你的錢花在哪了",
+  "annualReportPage3Title": "月度趨勢",
+  "annualReportPage3Subtitle": "12個月的收支變化",
+  "annualReportHighestMonth": "支出最高月份",
+  "annualReportLowestMonth": "支出最低月份",
+  "annualReportPage4Title": "特別時刻",
+  "annualReportPage4Subtitle": "那些值得銘記的帳單",
+  "annualReportLargestExpense": "年度最大支出",
+  "annualReportLargestIncome": "年度最大收入",
+  "annualReportFirstRecord": "第一筆記錄",
+  "annualReportPage5Title": "年度成就",
+  "annualReportPage5Subtitle": "你的記帳成就徽章",
+  "annualReportAchievementConsistent": "持之以恆",
+  "annualReportAchievementConsistentDesc": "連續記帳超過{days}天",
+  "@annualReportAchievementConsistentDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportAchievementSaver": "精打細算",
+  "annualReportAchievementSaverDesc": "年度結餘為正",
+  "annualReportAchievementDetail": "明察秋毫",
+  "annualReportAchievementDetailDesc": "記帳筆數超過{count}筆",
+  "@annualReportAchievementDetailDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "annualReportShareButton": "生成分享海報",
+  "annualReportGenerating": "正在生成年度報告...",
+  "annualReportSaveSuccess": "年度報告海報已儲存",
   "mineShareApp": "分享應用程式",
   "mineShareGenerating": "正在生成分享海報...",
   "mineShareWithFriends": "和好友分享蜜蜂記帳",
+  "mineCopyPromoText": "複製推廣文案",
+  "mineCopyPromoSubtitle": "一鍵複製分享給好友",
   "mineSlogan": "蜜蜂記帳，一筆一蜜",
   "mineSupportAuthor": "給專案 Star ⭐️",
   "mineSupportAuthorSubtitle": "開源免費，已有 {count} 人 Star",
@@ -1340,6 +1421,8 @@
   "searchSelectedCount": "已選擇 {count} 項",
   "searchStartDate": "開始日期",
   "searchTitle": "搜尋",
+  "shareGuidanceCopied": "文案已複製",
+  "shareGuidanceCopyText": "用蜜蜂記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount",
   "sharePosterAppName": "蜜蜂記帳",
   "sharePosterAvgDailyExpense": "日均支出",
   "sharePosterAvgMonthlyExpense": "月均支出",
@@ -1370,6 +1453,7 @@
   "sharePosterSave": "儲存到相簿",
   "sharePosterSaveFailed": "儲存失敗",
   "sharePosterSaveSuccess": "已儲存到相簿",
+  "sharePosterSavedMoneyTitle": "恭喜！本月比上月省了",
   "sharePosterScanText": "掃碼訪問開源專案",
   "sharePosterShare": "分享",
   "sharePosterShowIncome": "顯示收入",
@@ -1423,6 +1507,10 @@
   "smartBilling": "智慧記帳",
   "smartBillingAIOptional": "AI 識別為可選功能，配置後可提高識別準確度",
   "smartBillingAIRequired": "語音記帳必須配置 AI（智譜 GLM API），請先在上方配置 AI 設定",
+  "smartBillingAutoTags": "自動關聯標籤",
+  "smartBillingAutoTagsDesc": "智慧記帳時自動根據分類關聯常用標籤",
+  "smartBillingAutoAttachment": "自動新增附件",
+  "smartBillingAutoAttachmentDesc": "圖片/拍照記帳時自動將原圖新增為附件",
   "smartBillingCameraBilling": "拍照記帳",
   "smartBillingCameraBillingDesc": "拍攝支付截圖進行識別",
   "smartBillingCameraBillingGuide": "在首頁長按底部中間的 + 按鈕，選擇「拍照」即可使用拍照記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。",
@@ -1504,6 +1592,47 @@
   "tagDefaultCameraBilling": "拍照記帳",
   "tagDefaultImageBilling": "圖片記帳",
   "tagDefaultAiBilling": "AI記帳",
+  "tagShare": "分享標籤",
+  "tagImport": "匯入標籤",
+  "tagClearUnused": "清理未使用",
+  "tagShareSuccess": "已儲存到 {path}",
+  "@tagShareSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "tagShareSubject": "BeeCount 標籤配置",
+  "tagShareFailed": "分享失敗",
+  "tagImportInvalidFile": "請選擇 YAML 配置檔案",
+  "tagImportNoTags": "檔案中沒有標籤資料",
+  "tagImportModeTitle": "選擇匯入模式",
+  "tagImportModeMerge": "合併",
+  "tagImportModeMergeDesc": "保留現有標籤，新增不存在的",
+  "tagImportModeOverwrite": "覆蓋",
+  "tagImportModeOverwriteDesc": "清空未使用標籤後匯入",
+  "tagImportSuccess": "匯入成功",
+  "tagImportFailed": "匯入失敗",
+  "tagClearUnusedEmpty": "沒有未使用的標籤",
+  "tagClearUnusedTitle": "清理未使用標籤",
+  "tagClearUnusedMessage": "確定要刪除 {count} 個未使用的標籤嗎？",
+  "@tagClearUnusedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedSuccess": "已刪除 {count} 個標籤",
+  "@tagClearUnusedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagClearUnusedFailed": "清理失敗",
   "tagDeleteConfirmMessage": "確定要刪除標籤「{name}」嗎？此操作不會影響已關聯的交易記錄。",
   "@tagDeleteConfirmMessage": {
     "placeholders": {

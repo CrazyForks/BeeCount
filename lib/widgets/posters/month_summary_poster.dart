@@ -22,6 +22,10 @@ class MonthSummaryPoster extends StatelessWidget {
     this.hideIncome = false,
   });
 
+  /// 是否显示省钱横幅
+  bool get _hasSavedMoneyBanner =>
+      data.expenseChangeRate != null && data.expenseChangeRate! < 0;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -75,6 +79,46 @@ class MonthSummaryPoster extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// 构建副标题（省钱时显示省钱信息）
+  Widget _buildSubtitle(BuildContext context, AppLocalizations l10n) {
+    if (_hasSavedMoneyBanner) {
+      // 省钱时显示省钱文案
+      final formatter = NumberFormat('#,##0', 'zh_CN');
+      final rate = data.expenseChangeRate!;
+      final savedAmount = data.totalExpense * (-rate) / (1 + rate);
+      // 使用与主题色协调的绿色
+      const savedColor = Color(0xFF4CAF50);
+
+      return Row(
+        children: [
+          Icon(
+            Icons.trending_down_rounded,
+            color: savedColor,
+            size: 22,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '${l10n.sharePosterSavedMoneyTitle} ¥${formatter.format(savedAmount)}',
+            style: TextStyle(
+              color: savedColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      );
+    }
+
+    // 默认副标题
+    return Text(
+      l10n.sharePosterMonthSubtitle,
+      style: TextStyle(
+        color: primaryColor.withValues(alpha: 0.6),
+        fontSize: 18,
       ),
     );
   }
@@ -142,14 +186,8 @@ class MonthSummaryPoster extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              // 副标题
-              Text(
-                l10n.sharePosterMonthSubtitle,
-                style: TextStyle(
-                  color: primaryColor.withValues(alpha: 0.6),
-                  fontSize: 18,
-                ),
-              ),
+              // 副标题（省钱时显示省钱信息）
+              _buildSubtitle(context, l10n),
             ],
           ),
         ),

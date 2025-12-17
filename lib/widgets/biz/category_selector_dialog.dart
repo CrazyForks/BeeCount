@@ -7,6 +7,10 @@ import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 import '../category_icon.dart';
 
+/// 分类过滤器回调类型
+/// 返回 true 表示该分类可选，返回 false 表示不可选（置灰）
+typedef CategoryFilterCallback = Future<bool> Function(Category category);
+
 /// 显示分类选择器
 ///
 /// [type] 分类类型：'income' 或 'expense'
@@ -17,6 +21,9 @@ import '../category_icon.dart';
 /// [showTransactionCount] 是否显示交易笔数
 /// [ledgerId] 如果要显示笔数，需要账本ID
 /// [expandChildrenByDefault] 是否默认展开二级分类
+/// [onlyTopLevel] 是否只显示一级分类（不显示二级分类）
+/// [categoryFilter] 自定义过滤器，决定分类是否可选
+/// [title] 自定义标题
 Future<Category?> showCategorySelector(
   BuildContext context, {
   required String type,
@@ -27,6 +34,9 @@ Future<Category?> showCategorySelector(
   bool showTransactionCount = false,
   int? ledgerId,
   bool expandChildrenByDefault = false,
+  bool onlyTopLevel = false,
+  CategoryFilterCallback? categoryFilter,
+  String? title,
 }) {
   return showDialog<Category>(
     context: context,
@@ -39,6 +49,9 @@ Future<Category?> showCategorySelector(
       showTransactionCount: showTransactionCount,
       ledgerId: ledgerId,
       expandChildrenByDefault: expandChildrenByDefault,
+      onlyTopLevel: onlyTopLevel,
+      categoryFilter: categoryFilter,
+      title: title,
     ),
   );
 }
@@ -52,6 +65,9 @@ class CategorySelectorDialog extends ConsumerStatefulWidget {
   final bool showTransactionCount;
   final int? ledgerId;
   final bool expandChildrenByDefault;
+  final bool onlyTopLevel;
+  final CategoryFilterCallback? categoryFilter;
+  final String? title;
 
   const CategorySelectorDialog({
     super.key,
@@ -63,6 +79,9 @@ class CategorySelectorDialog extends ConsumerStatefulWidget {
     this.showTransactionCount = false,
     this.ledgerId,
     this.expandChildrenByDefault = false,
+    this.onlyTopLevel = false,
+    this.categoryFilter,
+    this.title,
   });
 
   @override
@@ -73,6 +92,7 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
   final TextEditingController _searchController = TextEditingController();
   String _searchText = '';
   Map<int, int> _transactionCounts = {};
+  Map<int, bool> _categoryFilterResults = {}; // 存储过滤器结果
 
   @override
   void initState() {
@@ -82,7 +102,7 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
         _searchText = _searchController.text.trim().toLowerCase();
       });
     });
-    if (widget.showTransactionCount && widget.ledgerId != null) {
+    if (widget.showTransactionCount) {
       _loadTransactionCounts();
     }
   }
@@ -106,10 +126,26 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
     allCategories.addAll(incomeCategories);
     allCategories.addAll(expenseCategories);
 
-    // 为每个一级分类获取子分类
-    for (final category in [...incomeCategories, ...expenseCategories]) {
-      final subs = await repo.getSubCategories(category.id);
-      allCategories.addAll(subs);
+    // 如果只显示一级分类，不加载子分类
+    if (!widget.onlyTopLevel) {
+      // 为每个一级分类获取子分类
+      for (final category in [...incomeCategories, ...expenseCategories]) {
+        final subs = await repo.getSubCategories(category.id);
+        allCategories.addAll(subs);
+      }
+    }
+
+    // 如果有过滤器，计算每个分类的可选状态
+    if (widget.categoryFilter != null) {
+      final filterResults = <int, bool>{};
+      for (final category in allCategories) {
+        filterResults[category.id] = await widget.categoryFilter!(category);
+      }
+      if (mounted) {
+        setState(() {
+          _categoryFilterResults = filterResults;
+        });
+      }
     }
 
     return allCategories;
@@ -117,13 +153,11 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
 
   /// 加载每个分类的交易笔数
   Future<void> _loadTransactionCounts() async {
-    if (widget.ledgerId == null) return;
-
     try {
       final repo = ref.read(repositoryProvider);
 
-      // 获取该账本下所有交易
-      final transactions = await repo.transactionsWithCategoryAll(ledgerId: widget.ledgerId!).first;
+      // 获取交易（ledgerId 可选，不传则获取所有账本）
+      final transactions = await repo.transactionsWithCategoryAll(ledgerId: widget.ledgerId).first;
 
       // 统计每个分类的笔数
       final counts = <int, int>{};
@@ -189,7 +223,11 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
           .toList();
 
       // 判断父分类是否可选
-      final isParentSelectable = !hasChildren || widget.includeParentCategories;
+      bool isParentSelectable = !hasChildren || widget.includeParentCategories;
+      // 如果有过滤器，应用过滤器结果
+      if (widget.categoryFilter != null && _categoryFilterResults.containsKey(parent.id)) {
+        isParentSelectable = isParentSelectable && _categoryFilterResults[parent.id]!;
+      }
 
       // 应用搜索过滤
       if (_searchText.isNotEmpty) {
@@ -276,9 +314,9 @@ class _CategorySelectorDialogState extends ConsumerState<CategorySelectorDialog>
                     children: [
                       Expanded(
                         child: Text(
-                          widget.type == 'income'
+                          widget.title ?? (widget.type == 'income'
                               ? l10n.categoryIncome
-                              : l10n.categoryExpense,
+                              : l10n.categoryExpense),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -528,11 +566,11 @@ class _CategoryTile extends StatelessWidget {
       categoryName: category.name,
     );
 
-    // 如果父分类不可选，则显示为半透明
-    final opacity = isParent && !isSelectable ? 0.5 : 1.0;
+    // 不可选时显示为半透明
+    final opacity = !isSelectable ? 0.5 : 1.0;
 
     return InkWell(
-      onTap: onTap,
+      onTap: isSelectable || isParent ? onTap : null, // 不可选且非父分类时禁用点击
       child: Opacity(
         opacity: opacity,
         child: Container(
@@ -603,7 +641,7 @@ class _CategoryTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      '$transactionCount',
+                      AppLocalizations.of(context).tagTransactionCount(transactionCount),
                       style: TextStyle(
                         fontSize: 12,
                         color: BeeTokens.textSecondary(context),

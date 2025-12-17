@@ -97,7 +97,6 @@ flutter:
   assets:
     - assets/logo.svg
     - assets/bee.svg
-    - assets/logo.png
     - assets/logo2.png
     - assets/icons/ai.svg
     - assets/images/

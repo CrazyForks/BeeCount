@@ -16,13 +16,15 @@ abstract class TransactionRepository {
   });
 
   /// 获取所有交易记录（带分类信息）
+  /// [ledgerId] 可选，不传则获取所有账本的交易
   Stream<List<({Transaction t, Category? category})>> watchTransactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   });
 
   /// 获取所有交易记录（带分类信息）- 非 Stream 版本
+  /// [ledgerId] 可选，不传则获取所有账本的交易
   Stream<List<({Transaction t, Category? category})>> transactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   });
 
   /// 获取最近的交易记录（带分类信息）- 用于预加载

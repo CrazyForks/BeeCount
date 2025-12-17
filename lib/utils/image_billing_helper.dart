@@ -106,6 +106,10 @@ class ImageBillingHelper {
         return;
       }
 
+      // 读取智能记账设置
+      final autoAddTags = ref.read(smartBillingAutoTagsProvider);
+      final autoAddAttachment = ref.read(smartBillingAutoAttachmentProvider);
+
       // 使用BillCreationService创建交易
       final repo = ref.read(repositoryProvider);
       final billCreationService = BillCreationService(repo);
@@ -129,24 +133,27 @@ class ImageBillingHelper {
         note: note.isNotEmpty ? note : null,
         billingTypes: billingTypes,
         l10n: l10n,
+        autoAddTags: autoAddTags,
       );
 
       if (!context.mounted) return;
 
       if (transactionId != null) {
-        // 自动保存图片附件
-        final attachmentService = ref.read(attachmentServiceProvider);
-        await attachmentService.saveAttachment(
-          transactionId: transactionId,
-          sourceFile: imageFile,
-          index: 0,
-        );
+        // 自动保存图片附件（根据设置开关）
+        if (autoAddAttachment) {
+          final attachmentService = ref.read(attachmentServiceProvider);
+          await attachmentService.saveAttachment(
+            transactionId: transactionId,
+            sourceFile: imageFile,
+            index: 0,
+          );
+          ref.read(attachmentListRefreshProvider.notifier).state++;
+        }
 
-        // 刷新列表、统计信息、标签和附件列表
+        // 刷新列表、统计信息、标签
         ref.read(ledgerListRefreshProvider.notifier).state++;
         ref.read(statsRefreshProvider.notifier).state++;
         ref.read(tagListRefreshProvider.notifier).state++;
-        ref.read(attachmentListRefreshProvider.notifier).state++;
         final transactionType = (ocrResult.aiType == 'income') ? 'income' : 'expense';
         final typeText = transactionType == 'income' ? l10n.aiTypeIncome : l10n.aiTypeExpense;
         final amount = ocrResult.amount!.abs().toStringAsFixed(2);

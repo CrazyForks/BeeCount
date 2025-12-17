@@ -156,6 +156,12 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get commonEdit;
 
+  /// No description provided for @commonMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get commonMore;
+
   /// No description provided for @commonOk.
   ///
   /// In en, this message translates to:
@@ -503,6 +509,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap the plus button at the bottom to add a record'**
   String get homeNoRecordsSubtext;
+
+  /// No description provided for @homeLastMonthReportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View and share last month\'s report'**
+  String get homeLastMonthReportSubtitle;
+
+  /// No description provided for @homeLastMonthReportView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get homeLastMonthReportView;
+
+  /// No description provided for @homeAnnualReportReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {year} Annual Report is ready'**
+  String homeAnnualReportReminder(int year);
+
+  /// No description provided for @homeAnnualReportView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get homeAnnualReportView;
 
   /// No description provided for @widgetTodayExpense.
   ///
@@ -1632,6 +1662,204 @@ abstract class AppLocalizations {
   /// **'Delete Avatar'**
   String get mineAvatarDelete;
 
+  /// No description provided for @annualReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Report'**
+  String get annualReportTitle;
+
+  /// No description provided for @annualReportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your {year} financial journey'**
+  String annualReportSubtitle(int year);
+
+  /// No description provided for @annualReportEntrySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your personalized annual report to share'**
+  String get annualReportEntrySubtitle;
+
+  /// No description provided for @annualReportNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data for {year}'**
+  String annualReportNoData(int year);
+
+  /// No description provided for @annualReportPage1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Overview'**
+  String get annualReportPage1Title;
+
+  /// No description provided for @annualReportPage1Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {year} bookkeeping journey'**
+  String annualReportPage1Subtitle(int year);
+
+  /// No description provided for @annualReportTotalDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days Tracked'**
+  String get annualReportTotalDays;
+
+  /// No description provided for @annualReportTotalRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Records'**
+  String get annualReportTotalRecords;
+
+  /// No description provided for @annualReportTotalIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Income'**
+  String get annualReportTotalIncome;
+
+  /// No description provided for @annualReportTotalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get annualReportTotalExpense;
+
+  /// No description provided for @annualReportNetSavings.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Savings'**
+  String get annualReportNetSavings;
+
+  /// No description provided for @annualReportPage2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense Analysis'**
+  String get annualReportPage2Title;
+
+  /// No description provided for @annualReportPage2Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where your money went'**
+  String get annualReportPage2Subtitle;
+
+  /// No description provided for @annualReportPage3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Trends'**
+  String get annualReportPage3Title;
+
+  /// No description provided for @annualReportPage3Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'12 months of income & expense'**
+  String get annualReportPage3Subtitle;
+
+  /// No description provided for @annualReportHighestMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest Spending Month'**
+  String get annualReportHighestMonth;
+
+  /// No description provided for @annualReportLowestMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest Spending Month'**
+  String get annualReportLowestMonth;
+
+  /// No description provided for @annualReportPage4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Special Moments'**
+  String get annualReportPage4Title;
+
+  /// No description provided for @annualReportPage4Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorable transactions'**
+  String get annualReportPage4Subtitle;
+
+  /// No description provided for @annualReportLargestExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest Expense'**
+  String get annualReportLargestExpense;
+
+  /// No description provided for @annualReportLargestIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest Income'**
+  String get annualReportLargestIncome;
+
+  /// No description provided for @annualReportFirstRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'First Record'**
+  String get annualReportFirstRecord;
+
+  /// No description provided for @annualReportPage5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get annualReportPage5Title;
+
+  /// No description provided for @annualReportPage5Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bookkeeping badges'**
+  String get annualReportPage5Subtitle;
+
+  /// No description provided for @annualReportAchievementConsistent.
+  ///
+  /// In en, this message translates to:
+  /// **'Consistent'**
+  String get annualReportAchievementConsistent;
+
+  /// No description provided for @annualReportAchievementConsistentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracked for over {days} days straight'**
+  String annualReportAchievementConsistentDesc(int days);
+
+  /// No description provided for @annualReportAchievementSaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Saver'**
+  String get annualReportAchievementSaver;
+
+  /// No description provided for @annualReportAchievementSaverDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Positive net savings this year'**
+  String get annualReportAchievementSaverDesc;
+
+  /// No description provided for @annualReportAchievementDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail-Oriented'**
+  String get annualReportAchievementDetail;
+
+  /// No description provided for @annualReportAchievementDetailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Over {count} records tracked'**
+  String annualReportAchievementDetailDesc(int count);
+
+  /// No description provided for @annualReportShareButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Share Poster'**
+  String get annualReportShareButton;
+
+  /// No description provided for @annualReportGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating annual report...'**
+  String get annualReportGenerating;
+
+  /// No description provided for @annualReportSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual report poster saved'**
+  String get annualReportSaveSuccess;
+
   /// No description provided for @mineShareApp.
   ///
   /// In en, this message translates to:
@@ -1643,6 +1871,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share BeeCount with friends'**
   String get mineShareWithFriends;
+
+  /// No description provided for @mineCopyPromoText.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Promo Text'**
+  String get mineCopyPromoText;
+
+  /// No description provided for @mineCopyPromoSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy and share with friends'**
+  String get mineCopyPromoSubtitle;
 
   /// No description provided for @mineShareGenerating.
   ///
@@ -1733,6 +1973,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saved to gallery'**
   String get sharePosterSaveSuccess;
+
+  /// No description provided for @shareGuidanceCopyText.
+  ///
+  /// In en, this message translates to:
+  /// **'Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount'**
+  String get shareGuidanceCopyText;
+
+  /// No description provided for @shareGuidanceCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Text copied'**
+  String get shareGuidanceCopied;
 
   /// No description provided for @sharePosterSaveFailed.
   ///
@@ -1889,6 +2141,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Decrease'**
   String get sharePosterDecreaseRate;
+
+  /// No description provided for @sharePosterSavedMoneyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Congrats! You saved this month'**
+  String get sharePosterSavedMoneyTitle;
 
   /// No description provided for @sharePosterLedgerName.
   ///
@@ -2562,6 +2820,150 @@ abstract class AppLocalizations {
   /// **'This category has {count} transaction records. Please handle them first.'**
   String categoryCannotDeleteMessage(Object count);
 
+  /// No description provided for @categoryShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Categories'**
+  String get categoryShare;
+
+  /// No description provided for @categoryImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Categories'**
+  String get categoryImport;
+
+  /// No description provided for @categoryClearUnused.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Unused Categories'**
+  String get categoryClearUnused;
+
+  /// No description provided for @categoryClearUnusedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Unused Categories'**
+  String get categoryClearUnusedTitle;
+
+  /// No description provided for @categoryClearUnusedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {count} unused categories? This action cannot be undone.'**
+  String categoryClearUnusedMessage(Object count);
+
+  /// No description provided for @categoryClearUnusedEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No unused categories'**
+  String get categoryClearUnusedEmpty;
+
+  /// No description provided for @categoryClearUnusedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {count} categories'**
+  String categoryClearUnusedSuccess(Object count);
+
+  /// No description provided for @categoryClearUnusedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear failed'**
+  String get categoryClearUnusedFailed;
+
+  /// No description provided for @categoryShareScopeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Scope'**
+  String get categoryShareScopeTitle;
+
+  /// No description provided for @categoryShareScopeExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense categories only'**
+  String get categoryShareScopeExpense;
+
+  /// No description provided for @categoryShareScopeIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income categories only'**
+  String get categoryShareScopeIncome;
+
+  /// No description provided for @categoryShareScopeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get categoryShareScopeAll;
+
+  /// No description provided for @categoryShareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to {path}'**
+  String categoryShareSuccess(Object path);
+
+  /// No description provided for @categoryShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount Category Configuration'**
+  String get categoryShareSubject;
+
+  /// No description provided for @categoryShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Share failed'**
+  String get categoryShareFailed;
+
+  /// No description provided for @categoryImportInvalidFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a YAML configuration file'**
+  String get categoryImportInvalidFile;
+
+  /// No description provided for @categoryImportNoCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'No category data in file'**
+  String get categoryImportNoCategories;
+
+  /// No description provided for @categoryImportModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Import Mode'**
+  String get categoryImportModeTitle;
+
+  /// No description provided for @categoryImportModeMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge'**
+  String get categoryImportModeMerge;
+
+  /// No description provided for @categoryImportModeMergeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep existing, add new ones'**
+  String get categoryImportModeMergeDesc;
+
+  /// No description provided for @categoryImportModeOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite'**
+  String get categoryImportModeOverwrite;
+
+  /// No description provided for @categoryImportModeOverwriteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear unused categories then import'**
+  String get categoryImportModeOverwriteDesc;
+
+  /// No description provided for @categoryImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Import successful'**
+  String get categoryImportSuccess;
+
+  /// No description provided for @categoryImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get categoryImportFailed;
+
   /// No description provided for @categoryDeleteConfirmTitle.
   ///
   /// In en, this message translates to:
@@ -2621,12 +3023,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Parent Category'**
   String get categorySelectParentTitle;
-
-  /// No description provided for @categorySelectParentDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Only categories without transaction records can be selected as parent'**
-  String get categorySelectParentDescription;
 
   /// No description provided for @categorySubCategoryCreated.
   ///
@@ -6816,6 +7212,30 @@ abstract class AppLocalizations {
   /// **'Voice billing requires AI configuration (Zhipu GLM API), please configure AI settings above first'**
   String get smartBillingAIRequired;
 
+  /// No description provided for @smartBillingAutoTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-associate Tags'**
+  String get smartBillingAutoTags;
+
+  /// No description provided for @smartBillingAutoTagsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically associate frequently used tags based on category'**
+  String get smartBillingAutoTagsDesc;
+
+  /// No description provided for @smartBillingAutoAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-add Attachment'**
+  String get smartBillingAutoAttachment;
+
+  /// No description provided for @smartBillingAutoAttachmentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically add original image as attachment for photo billing'**
+  String get smartBillingAutoAttachmentDesc;
+
   /// No description provided for @autoScreenshotBillingIosDesc.
   ///
   /// In en, this message translates to:
@@ -7193,6 +7613,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to read file'**
   String get configExportReadFileFailed;
+
+  /// No description provided for @configIncludeLedgers.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledgers'**
+  String get configIncludeLedgers;
 
   /// No description provided for @configIncludeSupabase.
   ///
@@ -8567,6 +8993,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI'**
   String get tagDefaultAiBilling;
+
+  /// No description provided for @tagShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Tags'**
+  String get tagShare;
+
+  /// No description provided for @tagImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Tags'**
+  String get tagImport;
+
+  /// No description provided for @tagClearUnused.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Unused'**
+  String get tagClearUnused;
+
+  /// No description provided for @tagShareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to {path}'**
+  String tagShareSuccess(String path);
+
+  /// No description provided for @tagShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount Tags Configuration'**
+  String get tagShareSubject;
+
+  /// No description provided for @tagShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Share failed'**
+  String get tagShareFailed;
+
+  /// No description provided for @tagImportInvalidFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a YAML file'**
+  String get tagImportInvalidFile;
+
+  /// No description provided for @tagImportNoTags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags found in file'**
+  String get tagImportNoTags;
+
+  /// No description provided for @tagImportModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Import Mode'**
+  String get tagImportModeTitle;
+
+  /// No description provided for @tagImportModeMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge'**
+  String get tagImportModeMerge;
+
+  /// No description provided for @tagImportModeMergeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep existing tags, add new ones'**
+  String get tagImportModeMergeDesc;
+
+  /// No description provided for @tagImportModeOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite'**
+  String get tagImportModeOverwrite;
+
+  /// No description provided for @tagImportModeOverwriteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear unused tags before import'**
+  String get tagImportModeOverwriteDesc;
+
+  /// No description provided for @tagImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Import successful'**
+  String get tagImportSuccess;
+
+  /// No description provided for @tagImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get tagImportFailed;
+
+  /// No description provided for @tagClearUnusedEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No unused tags'**
+  String get tagClearUnusedEmpty;
+
+  /// No description provided for @tagClearUnusedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Unused Tags'**
+  String get tagClearUnusedTitle;
+
+  /// No description provided for @tagClearUnusedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} unused tags?'**
+  String tagClearUnusedMessage(int count);
+
+  /// No description provided for @tagClearUnusedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {count} tags'**
+  String tagClearUnusedSuccess(int count);
+
+  /// No description provided for @tagClearUnusedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear failed'**
+  String get tagClearUnusedFailed;
 
   /// No description provided for @tabDiscover.
   ///

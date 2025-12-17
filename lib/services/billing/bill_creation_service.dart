@@ -223,6 +223,7 @@ class BillCreationService {
   /// [note] 备注（可选）
   /// [billingTypes] 记账方式列表，如 ['image', 'ai'] 表示开启AI的图片记账
   /// [l10n] 国际化对象，用于获取标签名称
+  /// [autoAddTags] 是否自动关联标签，默认true
   /// 返回创建的交易ID，如果创建失败则返回null
   Future<int?> createBillTransaction({
     required OcrResult result,
@@ -230,6 +231,7 @@ class BillCreationService {
     String? note,
     List<String>? billingTypes,
     AppLocalizations? l10n,
+    bool autoAddTags = true,
   }) async {
     // 1. 验证金额
     if (result.amount == null || result.amount!.abs() <= 0) {
@@ -350,8 +352,8 @@ class BillCreationService {
       note: finalNote,
     );
 
-    // 10. 自动添加记账方式标签
-    if (billingTypes != null && billingTypes.isNotEmpty && l10n != null) {
+    // 10. 自动添加记账方式标签（根据设置开关）
+    if (autoAddTags && billingTypes != null && billingTypes.isNotEmpty && l10n != null) {
       await _addBillingTypeTags(transactionId, billingTypes, l10n);
     }
 

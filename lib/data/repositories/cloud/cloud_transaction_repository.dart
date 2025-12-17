@@ -171,9 +171,9 @@ class CloudTransactionRepository implements TransactionRepository {
   @override
   Stream<List<({Transaction t, Category? category})>>
       watchTransactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   }) {
-    final cacheKey = 'all:$ledgerId';
+    final cacheKey = 'all:${ledgerId ?? 'global'}';
 
     // 如果已缓存，直接返回
     if (_streamCache.containsKey(cacheKey)) {
@@ -191,12 +191,16 @@ class CloudTransactionRepository implements TransactionRepository {
       },
     );
 
+    // 构建过滤条件
+    final filters = <QueryFilter>[];
+    if (ledgerId != null) {
+      filters.add(QueryFilter(column: 'ledger_id', operator: 'eq', value: ledgerId));
+    }
+
     // 立即获取初始数据
     logger.info('CloudTransactionRepo', '开始获取初始数据: ledgerId=$ledgerId');
     _fetchTransactionsWithCategory(
-      filters: [
-        QueryFilter(column: 'ledger_id', operator: 'eq', value: ledgerId),
-      ],
+      filters: filters,
     ).then((data) {
       logger.info('CloudTransactionRepo', '初始数据获取成功: ledgerId=$ledgerId, count=${data.length}');
       if (!controller.isClosed) {
@@ -209,37 +213,60 @@ class CloudTransactionRepository implements TransactionRepository {
       }
     });
 
-    // 创建 Realtime 频道监听 transactions 表变化（过滤指定账本）
-    final channel = supabase.realtimeService!
-        .channel('transactions_with_category:all:$ledgerId');
+    // 创建 Realtime 频道监听 transactions 表变化
+    final channelName = ledgerId != null
+        ? 'transactions_with_category:all:$ledgerId'
+        : 'transactions_with_category:all:global';
+    final channel = supabase.realtimeService!.channel(channelName);
 
-    logger.info('CloudTransactionRepo', '设置Realtime订阅: ledgerId=$ledgerId, filter=ledger_id=eq.$ledgerId');
+    logger.info('CloudTransactionRepo', '设置Realtime订阅: ledgerId=$ledgerId');
 
-    channel.onPostgresChanges(
-      event: '*',
-      schema: 'public',
-      table: 'transactions',
-      filter: 'ledger_id=eq.$ledgerId',  // 只监听指定账本的变化
-      callback: (payload) async {
-        logger.info('CloudTransactionRepo', 'Realtime回调触发: ledgerId=$ledgerId');
-        try {
-          final data = await _fetchTransactionsWithCategory(
-            filters: [
-              QueryFilter(column: 'ledger_id', operator: 'eq', value: ledgerId),
-            ],
-          );
-          logger.info('CloudTransactionRepo', 'Realtime数据刷新成功: ledgerId=$ledgerId, count=${data.length}');
-          if (!controller.isClosed) {
-            controller.add(data);
+    if (ledgerId != null) {
+      // 指定账本：监听特定账本的变化
+      channel.onPostgresChanges(
+        event: '*',
+        schema: 'public',
+        table: 'transactions',
+        filter: 'ledger_id=eq.$ledgerId',
+        callback: (payload) async {
+          logger.info('CloudTransactionRepo', 'Realtime回调触发: ledgerId=$ledgerId');
+          try {
+            final data = await _fetchTransactionsWithCategory(filters: filters);
+            logger.info('CloudTransactionRepo', 'Realtime数据刷新成功: ledgerId=$ledgerId, count=${data.length}');
+            if (!controller.isClosed) {
+              controller.add(data);
+            }
+          } catch (e, stackTrace) {
+            logger.error('CloudTransactionRepo', 'Realtime数据刷新失败: ledgerId=$ledgerId', e, stackTrace);
+            if (!controller.isClosed) {
+              controller.addError(e);
+            }
           }
-        } catch (e, stackTrace) {
-          logger.error('CloudTransactionRepo', 'Realtime数据刷新失败: ledgerId=$ledgerId', e, stackTrace);
-          if (!controller.isClosed) {
-            controller.addError(e);
+        },
+      );
+    } else {
+      // 全局：监听所有交易变化
+      channel.onPostgresChanges(
+        event: '*',
+        schema: 'public',
+        table: 'transactions',
+        callback: (payload) async {
+          logger.info('CloudTransactionRepo', 'Realtime回调触发: global');
+          try {
+            final data = await _fetchTransactionsWithCategory(filters: filters);
+            logger.info('CloudTransactionRepo', 'Realtime数据刷新成功: global, count=${data.length}');
+            if (!controller.isClosed) {
+              controller.add(data);
+            }
+          } catch (e, stackTrace) {
+            logger.error('CloudTransactionRepo', 'Realtime数据刷新失败: global', e, stackTrace);
+            if (!controller.isClosed) {
+              controller.addError(e);
+            }
           }
-        }
-      },
-    );
+        },
+      );
+    }
 
     channel.subscribe();
     logger.info('CloudTransactionRepo', 'Realtime订阅已启动: ledgerId=$ledgerId');
@@ -258,7 +285,7 @@ class CloudTransactionRepository implements TransactionRepository {
   /// 兼容旧方法名
   @override
   Stream<List<({Transaction t, Category? category})>> transactionsWithCategoryAll({
-    required int ledgerId,
+    int? ledgerId,
   }) =>
       watchTransactionsWithCategoryAll(ledgerId: ledgerId);
 

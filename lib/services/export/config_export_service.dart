@@ -13,6 +13,7 @@ typedef OrderingTerm = d.OrderingTerm;
 
 /// 导出选项 - 控制导出哪些内容
 class ExportOptions {
+  final bool ledgers;
   final bool categories;
   final bool accounts;
   final bool tags;
@@ -21,6 +22,7 @@ class ExportOptions {
   final bool appSettings; // 包含云服务配置、AI配置等
 
   const ExportOptions({
+    this.ledgers = true,
     this.categories = true,
     this.accounts = true,
     this.tags = true,
@@ -34,6 +36,7 @@ class ExportOptions {
 
   /// 全不选
   static const none = ExportOptions(
+    ledgers: false,
     categories: false,
     accounts: false,
     tags: false,
@@ -50,6 +53,7 @@ class AppConfig {
   final S3Config? s3;
   final AIConfig? ai;
   final AppSettingsConfig? appSettings;
+  final LedgersConfig? ledgers;
   final RecurringTransactionsConfig? recurringTransactions;
   final AccountsConfig? accounts;
   final CategoriesConfig? categories;
@@ -62,6 +66,7 @@ class AppConfig {
     this.s3,
     this.ai,
     this.appSettings,
+    this.ledgers,
     this.recurringTransactions,
     this.accounts,
     this.categories,
@@ -90,6 +95,10 @@ class AppConfig {
 
     if (appSettings != null) {
       map['app_settings'] = appSettings!.toMap();
+    }
+
+    if (ledgers != null) {
+      map['ledgers'] = ledgers!.toMap();
     }
 
     if (recurringTransactions != null) {
@@ -135,6 +144,10 @@ class AppConfig {
       appSettings: yaml.containsKey('app_settings')
           ? AppSettingsConfig.fromMap(
               Map<String, dynamic>.from(yaml['app_settings'] as Map))
+          : null,
+      ledgers: yaml.containsKey('ledgers')
+          ? LedgersConfig.fromMap(
+              Map<String, dynamic>.from(yaml['ledgers'] as Map))
           : null,
       recurringTransactions: yaml.containsKey('recurring_transactions')
           ? RecurringTransactionsConfig.fromMap(
@@ -339,8 +352,8 @@ class AIConfig {
 class AppSettingsConfig {
   // 账户管理
   final bool? accountFeatureEnabled;
-  final int? defaultIncomeAccountId;
-  final int? defaultExpenseAccountId;
+  final String? defaultIncomeAccountName; // 默认收入账户名称（用于导出/导入匹配）
+  final String? defaultExpenseAccountName; // 默认支出账户名称（用于导出/导入匹配）
 
   // 记账提醒
   final bool? reminderEnabled;
@@ -371,8 +384,8 @@ class AppSettingsConfig {
 
   const AppSettingsConfig({
     this.accountFeatureEnabled,
-    this.defaultIncomeAccountId,
-    this.defaultExpenseAccountId,
+    this.defaultIncomeAccountName,
+    this.defaultExpenseAccountName,
     this.reminderEnabled,
     this.reminderHour,
     this.reminderMinute,
@@ -396,11 +409,11 @@ class AppSettingsConfig {
     if (accountFeatureEnabled != null) {
       map['account_feature_enabled'] = accountFeatureEnabled;
     }
-    if (defaultIncomeAccountId != null) {
-      map['default_income_account_id'] = defaultIncomeAccountId;
+    if (defaultIncomeAccountName != null) {
+      map['default_income_account_name'] = defaultIncomeAccountName;
     }
-    if (defaultExpenseAccountId != null) {
-      map['default_expense_account_id'] = defaultExpenseAccountId;
+    if (defaultExpenseAccountName != null) {
+      map['default_expense_account_name'] = defaultExpenseAccountName;
     }
     if (reminderEnabled != null) {
       map['reminder_enabled'] = reminderEnabled;
@@ -454,8 +467,8 @@ class AppSettingsConfig {
   static AppSettingsConfig fromMap(Map<String, dynamic> map) =>
       AppSettingsConfig(
         accountFeatureEnabled: map['account_feature_enabled'] as bool?,
-        defaultIncomeAccountId: map['default_income_account_id'] as int?,
-        defaultExpenseAccountId: map['default_expense_account_id'] as int?,
+        defaultIncomeAccountName: map['default_income_account_name'] as String?,
+        defaultExpenseAccountName: map['default_expense_account_name'] as String?,
         reminderEnabled: map['reminder_enabled'] as bool?,
         reminderHour: map['reminder_hour'] as int?,
         reminderMinute: map['reminder_minute'] as int?,
@@ -474,6 +487,72 @@ class AppSettingsConfig {
         autoScreenshotEnabled: map['auto_screenshot_enabled'] as bool?,
         shortcutPreferCamera: map['shortcut_prefer_camera'] as bool?,
       );
+}
+
+/// 账本配置
+class LedgersConfig {
+  final List<LedgerItem> items;
+
+  const LedgersConfig({required this.items});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'items': items.map((item) => item.toMap()).toList(),
+    };
+  }
+
+  static LedgersConfig fromMap(Map<String, dynamic> map) {
+    final itemsList = map['items'] as List<dynamic>? ?? [];
+    return LedgersConfig(
+      items: itemsList
+          .map((item) =>
+              LedgerItem.fromMap(Map<String, dynamic>.from(item as Map)))
+          .toList(),
+    );
+  }
+}
+
+/// 账本项
+class LedgerItem {
+  final String name;
+  final String currency;
+  final String? type; // personal / shared
+  final String? createdAt; // ISO 8601 format
+
+  const LedgerItem({
+    required this.name,
+    required this.currency,
+    this.type,
+    this.createdAt,
+  });
+
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      'name': name,
+      'currency': currency,
+    };
+    if (type != null && type!.isNotEmpty) map['type'] = type;
+    if (createdAt != null) map['created_at'] = createdAt;
+    return map;
+  }
+
+  static LedgerItem fromMap(Map<String, dynamic> map) {
+    return LedgerItem(
+      name: map['name'] as String,
+      currency: map['currency'] as String? ?? 'CNY',
+      type: map['type'] as String?,
+      createdAt: map['created_at'] as String?,
+    );
+  }
+
+  factory LedgerItem.fromDb(Ledger ledger) {
+    return LedgerItem(
+      name: ledger.name,
+      currency: ledger.currency,
+      type: ledger.type,
+      createdAt: ledger.createdAt.toIso8601String(),
+    );
+  }
 }
 
 /// 周期账单配置
@@ -501,12 +580,12 @@ class RecurringTransactionsConfig {
 
 /// 周期账单项
 class RecurringTransactionItem {
-  final int ledgerId; // 账本ID
+  final String ledgerName; // 账本名称（用于导出/导入匹配）
   final String type; // expense / income / transfer
   final double amount;
-  final int? categoryId;
-  final int? accountId;
-  final int? toAccountId;
+  final String? categoryName; // 分类名称（用于导出/导入匹配）
+  final String? accountName; // 账户名称（用于导出/导入匹配）
+  final String? toAccountName; // 转账目标账户名称（用于导出/导入匹配）
   final String? note;
   final String frequency; // daily / weekly / monthly / yearly
   final int interval;
@@ -518,12 +597,12 @@ class RecurringTransactionItem {
   final bool enabled;
 
   const RecurringTransactionItem({
-    required this.ledgerId,
+    required this.ledgerName,
     required this.type,
     required this.amount,
-    this.categoryId,
-    this.accountId,
-    this.toAccountId,
+    this.categoryName,
+    this.accountName,
+    this.toAccountName,
     this.note,
     required this.frequency,
     required this.interval,
@@ -537,7 +616,7 @@ class RecurringTransactionItem {
 
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{
-      'ledger_id': ledgerId,
+      'ledger_name': ledgerName,
       'type': type,
       'amount': amount,
       'frequency': frequency,
@@ -545,9 +624,9 @@ class RecurringTransactionItem {
       'start_date': startDate,
       'enabled': enabled,
     };
-    if (categoryId != null) map['category_id'] = categoryId;
-    if (accountId != null) map['account_id'] = accountId;
-    if (toAccountId != null) map['to_account_id'] = toAccountId;
+    if (categoryName != null) map['category_name'] = categoryName;
+    if (accountName != null) map['account_name'] = accountName;
+    if (toAccountName != null) map['to_account_name'] = toAccountName;
     if (note != null && note!.isNotEmpty) map['note'] = note;
     if (dayOfMonth != null) map['day_of_month'] = dayOfMonth;
     if (dayOfWeek != null) map['day_of_week'] = dayOfWeek;
@@ -558,12 +637,12 @@ class RecurringTransactionItem {
 
   static RecurringTransactionItem fromMap(Map<String, dynamic> map) {
     return RecurringTransactionItem(
-      ledgerId: map['ledger_id'] as int,
+      ledgerName: map['ledger_name'] as String,
       type: map['type'] as String,
       amount: (map['amount'] as num).toDouble(),
-      categoryId: map['category_id'] as int?,
-      accountId: map['account_id'] as int?,
-      toAccountId: map['to_account_id'] as int?,
+      categoryName: map['category_name'] as String?,
+      accountName: map['account_name'] as String?,
+      toAccountName: map['to_account_name'] as String?,
       note: map['note'] as String?,
       frequency: map['frequency'] as String,
       interval: map['interval'] as int,
@@ -576,14 +655,20 @@ class RecurringTransactionItem {
     );
   }
 
-  factory RecurringTransactionItem.fromDb(RecurringTransaction rt) {
+  /// 从数据库实体创建，需要传入名称映射
+  factory RecurringTransactionItem.fromDb(
+    RecurringTransaction rt, {
+    required Map<int, String> ledgerIdToName,
+    required Map<int, String> categoryIdToName,
+    required Map<int, String> accountIdToName,
+  }) {
     return RecurringTransactionItem(
-      ledgerId: rt.ledgerId,
+      ledgerName: ledgerIdToName[rt.ledgerId] ?? 'Unknown',
       type: rt.type,
       amount: rt.amount,
-      categoryId: rt.categoryId,
-      accountId: rt.accountId,
-      toAccountId: rt.toAccountId,
+      categoryName: rt.categoryId != null ? categoryIdToName[rt.categoryId] : null,
+      accountName: rt.accountId != null ? accountIdToName[rt.accountId] : null,
+      toAccountName: rt.toAccountId != null ? accountIdToName[rt.toAccountId] : null,
       note: rt.note,
       frequency: rt.frequency,
       interval: rt.interval,
@@ -865,6 +950,7 @@ class BudgetItem {
 
 /// 配置内容检测结果
 class ConfigContentInfo {
+  final bool hasLedgers;
   final bool hasCategories;
   final bool hasAccounts;
   final bool hasTags;
@@ -873,6 +959,7 @@ class ConfigContentInfo {
   final bool hasAppSettings; // 包含云服务配置、AI配置、应用设置中的任意一项
 
   const ConfigContentInfo({
+    this.hasLedgers = false,
     this.hasCategories = false,
     this.hasAccounts = false,
     this.hasTags = false,
@@ -893,6 +980,7 @@ class ConfigExportService {
       }
 
       return ConfigContentInfo(
+        hasLedgers: doc.containsKey('ledgers'),
         hasCategories: doc.containsKey('categories'),
         hasAccounts: doc.containsKey('accounts'),
         hasTags: doc.containsKey('tags'),
@@ -1007,6 +1095,31 @@ class ConfigExportService {
       );
     }
 
+    // 预先获取所有账本、分类、账户的名称映射（用于关联数据导出）
+    Map<int, String> ledgerIdToName = {};
+    Map<int, String> categoryIdToName = {};
+    Map<int, String> accountIdToName = {};
+
+    if (repository != null) {
+      try {
+        final ledgers = await repository.getAllLedgers();
+        ledgerIdToName = {for (var l in ledgers) l.id: l.name};
+
+        final categories = await repository.getAllCategories();
+        categoryIdToName = {for (var c in categories) c.id: c.name};
+
+        final accounts = await repository.getAllAccounts();
+        accountIdToName = {for (var a in accounts) a.id: a.name};
+      } catch (e) {
+        logger.warning('ConfigExport', '获取名称映射失败: $e');
+      }
+    }
+
+    // 收集需要强制导出的关联数据ID
+    final Set<int> requiredLedgerIds = {};
+    final Set<int> requiredCategoryIds = {};
+    final Set<int> requiredAccountIds = {};
+
     // 读取应用设置
     AppSettingsConfig? appSettings;
     final accountFeatureEnabled = prefs.getBool('account_feature_enabled');
@@ -1028,10 +1141,26 @@ class ConfigExportService {
     final autoScreenshotEnabled = prefs.getBool('auto_screenshot_billing_enabled');
     final shortcutPreferCamera = prefs.getBool('shortcut_prefer_camera');
 
+    // 获取默认账户名称并收集需要强制导出的账户
+    String? defaultIncomeAccountName;
+    String? defaultExpenseAccountName;
+    if (defaultIncomeAccountId != null) {
+      defaultIncomeAccountName = accountIdToName[defaultIncomeAccountId];
+      if (defaultIncomeAccountName != null) {
+        requiredAccountIds.add(defaultIncomeAccountId);
+      }
+    }
+    if (defaultExpenseAccountId != null) {
+      defaultExpenseAccountName = accountIdToName[defaultExpenseAccountId];
+      if (defaultExpenseAccountName != null) {
+        requiredAccountIds.add(defaultExpenseAccountId);
+      }
+    }
+
     // 如果有任何应用设置，就创建配置对象
     if (accountFeatureEnabled != null ||
-        defaultIncomeAccountId != null ||
-        defaultExpenseAccountId != null ||
+        defaultIncomeAccountName != null ||
+        defaultExpenseAccountName != null ||
         reminderEnabled != null ||
         reminderHour != null ||
         reminderMinute != null ||
@@ -1049,8 +1178,8 @@ class ConfigExportService {
         shortcutPreferCamera != null) {
       appSettings = AppSettingsConfig(
         accountFeatureEnabled: accountFeatureEnabled,
-        defaultIncomeAccountId: defaultIncomeAccountId,
-        defaultExpenseAccountId: defaultExpenseAccountId,
+        defaultIncomeAccountName: defaultIncomeAccountName,
+        defaultExpenseAccountName: defaultExpenseAccountName,
         reminderEnabled: reminderEnabled,
         reminderHour: reminderHour,
         reminderMinute: reminderMinute,
@@ -1076,9 +1205,28 @@ class ConfigExportService {
         final recurringList = await repository.getAllRecurringTransactions();
 
         if (recurringList.isNotEmpty) {
+          // 收集周期账单关联的账本、分类、账户ID
+          for (final rt in recurringList) {
+            requiredLedgerIds.add(rt.ledgerId);
+            if (rt.categoryId != null) {
+              requiredCategoryIds.add(rt.categoryId!);
+            }
+            if (rt.accountId != null) {
+              requiredAccountIds.add(rt.accountId!);
+            }
+            if (rt.toAccountId != null) {
+              requiredAccountIds.add(rt.toAccountId!);
+            }
+          }
+
           recurringConfig = RecurringTransactionsConfig(
             items: recurringList
-                .map((rt) => RecurringTransactionItem.fromDb(rt))
+                .map((rt) => RecurringTransactionItem.fromDb(
+                      rt,
+                      ledgerIdToName: ledgerIdToName,
+                      categoryIdToName: categoryIdToName,
+                      accountIdToName: accountIdToName,
+                    ))
                 .toList(),
           );
         }
@@ -1087,27 +1235,61 @@ class ConfigExportService {
       }
     }
 
-    // 读取账户配置（导出全部账户）
+    // 读取账本配置（导出全部账本，或强制导出关联的账本）
+    LedgersConfig? ledgersConfig;
+    if (repository != null && (options.ledgers || requiredLedgerIds.isNotEmpty)) {
+      try {
+        final ledgersList = await repository.getAllLedgers();
+
+        if (ledgersList.isNotEmpty) {
+          // 如果用户选择了导出账本，则导出全部
+          // 如果用户没有选择但有关联数据需要账本，则只导出关联的账本
+          final itemsToExport = options.ledgers
+              ? ledgersList
+              : ledgersList.where((l) => requiredLedgerIds.contains(l.id)).toList();
+
+          if (itemsToExport.isNotEmpty) {
+            ledgersConfig = LedgersConfig(
+              items: itemsToExport
+                  .map((ledger) => LedgerItem.fromDb(ledger))
+                  .toList(),
+            );
+          }
+        }
+      } catch (e) {
+        logger.warning('ConfigExport', '读取账本配置失败: $e');
+      }
+    }
+
+    // 读取账户配置（导出全部账户，或强制导出关联的账户）
     AccountsConfig? accountsConfig;
-    if (options.accounts && repository != null) {
+    if (repository != null && (options.accounts || requiredAccountIds.isNotEmpty)) {
       try {
         final accountsList = await repository.getAllAccounts();
 
         if (accountsList.isNotEmpty) {
-          accountsConfig = AccountsConfig(
-            items: accountsList
-                .map((account) => AccountItem.fromDb(account))
-                .toList(),
-          );
+          // 如果用户选择了导出账户，则导出全部
+          // 如果用户没有选择但有关联数据需要账户，则只导出关联的账户
+          final itemsToExport = options.accounts
+              ? accountsList
+              : accountsList.where((a) => requiredAccountIds.contains(a.id)).toList();
+
+          if (itemsToExport.isNotEmpty) {
+            accountsConfig = AccountsConfig(
+              items: itemsToExport
+                  .map((account) => AccountItem.fromDb(account))
+                  .toList(),
+            );
+          }
         }
       } catch (e) {
         logger.warning('ConfigExport', '读取账户配置失败: $e');
       }
     }
 
-    // 读取分类配置（导出全部分类）
+    // 读取分类配置（导出全部分类，或强制导出关联的分类）
     CategoriesConfig? categoriesConfig;
-    if (options.categories && repository != null) {
+    if (repository != null && (options.categories || requiredCategoryIds.isNotEmpty)) {
       try {
         // 获取所有分类（收入和支出）
         final expenseCategories = await repository.getTopLevelCategories('expense');
@@ -1128,16 +1310,39 @@ class ConfigExportService {
             for (var cat in categoriesList) cat.id: cat
           };
 
-          categoriesConfig = CategoriesConfig(
-            items: categoriesList.map((category) {
-              // 查找父分类名称
-              String? parentName;
-              if (category.parentId != null && categoryMap.containsKey(category.parentId)) {
-                parentName = categoryMap[category.parentId]!.name;
+          // 如果用户选择了导出分类，则导出全部
+          // 如果用户没有选择但有关联数据需要分类，则只导出关联的分类及其父分类
+          List<Category> itemsToExport;
+          if (options.categories) {
+            itemsToExport = categoriesList;
+          } else {
+            // 收集需要导出的分类（包括父分类）
+            final idsToExport = <int>{};
+            for (final id in requiredCategoryIds) {
+              if (categoryMap.containsKey(id)) {
+                idsToExport.add(id);
+                // 如果是子分类，也要导出父分类
+                final parentId = categoryMap[id]!.parentId;
+                if (parentId != null) {
+                  idsToExport.add(parentId);
+                }
               }
-              return CategoryItem.fromDb(category, parentName);
-            }).toList(),
-          );
+            }
+            itemsToExport = categoriesList.where((c) => idsToExport.contains(c.id)).toList();
+          }
+
+          if (itemsToExport.isNotEmpty) {
+            categoriesConfig = CategoriesConfig(
+              items: itemsToExport.map((category) {
+                // 查找父分类名称
+                String? parentName;
+                if (category.parentId != null && categoryMap.containsKey(category.parentId)) {
+                  parentName = categoryMap[category.parentId]!.name;
+                }
+                return CategoryItem.fromDb(category, parentName);
+              }).toList(),
+            );
+          }
         }
       } catch (e) {
         logger.warning('ConfigExport', '读取分类配置失败: $e');
@@ -1204,6 +1409,7 @@ class ConfigExportService {
       s3: exportS3,
       ai: exportAi,
       appSettings: exportAppSettings,
+      ledgers: ledgersConfig,
       recurringTransactions: recurringConfig,
       accounts: accountsConfig,
       categories: categoriesConfig,
@@ -1299,17 +1505,17 @@ class ConfigExportService {
       final settings = yamlMap['app_settings'] as Map<String, dynamic>;
 
       if (settings.containsKey('account_feature_enabled') ||
-          settings.containsKey('default_income_account_id') ||
-          settings.containsKey('default_expense_account_id')) {
+          settings.containsKey('default_income_account_name') ||
+          settings.containsKey('default_expense_account_name')) {
         buffer.writeln('  # 账户管理');
         if (settings.containsKey('account_feature_enabled')) {
           buffer.writeln('  account_feature_enabled: ${settings['account_feature_enabled']}');
         }
-        if (settings.containsKey('default_income_account_id')) {
-          buffer.writeln('  default_income_account_id: ${settings['default_income_account_id']}');
+        if (settings.containsKey('default_income_account_name')) {
+          buffer.writeln('  default_income_account_name: "${settings['default_income_account_name']}"');
         }
-        if (settings.containsKey('default_expense_account_id')) {
-          buffer.writeln('  default_expense_account_id: ${settings['default_expense_account_id']}');
+        if (settings.containsKey('default_expense_account_name')) {
+          buffer.writeln('  default_expense_account_name: "${settings['default_expense_account_name']}"');
         }
       }
 
@@ -1389,6 +1595,30 @@ class ConfigExportService {
       }
     }
 
+    // 账本
+    if (yamlMap.containsKey('ledgers')) {
+      buffer.writeln('# 账本');
+      buffer.writeln('ledgers:');
+      final ledgers = yamlMap['ledgers'] as Map<String, dynamic>;
+      final items = ledgers['items'] as List;
+
+      if (items.isNotEmpty) {
+        buffer.writeln('  items:');
+        for (final item in items) {
+          final itemMap = item as Map<String, dynamic>;
+          buffer.writeln('    - name: "${itemMap['name']}"');
+          buffer.writeln('      currency: "${itemMap['currency']}"');
+          if (itemMap.containsKey('type') && itemMap['type'] != null) {
+            buffer.writeln('      type: "${itemMap['type']}"');
+          }
+          if (itemMap.containsKey('created_at') && itemMap['created_at'] != null) {
+            buffer.writeln('      created_at: "${itemMap['created_at']}"');
+          }
+        }
+      }
+      buffer.writeln();
+    }
+
     // 周期账单
     if (yamlMap.containsKey('recurring_transactions')) {
       buffer.writeln('# 周期账单');
@@ -1400,18 +1630,18 @@ class ConfigExportService {
         buffer.writeln('  items:');
         for (final item in items) {
           final itemMap = item as Map<String, dynamic>;
-          buffer.writeln('    - ledger_id: ${itemMap['ledger_id']}');
+          buffer.writeln('    - ledger_name: "${itemMap['ledger_name']}"');
           buffer.writeln('      type: "${itemMap['type']}"');
           buffer.writeln('      amount: ${itemMap['amount']}');
 
-          if (itemMap.containsKey('category_id')) {
-            buffer.writeln('      category_id: ${itemMap['category_id']}');
+          if (itemMap.containsKey('category_name') && itemMap['category_name'] != null) {
+            buffer.writeln('      category_name: "${itemMap['category_name']}"');
           }
-          if (itemMap.containsKey('account_id')) {
-            buffer.writeln('      account_id: ${itemMap['account_id']}');
+          if (itemMap.containsKey('account_name') && itemMap['account_name'] != null) {
+            buffer.writeln('      account_name: "${itemMap['account_name']}"');
           }
-          if (itemMap.containsKey('to_account_id')) {
-            buffer.writeln('      to_account_id: ${itemMap['to_account_id']}');
+          if (itemMap.containsKey('to_account_name') && itemMap['to_account_name'] != null) {
+            buffer.writeln('      to_account_name: "${itemMap['to_account_name']}"');
           }
           if (itemMap.containsKey('note') && itemMap['note'] != null) {
             buffer.writeln('      note: "${itemMap['note']}"');
@@ -1625,7 +1855,10 @@ class ConfigExportService {
       logger.info('ConfigImport', 'AI配置已导入');
     }
 
-    // 导入应用设置
+    // 导入应用设置（除了默认账户，稍后处理）
+    String? pendingDefaultIncomeAccountName;
+    String? pendingDefaultExpenseAccountName;
+
     if (options.appSettings && config.appSettings != null) {
       final settings = config.appSettings!;
 
@@ -1633,12 +1866,9 @@ class ConfigExportService {
       if (settings.accountFeatureEnabled != null) {
         await prefs.setBool('account_feature_enabled', settings.accountFeatureEnabled!);
       }
-      if (settings.defaultIncomeAccountId != null) {
-        await prefs.setInt('default_income_account_id', settings.defaultIncomeAccountId!);
-      }
-      if (settings.defaultExpenseAccountId != null) {
-        await prefs.setInt('default_expense_account_id', settings.defaultExpenseAccountId!);
-      }
+      // 默认账户通过名称查找ID（需要先导入账户再处理此配置）
+      pendingDefaultIncomeAccountName = settings.defaultIncomeAccountName;
+      pendingDefaultExpenseAccountName = settings.defaultExpenseAccountName;
 
       // 记账提醒
       if (settings.reminderEnabled != null) {
@@ -1697,70 +1927,41 @@ class ConfigExportService {
         await prefs.setBool('shortcut_prefer_camera', settings.shortcutPreferCamera!);
       }
 
-      logger.info('ConfigImport', '应用设置已导入');
+      logger.info('ConfigImport', '应用设置已导入（默认账户待处理）');
     }
 
-    // 导入周期账单
-    if (options.recurringTransactions && config.recurringTransactions != null && repository != null) {
+    // === 按依赖顺序导入数据 ===
+    // 1. 导入账本（周期账单、预算依赖账本）
+    if (options.ledgers && config.ledgers != null && repository != null) {
       try {
-        final items = config.recurringTransactions!.items;
+        final items = config.ledgers!.items;
 
-        // 准备批量插入的数据
-        final recurringToInsert = items.map((item) => RecurringTransactionsCompanion.insert(
-          ledgerId: item.ledgerId,
-          type: item.type,
-          amount: item.amount,
-          categoryId: d.Value(item.categoryId),
-          accountId: d.Value(item.accountId),
-          toAccountId: d.Value(item.toAccountId),
-          note: d.Value(item.note),
-          frequency: item.frequency,
-          interval: d.Value(item.interval),
-          dayOfMonth: d.Value(item.dayOfMonth),
-          dayOfWeek: d.Value(item.dayOfWeek),
-          monthOfYear: d.Value(item.monthOfYear),
-          startDate: DateTime.parse(item.startDate),
-          endDate: d.Value(
-              item.endDate != null ? DateTime.parse(item.endDate!) : null),
-          enabled: d.Value(item.enabled),
-        )).toList();
+        // 获取现有账本名称集合
+        final existingLedgers = await repository.getAllLedgers();
+        final existingNames = existingLedgers.map((l) => l.name.toLowerCase()).toSet();
 
-        // 使用 repository 方法进行批量插入
-        await repository.batchInsertRecurringTransactions(recurringToInsert);
+        // 过滤掉已存在的账本（按名称去重）
+        final newItems = items.where((item) =>
+          !existingNames.contains(item.name.toLowerCase())
+        ).toList();
 
-        logger.info('ConfigImport', '周期账单已批量导入: ${items.length}条');
+        if (newItems.isNotEmpty) {
+          for (final item in newItems) {
+            await repository.createLedger(
+              name: item.name,
+              currency: item.currency,
+            );
+          }
+          logger.info('ConfigImport', '账本已导入: ${newItems.length}条 (跳过已存在: ${items.length - newItems.length}条)');
+        } else {
+          logger.info('ConfigImport', '账本全部已存在，跳过导入');
+        }
       } catch (e) {
-        logger.error('ConfigImport', '导入周期账单失败: $e');
+        logger.error('ConfigImport', '导入账本失败: $e');
       }
     }
 
-    // 导入账户
-    if (options.accounts && config.accounts != null && repository != null) {
-      try {
-        final items = config.accounts!.items;
-
-        // 准备批量插入的数据
-        final accountsToInsert = items.map((item) => AccountsCompanion.insert(
-          ledgerId: 0, // 保留字段，但不再使用（v2迁移后会移除）
-          name: item.name,
-          type: d.Value(item.type),
-          currency: d.Value(item.currency),
-          initialBalance: d.Value(item.initialBalance),
-          createdAt: d.Value(
-              item.createdAt != null ? DateTime.parse(item.createdAt!) : null),
-          updatedAt: d.Value(DateTime.now()),
-        )).toList();
-
-        // 使用 repository 方法进行批量插入
-        await repository.batchInsertAccounts(accountsToInsert);
-
-        logger.info('ConfigImport', '账户已批量导入: ${items.length}条');
-      } catch (e) {
-        logger.error('ConfigImport', '导入账户失败: $e');
-      }
-    }
-
-    // 导入分类
+    // 2. 导入分类（周期账单、预算依赖分类）
     if (options.categories && config.categories != null && repository != null) {
       try {
         final items = config.categories!.items;
@@ -1816,27 +2017,164 @@ class ConfigExportService {
       }
     }
 
-    // 导入标签
+    // 3. 导入账户（周期账单、默认账户依赖账户）
+    if (options.accounts && config.accounts != null && repository != null) {
+      try {
+        final items = config.accounts!.items;
+
+        // 获取现有账户名称集合
+        final existingAccounts = await repository.getAllAccounts();
+        final existingNames = existingAccounts.map((a) => a.name.toLowerCase()).toSet();
+
+        // 过滤掉已存在的账户（按名称去重）
+        final newItems = items.where((item) =>
+          !existingNames.contains(item.name.toLowerCase())
+        ).toList();
+
+        if (newItems.isNotEmpty) {
+          // 准备批量插入的数据
+          final accountsToInsert = newItems.map((item) => AccountsCompanion.insert(
+            ledgerId: 0, // 保留字段，但不再使用（v2迁移后会移除）
+            name: item.name,
+            type: d.Value(item.type),
+            currency: d.Value(item.currency),
+            initialBalance: d.Value(item.initialBalance),
+            createdAt: d.Value(
+                item.createdAt != null ? DateTime.parse(item.createdAt!) : null),
+            updatedAt: d.Value(DateTime.now()),
+          )).toList();
+
+          // 使用 repository 方法进行批量插入
+          await repository.batchInsertAccounts(accountsToInsert);
+
+          logger.info('ConfigImport', '账户已导入: ${newItems.length}条 (跳过已存在: ${items.length - newItems.length}条)');
+        } else {
+          logger.info('ConfigImport', '账户全部已存在，跳过导入');
+        }
+      } catch (e) {
+        logger.error('ConfigImport', '导入账户失败: $e');
+      }
+    }
+
+    // 4. 导入标签
     if (options.tags && config.tags != null && repository != null) {
       try {
         final items = config.tags!.items;
 
-        // 准备批量插入的数据
-        final tagsToInsert = items.map((item) => TagsCompanion.insert(
-          name: item.name,
-          color: d.Value(item.color),
-        )).toList();
+        // 获取现有标签名称集合
+        final existingTags = await repository.getAllTags();
+        final existingNames = existingTags.map((t) => t.name.toLowerCase()).toSet();
 
-        // 使用 repository 方法进行批量插入
-        await repository.batchInsertTags(tagsToInsert);
+        // 过滤掉已存在的标签（按名称去重）
+        final newItems = items.where((item) =>
+          !existingNames.contains(item.name.toLowerCase())
+        ).toList();
 
-        logger.info('ConfigImport', '标签已批量导入: ${items.length}条');
+        if (newItems.isNotEmpty) {
+          // 准备批量插入的数据
+          final tagsToInsert = newItems.map((item) => TagsCompanion.insert(
+            name: item.name,
+            color: d.Value(item.color),
+          )).toList();
+
+          // 使用 repository 方法进行批量插入
+          await repository.batchInsertTags(tagsToInsert);
+
+          logger.info('ConfigImport', '标签已导入: ${newItems.length}条 (跳过已存在: ${items.length - newItems.length}条)');
+        } else {
+          logger.info('ConfigImport', '标签全部已存在，跳过导入');
+        }
       } catch (e) {
         logger.error('ConfigImport', '导入标签失败: $e');
       }
     }
 
-    // 导入预算
+    // 5. 导入周期账单（依赖账本、分类、账户）
+    if (options.recurringTransactions && config.recurringTransactions != null && repository != null) {
+      try {
+        final items = config.recurringTransactions!.items;
+
+        // 构建名称到ID的映射
+        final ledgers = await repository.getAllLedgers();
+        final ledgerNameToId = {for (var l in ledgers) l.name: l.id};
+
+        final categories = await repository.getAllCategories();
+        final categoryNameToId = {for (var c in categories) c.name: c.id};
+
+        final accounts = await repository.getAllAccounts();
+        final accountNameToId = {for (var a in accounts) a.name: a.id};
+
+        int importedCount = 0;
+        int skippedCount = 0;
+
+        for (final item in items) {
+          // 通过名称查找账本ID
+          final targetLedgerId = ledgerNameToId[item.ledgerName];
+          if (targetLedgerId == null) {
+            logger.warning('ConfigImport', '找不到账本: ${item.ledgerName}，跳过周期账单');
+            skippedCount++;
+            continue;
+          }
+
+          // 通过名称查找分类ID
+          int? categoryId;
+          if (item.categoryName != null) {
+            categoryId = categoryNameToId[item.categoryName];
+            if (categoryId == null) {
+              logger.warning('ConfigImport', '找不到分类: ${item.categoryName}，跳过周期账单');
+              skippedCount++;
+              continue;
+            }
+          }
+
+          // 通过名称查找账户ID
+          int? accountId;
+          if (item.accountName != null) {
+            accountId = accountNameToId[item.accountName];
+            if (accountId == null) {
+              logger.warning('ConfigImport', '找不到账户: ${item.accountName}，跳过周期账单');
+              skippedCount++;
+              continue;
+            }
+          }
+
+          // 通过名称查找转账目标账户ID
+          int? toAccountId;
+          if (item.toAccountName != null) {
+            toAccountId = accountNameToId[item.toAccountName];
+            if (toAccountId == null) {
+              logger.warning('ConfigImport', '找不到转账目标账户: ${item.toAccountName}，跳过周期账单');
+              skippedCount++;
+              continue;
+            }
+          }
+
+          await repository.addRecurringTransaction(
+            ledgerId: targetLedgerId,
+            type: item.type,
+            amount: item.amount,
+            categoryId: categoryId,
+            accountId: accountId,
+            toAccountId: toAccountId,
+            note: item.note,
+            frequency: item.frequency,
+            interval: item.interval,
+            dayOfMonth: item.dayOfMonth,
+            dayOfWeek: item.dayOfWeek,
+            monthOfYear: item.monthOfYear,
+            startDate: DateTime.parse(item.startDate),
+            endDate: item.endDate != null ? DateTime.parse(item.endDate!) : null,
+          );
+          importedCount++;
+        }
+
+        logger.info('ConfigImport', '周期账单已导入: $importedCount条${skippedCount > 0 ? '，跳过: $skippedCount条' : ''}');
+      } catch (e) {
+        logger.error('ConfigImport', '导入周期账单失败: $e');
+      }
+    }
+
+    // 6. 导入预算（依赖账本、分类）
     if (options.budgets && config.budgets != null && repository != null) {
       try {
         final items = config.budgets!.items;
@@ -1886,6 +2224,36 @@ class ConfigExportService {
         logger.info('ConfigImport', '预算已导入: $importedCount条${skippedCount > 0 ? '，跳过: $skippedCount条' : ''}');
       } catch (e) {
         logger.error('ConfigImport', '导入预算失败: $e');
+      }
+    }
+
+    // 7. 处理默认账户设置（所有数据导入完成后）
+    if (repository != null && (pendingDefaultIncomeAccountName != null || pendingDefaultExpenseAccountName != null)) {
+      try {
+        final accounts = await repository.getAllAccounts();
+        final accountNameToId = {for (var a in accounts) a.name: a.id};
+
+        if (pendingDefaultIncomeAccountName != null) {
+          final accountId = accountNameToId[pendingDefaultIncomeAccountName];
+          if (accountId != null) {
+            await prefs.setInt('default_income_account_id', accountId);
+            logger.info('ConfigImport', '默认收入账户已设置: $pendingDefaultIncomeAccountName');
+          } else {
+            logger.warning('ConfigImport', '找不到默认收入账户: $pendingDefaultIncomeAccountName');
+          }
+        }
+
+        if (pendingDefaultExpenseAccountName != null) {
+          final accountId = accountNameToId[pendingDefaultExpenseAccountName];
+          if (accountId != null) {
+            await prefs.setInt('default_expense_account_id', accountId);
+            logger.info('ConfigImport', '默认支出账户已设置: $pendingDefaultExpenseAccountName');
+          } else {
+            logger.warning('ConfigImport', '找不到默认支出账户: $pendingDefaultExpenseAccountName');
+          }
+        }
+      } catch (e) {
+        logger.error('ConfigImport', '处理默认账户设置失败: $e');
       }
     }
   }
