@@ -218,6 +218,102 @@ jobs:
             build/app/outputs/flutter-apk/beecount-*.apk
             build/app/outputs/bundle/prodRelease/beecount-*.aab
 
+      - name: Upload AAB to Google Play Console
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+          AAB_FILE="build/app/outputs/bundle/prodRelease/beecount-${VERSION}.aab"
+
+          if [ -z "${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON:-}" ]; then
+            echo "⚠️  GOOGLE_PLAY_SERVICE_ACCOUNT_JSON not set, skipping Google Play upload"
+            exit 0
+          fi
+
+          if [ ! -f "$AAB_FILE" ]; then
+            echo "❌ AAB file not found: $AAB_FILE"
+            exit 1
+          fi
+
+          echo "📤 Uploading $AAB_FILE to Google Play Console..."
+
+          # 保存服务账户 JSON 到临时文件
+          echo "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > /tmp/service-account.json
+
+          # 使用 Google Play Developer API 上传
+          # 安装 google-play CLI 工具
+          pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+          # 创建上传脚本
+          cat > /tmp/upload_to_play.py << 'UPLOAD_SCRIPT'
+          import sys
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+
+          # 配置
+          PACKAGE_NAME = 'com.tntlikely.beecount'
+          AAB_FILE = sys.argv[1]
+          TRACK = 'alpha'  # internal, alpha, beta, production
+
+          # 认证
+          credentials = service_account.Credentials.from_service_account_file(
+              '/tmp/service-account.json',
+              scopes=['https://www.googleapis.com/auth/androidpublisher']
+          )
+
+          # 创建 API 客户端
+          service = build('androidpublisher', 'v3', credentials=credentials)
+
+          try:
+              # 创建编辑
+              edit = service.edits().insert(body={}, packageName=PACKAGE_NAME).execute()
+              edit_id = edit['id']
+              print(f"✅ Created edit: {edit_id}")
+
+              # 上传 AAB
+              media = MediaFileUpload(AAB_FILE, mimetype='application/octet-stream', resumable=True)
+              bundle = service.edits().bundles().upload(
+                  packageName=PACKAGE_NAME,
+                  editId=edit_id,
+                  media_body=media
+              ).execute()
+              version_code = bundle['versionCode']
+              print(f"✅ Uploaded AAB, version code: {version_code}")
+
+              # 分配到轨道
+              track_body = {
+                  'releases': [{
+                      'versionCodes': [version_code],
+                      'status': 'completed'
+                  }]
+              }
+              service.edits().tracks().update(
+                  packageName=PACKAGE_NAME,
+                  editId=edit_id,
+                  track=TRACK,
+                  body=track_body
+              ).execute()
+              print(f"✅ Assigned to {TRACK} track")
+
+              # 提交编辑
+              service.edits().commit(packageName=PACKAGE_NAME, editId=edit_id).execute()
+              print("✅ Changes committed to Google Play Console!")
+
+          except Exception as e:
+              print(f"❌ Upload failed: {e}")
+              sys.exit(1)
+          UPLOAD_SCRIPT
+
+          python /tmp/upload_to_play.py "$AAB_FILE"
+
+          # 清理
+          rm -f /tmp/service-account.json /tmp/upload_to_play.py
+
+          echo "✅ Successfully uploaded to Google Play Console (alpha track)!"
+
   ios:
     name: iOS (app.zip + unsigned .ipa)
     runs-on: macos-latest
