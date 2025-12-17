@@ -1591,6 +1591,7 @@
       }
     }
   },
+  "configIncludeLedgers": "账本",
   "configIncludeSupabase": "Supabase 云服务配置",
   "configIncludeWebdav": "WebDAV 云服务配置",
   "configIncludeS3": "S3 云服务配置",

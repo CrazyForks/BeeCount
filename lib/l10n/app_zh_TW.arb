@@ -721,6 +721,7 @@
   "configIncludeOtherSettingsSubtitle": "包含雲端服務配置、AI配置、應用程式設定等",
   "configIncludeRecurringTransactions": "週期帳單",
   "configIncludeS3": "S3 雲端服務配置",
+  "configIncludeLedgers": "帳本",
   "configIncludeSupabase": "Supabase 雲端服務配置",
   "configIncludeTags": "標籤",
   "configIncludeWebdav": "WebDAV 雲端服務配置",

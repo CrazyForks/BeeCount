@@ -3988,6 +3988,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configExportReadFileFailed => '读取文件失败';
 
   @override
+  String get configIncludeLedgers => '账本';
+
+  @override
   String get configIncludeSupabase => 'Supabase 云服务配置';
 
   @override
@@ -9006,6 +9009,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get configExportReadFileFailed => '讀取檔案失敗';
+
+  @override
+  String get configIncludeLedgers => '帳本';
 
   @override
   String get configIncludeSupabase => 'Supabase 雲端服務配置';

@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
+import '../../providers/font_scale_provider.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/export/config_export_service.dart';
@@ -246,10 +248,15 @@ class _ConfigImportExportPageState
         options: options,
       );
 
+      // 导入后立即刷新相关的 Provider 状态
+      if (options.appSettings) {
+        await _refreshProvidersAfterImport();
+      }
+
       if (!mounted) return;
       showToast(context, AppLocalizations.of(context).configImportSuccess);
 
-      // 提示需要重启应用
+      // 提示需要重启应用（部分设置可能仍需重启）
       if (!mounted) return;
       await AppDialog.info(
         context,
@@ -267,6 +274,74 @@ class _ConfigImportExportPageState
       if (mounted) {
         setState(() => _isImporting = false);
       }
+    }
+  }
+
+  /// 导入后刷新相关的 Provider 状态
+  Future<void> _refreshProvidersAfterImport() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // 刷新主题色
+      final primaryColor = prefs.getInt('primaryColor');
+      if (primaryColor != null) {
+        ref.read(primaryColorProvider.notifier).state = Color(primaryColor);
+        logger.info('ConfigImport', '主题色已刷新: $primaryColor');
+      }
+
+      // 刷新主题模式
+      final themeMode = prefs.getString('themeMode');
+      if (themeMode != null) {
+        switch (themeMode) {
+          case 'light':
+            ref.read(themeModeProvider.notifier).state = ThemeMode.light;
+            break;
+          case 'dark':
+            ref.read(themeModeProvider.notifier).state = ThemeMode.dark;
+            break;
+          default:
+            ref.read(themeModeProvider.notifier).state = ThemeMode.system;
+        }
+        logger.info('ConfigImport', '主题模式已刷新: $themeMode');
+      }
+
+      // 刷新暗黑模式图案样式
+      final darkModePatternStyle = prefs.getString('darkModePatternStyle');
+      if (darkModePatternStyle != null) {
+        ref.read(darkModePatternStyleProvider.notifier).state = darkModePatternStyle;
+        logger.info('ConfigImport', '暗黑模式图案已刷新: $darkModePatternStyle');
+      }
+
+      // 刷新字体缩放
+      final fontScaleLevel = prefs.getInt('fontScaleLevel');
+      if (fontScaleLevel != null) {
+        ref.read(fontScaleLevelProvider.notifier).state = fontScaleLevel.clamp(-3, 4);
+        logger.info('ConfigImport', '字体缩放档位已刷新: $fontScaleLevel');
+      }
+
+      final customFontScale = prefs.getDouble('customFontScale');
+      if (customFontScale != null) {
+        ref.read(customFontScaleProvider.notifier).state = customFontScale.clamp(0.7, 1.5);
+        logger.info('ConfigImport', '自定义字体缩放已刷新: $customFontScale');
+      }
+
+      // 刷新金额显示格式
+      final compactAmount = prefs.getBool('compactAmount');
+      if (compactAmount != null) {
+        ref.read(compactAmountProvider.notifier).state = compactAmount;
+        logger.info('ConfigImport', '金额显示格式已刷新: $compactAmount');
+      }
+
+      // 刷新交易时间显示
+      final showTransactionTime = prefs.getBool('showTransactionTime');
+      if (showTransactionTime != null) {
+        ref.read(showTransactionTimeProvider.notifier).state = showTransactionTime;
+        logger.info('ConfigImport', '交易时间显示已刷新: $showTransactionTime');
+      }
+
+      logger.info('ConfigImport', 'Provider 状态刷新完成');
+    } catch (e) {
+      logger.error('ConfigImport', '刷新 Provider 状态失败: $e');
     }
   }
 
@@ -440,6 +515,13 @@ class _ConfigImportExportPageState
                           ),
                         ),
                         SizedBox(height: 12.0.scaled(context, ref)),
+                        _buildConfigItem(
+                          context,
+                          ref,
+                          Icons.book_outlined,
+                          l10n.configIncludeLedgers,
+                        ),
+                        SizedBox(height: 8.0.scaled(context, ref)),
                         _buildConfigItem(
                           context,
                           ref,
@@ -795,6 +877,7 @@ class _ExportOptionsDialog extends StatefulWidget {
 
 class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
   // 默认全选
+  bool _ledgers = true;
   bool _categories = true;
   bool _accounts = true;
   bool _tags = true;
@@ -851,6 +934,14 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
+                CheckboxListTile(
+                  value: _ledgers,
+                  onChanged: (v) => setState(() => _ledgers = v ?? true),
+                  title: Text(l10n.configIncludeLedgers),
+                  secondary: Icon(Icons.book_outlined, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
                 CheckboxListTile(
                   value: _categories,
                   onChanged: (v) => setState(() => _categories = v ?? true),
@@ -924,6 +1015,7 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
                 FilledButton(
                   onPressed: () {
                     final options = ExportOptions(
+                      ledgers: _ledgers,
                       categories: _categories,
                       accounts: _accounts,
                       tags: _tags,
@@ -1058,6 +1150,7 @@ class _ImportPreviewDialog extends StatefulWidget {
 
 class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
   // 默认全选（仅对文件中存在的项）
+  late bool _ledgers;
   late bool _categories;
   late bool _accounts;
   late bool _tags;
@@ -1068,6 +1161,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
   @override
   void initState() {
     super.initState();
+    _ledgers = widget.contentInfo.hasLedgers;
     _categories = widget.contentInfo.hasCategories;
     _accounts = widget.contentInfo.hasAccounts;
     _tags = widget.contentInfo.hasTags;
@@ -1193,6 +1287,16 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
                   ),
                   const SizedBox(height: 8),
                   // 选项列表
+                  if (info.hasLedgers)
+                    CheckboxListTile(
+                      value: _ledgers,
+                      onChanged: (v) => setState(() => _ledgers = v ?? true),
+                      title: Text(l10n.configIncludeLedgers),
+                      secondary: Icon(Icons.book_outlined, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
                   if (info.hasCategories)
                     CheckboxListTile(
                       value: _categories,
@@ -1285,6 +1389,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
                 FilledButton(
                   onPressed: () {
                     final options = ExportOptions(
+                      ledgers: _ledgers,
                       categories: _categories,
                       accounts: _accounts,
                       tags: _tags,

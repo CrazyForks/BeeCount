@@ -368,8 +368,7 @@ class MinePage extends ConsumerWidget {
                         title: AppLocalizations.of(context).about,
                         subtitle: AppLocalizations.of(context).aboutDesc,
                         trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context),
-                            size: 20),
+                            color: BeeTokens.iconTertiary(context), size: 20),
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -441,13 +440,14 @@ class MinePage extends ConsumerWidget {
                         builder: (context, ref, _) {
                           final starCountAsync =
                               ref.watch(githubStarCountProvider);
-                          final starCount = starCountAsync.valueOrNull ?? 800;
+                          final starCount = starCountAsync.valueOrNull ?? 999;
                           return AppListTile(
                             leading: Icons.star_outline,
                             title:
                                 AppLocalizations.of(context).mineSupportAuthor,
                             subtitle: AppLocalizations.of(context)
-                                .mineSupportAuthorSubtitle(starCount.toString()),
+                                .mineSupportAuthorSubtitle(
+                                    starCount.toString()),
                             onTap: () => _showGitHubStarGuide(context),
                           );
                         },
@@ -457,8 +457,8 @@ class MinePage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.auto_graph_rounded,
                         title: AppLocalizations.of(context).annualReportTitle,
-                        subtitle:
-                            AppLocalizations.of(context).annualReportEntrySubtitle,
+                        subtitle: AppLocalizations.of(context)
+                            .annualReportEntrySubtitle,
                         trailing: Icon(Icons.chevron_right,
                             color: BeeTokens.iconTertiary(context), size: 20),
                         onTap: () {

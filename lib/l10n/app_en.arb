@@ -1697,6 +1697,7 @@
       }
     }
   },
+  "configIncludeLedgers": "Ledgers",
   "configIncludeSupabase": "Supabase cloud service config",
   "configIncludeWebdav": "WebDAV cloud service config",
   "configIncludeS3": "S3 cloud service config",

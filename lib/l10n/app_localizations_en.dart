@@ -3988,6 +3988,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get configExportReadFileFailed => 'Failed to read file';
 
   @override
+  String get configIncludeLedgers => 'Ledgers';
+
+  @override
   String get configIncludeSupabase => 'Supabase cloud service config';
 
   @override

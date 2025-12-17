@@ -7614,6 +7614,12 @@ abstract class AppLocalizations {
   /// **'Failed to read file'**
   String get configExportReadFileFailed;
 
+  /// No description provided for @configIncludeLedgers.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledgers'**
+  String get configIncludeLedgers;
+
   /// No description provided for @configIncludeSupabase.
   ///
   /// In en, this message translates to:

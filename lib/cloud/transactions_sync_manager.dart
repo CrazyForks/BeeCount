@@ -622,10 +622,12 @@ class TransactionsSyncManager implements SyncService {
     }
   }
 
-  /// 下载远程账本（创建新的本地账本）
+  /// 下载远程账本（创建新的本地账本或复用同名账本）
   ///
-  /// 如果本地不存在远程账本的 ID，则复用远程 ID
-  /// 如果本地已存在该 ID，则创建新 ID
+  /// 优先级：
+  /// 1. 如果本地存在同名账本，复用该账本（不创建新账本）
+  /// 2. 如果本地不存在同名账本但不存在远程 ID，复用远程 ID
+  /// 3. 否则创建新 ID
   Future<int?> downloadRemoteLedger({
     required String name,
     required String currency,
@@ -641,35 +643,49 @@ class TransactionsSyncManager implements SyncService {
           remotePath.replaceAll('ledger_', '').replaceAll('.json', '');
       final remoteId = int.tryParse(remoteIdStr);
 
-      // 检查本地是否已存在该 ID
-      final existingLedger = remoteId != null
-          ? await (db.select(db.ledgers)..where((t) => t.id.equals(remoteId)))
-              .getSingleOrNull()
-          : null;
+      // 优先检查本地是否已存在同名账本
+      final existingByName = await (db.select(db.ledgers)
+            ..where((t) => t.name.equals(name)))
+          .getSingleOrNull();
 
       final int ledgerId;
-      final bool reuseRemoteId = remoteId != null && existingLedger == null;
+      final bool reuseExistingByName = existingByName != null;
+      bool reuseRemoteId = false;
 
-      if (reuseRemoteId) {
-        // 复用远程 ID
-        logger.info('CloudSync', '复用远程ID: $remoteId');
-        await db.into(db.ledgers).insert(
-              LedgersCompanion.insert(
-                id: drift.Value(remoteId),
-                name: name,
-                currency: drift.Value(currency),
-              ),
-            );
-        ledgerId = remoteId;
+      if (reuseExistingByName) {
+        // 复用同名账本的 ID（不创建新账本）
+        ledgerId = existingByName.id;
+        logger.info('CloudSync', '本地已存在同名账本，复用账本ID: $ledgerId (名称: $name)');
       } else {
-        // 创建新 ID（自动递增）
-        logger.info('CloudSync', '本地ID冲突或无效，创建新ID');
-        ledgerId = await db.into(db.ledgers).insert(
-              LedgersCompanion.insert(
-                name: name,
-                currency: drift.Value(currency),
-              ),
-            );
+        // 检查本地是否已存在该远程 ID
+        final existingById = remoteId != null
+            ? await (db.select(db.ledgers)..where((t) => t.id.equals(remoteId)))
+                .getSingleOrNull()
+            : null;
+
+        reuseRemoteId = remoteId != null && existingById == null;
+
+        if (reuseRemoteId) {
+          // 复用远程 ID
+          logger.info('CloudSync', '复用远程ID: $remoteId');
+          await db.into(db.ledgers).insert(
+                LedgersCompanion.insert(
+                  id: drift.Value(remoteId),
+                  name: name,
+                  currency: drift.Value(currency),
+                ),
+              );
+          ledgerId = remoteId;
+        } else {
+          // 创建新 ID（自动递增）
+          logger.info('CloudSync', '本地ID冲突或无效，创建新ID');
+          ledgerId = await db.into(db.ledgers).insert(
+                LedgersCompanion.insert(
+                  name: name,
+                  currency: drift.Value(currency),
+                ),
+              );
+        }
       }
 
       // 下载数据
@@ -677,8 +693,10 @@ class TransactionsSyncManager implements SyncService {
 
       if (jsonStr == null) {
         logger.warning('CloudSync', '云端账本不存在: $remotePath');
-        // 删除刚创建的空账本
-        await (db.delete(db.ledgers)..where((t) => t.id.equals(ledgerId))).go();
+        // 只有新创建的账本才需要删除
+        if (!reuseExistingByName) {
+          await (db.delete(db.ledgers)..where((t) => t.id.equals(ledgerId))).go();
+        }
         return null;
       }
 
@@ -688,26 +706,45 @@ class TransactionsSyncManager implements SyncService {
       logger.info('CloudSync',
           '下载完成: ledgerId=$ledgerId, inserted=${result.inserted}');
 
-      // 删除旧的远程文件（只有在 ID 改变时才需要删除旧文件并上传新文件）
-      if (reuseRemoteId) {
+      // 处理云端文件更新
+      if (reuseExistingByName) {
+        // 复用了同名账本，本地 ID 可能和云端不同
+        // 需要删除旧的云端文件，并上传新的（使用本地 ID）
+        if (remoteId != null && remoteId != ledgerId) {
+          try {
+            await _provider!.storage.delete(path: remotePath);
+            logger.info('CloudSync', '旧远程文件已删除: $remotePath (远程ID: $remoteId != 本地ID: $ledgerId)');
+          } catch (e) {
+            logger.warning('CloudSync', '删除旧远程文件失败（忽略）: $e');
+          }
+          // 上传本地账本到云端（使用本地 ID）
+          try {
+            await uploadCurrentLedger(ledgerId: ledgerId);
+            logger.info('CloudSync', '账本已上传到云端: ledger_$ledgerId.json');
+          } catch (e) {
+            logger.warning('CloudSync', '上传账本失败（忽略）: $e');
+          }
+        } else {
+          logger.info('CloudSync', '复用同名账本，ID相同无需更新云端文件');
+        }
+      } else if (reuseRemoteId) {
         // 复用了远程ID，无需删除和重新上传
         logger.info('CloudSync', '复用远程ID，无需更新云端文件');
       } else {
-        // ID 改变了，需要删除旧文件并上传新文件
+        // 创建了新 ID，需要删除旧文件并上传新文件
         try {
           await _provider!.storage.delete(path: remotePath);
           logger.info('CloudSync', '旧远程文件已删除: $remotePath');
         } catch (e) {
           logger.warning('CloudSync', '删除旧远程文件失败（忽略）: $e');
         }
-      }
-
-      // 上传新创建的本地账本到云端
-      try {
-        await uploadCurrentLedger(ledgerId: ledgerId);
-        logger.info('CloudSync', '新账本已上传到云端: ledger_$ledgerId.json');
-      } catch (e) {
-        logger.warning('CloudSync', '上传新账本失败（忽略）: $e');
+        // 上传新创建的本地账本到云端
+        try {
+          await uploadCurrentLedger(ledgerId: ledgerId);
+          logger.info('CloudSync', '新账本已上传到云端: ledger_$ledgerId.json');
+        } catch (e) {
+          logger.warning('CloudSync', '上传新账本失败（忽略）: $e');
+        }
       }
 
       return ledgerId;
