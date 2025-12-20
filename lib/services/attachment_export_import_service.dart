@@ -5,11 +5,13 @@ import 'package:archive/archive.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/db.dart';
 import '../providers.dart';
 import 'attachment_service.dart';
 import 'system/logger_service.dart';
+import 'ui/avatar_service.dart';
 
 /// 附件导出导入服务
 /// 负责附件的打包导出和解压导入
@@ -34,16 +36,42 @@ class AttachmentExportImportService {
 
       // 获取所有附件记录
       final allAttachments = await repo.getAllAttachments();
-      if (allAttachments.isEmpty) {
-        logger.info('AttachmentExportImport', '没有附件需要导出');
+
+      // 检查头像
+      final avatarPath = await AvatarService.getAvatarPath();
+      String? avatarFileName;
+      File? avatarFile;
+      if (avatarPath != null) {
+        avatarFile = File(avatarPath);
+        if (await avatarFile.exists()) {
+          avatarFileName = path.basename(avatarPath);
+        } else {
+          avatarFile = null;
+        }
+      }
+
+      // 如果没有附件也没有头像，则无需导出
+      if (allAttachments.isEmpty && avatarFile == null) {
+        logger.info('AttachmentExportImport', '没有附件和头像需要导出');
         return null;
       }
 
       // 创建归档
       final archive = Archive();
 
-      // 添加元数据文件
-      final metadata = _buildMetadata(allAttachments);
+      // 添加头像文件（如果存在）
+      if (avatarFile != null && avatarFileName != null) {
+        final bytes = await avatarFile.readAsBytes();
+        archive.addFile(ArchiveFile(
+          'avatar/$avatarFileName',
+          bytes.length,
+          bytes,
+        ));
+        logger.debug('AttachmentExportImport', '添加头像文件: $avatarFileName');
+      }
+
+      // 添加元数据文件（包含头像信息）
+      final metadata = _buildMetadata(allAttachments, avatarFileName: avatarFileName);
       final metadataBytes = utf8.encode(jsonEncode(metadata));
       archive.addFile(ArchiveFile(
         'metadata.json',
@@ -98,9 +126,9 @@ class AttachmentExportImportService {
   }
 
   /// 构建元数据
-  Map<String, dynamic> _buildMetadata(List<TransactionAttachment> attachments) {
-    return {
-      'version': 1,
+  Map<String, dynamic> _buildMetadata(List<TransactionAttachment> attachments, {String? avatarFileName}) {
+    final metadata = <String, dynamic>{
+      'version': 2, // 升级版本号以支持头像
       'exportedAt': DateTime.now().toIso8601String(),
       'count': attachments.length,
       'attachments': attachments.map((a) => {
@@ -115,6 +143,13 @@ class AttachmentExportImportService {
         'createdAt': a.createdAt.toIso8601String(),
       }).toList(),
     };
+
+    // 添加头像信息（如果存在）
+    if (avatarFileName != null) {
+      metadata['avatar'] = avatarFileName;
+    }
+
+    return metadata;
   }
 
   // ============================================
@@ -276,8 +311,59 @@ class AttachmentExportImportService {
         onProgress?.call(processed, total);
       }
 
+      // 处理头像导入（如果存在）
+      bool avatarImported = false;
+      final avatarFileName = metadata['avatar'] as String?;
+      if (avatarFileName != null) {
+        // 查找头像文件
+        ArchiveFile? avatarFile;
+        for (final file in archive) {
+          if (file.name == 'avatar/$avatarFileName') {
+            avatarFile = file;
+            break;
+          }
+        }
+
+        if (avatarFile != null) {
+          try {
+            // 获取应用文档目录
+            final appDir = await getApplicationDocumentsDirectory();
+            final avatarDir = Directory(path.join(appDir.path, 'avatars'));
+            if (!await avatarDir.exists()) {
+              await avatarDir.create(recursive: true);
+            }
+
+            // 检查是否需要覆盖
+            final localAvatarPath = path.join(avatarDir.path, avatarFileName);
+            final localAvatarFile = File(localAvatarPath);
+
+            if (await localAvatarFile.exists()) {
+              if (conflictStrategy == conflictOverwrite) {
+                await localAvatarFile.delete();
+              } else {
+                logger.debug('AttachmentExportImport', '跳过已存在的头像: $avatarFileName');
+              }
+            }
+
+            // 保存头像文件
+            if (!await localAvatarFile.exists()) {
+              await localAvatarFile.writeAsBytes(avatarFile.content as List<int>);
+
+              // 更新 SharedPreferences 中的头像路径
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('user_avatar_path', 'avatars/$avatarFileName');
+
+              avatarImported = true;
+              logger.info('AttachmentExportImport', '头像已导入: $avatarFileName');
+            }
+          } catch (e) {
+            logger.error('AttachmentExportImport', '导入头像失败: $avatarFileName', e);
+          }
+        }
+      }
+
       logger.info('AttachmentExportImport',
-          '附件导入完成: 导入 $imported, 跳过 $skipped, 覆盖 $overwritten, 失败 $failed');
+          '附件导入完成: 导入 $imported, 跳过 $skipped, 覆盖 $overwritten, 失败 $failed${avatarImported ? ', 头像已导入' : ''}');
 
       return AttachmentImportResult(
         success: true,
@@ -285,6 +371,7 @@ class AttachmentExportImportService {
         skipped: skipped,
         failed: failed,
         overwritten: overwritten,
+        avatarImported: avatarImported,
         message: null,
       );
     } catch (e, stackTrace) {
@@ -324,6 +411,7 @@ class AttachmentExportImportService {
             exportedAt: DateTime.tryParse(metadata['exportedAt'] as String? ?? ''),
             count: metadata['count'] as int? ?? 0,
             fileSize: await archiveFile.length(),
+            hasAvatar: metadata['avatar'] != null,
           );
         }
       }
@@ -363,6 +451,7 @@ class AttachmentImportResult {
   final int skipped;
   final int failed;
   final int overwritten;
+  final bool avatarImported;
   final String? message;
 
   AttachmentImportResult({
@@ -371,6 +460,7 @@ class AttachmentImportResult {
     required this.skipped,
     required this.failed,
     required this.overwritten,
+    this.avatarImported = false,
     this.message,
   });
 }
@@ -381,12 +471,14 @@ class AttachmentArchiveInfo {
   final DateTime? exportedAt;
   final int count;
   final int fileSize;
+  final bool hasAvatar;
 
   AttachmentArchiveInfo({
     required this.version,
     this.exportedAt,
     required this.count,
     required this.fileSize,
+    this.hasAvatar = false,
   });
 }
 

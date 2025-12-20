@@ -377,6 +377,7 @@ class AppSettingsConfig {
 
   // 云服务选择
   final String? cloudServiceType;
+  final bool? autoSync; // 自动同步
 
   // 自动记账功能
   final bool? autoScreenshotEnabled;
@@ -399,6 +400,7 @@ class AppSettingsConfig {
     this.compactAmount,
     this.showTransactionTime,
     this.cloudServiceType,
+    this.autoSync,
     this.autoScreenshotEnabled,
     this.shortcutPreferCamera,
   });
@@ -454,6 +456,9 @@ class AppSettingsConfig {
     if (cloudServiceType != null && cloudServiceType!.isNotEmpty) {
       map['cloud_service_type'] = cloudServiceType;
     }
+    if (autoSync != null) {
+      map['auto_sync'] = autoSync;
+    }
     if (autoScreenshotEnabled != null) {
       map['auto_screenshot_enabled'] = autoScreenshotEnabled;
     }
@@ -484,6 +489,7 @@ class AppSettingsConfig {
         compactAmount: map['compact_amount'] as bool?,
         showTransactionTime: map['show_transaction_time'] as bool?,
         cloudServiceType: map['cloud_service_type'] as String?,
+        autoSync: map['auto_sync'] as bool?,
         autoScreenshotEnabled: map['auto_screenshot_enabled'] as bool?,
         shortcutPreferCamera: map['shortcut_prefer_camera'] as bool?,
       );
@@ -1137,7 +1143,8 @@ class ConfigExportService {
     final darkModePatternStyle = prefs.getString('darkModePatternStyle');
     final compactAmount = prefs.getBool('compactAmount');
     final showTransactionTime = prefs.getBool('showTransactionTime');
-    final cloudServiceType = prefs.getString('selected_cloud_service');
+    final cloudServiceType = prefs.getString('cloud_active_type');
+    final autoSync = prefs.getBool('auto_sync');
     final autoScreenshotEnabled = prefs.getBool('auto_screenshot_billing_enabled');
     final shortcutPreferCamera = prefs.getBool('shortcut_prefer_camera');
 
@@ -1174,6 +1181,7 @@ class ConfigExportService {
         compactAmount != null ||
         showTransactionTime != null ||
         cloudServiceType != null ||
+        autoSync != null ||
         autoScreenshotEnabled != null ||
         shortcutPreferCamera != null) {
       appSettings = AppSettingsConfig(
@@ -1193,6 +1201,7 @@ class ConfigExportService {
         compactAmount: compactAmount,
         showTransactionTime: showTransactionTime,
         cloudServiceType: cloudServiceType,
+        autoSync: autoSync,
         autoScreenshotEnabled: autoScreenshotEnabled,
         shortcutPreferCamera: shortcutPreferCamera,
       );
@@ -1578,9 +1587,15 @@ class ConfigExportService {
         }
       }
 
-      if (settings.containsKey('cloud_service_type')) {
+      if (settings.containsKey('cloud_service_type') ||
+          settings.containsKey('auto_sync')) {
         buffer.writeln('  # 云服务');
-        buffer.writeln('  cloud_service_type: "${settings['cloud_service_type']}"');
+        if (settings.containsKey('cloud_service_type')) {
+          buffer.writeln('  cloud_service_type: "${settings['cloud_service_type']}"');
+        }
+        if (settings.containsKey('auto_sync')) {
+          buffer.writeln('  auto_sync: ${settings['auto_sync']}');
+        }
       }
 
       if (settings.containsKey('auto_screenshot_enabled') ||
@@ -1916,7 +1931,10 @@ class ConfigExportService {
 
       // 云服务
       if (settings.cloudServiceType != null) {
-        await prefs.setString('selected_cloud_service', settings.cloudServiceType!);
+        await prefs.setString('cloud_active_type', settings.cloudServiceType!);
+      }
+      if (settings.autoSync != null) {
+        await prefs.setBool('auto_sync', settings.autoSync!);
       }
 
       // 自动记账
@@ -2164,6 +2182,7 @@ class ConfigExportService {
             monthOfYear: item.monthOfYear,
             startDate: DateTime.parse(item.startDate),
             endDate: item.endDate != null ? DateTime.parse(item.endDate!) : null,
+            enabled: item.enabled,
           );
           importedCount++;
         }

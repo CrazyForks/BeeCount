@@ -19,6 +19,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tabMine => '我的';
 
   @override
+  String get tabAdd => '记账';
+
+  @override
   String get commonCancel => '取消';
 
   @override
@@ -998,25 +1001,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterSlogan => '一笔一蜜，记录美好生活';
 
   @override
-  String get sharePosterFeature1 => '🔒 数据安全·你做主';
+  String get sharePosterFeature1 => '数据安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '✨ 完全开源·可审计';
+  String get sharePosterFeature2 => '完全开源·可审计';
 
   @override
-  String get sharePosterFeature3 => '🤖 AI智能记账·图片语音';
+  String get sharePosterFeature3 => 'AI智能记账·图片语音';
 
   @override
-  String get sharePosterFeature4 => '📸 拍照记账·自动识别';
+  String get sharePosterFeature4 => '拍照记账·自动识别';
 
   @override
-  String get sharePosterFeature5 => '📊 多账本·暗黑模式';
+  String get sharePosterFeature5 => '多账本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '☁️ 自建云同步·永久免费';
+  String get sharePosterFeature6 => '自建云同步·永久免费';
 
   @override
   String get sharePosterScanText => '扫码访问开源项目';
+
+  @override
+  String get appPromoTagOpenSource => '开源';
+
+  @override
+  String get appPromoTagFree => '免费';
+
+  @override
+  String get appPromoFooterText => '让每一笔都有迹可循';
+
+  @override
+  String userProfileJourneyYears(int years) {
+    return '记账达人 $years 年';
+  }
+
+  @override
+  String get userProfileJourneyOneYear => '记账满一年';
+
+  @override
+  String get userProfileJourneyHalfYear => '坚持记账半年';
+
+  @override
+  String get userProfileJourneyThreeMonths => '记账三个月';
+
+  @override
+  String get userProfileJourneyOneMonth => '记账满一个月';
+
+  @override
+  String get userProfileJourneyOneWeek => '记账一周';
+
+  @override
+  String get userProfileJourneyStart => '开始记账之旅';
+
+  @override
+  String get userProfileDailyAverage => '日均记账';
 
   @override
   String get sharePosterSave => '保存到相册';
@@ -1131,6 +1169,29 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterUnitYuan => '元';
+
+  @override
+  String userProfilePosterStartDate(String date) {
+    return '记账始于 $date';
+  }
+
+  @override
+  String get userProfilePosterRecordDays => '记账天数';
+
+  @override
+  String get userProfilePosterDaysUnit => '天';
+
+  @override
+  String get userProfilePosterRecordCount => '记账笔数';
+
+  @override
+  String get userProfilePosterCountUnit => '笔';
+
+  @override
+  String get userProfilePosterLedgerCount => '账本数量';
+
+  @override
+  String get userProfilePosterLedgerUnit => '本';
 
   @override
   String get mineDaysCount => '记账天数';
@@ -3584,6 +3645,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get iosAutoBackTapDesc => '设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图';
 
   @override
+  String get iosAutoTutorialTitle => '视频教程';
+
+  @override
+  String get iosAutoTutorialDesc => '查看详细配置视频教程';
+
+  @override
   String get aiSettingsTitle => 'AI小助手';
 
   @override
@@ -3849,9 +3916,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aboutGitHubRepo => 'GitHub 仓库';
-
-  @override
-  String get aboutContactEmail => '联系邮箱';
 
   @override
   String get aboutWeChatGroup => '微信群';
@@ -4247,6 +4311,51 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeNoneFeature3 => '适合有特殊分类需求的用户';
+
+  @override
+  String get welcomeExistingUserTitle => '老用户？';
+
+  @override
+  String get welcomeExistingUserButton => '导入配置';
+
+  @override
+  String get welcomeImportingConfig => '正在导入配置...';
+
+  @override
+  String get welcomeImportSuccess => '配置导入成功';
+
+  @override
+  String welcomeImportFailed(String error) {
+    return '配置导入失败: $error';
+  }
+
+  @override
+  String get welcomeImportNoFile => '未选择文件';
+
+  @override
+  String get welcomeImportAttachmentTitle => '导入附件';
+
+  @override
+  String get welcomeImportAttachmentDesc => '检测到您导入了配置文件，是否需要导入附件文件？';
+
+  @override
+  String get welcomeImportAttachmentButton => '选择附件文件';
+
+  @override
+  String get welcomeImportAttachmentSkip => '跳过';
+
+  @override
+  String welcomeImportAttachmentSuccess(int imported) {
+    return '附件导入完成：导入 $imported 个';
+  }
+
+  @override
+  String welcomeImportAttachmentFailed(String error) {
+    return '附件导入失败: $error';
+  }
+
+  @override
+  String get welcomeImportingAttachment => '正在导入附件...';
 
   @override
   String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
@@ -4823,7 +4932,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverConfigManagement => '配置管理';
 
   @override
-  String get discoverAttachmentExport => '附件导出';
+  String get discoverAutoBilling => '自动记账';
 
   @override
   String get homeSwitchLedger => '选择账本';
@@ -5123,6 +5232,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tabMine => '我的';
 
   @override
+  String get tabAdd => '記帳';
+
+  @override
   String get commonCancel => '取消';
 
   @override
@@ -5139,6 +5251,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonEdit => '編輯';
+
+  @override
+  String get commonMore => '更多';
 
   @override
   String get commonOk => '確定';
@@ -6099,25 +6214,60 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterSlogan => '一筆一蜜，記錄美好生活';
 
   @override
-  String get sharePosterFeature1 => '🔒 資料安全·你做主';
+  String get sharePosterFeature1 => '資料安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '✨ 完全開源·可審計';
+  String get sharePosterFeature2 => '完全開源·可審計';
 
   @override
-  String get sharePosterFeature3 => '🤖 AI智能記帳·圖片語音';
+  String get sharePosterFeature3 => 'AI智能記帳·圖片語音';
 
   @override
-  String get sharePosterFeature4 => '📸 拍照記帳·自動識別';
+  String get sharePosterFeature4 => '拍照記帳·自動識別';
 
   @override
-  String get sharePosterFeature5 => '📊 多帳本·暗黑模式';
+  String get sharePosterFeature5 => '多帳本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '☁️ 自建雲同步·永久免費';
+  String get sharePosterFeature6 => '自建雲同步·永久免費';
 
   @override
   String get sharePosterScanText => '掃碼訪問開源專案';
+
+  @override
+  String get appPromoTagOpenSource => '開源';
+
+  @override
+  String get appPromoTagFree => '免費';
+
+  @override
+  String get appPromoFooterText => '讓每一筆都有跡可循';
+
+  @override
+  String userProfileJourneyYears(int years) {
+    return '記帳達人 $years 年';
+  }
+
+  @override
+  String get userProfileJourneyOneYear => '記帳滿一年';
+
+  @override
+  String get userProfileJourneyHalfYear => '堅持記帳半年';
+
+  @override
+  String get userProfileJourneyThreeMonths => '記帳三個月';
+
+  @override
+  String get userProfileJourneyOneMonth => '記帳滿一個月';
+
+  @override
+  String get userProfileJourneyOneWeek => '記帳一週';
+
+  @override
+  String get userProfileJourneyStart => '開始記帳之旅';
+
+  @override
+  String get userProfileDailyAverage => '日均記帳';
 
   @override
   String get sharePosterSave => '儲存到相簿';
@@ -6232,6 +6382,29 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterUnitYuan => '元';
+
+  @override
+  String userProfilePosterStartDate(String date) {
+    return '記帳始於 $date';
+  }
+
+  @override
+  String get userProfilePosterRecordDays => '記帳天數';
+
+  @override
+  String get userProfilePosterDaysUnit => '天';
+
+  @override
+  String get userProfilePosterRecordCount => '記帳筆數';
+
+  @override
+  String get userProfilePosterCountUnit => '筆';
+
+  @override
+  String get userProfilePosterLedgerCount => '帳本數量';
+
+  @override
+  String get userProfilePosterLedgerUnit => '本';
 
   @override
   String get mineDaysCount => '記帳天數';
@@ -6584,6 +6757,84 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String categoryCannotDeleteMessage(Object count) {
     return '該分類下還有 $count 筆交易記錄，請先處理這些記錄。';
   }
+
+  @override
+  String get categoryShare => '分享分類';
+
+  @override
+  String get categoryImport => '匯入分類';
+
+  @override
+  String get categoryClearUnused => '清空未使用分類';
+
+  @override
+  String get categoryClearUnusedTitle => '清空未使用分類';
+
+  @override
+  String categoryClearUnusedMessage(Object count) {
+    return '確定要刪除 $count 個未使用的分類嗎？此操作無法撤銷。';
+  }
+
+  @override
+  String get categoryClearUnusedEmpty => '沒有未使用的分類';
+
+  @override
+  String categoryClearUnusedSuccess(Object count) {
+    return '已刪除 $count 個分類';
+  }
+
+  @override
+  String get categoryClearUnusedFailed => '清空失敗';
+
+  @override
+  String get categoryShareScopeTitle => '選擇分享範圍';
+
+  @override
+  String get categoryShareScopeExpense => '僅支出分類';
+
+  @override
+  String get categoryShareScopeIncome => '僅收入分類';
+
+  @override
+  String get categoryShareScopeAll => '全部分類';
+
+  @override
+  String categoryShareSuccess(Object path) {
+    return '已儲存到 $path';
+  }
+
+  @override
+  String get categoryShareSubject => 'BeeCount 分類配置';
+
+  @override
+  String get categoryShareFailed => '分享失敗';
+
+  @override
+  String get categoryImportInvalidFile => '請選擇 YAML 配置檔案';
+
+  @override
+  String get categoryImportNoCategories => '檔案中沒有分類資料';
+
+  @override
+  String get categoryImportModeTitle => '選擇匯入模式';
+
+  @override
+  String get categoryImportModeMerge => '合併';
+
+  @override
+  String get categoryImportModeMergeDesc => '保留現有分類，新增不存在的';
+
+  @override
+  String get categoryImportModeOverwrite => '覆蓋';
+
+  @override
+  String get categoryImportModeOverwriteDesc => '清空未使用分類後匯入';
+
+  @override
+  String get categoryImportSuccess => '匯入成功';
+
+  @override
+  String get categoryImportFailed => '匯入失敗';
 
   @override
   String get categoryDeleteConfirmTitle => '刪除分類';
@@ -8607,6 +8858,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get iosAutoBackTapDesc => '設定 > 輔助使用 > 觸控 > 背面輕點\n• 選擇「點兩下」或「點三下」\n• 選擇剛建立的捷徑\n• 完成後，支付時雙擊手機背面即可自動記帳，無需截圖';
 
   @override
+  String get iosAutoTutorialTitle => '影片教學';
+
+  @override
+  String get iosAutoTutorialDesc => '查看詳細設定影片教學';
+
+  @override
   String get aiSettingsTitle => 'AI 小助手';
 
   @override
@@ -8872,9 +9129,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aboutGitHubRepo => 'GitHub 儲存庫';
-
-  @override
-  String get aboutContactEmail => '聯絡電子郵件';
 
   @override
   String get aboutWeChatGroup => '微信群';
@@ -9270,6 +9524,51 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeCategoryModeNoneFeature3 => '適合有特殊分類需求的使用者';
+
+  @override
+  String get welcomeExistingUserTitle => '老用戶？';
+
+  @override
+  String get welcomeExistingUserButton => '匯入配置';
+
+  @override
+  String get welcomeImportingConfig => '正在匯入配置...';
+
+  @override
+  String get welcomeImportSuccess => '配置匯入成功';
+
+  @override
+  String welcomeImportFailed(String error) {
+    return '配置匯入失敗: $error';
+  }
+
+  @override
+  String get welcomeImportNoFile => '未選擇檔案';
+
+  @override
+  String get welcomeImportAttachmentTitle => '匯入附件';
+
+  @override
+  String get welcomeImportAttachmentDesc => '檢測到您匯入了配置檔案，是否需要匯入附件檔案？';
+
+  @override
+  String get welcomeImportAttachmentButton => '選擇附件檔案';
+
+  @override
+  String get welcomeImportAttachmentSkip => '跳過';
+
+  @override
+  String welcomeImportAttachmentSuccess(int imported) {
+    return '附件匯入完成：匯入 $imported 個';
+  }
+
+  @override
+  String welcomeImportAttachmentFailed(String error) {
+    return '附件匯入失敗: $error';
+  }
+
+  @override
+  String get welcomeImportingAttachment => '正在匯入附件...';
 
   @override
   String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
@@ -9846,7 +10145,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get discoverConfigManagement => '配置管理';
 
   @override
-  String get discoverAttachmentExport => '附件導出';
+  String get discoverAutoBilling => '自動記賬';
 
   @override
   String get homeSwitchLedger => '選擇帳本';

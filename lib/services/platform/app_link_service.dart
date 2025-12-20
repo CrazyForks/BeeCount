@@ -6,10 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/base_repository.dart';
 import '../../providers/database_providers.dart';
-import '../../providers/sync_providers.dart';
-import '../../providers/statistics_providers.dart';
-import '../../providers/tag_providers.dart';
 import '../automation/auto_billing_service.dart';
+import '../billing/post_processor.dart';
 import '../system/logger_service.dart';
 
 /// AppLink 动作类型
@@ -359,8 +357,9 @@ class AppLinkService {
 
       logger.info('AppLink', '自动记账成功: id=$transactionId, amount=${txParams.amount}');
 
-      // 触发 UI 刷新
-      _triggerRefresh();
+      // 统一后处理：刷新UI + 触发云同步
+      final hasTags = txParams.tags != null && txParams.tags!.isNotEmpty;
+      await PostProcessor.runC(_container, ledgerId: ledgerId, tags: hasTags);
 
       if (!txParams.silent) {
         final typeText = txParams.type == 'income' ? '收入' : (txParams.type == 'transfer' ? '转账' : '支出');
@@ -441,14 +440,6 @@ class AppLinkService {
       name: name,
     );
     return newAccountId;
-  }
-
-  /// 触发 UI 刷新（账本列表、统计、标签等）
-  void _triggerRefresh() {
-    logger.info('AppLink', '触发 UI 刷新');
-    _container.read(ledgerListRefreshProvider.notifier).state++;
-    _container.read(statsRefreshProvider.notifier).state++;
-    _container.read(tagListRefreshProvider.notifier).state++;
   }
 
   /// 释放资源

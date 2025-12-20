@@ -4,6 +4,7 @@
   "tabHome": "明细",
   "tabAnalytics": "图表",
   "tabMine": "我的",
+  "tabAdd": "记账",
   "commonCancel": "取消",
   "commonConfirm": "确定",
   "commonSave": "保存",
@@ -420,13 +421,31 @@
   "mineShareGenerating": "正在生成分享海报...",
   "sharePosterAppName": "蜜蜂记账",
   "sharePosterSlogan": "一笔一蜜，记录美好生活",
-  "sharePosterFeature1": "🔒 数据安全·你做主",
-  "sharePosterFeature2": "✨ 完全开源·可审计",
-  "sharePosterFeature3": "🤖 AI智能记账·图片语音",
-  "sharePosterFeature4": "📸 拍照记账·自动识别",
-  "sharePosterFeature5": "📊 多账本·暗黑模式",
-  "sharePosterFeature6": "☁️ 自建云同步·永久免费",
+  "sharePosterFeature1": "数据安全·你做主",
+  "sharePosterFeature2": "完全开源·可审计",
+  "sharePosterFeature3": "AI智能记账·图片语音",
+  "sharePosterFeature4": "拍照记账·自动识别",
+  "sharePosterFeature5": "多账本·暗黑模式",
+  "sharePosterFeature6": "自建云同步·永久免费",
   "sharePosterScanText": "扫码访问开源项目",
+  "appPromoTagOpenSource": "开源",
+  "appPromoTagFree": "免费",
+  "appPromoFooterText": "让每一笔都有迹可循",
+  "userProfileJourneyYears": "记账达人 {years} 年",
+  "@userProfileJourneyYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "userProfileJourneyOneYear": "记账满一年",
+  "userProfileJourneyHalfYear": "坚持记账半年",
+  "userProfileJourneyThreeMonths": "记账三个月",
+  "userProfileJourneyOneMonth": "记账满一个月",
+  "userProfileJourneyOneWeek": "记账一周",
+  "userProfileJourneyStart": "开始记账之旅",
+  "userProfileDailyAverage": "日均记账",
   "sharePosterSave": "保存到相册",
   "sharePosterShare": "分享",
   "sharePosterHideIncome": "隐藏收入",
@@ -465,6 +484,20 @@
   "sharePosterUnitDay": "天",
   "sharePosterUnitCount": "笔",
   "sharePosterUnitYuan": "元",
+  "userProfilePosterStartDate": "记账始于 {date}",
+  "@userProfilePosterStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "userProfilePosterRecordDays": "记账天数",
+  "userProfilePosterDaysUnit": "天",
+  "userProfilePosterRecordCount": "记账笔数",
+  "userProfilePosterCountUnit": "笔",
+  "userProfilePosterLedgerCount": "账本数量",
+  "userProfilePosterLedgerUnit": "本",
   "mineDaysCount": "记账天数",
   "mineTotalRecords": "总笔数",
   "mineCurrentBalance": "当前余额",
@@ -1428,6 +1461,8 @@
   "iosAutoShortcutRecommendedTip": "✅ 推荐：在\"轻点背面\"中绑定快捷指令后，支付时双击手机背部即可自动截图并识别记账，无需手动截图。",
   "iosAutoBackTapTitle": "💡 双击背部快速触发（推荐）",
   "iosAutoBackTapDesc": "设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图",
+  "iosAutoTutorialTitle": "视频教程",
+  "iosAutoTutorialDesc": "查看详细配置视频教程",
   "aiSettingsTitle": "AI小助手",
   "aiSettingsSubtitle": "配置AI模型和识别策略",
   "aiEnableTitle": "启用AI小助手",
@@ -1539,7 +1574,6 @@
   "aboutPageLoadingVersion": "加载版本号中...",
   "aboutWebsite": "官方网站",
   "aboutGitHubRepo": "GitHub 仓库",
-  "aboutContactEmail": "联系邮箱",
   "aboutWeChatGroup": "微信群",
   "aboutWeChatGroupDesc": "点击查看二维码",
   "aboutXiaohongshu": "小红书",
@@ -1801,6 +1835,40 @@
   "welcomeCategoryModeNoneFeature1": "不预置任何分类",
   "welcomeCategoryModeNoneFeature2": "完全按自己需求创建",
   "welcomeCategoryModeNoneFeature3": "适合有特殊分类需求的用户",
+  "welcomeExistingUserTitle": "老用户？",
+  "welcomeExistingUserButton": "导入配置",
+  "welcomeImportingConfig": "正在导入配置...",
+  "welcomeImportSuccess": "配置导入成功",
+  "welcomeImportFailed": "配置导入失败: {error}",
+  "@welcomeImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportNoFile": "未选择文件",
+  "welcomeImportAttachmentTitle": "导入附件",
+  "welcomeImportAttachmentDesc": "检测到您导入了配置文件，是否需要导入附件文件？",
+  "welcomeImportAttachmentButton": "选择附件文件",
+  "welcomeImportAttachmentSkip": "跳过",
+  "welcomeImportAttachmentSuccess": "附件导入完成：导入 {imported} 个",
+  "@welcomeImportAttachmentSuccess": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      }
+    }
+  },
+  "welcomeImportAttachmentFailed": "附件导入失败: {error}",
+  "@welcomeImportAttachmentFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportingAttachment": "正在导入附件...",
   "iosVersionWarningTitle": "需要 iOS 16.0 或更高版本",
   "iosVersionWarningDesc": "截图自动记账功能使用了 iOS 16 引入的 App Intents 框架。您的设备系统版本较低，暂不支持此功能。\n\n请升级到 iOS 16 或更高版本以使用此功能。",
   "aiChatTitle": "AI助手",
@@ -2043,7 +2111,7 @@
   "discoverExport": "导出",
   "discoverHelp": "使用帮助",
   "discoverConfigManagement": "配置管理",
-  "discoverAttachmentExport": "附件导出",
+  "discoverAutoBilling": "自动记账",
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
   "budgetTitle": "预算管理",

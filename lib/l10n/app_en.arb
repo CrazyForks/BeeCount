@@ -7,6 +7,7 @@
   "tabHome": "Home",
   "tabAnalytics": "Charts",
   "tabMine": "Mine",
+  "tabAdd": "Add",
   "commonCancel": "Cancel",
   "commonConfirm": "Confirm",
   "commonSave": "Save",
@@ -475,13 +476,31 @@
   "mineShareGenerating": "Generating share poster...",
   "sharePosterAppName": "BeeCount",
   "sharePosterSlogan": "Smart Accounting, Beautiful Life",
-  "sharePosterFeature1": "🔒 Data Security·You Control",
-  "sharePosterFeature2": "✨ Open Source·Auditable",
-  "sharePosterFeature3": "🤖 AI Smart·Photo & Voice",
-  "sharePosterFeature4": "📸 Photo Accounting·Auto Recognition",
-  "sharePosterFeature5": "📊 Multi Ledger·Dark Mode",
-  "sharePosterFeature6": "☁️ Self-Hosted Cloud·Free Forever",
+  "sharePosterFeature1": "Data Security·You Control",
+  "sharePosterFeature2": "Open Source·Auditable",
+  "sharePosterFeature3": "AI Smart·Photo & Voice",
+  "sharePosterFeature4": "Photo Accounting·Auto Recognition",
+  "sharePosterFeature5": "Multi Ledger·Dark Mode",
+  "sharePosterFeature6": "Self-Hosted Cloud·Free Forever",
   "sharePosterScanText": "Scan to visit open source project",
+  "appPromoTagOpenSource": "Open Source",
+  "appPromoTagFree": "Free",
+  "appPromoFooterText": "Track every penny, trace every moment",
+  "userProfileJourneyYears": "Bookkeeping Pro {years} Years",
+  "@userProfileJourneyYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "userProfileJourneyOneYear": "One Year of Bookkeeping",
+  "userProfileJourneyHalfYear": "Six Months Strong",
+  "userProfileJourneyThreeMonths": "Three Months In",
+  "userProfileJourneyOneMonth": "One Month Milestone",
+  "userProfileJourneyOneWeek": "First Week Done",
+  "userProfileJourneyStart": "Starting the Journey",
+  "userProfileDailyAverage": "Daily Average",
   "sharePosterSave": "Save to Gallery",
   "sharePosterShare": "Share",
   "sharePosterHideIncome": "Hide Income",
@@ -520,6 +539,20 @@
   "sharePosterUnitDay": "days",
   "sharePosterUnitCount": "",
   "sharePosterUnitYuan": "",
+  "userProfilePosterStartDate": "Bookkeeping since {date}",
+  "@userProfilePosterStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "userProfilePosterRecordDays": "Days",
+  "userProfilePosterDaysUnit": "days",
+  "userProfilePosterRecordCount": "Records",
+  "userProfilePosterCountUnit": "",
+  "userProfilePosterLedgerCount": "Ledgers",
+  "userProfilePosterLedgerUnit": "",
   "mineDaysCount": "Days",
   "mineTotalRecords": "Records",
   "mineCurrentBalance": "Balance",
@@ -1534,6 +1567,8 @@
   "iosAutoShortcutRecommendedTip": "✅ Recommended: After binding the shortcut to \"Back Tap\", double tap phone back during payment to auto-screenshot and recognize billing, no manual screenshot needed.",
   "iosAutoBackTapTitle": "💡 Double Tap Back to Trigger (Recommended)",
   "iosAutoBackTapDesc": "Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed",
+  "iosAutoTutorialTitle": "Video Tutorial",
+  "iosAutoTutorialDesc": "Watch detailed setup video tutorial",
   "aiSettingsTitle": "AI Assistant",
   "aiSettingsSubtitle": "Configure AI models and recognition strategy",
   "aiEnableTitle": "Enable AI Assistant",
@@ -1645,7 +1680,6 @@
   "aboutPageLoadingVersion": "Loading version...",
   "aboutWebsite": "Official Website",
   "aboutGitHubRepo": "GitHub Repository",
-  "aboutContactEmail": "Contact Email",
   "aboutWeChatGroup": "WeChat Group",
   "aboutWeChatGroupDesc": "Tap to view QR code",
   "aboutXiaohongshu": "Xiaohongshu",
@@ -1841,6 +1875,40 @@
   "welcomeCategoryModeNoneFeature1": "No preset categories",
   "welcomeCategoryModeNoneFeature2": "Create categories based on your needs",
   "welcomeCategoryModeNoneFeature3": "Perfect for custom classification needs",
+  "welcomeExistingUserTitle": "Existing User?",
+  "welcomeExistingUserButton": "Import Config",
+  "welcomeImportingConfig": "Importing configuration...",
+  "welcomeImportSuccess": "Configuration imported successfully",
+  "welcomeImportFailed": "Import failed: {error}",
+  "@welcomeImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportNoFile": "No file selected",
+  "welcomeImportAttachmentTitle": "Import Attachments",
+  "welcomeImportAttachmentDesc": "Would you like to import attachment files as well?",
+  "welcomeImportAttachmentButton": "Select Attachment File",
+  "welcomeImportAttachmentSkip": "Skip",
+  "welcomeImportAttachmentSuccess": "Attachments imported: {imported}",
+  "@welcomeImportAttachmentSuccess": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      }
+    }
+  },
+  "welcomeImportAttachmentFailed": "Attachment import failed: {error}",
+  "@welcomeImportAttachmentFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportingAttachment": "Importing attachments...",
   "iosVersionWarningTitle": "Requires iOS 16.0 or later",
   "iosVersionWarningDesc": "Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.",
   "aiChatTitle": "AI Assistant",
@@ -2083,7 +2151,7 @@
   "discoverExport": "Export",
   "discoverHelp": "Help",
   "discoverConfigManagement": "Config",
-  "discoverAttachmentExport": "Attachments",
+  "discoverAutoBilling": "Auto",
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
   "budgetTitle": "Budget",

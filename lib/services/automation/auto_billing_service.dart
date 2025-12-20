@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../billing/ocr_service.dart';
 import '../billing/category_matcher.dart';
 import '../billing/bill_creation_service.dart';
+import '../billing/post_processor.dart';
 import '../attachment_service.dart';
 import '../data/tag_seed_service.dart';
 import 'auto_billing_config.dart';
@@ -533,13 +534,11 @@ class AutoBillingService {
       );
 
       if (transactionId != null) {
-        print('✅ 交易记录已创建: ID=$transactionId');
-        // 刷新标签列表
-        if (billingTypes != null && billingTypes.isNotEmpty) {
-          _container.read(tagListRefreshProvider.notifier).state++;
-        }
+        logger.info('AutoBilling', '交易记录已创建', 'ID=$transactionId');
+        // 统一后处理：刷新UI + 触发云同步
+        await PostProcessor.runC(_container, ledgerId: ledgerId, tags: true);
       } else {
-        print('❌ 创建交易记录失败');
+        logger.warning('AutoBilling', '创建交易记录失败');
       }
 
       return transactionId;

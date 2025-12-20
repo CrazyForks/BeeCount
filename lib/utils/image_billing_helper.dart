@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../providers.dart';
 import '../services/billing/ocr_service.dart';
 import '../services/billing/bill_creation_service.dart';
+import '../services/billing/post_processor.dart';
 import '../services/data/tag_seed_service.dart';
 import '../services/attachment_service.dart';
 import '../widgets/ui/ui.dart';
@@ -147,17 +148,17 @@ class ImageBillingHelper {
             sourceFile: imageFile,
             index: 0,
           );
-          ref.read(attachmentListRefreshProvider.notifier).state++;
         }
 
-        // 刷新列表、统计信息、标签
-        ref.read(ledgerListRefreshProvider.notifier).state++;
-        ref.read(statsRefreshProvider.notifier).state++;
-        ref.read(tagListRefreshProvider.notifier).state++;
-        final transactionType = (ocrResult.aiType == 'income') ? 'income' : 'expense';
-        final typeText = transactionType == 'income' ? l10n.aiTypeIncome : l10n.aiTypeExpense;
-        final amount = ocrResult.amount!.abs().toStringAsFixed(2);
-        showToast(context, l10n.aiOcrSuccess(typeText, amount));
+        // 统一后处理：刷新UI + 触发云同步
+        await PostProcessor.run(ref, ledgerId: currentLedger.id, tags: true, attachments: autoAddAttachment);
+
+        if (context.mounted) {
+          final transactionType = (ocrResult.aiType == 'income') ? 'income' : 'expense';
+          final typeText = transactionType == 'income' ? l10n.aiTypeIncome : l10n.aiTypeExpense;
+          final amount = ocrResult.amount!.abs().toStringAsFixed(2);
+          showToast(context, l10n.aiOcrSuccess(typeText, amount));
+        }
       } else {
         showToast(context, l10n.aiOcrCreateFailed);
       }

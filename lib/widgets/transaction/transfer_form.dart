@@ -5,7 +5,7 @@ import '../../data/db.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../styles/tokens.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../services/attachment_service.dart';
 import '../biz/amount_editor_sheet.dart';
 import '../ui/ui.dart';
@@ -167,7 +167,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
               }
 
               // 统一处理：自动/手动同步与状态刷新
-              await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+              await PostProcessor.sync(ref, ledgerId: ledgerId);
               // 刷新统计
               ref.invalidate(countsForLedgerProvider(ledgerId));
               ref.read(statsRefreshProvider.notifier).state++;
@@ -210,7 +210,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
               }
 
               // 统一处理：自动/手动同步与状态刷新
-              await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+              await PostProcessor.sync(ref, ledgerId: ledgerId);
               // 刷新统计
               ref.invalidate(countsForLedgerProvider(ledgerId));
               ref.read(statsRefreshProvider.notifier).state++;

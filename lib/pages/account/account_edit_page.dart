@@ -6,7 +6,7 @@ import '../../widgets/biz/section_card.dart';
 import '../../widgets/biz/app_list_tile.dart';
 import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../utils/currencies.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
@@ -490,7 +490,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
 
       // 触发账本同步(后台异步,不阻塞页面关闭)
       if (mounted) {
-        handleLocalChange(ref, ledgerId: widget.ledgerId, background: true);
+        PostProcessor.sync(ref, ledgerId: widget.ledgerId);
         Navigator.of(context).pop(true);
       }
     } catch (e) {
@@ -566,7 +566,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
 
       // 触发账本同步(后台异步,不阻塞页面关闭)
       if (mounted) {
-        handleLocalChange(ref, ledgerId: widget.ledgerId, background: true);
+        PostProcessor.sync(ref, ledgerId: widget.ledgerId);
         Navigator.of(context).pop(true);
       }
     } catch (e) {

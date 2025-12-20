@@ -8,7 +8,7 @@ import '../../widgets/biz/biz.dart';
 import '../../widgets/category_icon.dart';
 import '../../styles/tokens.dart';
 import '../../utils/transaction_edit_utils.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../utils/category_utils.dart';
 import '../../l10n/app_localizations.dart';
 import 'tag_edit_page.dart';
@@ -336,7 +336,7 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
     try {
       await repo.deleteTransaction(transaction.id);
 
-      await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+      await PostProcessor.sync(ref, ledgerId: ledgerId);
 
       ref.invalidate(countsForLedgerProvider(ledgerId));
       ref.read(statsRefreshProvider.notifier).state++;

@@ -729,11 +729,7 @@ class SeedService {
     final ledgerId = await createDefaultLedger(db, l10n, currency);
     logger.info('seed', '已创建账本 ID: $ledgerId');
 
-    // 2. 创建默认账户（3个：现金、银行卡、信用卡）
-    await createDefaultAccounts(db, ledgerId, l10n, currency);
-    logger.info('seed', '已创建3个账户');
-
-    // 3. 创建默认分类（可选）
+    // 2. 创建默认分类（可选）
     if (!skipCategories) {
       if (useHierarchicalCategories) {
         await createHierarchicalCategories(db, l10n);

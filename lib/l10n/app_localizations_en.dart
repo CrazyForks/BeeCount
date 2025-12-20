@@ -19,6 +19,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabMine => 'Mine';
 
   @override
+  String get tabAdd => 'Add';
+
+  @override
   String get commonCancel => 'Cancel';
 
   @override
@@ -998,25 +1001,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharePosterSlogan => 'Smart Accounting, Beautiful Life';
 
   @override
-  String get sharePosterFeature1 => '🔒 Data Security·You Control';
+  String get sharePosterFeature1 => 'Data Security·You Control';
 
   @override
-  String get sharePosterFeature2 => '✨ Open Source·Auditable';
+  String get sharePosterFeature2 => 'Open Source·Auditable';
 
   @override
-  String get sharePosterFeature3 => '🤖 AI Smart·Photo & Voice';
+  String get sharePosterFeature3 => 'AI Smart·Photo & Voice';
 
   @override
-  String get sharePosterFeature4 => '📸 Photo Accounting·Auto Recognition';
+  String get sharePosterFeature4 => 'Photo Accounting·Auto Recognition';
 
   @override
-  String get sharePosterFeature5 => '📊 Multi Ledger·Dark Mode';
+  String get sharePosterFeature5 => 'Multi Ledger·Dark Mode';
 
   @override
-  String get sharePosterFeature6 => '☁️ Self-Hosted Cloud·Free Forever';
+  String get sharePosterFeature6 => 'Self-Hosted Cloud·Free Forever';
 
   @override
   String get sharePosterScanText => 'Scan to visit open source project';
+
+  @override
+  String get appPromoTagOpenSource => 'Open Source';
+
+  @override
+  String get appPromoTagFree => 'Free';
+
+  @override
+  String get appPromoFooterText => 'Track every penny, trace every moment';
+
+  @override
+  String userProfileJourneyYears(int years) {
+    return 'Bookkeeping Pro $years Years';
+  }
+
+  @override
+  String get userProfileJourneyOneYear => 'One Year of Bookkeeping';
+
+  @override
+  String get userProfileJourneyHalfYear => 'Six Months Strong';
+
+  @override
+  String get userProfileJourneyThreeMonths => 'Three Months In';
+
+  @override
+  String get userProfileJourneyOneMonth => 'One Month Milestone';
+
+  @override
+  String get userProfileJourneyOneWeek => 'First Week Done';
+
+  @override
+  String get userProfileJourneyStart => 'Starting the Journey';
+
+  @override
+  String get userProfileDailyAverage => 'Daily Average';
 
   @override
   String get sharePosterSave => 'Save to Gallery';
@@ -1131,6 +1169,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharePosterUnitYuan => '';
+
+  @override
+  String userProfilePosterStartDate(String date) {
+    return 'Bookkeeping since $date';
+  }
+
+  @override
+  String get userProfilePosterRecordDays => 'Days';
+
+  @override
+  String get userProfilePosterDaysUnit => 'days';
+
+  @override
+  String get userProfilePosterRecordCount => 'Records';
+
+  @override
+  String get userProfilePosterCountUnit => '';
+
+  @override
+  String get userProfilePosterLedgerCount => 'Ledgers';
+
+  @override
+  String get userProfilePosterLedgerUnit => '';
 
   @override
   String get mineDaysCount => 'Days';
@@ -3584,6 +3645,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
 
   @override
+  String get iosAutoTutorialTitle => 'Video Tutorial';
+
+  @override
+  String get iosAutoTutorialDesc => 'Watch detailed setup video tutorial';
+
+  @override
   String get aiSettingsTitle => 'AI Assistant';
 
   @override
@@ -3849,9 +3916,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutGitHubRepo => 'GitHub Repository';
-
-  @override
-  String get aboutContactEmail => 'Contact Email';
 
   @override
   String get aboutWeChatGroup => 'WeChat Group';
@@ -4247,6 +4311,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeCategoryModeNoneFeature3 => 'Perfect for custom classification needs';
+
+  @override
+  String get welcomeExistingUserTitle => 'Existing User?';
+
+  @override
+  String get welcomeExistingUserButton => 'Import Config';
+
+  @override
+  String get welcomeImportingConfig => 'Importing configuration...';
+
+  @override
+  String get welcomeImportSuccess => 'Configuration imported successfully';
+
+  @override
+  String welcomeImportFailed(String error) {
+    return 'Import failed: $error';
+  }
+
+  @override
+  String get welcomeImportNoFile => 'No file selected';
+
+  @override
+  String get welcomeImportAttachmentTitle => 'Import Attachments';
+
+  @override
+  String get welcomeImportAttachmentDesc => 'Would you like to import attachment files as well?';
+
+  @override
+  String get welcomeImportAttachmentButton => 'Select Attachment File';
+
+  @override
+  String get welcomeImportAttachmentSkip => 'Skip';
+
+  @override
+  String welcomeImportAttachmentSuccess(int imported) {
+    return 'Attachments imported: $imported';
+  }
+
+  @override
+  String welcomeImportAttachmentFailed(String error) {
+    return 'Attachment import failed: $error';
+  }
+
+  @override
+  String get welcomeImportingAttachment => 'Importing attachments...';
 
   @override
   String get iosVersionWarningTitle => 'Requires iOS 16.0 or later';
@@ -4823,7 +4932,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverConfigManagement => 'Config';
 
   @override
-  String get discoverAttachmentExport => 'Attachments';
+  String get discoverAutoBilling => 'Auto';
 
   @override
   String get homeSwitchLedger => 'Select Ledger';

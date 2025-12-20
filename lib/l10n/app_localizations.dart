@@ -120,6 +120,12 @@ abstract class AppLocalizations {
   /// **'Mine'**
   String get tabMine;
 
+  /// No description provided for @tabAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get tabAdd;
+
   /// No description provided for @commonCancel.
   ///
   /// In en, this message translates to:
@@ -1905,37 +1911,37 @@ abstract class AppLocalizations {
   /// No description provided for @sharePosterFeature1.
   ///
   /// In en, this message translates to:
-  /// **'🔒 Data Security·You Control'**
+  /// **'Data Security·You Control'**
   String get sharePosterFeature1;
 
   /// No description provided for @sharePosterFeature2.
   ///
   /// In en, this message translates to:
-  /// **'✨ Open Source·Auditable'**
+  /// **'Open Source·Auditable'**
   String get sharePosterFeature2;
 
   /// No description provided for @sharePosterFeature3.
   ///
   /// In en, this message translates to:
-  /// **'🤖 AI Smart·Photo & Voice'**
+  /// **'AI Smart·Photo & Voice'**
   String get sharePosterFeature3;
 
   /// No description provided for @sharePosterFeature4.
   ///
   /// In en, this message translates to:
-  /// **'📸 Photo Accounting·Auto Recognition'**
+  /// **'Photo Accounting·Auto Recognition'**
   String get sharePosterFeature4;
 
   /// No description provided for @sharePosterFeature5.
   ///
   /// In en, this message translates to:
-  /// **'📊 Multi Ledger·Dark Mode'**
+  /// **'Multi Ledger·Dark Mode'**
   String get sharePosterFeature5;
 
   /// No description provided for @sharePosterFeature6.
   ///
   /// In en, this message translates to:
-  /// **'☁️ Self-Hosted Cloud·Free Forever'**
+  /// **'Self-Hosted Cloud·Free Forever'**
   String get sharePosterFeature6;
 
   /// No description provided for @sharePosterScanText.
@@ -1943,6 +1949,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan to visit open source project'**
   String get sharePosterScanText;
+
+  /// No description provided for @appPromoTagOpenSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source'**
+  String get appPromoTagOpenSource;
+
+  /// No description provided for @appPromoTagFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get appPromoTagFree;
+
+  /// No description provided for @appPromoFooterText.
+  ///
+  /// In en, this message translates to:
+  /// **'Track every penny, trace every moment'**
+  String get appPromoFooterText;
+
+  /// No description provided for @userProfileJourneyYears.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookkeeping Pro {years} Years'**
+  String userProfileJourneyYears(int years);
+
+  /// No description provided for @userProfileJourneyOneYear.
+  ///
+  /// In en, this message translates to:
+  /// **'One Year of Bookkeeping'**
+  String get userProfileJourneyOneYear;
+
+  /// No description provided for @userProfileJourneyHalfYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Six Months Strong'**
+  String get userProfileJourneyHalfYear;
+
+  /// No description provided for @userProfileJourneyThreeMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Three Months In'**
+  String get userProfileJourneyThreeMonths;
+
+  /// No description provided for @userProfileJourneyOneMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'One Month Milestone'**
+  String get userProfileJourneyOneMonth;
+
+  /// No description provided for @userProfileJourneyOneWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'First Week Done'**
+  String get userProfileJourneyOneWeek;
+
+  /// No description provided for @userProfileJourneyStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting the Journey'**
+  String get userProfileJourneyStart;
+
+  /// No description provided for @userProfileDailyAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Average'**
+  String get userProfileDailyAverage;
 
   /// No description provided for @sharePosterSave.
   ///
@@ -2171,6 +2243,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **''**
   String get sharePosterUnitYuan;
+
+  /// No description provided for @userProfilePosterStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookkeeping since {date}'**
+  String userProfilePosterStartDate(String date);
+
+  /// No description provided for @userProfilePosterRecordDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get userProfilePosterRecordDays;
+
+  /// No description provided for @userProfilePosterDaysUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get userProfilePosterDaysUnit;
+
+  /// No description provided for @userProfilePosterRecordCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Records'**
+  String get userProfilePosterRecordCount;
+
+  /// No description provided for @userProfilePosterCountUnit.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get userProfilePosterCountUnit;
+
+  /// No description provided for @userProfilePosterLedgerCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledgers'**
+  String get userProfilePosterLedgerCount;
+
+  /// No description provided for @userProfilePosterLedgerUnit.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get userProfilePosterLedgerUnit;
 
   /// No description provided for @mineDaysCount.
   ///
@@ -6822,6 +6936,18 @@ abstract class AppLocalizations {
   /// **'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed'**
   String get iosAutoBackTapDesc;
 
+  /// No description provided for @iosAutoTutorialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video Tutorial'**
+  String get iosAutoTutorialTitle;
+
+  /// No description provided for @iosAutoTutorialDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch detailed setup video tutorial'**
+  String get iosAutoTutorialDesc;
+
   /// No description provided for @aiSettingsTitle.
   ///
   /// In en, this message translates to:
@@ -7343,12 +7469,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'GitHub Repository'**
   String get aboutGitHubRepo;
-
-  /// No description provided for @aboutContactEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Contact Email'**
-  String get aboutContactEmail;
 
   /// No description provided for @aboutWeChatGroup.
   ///
@@ -8099,6 +8219,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Perfect for custom classification needs'**
   String get welcomeCategoryModeNoneFeature3;
+
+  /// No description provided for @welcomeExistingUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing User?'**
+  String get welcomeExistingUserTitle;
+
+  /// No description provided for @welcomeExistingUserButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Config'**
+  String get welcomeExistingUserButton;
+
+  /// No description provided for @welcomeImportingConfig.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing configuration...'**
+  String get welcomeImportingConfig;
+
+  /// No description provided for @welcomeImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration imported successfully'**
+  String get welcomeImportSuccess;
+
+  /// No description provided for @welcomeImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: {error}'**
+  String welcomeImportFailed(String error);
+
+  /// No description provided for @welcomeImportNoFile.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get welcomeImportNoFile;
+
+  /// No description provided for @welcomeImportAttachmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Attachments'**
+  String get welcomeImportAttachmentTitle;
+
+  /// No description provided for @welcomeImportAttachmentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to import attachment files as well?'**
+  String get welcomeImportAttachmentDesc;
+
+  /// No description provided for @welcomeImportAttachmentButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Attachment File'**
+  String get welcomeImportAttachmentButton;
+
+  /// No description provided for @welcomeImportAttachmentSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get welcomeImportAttachmentSkip;
+
+  /// No description provided for @welcomeImportAttachmentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments imported: {imported}'**
+  String welcomeImportAttachmentSuccess(int imported);
+
+  /// No description provided for @welcomeImportAttachmentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachment import failed: {error}'**
+  String welcomeImportAttachmentFailed(String error);
+
+  /// No description provided for @welcomeImportingAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing attachments...'**
+  String get welcomeImportingAttachment;
 
   /// No description provided for @iosVersionWarningTitle.
   ///
@@ -9216,11 +9414,11 @@ abstract class AppLocalizations {
   /// **'Config'**
   String get discoverConfigManagement;
 
-  /// No description provided for @discoverAttachmentExport.
+  /// No description provided for @discoverAutoBilling.
   ///
   /// In en, this message translates to:
-  /// **'Attachments'**
-  String get discoverAttachmentExport;
+  /// **'Auto'**
+  String get discoverAutoBilling;
 
   /// No description provided for @homeSwitchLedger.
   ///

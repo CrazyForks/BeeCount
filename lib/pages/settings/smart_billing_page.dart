@@ -144,21 +144,6 @@ class SmartBillingPage extends ConsumerWidget {
                         leading: Icons.psychology_outlined,
                         title: l10n.aiSettingsTitle,
                         subtitle: l10n.aiSettingsSubtitle,
-                        trailing: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'AI',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => const AISettingsPage()),
@@ -242,21 +227,6 @@ class SmartBillingPage extends ConsumerWidget {
                         subtitle: Platform.isAndroid
                             ? l10n.autoScreenshotBillingDesc
                             : l10n.autoScreenshotBillingIosDesc,
-                        trailing: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'BETA',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => const AutoBillingSettingsPage()),

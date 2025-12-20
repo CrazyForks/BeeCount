@@ -45,6 +45,7 @@ class LocalRecurringTransactionRepository implements RecurringTransactionReposit
     int? monthOfYear,
     required DateTime startDate,
     DateTime? endDate,
+    bool enabled = true,
   }) async {
     return await db.into(db.recurringTransactions).insert(
       RecurringTransactionsCompanion.insert(
@@ -62,6 +63,7 @@ class LocalRecurringTransactionRepository implements RecurringTransactionReposit
         monthOfYear: d.Value(monthOfYear),
         startDate: startDate,
         endDate: d.Value(endDate),
+        enabled: d.Value(enabled),
       ),
     );
   }

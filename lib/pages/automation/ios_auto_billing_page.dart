@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/ui/primary_header.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
@@ -35,6 +36,11 @@ class _IOSAutoBillingPageState extends ConsumerState<IOSAutoBillingPage> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                // 视频教程（置顶）
+                _buildTutorialCard(context, primaryColor, l10n),
+
+                const SizedBox(height: 16),
+
                 // iOS 15版本提示
                 if (!supportsAppIntents) _buildVersionWarning(context, primaryColor),
                 if (!supportsAppIntents) const SizedBox(height: 16),
@@ -265,6 +271,72 @@ class _IOSAutoBillingPageState extends ConsumerState<IOSAutoBillingPage> {
     );
   }
 
+
+  Widget _buildTutorialCard(
+    BuildContext context,
+    Color primaryColor,
+    AppLocalizations l10n,
+  ) {
+    final theme = Theme.of(context);
+
+    return Card(
+      child: InkWell(
+        onTap: () async {
+          final url = Uri.parse('https://xhslink.com/o/fKlXTFfHNm');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url, mode: LaunchMode.externalApplication);
+          }
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: primaryColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.play_circle_outline,
+                  color: primaryColor,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.iosAutoTutorialTitle,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      l10n.iosAutoTutorialDesc,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.open_in_new,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildVersionWarning(BuildContext context, Color primaryColor) {
     final theme = Theme.of(context);

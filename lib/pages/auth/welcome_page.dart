@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 import '../../l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/ui_state_providers.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/database_providers.dart';
+import '../../providers/theme_providers.dart';
+import '../../providers/font_scale_provider.dart';
 import '../../services/system/logger_service.dart';
+import '../../services/export/config_export_service.dart';
+import '../../services/data/seed_service.dart';
+import '../../services/attachment_export_import_service.dart';
 import '../../utils/currencies.dart';
 import '../../widgets/ui/ui.dart';
 
@@ -27,6 +34,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   // 分类模式: 'flat' = 一级分类, 'hierarchical' = 二级分类, 'none' = 不创建分类
   String _categoryMode = 'flat'; // 默认使用一级分类
   bool _isInitializing = false; // 初始化状态
+  bool _isImporting = false; // 导入状态
+  bool _isExistingUserFlow = false; // 老用户流程
+  bool _isImportingAttachment = false; // 附件导入状态
 
   @override
   void dispose() {
@@ -39,6 +49,23 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
+    // 老用户流程：只有1页（附件导入）
+    final existingUserPages = [
+      _buildAttachmentImportPage(context, theme, l10n),
+    ];
+
+    // 新用户流程：5页
+    final newUserPages = [
+      _buildWelcomePage(context, theme, l10n), // 第1屏：语言选择
+      _buildCurrencyPage(context, theme, l10n), // 第2屏：货币选择
+      _buildCategoryModePage(context, theme, l10n), // 第3屏：分类模式
+      _buildCloudSyncPage(context, theme, l10n), // 第4屏：云同步
+      _buildPrivacyAndOpenSourcePage(context, theme, l10n), // 第5屏：隐私保护+开源透明
+    ];
+
+    final pages = _isExistingUserFlow ? existingUserPages : newUserPages;
+    final pageCount = pages.length;
+
     return Scaffold(
       backgroundColor: theme.primaryColor,
       body: SafeArea(
@@ -50,7 +77,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  5,
+                  pageCount,
                   (index) => Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4),
                     width: _currentPage == index ? 24 : 8,
@@ -70,69 +97,65 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             Expanded(
               child: PageView(
                 controller: _pageController,
+                physics: _isExistingUserFlow ? const NeverScrollableScrollPhysics() : null,
                 onPageChanged: (index) {
                   setState(() {
                     _currentPage = index;
                   });
                 },
-                children: [
-                  _buildWelcomePage(context, theme, l10n), // 第1屏：语言选择
-                  _buildCurrencyPage(context, theme, l10n), // 第2屏：货币选择
-                  _buildCategoryModePage(context, theme, l10n), // 第3屏：分类模式
-                  _buildCloudSyncPage(context, theme, l10n), // 第4屏：云同步
-                  _buildPrivacyAndOpenSourcePage(context, theme, l10n), // 第5屏：隐私保护+开源透明
-                ],
+                children: pages,
               ),
             ),
 
-            // 底部按钮
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Row(
-                children: [
-                  if (_currentPage > 0)
-                    TextButton(
-                      onPressed: () {
-                        _pageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
+            // 底部按钮（老用户流程不显示，由页面内自带按钮处理）
+            if (!_isExistingUserFlow)
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Row(
+                  children: [
+                    if (_currentPage > 0)
+                      TextButton(
+                        onPressed: () {
+                          _pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Text(l10n.commonPrevious),
                       ),
-                      child: Text(l10n.commonPrevious),
-                    ),
-                  const Spacer(),
-                  if (_currentPage < 4)
-                    FilledButton(
-                      onPressed: () {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: theme.primaryColor,
+                    const Spacer(),
+                    if (_currentPage < 4)
+                      FilledButton(
+                        onPressed: () {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: theme.primaryColor,
+                        ),
+                        child: Text(l10n.commonNext),
+                      )
+                    else
+                      FilledButton(
+                        onPressed: _isInitializing ? null : () => _finishWelcome(context),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: theme.primaryColor,
+                        ),
+                        child: _isInitializing
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : Text(l10n.commonFinish),
                       ),
-                      child: Text(l10n.commonNext),
-                    )
-                  else
-                    FilledButton(
-                      onPressed: _isInitializing ? null : () => _finishWelcome(context),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: theme.primaryColor,
-                      ),
-                      child: _isInitializing
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Text(l10n.commonFinish),
-                    ),
                 ],
               ),
             ),
@@ -156,7 +179,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       const Locale('en'),
     ];
 
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -258,6 +281,43 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                   ),
                 );
               },
+            ),
+          ),
+
+          // 老用户导入配置（紧凑样式）
+          const SizedBox(height: 24),
+          TextButton(
+            onPressed: _isImporting ? null : () => _importConfig(context),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_isImporting)
+                  const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white70,
+                    ),
+                  )
+                else
+                  Icon(
+                    Icons.file_upload_outlined,
+                    size: 16,
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
+                const SizedBox(width: 6),
+                Text(
+                  _isImporting
+                      ? l10n.welcomeImportingConfig
+                      : '${l10n.welcomeExistingUserTitle} ${l10n.welcomeExistingUserButton}',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.white.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -663,6 +723,249 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       if (mounted) {
         setState(() {
           _isInitializing = false;
+        });
+      }
+    }
+  }
+
+  /// 导入配置文件（老用户）
+  Future<void> _importConfig(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+
+    setState(() {
+      _isImporting = true;
+    });
+
+    try {
+      // 选择文件
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['yml', 'yaml'],
+      );
+
+      if (result == null || result.files.isEmpty) {
+        if (context.mounted) {
+          showToast(context, l10n.welcomeImportNoFile);
+        }
+        return;
+      }
+
+      final filePath = result.files.single.path;
+      if (filePath == null) {
+        if (context.mounted) {
+          showToast(context, l10n.welcomeImportNoFile);
+        }
+        return;
+      }
+
+      // 读取文件内容
+      final file = File(filePath);
+      final yamlContent = await file.readAsString();
+
+      logger.info('welcome', '开始导入配置文件');
+
+      // 获取数据库和仓库
+      final db = ref.read(databaseProvider);
+      final repo = ref.read(repositoryProvider);
+
+      // 导入配置
+      await ConfigExportService.importFromYaml(
+        yamlContent,
+        repository: repo,
+      );
+
+      logger.info('welcome', '配置文件导入成功');
+
+      // 检查是否有账本，如果没有则创建默认 CNY 账本
+      final ledgers = await repo.getAllLedgers();
+      if (ledgers.isEmpty) {
+        logger.info('welcome', '配置不包含账本，创建默认账本');
+        await SeedService.createDefaultLedger(db, l10n, 'CNY');
+        logger.info('welcome', '已创建默认 CNY 账本');
+      } else {
+        logger.info('welcome', '配置已包含 ${ledgers.length} 个账本');
+      }
+
+      // 标记欢迎页面已完成
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('welcome_shown', true);
+
+      // 刷新所有配置相关的 providers，使导入的配置立即生效
+      ref.invalidate(primaryColorInitProvider);
+      ref.invalidate(themeModeInitProvider);
+      ref.invalidate(darkModePatternStyleInitProvider);
+      ref.invalidate(compactAmountInitProvider);
+      ref.invalidate(showTransactionTimeInitProvider);
+      ref.invalidate(fontScaleInitProvider);
+      ref.invalidate(languageProvider);
+
+      if (context.mounted) {
+        showToast(context, l10n.welcomeImportSuccess);
+        // 切换到老用户流程（附件导入页面）
+        setState(() {
+          _isExistingUserFlow = true;
+          _currentPage = 0;
+        });
+      }
+    } catch (e, st) {
+      logger.error('welcome', '导入配置文件失败', e, st);
+      if (context.mounted) {
+        showToast(context, l10n.welcomeImportFailed(e.toString()));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isImporting = false;
+        });
+      }
+    }
+  }
+
+  /// 附件导入页面（老用户流程）
+  Widget _buildAttachmentImportPage(
+      BuildContext context, ThemeData theme, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // 图标
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.image_outlined,
+              size: 64,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // 标题
+          Text(
+            l10n.welcomeImportAttachmentTitle,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+
+          // 描述
+          Text(
+            l10n.welcomeImportAttachmentDesc,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 48),
+
+          // 导入按钮
+          FilledButton.icon(
+            onPressed: _isImportingAttachment ? null : () => _importAttachments(context),
+            icon: _isImportingAttachment
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : const Icon(Icons.file_upload_outlined),
+            label: Text(
+              _isImportingAttachment
+                  ? l10n.welcomeImportingAttachment
+                  : l10n.welcomeImportAttachmentButton,
+            ),
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: theme.primaryColor,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 跳过按钮
+          TextButton(
+            onPressed: _isImportingAttachment ? null : _finishExistingUserFlow,
+            child: Text(
+              l10n.welcomeImportAttachmentSkip,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.8),
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.white.withValues(alpha: 0.5),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 完成老用户流程
+  void _finishExistingUserFlow() {
+    ref.read(shouldShowWelcomeProvider.notifier).state = false;
+  }
+
+  /// 导入附件
+  Future<void> _importAttachments(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+
+    try {
+      // 选择附件归档文件
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['gz', 'tar'],
+      );
+
+      if (result == null || result.files.isEmpty) {
+        return;
+      }
+
+      final filePath = result.files.single.path;
+      if (filePath == null) {
+        return;
+      }
+
+      if (!context.mounted) return;
+
+      // 显示加载状态
+      setState(() {
+        _isImportingAttachment = true;
+      });
+
+      // 执行导入
+      final importService = ref.read(attachmentExportImportServiceProvider);
+      final importResult = await importService.importAttachments(
+        archivePath: filePath,
+        conflictStrategy: AttachmentExportImportService.conflictSkip,
+      );
+
+      if (!context.mounted) return;
+
+      if (importResult.success) {
+        showToast(context, l10n.welcomeImportAttachmentSuccess(importResult.imported));
+        // 导入成功，完成流程
+        _finishExistingUserFlow();
+      } else {
+        showToast(context, l10n.welcomeImportAttachmentFailed(importResult.message ?? ''));
+      }
+    } catch (e, st) {
+      logger.error('welcome', '导入附件失败', e, st);
+      if (context.mounted) {
+        showToast(context, l10n.welcomeImportAttachmentFailed(e.toString()));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isImportingAttachment = false;
         });
       }
     }

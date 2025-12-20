@@ -2,6 +2,7 @@ import 'dart:convert';
 import '../data/db.dart';
 import '../data/repositories/base_repository.dart';
 import '../services/data_import_service.dart';
+import '../services/system/logger_service.dart';
 
 /// 账本交易数据的 JSON 导入导出工具
 ///
@@ -41,9 +42,13 @@ String _sanitizeString(String? input) {
 /// - tags: 标签列表（name, color）
 /// - items: 交易明细（type, amount, categoryName, categoryKind, happenedAt, note, tags）
 Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
+  logger.debug('TransactionsJson', '开始导出账本 $ledgerId');
+
   final txs = await (db.select(db.transactions)
         ..where((t) => t.ledgerId.equals(ledgerId)))
       .get();
+
+  logger.debug('TransactionsJson', '账本 $ledgerId 共有 ${txs.length} 条交易');
 
   // 稳定排序，避免不同平台/查询导致顺序差异
   txs.sort((a, b) {
@@ -130,13 +135,21 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
       .toList();
 
   final items = txs.map((t) {
+    // 安全获取分类信息（分类可能已被删除）
+    final catInfo = t.categoryId != null ? cats[t.categoryId] : null;
+
+    // 记录分类缺失的交易（用于排查数据问题）
+    if (t.categoryId != null && catInfo == null) {
+      logger.warning('TransactionsJson',
+        '交易 ${t.id} 引用了不存在的分类 ${t.categoryId}, '
+        'amount=${t.amount}, note=${t.note}, happenedAt=${t.happenedAt}');
+    }
+
     final item = <String, dynamic>{
       'type': t.type,
       'amount': t.amount,
-      'categoryName':
-          t.categoryId != null ? cats[t.categoryId]!['name'] : null,
-      'categoryKind':
-          t.categoryId != null ? cats[t.categoryId]!['kind'] : null,
+      'categoryName': catInfo?['name'],
+      'categoryKind': catInfo?['kind'],
       'happenedAt': t.happenedAt.toUtc().toIso8601String(),
       'note': _sanitizeString(t.note),
     };
@@ -244,12 +257,18 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
     return tagItem;
   }).toList();
 
+  // 检查账本是否存在
+  if (ledger == null) {
+    logger.error('TransactionsJson', '账本 $ledgerId 不存在！');
+    throw Exception('账本 $ledgerId 不存在');
+  }
+
   final payload = {
     'version': 5, // 版本升级,新增附件元数据
     'exportedAt': DateTime.now().toUtc().toIso8601String(),
     'ledgerId': ledgerId,
-    'ledgerName': ledger?.name,
-    'currency': ledger?.currency,
+    'ledgerName': ledger.name,
+    'currency': ledger.currency,
     'count': items.length,
     'accounts': accountItems,
     'categories': categoryItems,
@@ -257,6 +276,7 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
     'items': items,
   };
 
+  logger.debug('TransactionsJson', '导出完成: ${items.length} 条交易, ${categoryItems.length} 个分类');
   return jsonEncode(payload);
 }
 
