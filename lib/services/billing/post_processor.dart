@@ -66,6 +66,30 @@ class PostProcessor {
   static Future<void> syncR(Ref ref, {required int ledgerId}) =>
       _doSyncR(ref, ledgerId);
 
+  // ============ 云端下载后处理（仅刷新，不触发同步） ============
+
+  /// 云端下载后的处理：刷新统计和UI状态，但不触发同步上传
+  /// UI 层使用（WidgetRef）
+  static void runAfterDownload(WidgetRef ref) {
+    ref.read(statsRefreshProvider.notifier).state++;
+    ref.read(syncStatusRefreshProvider.notifier).state++;
+    ref.read(ledgerListRefreshProvider.notifier).state++;
+    ref.read(tagListRefreshProvider.notifier).state++;
+    ref.read(attachmentListRefreshProvider.notifier).state++;
+    logger.info('PostProcessor', '云端下载后刷新完成');
+  }
+
+  /// 云端下载后的处理：刷新统计和UI状态，但不触发同步上传
+  /// 后台服务使用（ProviderContainer）
+  static void runAfterDownloadC(ProviderContainer c) {
+    c.read(statsRefreshProvider.notifier).state++;
+    c.read(syncStatusRefreshProvider.notifier).state++;
+    c.read(ledgerListRefreshProvider.notifier).state++;
+    c.read(tagListRefreshProvider.notifier).state++;
+    c.read(attachmentListRefreshProvider.notifier).state++;
+    logger.info('PostProcessor', '云端下载后刷新完成');
+  }
+
   // ============ 内部同步实现 ============
 
   static Future<void> _doSync(WidgetRef ref, int ledgerId) async {

@@ -4252,6 +4252,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeCategoryModeNoneFeature3 => 'Perfect for custom classification needs';
 
   @override
+  String get welcomeExistingUserTitle => 'Existing User?';
+
+  @override
+  String get welcomeExistingUserButton => 'Import Config';
+
+  @override
+  String get welcomeExistingUserDescription => 'Migrate data from another device';
+
+  @override
+  String get welcomeImportingConfig => 'Importing configuration...';
+
+  @override
+  String get welcomeImportSuccess => 'Configuration imported successfully';
+
+  @override
+  String welcomeImportFailed(String error) {
+    return 'Import failed: $error';
+  }
+
+  @override
+  String get welcomeImportNoFile => 'No file selected';
+
+  @override
+  String get welcomeImportInvalidFormat => 'Invalid configuration file format';
+
+  @override
+  String get welcomeImportAttachmentTitle => 'Import Attachments';
+
+  @override
+  String get welcomeImportAttachmentDesc => 'Would you like to import attachment files as well?';
+
+  @override
+  String get welcomeImportAttachmentButton => 'Select Attachment File';
+
+  @override
+  String get welcomeImportAttachmentSkip => 'Skip';
+
+  @override
+  String welcomeImportAttachmentSuccess(int imported) {
+    return 'Attachments imported: $imported';
+  }
+
+  @override
+  String welcomeImportAttachmentFailed(String error) {
+    return 'Attachment import failed: $error';
+  }
+
+  @override
+  String get welcomeImportingAttachment => 'Importing attachments...';
+
+  @override
   String get iosVersionWarningTitle => 'Requires iOS 16.0 or later';
 
   @override

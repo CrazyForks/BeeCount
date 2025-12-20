@@ -1137,7 +1137,7 @@ class ConfigExportService {
     final darkModePatternStyle = prefs.getString('darkModePatternStyle');
     final compactAmount = prefs.getBool('compactAmount');
     final showTransactionTime = prefs.getBool('showTransactionTime');
-    final cloudServiceType = prefs.getString('selected_cloud_service');
+    final cloudServiceType = prefs.getString('cloud_active_type');
     final autoScreenshotEnabled = prefs.getBool('auto_screenshot_billing_enabled');
     final shortcutPreferCamera = prefs.getBool('shortcut_prefer_camera');
 
@@ -1916,7 +1916,7 @@ class ConfigExportService {
 
       // 云服务
       if (settings.cloudServiceType != null) {
-        await prefs.setString('selected_cloud_service', settings.cloudServiceType!);
+        await prefs.setString('cloud_active_type', settings.cloudServiceType!);
       }
 
       // 自动记账

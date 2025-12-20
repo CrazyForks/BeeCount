@@ -1842,6 +1842,42 @@
   "welcomeCategoryModeNoneFeature1": "No preset categories",
   "welcomeCategoryModeNoneFeature2": "Create categories based on your needs",
   "welcomeCategoryModeNoneFeature3": "Perfect for custom classification needs",
+  "welcomeExistingUserTitle": "Existing User?",
+  "welcomeExistingUserButton": "Import Config",
+  "welcomeExistingUserDescription": "Migrate data from another device",
+  "welcomeImportingConfig": "Importing configuration...",
+  "welcomeImportSuccess": "Configuration imported successfully",
+  "welcomeImportFailed": "Import failed: {error}",
+  "@welcomeImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportNoFile": "No file selected",
+  "welcomeImportInvalidFormat": "Invalid configuration file format",
+  "welcomeImportAttachmentTitle": "Import Attachments",
+  "welcomeImportAttachmentDesc": "Would you like to import attachment files as well?",
+  "welcomeImportAttachmentButton": "Select Attachment File",
+  "welcomeImportAttachmentSkip": "Skip",
+  "welcomeImportAttachmentSuccess": "Attachments imported: {imported}",
+  "@welcomeImportAttachmentSuccess": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      }
+    }
+  },
+  "welcomeImportAttachmentFailed": "Attachment import failed: {error}",
+  "@welcomeImportAttachmentFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportingAttachment": "Importing attachments...",
   "iosVersionWarningTitle": "Requires iOS 16.0 or later",
   "iosVersionWarningDesc": "Screenshot auto-billing feature uses the App Intents framework introduced in iOS 16. Your device is running an older version and does not support this feature.\n\nPlease upgrade to iOS 16 or later to use this feature.",
   "aiChatTitle": "AI Assistant",

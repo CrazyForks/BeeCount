@@ -1802,6 +1802,42 @@
   "welcomeCategoryModeNoneFeature1": "不预置任何分类",
   "welcomeCategoryModeNoneFeature2": "完全按自己需求创建",
   "welcomeCategoryModeNoneFeature3": "适合有特殊分类需求的用户",
+  "welcomeExistingUserTitle": "老用户？",
+  "welcomeExistingUserButton": "导入配置",
+  "welcomeExistingUserDescription": "从其他设备迁移数据",
+  "welcomeImportingConfig": "正在导入配置...",
+  "welcomeImportSuccess": "配置导入成功",
+  "welcomeImportFailed": "配置导入失败: {error}",
+  "@welcomeImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportNoFile": "未选择文件",
+  "welcomeImportInvalidFormat": "无效的配置文件格式",
+  "welcomeImportAttachmentTitle": "导入附件",
+  "welcomeImportAttachmentDesc": "检测到您导入了配置文件，是否需要导入附件文件？",
+  "welcomeImportAttachmentButton": "选择附件文件",
+  "welcomeImportAttachmentSkip": "跳过",
+  "welcomeImportAttachmentSuccess": "附件导入完成：导入 {imported} 个",
+  "@welcomeImportAttachmentSuccess": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      }
+    }
+  },
+  "welcomeImportAttachmentFailed": "附件导入失败: {error}",
+  "@welcomeImportAttachmentFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportingAttachment": "正在导入附件...",
   "iosVersionWarningTitle": "需要 iOS 16.0 或更高版本",
   "iosVersionWarningDesc": "截图自动记账功能使用了 iOS 16 引入的 App Intents 框架。您的设备系统版本较低，暂不支持此功能。\n\n请升级到 iOS 16 或更高版本以使用此功能。",
   "aiChatTitle": "AI助手",

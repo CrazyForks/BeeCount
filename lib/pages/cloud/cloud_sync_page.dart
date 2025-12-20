@@ -405,8 +405,8 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                         .mineDownloadComplete,
                                     message: msg);
 
-                                // 下载完成后，触发同步刷新状态和账本列表
-                                await PostProcessor.sync(ref, ledgerId: ledgerId);
+                                // 下载完成后，刷新统计和UI状态（不触发同步上传）
+                                PostProcessor.runAfterDownload(ref);
                               } catch (e) {
                                 if (!context.mounted) return;
                                 await AppDialog.error(context,

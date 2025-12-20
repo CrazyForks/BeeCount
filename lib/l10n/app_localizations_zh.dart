@@ -4252,6 +4252,57 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeCategoryModeNoneFeature3 => '适合有特殊分类需求的用户';
 
   @override
+  String get welcomeExistingUserTitle => '老用户？';
+
+  @override
+  String get welcomeExistingUserButton => '导入配置';
+
+  @override
+  String get welcomeExistingUserDescription => '从其他设备迁移数据';
+
+  @override
+  String get welcomeImportingConfig => '正在导入配置...';
+
+  @override
+  String get welcomeImportSuccess => '配置导入成功';
+
+  @override
+  String welcomeImportFailed(String error) {
+    return '配置导入失败: $error';
+  }
+
+  @override
+  String get welcomeImportNoFile => '未选择文件';
+
+  @override
+  String get welcomeImportInvalidFormat => '无效的配置文件格式';
+
+  @override
+  String get welcomeImportAttachmentTitle => '导入附件';
+
+  @override
+  String get welcomeImportAttachmentDesc => '检测到您导入了配置文件，是否需要导入附件文件？';
+
+  @override
+  String get welcomeImportAttachmentButton => '选择附件文件';
+
+  @override
+  String get welcomeImportAttachmentSkip => '跳过';
+
+  @override
+  String welcomeImportAttachmentSuccess(int imported) {
+    return '附件导入完成：导入 $imported 个';
+  }
+
+  @override
+  String welcomeImportAttachmentFailed(String error) {
+    return '附件导入失败: $error';
+  }
+
+  @override
+  String get welcomeImportingAttachment => '正在导入附件...';
+
+  @override
   String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';
 
   @override
@@ -9357,6 +9408,57 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeCategoryModeNoneFeature3 => '適合有特殊分類需求的使用者';
+
+  @override
+  String get welcomeExistingUserTitle => '老用戶？';
+
+  @override
+  String get welcomeExistingUserButton => '匯入配置';
+
+  @override
+  String get welcomeExistingUserDescription => '從其他裝置遷移資料';
+
+  @override
+  String get welcomeImportingConfig => '正在匯入配置...';
+
+  @override
+  String get welcomeImportSuccess => '配置匯入成功';
+
+  @override
+  String welcomeImportFailed(String error) {
+    return '配置匯入失敗: $error';
+  }
+
+  @override
+  String get welcomeImportNoFile => '未選擇檔案';
+
+  @override
+  String get welcomeImportInvalidFormat => '無效的配置檔案格式';
+
+  @override
+  String get welcomeImportAttachmentTitle => '匯入附件';
+
+  @override
+  String get welcomeImportAttachmentDesc => '檢測到您匯入了配置檔案，是否需要匯入附件檔案？';
+
+  @override
+  String get welcomeImportAttachmentButton => '選擇附件檔案';
+
+  @override
+  String get welcomeImportAttachmentSkip => '跳過';
+
+  @override
+  String welcomeImportAttachmentSuccess(int imported) {
+    return '附件匯入完成：匯入 $imported 個';
+  }
+
+  @override
+  String welcomeImportAttachmentFailed(String error) {
+    return '附件匯入失敗: $error';
+  }
+
+  @override
+  String get welcomeImportingAttachment => '正在匯入附件...';
 
   @override
   String get iosVersionWarningTitle => '需要 iOS 16.0 或更高版本';

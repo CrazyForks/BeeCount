@@ -8106,6 +8106,96 @@ abstract class AppLocalizations {
   /// **'Perfect for custom classification needs'**
   String get welcomeCategoryModeNoneFeature3;
 
+  /// No description provided for @welcomeExistingUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing User?'**
+  String get welcomeExistingUserTitle;
+
+  /// No description provided for @welcomeExistingUserButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Config'**
+  String get welcomeExistingUserButton;
+
+  /// No description provided for @welcomeExistingUserDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Migrate data from another device'**
+  String get welcomeExistingUserDescription;
+
+  /// No description provided for @welcomeImportingConfig.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing configuration...'**
+  String get welcomeImportingConfig;
+
+  /// No description provided for @welcomeImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration imported successfully'**
+  String get welcomeImportSuccess;
+
+  /// No description provided for @welcomeImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: {error}'**
+  String welcomeImportFailed(String error);
+
+  /// No description provided for @welcomeImportNoFile.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get welcomeImportNoFile;
+
+  /// No description provided for @welcomeImportInvalidFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid configuration file format'**
+  String get welcomeImportInvalidFormat;
+
+  /// No description provided for @welcomeImportAttachmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Attachments'**
+  String get welcomeImportAttachmentTitle;
+
+  /// No description provided for @welcomeImportAttachmentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to import attachment files as well?'**
+  String get welcomeImportAttachmentDesc;
+
+  /// No description provided for @welcomeImportAttachmentButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Attachment File'**
+  String get welcomeImportAttachmentButton;
+
+  /// No description provided for @welcomeImportAttachmentSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get welcomeImportAttachmentSkip;
+
+  /// No description provided for @welcomeImportAttachmentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments imported: {imported}'**
+  String welcomeImportAttachmentSuccess(int imported);
+
+  /// No description provided for @welcomeImportAttachmentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachment import failed: {error}'**
+  String welcomeImportAttachmentFailed(String error);
+
+  /// No description provided for @welcomeImportingAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing attachments...'**
+  String get welcomeImportingAttachment;
+
   /// No description provided for @iosVersionWarningTitle.
   ///
   /// In en, this message translates to:

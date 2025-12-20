@@ -1956,6 +1956,42 @@
   "welcomeCloudSyncFeature3": "自建 WebDAV/Supabase/S3 服務",
   "welcomeCloudSyncTitle": "可選的雲端同步",
   "welcomeCurrencyDescription": "選擇您常用的貨幣，之後可以隨時在設定中更改",
+  "welcomeExistingUserTitle": "老用戶？",
+  "welcomeExistingUserButton": "匯入配置",
+  "welcomeExistingUserDescription": "從其他裝置遷移資料",
+  "welcomeImportingConfig": "正在匯入配置...",
+  "welcomeImportSuccess": "配置匯入成功",
+  "welcomeImportFailed": "配置匯入失敗: {error}",
+  "@welcomeImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportNoFile": "未選擇檔案",
+  "welcomeImportInvalidFormat": "無效的配置檔案格式",
+  "welcomeImportAttachmentTitle": "匯入附件",
+  "welcomeImportAttachmentDesc": "檢測到您匯入了配置檔案，是否需要匯入附件檔案？",
+  "welcomeImportAttachmentButton": "選擇附件檔案",
+  "welcomeImportAttachmentSkip": "跳過",
+  "welcomeImportAttachmentSuccess": "附件匯入完成：匯入 {imported} 個",
+  "@welcomeImportAttachmentSuccess": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      }
+    }
+  },
+  "welcomeImportAttachmentFailed": "附件匯入失敗: {error}",
+  "@welcomeImportAttachmentFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeImportingAttachment": "正在匯入附件...",
   "welcomeDescription": "一个真正尊重您隐私的记帳應用",
   "welcomeOpenSourceFeature1": "活躍的開發者社群，持續改進",
   "welcomePrivacyFeature1": "100% 開源代碼，接受社區監督",
