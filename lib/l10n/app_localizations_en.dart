@@ -19,6 +19,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabMine => 'Mine';
 
   @override
+  String get tabAdd => 'Add';
+
+  @override
   String get commonCancel => 'Cancel';
 
   @override

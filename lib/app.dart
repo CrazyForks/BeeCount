@@ -11,8 +11,6 @@ import 'pages/main/discover_page.dart';
 import 'pages/main/mine_page.dart';
 import 'pages/transaction/transaction_editor_page.dart';
 import 'providers.dart';
-import 'providers/ui_state_providers.dart';
-import 'utils/ui_scale_extensions.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
 import 'widgets/ui/ui.dart';
@@ -92,7 +90,8 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
     _appLinkSubscription = ref.listenManual<AppLinkAction?>(
       pendingAppLinkActionProvider,
       (previous, next) {
-        logger.info('AppLink', 'BeeApp: 监听触发 previous=$previous, next=$next, mounted=$mounted');
+        logger.info('AppLink',
+            'BeeApp: 监听触发 previous=$previous, next=$next, mounted=$mounted');
         if (next != null && mounted) {
           logger.info('AppLink', 'BeeApp: 执行动作 $next');
           _handleAppLinkAction(context, next);
@@ -127,7 +126,8 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
     final now = DateTime.now();
     if (_isHandlingAppLink ||
         (_lastAppLinkHandleTime != null &&
-            now.difference(_lastAppLinkHandleTime!) < const Duration(seconds: 1))) {
+            now.difference(_lastAppLinkHandleTime!) <
+                const Duration(seconds: 1))) {
       logger.info('AppLink', 'BeeApp: 忽略重复的动作 $action');
       return;
     }
@@ -168,7 +168,8 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
   Future<bool> _checkGlmApiKeyConfigured() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
+      final aiEnabled =
+          prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
       final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
       return aiEnabled && apiKey.isNotEmpty;
     } catch (e) {
@@ -206,193 +207,109 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    // 将 4 个页面映射到 5 槽位（中间为"+"）：页面索引 0,1,2,3 对应视觉槽位 0,1,3,4（槽位 2 为 +）。
     final idx = ref.watch(bottomTabIndexProvider);
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.watch(primaryColorProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) {
-        // 拦截根路由的返回键，避免意外将根路由 pop 到空导致黑屏。
-        // 实现双击返回退出应用逻辑
         if (didPop) return;
 
         final now = DateTime.now();
-        final l10n = AppLocalizations.of(context);
 
         if (_lastBackPressTime == null ||
             now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
-          // 第一次按返回键，显示提示并记录时间
           _lastBackPressTime = now;
           showToast(context, l10n.commonPressAgainToExit);
         } else {
-          // 2秒内第二次按返回键，退出应用
           SystemNavigator.pop();
         }
       },
       child: Stack(
         children: [
           Scaffold(
-            body: IndexedStack(
-              index: idx,
-              children: _pages,
-            ),
-            bottomNavigationBar: BottomAppBar(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF1C1C1E)  // ⭐ 暗黑模式：深灰（与卡片同色）
-              : Colors.white,             // 亮色模式：白色
-          shape: null,  // ⭐ 去掉凹口设计
-          notchMargin: 0,
-          elevation: 8,  // ⭐ 保持阴影，让Tab栏突起
-          child: SizedBox(
-            height: 60.0.scaled(context, ref),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(5, (i) {
-                if (i == 2) {
-                  // 中间预留给 FAB 的槽位，确保 5 等分
-                  return const Expanded(child: SizedBox());
-                }
-                // 槽位转页面索引
-                final pageIndex = i > 2 ? i - 1 : i;
-                final activeVisualIndex = idx >= 2 ? idx + 1 : idx;
-                final active = activeVisualIndex == i;
-                final isDark = Theme.of(context).brightness == Brightness.dark;
-                Color color = active
-                    ? Theme.of(context).colorScheme.primary
-                    : (isDark ? Colors.white70 : Colors.black54); // ⭐ 自适应未选中颜色
-                IconData icon;
-                String label;
-                final l10n = AppLocalizations.of(context);
-                switch (pageIndex) {
-                  case 0:
-                    icon = Icons.list_alt_rounded;
-                    label = l10n.tabHome;
-                    break;
-                  case 1:
-                    icon = Icons.pie_chart_rounded;
-                    label = l10n.tabAnalytics;
-                    break;
-                  case 2:
-                    icon = Icons.explore_rounded;
-                    label = l10n.tabDiscover;
-                    break;
-                  default:
-                    icon = Icons.person_rounded;
-                    label = l10n.tabMine;
-                }
-                return Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
+            body: Stack(
+              children: [
+                // 页面内容（使用 MediaQuery 注入底部 padding）
+                Positioned.fill(
+                  child: MediaQuery(
+                    data: MediaQuery.of(context).copyWith(
+                      padding: MediaQuery.of(context).padding.copyWith(
+                            bottom: 56 + bottomPadding,
+                          ),
+                    ),
+                    child: IndexedStack(
+                      index: idx,
+                      children: _pages,
+                    ),
+                  ),
+                ),
+                // 底部导航栏（放在 body Stack 中，可以让按钮超出）
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: _BeeBottomBar(
+                    currentIndex: idx,
+                    primaryColor: primaryColor,
+                    isDark: isDark,
+                    bottomPadding: bottomPadding,
+                    l10n: l10n,
+                    onTabTap: (index) {
                       final now = DateTime.now();
-                      // 检测双击：同一个标签在300ms内连续点击两次
-                      if (_lastTappedIndex == pageIndex &&
+                      if (_lastTappedIndex == index &&
                           _lastTapTime != null &&
-                          now.difference(_lastTapTime!) < const Duration(milliseconds: 300)) {
-                        // 双击首页标签，触发滚动到顶部
-                        if (pageIndex == 0) {
+                          now.difference(_lastTapTime!) <
+                              const Duration(milliseconds: 300)) {
+                        if (index == 0) {
                           ref.read(homeScrollToTopProvider.notifier).state++;
                         }
-                        // 重置双击状态
                         _lastTapTime = null;
                         _lastTappedIndex = null;
                       } else {
-                        // 记录本次点击
                         _lastTapTime = now;
-                        _lastTappedIndex = pageIndex;
-                        // 切换标签
-                        ref.read(bottomTabIndexProvider.notifier).state = pageIndex;
+                        _lastTappedIndex = index;
+                        ref.read(bottomTabIndexProvider.notifier).state = index;
                       }
                     },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 6.0,
-                        horizontal: 4.0,
+                    onCenterTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const TransactionEditorPage(
+                              initialKind: 'expense'),
+                        ),
+                      );
+                    },
+                    centerActions: [
+                      SpeedDialAction(
+                        icon: Icons.camera_alt_rounded,
+                        label: l10n.fabActionCamera,
+                        onTap: () => ImageBillingHelper.openCameraForBilling(
+                            context, ref),
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(icon, color: color, size: 24),
-                          const SizedBox(height: 2),
-                          Text(label,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: color,
-                                  fontWeight: active
-                                      ? FontWeight.w600
-                                      : FontWeight.w400)),
-                        ],
+                      SpeedDialAction(
+                        icon: Icons.photo_library_rounded,
+                        label: l10n.fabActionGallery,
+                        onTap: () => ImageBillingHelper.pickImageForBilling(
+                            context, ref),
                       ),
-                    ),
+                      SpeedDialAction(
+                        icon: Icons.mic_rounded,
+                        label: l10n.fabActionVoice,
+                        onTap: () =>
+                            VoiceBillingHelper.startVoiceBilling(context, ref),
+                      ),
+                    ],
                   ),
-                );
-              }),
+                ),
+              ],
             ),
-          ),
-        ),
-        floatingActionButton: Consumer(builder: (context, ref, _) {
-          final color = Theme.of(context).colorScheme.primary;
-          final l10n = AppLocalizations.of(context);
-
-          return FutureBuilder<bool>(
-            future: _checkGlmApiKeyConfigured(),
-            builder: (context, snapshot) {
-              final isVoiceEnabled = snapshot.data ?? false;
-
-              return SpeedDialFAB(
-                      icon: Icons.add,
-                      backgroundColor: color,
-                      foregroundColor: Colors.white,
-                      // 短按：直接打开手动记账
-                      onPressed: () async {
-                        // 用户交互，切换首页到 Stream 模式
-                        ref.read(homeSwitchToStreamProvider.notifier).state++;
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const TransactionEditorPage(
-                              initialKind: 'expense',
-                              quickAdd: true,
-                            ),
-                          ),
-                        );
-                      },
-                      // 长按：展开扇形菜单
-                      actions: [
-                        SpeedDialAction(
-                          icon: Icons.camera_alt,
-                          label: l10n.fabActionCamera,
-                          onTap: () {
-                            ref.read(homeSwitchToStreamProvider.notifier).state++;
-                            ImageBillingHelper.openCameraForBilling(context, ref);
-                          },
-                        ),
-                        SpeedDialAction(
-                          icon: Icons.photo_library,
-                          label: l10n.fabActionGallery,
-                          onTap: () {
-                            ref.read(homeSwitchToStreamProvider.notifier).state++;
-                            ImageBillingHelper.pickImageForBilling(context, ref);
-                          },
-                        ),
-                        SpeedDialAction(
-                          icon: Icons.mic,
-                          label: l10n.fabActionVoice,
-                          enabled: isVoiceEnabled,
-                          disabledTooltip: l10n.fabActionVoiceDisabled,
-                          onTap: () {
-                            ref.read(homeSwitchToStreamProvider.notifier).state++;
-                            VoiceBillingHelper.startVoiceBilling(context, ref);
-                          },
-                        ),
-                      ],
-                    );
-            },
-          );
-        }),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           ),
           // 开发模式下的主题切换按钮
           if (kDebugMode)
@@ -568,4 +485,515 @@ class _ArrowPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
+/// 闲鱼风格底部导航栏（带圆滑凸起）
+class _BeeBottomBar extends StatefulWidget {
+  final int currentIndex;
+  final Color primaryColor;
+  final bool isDark;
+  final double bottomPadding;
+  final AppLocalizations l10n;
+  final ValueChanged<int> onTabTap;
+  final VoidCallback onCenterTap;
+  final List<SpeedDialAction> centerActions;
 
+  const _BeeBottomBar({
+    required this.currentIndex,
+    required this.primaryColor,
+    required this.isDark,
+    required this.bottomPadding,
+    required this.l10n,
+    required this.onTabTap,
+    required this.onCenterTap,
+    required this.centerActions,
+  });
+
+  @override
+  State<_BeeBottomBar> createState() => _BeeBottomBarState();
+}
+
+class _BeeBottomBarState extends State<_BeeBottomBar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _expandAnimation;
+  bool _isOpen = false;
+  int? _hoveredIndex;
+  OverlayEntry? _overlayEntry;
+  final GlobalKey _centerButtonKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _expandAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  void _onLongPressStart(LongPressStartDetails details) {
+    if (widget.centerActions.isEmpty) return;
+    setState(() {
+      _isOpen = true;
+      _controller.forward();
+    });
+    _showOverlay();
+  }
+
+  void _onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
+    _updateHoveredIndex(details.globalPosition);
+  }
+
+  void _onLongPressEnd(LongPressEndDetails details) {
+    if (_hoveredIndex != null && _hoveredIndex! < widget.centerActions.length) {
+      final action = widget.centerActions[_hoveredIndex!];
+      if (action.enabled && action.onTap != null) {
+        action.onTap!();
+      }
+    }
+
+    setState(() {
+      _isOpen = false;
+      _hoveredIndex = null;
+      _controller.reverse();
+    });
+    _removeOverlay();
+  }
+
+  void _showOverlay() {
+    final RenderBox? renderBox =
+        _centerButtonKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final position = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => _SpeedDialOverlay(
+        buttonPosition: position,
+        buttonSize: size,
+        actions: widget.centerActions,
+        animation: _expandAnimation,
+        hoveredIndex: _hoveredIndex,
+        backgroundColor: widget.primaryColor,
+      ),
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _updateHoveredIndex(Offset globalPosition) {
+    final RenderBox? renderBox =
+        _centerButtonKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final buttonPosition = renderBox.localToGlobal(Offset.zero);
+    final buttonSize = renderBox.size;
+    final buttonCenter = Offset(
+      buttonPosition.dx + buttonSize.width / 2,
+      buttonPosition.dy + buttonSize.height / 2,
+    );
+
+    final angles = [210.0, 270.0, 330.0];
+    const distance = 85.0;
+    const buttonRadius = 26.0;
+
+    int? newHoveredIndex;
+    for (int i = 0; i < widget.centerActions.length && i < angles.length; i++) {
+      final angle = angles[i];
+      final radians = angle * 3.14159265359 / 180;
+      final offsetX = distance * cos(radians);
+      final offsetY = distance * sin(radians);
+
+      final actionCenter = Offset(
+        buttonCenter.dx + offsetX,
+        buttonCenter.dy + offsetY,
+      );
+
+      final dx = globalPosition.dx - actionCenter.dx;
+      final dy = globalPosition.dy - actionCenter.dy;
+      final distanceToButton = sqrt(dx * dx + dy * dy);
+
+      if (distanceToButton <= buttonRadius) {
+        newHoveredIndex = i;
+        break;
+      }
+    }
+
+    if (newHoveredIndex != _hoveredIndex) {
+      setState(() {
+        _hoveredIndex = newHoveredIndex;
+      });
+      _overlayEntry?.markNeedsBuild();
+    }
+  }
+
+  double cos(double radians) => _cos(radians);
+  double sin(double radians) => _sin(radians);
+  double sqrt(double value) => _sqrt(value);
+
+  static double _cos(double x) {
+    return x.isNaN
+        ? x
+        : (x == double.infinity || x == double.negativeInfinity)
+            ? double.nan
+            : _cosImpl(x);
+  }
+
+  static double _cosImpl(double x) {
+    x = x % (2 * 3.14159265359);
+    double result = 1.0;
+    double term = 1.0;
+    for (int i = 1; i <= 10; i++) {
+      term *= -x * x / ((2 * i - 1) * (2 * i));
+      result += term;
+    }
+    return result;
+  }
+
+  static double _sin(double x) {
+    return x.isNaN
+        ? x
+        : (x == double.infinity || x == double.negativeInfinity)
+            ? double.nan
+            : _sinImpl(x);
+  }
+
+  static double _sinImpl(double x) {
+    x = x % (2 * 3.14159265359);
+    double result = x;
+    double term = x;
+    for (int i = 1; i <= 10; i++) {
+      term *= -x * x / ((2 * i) * (2 * i + 1));
+      result += term;
+    }
+    return result;
+  }
+
+  static double _sqrt(double x) {
+    if (x < 0) return double.nan;
+    if (x == 0) return 0;
+    double guess = x / 2;
+    for (int i = 0; i < 20; i++) {
+      guess = (guess + x / guess) / 2;
+    }
+    return guess;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = widget.isDark ? const Color(0xFF1C1C1E) : Colors.white;
+    final inactiveColor = widget.isDark ? Colors.white70 : Colors.black54;
+
+    const barHeight = 56.0;
+    const buttonSize = 64.0; // 按钮大小
+    // 按钮底部对齐 tab 文字底部（约 barHeight - 8）
+    const buttonOverhang = buttonSize - (barHeight - 8); // = 64 - 48 = 16
+    const bumpHeight = 20.0; // 凸起背景的高度
+    const bumpExtraWidth = 2.0; // 凸起比按钮宽多少（每侧）
+
+    return SizedBox(
+      height: barHeight + widget.bottomPadding,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // 背景（使用 CustomPaint 绘制圆滑凸起）
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _SmoothBumpPainter(
+                color: bgColor,
+                bumpHalfWidth: buttonSize / 2 + bumpExtraWidth, // 凸起的半宽度
+                bumpHeight: bumpHeight, // 凸起高度
+              ),
+            ),
+          ),
+
+          // Tab 项
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            height: barHeight,
+            child: Row(
+              children: [
+                _buildTabItem(0, Icons.list_alt_outlined, widget.l10n.tabHome,
+                    inactiveColor),
+                _buildTabItem(1, Icons.pie_chart_outline_rounded,
+                    widget.l10n.tabAnalytics, inactiveColor),
+                // 中间占位
+                const Expanded(child: SizedBox()),
+                _buildTabItem(2, Icons.explore_outlined, widget.l10n.tabDiscover,
+                    inactiveColor),
+                _buildTabItem(3, Icons.person_outline_rounded, widget.l10n.tabMine,
+                    inactiveColor),
+              ],
+            ),
+          ),
+
+          // 中间凸起按钮（超出 Stack 顶部）
+          Positioned(
+            left: 0,
+            right: 0,
+            top: -buttonOverhang, // 按钮超出导航栏顶部
+            child: Center(
+              child: GestureDetector(
+                key: _centerButtonKey,
+                onTap: widget.onCenterTap,
+                onLongPressStart: _onLongPressStart,
+                onLongPressMoveUpdate: _onLongPressMoveUpdate,
+                onLongPressEnd: _onLongPressEnd,
+                child: AnimatedBuilder(
+                  animation: _expandAnimation,
+                  builder: (context, child) {
+                    return Transform.rotate(
+                      angle: _expandAnimation.value * 3.14159265359 / 4,
+                      child: Container(
+                        width: buttonSize,
+                        height: buttonSize,
+                        decoration: BoxDecoration(
+                          color: widget.primaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          _isOpen ? Icons.close : Icons.add,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabItem(
+      int index, IconData icon, String label, Color inactiveColor) {
+    final isActive = index == widget.currentIndex;
+    final iconColor = isActive ? widget.primaryColor : inactiveColor;
+
+    return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => widget.onTabTap(index),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: iconColor, size: 24),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                color: inactiveColor, // 文字颜色不变
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 圆滑凸起背景绘制器 - 闲鱼风格
+class _SmoothBumpPainter extends CustomPainter {
+  final Color color;
+  final double bumpHalfWidth; // 凸起的半宽度（从中心到起点的距离）
+  final double bumpHeight; // 凸起的高度
+
+  _SmoothBumpPainter({
+    required this.color,
+    required this.bumpHalfWidth,
+    required this.bumpHeight,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final centerX = size.width / 2;
+    // 计算圆弧半径，使圆弧顶点刚好到达 bumpHeight 高度
+    // 公式：r = (h^2 + w^2) / (2*h)
+    final arcRadius =
+        (bumpHeight * bumpHeight + bumpHalfWidth * bumpHalfWidth) /
+            (2 * bumpHeight);
+
+    final path = Path();
+
+    // 从左下角开始
+    path.moveTo(0, size.height);
+    path.lineTo(0, 0);
+
+    // 左边平直部分到凸起开始
+    path.lineTo(centerX - bumpHalfWidth, 0);
+
+    // 使用圆弧绘制凸起（向上凸出，顺时针方向）
+    path.arcToPoint(
+      Offset(centerX + bumpHalfWidth, 0),
+      radius: Radius.circular(arcRadius),
+      clockwise: true,
+    );
+
+    // 右边平直部分
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width, size.height);
+    path.close();
+
+    // 绘制背景
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _SmoothBumpPainter oldDelegate) {
+    return oldDelegate.color != color ||
+        oldDelegate.bumpHalfWidth != bumpHalfWidth ||
+        oldDelegate.bumpHeight != bumpHeight;
+  }
+}
+
+/// 扇形菜单覆盖层
+class _SpeedDialOverlay extends StatelessWidget {
+  final Offset buttonPosition;
+  final Size buttonSize;
+  final List<SpeedDialAction> actions;
+  final Animation<double> animation;
+  final int? hoveredIndex;
+  final Color backgroundColor;
+
+  const _SpeedDialOverlay({
+    required this.buttonPosition,
+    required this.buttonSize,
+    required this.actions,
+    required this.animation,
+    required this.hoveredIndex,
+    required this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final buttonCenter = Offset(
+      buttonPosition.dx + buttonSize.width / 2,
+      buttonPosition.dy + buttonSize.height / 2,
+    );
+
+    final angles = [210.0, 270.0, 330.0];
+    const distance = 85.0;
+    const pi = 3.14159265359;
+
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        if (animation.value == 0) {
+          return const SizedBox.shrink();
+        }
+
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.3 * animation.value),
+                ),
+              ),
+            ),
+            for (int i = 0; i < actions.length && i < angles.length; i++)
+              Builder(builder: (context) {
+                final angle = angles[i];
+                final radians = angle * pi / 180;
+                final progress = animation.value;
+                final offsetX = progress * distance * _cos(radians);
+                final offsetY = progress * distance * _sin(radians);
+
+                const btnSize = 48.0;
+                final left = buttonCenter.dx + offsetX - btnSize / 2;
+                final top = buttonCenter.dy + offsetY - btnSize / 2;
+
+                final isEnabled = actions[i].enabled;
+                final bgColor =
+                    isEnabled ? backgroundColor : Colors.grey.shade400;
+                final isHovered = i == hoveredIndex;
+
+                return Positioned(
+                  left: left,
+                  top: top,
+                  child: Transform.scale(
+                    scale: progress,
+                    child: Opacity(
+                      opacity: progress,
+                      child: AnimatedScale(
+                        scale: isHovered ? 1.2 : 1.0,
+                        duration: const Duration(milliseconds: 150),
+                        child: Material(
+                          color: bgColor,
+                          shape: const CircleBorder(),
+                          elevation: isHovered ? 8 : 4,
+                          child: Container(
+                            width: btnSize,
+                            height: btnSize,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: isHovered
+                                  ? Border.all(color: Colors.white, width: 3)
+                                  : null,
+                            ),
+                            child: Icon(
+                              actions[i].icon,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+          ],
+        );
+      },
+    );
+  }
+
+  static double _cos(double x) {
+    x = x % (2 * 3.14159265359);
+    double result = 1.0;
+    double term = 1.0;
+    for (int i = 1; i <= 10; i++) {
+      term *= -x * x / ((2 * i - 1) * (2 * i));
+      result += term;
+    }
+    return result;
+  }
+
+  static double _sin(double x) {
+    x = x % (2 * 3.14159265359);
+    double result = x;
+    double term = x;
+    for (int i = 1; i <= 10; i++) {
+      term *= -x * x / ((2 * i) * (2 * i + 1));
+      result += term;
+    }
+    return result;
+  }
+}

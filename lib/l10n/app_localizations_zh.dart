@@ -19,6 +19,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tabMine => '我的';
 
   @override
+  String get tabAdd => '记账';
+
+  @override
   String get commonCancel => '取消';
 
   @override
@@ -5227,6 +5230,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tabMine => '我的';
+
+  @override
+  String get tabAdd => '記帳';
 
   @override
   String get commonCancel => '取消';

@@ -120,6 +120,12 @@ abstract class AppLocalizations {
   /// **'Mine'**
   String get tabMine;
 
+  /// No description provided for @tabAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get tabAdd;
+
   /// No description provided for @commonCancel.
   ///
   /// In en, this message translates to:
