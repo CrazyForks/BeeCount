@@ -89,6 +89,7 @@ class CloudRecurringTransactionRepository
     int? monthOfYear,
     required DateTime startDate,
     DateTime? endDate,
+    bool enabled = true,
   }) async {
     logger.info('CloudRecurringTransactionRepo',
         '添加周期记账: ledgerId=$ledgerId, type=$type, amount=$amount');
@@ -111,7 +112,7 @@ class CloudRecurringTransactionRepository
       'month_of_year': monthOfYear,
       'start_date': startDate.toIso8601String(),
       'end_date': endDate?.toIso8601String(),
-      'enabled': true,
+      'enabled': enabled,
       'created_by': userId,
     };
 

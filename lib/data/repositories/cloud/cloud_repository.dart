@@ -745,6 +745,7 @@ class CloudRepository extends BaseRepository {
     int? monthOfYear,
     required DateTime startDate,
     DateTime? endDate,
+    bool enabled = true,
   }) =>
       _recurringTransaction.addRecurringTransaction(
         ledgerId: ledgerId,
@@ -761,6 +762,7 @@ class CloudRepository extends BaseRepository {
         monthOfYear: monthOfYear,
         startDate: startDate,
         endDate: endDate,
+        enabled: enabled,
       );
 
   @override

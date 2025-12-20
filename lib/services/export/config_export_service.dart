@@ -2182,6 +2182,7 @@ class ConfigExportService {
             monthOfYear: item.monthOfYear,
             startDate: DateTime.parse(item.startDate),
             endDate: item.endDate != null ? DateTime.parse(item.endDate!) : null,
+            enabled: item.enabled,
           );
           importedCount++;
         }

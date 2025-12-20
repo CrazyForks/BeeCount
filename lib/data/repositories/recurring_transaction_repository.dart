@@ -29,6 +29,7 @@ abstract class RecurringTransactionRepository {
     int? monthOfYear,
     required DateTime startDate,
     DateTime? endDate,
+    bool enabled = true,
   });
 
   /// 更新周期记账

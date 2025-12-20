@@ -708,6 +708,7 @@ class LocalRepository extends BaseRepository {
     int? monthOfYear,
     required DateTime startDate,
     DateTime? endDate,
+    bool enabled = true,
   }) =>
       _recurringTransactionRepo.addRecurringTransaction(
         ledgerId: ledgerId,
@@ -724,6 +725,7 @@ class LocalRepository extends BaseRepository {
         monthOfYear: monthOfYear,
         startDate: startDate,
         endDate: endDate,
+        enabled: enabled,
       );
 
   @override
