@@ -233,28 +233,11 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
       child: Stack(
         children: [
           Scaffold(
-            body: Stack(
-              children: [
-                // 页面内容（使用 MediaQuery 注入底部 padding）
-                Positioned.fill(
-                  child: MediaQuery(
-                    data: MediaQuery.of(context).copyWith(
-                      padding: MediaQuery.of(context).padding.copyWith(
-                            bottom: 56 + bottomPadding,
-                          ),
-                    ),
-                    child: IndexedStack(
-                      index: idx,
-                      children: _pages,
-                    ),
-                  ),
-                ),
-                // 底部导航栏（放在 body Stack 中，可以让按钮超出）
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: _BeeBottomBar(
+            body: IndexedStack(
+              index: idx,
+              children: _pages,
+            ),
+            bottomNavigationBar: _BeeBottomBar(
                     currentIndex: idx,
                     primaryColor: primaryColor,
                     isDark: isDark,
@@ -306,9 +289,6 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                             VoiceBillingHelper.startVoiceBilling(context, ref),
                       ),
                     ],
-                  ),
-                ),
-              ],
             ),
           ),
           // 开发模式下的主题切换按钮
