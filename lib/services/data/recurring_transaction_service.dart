@@ -35,7 +35,9 @@ class RecurringTransactionService {
   ///
   /// [repository] 可以是 BeeRepository 或 CloudRepository
   /// [verbose] 是否打印详细日志
-  static Future<void> generatePendingTransactionsStatic({
+  ///
+  /// 返回：生成了交易的账本ID集合（用于触发同步）
+  static Future<Set<int>> generatePendingTransactionsStatic({
     required dynamic repository,
     bool verbose = false,
   }) async {
@@ -50,10 +52,14 @@ class RecurringTransactionService {
 
       if (generatedTransactions.isNotEmpty) {
         print('✅ [RecurringTransaction] 成功生成 ${generatedTransactions.length} 条重复交易记录');
+        // 收集生成了交易的账本ID
+        final ledgerIds = generatedTransactions.map((t) => t.ledgerId).toSet();
+        return ledgerIds;
       } else {
         if (verbose) {
           print('ℹ️  [RecurringTransaction] 没有待生成的重复交易');
         }
+        return {};
       }
     } catch (e, stackTrace) {
       print('❌ [RecurringTransaction] 生成重复交易失败: $e');
@@ -62,6 +68,7 @@ class RecurringTransactionService {
         print(stackTrace.toString());
       }
       // 不抛出异常，避免影响应用启动
+      return {};
     }
   }
 

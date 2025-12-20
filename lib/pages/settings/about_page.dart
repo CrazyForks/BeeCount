@@ -122,16 +122,6 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                       ),
                       const Divider(height: 1, thickness: 0.5),
                       AppListTile(
-                        leading: Icons.email_outlined,
-                        title: AppLocalizations.of(context).aboutContactEmail,
-                        subtitle: 'sunxiaoyes@outlook.com',
-                        onTap: () async {
-                          final url = Uri.parse('mailto:sunxiaoyes@outlook.com');
-                          await _tryOpenUrl(url);
-                        },
-                      ),
-                      const Divider(height: 1, thickness: 0.5),
-                      AppListTile(
                         leading: Icons.chat_outlined,
                         title: AppLocalizations.of(context).aboutWeChatGroup,
                         subtitle: AppLocalizations.of(context).aboutWeChatGroupDesc,

@@ -13,7 +13,7 @@ import '../../widgets/ai/bill_card_widget.dart';
 import '../../widgets/ai/ai_quick_commands_bar.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../providers.dart';
 import '../../providers/ai_chat_providers.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
@@ -698,7 +698,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
 
         // 触发云同步
         final billLedgerId = response.billInfo?.ledgerId ?? ledgerId;
-        await handleLocalChange(ref, ledgerId: billLedgerId, background: true);
+        await PostProcessor.sync(ref, ledgerId: billLedgerId);
 
         logger.info('AIChat', '记账成功，已刷新统计信息和触发云同步');
       }
@@ -817,7 +817,7 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         final billInfo = metadata['billInfo'] as Map<String, dynamic>?;
         if (billInfo != null && billInfo['ledgerId'] != null) {
           final ledgerId = billInfo['ledgerId'] as int;
-          await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+          await PostProcessor.sync(ref, ledgerId: ledgerId);
           logger.info('AIChat', '撤销记账成功,已刷新统计信息和触发云同步');
         }
       }
@@ -995,10 +995,10 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         ref.read(statsRefreshProvider.notifier).state++;
 
         // 触发云同步（旧账本和新账本都需要同步）
-        await handleLocalChange(ref,
-            ledgerId: transaction.ledgerId, background: true);
-        await handleLocalChange(ref,
-            ledgerId: selectedLedgerId, background: true);
+        await PostProcessor.sync(ref,
+            ledgerId: transaction.ledgerId);
+        await PostProcessor.sync(ref,
+            ledgerId: selectedLedgerId);
 
         logger.info('AIChat',
             '修改账本成功: ${transaction.ledgerId} -> $selectedLedgerId,已刷新统计信息和触发云同步');

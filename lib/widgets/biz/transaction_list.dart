@@ -9,7 +9,7 @@ import '../../services/system/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../utils/transaction_edit_utils.dart';
 import '../../utils/category_utils.dart';
 import '../category_icon.dart';
@@ -455,7 +455,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                 final curLedger = ref.read(currentLedgerIdProvider);
                 ref.invalidate(countsForLedgerProvider(curLedger));
                 ref.read(statsRefreshProvider.notifier).state++;
-                handleLocalChange(ref, ledgerId: curLedger, background: true);
+                PostProcessor.sync(ref, ledgerId: curLedger);
 
                 if (context.mounted) {
                   showToast(context, AppLocalizations.of(context).ledgersDeleted);

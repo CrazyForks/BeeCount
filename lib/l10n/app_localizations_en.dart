@@ -3851,9 +3851,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutGitHubRepo => 'GitHub Repository';
 
   @override
-  String get aboutContactEmail => 'Contact Email';
-
-  @override
   String get aboutWeChatGroup => 'WeChat Group';
 
   @override

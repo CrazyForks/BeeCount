@@ -18,7 +18,7 @@ import '../../utils/currencies.dart';
 import '../../services/system/logger_service.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/format_utils.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../l10n/app_localizations.dart';
 import '../../styles/tokens.dart';
 
@@ -45,7 +45,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
       if (previous?.running == true && next.isJustCompleted && next.ledgerId != null) {
         print('🟢 [LedgersPage] 检测到导入完成: ledgerId=${next.ledgerId}');
         // 触发同步状态刷新和账本列表刷新
-        handleLocalChange(ref, ledgerId: next.ledgerId!, background: true);
+        PostProcessor.sync(ref, ledgerId: next.ledgerId!);
       }
     });
 
@@ -476,7 +476,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
     );
 
     // 修改账本名称/币种后，需要触发同步以更新云端账本文件
-    await handleLocalChange(ref, ledgerId: ledger.id, background: true);
+    await PostProcessor.sync(ref, ledgerId: ledger.id);
 
     ref.read(ledgerListRefreshProvider.notifier).state++;
   }
@@ -500,8 +500,11 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
       if (!mounted) return;
 
+      // 清空缓存的交易数据（避免首页使用旧缓存）
+      ref.read(cachedTransactionsProvider.notifier).state = null;
+
       // 触发同步状态刷新
-      await handleLocalChange(ref, ledgerId: ledger.id, background: true);
+      await PostProcessor.sync(ref, ledgerId: ledger.id);
 
       ref.read(ledgerListRefreshProvider.notifier).state++;
       ref.read(statsRefreshProvider.notifier).state++;
@@ -1045,7 +1048,7 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
                         if (!mounted) return;
 
                         // 下载完成后，触发刷新状态和账本列表
-                        await handleLocalChange(ref, ledgerId: ledger.id, background: true);
+                        await PostProcessor.sync(ref, ledgerId: ledger.id);
 
                         // 刷新统计
                         ref.read(statsRefreshProvider.notifier).state++;

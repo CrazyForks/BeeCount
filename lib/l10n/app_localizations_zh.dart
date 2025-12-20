@@ -3851,9 +3851,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutGitHubRepo => 'GitHub 仓库';
 
   @override
-  String get aboutContactEmail => '联系邮箱';
-
-  @override
   String get aboutWeChatGroup => '微信群';
 
   @override
@@ -5139,6 +5136,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonEdit => '編輯';
+
+  @override
+  String get commonMore => '更多';
 
   @override
   String get commonOk => '確定';
@@ -6584,6 +6584,84 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String categoryCannotDeleteMessage(Object count) {
     return '該分類下還有 $count 筆交易記錄，請先處理這些記錄。';
   }
+
+  @override
+  String get categoryShare => '分享分類';
+
+  @override
+  String get categoryImport => '匯入分類';
+
+  @override
+  String get categoryClearUnused => '清空未使用分類';
+
+  @override
+  String get categoryClearUnusedTitle => '清空未使用分類';
+
+  @override
+  String categoryClearUnusedMessage(Object count) {
+    return '確定要刪除 $count 個未使用的分類嗎？此操作無法撤銷。';
+  }
+
+  @override
+  String get categoryClearUnusedEmpty => '沒有未使用的分類';
+
+  @override
+  String categoryClearUnusedSuccess(Object count) {
+    return '已刪除 $count 個分類';
+  }
+
+  @override
+  String get categoryClearUnusedFailed => '清空失敗';
+
+  @override
+  String get categoryShareScopeTitle => '選擇分享範圍';
+
+  @override
+  String get categoryShareScopeExpense => '僅支出分類';
+
+  @override
+  String get categoryShareScopeIncome => '僅收入分類';
+
+  @override
+  String get categoryShareScopeAll => '全部分類';
+
+  @override
+  String categoryShareSuccess(Object path) {
+    return '已儲存到 $path';
+  }
+
+  @override
+  String get categoryShareSubject => 'BeeCount 分類配置';
+
+  @override
+  String get categoryShareFailed => '分享失敗';
+
+  @override
+  String get categoryImportInvalidFile => '請選擇 YAML 配置檔案';
+
+  @override
+  String get categoryImportNoCategories => '檔案中沒有分類資料';
+
+  @override
+  String get categoryImportModeTitle => '選擇匯入模式';
+
+  @override
+  String get categoryImportModeMerge => '合併';
+
+  @override
+  String get categoryImportModeMergeDesc => '保留現有分類，新增不存在的';
+
+  @override
+  String get categoryImportModeOverwrite => '覆蓋';
+
+  @override
+  String get categoryImportModeOverwriteDesc => '清空未使用分類後匯入';
+
+  @override
+  String get categoryImportSuccess => '匯入成功';
+
+  @override
+  String get categoryImportFailed => '匯入失敗';
 
   @override
   String get categoryDeleteConfirmTitle => '刪除分類';
@@ -8872,9 +8950,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aboutGitHubRepo => 'GitHub 儲存庫';
-
-  @override
-  String get aboutContactEmail => '聯絡電子郵件';
 
   @override
   String get aboutWeChatGroup => '微信群';

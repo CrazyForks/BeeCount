@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import '../category/category_edit_page.dart';
 import '../category/category_migration_page.dart';
 import '../../utils/transaction_edit_utils.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 
@@ -386,7 +386,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                   await repo.deleteTransaction(transaction.id);
 
                   // 统一处理：自动/手动同步与状态刷新（后台静默）
-                  await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+                  await PostProcessor.sync(ref, ledgerId: ledgerId);
 
                   // 刷新：账本笔数与全局统计
                   ref.invalidate(countsForLedgerProvider(ledgerId));
@@ -464,7 +464,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                   await repo.deleteTransaction(transaction.id);
 
                   // 统一处理：自动/手动同步与状态刷新（后台静默）
-                  await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+                  await PostProcessor.sync(ref, ledgerId: ledgerId);
 
                   // 刷新：账本笔数与全局统计
                   ref.invalidate(countsForLedgerProvider(ledgerId));

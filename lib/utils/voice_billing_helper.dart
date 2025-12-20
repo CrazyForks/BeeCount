@@ -12,6 +12,7 @@ import '../services/system/logger_service.dart';
 import '../services/ai/ai_constants.dart';
 import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
+import '../services/billing/post_processor.dart';
 import '../services/billing/ocr_service.dart';
 import '../services/data/tag_seed_service.dart';
 import '../widgets/ui/ui.dart';
@@ -370,13 +371,16 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
       Navigator.of(context).pop();
 
       if (transactionId != null) {
-        // 刷新列表、统计信息和标签列表
-        ref.read(ledgerListRefreshProvider.notifier).state++;
-        ref.read(statsRefreshProvider.notifier).state++;
-        ref.read(tagListRefreshProvider.notifier).state++;
-        showToast(context, l10n.voiceRecordingSuccess);
+        // 统一后处理：刷新UI + 触发云同步
+        await PostProcessor.run(ref, ledgerId: currentLedger.id, tags: true);
+
+        if (mounted) {
+          showToast(context, l10n.voiceRecordingSuccess);
+        }
       } else {
-        showToast(context, l10n.voiceRecordingNoInfo);
+        if (mounted) {
+          showToast(context, l10n.voiceRecordingNoInfo);
+        }
       }
     } catch (e) {
       if (!mounted) return;

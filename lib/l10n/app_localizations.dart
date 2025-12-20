@@ -7344,12 +7344,6 @@ abstract class AppLocalizations {
   /// **'GitHub Repository'**
   String get aboutGitHubRepo;
 
-  /// No description provided for @aboutContactEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Contact Email'**
-  String get aboutContactEmail;
-
   /// No description provided for @aboutWeChatGroup.
   ///
   /// In en, this message translates to:

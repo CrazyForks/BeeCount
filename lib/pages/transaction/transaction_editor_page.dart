@@ -11,7 +11,7 @@ import '../../widgets/biz/amount_editor_sheet.dart';
 import '../../widgets/category/category_selector.dart';
 import '../../widgets/transaction/transfer_form.dart';
 import '../../styles/tokens.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../services/attachment_service.dart';
 
 /// 交易编辑器页面
@@ -278,7 +278,7 @@ class _TransactionEditorPageState extends ConsumerState<TransactionEditorPage>
             ref.read(tagListRefreshProvider.notifier).state++;
           }
           // 统一处理：自动/手动同步与状态刷新（后台静默）
-          handleLocalChange(ref, ledgerId: ledgerId, background: true);
+          PostProcessor.sync(ref, ledgerId: ledgerId);
           // 刷新：账本笔数与全局统计
           ref.invalidate(countsForLedgerProvider(ledgerId));
           ref.read(statsRefreshProvider.notifier).state++;

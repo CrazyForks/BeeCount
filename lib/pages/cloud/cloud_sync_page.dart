@@ -9,7 +9,7 @@ import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../utils/sync_helpers.dart';
+import '../../services/billing/post_processor.dart';
 import '../../cloud/sync_service.dart';
 import '../auth/login_page.dart';
 
@@ -405,8 +405,8 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                         .mineDownloadComplete,
                                     message: msg);
 
-                                // 下载完成后，触发handleLocalChange刷新状态和账本列表
-                                await handleLocalChange(ref, ledgerId: ledgerId, background: true);
+                                // 下载完成后，触发同步刷新状态和账本列表
+                                await PostProcessor.sync(ref, ledgerId: ledgerId);
                               } catch (e) {
                                 if (!context.mounted) return;
                                 await AppDialog.error(context,
