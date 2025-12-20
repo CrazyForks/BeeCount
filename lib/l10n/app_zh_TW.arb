@@ -1537,12 +1537,12 @@
   "sharePosterBalance": "總結餘",
   "sharePosterCompareLastMonth": "環比上月",
   "sharePosterDecreaseRate": "較上月減少",
-  "sharePosterFeature1": "🔒 資料安全·你做主",
-  "sharePosterFeature2": "✨ 完全開源·可審計",
-  "sharePosterFeature3": "🤖 AI智能記帳·圖片語音",
-  "sharePosterFeature4": "📸 拍照記帳·自動識別",
-  "sharePosterFeature5": "📊 多帳本·暗黑模式",
-  "sharePosterFeature6": "☁️ 自建雲同步·永久免費",
+  "sharePosterFeature1": "資料安全·你做主",
+  "sharePosterFeature2": "完全開源·可審計",
+  "sharePosterFeature3": "AI智能記帳·圖片語音",
+  "sharePosterFeature4": "拍照記帳·自動識別",
+  "sharePosterFeature5": "多帳本·暗黑模式",
+  "sharePosterFeature6": "自建雲同步·永久免費",
   "sharePosterGenerateFailed": "生成海報失敗，請重試",
   "sharePosterGenerating": "生成中...",
   "sharePosterHideIncome": "隱藏收入",
@@ -1562,6 +1562,24 @@
   "sharePosterSaveSuccess": "已儲存到相簿",
   "sharePosterSavedMoneyTitle": "恭喜！本月比上月省了",
   "sharePosterScanText": "掃碼訪問開源專案",
+  "appPromoTagOpenSource": "開源",
+  "appPromoTagFree": "免費",
+  "appPromoFooterText": "讓每一筆都有跡可循",
+  "userProfileJourneyYears": "記帳達人 {years} 年",
+  "@userProfileJourneyYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "userProfileJourneyOneYear": "記帳滿一年",
+  "userProfileJourneyHalfYear": "堅持記帳半年",
+  "userProfileJourneyThreeMonths": "記帳三個月",
+  "userProfileJourneyOneMonth": "記帳滿一個月",
+  "userProfileJourneyOneWeek": "記帳一週",
+  "userProfileJourneyStart": "開始記帳之旅",
+  "userProfileDailyAverage": "日均記帳",
   "sharePosterShare": "分享",
   "sharePosterShowIncome": "顯示收入",
   "sharePosterSlogan": "一筆一蜜，記錄美好生活",
@@ -1571,6 +1589,20 @@
   "sharePosterUnitCount": "筆",
   "sharePosterUnitDay": "天",
   "sharePosterUnitYuan": "元",
+  "userProfilePosterStartDate": "記帳始於 {date}",
+  "@userProfilePosterStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "userProfilePosterRecordDays": "記帳天數",
+  "userProfilePosterDaysUnit": "天",
+  "userProfilePosterRecordCount": "記帳筆數",
+  "userProfilePosterCountUnit": "筆",
+  "userProfilePosterLedgerCount": "帳本數量",
+  "userProfilePosterLedgerUnit": "本",
   "sharePosterYearBalance": "年度結餘",
   "sharePosterYearDeficit": "年度赤字",
   "sharePosterYearSubtitle": "用數據記錄生活 用理性規劃未來",
@@ -1958,7 +1990,6 @@
   "welcomeCurrencyDescription": "選擇您常用的貨幣，之後可以隨時在設定中更改",
   "welcomeExistingUserTitle": "老用戶？",
   "welcomeExistingUserButton": "匯入配置",
-  "welcomeExistingUserDescription": "從其他裝置遷移資料",
   "welcomeImportingConfig": "正在匯入配置...",
   "welcomeImportSuccess": "配置匯入成功",
   "welcomeImportFailed": "配置匯入失敗: {error}",
@@ -1970,7 +2001,6 @@
     }
   },
   "welcomeImportNoFile": "未選擇檔案",
-  "welcomeImportInvalidFormat": "無效的配置檔案格式",
   "welcomeImportAttachmentTitle": "匯入附件",
   "welcomeImportAttachmentDesc": "檢測到您匯入了配置檔案，是否需要匯入附件檔案？",
   "welcomeImportAttachmentButton": "選擇附件檔案",

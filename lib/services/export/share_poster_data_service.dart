@@ -2,6 +2,7 @@
 library;
 
 import '../../data/repositories/base_repository.dart';
+import '../ui/avatar_service.dart';
 import 'share_poster_types.dart';
 
 /// 海报数据计算服务
@@ -317,6 +318,48 @@ class SharePosterDataService {
       firstRecordDate: firstRecordDate,
       lastRecordDate: lastRecordDate,
       balance: balance,
+    );
+  }
+
+  /// 计算用户档案海报数据
+  Future<UserProfilePosterData> calculateUserProfile({
+    required int ledgerId,
+  }) async {
+    // 获取用户头像路径
+    final avatarPath = await AvatarService.getAvatarPath();
+
+    // 获取当前账本信息
+    final ledger = await repository.getLedgerById(ledgerId);
+    final ledgerName = ledger?.name ?? '默认账本';
+
+    // 获取所有账本数量
+    final allLedgers = await repository.getAllLedgers();
+    final ledgerCount = allLedgers.length;
+
+    // 获取当前账本的统计数据
+    final countsResult = await repository.getCountsForLedger(ledgerId: ledgerId);
+    final recordDays = countsResult.dayCount;
+
+    // 获取当前账本的交易总数
+    final ledgerStats = await repository.getLedgerStats(ledgerId: ledgerId);
+    final recordCount = ledgerStats.transactionCount;
+
+    // 获取第一笔交易的时间
+    DateTime? firstRecordDate;
+    if (recordCount > 0) {
+      final firstTx = await repository.getFirstTransactionByLedger(ledgerId);
+      if (firstTx != null) {
+        firstRecordDate = firstTx.happenedAt;
+      }
+    }
+
+    return UserProfilePosterData(
+      avatarPath: avatarPath,
+      recordDays: recordDays,
+      recordCount: recordCount,
+      ledgerCount: ledgerCount,
+      ledgerName: ledgerName,
+      firstRecordDate: firstRecordDate,
     );
   }
 

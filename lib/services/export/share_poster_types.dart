@@ -14,6 +14,9 @@ enum PosterType {
 
   /// 应用推广海报
   appPromo,
+
+  /// 用户档案海报
+  userProfile,
 }
 
 /// 海报类型扩展 - 用于UI展示
@@ -28,6 +31,8 @@ extension PosterTypeExtension on PosterType {
         return '账本总结';
       case PosterType.appPromo:
         return '分享应用';
+      case PosterType.userProfile:
+        return '我的档案';
     }
   }
 
@@ -41,6 +46,8 @@ extension PosterTypeExtension on PosterType {
         return '分享你的账本统计';
       case PosterType.appPromo:
         return '推荐蜜蜂记账给好友';
+      case PosterType.userProfile:
+        return '分享你的记账档案';
     }
   }
 }
@@ -214,5 +221,35 @@ class CategoryTotal {
     this.icon,
     required this.total,
     required this.percentage,
+  });
+}
+
+/// 用户档案海报数据
+class UserProfilePosterData {
+  /// 用户头像路径 (可为null,表示使用默认头像)
+  final String? avatarPath;
+
+  /// 记账天数
+  final int recordDays;
+
+  /// 记账笔数
+  final int recordCount;
+
+  /// 账本数量
+  final int ledgerCount;
+
+  /// 当前账本名称
+  final String ledgerName;
+
+  /// 开始记账日期
+  final DateTime? firstRecordDate;
+
+  const UserProfilePosterData({
+    this.avatarPath,
+    required this.recordDays,
+    required this.recordCount,
+    required this.ledgerCount,
+    required this.ledgerName,
+    this.firstRecordDate,
   });
 }

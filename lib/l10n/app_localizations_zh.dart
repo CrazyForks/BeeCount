@@ -998,25 +998,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharePosterSlogan => '一笔一蜜，记录美好生活';
 
   @override
-  String get sharePosterFeature1 => '🔒 数据安全·你做主';
+  String get sharePosterFeature1 => '数据安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '✨ 完全开源·可审计';
+  String get sharePosterFeature2 => '完全开源·可审计';
 
   @override
-  String get sharePosterFeature3 => '🤖 AI智能记账·图片语音';
+  String get sharePosterFeature3 => 'AI智能记账·图片语音';
 
   @override
-  String get sharePosterFeature4 => '📸 拍照记账·自动识别';
+  String get sharePosterFeature4 => '拍照记账·自动识别';
 
   @override
-  String get sharePosterFeature5 => '📊 多账本·暗黑模式';
+  String get sharePosterFeature5 => '多账本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '☁️ 自建云同步·永久免费';
+  String get sharePosterFeature6 => '自建云同步·永久免费';
 
   @override
   String get sharePosterScanText => '扫码访问开源项目';
+
+  @override
+  String get appPromoTagOpenSource => '开源';
+
+  @override
+  String get appPromoTagFree => '免费';
+
+  @override
+  String get appPromoFooterText => '让每一笔都有迹可循';
+
+  @override
+  String userProfileJourneyYears(int years) {
+    return '记账达人 $years 年';
+  }
+
+  @override
+  String get userProfileJourneyOneYear => '记账满一年';
+
+  @override
+  String get userProfileJourneyHalfYear => '坚持记账半年';
+
+  @override
+  String get userProfileJourneyThreeMonths => '记账三个月';
+
+  @override
+  String get userProfileJourneyOneMonth => '记账满一个月';
+
+  @override
+  String get userProfileJourneyOneWeek => '记账一周';
+
+  @override
+  String get userProfileJourneyStart => '开始记账之旅';
+
+  @override
+  String get userProfileDailyAverage => '日均记账';
 
   @override
   String get sharePosterSave => '保存到相册';
@@ -1131,6 +1166,29 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sharePosterUnitYuan => '元';
+
+  @override
+  String userProfilePosterStartDate(String date) {
+    return '记账始于 $date';
+  }
+
+  @override
+  String get userProfilePosterRecordDays => '记账天数';
+
+  @override
+  String get userProfilePosterDaysUnit => '天';
+
+  @override
+  String get userProfilePosterRecordCount => '记账笔数';
+
+  @override
+  String get userProfilePosterCountUnit => '笔';
+
+  @override
+  String get userProfilePosterLedgerCount => '账本数量';
+
+  @override
+  String get userProfilePosterLedgerUnit => '本';
 
   @override
   String get mineDaysCount => '记账天数';
@@ -4258,9 +4316,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeExistingUserButton => '导入配置';
 
   @override
-  String get welcomeExistingUserDescription => '从其他设备迁移数据';
-
-  @override
   String get welcomeImportingConfig => '正在导入配置...';
 
   @override
@@ -4273,9 +4328,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get welcomeImportNoFile => '未选择文件';
-
-  @override
-  String get welcomeImportInvalidFormat => '无效的配置文件格式';
 
   @override
   String get welcomeImportAttachmentTitle => '导入附件';
@@ -6156,25 +6208,60 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get sharePosterSlogan => '一筆一蜜，記錄美好生活';
 
   @override
-  String get sharePosterFeature1 => '🔒 資料安全·你做主';
+  String get sharePosterFeature1 => '資料安全·你做主';
 
   @override
-  String get sharePosterFeature2 => '✨ 完全開源·可審計';
+  String get sharePosterFeature2 => '完全開源·可審計';
 
   @override
-  String get sharePosterFeature3 => '🤖 AI智能記帳·圖片語音';
+  String get sharePosterFeature3 => 'AI智能記帳·圖片語音';
 
   @override
-  String get sharePosterFeature4 => '📸 拍照記帳·自動識別';
+  String get sharePosterFeature4 => '拍照記帳·自動識別';
 
   @override
-  String get sharePosterFeature5 => '📊 多帳本·暗黑模式';
+  String get sharePosterFeature5 => '多帳本·暗黑模式';
 
   @override
-  String get sharePosterFeature6 => '☁️ 自建雲同步·永久免費';
+  String get sharePosterFeature6 => '自建雲同步·永久免費';
 
   @override
   String get sharePosterScanText => '掃碼訪問開源專案';
+
+  @override
+  String get appPromoTagOpenSource => '開源';
+
+  @override
+  String get appPromoTagFree => '免費';
+
+  @override
+  String get appPromoFooterText => '讓每一筆都有跡可循';
+
+  @override
+  String userProfileJourneyYears(int years) {
+    return '記帳達人 $years 年';
+  }
+
+  @override
+  String get userProfileJourneyOneYear => '記帳滿一年';
+
+  @override
+  String get userProfileJourneyHalfYear => '堅持記帳半年';
+
+  @override
+  String get userProfileJourneyThreeMonths => '記帳三個月';
+
+  @override
+  String get userProfileJourneyOneMonth => '記帳滿一個月';
+
+  @override
+  String get userProfileJourneyOneWeek => '記帳一週';
+
+  @override
+  String get userProfileJourneyStart => '開始記帳之旅';
+
+  @override
+  String get userProfileDailyAverage => '日均記帳';
 
   @override
   String get sharePosterSave => '儲存到相簿';
@@ -6289,6 +6376,29 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sharePosterUnitYuan => '元';
+
+  @override
+  String userProfilePosterStartDate(String date) {
+    return '記帳始於 $date';
+  }
+
+  @override
+  String get userProfilePosterRecordDays => '記帳天數';
+
+  @override
+  String get userProfilePosterDaysUnit => '天';
+
+  @override
+  String get userProfilePosterRecordCount => '記帳筆數';
+
+  @override
+  String get userProfilePosterCountUnit => '筆';
+
+  @override
+  String get userProfilePosterLedgerCount => '帳本數量';
+
+  @override
+  String get userProfilePosterLedgerUnit => '本';
 
   @override
   String get mineDaysCount => '記帳天數';
@@ -9416,9 +9526,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get welcomeExistingUserButton => '匯入配置';
 
   @override
-  String get welcomeExistingUserDescription => '從其他裝置遷移資料';
-
-  @override
   String get welcomeImportingConfig => '正在匯入配置...';
 
   @override
@@ -9431,9 +9538,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeImportNoFile => '未選擇檔案';
-
-  @override
-  String get welcomeImportInvalidFormat => '無效的配置檔案格式';
 
   @override
   String get welcomeImportAttachmentTitle => '匯入附件';

@@ -18,6 +18,7 @@ import '../../widgets/posters/app_promo_poster.dart';
 import '../../widgets/posters/year_summary_poster.dart';
 import '../../widgets/posters/month_summary_poster.dart';
 import '../../widgets/posters/ledger_summary_poster.dart';
+import '../../widgets/posters/user_profile_poster.dart';
 import 'share_poster_types.dart';
 import 'share_poster_data_service.dart';
 
@@ -465,12 +466,11 @@ class _PosterCarouselPreviewDialog extends ConsumerStatefulWidget {
 class _PosterCarouselPreviewDialogState
     extends ConsumerState<_PosterCarouselPreviewDialog> {
   late PageController _pageController;
-  int _currentPage = 1; // 默认从月度总结开始
+  int _currentPage = 0; // 默认从用户档案开始
 
   // 海报类型列表
   final List<PosterType> _posterTypes = [
-    PosterType.yearSummary,
-    PosterType.monthSummary,
+    PosterType.userProfile,
     PosterType.appPromo,
   ];
 
@@ -486,7 +486,7 @@ class _PosterCarouselPreviewDialogState
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 1);
+    _pageController = PageController(initialPage: 0);
 
     // 打开时立即开始生成默认海报
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -531,6 +531,9 @@ class _PosterCarouselPreviewDialogState
         case PosterType.appPromo:
           imageBytes =
               await SharePosterService.generatePoster(context, primaryColor);
+          break;
+        case PosterType.userProfile:
+          imageBytes = await _generateUserProfile(primaryColor);
           break;
       }
 
@@ -629,6 +632,28 @@ class _PosterCarouselPreviewDialogState
 
     return await _generatePosterFromWidget(
       LedgerSummaryPoster(data: data, primaryColor: primaryColor, hideIncome: hideIncome),
+    );
+  }
+
+  /// 生成用户档案海报
+  Future<Uint8List?> _generateUserProfile(Color primaryColor) async {
+    final ledgerId = ref.read(currentLedgerIdProvider);
+    if (ledgerId == 0) {
+      final l10n = AppLocalizations.of(context);
+      showToast(context, l10n.sharePosterNoLedger);
+      return null;
+    }
+
+    final repository = ref.read(repositoryProvider);
+    final dataService = SharePosterDataService(repository);
+    final l10n = AppLocalizations.of(context);
+
+    final data = await dataService.calculateUserProfile(
+      ledgerId: ledgerId,
+    );
+
+    return await _generatePosterFromWidget(
+      UserProfilePoster(data: data, l10n: l10n, primaryColor: primaryColor),
     );
   }
 
@@ -832,7 +857,9 @@ class _PosterCarouselPreviewDialogState
                                 ),
 
                               // 隐藏收入按钮（只在年度/月度/账本总结海报显示）
-                              if (_posterTypes[index] != PosterType.appPromo && !generating)
+                              if (_posterTypes[index] != PosterType.appPromo &&
+                                  _posterTypes[index] != PosterType.userProfile &&
+                                  !generating)
                                 Positioned(
                                   top: 16,
                                   right: 16,

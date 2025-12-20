@@ -475,13 +475,31 @@
   "mineShareGenerating": "Generating share poster...",
   "sharePosterAppName": "BeeCount",
   "sharePosterSlogan": "Smart Accounting, Beautiful Life",
-  "sharePosterFeature1": "🔒 Data Security·You Control",
-  "sharePosterFeature2": "✨ Open Source·Auditable",
-  "sharePosterFeature3": "🤖 AI Smart·Photo & Voice",
-  "sharePosterFeature4": "📸 Photo Accounting·Auto Recognition",
-  "sharePosterFeature5": "📊 Multi Ledger·Dark Mode",
-  "sharePosterFeature6": "☁️ Self-Hosted Cloud·Free Forever",
+  "sharePosterFeature1": "Data Security·You Control",
+  "sharePosterFeature2": "Open Source·Auditable",
+  "sharePosterFeature3": "AI Smart·Photo & Voice",
+  "sharePosterFeature4": "Photo Accounting·Auto Recognition",
+  "sharePosterFeature5": "Multi Ledger·Dark Mode",
+  "sharePosterFeature6": "Self-Hosted Cloud·Free Forever",
   "sharePosterScanText": "Scan to visit open source project",
+  "appPromoTagOpenSource": "Open Source",
+  "appPromoTagFree": "Free",
+  "appPromoFooterText": "Track every penny, trace every moment",
+  "userProfileJourneyYears": "Bookkeeping Pro {years} Years",
+  "@userProfileJourneyYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "userProfileJourneyOneYear": "One Year of Bookkeeping",
+  "userProfileJourneyHalfYear": "Six Months Strong",
+  "userProfileJourneyThreeMonths": "Three Months In",
+  "userProfileJourneyOneMonth": "One Month Milestone",
+  "userProfileJourneyOneWeek": "First Week Done",
+  "userProfileJourneyStart": "Starting the Journey",
+  "userProfileDailyAverage": "Daily Average",
   "sharePosterSave": "Save to Gallery",
   "sharePosterShare": "Share",
   "sharePosterHideIncome": "Hide Income",
@@ -520,6 +538,20 @@
   "sharePosterUnitDay": "days",
   "sharePosterUnitCount": "",
   "sharePosterUnitYuan": "",
+  "userProfilePosterStartDate": "Bookkeeping since {date}",
+  "@userProfilePosterStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "userProfilePosterRecordDays": "Days",
+  "userProfilePosterDaysUnit": "days",
+  "userProfilePosterRecordCount": "Records",
+  "userProfilePosterCountUnit": "",
+  "userProfilePosterLedgerCount": "Ledgers",
+  "userProfilePosterLedgerUnit": "",
   "mineDaysCount": "Days",
   "mineTotalRecords": "Records",
   "mineCurrentBalance": "Balance",
@@ -1844,7 +1876,6 @@
   "welcomeCategoryModeNoneFeature3": "Perfect for custom classification needs",
   "welcomeExistingUserTitle": "Existing User?",
   "welcomeExistingUserButton": "Import Config",
-  "welcomeExistingUserDescription": "Migrate data from another device",
   "welcomeImportingConfig": "Importing configuration...",
   "welcomeImportSuccess": "Configuration imported successfully",
   "welcomeImportFailed": "Import failed: {error}",
@@ -1856,7 +1887,6 @@
     }
   },
   "welcomeImportNoFile": "No file selected",
-  "welcomeImportInvalidFormat": "Invalid configuration file format",
   "welcomeImportAttachmentTitle": "Import Attachments",
   "welcomeImportAttachmentDesc": "Would you like to import attachment files as well?",
   "welcomeImportAttachmentButton": "Select Attachment File",
