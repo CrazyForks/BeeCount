@@ -677,7 +677,7 @@ class _AnnualReportPageState extends ConsumerState<AnnualReportPage> {
     bool showSign = false,
   }) {
     final formatter = NumberFormat('#,##0.00', 'zh_CN');
-    final sign = showSign ? (amount >= 0 ? '+' : '') : '';
+    final sign = showSign ? (amount >= 0 ? '+' : '-') : '';
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -727,7 +727,15 @@ class _AnnualReportPageState extends ConsumerState<AnnualReportPage> {
     final avgExpensePerRecord = data.totalRecords > 0
         ? data.totalExpense / data.totalRecords
         : 0.0;
-    final dailyAvg = data.totalDays > 0 ? data.totalExpense / data.totalDays : 0;
+
+    // 计算年度总天数：过去年份用全年天数，当前年份用截至今天的天数
+    final now = DateTime.now();
+    final isCurrentYear = data.year == now.year;
+    final yearEnd = isCurrentYear ? now : DateTime(data.year, 12, 31);
+    final yearStart = DateTime(data.year, 1, 1);
+    final totalCalendarDays = yearEnd.difference(yearStart).inDays + 1;
+
+    final dailyAvg = totalCalendarDays > 0 ? data.totalExpense / totalCalendarDays : 0;
     final monthlyAvg = data.totalExpense / 12;
 
     // 找出记账最多的月份
