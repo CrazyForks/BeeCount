@@ -21,7 +21,7 @@ import '../category/category_manage_page.dart';
 import '../data/export_page.dart';
 import '../data/import_page.dart';
 import '../settings/config_import_export_page.dart';
-import '../settings/data_management_page.dart';
+import '../automation/auto_billing_settings_page.dart';
 import '../tag/tag_manage_page.dart';
 
 /// 发现页
@@ -867,7 +867,7 @@ class _QuickActionsCard extends ConsumerWidget {
             ],
           ),
           SizedBox(height: 12.0.scaled(context, ref)),
-          // 第二行：AI设置、使用帮助、配置管理、附件导出
+          // 第二行：AI设置、使用帮助、配置管理、自动记账
           Row(
             children: [
               Expanded(
@@ -915,12 +915,12 @@ class _QuickActionsCard extends ConsumerWidget {
                 child: _buildActionButton(
                   context,
                   ref,
-                  icon: Icons.upload_file,
-                  label: l10n.discoverAttachmentExport,
+                  icon: Icons.auto_fix_high,
+                  label: l10n.discoverAutoBilling,
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const DataManagementPage()),
+                        builder: (_) => const AutoBillingSettingsPage()),
                   ),
                 ),
               ),

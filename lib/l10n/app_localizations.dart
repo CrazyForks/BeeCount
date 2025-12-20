@@ -6822,6 +6822,18 @@ abstract class AppLocalizations {
   /// **'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed'**
   String get iosAutoBackTapDesc;
 
+  /// No description provided for @iosAutoTutorialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video Tutorial'**
+  String get iosAutoTutorialTitle;
+
+  /// No description provided for @iosAutoTutorialDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch detailed setup video tutorial'**
+  String get iosAutoTutorialDesc;
+
   /// No description provided for @aiSettingsTitle.
   ///
   /// In en, this message translates to:
@@ -9210,11 +9222,11 @@ abstract class AppLocalizations {
   /// **'Config'**
   String get discoverConfigManagement;
 
-  /// No description provided for @discoverAttachmentExport.
+  /// No description provided for @discoverAutoBilling.
   ///
   /// In en, this message translates to:
-  /// **'Attachments'**
-  String get discoverAttachmentExport;
+  /// **'Auto'**
+  String get discoverAutoBilling;
 
   /// No description provided for @homeSwitchLedger.
   ///

@@ -3584,6 +3584,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iosAutoBackTapDesc => 'Settings > Accessibility > Touch > Back Tap\n• Select \"Double Tap\" or \"Triple Tap\"\n• Choose the shortcut you just created\n• After setup, double tap phone back during payment to auto-record, no screenshot needed';
 
   @override
+  String get iosAutoTutorialTitle => 'Video Tutorial';
+
+  @override
+  String get iosAutoTutorialDesc => 'Watch detailed setup video tutorial';
+
+  @override
   String get aiSettingsTitle => 'AI Assistant';
 
   @override
@@ -4820,7 +4826,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverConfigManagement => 'Config';
 
   @override
-  String get discoverAttachmentExport => 'Attachments';
+  String get discoverAutoBilling => 'Auto';
 
   @override
   String get homeSwitchLedger => 'Select Ledger';

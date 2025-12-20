@@ -3584,6 +3584,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get iosAutoBackTapDesc => '设置 > 辅助功能 > 触控 > 轻点背面\n• 选择\"轻点两下\"或\"轻点三下\"\n• 选择刚创建的快捷指令\n• 完成后，支付时双击手机背面即可自动记账，无需截图';
 
   @override
+  String get iosAutoTutorialTitle => '视频教程';
+
+  @override
+  String get iosAutoTutorialDesc => '查看详细配置视频教程';
+
+  @override
   String get aiSettingsTitle => 'AI小助手';
 
   @override
@@ -4820,7 +4826,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverConfigManagement => '配置管理';
 
   @override
-  String get discoverAttachmentExport => '附件导出';
+  String get discoverAutoBilling => '自动记账';
 
   @override
   String get homeSwitchLedger => '选择账本';
@@ -8685,6 +8691,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get iosAutoBackTapDesc => '設定 > 輔助使用 > 觸控 > 背面輕點\n• 選擇「點兩下」或「點三下」\n• 選擇剛建立的捷徑\n• 完成後，支付時雙擊手機背面即可自動記帳，無需截圖';
 
   @override
+  String get iosAutoTutorialTitle => '影片教學';
+
+  @override
+  String get iosAutoTutorialDesc => '查看詳細設定影片教學';
+
+  @override
   String get aiSettingsTitle => 'AI 小助手';
 
   @override
@@ -9921,7 +9933,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get discoverConfigManagement => '配置管理';
 
   @override
-  String get discoverAttachmentExport => '附件導出';
+  String get discoverAutoBilling => '自動記賬';
 
   @override
   String get homeSwitchLedger => '選擇帳本';
