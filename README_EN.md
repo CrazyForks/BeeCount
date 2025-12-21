@@ -629,13 +629,14 @@ Progress: [██████████] 101.67% - 🎉 Goal Achieved!
 - ✅ Apple Developer Account registration (¥688/year, ≈$95/year)
 - ✅ iOS TestFlight public beta launched
 - ✅ Lightweight cloud server (¥79/year, ≈$11/year) - For ICP filing
+- ✅ Google Play Developer Account registration (¥177, ≈$25, one-time)
 
 **Ongoing Costs**:
 
 - 📱 Apple Developer Account renewal: ¥688/year (≈$95/year)
 - ☁️ Lightweight cloud server: ¥79/year (≈$11/year)
 
-**Total Annual Cost**: ¥767/year (≈$106/year)
+**Total Annual Cost**: ¥767/year (≈$106/year) (+ one-time cost ¥177/≈$25)
 
 All donation fund usage will be transparently disclosed here.
 
@@ -645,16 +646,10 @@ Thank you to the following generous supporters (in chronological order):
 
 > 💡 Already donated? [Click here to submit your info](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml) to be featured in the supporters list!
 
-<p>
-  <a href="#" title="*Qiao ¥12"><img src="assets/avatars/qiao.svg" width="50" style="border-radius:50%" alt="Qiao"/></a>
-  <a href="#" title="*Rui ¥720"><img src="assets/avatars/rui.svg" width="50" style="border-radius:50%" alt="Rui"/></a>
-  <a href="https://github.com/fishdivinity" title="fishdivinity ¥50"><img src="assets/avatars/fishdivinity.png" width="50" style="border-radius:50%" alt="fishdivinity"/></a>
-  <a href="#" title="*Shao ¥15"><img src="assets/avatars/shao.svg" width="50" style="border-radius:50%" alt="Shao"/></a>
-  <a href="#" title="*Ge ¥6"><img src="assets/avatars/ge.svg" width="50" style="border-radius:50%" alt="Ge"/></a>
-  <a href="#" title="*Te ¥15"><img src="assets/avatars/te.svg" width="50" style="border-radius:50%" alt="Te"/></a>
-  <a href="#" title="*Wen ¥50"><img src="assets/avatars/wen.svg" width="50" style="border-radius:50%" alt="Wen"/></a>
-  <a href="#" title="Anonymous ¥50"><img src="assets/avatars/anon.svg" width="50" style="border-radius:50%" alt="Anonymous"/></a>
-</p>
+| | | | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="assets/avatars/qiao.svg" width="50" alt="Qiao"/> | <img src="assets/avatars/rui.svg" width="50" alt="Rui"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="50" alt="fishdivinity"/></a> | <img src="assets/avatars/shao.svg" width="50" alt="Shao"/> | <img src="assets/avatars/ge.svg" width="50" alt="Ge"/> | <img src="assets/avatars/te.svg" width="50" alt="Te"/> | <img src="assets/avatars/wen.svg" width="50" alt="Wen"/> | <img src="assets/avatars/anon.svg" width="50" alt="Anonymous"/> |
+| *Qiao ¥12 | *Rui ¥720 | [fishdivinity](https://github.com/fishdivinity) ¥50 | *Shao ¥15 | *Ge ¥6 | *Te ¥15 | *Wen ¥50 | Anonymous ¥50 |
 
 ---
 

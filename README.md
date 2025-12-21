@@ -624,13 +624,14 @@ A:
 - ✅ Apple 开发者账号注册（¥688/年）
 - ✅ iOS TestFlight 公测上线
 - ✅ 轻量云服务器（¥79/年）- 用于办理ICP备案
+- ✅ Google Play 开发者账号注册（¥177，一次性）
 
 **持续成本**：
 
 - 📱 Apple 开发者账号续费：¥688/年
 - ☁️ 轻量云服务器：¥79/年
 
-**总计年度成本**：¥767/年
+**总计年度成本**：¥767/年（+ 已投入一次性成本 ¥177）
 
 所有捐赠资金的使用情况都会在这里公开透明地说明。
 
@@ -640,16 +641,10 @@ A:
 
 > 💡 已捐赠？[点击这里提交您的信息](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml)，展示在支持者列表中！
 
-<p>
-  <a href="#" title="*桥 ¥12"><img src="assets/avatars/qiao.svg" width="50" style="border-radius:50%" alt="桥"/></a>
-  <a href="#" title="*睿 ¥720"><img src="assets/avatars/rui.svg" width="50" style="border-radius:50%" alt="睿"/></a>
-  <a href="https://github.com/fishdivinity" title="fishdivinity ¥50"><img src="assets/avatars/fishdivinity.png" width="50" style="border-radius:50%" alt="fishdivinity"/></a>
-  <a href="#" title="*邵 ¥15"><img src="assets/avatars/shao.svg" width="50" style="border-radius:50%" alt="邵"/></a>
-  <a href="#" title="*哥 ¥6"><img src="assets/avatars/ge.svg" width="50" style="border-radius:50%" alt="哥"/></a>
-  <a href="#" title="*特 ¥15"><img src="assets/avatars/te.svg" width="50" style="border-radius:50%" alt="特"/></a>
-  <a href="#" title="*文 ¥50"><img src="assets/avatars/wen.svg" width="50" style="border-radius:50%" alt="文"/></a>
-  <a href="#" title="匿名者 ¥50"><img src="assets/avatars/anon.svg" width="50" style="border-radius:50%" alt="匿名"/></a>
-</p>
+| | | | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="assets/avatars/qiao.svg" width="50"/> | <img src="assets/avatars/rui.svg" width="50"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="50"/></a> | <img src="assets/avatars/shao.svg" width="50"/> | <img src="assets/avatars/ge.svg" width="50"/> | <img src="assets/avatars/te.svg" width="50"/> | <img src="assets/avatars/wen.svg" width="50"/> | <img src="assets/avatars/anon.svg" width="50"/> |
+| *桥 ¥12 | *睿 ¥720 | [fishdivinity](https://github.com/fishdivinity) ¥50 | *邵 ¥15 | *哥 ¥6 | *特 ¥15 | *文 ¥50 | 匿名者 ¥50 |
 
 ---
 
