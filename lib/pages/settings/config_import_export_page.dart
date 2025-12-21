@@ -219,13 +219,13 @@ class _ConfigImportExportPageState
       }
 
       // Step 4: 执行导入
+      // 注意：不传入 ledgerId，让导入逻辑使用 yml 中指定的账本名称
+      // 这样预算等数据会导入到正确的账本，而不是当前账本
       final repo = ref.read(repositoryProvider);
-      final ledgerId = ref.read(currentLedgerIdProvider);
 
       await ConfigExportService.importFromFile(
         filePath,
         repository: repo,
-        ledgerId: ledgerId,
         options: options,
       );
 
