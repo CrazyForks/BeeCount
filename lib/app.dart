@@ -265,7 +265,9 @@ class _BeeAppState extends ConsumerState<BeeApp> with WidgetsBindingObserver {
                         context,
                         MaterialPageRoute(
                           builder: (_) => const TransactionEditorPage(
-                              initialKind: 'expense'),
+                            initialKind: 'expense',
+                            quickAdd: true,
+                          ),
                         ),
                       );
                     },
