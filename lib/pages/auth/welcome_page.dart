@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import '../../l10n/app_localizations.dart';
+import '../../utils/file_picker_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/ui_state_providers.dart';
 import '../../providers/language_provider.dart';
@@ -737,11 +737,8 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     });
 
     try {
-      // 选择文件
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['yml', 'yaml'],
-      );
+      // 选择文件（使用 FilePickerHelper 处理部分设备不支持扩展名过滤的问题）
+      final result = await FilePickerHelper.pickYamlFile();
 
       if (result == null || result.files.isEmpty) {
         if (context.mounted) {
@@ -919,11 +916,8 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     final l10n = AppLocalizations.of(context);
 
     try {
-      // 选择附件归档文件
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['gz', 'tar'],
-      );
+      // 选择附件归档文件（使用 FilePickerHelper 处理部分设备不支持扩展名过滤的问题）
+      final result = await FilePickerHelper.pickArchiveFile();
 
       if (result == null || result.files.isEmpty) {
         return;

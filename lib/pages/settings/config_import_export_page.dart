@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +10,7 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../providers/theme_providers.dart';
+import '../../utils/file_picker_helper.dart';
 import '../../providers/font_scale_provider.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
@@ -179,19 +178,8 @@ class _ConfigImportExportPageState
     setState(() => _isImporting = true);
 
     try {
-      // Step 1: 选择文件（仅限 yml/yaml 文件）
-      // 部分 Android 设备不支持 yml/yaml 扩展名过滤，会抛出 PlatformException
-      // 所以先尝试过滤，失败则 fallback 到 FileType.any
-      FilePickerResult? result;
-      try {
-        result = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['yml', 'yaml'],
-        );
-      } on PlatformException {
-        // 设备不支持扩展名过滤，fallback 到选择任意文件
-        result = await FilePicker.platform.pickFiles(type: FileType.any);
-      }
+      // Step 1: 选择文件（使用 FilePickerHelper 处理部分设备不支持扩展名过滤的问题）
+      final result = await FilePickerHelper.pickYamlFile();
 
       if (result == null || result.files.isEmpty) {
         if (mounted) {
@@ -204,13 +192,6 @@ class _ConfigImportExportPageState
       if (filePath == null) {
         if (!mounted) return;
         throw Exception(AppLocalizations.of(context).configImportNoFilePath);
-      }
-
-      // 手动验证文件扩展名
-      final fileName = filePath.toLowerCase();
-      if (!fileName.endsWith('.yml') && !fileName.endsWith('.yaml')) {
-        if (!mounted) return;
-        throw Exception('请选择 YAML 配置文件（.yml 或 .yaml）');
       }
 
       // Step 2: 读取文件并检测可用内容
