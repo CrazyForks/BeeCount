@@ -491,6 +491,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                           : (subtitle.isNotEmpty ? null : categoryName),
                         amount: it.t.amount,
                         isExpense: isExpense,
+                        isTransfer: isTransfer,
                         hide: widget.hideAmounts,
                         happenedAt: it.t.happenedAt,
                         accountName: isTransfer
