@@ -125,6 +125,13 @@ android {
         }
     }
 
+    // 支持 16KB 页面大小 (Google Play 2024+ 要求)
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     // 当存在 flavors 时，assembleDebug 会聚合构建所有 debug 变体（devDebug、prodDebug），
     // 这会让 Flutter 工具无法确定唯一 APK 路径。这里忽略 prodDebug，仅保留 devDebug，
     // 从而让不带 --flavor 的 `flutter run` 正常工作并默认使用 dev。
