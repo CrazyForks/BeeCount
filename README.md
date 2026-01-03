@@ -641,10 +641,10 @@ A:
 
 > 💡 已捐赠？[点击这里提交您的信息](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml)，展示在支持者列表中！
 
-| | | | | | | | |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| <img src="assets/avatars/qiao.svg" width="50"/> | <img src="assets/avatars/rui.svg" width="50"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="50"/></a> | <img src="assets/avatars/shao.svg" width="50"/> | <img src="assets/avatars/ge.svg" width="50"/> | <img src="assets/avatars/te.svg" width="50"/> | <img src="assets/avatars/wen.svg" width="50"/> | <img src="assets/avatars/anon.svg" width="50"/> |
-| *桥 ¥12 | *睿 ¥720 | [fishdivinity](https://github.com/fishdivinity) ¥50 | *邵 ¥15 | *哥 ¥6 | *特 ¥15 | *文 ¥50 | 匿名者 ¥50 |
+| | | | | | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="assets/avatars/qiao.svg" width="50"/> | <img src="assets/avatars/rui.svg" width="50"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="50"/></a> | <img src="assets/avatars/shao.svg" width="50"/> | <img src="assets/avatars/ge.svg" width="50"/> | <img src="assets/avatars/te.svg" width="50"/> | <img src="assets/avatars/wen.svg" width="50"/> | <img src="assets/avatars/anon.svg" width="50"/> | <a href="https://github.com/birdnofoots"><img src="https://github.com/birdnofoots.png" width="50"/></a> | <a href="https://github.com/charieswang72-pro"><img src="https://github.com/charieswang72-pro.png" width="50"/></a> |
+| *桥 ¥12 | *睿 ¥720 | [fishdivinity](https://github.com/fishdivinity) ¥50 | *邵 ¥15 | *哥 ¥6 | *特 ¥15 | *文 ¥50 | 匿名者 ¥50 | [birdnofoots](https://github.com/birdnofoots) ¥10 | [Charies](https://github.com/charieswang72-pro) ¥10 |
 
 ---
 

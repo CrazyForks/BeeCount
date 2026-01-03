@@ -646,10 +646,10 @@ Thank you to the following generous supporters (in chronological order):
 
 > 💡 Already donated? [Click here to submit your info](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml) to be featured in the supporters list!
 
-| | | | | | | | |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| <img src="assets/avatars/qiao.svg" width="50" alt="Qiao"/> | <img src="assets/avatars/rui.svg" width="50" alt="Rui"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="50" alt="fishdivinity"/></a> | <img src="assets/avatars/shao.svg" width="50" alt="Shao"/> | <img src="assets/avatars/ge.svg" width="50" alt="Ge"/> | <img src="assets/avatars/te.svg" width="50" alt="Te"/> | <img src="assets/avatars/wen.svg" width="50" alt="Wen"/> | <img src="assets/avatars/anon.svg" width="50" alt="Anonymous"/> |
-| *Qiao ¥12 | *Rui ¥720 | [fishdivinity](https://github.com/fishdivinity) ¥50 | *Shao ¥15 | *Ge ¥6 | *Te ¥15 | *Wen ¥50 | Anonymous ¥50 |
+| | | | | | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="assets/avatars/qiao.svg" width="50" alt="Qiao"/> | <img src="assets/avatars/rui.svg" width="50" alt="Rui"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="50" alt="fishdivinity"/></a> | <img src="assets/avatars/shao.svg" width="50" alt="Shao"/> | <img src="assets/avatars/ge.svg" width="50" alt="Ge"/> | <img src="assets/avatars/te.svg" width="50" alt="Te"/> | <img src="assets/avatars/wen.svg" width="50" alt="Wen"/> | <img src="assets/avatars/anon.svg" width="50" alt="Anonymous"/> | <a href="https://github.com/birdnofoots"><img src="https://github.com/birdnofoots.png" width="50" alt="birdnofoots"/></a> | <a href="https://github.com/charieswang72-pro"><img src="https://github.com/charieswang72-pro.png" width="50" alt="Charies"/></a> |
+| *Qiao ¥12 | *Rui ¥720 | [fishdivinity](https://github.com/fishdivinity) ¥50 | *Shao ¥15 | *Ge ¥6 | *Te ¥15 | *Wen ¥50 | Anonymous ¥50 | [birdnofoots](https://github.com/birdnofoots) ¥10 | [Charies](https://github.com/charieswang72-pro) ¥10 |
 
 ---
 

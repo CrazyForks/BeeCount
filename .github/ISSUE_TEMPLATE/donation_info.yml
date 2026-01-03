@@ -32,7 +32,7 @@ body:
     id: link
     attributes:
       label: 个人主页链接 / Profile Link
-      description: 点击头像跳转的链接 / Link when clicking your avatar
+      description: 点击头像跳转的链接，可以是任意网站（GitHub、微博、个人博客等）/ Link when clicking your avatar, can be any website (GitHub, Weibo, personal blog, etc.)
       placeholder: https://github.com/username
     validations:
       required: true
