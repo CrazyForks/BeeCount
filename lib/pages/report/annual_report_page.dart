@@ -187,7 +187,9 @@ final annualReportDataProvider =
 
 /// 年度账单页面
 class AnnualReportPage extends ConsumerStatefulWidget {
-  const AnnualReportPage({super.key});
+  final int? initialYear;
+
+  const AnnualReportPage({super.key, this.initialYear});
 
   @override
   ConsumerState<AnnualReportPage> createState() => _AnnualReportPageState();
@@ -202,7 +204,8 @@ class _AnnualReportPageState extends ConsumerState<AnnualReportPage> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    _selectedYear = DateTime.now().year;
+    // 如果传入了初始年份则使用，否则使用当前年份
+    _selectedYear = widget.initialYear ?? DateTime.now().year;
   }
 
   @override

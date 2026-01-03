@@ -417,7 +417,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => const AnnualReportPage(),
+                          builder: (_) => AnnualReportPage(initialYear: reportYear),
                         ),
                       );
                       // 临时隐藏

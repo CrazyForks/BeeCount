@@ -466,13 +466,10 @@ class _PosterCarouselPreviewDialog extends ConsumerStatefulWidget {
 class _PosterCarouselPreviewDialogState
     extends ConsumerState<_PosterCarouselPreviewDialog> {
   late PageController _pageController;
-  int _currentPage = 0; // 默认从用户档案开始
+  int _currentPage = 0; // 默认从第一个海报开始
 
-  // 海报类型列表
-  final List<PosterType> _posterTypes = [
-    PosterType.userProfile,
-    PosterType.appPromo,
-  ];
+  // 海报类型列表（根据传入参数动态决定）
+  late List<PosterType> _posterTypes;
 
   // 缓存已生成的海报
   final Map<int, Uint8List?> _posterCache = {};
@@ -487,6 +484,18 @@ class _PosterCarouselPreviewDialogState
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0);
+
+    // 根据传入参数决定海报类型
+    if (widget.month != null) {
+      // 传入了月份，显示月度报告
+      _posterTypes = [PosterType.monthSummary];
+    } else if (widget.year != null) {
+      // 只传入年份，显示年度报告
+      _posterTypes = [PosterType.yearSummary];
+    } else {
+      // 都没传入，显示用户档案和应用分享
+      _posterTypes = [PosterType.userProfile, PosterType.appPromo];
+    }
 
     // 打开时立即开始生成默认海报
     WidgetsBinding.instance.addPostFrameCallback((_) {
