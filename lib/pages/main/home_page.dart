@@ -465,9 +465,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     final aiEnabledAsync = ref.watch(aiAssistantEnabledProvider);
     final aiEnabled = aiEnabledAsync.asData?.value ?? true; // 默认开启
 
-    // 检测账本切换，强制刷新 StreamBuilder
+    // 检测账本切换，强制刷新 StreamBuilder 并清空缓存
     if (_lastLedgerId != null && _lastLedgerId != ledgerId) {
       _streamBuilderKey++;
+      // 清空缓存，避免显示旧账本数据
+      Future.microtask(() {
+        ref.read(cachedTransactionsProvider.notifier).state = null;
+      });
       logger.info('HomePage',
           '账本切换: $_lastLedgerId → $ledgerId, 刷新StreamBuilder (key=$_streamBuilderKey)');
     }
