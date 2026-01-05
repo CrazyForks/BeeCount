@@ -281,13 +281,13 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                               border: const OutlineInputBorder(),
                               errorText: _duplicateErrorMessage,
                             ),
-                            maxLength: 4,
+                            maxLength: 10,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
                                 return AppLocalizations.of(context)
                                     .categoryNameRequired;
                               }
-                              if (value.trim().length > 4) {
+                              if (value.trim().length > 10) {
                                 return AppLocalizations.of(context)
                                     .categoryNameTooLong;
                               }
