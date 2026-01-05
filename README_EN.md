@@ -17,8 +17,11 @@
 <a href="https://apps.apple.com/app/id6754611670">
   <img src="https://img.shields.io/badge/App_Store-Download-000000?style=for-the-badge&logo=app-store&logoColor=white" alt="Download on App Store" height="50"/>
 </a>
+<a href="https://play.google.com/store/apps/details?id=com.tntlikely.beecount">
+  <img src="https://img.shields.io/badge/Google_Play-Download-414141?style=for-the-badge&logo=google-play&logoColor=white" alt="Get it on Google Play" height="50"/>
+</a>
 <a href="https://testflight.apple.com/join/Eaw2rWxa">
-  <img src="https://img.shields.io/badge/TestFlight-Public_Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+  <img src="https://img.shields.io/badge/TestFlight-Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
 </a>
 <a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
   <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
@@ -35,11 +38,11 @@
 
 > ## 📱 Platform Support
 >
-> 🤖 **Android** - [Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | Supports Android 5.0+
+> 🤖 **Android** - [Google Play](https://play.google.com/store/apps/details?id=com.tntlikely.beecount) | [Download APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | Supports Android 5.0+
 >
 > 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight Beta](https://testflight.apple.com/join/Eaw2rWxa) | Supports iOS 15.5+
 >
-> 💡 Search for **"BeeCount"** on the App Store (including regions outside China) to download and install
+> 💡 Search for **"BeeCount - Simple Ledger"** on App Store or Google Play to download
 >
 > 📱 **HarmonyOS** - Coming Soon | Supports HarmonyOS 5.0+ | [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 

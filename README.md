@@ -17,8 +17,11 @@
 <a href="https://apps.apple.com/app/id6754611670">
   <img src="https://img.shields.io/badge/App_Store-Download-000000?style=for-the-badge&logo=app-store&logoColor=white" alt="Download on App Store" height="50"/>
 </a>
+<a href="https://play.google.com/store/apps/details?id=com.tntlikely.beecount">
+  <img src="https://img.shields.io/badge/Google_Play-Download-414141?style=for-the-badge&logo=google-play&logoColor=white" alt="Get it on Google Play" height="50"/>
+</a>
 <a href="https://testflight.apple.com/join/Eaw2rWxa">
-  <img src="https://img.shields.io/badge/TestFlight-Public_Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
+  <img src="https://img.shields.io/badge/TestFlight-Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
 </a>
 <a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
   <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
@@ -43,11 +46,11 @@
 
 > ## 📱 平台支持
 >
-> 🤖 **Android** - [下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | 支持 Android 5.0+
+> 🤖 **Android** - [Google Play](https://play.google.com/store/apps/details?id=com.tntlikely.beecount) | [下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | 支持 Android 5.0+
 >
-> 🍎 **iOS** - [App Store 正式版](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 15.5+
+> 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 15.5+
 >
-> 💡 在 App Store 搜索 **"蜜蜂记账-简洁记账本"** 即可下载安装
+> 💡 在 App Store 或 Google Play 搜索 **"蜜蜂记账 - 简洁记账本"** 即可下载
 >
 > 📱 **HarmonyOS** - 正在上架中 | 支持 HarmonyOS 5.0+ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
