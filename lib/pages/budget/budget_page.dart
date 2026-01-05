@@ -48,11 +48,12 @@ class BudgetPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, WidgetRef ref, BudgetOverview? overview) {
+  Widget _buildContent(
+      BuildContext context, WidgetRef ref, BudgetOverview? overview) {
     final l10n = AppLocalizations.of(context);
 
     if (overview == null || overview.totalBudget == null) {
-      return _buildEmptyState(context, l10n);
+      return _buildEmptyState(context, ref, l10n);
     }
 
     return ListView(
@@ -66,12 +67,14 @@ class BudgetPage extends ConsumerWidget {
         SizedBox(height: 12.0.scaled(context, ref)),
         // 分类预算列表
         if (overview.categoryBudgets.isNotEmpty)
-          _buildCategoryBudgetsCard(context, ref, overview.categoryBudgets, l10n),
+          _buildCategoryBudgetsCard(
+              context, ref, overview.categoryBudgets, l10n),
       ],
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, AppLocalizations l10n) {
+  Widget _buildEmptyState(
+      BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -92,8 +95,12 @@ class BudgetPage extends ConsumerWidget {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () => _addBudget(context),
-            icon: const Icon(Icons.add),
+            icon: Icon(Icons.add, color: BeeTokens.buttonPrimaryText(context)),
             label: Text(l10n.budgetAddTotal),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: BeeTokens.buttonPrimary(context),
+              foregroundColor: BeeTokens.buttonPrimaryText(context),
+            ),
           ),
         ],
       ),
@@ -206,7 +213,8 @@ class BudgetPage extends ConsumerWidget {
                   ),
                 ),
                 Text(
-                  l10n.budgetDailyAvailable(overview.dailyAvailable.toStringAsFixed(0)),
+                  l10n.budgetDailyAvailable(
+                      overview.dailyAvailable.toStringAsFixed(0)),
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,

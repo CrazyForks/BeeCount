@@ -74,9 +74,12 @@ class LocalBudgetRepository implements BudgetRepository {
 
   @override
   Future<Budget?> getTotalBudget(int ledgerId) async {
-    return await (db.select(db.budgets)
-          ..where((b) => b.ledgerId.equals(ledgerId) & b.type.equals('total') & b.enabled.equals(true)))
-        .getSingleOrNull();
+    // 使用 .get() 然后取第一个，避免多条脏数据时报错
+    final budgets = await (db.select(db.budgets)
+          ..where((b) => b.ledgerId.equals(ledgerId) & b.type.equals('total') & b.enabled.equals(true))
+          ..orderBy([(b) => d.OrderingTerm(expression: b.createdAt)]))
+        .get();
+    return budgets.firstOrNull;
   }
 
   @override

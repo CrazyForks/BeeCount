@@ -341,7 +341,7 @@ class BeeTokens {
 
   /// 主按钮文字颜色
   /// - 亮色模式：#FFFFFF
-  /// - 暗黑模式：#FFFFFF（或深色，取决于主题色亮度）
+  /// - 暗黑模式：#FFFFFF
   static Color buttonPrimaryText(BuildContext context) => Colors.white;
 
   /// 次要按钮文字颜色

@@ -35,6 +35,7 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
   String? _selectedCategoryIcon;
   int _startDay = 1;
   bool _isLoading = false;
+  bool _hasTotalBudget = false; // 是否已存在总预算
 
   bool get _isEditing => widget.budget != null;
 
@@ -48,6 +49,21 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
       _startDay = widget.budget!.startDay;
     } else {
       _type = widget.isCategory ? 'category' : 'total';
+      // 检查是否已存在总预算
+      _checkTotalBudgetExists();
+    }
+  }
+
+  Future<void> _checkTotalBudgetExists() async {
+    final totalBudget = await ref.read(totalBudgetProvider.future);
+    if (mounted && totalBudget != null) {
+      setState(() {
+        _hasTotalBudget = true;
+        // 如果已存在总预算，默认选择分类预算
+        if (_type == 'total') {
+          _type = 'category';
+        }
+      });
     }
   }
 
@@ -117,6 +133,7 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
                                 l10n.budgetTypeTotalLabel,
                                 'total',
                                 Icons.account_balance_wallet_outlined,
+                                disabled: _hasTotalBudget, // 已有总预算时禁用
                               ),
                             ),
                             SizedBox(width: 12.0.scaled(context, ref)),
@@ -223,43 +240,47 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
     BuildContext context,
     String label,
     String type,
-    IconData icon,
-  ) {
+    IconData icon, {
+    bool disabled = false,
+  }) {
     final isSelected = _type == type;
     final primary = Theme.of(context).colorScheme.primary;
 
     return InkWell(
-      onTap: () => setState(() => _type = type),
+      onTap: disabled ? null : () => setState(() => _type = type),
       borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: EdgeInsets.all(16.0.scaled(context, ref)),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? primary.withValues(alpha: 0.1)
-              : BeeTokens.surface(context),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? primary : BeeTokens.border(context),
-            width: isSelected ? 2 : 1,
+      child: Opacity(
+        opacity: disabled ? 0.4 : 1.0,
+        child: Container(
+          padding: EdgeInsets.all(16.0.scaled(context, ref)),
+          decoration: BoxDecoration(
+            color: isSelected && !disabled
+                ? primary.withValues(alpha: 0.1)
+                : BeeTokens.surface(context),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected && !disabled ? primary : BeeTokens.border(context),
+              width: isSelected && !disabled ? 2 : 1,
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              size: 32.0.scaled(context, ref),
-              color: isSelected ? primary : BeeTokens.iconSecondary(context),
-            ),
-            SizedBox(height: 8.0.scaled(context, ref)),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? primary : BeeTokens.textSecondary(context),
+          child: Column(
+            children: [
+              Icon(
+                icon,
+                size: 32.0.scaled(context, ref),
+                color: isSelected && !disabled ? primary : BeeTokens.iconSecondary(context),
               ),
-            ),
-          ],
+              SizedBox(height: 8.0.scaled(context, ref)),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: isSelected && !disabled ? FontWeight.w600 : FontWeight.w400,
+                  color: isSelected && !disabled ? primary : BeeTokens.textSecondary(context),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
