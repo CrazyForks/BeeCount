@@ -256,7 +256,7 @@ jobs:
           # 配置
           PACKAGE_NAME = 'com.tntlikely.beecount'
           AAB_FILE = sys.argv[1]
-          TRACK = 'alpha'  # internal, alpha, beta, production
+          TRACK = 'production'  # internal, alpha, beta, production
 
           # 认证
           credentials = service_account.Credentials.from_service_account_file(
