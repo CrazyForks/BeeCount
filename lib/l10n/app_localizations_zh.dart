@@ -1669,10 +1669,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryParentRequiredTitle => '错误';
 
   @override
-  String get categoryExpenseList => '餐饮-交通-购物-娱乐-居家-家庭-通讯-水电-住房-医疗-教育-宠物-运动-数码-旅行-烟酒-母婴-美容-维修-社交-学习-汽车-打车-地铁-外卖-物业-停车-捐赠-礼金-纳税-饮料-服装-零食-红包-水果-游戏-书-爱人-装修-日用品-彩票-股票-社保-快递-工作';
+  String get categoryExpenseList => '餐饮-交通-购物-娱乐-居家-家庭-通讯-水电-住房-医疗-教育-宠物-运动-数码-旅行-烟酒-母婴-美容-维修-社交-学习-汽车-打车-地铁-外卖-物业-停车-捐赠-送礼-纳税-饮料-服装-零食-发红包-水果-游戏-书-爱人-装修-日用品-彩票-股票-社保-快递-工作';
 
   @override
-  String get categoryIncomeList => '工资-理财-红包-奖金-报销-兼职-礼金-利息-退款-投资收益-二手转卖-社会保障-退税退费-公积金';
+  String get categoryIncomeList => '工资-理财-收红包-奖金-报销-兼职-收礼-利息-退款-投资收益-二手转卖-社会保障-退税退费-公积金';
 
   @override
   String get categoryExpenseDining => '餐饮-早餐-午餐-晚餐-美团外卖-饿了么外卖-京东外卖-餐厅-美食';
@@ -6882,10 +6882,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get categoryParentRequiredTitle => '錯誤';
 
   @override
-  String get categoryExpenseList => '餐飲-交通-購物-娛樂-居家-家庭-通訊-水電-住房-醫療-教育-寵物-運動-數碼-旅行-煙酒-母嬰-美容-維修-社交-學習-汽車-打車-地鐵-外賣-物業-停車-捐贈-禮金-納稅-飲料-服裝-零食-紅包-水果-遊戲-書-愛人-裝修-日用品-彩票-股票-社保-快遞-工作';
+  String get categoryExpenseList => '餐飲-交通-購物-娛樂-居家-家庭-通訊-水電-住房-醫療-教育-寵物-運動-數碼-旅行-煙酒-母嬰-美容-維修-社交-學習-汽車-打車-地鐵-外賣-物業-停車-捐贈-送禮-納稅-飲料-服裝-零食-發紅包-水果-遊戲-書-愛人-裝修-日用品-彩票-股票-社保-快遞-工作';
 
   @override
-  String get categoryIncomeList => '工資-理財-紅包-獎金-報銷-兼職-禮金-利息-退款-投資收益-二手轉賣-社會保障-退稅退費-公積金';
+  String get categoryIncomeList => '工資-理財-收紅包-獎金-報銷-兼職-收禮-利息-退款-投資收益-二手轉賣-社會保障-退稅退費-公積金';
 
   @override
   String get categoryExpenseDining => '餐飲-早餐-午餐-晚餐-美團外賣-餓了麼外賣-京東外賣-餐廳-美食';

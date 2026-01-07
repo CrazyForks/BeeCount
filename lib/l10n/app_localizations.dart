@@ -3159,13 +3159,13 @@ abstract class AppLocalizations {
   /// No description provided for @categoryExpenseList.
   ///
   /// In en, this message translates to:
-  /// **'Dining-Transport-Shopping-Entertainment-Home-Family-Communication-Utilities-Housing-Medical-Education-Pets-Sports-Digital-Travel-Alcohol & Tobacco-Baby Care-Beauty-Repair-Social-Learning-Car-Taxi-Subway-Delivery-Property-Parking-Donation-Gift-Tax-Beverage-Clothing-Snacks-Red Packet-Fruit-Game-Book-Lover-Decoration-Daily Goods-Lottery-Stock-Social Security-Express-Work'**
+  /// **'Dining-Transport-Shopping-Entertainment-Home-Family-Communication-Utilities-Housing-Medical-Education-Pets-Sports-Digital-Travel-Alcohol & Tobacco-Baby Care-Beauty-Repair-Social-Learning-Car-Taxi-Subway-Delivery-Property-Parking-Donation-Give Gift-Tax-Beverage-Clothing-Snacks-Send Red Packet-Fruit-Game-Book-Lover-Decoration-Daily Goods-Lottery-Stock-Social Security-Express-Work'**
   String get categoryExpenseList;
 
   /// No description provided for @categoryIncomeList.
   ///
   /// In en, this message translates to:
-  /// **'Salary-Investment-Red Packet-Bonus-Reimbursement-Part-time-Gift-Interest-Refund-Investment Income-Second-hand-Social Benefit-Tax Refund-Provident Fund'**
+  /// **'Salary-Investment-Receive Red Packet-Bonus-Reimbursement-Part-time-Receive Gift-Interest-Refund-Investment Income-Second-hand-Social Benefit-Tax Refund-Provident Fund'**
   String get categoryIncomeList;
 
   /// No description provided for @categoryExpenseDining.
