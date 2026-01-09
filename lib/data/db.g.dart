@@ -765,9 +765,39 @@ class $CategoriesTable extends Categories
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(1));
+  static const VerificationMeta _iconTypeMeta =
+      const VerificationMeta('iconType');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, kind, icon, sortOrder, parentId, level];
+  late final GeneratedColumn<String> iconType = GeneratedColumn<String>(
+      'icon_type', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('material'));
+  static const VerificationMeta _customIconPathMeta =
+      const VerificationMeta('customIconPath');
+  @override
+  late final GeneratedColumn<String> customIconPath = GeneratedColumn<String>(
+      'custom_icon_path', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _communityIconIdMeta =
+      const VerificationMeta('communityIconId');
+  @override
+  late final GeneratedColumn<String> communityIconId = GeneratedColumn<String>(
+      'community_icon_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        kind,
+        icon,
+        sortOrder,
+        parentId,
+        level,
+        iconType,
+        customIconPath,
+        communityIconId
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -809,6 +839,22 @@ class $CategoriesTable extends Categories
       context.handle(
           _levelMeta, level.isAcceptableOrUnknown(data['level']!, _levelMeta));
     }
+    if (data.containsKey('icon_type')) {
+      context.handle(_iconTypeMeta,
+          iconType.isAcceptableOrUnknown(data['icon_type']!, _iconTypeMeta));
+    }
+    if (data.containsKey('custom_icon_path')) {
+      context.handle(
+          _customIconPathMeta,
+          customIconPath.isAcceptableOrUnknown(
+              data['custom_icon_path']!, _customIconPathMeta));
+    }
+    if (data.containsKey('community_icon_id')) {
+      context.handle(
+          _communityIconIdMeta,
+          communityIconId.isAcceptableOrUnknown(
+              data['community_icon_id']!, _communityIconIdMeta));
+    }
     return context;
   }
 
@@ -832,6 +878,12 @@ class $CategoriesTable extends Categories
           .read(DriftSqlType.int, data['${effectivePrefix}parent_id']),
       level: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}level'])!,
+      iconType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon_type'])!,
+      customIconPath: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}custom_icon_path']),
+      communityIconId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}community_icon_id']),
     );
   }
 
@@ -849,6 +901,9 @@ class Category extends DataClass implements Insertable<Category> {
   final int sortOrder;
   final int? parentId;
   final int level;
+  final String iconType;
+  final String? customIconPath;
+  final String? communityIconId;
   const Category(
       {required this.id,
       required this.name,
@@ -856,7 +911,10 @@ class Category extends DataClass implements Insertable<Category> {
       this.icon,
       required this.sortOrder,
       this.parentId,
-      required this.level});
+      required this.level,
+      required this.iconType,
+      this.customIconPath,
+      this.communityIconId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -871,6 +929,13 @@ class Category extends DataClass implements Insertable<Category> {
       map['parent_id'] = Variable<int>(parentId);
     }
     map['level'] = Variable<int>(level);
+    map['icon_type'] = Variable<String>(iconType);
+    if (!nullToAbsent || customIconPath != null) {
+      map['custom_icon_path'] = Variable<String>(customIconPath);
+    }
+    if (!nullToAbsent || communityIconId != null) {
+      map['community_icon_id'] = Variable<String>(communityIconId);
+    }
     return map;
   }
 
@@ -885,6 +950,13 @@ class Category extends DataClass implements Insertable<Category> {
           ? const Value.absent()
           : Value(parentId),
       level: Value(level),
+      iconType: Value(iconType),
+      customIconPath: customIconPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customIconPath),
+      communityIconId: communityIconId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(communityIconId),
     );
   }
 
@@ -899,6 +971,9 @@ class Category extends DataClass implements Insertable<Category> {
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
       parentId: serializer.fromJson<int?>(json['parentId']),
       level: serializer.fromJson<int>(json['level']),
+      iconType: serializer.fromJson<String>(json['iconType']),
+      customIconPath: serializer.fromJson<String?>(json['customIconPath']),
+      communityIconId: serializer.fromJson<String?>(json['communityIconId']),
     );
   }
   @override
@@ -912,6 +987,9 @@ class Category extends DataClass implements Insertable<Category> {
       'sortOrder': serializer.toJson<int>(sortOrder),
       'parentId': serializer.toJson<int?>(parentId),
       'level': serializer.toJson<int>(level),
+      'iconType': serializer.toJson<String>(iconType),
+      'customIconPath': serializer.toJson<String?>(customIconPath),
+      'communityIconId': serializer.toJson<String?>(communityIconId),
     };
   }
 
@@ -922,7 +1000,10 @@ class Category extends DataClass implements Insertable<Category> {
           Value<String?> icon = const Value.absent(),
           int? sortOrder,
           Value<int?> parentId = const Value.absent(),
-          int? level}) =>
+          int? level,
+          String? iconType,
+          Value<String?> customIconPath = const Value.absent(),
+          Value<String?> communityIconId = const Value.absent()}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -931,6 +1012,12 @@ class Category extends DataClass implements Insertable<Category> {
         sortOrder: sortOrder ?? this.sortOrder,
         parentId: parentId.present ? parentId.value : this.parentId,
         level: level ?? this.level,
+        iconType: iconType ?? this.iconType,
+        customIconPath:
+            customIconPath.present ? customIconPath.value : this.customIconPath,
+        communityIconId: communityIconId.present
+            ? communityIconId.value
+            : this.communityIconId,
       );
   Category copyWithCompanion(CategoriesCompanion data) {
     return Category(
@@ -941,6 +1028,13 @@ class Category extends DataClass implements Insertable<Category> {
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
       parentId: data.parentId.present ? data.parentId.value : this.parentId,
       level: data.level.present ? data.level.value : this.level,
+      iconType: data.iconType.present ? data.iconType.value : this.iconType,
+      customIconPath: data.customIconPath.present
+          ? data.customIconPath.value
+          : this.customIconPath,
+      communityIconId: data.communityIconId.present
+          ? data.communityIconId.value
+          : this.communityIconId,
     );
   }
 
@@ -953,14 +1047,17 @@ class Category extends DataClass implements Insertable<Category> {
           ..write('icon: $icon, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('parentId: $parentId, ')
-          ..write('level: $level')
+          ..write('level: $level, ')
+          ..write('iconType: $iconType, ')
+          ..write('customIconPath: $customIconPath, ')
+          ..write('communityIconId: $communityIconId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, kind, icon, sortOrder, parentId, level);
+  int get hashCode => Object.hash(id, name, kind, icon, sortOrder, parentId,
+      level, iconType, customIconPath, communityIconId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -971,7 +1068,10 @@ class Category extends DataClass implements Insertable<Category> {
           other.icon == this.icon &&
           other.sortOrder == this.sortOrder &&
           other.parentId == this.parentId &&
-          other.level == this.level);
+          other.level == this.level &&
+          other.iconType == this.iconType &&
+          other.customIconPath == this.customIconPath &&
+          other.communityIconId == this.communityIconId);
 }
 
 class CategoriesCompanion extends UpdateCompanion<Category> {
@@ -982,6 +1082,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<int> sortOrder;
   final Value<int?> parentId;
   final Value<int> level;
+  final Value<String> iconType;
+  final Value<String?> customIconPath;
+  final Value<String?> communityIconId;
   const CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -990,6 +1093,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     this.sortOrder = const Value.absent(),
     this.parentId = const Value.absent(),
     this.level = const Value.absent(),
+    this.iconType = const Value.absent(),
+    this.customIconPath = const Value.absent(),
+    this.communityIconId = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
@@ -999,6 +1105,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     this.sortOrder = const Value.absent(),
     this.parentId = const Value.absent(),
     this.level = const Value.absent(),
+    this.iconType = const Value.absent(),
+    this.customIconPath = const Value.absent(),
+    this.communityIconId = const Value.absent(),
   })  : name = Value(name),
         kind = Value(kind);
   static Insertable<Category> custom({
@@ -1009,6 +1118,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Expression<int>? sortOrder,
     Expression<int>? parentId,
     Expression<int>? level,
+    Expression<String>? iconType,
+    Expression<String>? customIconPath,
+    Expression<String>? communityIconId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1018,6 +1130,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       if (sortOrder != null) 'sort_order': sortOrder,
       if (parentId != null) 'parent_id': parentId,
       if (level != null) 'level': level,
+      if (iconType != null) 'icon_type': iconType,
+      if (customIconPath != null) 'custom_icon_path': customIconPath,
+      if (communityIconId != null) 'community_icon_id': communityIconId,
     });
   }
 
@@ -1028,7 +1143,10 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       Value<String?>? icon,
       Value<int>? sortOrder,
       Value<int?>? parentId,
-      Value<int>? level}) {
+      Value<int>? level,
+      Value<String>? iconType,
+      Value<String?>? customIconPath,
+      Value<String?>? communityIconId}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -1037,6 +1155,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       sortOrder: sortOrder ?? this.sortOrder,
       parentId: parentId ?? this.parentId,
       level: level ?? this.level,
+      iconType: iconType ?? this.iconType,
+      customIconPath: customIconPath ?? this.customIconPath,
+      communityIconId: communityIconId ?? this.communityIconId,
     );
   }
 
@@ -1064,6 +1185,15 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (level.present) {
       map['level'] = Variable<int>(level.value);
     }
+    if (iconType.present) {
+      map['icon_type'] = Variable<String>(iconType.value);
+    }
+    if (customIconPath.present) {
+      map['custom_icon_path'] = Variable<String>(customIconPath.value);
+    }
+    if (communityIconId.present) {
+      map['community_icon_id'] = Variable<String>(communityIconId.value);
+    }
     return map;
   }
 
@@ -1076,7 +1206,10 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
           ..write('icon: $icon, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('parentId: $parentId, ')
-          ..write('level: $level')
+          ..write('level: $level, ')
+          ..write('iconType: $iconType, ')
+          ..write('customIconPath: $customIconPath, ')
+          ..write('communityIconId: $communityIconId')
           ..write(')'))
         .toString();
   }
@@ -5095,6 +5228,9 @@ typedef $$CategoriesTableCreateCompanionBuilder = CategoriesCompanion Function({
   Value<int> sortOrder,
   Value<int?> parentId,
   Value<int> level,
+  Value<String> iconType,
+  Value<String?> customIconPath,
+  Value<String?> communityIconId,
 });
 typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
   Value<int> id,
@@ -5104,6 +5240,9 @@ typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
   Value<int> sortOrder,
   Value<int?> parentId,
   Value<int> level,
+  Value<String> iconType,
+  Value<String?> customIconPath,
+  Value<String?> communityIconId,
 });
 
 class $$CategoriesTableFilterComposer
@@ -5135,6 +5274,17 @@ class $$CategoriesTableFilterComposer
 
   ColumnFilters<int> get level => $composableBuilder(
       column: $table.level, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get iconType => $composableBuilder(
+      column: $table.iconType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get customIconPath => $composableBuilder(
+      column: $table.customIconPath,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get communityIconId => $composableBuilder(
+      column: $table.communityIconId,
+      builder: (column) => ColumnFilters(column));
 }
 
 class $$CategoriesTableOrderingComposer
@@ -5166,6 +5316,17 @@ class $$CategoriesTableOrderingComposer
 
   ColumnOrderings<int> get level => $composableBuilder(
       column: $table.level, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get iconType => $composableBuilder(
+      column: $table.iconType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get customIconPath => $composableBuilder(
+      column: $table.customIconPath,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get communityIconId => $composableBuilder(
+      column: $table.communityIconId,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$CategoriesTableAnnotationComposer
@@ -5197,6 +5358,15 @@ class $$CategoriesTableAnnotationComposer
 
   GeneratedColumn<int> get level =>
       $composableBuilder(column: $table.level, builder: (column) => column);
+
+  GeneratedColumn<String> get iconType =>
+      $composableBuilder(column: $table.iconType, builder: (column) => column);
+
+  GeneratedColumn<String> get customIconPath => $composableBuilder(
+      column: $table.customIconPath, builder: (column) => column);
+
+  GeneratedColumn<String> get communityIconId => $composableBuilder(
+      column: $table.communityIconId, builder: (column) => column);
 }
 
 class $$CategoriesTableTableManager extends RootTableManager<
@@ -5229,6 +5399,9 @@ class $$CategoriesTableTableManager extends RootTableManager<
             Value<int> sortOrder = const Value.absent(),
             Value<int?> parentId = const Value.absent(),
             Value<int> level = const Value.absent(),
+            Value<String> iconType = const Value.absent(),
+            Value<String?> customIconPath = const Value.absent(),
+            Value<String?> communityIconId = const Value.absent(),
           }) =>
               CategoriesCompanion(
             id: id,
@@ -5238,6 +5411,9 @@ class $$CategoriesTableTableManager extends RootTableManager<
             sortOrder: sortOrder,
             parentId: parentId,
             level: level,
+            iconType: iconType,
+            customIconPath: customIconPath,
+            communityIconId: communityIconId,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -5247,6 +5423,9 @@ class $$CategoriesTableTableManager extends RootTableManager<
             Value<int> sortOrder = const Value.absent(),
             Value<int?> parentId = const Value.absent(),
             Value<int> level = const Value.absent(),
+            Value<String> iconType = const Value.absent(),
+            Value<String?> customIconPath = const Value.absent(),
+            Value<String?> communityIconId = const Value.absent(),
           }) =>
               CategoriesCompanion.insert(
             id: id,
@@ -5256,6 +5435,9 @@ class $$CategoriesTableTableManager extends RootTableManager<
             sortOrder: sortOrder,
             parentId: parentId,
             level: level,
+            iconType: iconType,
+            customIconPath: customIconPath,
+            communityIconId: communityIconId,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

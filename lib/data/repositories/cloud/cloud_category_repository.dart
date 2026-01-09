@@ -692,6 +692,9 @@ class CloudCategoryRepository implements CategoryRepository {
       sortOrder: json['sort_order'] as int? ?? 0,
       parentId: json['parent_id'] as int?,
       level: json['level'] as int? ?? 1,
+      iconType: json['icon_type'] as String? ?? 'material',
+      customIconPath: json['custom_icon_path'] as String?,
+      communityIconId: json['community_icon_id'] as String?,
     );
   }
 
@@ -723,5 +726,26 @@ class CloudCategoryRepository implements CategoryRepository {
   @override
   Future<int> insertCategory(CategoriesCompanion category) async {
     throw UnimplementedError('云端插入分类暂不支持');
+  }
+
+  @override
+  Future<void> updateCategoryIcon(
+    int id, {
+    required String iconType,
+    String? icon,
+    String? customIconPath,
+    String? communityIconId,
+  }) async {
+    throw UnimplementedError('云端更新分类图标暂不支持');
+  }
+
+  @override
+  Future<void> clearCategoryCustomIcon(int id, {String? materialIcon}) async {
+    throw UnimplementedError('云端清除自定义图标暂不支持');
+  }
+
+  @override
+  Future<List<String>> getCustomIconPaths() async {
+    throw UnimplementedError('云端获取自定义图标路径暂不支持');
   }
 }

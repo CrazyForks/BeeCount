@@ -130,4 +130,23 @@ abstract class CategoryRepository {
 
   /// 插入单个分类（返回新ID）
   Future<int> insertCategory(CategoriesCompanion category);
+
+  /// 更新分类图标
+  /// [iconType] 图标类型：'material' / 'custom' / 'community'
+  /// [icon] Material图标名称（iconType='material'时使用）
+  /// [customIconPath] 自定义图标路径（iconType='custom'时使用）
+  /// [communityIconId] 社区图标ID（iconType='community'时使用）
+  Future<void> updateCategoryIcon(
+    int id, {
+    required String iconType,
+    String? icon,
+    String? customIconPath,
+    String? communityIconId,
+  });
+
+  /// 清除自定义图标，恢复为 Material 图标
+  Future<void> clearCategoryCustomIcon(int id, {String? materialIcon});
+
+  /// 获取所有使用自定义图标的分类路径列表
+  Future<List<String>> getCustomIconPaths();
 }

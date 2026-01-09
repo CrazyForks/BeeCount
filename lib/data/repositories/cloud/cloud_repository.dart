@@ -909,6 +909,29 @@ class CloudRepository extends BaseRepository {
       _category.insertCategory(category);
 
   @override
+  Future<void> updateCategoryIcon(
+    int id, {
+    required String iconType,
+    String? icon,
+    String? customIconPath,
+    String? communityIconId,
+  }) =>
+      _category.updateCategoryIcon(
+        id,
+        iconType: iconType,
+        icon: icon,
+        customIconPath: customIconPath,
+        communityIconId: communityIconId,
+      );
+
+  @override
+  Future<void> clearCategoryCustomIcon(int id, {String? materialIcon}) =>
+      _category.clearCategoryCustomIcon(id, materialIcon: materialIcon);
+
+  @override
+  Future<List<String>> getCustomIconPaths() => _category.getCustomIconPaths();
+
+  @override
   Future<void> batchInsertRecurringTransactions(
           List<RecurringTransactionsCompanion> items) =>
       _recurringTransaction.batchInsertRecurringTransactions(items);

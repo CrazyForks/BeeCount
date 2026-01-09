@@ -11,7 +11,7 @@ import '../../widgets/analytics/category_rank_row.dart';
 import '../../widgets/ui/capsule_switcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/export/share_poster_service.dart';
-import '../../utils/ui_scale_extensions.dart';
+import '../../data/db.dart' as db;
 
 class AnalyticsPage extends ConsumerStatefulWidget {
   const AnalyticsPage({super.key});
@@ -535,7 +535,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
 
                 // 在balance模式下，需要计算结余数据
                 dynamic seriesRaw;
-                List<({int? id, String name, String? icon, double total})>
+                List<({int? id, String name, db.Category? category, double total})>
                     catData;
                 int txCount;
                 double sum;
@@ -550,7 +550,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
 
                   // 分类数据显示支出分类（但结余模式下不显示排行榜）
                   catData = list[0] as List<
-                      ({int? id, String name, String? icon, double total})>;
+                      ({int? id, String name, db.Category? category, double total})>;
 
                   // 获取收入和支出的交易数量
                   final expenseCount = list[2] as int;
@@ -563,7 +563,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                   sum = incomeSum - expenseSum;
                 } else {
                   catData = list[0] as List<
-                      ({int? id, String name, String? icon, double total})>;
+                      ({int? id, String name, db.Category? category, double total})>;
                   seriesRaw = list[1];
                   txCount = list[2] as int;
                   sum = catData.fold<double>(0, (a, b) => a + b.total);
@@ -863,8 +863,8 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                         for (final item in catData)
                           CategoryRankRow(
                             categoryId: item.id,
+                            category: item.category,
                             name: item.name,
-                            iconName: item.icon,
                             value: item.total,
                             percent: sum == 0 ? 0 : item.total / sum,
                             color: Theme.of(context).colorScheme.primary,
@@ -1018,7 +1018,7 @@ Future<List<dynamic>> _loadBalanceData(
 }
 
 // 聚合一级分类数据（将二级分类金额聚合到一级分类）
-Future<List<({int? id, String name, String? icon, double total})>>
+Future<List<({int? id, String name, db.Category? category, double total})>>
     _aggregateTopLevelCategories(
         List<
                 ({
@@ -1031,11 +1031,15 @@ Future<List<({int? id, String name, String? icon, double total})>>
                 })>
             hierarchyData,
         dynamic repo) async {
-  // 1. 先收集所有一级分类的基本信息
-  final topLevelInfo = <int, ({String name, String? icon})>{};
+  // 1. 先收集所有一级分类的完整信息
+  final topLevelInfo = <int, db.Category>{};
   for (final item in hierarchyData) {
     if (item.level == 1 && item.id != null) {
-      topLevelInfo[item.id!] = (name: item.name, icon: item.icon);
+      // 查询完整的分类对象
+      final category = await repo.getCategoryById(item.id!);
+      if (category != null) {
+        topLevelInfo[item.id!] = category;
+      }
     }
   }
 
@@ -1053,7 +1057,7 @@ Future<List<({int? id, String name, String? icon, double total})>>
   for (final parentId in parentIdsToQuery) {
     final category = await repo.getCategoryById(parentId);
     if (category != null) {
-      topLevelInfo[parentId] = (name: category.name, icon: category.icon);
+      topLevelInfo[parentId] = category;
     }
   }
 
@@ -1079,10 +1083,20 @@ Future<List<({int? id, String name, String? icon, double total})>>
 
     // 获取一级分类信息
     if (id != null && topLevelInfo.containsKey(id)) {
-      final info = topLevelInfo[id]!;
-      return (id: id, name: info.name, icon: info.icon, total: total);
+      final category = topLevelInfo[id]!;
+      return (
+        id: id,
+        name: category.name,
+        category: category,
+        total: total
+      );
     } else {
-      return (id: id, name: '未分类', icon: null, total: total);
+      return (
+        id: id,
+        name: '未分类',
+        category: null,
+        total: total
+      );
     }
   }).toList()
     ..sort((a, b) => b.total.compareTo(a.total));

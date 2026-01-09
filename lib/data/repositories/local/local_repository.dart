@@ -440,6 +440,29 @@ class LocalRepository extends BaseRepository {
   Future<int> insertCategory(CategoriesCompanion category) =>
       _categoryRepo.insertCategory(category);
 
+  @override
+  Future<void> updateCategoryIcon(
+    int id, {
+    required String iconType,
+    String? icon,
+    String? customIconPath,
+    String? communityIconId,
+  }) =>
+      _categoryRepo.updateCategoryIcon(
+        id,
+        iconType: iconType,
+        icon: icon,
+        customIconPath: customIconPath,
+        communityIconId: communityIconId,
+      );
+
+  @override
+  Future<void> clearCategoryCustomIcon(int id, {String? materialIcon}) =>
+      _categoryRepo.clearCategoryCustomIcon(id, materialIcon: materialIcon);
+
+  @override
+  Future<List<String>> getCustomIconPaths() => _categoryRepo.getCustomIconPaths();
+
   // ============================================
   // AccountRepository 接口实现 - 委托给 LocalAccountRepository
   // ============================================

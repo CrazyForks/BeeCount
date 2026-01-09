@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -365,6 +367,27 @@ class _CategoryItem extends StatelessWidget {
 
   IconData _iconFor(Category c) => getCategoryIconData(category: c);
 
+  /// 构建图标组件（支持自定义图标）
+  Widget _buildIcon(BuildContext context, double size, Color color) {
+    // 检查是否有自定义图标
+    if (category.iconType == 'custom' && category.customIconPath != null) {
+      return ClipOval(
+        child: Image.file(
+          File(category.customIconPath!),
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Icon(
+            _iconFor(category),
+            size: size,
+            color: color,
+          ),
+        ),
+      );
+    }
+    return Icon(_iconFor(category), size: size, color: color);
+  }
+
   @override
   Widget build(BuildContext context) {
     // 二级分类使用较小的图标和缩进
@@ -392,12 +415,10 @@ class _CategoryItem extends StatelessWidget {
                           : BeeTokens.surfaceCategoryIcon(context),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  _iconFor(category),
-                  size: isSubCategory ? 20 : 24,
-                  color: selected
-                      ? primaryColor
-                      : BeeTokens.iconCategory(context),
+                child: _buildIcon(
+                  context,
+                  isSubCategory ? 20 : 24,
+                  selected ? primaryColor : BeeTokens.iconCategory(context),
                 ),
               ),
               // 有子分类时在图标右下角显示三个点（完全分开，不重叠）

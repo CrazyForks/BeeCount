@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/category_selector_dialog.dart';
@@ -9,6 +11,7 @@ import '../../data/db.dart' as db;
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 import '../../styles/tokens.dart';
+import '../../services/custom_icon_service.dart';
 import '../transaction/category_detail_page.dart';
 import 'category_migration_page.dart';
 
@@ -41,10 +44,24 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   bool _isSubCategory = false;
   db.Category? _selectedParentCategory;
 
+  // 自定义图标相关状态
+  String _iconType = 'material'; // material / custom
+  String? _customIconPath;
+  bool _isPickingImage = false;
+
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.category?.name ?? '');
+
+    // 初始化图标状态
+    if (widget.category != null) {
+      // 编辑模式：加载现有图标配置
+      _iconType = widget.category!.iconType;
+      if (_iconType == 'custom' && widget.category!.customIconPath != null) {
+        _customIconPath = widget.category!.customIconPath;
+      }
+    }
 
     // 确保选中的图标在可用的图标组中存在
     final categoryIcon = widget.category?.icon;
@@ -315,11 +332,19 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 16),
+                          // 自定义图标选项
+                          _buildCustomIconSection(context),
+                          const SizedBox(height: 16),
+                          const Divider(),
+                          const SizedBox(height: 16),
+                          // Material 图标网格
                           _GroupedIconGrid(
-                            selectedIcon: _selectedIcon,
+                            selectedIcon:
+                                _iconType == 'material' ? _selectedIcon : null,
                             kind: widget.kind,
                             onIconSelected: (icon) {
                               setState(() {
+                                _iconType = 'material';
                                 _selectedIcon = icon;
                               });
                             },
@@ -392,6 +417,16 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       return;
     }
 
+    // 如果选择了自定义图标但没有选择图片
+    if (_iconType == 'custom' && _customIconPath == null) {
+      await AppDialog.error(
+        context,
+        title: AppLocalizations.of(context).categorySaveError,
+        message: AppLocalizations.of(context).categoryCustomIconRequired,
+      );
+      return;
+    }
+
     // 保存前再次检查名称重复
     final repo = ref.read(repositoryProvider);
     final name = _nameController.text.trim();
@@ -423,13 +458,31 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
           // 二级分类可以修改父分类
           parentId: _isSubCategory ? _selectedParentCategory?.id : null,
         );
+
+        // 更新图标信息
+        if (_iconType == 'custom') {
+          await repo.updateCategoryIcon(
+            widget.category!.id,
+            iconType: 'custom',
+            customIconPath: _customIconPath,
+          );
+        } else {
+          // 切换回 material 图标时，清除自定义图标
+          await repo.updateCategoryIcon(
+            widget.category!.id,
+            iconType: 'material',
+            icon: _selectedIcon,
+          );
+        }
+
         if (!mounted) return;
         showToast(context, AppLocalizations.of(context).categoryUpdated(name));
       } else {
         // 新建分类
+        int newCategoryId;
         if (_isSubCategory) {
           // 新建二级分类
-          await repo.createSubCategory(
+          newCategoryId = await repo.createSubCategory(
             parentId: _selectedParentCategory!.id,
             name: name,
             kind: widget.kind,
@@ -440,7 +493,7 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
               AppLocalizations.of(context).categorySubCategoryCreated(name));
         } else {
           // 新建一级分类
-          await repo.createCategory(
+          newCategoryId = await repo.createCategory(
             name: name,
             kind: widget.kind,
             icon: _selectedIcon,
@@ -448,6 +501,20 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
           if (!mounted) return;
           showToast(
               context, AppLocalizations.of(context).categoryCreated(name));
+        }
+
+        // 如果选择了自定义图标，需要保存图标文件并更新分类
+        if (_iconType == 'custom' && _customIconPath != null) {
+          final customIconService = CustomIconService();
+          final savedPath = await customIconService.saveCustomIcon(
+            File(_customIconPath!),
+            newCategoryId,
+          );
+          await repo.updateCategoryIcon(
+            newCategoryId,
+            iconType: 'custom',
+            customIconPath: savedPath,
+          );
         }
       }
 
@@ -529,6 +596,161 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
         title: AppLocalizations.of(context).categoryDeleteError,
         message: '$e',
       );
+    }
+  }
+
+  /// 构建自定义图标选择区域
+  Widget _buildCustomIconSection(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final isSelected = _iconType == 'custom';
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
+    return InkWell(
+      onTap: _pickCustomIcon,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? primaryColor.withValues(alpha: 0.1)
+              : BeeTokens.surface(context),
+          border: Border.all(
+            color: isSelected ? primaryColor : BeeTokens.border(context),
+            width: isSelected ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            // 图标预览
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: BeeTokens.surfaceHeader(context),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: BeeTokens.border(context)),
+              ),
+              child: _isPickingImage
+                  ? const Center(
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  : _customIconPath != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.file(
+                            File(_customIconPath!),
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Icon(
+                              Icons.broken_image,
+                              size: 24,
+                              color: BeeTokens.textTertiary(context),
+                            ),
+                          ),
+                        )
+                      : Icon(
+                          Icons.add_photo_alternate_outlined,
+                          size: 24,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+            ),
+            const SizedBox(width: 12),
+            // 文字说明
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.categoryCustomIconTitle,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: isSelected ? primaryColor : null,
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _customIconPath != null
+                        ? l10n.categoryCustomIconTapToChange
+                        : l10n.categoryCustomIconTapToSelect,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: BeeTokens.textTertiary(context),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            // 选中状态指示器
+            if (isSelected)
+              Icon(
+                Icons.check_circle,
+                color: primaryColor,
+                size: 24,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 选择自定义图标
+  Future<void> _pickCustomIcon() async {
+    if (_isPickingImage) return;
+
+    setState(() => _isPickingImage = true);
+
+    try {
+      final picker = ImagePicker();
+      final image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 2048,
+        maxHeight: 2048,
+      );
+
+      if (image == null) {
+        setState(() => _isPickingImage = false);
+        return;
+      }
+
+      final file = File(image.path);
+      final customIconService = CustomIconService();
+
+      // 验证图片
+      await customIconService.validateImage(file);
+
+      // 如果是编辑现有分类，直接保存；否则先临时存储
+      if (widget.category != null) {
+        // 保存图标到本地存储
+        final savedPath =
+            await customIconService.saveCustomIcon(file, widget.category!.id);
+
+        setState(() {
+          _iconType = 'custom';
+          _customIconPath = savedPath;
+          _isPickingImage = false;
+        });
+      } else {
+        // 新建分类：暂时使用原始路径，保存时再处理
+        setState(() {
+          _iconType = 'custom';
+          _customIconPath = image.path;
+          _isPickingImage = false;
+        });
+      }
+    } on CustomIconException catch (e) {
+      setState(() => _isPickingImage = false);
+      if (!mounted) return;
+      showToast(context, e.message);
+    } catch (e) {
+      setState(() => _isPickingImage = false);
+      if (!mounted) return;
+      showToast(context, AppLocalizations.of(context).categoryCustomIconError);
     }
   }
 

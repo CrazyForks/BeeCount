@@ -363,8 +363,10 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
             );
           } else {
             final transaction = item.transaction!;
+            final category = _getTransactionCategory();
             return TransactionListItem(
               icon: _getTransactionIcon(transaction),
+              category: category,
               title: _getTransactionTitle(transaction),
               amount: transaction.amount,
               isExpense: transaction.type == 'expense',
@@ -439,8 +441,11 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                   .where((t) => t.type == 'income')
                   .fold(0.0, (sum, t) => sum + t.amount),
             ),
-            ...dayTransactions.map((transaction) => TransactionListItem(
+            ...dayTransactions.map((transaction) {
+              final category = _getTransactionCategory();
+              return TransactionListItem(
               icon: _getTransactionIcon(transaction),
+              category: category,
               title: _getTransactionTitle(transaction),
               amount: transaction.amount,
               isExpense: transaction.type == 'expense',
@@ -477,7 +482,8 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                   }
                 }
               },
-            )),
+            );
+            }),
           ],
         );
       },
@@ -485,6 +491,11 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
   }
 
 
+
+  db.Category? _getTransactionCategory() {
+    final categoryAsync = ref.read(_categoryStreamProvider(widget.categoryId));
+    return categoryAsync.value;
+  }
 
   IconData _getTransactionIcon(db.Transaction transaction) {
     final categoryAsync = ref.read(_categoryStreamProvider(widget.categoryId));

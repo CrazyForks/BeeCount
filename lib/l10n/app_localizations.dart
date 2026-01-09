@@ -2886,6 +2886,36 @@ abstract class AppLocalizations {
   /// **'Category Icon'**
   String get categoryIconLabel;
 
+  /// No description provided for @categoryCustomIconTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Icon'**
+  String get categoryCustomIconTitle;
+
+  /// No description provided for @categoryCustomIconTapToSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select image'**
+  String get categoryCustomIconTapToSelect;
+
+  /// No description provided for @categoryCustomIconTapToChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to change image'**
+  String get categoryCustomIconTapToChange;
+
+  /// No description provided for @categoryCustomIconError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error selecting image'**
+  String get categoryCustomIconError;
+
+  /// No description provided for @categoryCustomIconRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a custom icon image'**
+  String get categoryCustomIconRequired;
+
   /// No description provided for @categoryDangerousOperations.
   ///
   /// In en, this message translates to:

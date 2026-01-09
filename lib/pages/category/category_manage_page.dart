@@ -8,12 +8,12 @@ import 'package:share_plus/share_plus.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as db;
-import '../../services/data/category_service.dart';
 import '../../services/export/config_export_service.dart';
 import '../../services/system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 import '../../styles/tokens.dart';
+import '../../widgets/category_icon.dart';
 import 'category_edit_page.dart';
 
 class CategoryManagePage extends ConsumerStatefulWidget {
@@ -767,6 +767,7 @@ class _CategoryCard extends ConsumerWidget {
     required this.onTap,
   });
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 二级分类：使用浅色背景
@@ -805,12 +806,13 @@ class _CategoryCard extends ConsumerWidget {
                           : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      CategoryService.getCategoryIcon(item.category.icon),
+                    child: CategoryIconWidget(
+                      category: item.category,
+                      size: item.isSubCategory ? 16.0 : 18.0,
                       color: item.isSubCategory
-                          ? Colors.orange[700]
+                          ? Colors.orange[700]!
                           : Theme.of(context).colorScheme.primary,
-                      size: item.isSubCategory ? 16 : 18,
+                      circular: true,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -891,6 +893,7 @@ class _SubcategoryDialogState extends ConsumerState<_SubcategoryDialog> {
   List<({db.Category category, int transactionCount})>? _subCategories;
   bool _isLoading = true;
 
+
   @override
   void initState() {
     super.initState();
@@ -945,10 +948,11 @@ class _SubcategoryDialogState extends ConsumerState<_SubcategoryDialog> {
                     color: primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    CategoryService.getCategoryIcon(widget.parentCategory.icon),
-                    color: primaryColor,
+                  child: CategoryIconWidget(
+                    category: widget.parentCategory,
                     size: 18,
+                    color: primaryColor,
+                    circular: true,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -1082,6 +1086,7 @@ class _DialogSubCategoryCard extends StatelessWidget {
     required this.onTap,
   });
 
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
@@ -1109,10 +1114,11 @@ class _DialogSubCategoryCard extends StatelessWidget {
                 color: primaryColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                CategoryService.getCategoryIcon(category.icon),
-                color: primaryColor,
+              child: CategoryIconWidget(
+                category: category,
                 size: 14,
+                color: primaryColor,
+                circular: true,
               ),
             ),
             const SizedBox(height: 4),

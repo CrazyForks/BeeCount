@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/db.dart';
@@ -561,11 +563,6 @@ class _CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconData = getCategoryIconData(
-      category: category,
-      categoryName: category.name,
-    );
-
     // 不可选时显示为半透明
     final opacity = !isSelectable ? 0.5 : 1.0;
 
@@ -610,10 +607,10 @@ class _CategoryTile extends StatelessWidget {
                         ? Border.all(color: primaryColor, width: 1.5)
                         : null,
                   ),
-                  child: Icon(
-                    iconData,
-                    color: primaryColor,
+                  child: CategoryIconWidget(
+                    category: category,
                     size: 24,
+                    color: primaryColor,
                   ),
                 ),
                 const SizedBox(width: 12),

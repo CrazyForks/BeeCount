@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/db.dart' as db;
 import '../../styles/tokens.dart';
 import '../../widgets/ui/ui.dart';
+import '../../widgets/category_icon.dart';
 import '../../providers/theme_providers.dart';
 import 'amount_text.dart';
 import 'tag_chip.dart';
 
 class TransactionListItem extends ConsumerWidget {
   final IconData icon;
+  final db.Category? category; // 可选的分类对象，用于显示自定义图标
   final String title;
   final double amount;
   final bool isExpense; // 决定正负号
@@ -37,6 +40,7 @@ class TransactionListItem extends ConsumerWidget {
   const TransactionListItem({
       super.key,
       required this.icon,
+      this.category,
       required this.title,
       required this.amount,
       required this.isExpense,
@@ -57,6 +61,7 @@ class TransactionListItem extends ConsumerWidget {
       this.attachmentCount = 0,
       this.onAttachmentTap,
   });
+
 
   /// 检查是否有次要信息需要显示（时间、账户或附件）
   bool _hasSecondaryInfo(WidgetRef ref) {
@@ -177,8 +182,10 @@ class TransactionListItem extends ConsumerWidget {
                         .withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon,
-                      color: Theme.of(context).colorScheme.primary, size: 18),
+                  child: CategoryIconWidget(
+                    category: category,
+                    size: 18,
+                  ),
                 ),
               ),
             const SizedBox(width: 12),

@@ -1516,6 +1516,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryIconLabel => '分类图标';
 
   @override
+  String get categoryCustomIconTitle => '自定义图标';
+
+  @override
+  String get categoryCustomIconTapToSelect => '点击选择图片';
+
+  @override
+  String get categoryCustomIconTapToChange => '点击更换图片';
+
+  @override
+  String get categoryCustomIconError => '选择图片时出错';
+
+  @override
+  String get categoryCustomIconRequired => '请选择自定义图标图片';
+
+  @override
   String get categoryDangerousOperations => '危险操作';
 
   @override
@@ -6727,6 +6742,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryIconLabel => '分類圖示';
+
+  @override
+  String get categoryCustomIconTitle => '自訂圖示';
+
+  @override
+  String get categoryCustomIconTapToSelect => '點擊選擇圖片';
+
+  @override
+  String get categoryCustomIconTapToChange => '點擊更換圖片';
+
+  @override
+  String get categoryCustomIconError => '選擇圖片時出錯';
+
+  @override
+  String get categoryCustomIconRequired => '請選擇自訂圖示圖片';
 
   @override
   String get categoryDangerousOperations => '危險操作';

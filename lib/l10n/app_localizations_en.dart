@@ -1516,6 +1516,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryIconLabel => 'Category Icon';
 
   @override
+  String get categoryCustomIconTitle => 'Custom Icon';
+
+  @override
+  String get categoryCustomIconTapToSelect => 'Tap to select image';
+
+  @override
+  String get categoryCustomIconTapToChange => 'Tap to change image';
+
+  @override
+  String get categoryCustomIconError => 'Error selecting image';
+
+  @override
+  String get categoryCustomIconRequired => 'Please select a custom icon image';
+
+  @override
   String get categoryDangerousOperations => 'Dangerous Operations';
 
   @override

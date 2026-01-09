@@ -305,6 +305,7 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
                 icon: isTransfer
                     ? Icons.swap_horiz
                     : getCategoryIconData(category: category, categoryName: categoryName),
+                category: isTransfer ? null : category,
                 title: hasNote ? transaction.note! : categoryName,
                 categoryName: hasNote ? null : categoryName,
                 amount: transaction.amount,

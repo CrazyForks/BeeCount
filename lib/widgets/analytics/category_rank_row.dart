@@ -4,18 +4,18 @@ import '../../styles/tokens.dart';
 import '../../widgets/category_icon.dart';
 import '../biz/biz.dart';
 import '../../utils/category_utils.dart';
-import '../../services/data/category_service.dart';
 import '../../providers.dart';
 import '../../pages/transaction/category_detail_page.dart';
 import '../../l10n/app_localizations.dart';
+import '../../data/db.dart' as db;
 
 class CategoryRankRow extends ConsumerStatefulWidget {
   final int? categoryId; // 分类ID
+  final db.Category? category; // 分类对象（用于显示图标）
   final String name;
   final double value;
   final double percent; // 0..1 (相对于总金额的真实占比)
   final Color color;
-  final String? iconName; // 图标名称,从数据库icon字段获取
   final DateTime start; // 统计开始时间
   final DateTime end; // 统计结束时间
   final String scope; // 周期范围
@@ -24,11 +24,11 @@ class CategoryRankRow extends ConsumerStatefulWidget {
   const CategoryRankRow({
     super.key,
     this.categoryId,
+    this.category,
     required this.name,
     required this.value,
     required this.percent,
     required this.color,
-    this.iconName,
     required this.start,
     required this.end,
     required this.scope,
@@ -41,7 +41,7 @@ class CategoryRankRow extends ConsumerStatefulWidget {
 
 class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
   bool _expanded = false;
-  List<({int id, String name, String icon, double total, double percent})>? _subCategories;
+  List<({int id, db.Category category, String name, double total, double percent})>? _subCategories;
   bool _hasCheckedSubCategories = false;
 
   @override
@@ -58,13 +58,6 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
     }
   }
 
-  IconData _getIconData(String? iconName, String name) {
-    // 优先使用iconName(从数据库icon字段获取),否则根据分类名称推导
-    if (iconName != null && iconName.isNotEmpty) {
-      return CategoryService.getCategoryIcon(iconName);
-    }
-    return getCategoryIconData(categoryName: name);
-  }
 
   Future<void> _loadSubCategories() async {
     if (widget.categoryId == null) return;
@@ -89,7 +82,7 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
     double totalAmount = widget.value; // 一级分类总金额作为基准
 
     // 计算每个二级分类的统计数据
-    final subCatData = <({int id, String name, String icon, double total, double percent})>[];
+    final subCatData = <({int id, db.Category category, String name, double total, double percent})>[];
 
     for (final subCat in subCats) {
       // 获取该二级分类在指定时间范围内的交易总额
@@ -110,8 +103,8 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
         final percent = widget.percent * (total / totalAmount);
         subCatData.add((
           id: subCat.id,
+          category: subCat,
           name: subCat.name,
-          icon: subCat.icon ?? '',
           total: total,
           percent: percent,
         ));
@@ -179,12 +172,20 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
 
   Widget _buildCategoryRow({
     required int? categoryId,
+    required db.Category? category,
     required String name,
-    required String? iconName,
     required double value,
     required double percent,
     required bool isTopLevel,
   }) {
+    // 使用统一的 CategoryIconWidget
+    final iconWidget = CategoryIconWidget(
+      category: category,
+      categoryName: name,
+      size: isTopLevel ? 20 : 18,
+      color: widget.color,
+    );
+
     return InkWell(
       onTap: isTopLevel
           ? _handleTopLevelTap
@@ -209,11 +210,7 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
                     : widget.color.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                _getIconData(iconName, name),
-                color: widget.color,
-                size: isTopLevel ? 20 : 18,
-              ),
+              child: iconWidget,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -289,8 +286,8 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
         // 一级分类
         _buildCategoryRow(
           categoryId: widget.categoryId,
+          category: widget.category,
           name: widget.name,
-          iconName: widget.iconName,
           value: widget.value,
           percent: widget.percent,
           isTopLevel: true,
@@ -300,8 +297,8 @@ class _CategoryRankRowState extends ConsumerState<CategoryRankRow> {
           ...(_subCategories!.map((subCat) {
             return _buildCategoryRow(
               categoryId: subCat.id,
+              category: subCat.category,
               name: subCat.name,
-              iconName: subCat.icon,
               value: subCat.total,
               percent: subCat.percent, // 使用真实占比
               isTopLevel: false,
