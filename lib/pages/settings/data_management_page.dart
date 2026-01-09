@@ -17,6 +17,7 @@ import '../category/category_migration_page.dart';
 import '../tag/tag_manage_page.dart';
 import '../settings/config_import_export_page.dart';
 import '../settings/storage_management_page.dart';
+import '../settings/attachment_preview_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../services/attachment_export_import_service.dart';
@@ -34,6 +35,8 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   bool _isImporting = false;
   int _exportProgress = 0;
   int _exportTotal = 0;
+  int _exportAttachmentCount = 0;
+  int _exportIconCount = 0;
   int _importProgress = 0;
   int _importTotal = 0;
 
@@ -236,7 +239,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                       color: primary,
                     ),
                   )
-                : null,
+                : IconButton(
+                    icon: Icon(Icons.preview, color: primary),
+                    onPressed: _handleExportPreview,
+                  ),
             onTap: _isExporting ? null : _handleExport,
           ),
           // 导出进度
@@ -253,7 +259,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    l10n.attachmentExportProgress(_exportProgress, _exportTotal),
+                    _exportAttachmentCount > 0 || _exportIconCount > 0
+                        ? l10n.attachmentExportProgressDetail(
+                            _exportAttachmentCount,
+                            _exportIconCount,
+                            _exportProgress,
+                            _exportTotal,
+                          )
+                        : l10n.attachmentExportProgress(_exportProgress, _exportTotal),
                     style: TextStyle(
                       fontSize: 12,
                       color: BeeTokens.textSecondary(context),
@@ -308,18 +321,44 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     );
   }
 
+  /// 预览即将导出的附件和自定义图标
+  Future<void> _handleExportPreview() async {
+    final service = ref.read(attachmentExportImportServiceProvider);
+    final previewData = await service.getExportPreviewImages();
+
+    if (!mounted) return;
+
+    if (previewData.isEmpty) {
+      showToast(context, AppLocalizations.of(context).attachmentExportEmpty);
+      return;
+    }
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => AttachmentPreviewPage(
+          exportData: previewData,
+          title: AppLocalizations.of(context).attachmentExportPreviewTitle,
+        ),
+      ),
+    );
+  }
+
   Future<void> _handleExport() async {
     final l10n = AppLocalizations.of(context);
     final service = ref.read(attachmentExportImportServiceProvider);
 
-    // 获取附件数量用于进度显示
-    final repo = ref.read(repositoryProvider);
-    final attachments = await repo.getAllAttachments();
+    // 先获取实际存在的文件数用于进度显示
+    final previewData = await service.getExportPreviewImages();
+    final attachmentCount = previewData.attachments.length;
+    final iconCount = previewData.customIcons.length;
+    final actualFileCount = attachmentCount + iconCount;
 
     setState(() {
       _isExporting = true;
       _exportProgress = 0;
-      _exportTotal = attachments.length;
+      _exportTotal = actualFileCount; // 使用实际文件数（附件 + 图标）
+      _exportAttachmentCount = attachmentCount;
+      _exportIconCount = iconCount;
     });
 
     final exportPath = await service.exportAttachments(
@@ -356,14 +395,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   }
 
   Future<void> _selectImportFile() async {
-    final result = await FilePicker.platform.pickFiles(
+    final pickerResult = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['gz', 'tar'],
     );
 
-    if (result == null || result.files.isEmpty) return;
+    if (pickerResult == null || pickerResult.files.isEmpty) return;
 
-    final filePath = result.files.first.path;
+    final filePath = pickerResult.files.first.path;
     if (filePath == null) return;
 
     final service = ref.read(attachmentExportImportServiceProvider);
@@ -377,13 +416,44 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     }
 
     // 显示确认弹窗
-    final conflictStrategy = await _showImportConfirmDialog(filePath, info);
-    if (conflictStrategy != null) {
-      await _handleImport(filePath, info, conflictStrategy);
+    final dialogResult = await _showImportConfirmDialog(filePath, info);
+    if (dialogResult != null) {
+      final conflictStrategy = dialogResult['strategy'] as String;
+      final shouldPreview = dialogResult['preview'] as bool? ?? false;
+
+      if (shouldPreview) {
+        // 显示预览
+        await _handleImportPreview(filePath);
+      } else {
+        // 直接导入
+        await _handleImport(filePath, info, conflictStrategy);
+      }
     }
   }
 
-  Future<String?> _showImportConfirmDialog(
+  /// 预览归档中的附件和自定义图标
+  Future<void> _handleImportPreview(String filePath) async {
+    final service = ref.read(attachmentExportImportServiceProvider);
+    final previewData = await service.getArchivePreviewImages(filePath);
+
+    if (!mounted) return;
+
+    if (previewData.isEmpty) {
+      showToast(context, AppLocalizations.of(context).attachmentPreviewEmpty);
+      return;
+    }
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => AttachmentPreviewPage(
+          archiveData: previewData,
+          title: AppLocalizations.of(context).attachmentImportPreviewTitle,
+        ),
+      ),
+    );
+  }
+
+  Future<Map<String, dynamic>?> _showImportConfirmDialog(
     String filePath,
     AttachmentArchiveInfo info,
   ) async {
@@ -391,7 +461,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     final primary = ref.read(primaryColorProvider);
     String conflictStrategy = AttachmentExportImportService.conflictSkip;
 
-    return showDialog<String>(
+    return showDialog<Map<String, dynamic>>(
       context: context,
       builder: (ctx) {
         return StatefulBuilder(
@@ -419,17 +489,44 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                   ),
                   const SizedBox(height: 12),
                   // 归档信息
-                  Text(
-                    l10n.attachmentArchiveInfo(
-                      info.count,
-                      info.exportedAt != null
-                          ? DateFormat('yyyy-MM-dd HH:mm').format(info.exportedAt!)
-                          : '-',
-                    ),
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: BeeTokens.textSecondary(ctx),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.attachmentArchiveInfo(
+                          info.count,
+                          info.exportedAt != null
+                              ? DateFormat('yyyy-MM-dd HH:mm').format(info.exportedAt!)
+                              : '-',
+                        ),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: BeeTokens.textSecondary(ctx),
+                        ),
+                      ),
+                      if (info.customIconCount > 0)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            '自定义图标: ${info.customIconCount} 个',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: BeeTokens.textSecondary(ctx),
+                            ),
+                          ),
+                        ),
+                      if (info.hasAvatar)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            '包含头像',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: BeeTokens.textSecondary(ctx),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   // 冲突策略
@@ -475,8 +572,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                   onPressed: () => Navigator.of(ctx).pop(null),
                   child: Text(l10n.commonCancel),
                 ),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop({
+                    'strategy': conflictStrategy,
+                    'preview': true,
+                  }),
+                  child: Text(l10n.attachmentPreview),
+                ),
                 ElevatedButton(
-                  onPressed: () => Navigator.of(ctx).pop(conflictStrategy),
+                  onPressed: () => Navigator.of(ctx).pop({
+                    'strategy': conflictStrategy,
+                    'preview': false,
+                  }),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primary,
                     foregroundColor: Colors.white,

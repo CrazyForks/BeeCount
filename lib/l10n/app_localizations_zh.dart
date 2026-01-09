@@ -5069,6 +5069,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String attachmentExportProgressDetail(int attachmentCount, int iconCount, int current, int total) {
+    return '正在导出 $attachmentCount 个附件 + $iconCount 个图标 ($current/$total)';
+  }
+
+  @override
   String get attachmentExportSuccess => '附件导出成功';
 
   @override
@@ -5108,6 +5113,23 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get attachmentStartImport => '开始导入';
+
+  @override
+  String get attachmentPreview => '预览附件';
+
+  @override
+  String attachmentPreviewSubtitle(int count) {
+    return '共 $count 张图片';
+  }
+
+  @override
+  String get attachmentPreviewEmpty => '暂无附件';
+
+  @override
+  String get attachmentExportPreviewTitle => '导出预览';
+
+  @override
+  String get attachmentImportPreviewTitle => '导入预览';
 
   @override
   String get shortcutsGuide => '快捷指令';
@@ -10297,6 +10319,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String attachmentExportProgressDetail(int attachmentCount, int iconCount, int current, int total) {
+    return '正在匯出 $attachmentCount 個附件 + $iconCount 個圖標 ($current/$total)';
+  }
+
+  @override
   String get attachmentExportSuccess => '附件匯出成功';
 
   @override
@@ -10336,6 +10363,23 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get attachmentStartImport => '開始匯入';
+
+  @override
+  String get attachmentPreview => '預覽附件';
+
+  @override
+  String attachmentPreviewSubtitle(int count) {
+    return '共 $count 張圖片';
+  }
+
+  @override
+  String get attachmentPreviewEmpty => '暫無附件';
+
+  @override
+  String get attachmentExportPreviewTitle => '匯出預覽';
+
+  @override
+  String get attachmentImportPreviewTitle => '匯入預覽';
 
   @override
   String get shortcutsGuide => '快捷指令';

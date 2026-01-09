@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,9 +65,19 @@ class AttachmentExportImportService {
         }
       }
 
-      // 如果没有附件、头像和自定义图标，则无需导出
-      if (allAttachments.isEmpty && avatarFile == null && customIconFiles.isEmpty) {
-        logger.info('AttachmentExportImport', '没有附件、头像和自定义图标需要导出');
+      // 先扫描实际存在的附件文件
+      final existingAttachmentFiles = <File>[];
+      for (final attachment in allAttachments) {
+        final filePath = '${attachmentDir.path}/${attachment.fileName}';
+        final file = File(filePath);
+        if (await file.exists()) {
+          existingAttachmentFiles.add(file);
+        }
+      }
+
+      // 如果没有实际文件、头像和自定义图标，则无需导出
+      if (existingAttachmentFiles.isEmpty && avatarFile == null && customIconFiles.isEmpty) {
+        logger.info('AttachmentExportImport', '没有实际文件需要导出（数据库记录: ${allAttachments.length}，实际文件: 0）');
         return null;
       }
 
@@ -84,8 +95,25 @@ class AttachmentExportImportService {
         logger.debug('AttachmentExportImport', '添加头像文件: $avatarFileName');
       }
 
-      // 添加自定义图标文件
+      // 构建实际存在的附件列表（复用前面扫描的结果）
+      final existingAttachments = <TransactionAttachment>[];
+      for (final attachment in allAttachments) {
+        final filePath = '${attachmentDir.path}/${attachment.fileName}';
+        if (existingAttachmentFiles.any((f) => f.path == filePath)) {
+          existingAttachments.add(attachment);
+        }
+      }
+
+      logger.info('AttachmentExportImport', '数据库中有 ${allAttachments.length} 条附件记录，实际存在 ${existingAttachments.length} 个文件，自定义图标 ${customIconFiles.length} 个');
+
+      // 添加元数据文件（先构建，但稍后再填充自定义图标列表）
       final customIconFileNames = <String>[];
+
+      // 计算总文件数（附件 + 自定义图标）
+      int processed = 0;
+      final total = existingAttachments.length + customIconFiles.length;
+
+      // 先添加自定义图标文件
       for (final iconFile in customIconFiles) {
         final fileName = path.basename(iconFile.path);
         final bytes = await iconFile.readAsBytes();
@@ -96,11 +124,14 @@ class AttachmentExportImportService {
         ));
         customIconFileNames.add(fileName);
         logger.debug('AttachmentExportImport', '添加自定义图标: $fileName');
+
+        processed++;
+        onProgress?.call(processed, total);
       }
 
-      // 添加元数据文件（包含头像和自定义图标信息）
+      // 添加元数据文件
       final metadata = _buildMetadata(
-        allAttachments,
+        existingAttachments,
         avatarFileName: avatarFileName,
         customIconFileNames: customIconFileNames.isEmpty ? null : customIconFileNames,
       );
@@ -111,22 +142,16 @@ class AttachmentExportImportService {
         metadataBytes,
       ));
 
-      // 添加图片文件
-      int processed = 0;
-      final total = allAttachments.length;
-
-      for (final attachment in allAttachments) {
+      // 添加实际存在的附件图片文件
+      for (final attachment in existingAttachments) {
         final filePath = '${attachmentDir.path}/${attachment.fileName}';
         final file = File(filePath);
-
-        if (await file.exists()) {
-          final bytes = await file.readAsBytes();
-          archive.addFile(ArchiveFile(
-            'images/${attachment.fileName}',
-            bytes.length,
-            bytes,
-          ));
-        }
+        final bytes = await file.readAsBytes();
+        archive.addFile(ArchiveFile(
+          'images/${attachment.fileName}',
+          bytes.length,
+          bytes,
+        ));
 
         processed++;
         onProgress?.call(processed, total);
@@ -487,6 +512,135 @@ class AttachmentExportImportService {
     }
   }
 
+  /// 获取即将导出的附件和自定义图标预览列表
+  /// 返回本地文件列表（包括附件和自定义图标）
+  Future<ExportPreviewData> getExportPreviewImages() async {
+    try {
+      final attachmentService = ref.read(attachmentServiceProvider);
+      final attachmentDir = await attachmentService.getAttachmentDirectory();
+      final repo = ref.read(repositoryProvider);
+      final allAttachments = await repo.getAllAttachments();
+
+      logger.debug('AttachmentExportImport', '获取预览：附件目录=${attachmentDir.path}, 数据库附件数=${allAttachments.length}');
+
+      // 1. 获取附件文件
+      final attachmentFiles = <File>[];
+      if (await attachmentDir.exists()) {
+        final actualFiles = attachmentDir.listSync();
+        logger.debug('AttachmentExportImport', '附件目录中实际有 ${actualFiles.length} 个文件/文件夹');
+        for (final entity in actualFiles) {
+          if (entity is File && _isImageFile(entity.path)) {
+            attachmentFiles.add(entity);
+            logger.debug('AttachmentExportImport', '附件文件: ${path.basename(entity.path)}');
+          }
+        }
+      } else {
+        logger.warning('AttachmentExportImport', '附件目录不存在！');
+      }
+
+      // 2. 获取自定义图标文件
+      final customIconService = CustomIconService();
+      final customIconDir = await customIconService.getIconDirectory();
+      final customIconFiles = <File>[];
+
+      if (await customIconDir.exists()) {
+        final iconEntities = customIconDir.listSync();
+        logger.debug('AttachmentExportImport', '自定义图标目录中有 ${iconEntities.length} 个文件/文件夹');
+        for (final entity in iconEntities) {
+          if (entity is File && _isImageFile(entity.path)) {
+            customIconFiles.add(entity);
+            logger.debug('AttachmentExportImport', '自定义图标: ${path.basename(entity.path)}');
+          }
+        }
+      }
+
+      logger.info('AttachmentExportImport', '导出预览找到 ${attachmentFiles.length} 个附件，${customIconFiles.length} 个自定义图标');
+
+      // 打印所有将要导出的文件
+      logger.info('AttachmentExportImport', '===== 导出文件列表 =====');
+      logger.info('AttachmentExportImport', '附件文件 (${attachmentFiles.length} 个):');
+      for (final file in attachmentFiles) {
+        logger.info('AttachmentExportImport', '  - ${path.basename(file.path)}');
+      }
+      logger.info('AttachmentExportImport', '自定义图标 (${customIconFiles.length} 个):');
+      for (final file in customIconFiles) {
+        logger.info('AttachmentExportImport', '  - ${path.basename(file.path)}');
+      }
+      logger.info('AttachmentExportImport', '========================');
+
+      return ExportPreviewData(
+        attachments: attachmentFiles,
+        customIcons: customIconFiles,
+      );
+    } catch (e, stackTrace) {
+      logger.error('AttachmentExportImport', '获取导出预览图片失败', e, stackTrace);
+      return ExportPreviewData(attachments: [], customIcons: []);
+    }
+  }
+
+  /// 判断是否为图片文件
+  bool _isImageFile(String filePath) {
+    final ext = path.extension(filePath).toLowerCase();
+    return ext == '.jpg' || ext == '.jpeg' || ext == '.png' || ext == '.gif' || ext == '.webp';
+  }
+
+  /// 从归档中提取图片用于预览（包括附件和自定义图标）
+  /// 返回图片数据列表（文件名和字节数据）
+  Future<ArchivePreviewData> getArchivePreviewImages(String archivePath) async {
+    try {
+      final archiveFile = File(archivePath);
+      if (!await archiveFile.exists()) {
+        logger.warning('AttachmentExportImport', '归档文件不存在: $archivePath');
+        return ArchivePreviewData(attachments: [], customIcons: []);
+      }
+
+      logger.info('AttachmentExportImport', '开始解析归档文件: $archivePath');
+      final bytes = await archiveFile.readAsBytes();
+      final tarData = GZipDecoder().decodeBytes(bytes);
+      final archive = TarDecoder().decodeBytes(tarData);
+
+      logger.debug('AttachmentExportImport', '归档中共有 ${archive.length} 个文件');
+      final attachmentItems = <AttachmentPreviewItem>[];
+      final customIconItems = <AttachmentPreviewItem>[];
+
+      // 提取所有图片文件
+      for (final file in archive) {
+        logger.debug('AttachmentExportImport', '归档文件: ${file.name}');
+
+        // 附件图片（images/ 目录）
+        if (file.name.startsWith('images/')) {
+          final fileName = path.basename(file.name);
+          final imageBytes = file.content as List<int>;
+          attachmentItems.add(AttachmentPreviewItem(
+            fileName: fileName,
+            bytes: Uint8List.fromList(imageBytes),
+          ));
+          logger.debug('AttachmentExportImport', '添加附件预览: $fileName');
+        }
+
+        // 自定义图标（custom_icons/ 目录）
+        else if (file.name.startsWith('custom_icons/')) {
+          final fileName = path.basename(file.name);
+          final imageBytes = file.content as List<int>;
+          customIconItems.add(AttachmentPreviewItem(
+            fileName: fileName,
+            bytes: Uint8List.fromList(imageBytes),
+          ));
+          logger.debug('AttachmentExportImport', '添加自定义图标预览: $fileName');
+        }
+      }
+
+      logger.info('AttachmentExportImport', '导入预览找到 ${attachmentItems.length} 个附件，${customIconItems.length} 个自定义图标');
+      return ArchivePreviewData(
+        attachments: attachmentItems,
+        customIcons: customIconItems,
+      );
+    } catch (e, stackTrace) {
+      logger.error('AttachmentExportImport', '获取归档预览图片失败', e, stackTrace);
+      return ArchivePreviewData(attachments: [], customIcons: []);
+    }
+  }
+
   /// 预览归档内容
   /// 返回归档中的元数据信息
   Future<AttachmentArchiveInfo?> previewArchive(String archivePath) async {
@@ -589,6 +743,47 @@ class AttachmentArchiveInfo {
     this.hasAvatar = false,
     this.customIconCount = 0,
   });
+}
+
+/// 附件预览项
+class AttachmentPreviewItem {
+  final String fileName;
+  final Uint8List bytes;
+
+  AttachmentPreviewItem({
+    required this.fileName,
+    required this.bytes,
+  });
+}
+
+/// 导出预览数据（本地文件）
+class ExportPreviewData {
+  final List<File> attachments; // 附件文件
+  final List<File> customIcons; // 自定义图标文件
+
+  ExportPreviewData({
+    required this.attachments,
+    required this.customIcons,
+  });
+
+  int get totalCount => attachments.length + customIcons.length;
+
+  bool get isEmpty => totalCount == 0;
+}
+
+/// 归档预览数据（从tar.gz中提取）
+class ArchivePreviewData {
+  final List<AttachmentPreviewItem> attachments; // 附件数据
+  final List<AttachmentPreviewItem> customIcons; // 自定义图标数据
+
+  ArchivePreviewData({
+    required this.attachments,
+    required this.customIcons,
+  });
+
+  int get totalCount => attachments.length + customIcons.length;
+
+  bool get isEmpty => totalCount == 0;
 }
 
 /// Provider

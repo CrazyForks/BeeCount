@@ -335,6 +335,23 @@
       }
     }
   },
+  "attachmentExportProgressDetail": "正在匯出 {attachmentCount} 個附件 + {iconCount} 個圖標 ({current}/{total})",
+  "@attachmentExportProgressDetail": {
+    "placeholders": {
+      "attachmentCount": {
+        "type": "int"
+      },
+      "iconCount": {
+        "type": "int"
+      },
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "attachmentExportSavedTo": "已儲存到: {path}",
   "@attachmentExportSavedTo": {
     "placeholders": {
@@ -382,6 +399,18 @@
   "attachmentImportTitle": "匯入附件",
   "attachmentMaxReached": "已達到最大附件數量",
   "attachmentStartImport": "開始匯入",
+  "attachmentPreview": "預覽附件",
+  "attachmentPreviewSubtitle": "共 {count} 張圖片",
+  "@attachmentPreviewSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentPreviewEmpty": "暫無附件",
+  "attachmentExportPreviewTitle": "匯出預覽",
+  "attachmentImportPreviewTitle": "匯入預覽",
   "attachmentTakePhoto": "拍照",
   "authBackToMinePage": "返回我的頁面",
   "authConfirmPassword": "確認密碼",

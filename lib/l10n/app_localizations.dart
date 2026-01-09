@@ -9672,6 +9672,12 @@ abstract class AppLocalizations {
   /// **'Exporting attachments ({current}/{total})'**
   String attachmentExportProgress(int current, int total);
 
+  /// No description provided for @attachmentExportProgressDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting {attachmentCount} attachment(s) + {iconCount} icon(s) ({current}/{total})'**
+  String attachmentExportProgressDetail(int attachmentCount, int iconCount, int current, int total);
+
   /// No description provided for @attachmentExportSuccess.
   ///
   /// In en, this message translates to:
@@ -9737,6 +9743,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Import'**
   String get attachmentStartImport;
+
+  /// No description provided for @attachmentPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview Attachments'**
+  String get attachmentPreview;
+
+  /// No description provided for @attachmentPreviewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} images in total'**
+  String attachmentPreviewSubtitle(int count);
+
+  /// No description provided for @attachmentPreviewEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No attachments'**
+  String get attachmentPreviewEmpty;
+
+  /// No description provided for @attachmentExportPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Preview'**
+  String get attachmentExportPreviewTitle;
+
+  /// No description provided for @attachmentImportPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Preview'**
+  String get attachmentImportPreviewTitle;
 
   /// No description provided for @shortcutsGuide.
   ///

@@ -2225,6 +2225,23 @@
       }
     }
   },
+  "attachmentExportProgressDetail": "Exporting {attachmentCount} attachment(s) + {iconCount} icon(s) ({current}/{total})",
+  "@attachmentExportProgressDetail": {
+    "placeholders": {
+      "attachmentCount": {
+        "type": "int"
+      },
+      "iconCount": {
+        "type": "int"
+      },
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "attachmentExportSuccess": "Attachments exported successfully",
   "attachmentExportFailed": "Failed to export attachments",
   "attachmentExportSavedTo": "Saved to: {path}",
@@ -2279,6 +2296,18 @@
     }
   },
   "attachmentStartImport": "Start Import",
+  "attachmentPreview": "Preview Attachments",
+  "attachmentPreviewSubtitle": "{count} images in total",
+  "@attachmentPreviewSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentPreviewEmpty": "No attachments",
+  "attachmentExportPreviewTitle": "Export Preview",
+  "attachmentImportPreviewTitle": "Import Preview",
   "shortcutsGuide": "Shortcuts",
   "shortcutsGuideDesc": "Quick access to voice, camera billing, etc.",
   "shortcutsIntroTitle": "Quick Billing",
