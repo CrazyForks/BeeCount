@@ -4578,18 +4578,6 @@ abstract class AppLocalizations {
   /// **'Subcategory'**
   String get exportCsvHeaderSubCategory;
 
-  /// No description provided for @exportCsvHeaderCategoryIcon.
-  ///
-  /// In en, this message translates to:
-  /// **'Category Icon'**
-  String get exportCsvHeaderCategoryIcon;
-
-  /// No description provided for @exportCsvHeaderSubCategoryIcon.
-  ///
-  /// In en, this message translates to:
-  /// **'Subcategory Icon'**
-  String get exportCsvHeaderSubCategoryIcon;
-
   /// No description provided for @exportCsvHeaderAmount.
   ///
   /// In en, this message translates to:

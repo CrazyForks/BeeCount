@@ -970,8 +970,6 @@
   "exportCsvHeaderType": "Type",
   "exportCsvHeaderCategory": "Category",
   "exportCsvHeaderSubCategory": "Subcategory",
-  "exportCsvHeaderCategoryIcon": "Category Icon",
-  "exportCsvHeaderSubCategoryIcon": "Subcategory Icon",
   "exportCsvHeaderAmount": "Amount",
   "exportCsvHeaderAccount": "Account",
   "exportCsvHeaderFromAccount": "From Account",

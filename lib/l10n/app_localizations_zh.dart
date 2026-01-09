@@ -2414,12 +2414,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportCsvHeaderSubCategory => '二级分类';
 
   @override
-  String get exportCsvHeaderCategoryIcon => '分类图标';
-
-  @override
-  String get exportCsvHeaderSubCategoryIcon => '二级分类图标';
-
-  @override
   String get exportCsvHeaderAmount => '金额';
 
   @override
@@ -7662,12 +7656,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get exportCsvHeaderSubCategory => '二級分類';
-
-  @override
-  String get exportCsvHeaderCategoryIcon => '分類圖示';
-
-  @override
-  String get exportCsvHeaderSubCategoryIcon => '二級分類圖示';
 
   @override
   String get exportCsvHeaderAmount => '金額';

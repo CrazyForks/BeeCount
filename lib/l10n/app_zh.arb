@@ -989,8 +989,6 @@
   "exportCsvHeaderType": "类型",
   "exportCsvHeaderCategory": "分类",
   "exportCsvHeaderSubCategory": "二级分类",
-  "exportCsvHeaderCategoryIcon": "分类图标",
-  "exportCsvHeaderSubCategoryIcon": "二级分类图标",
   "exportCsvHeaderAmount": "金额",
   "exportCsvHeaderAccount": "账户",
   "exportCsvHeaderFromAccount": "转出账户",

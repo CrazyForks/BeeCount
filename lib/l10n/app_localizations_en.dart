@@ -2414,12 +2414,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportCsvHeaderSubCategory => 'Subcategory';
 
   @override
-  String get exportCsvHeaderCategoryIcon => 'Category Icon';
-
-  @override
-  String get exportCsvHeaderSubCategoryIcon => 'Subcategory Icon';
-
-  @override
   String get exportCsvHeaderAmount => 'Amount';
 
   @override
