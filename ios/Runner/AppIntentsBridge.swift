@@ -9,6 +9,10 @@ class AppIntentsBridge: NSObject, FlutterPlugin {
     private static var eventChannel: FlutterEventChannel?
     private static var eventSink: FlutterEventSink?
 
+    // 事件缓存队列（解决冷启动时序问题）
+    private static var pendingEvents: [String] = []
+    private static let maxPendingEvents = 5
+
     static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(
             name: channelName,
@@ -41,9 +45,21 @@ class AppIntentsBridge: NSObject, FlutterPlugin {
     }
 
     /// 从AppIntent发送事件到Flutter
+    /// 如果Flutter还未订阅，事件会被缓存，等待订阅后发送
     static func sendEvent(_ event: String) {
         DispatchQueue.main.async {
-            eventSink?(event)
+            if let sink = eventSink {
+                // 如果已连接，立即发送
+                sink(event)
+                print("[AppIntentsBridge] ✅ 事件已发送: \(event)")
+            } else {
+                // 如果未连接，缓存事件（解决冷启动时序问题）
+                pendingEvents.append(event)
+                if pendingEvents.count > maxPendingEvents {
+                    pendingEvents.removeFirst()
+                }
+                print("[AppIntentsBridge] 📦 事件已缓存（共\(pendingEvents.count)个）: \(event)")
+            }
         }
     }
 }
@@ -53,6 +69,19 @@ class AppIntentsBridge: NSObject, FlutterPlugin {
 extension AppIntentsBridge: FlutterStreamHandler {
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         AppIntentsBridge.eventSink = events
+
+        // 发送缓存的事件（解决冷启动时序问题）
+        DispatchQueue.main.async {
+            for event in AppIntentsBridge.pendingEvents {
+                events(event)
+                print("[AppIntentsBridge] 📤 发送缓存事件: \(event)")
+            }
+            if !AppIntentsBridge.pendingEvents.isEmpty {
+                print("[AppIntentsBridge] ✅ 已发送 \(AppIntentsBridge.pendingEvents.count) 个缓存事件")
+            }
+            AppIntentsBridge.pendingEvents.removeAll()
+        }
+
         return nil
     }
 
