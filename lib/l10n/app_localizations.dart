@@ -4236,6 +4236,30 @@ abstract class AppLocalizations {
   /// **'Select Cloud Service Type'**
   String get cloudSelectServiceType;
 
+  /// No description provided for @cloudMultiDeviceWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-Device Sync Notice'**
+  String get cloudMultiDeviceWarningTitle;
+
+  /// No description provided for @cloudMultiDeviceWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-device collaborative editing is not currently supported. To use on a new device, please clear local data first, then download ledgers from cloud.'**
+  String get cloudMultiDeviceWarningMessage;
+
+  /// No description provided for @cloudMultiDeviceWarningDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-Device Sync Instructions:\n\n1. Simultaneous editing on multiple devices is not supported\n2. To switch from Device A to Device B:\n   • Clear all ledgers on Device B\n   • Download latest data from cloud\n3. True multi-device collaboration will be supported in future versions'**
+  String get cloudMultiDeviceWarningDetail;
+
+  /// No description provided for @cloudMultiDeviceLearnMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn More'**
+  String get cloudMultiDeviceLearnMore;
+
   /// No description provided for @cloudWebdavUrlLabel.
   ///
   /// In en, this message translates to:

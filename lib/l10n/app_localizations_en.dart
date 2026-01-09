@@ -2235,6 +2235,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudSelectServiceType => 'Select Cloud Service Type';
 
   @override
+  String get cloudMultiDeviceWarningTitle => 'Multi-Device Sync Notice';
+
+  @override
+  String get cloudMultiDeviceWarningMessage => 'Multi-device collaborative editing is not currently supported. To use on a new device, please clear local data first, then download ledgers from cloud.';
+
+  @override
+  String get cloudMultiDeviceWarningDetail => 'Multi-Device Sync Instructions:\n\n1. Simultaneous editing on multiple devices is not supported\n2. To switch from Device A to Device B:\n   • Clear all ledgers on Device B\n   • Download latest data from cloud\n3. True multi-device collaboration will be supported in future versions';
+
+  @override
+  String get cloudMultiDeviceLearnMore => 'Learn More';
+
+  @override
   String get cloudWebdavUrlLabel => 'WebDAV Server URL';
 
   @override

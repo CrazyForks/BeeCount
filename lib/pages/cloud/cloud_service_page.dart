@@ -150,6 +150,12 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
                     ),
                     const SizedBox(height: 12),
 
+                    // 多设备同步警告
+                    if (active.type != CloudBackendType.local) ...[
+                      _buildMultiDeviceWarning(context),
+                      const SizedBox(height: 12),
+                    ],
+
                     // 1. 本地存储 Card (云端模式下禁用)
                     _buildServiceCard(
                       context: context,
@@ -335,6 +341,115 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
           overflow: TextOverflow.ellipsis,
         ),
       ],
+    );
+  }
+
+  Widget _buildMultiDeviceWarning(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return GestureDetector(
+      onTap: () => _showMultiDeviceDetailDialog(context),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: BeeTokens.warning(context).withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: BeeTokens.warning(context).withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.warning_amber_rounded,
+              color: BeeTokens.warning(context),
+              size: 24,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.cloudMultiDeviceWarningTitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: BeeTokens.textPrimary(context),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.cloudMultiDeviceWarningMessage,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: BeeTokens.textSecondary(context),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              Icons.info_outline,
+              color: BeeTokens.warning(context),
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showMultiDeviceDetailDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: BeeTokens.surfaceElevated(context),
+        title: Row(
+          children: [
+            Icon(
+              Icons.warning_amber_rounded,
+              color: BeeTokens.warning(context),
+              size: 24,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                l10n.cloudMultiDeviceWarningTitle,
+                style: TextStyle(
+                  color: BeeTokens.textPrimary(context),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Text(
+            l10n.cloudMultiDeviceWarningDetail,
+            style: TextStyle(
+              color: BeeTokens.textPrimary(context),
+              fontSize: 14,
+              height: 1.5,
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              l10n.commonConfirm,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
