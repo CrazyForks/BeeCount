@@ -283,6 +283,51 @@ class LocalRepository extends BaseRepository {
   Future<void> updateTransactionLedger({required int id, required int ledgerId}) =>
       _transactionRepo.updateTransactionLedger(id: id, ledgerId: ledgerId);
 
+  // ==================== 日历功能相关 ====================
+
+  @override
+  Future<Map<String, (double, double)>> getDailyTotalsByMonth({
+    required int ledgerId,
+    required DateTime month,
+  }) =>
+      _transactionRepo.getDailyTotalsByMonth(ledgerId: ledgerId, month: month);
+
+  @override
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDate({
+    required int ledgerId,
+    required DateTime date,
+  }) =>
+      _transactionRepo.getTransactionsByDate(ledgerId: ledgerId, date: date);
+
+  @override
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDateRange({
+    required int ledgerId,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) =>
+      _transactionRepo.getTransactionsByDateRange(
+          ledgerId: ledgerId, startDate: startDate, endDate: endDate);
+
+  @override
+  Future<List<String>> getTransactionDatesByMonth({
+    required int ledgerId,
+    required DateTime month,
+  }) =>
+      _transactionRepo.getTransactionDatesByMonth(
+          ledgerId: ledgerId, month: month);
+
   // ============================================
   // CategoryRepository 接口实现 - 委托给 LocalCategoryRepository
   // ============================================

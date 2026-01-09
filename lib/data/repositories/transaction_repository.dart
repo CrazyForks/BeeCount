@@ -125,4 +125,46 @@ abstract class TransactionRepository {
     required int id,
     required int ledgerId,
   });
+
+  // ==================== 日历功能相关 ====================
+
+  /// 获取指定月份的每日交易统计
+  /// 返回 Map<日期字符串, (收入, 支出)>
+  /// 例: {"2025-01-15": (500.0, 1200.0), ...}
+  Future<Map<String, (double income, double expense)>> getDailyTotalsByMonth({
+    required int ledgerId,
+    required DateTime month,
+  });
+
+  /// 获取指定日期的所有交易（含分类、标签、附件、账户）
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDate({
+    required int ledgerId,
+    required DateTime date,
+  });
+
+  /// 获取指定时间范围的交易列表（用于日历当月列表）
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDateRange({
+    required int ledgerId,
+    required DateTime startDate,
+    required DateTime endDate,
+  });
+
+  /// 获取指定月份所有有交易的日期列表
+  /// 返回 ["2025-01-15", "2025-01-16", ...]
+  Future<List<String>> getTransactionDatesByMonth({
+    required int ledgerId,
+    required DateTime month,
+  });
 }

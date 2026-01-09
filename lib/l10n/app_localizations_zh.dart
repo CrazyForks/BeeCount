@@ -5244,6 +5244,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get quickActionAiChat => 'AI 小助手';
+
+  @override
+  String get calendarTitle => '日历';
+
+  @override
+  String get calendarToday => '今天';
+
+  @override
+  String get calendarNoTransactions => '当天无交易';
+
+  @override
+  String get commonUncategorized => '未分类';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -10488,4 +10500,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get quickActionAiChat => 'AI 小助手';
+
+  @override
+  String get calendarTitle => '日曆';
+
+  @override
+  String get calendarToday => '今天';
+
+  @override
+  String get calendarNoTransactions => '當天無交易';
+
+  @override
+  String get commonUncategorized => '未分類';
 }

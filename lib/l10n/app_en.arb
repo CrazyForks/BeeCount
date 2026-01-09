@@ -2345,5 +2345,9 @@
   "quickActionImage": "Photo Billing",
   "quickActionCamera": "Camera Billing",
   "quickActionVoice": "Voice Billing",
-  "quickActionAiChat": "AI Assistant"
+  "quickActionAiChat": "AI Assistant",
+  "calendarTitle": "Calendar",
+  "calendarToday": "Today",
+  "calendarNoTransactions": "No transactions",
+  "commonUncategorized": "Uncategorized"
 }

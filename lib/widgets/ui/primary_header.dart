@@ -107,11 +107,18 @@ class PrimaryHeader extends ConsumerWidget {
                     padding: effectivePadding,
                     child: Row(
                       children: [
-                        if (showBack)
+                        if (showBack) ...[
                           IconButton(
                             icon: Icon(Icons.arrow_back, color: iconColor), // ⭐ 自适应颜色
                             onPressed: () => Navigator.of(context).maybePop(),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            style: IconButton.styleFrom(
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
                           ),
+                          const SizedBox(width: 8),
+                        ],
                         if (leadingIcon != null) ...[
                           leadingPlain
                               ? Icon(leadingIcon, color: iconColor)

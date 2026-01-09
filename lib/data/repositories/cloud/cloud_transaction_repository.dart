@@ -747,4 +747,51 @@ class CloudTransactionRepository implements TransactionRepository {
   }) async {
     throw UnimplementedError('云端更新交易账本暂不支持');
   }
+
+  // ==================== 日历功能相关 ====================
+
+  @override
+  Future<Map<String, (double income, double expense)>> getDailyTotalsByMonth({
+    required int ledgerId,
+    required DateTime month,
+  }) async {
+    throw UnimplementedError('云端日历功能暂不支持');
+  }
+
+  @override
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDate({
+    required int ledgerId,
+    required DateTime date,
+  }) async {
+    throw UnimplementedError('云端日历功能暂不支持');
+  }
+
+  @override
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDateRange({
+    required int ledgerId,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    throw UnimplementedError('云端日历功能暂不支持');
+  }
+
+  @override
+  Future<List<String>> getTransactionDatesByMonth({
+    required int ledgerId,
+    required DateTime month,
+  }) async {
+    throw UnimplementedError('云端日历功能暂不支持');
+  }
 }
