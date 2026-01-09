@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -365,27 +363,15 @@ class _CategoryItem extends StatelessWidget {
     this.expanded = false,
   });
 
-  IconData _iconFor(Category c) => getCategoryIconData(category: c);
-
   /// 构建图标组件（支持自定义图标）
   Widget _buildIcon(BuildContext context, double size, Color color) {
-    // 检查是否有自定义图标
-    if (category.iconType == 'custom' && category.customIconPath != null) {
-      return ClipOval(
-        child: Image.file(
-          File(category.customIconPath!),
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Icon(
-            _iconFor(category),
-            size: size,
-            color: color,
-          ),
-        ),
-      );
-    }
-    return Icon(_iconFor(category), size: size, color: color);
+    // 使用统一的 CategoryIconWidget
+    return CategoryIconWidget(
+      category: category,
+      size: size,
+      color: color,
+      circular: true, // 使用圆形
+    );
   }
 
   @override

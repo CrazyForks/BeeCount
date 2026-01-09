@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/data/category_service.dart';
+import '../services/custom_icon_service.dart';
 import '../data/db.dart';
 import '../data/models/category_icon.dart';
 import '../providers/theme_providers.dart';
@@ -99,36 +100,52 @@ class CategoryIconWidget extends ConsumerWidget {
   }
 
   Widget _buildCustomIcon(String path, Color fallbackColor) {
-    final file = File(path);
+    // 需要异步解析相对路径,使用 FutureBuilder
+    return FutureBuilder<String>(
+      future: CustomIconService().resolveIconPath(path),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          // 加载中,显示占位图标
+          return Icon(
+            Icons.category,
+            size: size,
+            color: fallbackColor,
+          );
+        }
 
-    // 图标本身 - 不做圆角裁剪，但填满1:1区域
-    final iconWidget = Image.file(
-      file,
-      width: size,
-      height: size,
-      fit: BoxFit.cover, // 填满整个区域，保持1:1比例
-      errorBuilder: (_, __, ___) => Icon(
-        Icons.category,
-        size: size,
-        color: fallbackColor,
-      ),
+        final absolutePath = snapshot.data!;
+        final file = File(absolutePath);
+
+        // 图标本身 - 不做圆角裁剪，但填满1:1区域
+        final iconWidget = Image.file(
+          file,
+          width: size,
+          height: size,
+          fit: BoxFit.cover, // 填满整个区域，保持1:1比例
+          errorBuilder: (_, __, ___) => Icon(
+            Icons.category,
+            size: size,
+            color: fallbackColor,
+          ),
+        );
+
+        if (showBackground) {
+          // circular 参数只影响背景容器的形状
+          final backgroundRadius = circular ? size * 0.75 : size * 0.375;
+          return Container(
+            width: size * 1.5,
+            height: size * 1.5,
+            decoration: BoxDecoration(
+              color: backgroundColor ?? fallbackColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(backgroundRadius),
+            ),
+            child: Center(child: iconWidget),
+          );
+        }
+
+        return iconWidget;
+      },
     );
-
-    if (showBackground) {
-      // circular 参数只影响背景容器的形状
-      final backgroundRadius = circular ? size * 0.75 : size * 0.375;
-      return Container(
-        width: size * 1.5,
-        height: size * 1.5,
-        decoration: BoxDecoration(
-          color: backgroundColor ?? fallbackColor.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(backgroundRadius),
-        ),
-        child: Center(child: iconWidget),
-      );
-    }
-
-    return iconWidget;
   }
 }
 

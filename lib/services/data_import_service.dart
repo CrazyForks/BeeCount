@@ -31,6 +31,9 @@ class ImportCategory {
   final int level; // 1 or 2
   final String? icon;
   final String? parentName; // 二级分类的父分类名称
+  final String? iconType; // 图标类型: material / custom / community
+  final String? customIconPath; // 自定义图标路径
+  final String? communityIconId; // 社区图标ID
 
   const ImportCategory({
     required this.name,
@@ -38,6 +41,9 @@ class ImportCategory {
     this.level = 1,
     this.icon,
     this.parentName,
+    this.iconType,
+    this.customIconPath,
+    this.communityIconId,
   });
 }
 
@@ -275,6 +281,17 @@ class DataImportService {
             icon: cat.icon,
           );
           categoryCache[key] = id;
+
+          // 如果有自定义图标信息，更新图标
+          if (cat.iconType != null && cat.iconType != 'material') {
+            await repo.updateCategoryIcon(
+              id,
+              iconType: cat.iconType!,
+              icon: cat.icon,
+              customIconPath: cat.customIconPath,
+              communityIconId: cat.communityIconId,
+            );
+          }
         }
       }
 
@@ -295,6 +312,17 @@ class DataImportService {
               icon: cat.icon,
             );
             categoryCache[key] = id;
+
+            // 如果有自定义图标信息，更新图标
+            if (cat.iconType != null && cat.iconType != 'material') {
+              await repo.updateCategoryIcon(
+                id,
+                iconType: cat.iconType!,
+                icon: cat.icon,
+                customIconPath: cat.customIconPath,
+                communityIconId: cat.communityIconId,
+              );
+            }
           }
         }
       }

@@ -49,6 +49,21 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
   String? _customIconPath;
   bool _isPickingImage = false;
 
+  /// 获取自定义图标的绝对路径（用于预览）
+  /// 处理相对路径和绝对路径两种情况
+  Future<String?> _getAbsoluteIconPath() async {
+    if (_customIconPath == null) return null;
+
+    // 如果是绝对路径（新选择的临时图片），直接返回
+    if (_customIconPath!.startsWith('/')) {
+      return _customIconPath;
+    }
+
+    // 如果是相对路径（从数据库加载的），需要解析
+    final customIconService = CustomIconService();
+    return await customIconService.resolveIconPath(_customIconPath!);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -640,19 +655,34 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                       ),
                     )
                   : _customIconPath != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Image.file(
-                            File(_customIconPath!),
-                            width: 48,
-                            height: 48,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Icon(
-                              Icons.broken_image,
-                              size: 24,
-                              color: BeeTokens.textTertiary(context),
-                            ),
-                          ),
+                      ? FutureBuilder<String?>(
+                          future: _getAbsoluteIconPath(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const SizedBox(
+                                width: 48,
+                                height: 48,
+                                child: Center(
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                              );
+                            }
+
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Image.file(
+                                File(snapshot.data!),
+                                width: 48,
+                                height: 48,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Icon(
+                                  Icons.broken_image,
+                                  size: 24,
+                                  color: BeeTokens.textTertiary(context),
+                                ),
+                              ),
+                            );
+                          },
                         )
                       : Icon(
                           Icons.add_photo_alternate_outlined,

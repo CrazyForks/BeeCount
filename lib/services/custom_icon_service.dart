@@ -45,6 +45,16 @@ class CustomIconService {
     return dir;
   }
 
+  /// 将相对路径解析为绝对路径
+  ///
+  /// [relativePath] - 相对路径(如: custom_icons/6_1767927021604.png)
+  /// 返回绝对路径
+  Future<String> resolveIconPath(String relativePath) async {
+    final dir = await getIconDirectory();
+    final fileName = path.basename(relativePath);
+    return path.join(dir.path, fileName);
+  }
+
   /// 从相册选择图片
   Future<File?> pickFromGallery() async {
     try {
@@ -100,7 +110,7 @@ class CustomIconService {
 
   /// 保存自定义图标
   /// 将图片裁剪为正方形并压缩后保存
-  /// 返回保存后的文件路径
+  /// 返回保存后的相对路径（如: custom_icons/6_1767927021604.png）
   Future<String> saveCustomIcon(File sourceFile, int categoryId) async {
     try {
       // 1. 验证文件
@@ -133,8 +143,6 @@ class CustomIconService {
         throw CustomIconException('图片压缩失败');
       }
 
-      logger.info('CustomIconService', '自定义图标已保存: $destPath');
-
       // 5. 删除源文件（如果是临时文件）
       if (sourceFile.path.contains('cache') ||
           sourceFile.path.contains('tmp')) {
@@ -143,7 +151,11 @@ class CustomIconService {
         } catch (_) {}
       }
 
-      return destPath;
+      // 6. 返回相对路径（用于跨设备同步）
+      final relativePath = 'custom_icons/$fileName';
+      logger.info('CustomIconService', '自定义图标已保存: $destPath (相对路径: $relativePath)');
+
+      return relativePath;
     } catch (e) {
       if (e is CustomIconException) rethrow;
       logger.error('CustomIconService', '保存自定义图标失败', e);
@@ -238,5 +250,6 @@ class CustomIconService {
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
   }
+
 }
 

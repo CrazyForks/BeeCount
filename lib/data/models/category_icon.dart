@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../db.dart';
+import '../../services/custom_icon_service.dart';
 
 /// 图标类型枚举
 enum CategoryIconType {
@@ -69,14 +70,16 @@ class CategoryIconData {
   bool get isMaterial => type == CategoryIconType.material;
 
   /// 获取自定义图标文件（如果存在）
-  File? get customIconFile {
+  /// 注意：customIconPath 现在是相对路径，需要解析为绝对路径
+  Future<File?> getCustomIconFile() async {
     if (customIconPath == null) return null;
-    return File(customIconPath!);
+    final absolutePath = await CustomIconService().resolveIconPath(customIconPath!);
+    return File(absolutePath);
   }
 
   /// 自定义图标文件是否存在
   Future<bool> get customIconExists async {
-    final file = customIconFile;
+    final file = await getCustomIconFile();
     if (file == null) return false;
     return file.exists();
   }
