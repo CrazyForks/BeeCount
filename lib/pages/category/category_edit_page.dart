@@ -12,6 +12,7 @@ import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
 import '../../styles/tokens.dart';
 import '../../services/custom_icon_service.dart';
+import '../../services/system/logger_service.dart';
 import '../transaction/category_detail_page.dart';
 import 'category_migration_page.dart';
 
@@ -756,9 +757,26 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
 
       // 如果是编辑现有分类，直接保存；否则先临时存储
       if (widget.category != null) {
-        // 保存图标到本地存储
+        // 保存旧图标路径，以便删除
+        String? oldIconPath;
+        if (_iconType == 'custom' && _customIconPath != null) {
+          // 如果当前已有自定义图标，保存其绝对路径
+          oldIconPath = await _getAbsoluteIconPath();
+        }
+
+        // 保存新图标到本地存储
         final savedPath =
             await customIconService.saveCustomIcon(file, widget.category!.id);
+
+        // 删除旧图标（如果存在且不同于新图标）
+        if (oldIconPath != null && oldIconPath != savedPath) {
+          try {
+            await customIconService.deleteCustomIcon(oldIconPath);
+          } catch (e) {
+            // 删除失败不影响主流程，仅记录日志
+            logger.warning('CategoryEditPage', '删除旧图标失败: $oldIconPath', e);
+          }
+        }
 
         setState(() {
           _iconType = 'custom';
