@@ -771,6 +771,11 @@
   "appearanceAmountFormatCompactDesc": "Abbreviate large amounts, e.g. 12.3K (only affects account balance)",
   "appearanceShowTransactionTime": "Show Transaction Time",
   "appearanceShowTransactionTimeDesc": "Display time in transaction list, allow time selection when editing",
+  "appearanceColorScheme": "Income/Expense Color Scheme",
+  "appearanceColorSchemeOn": "Red for income · Green for expense",
+  "appearanceColorSchemeOff": "Red for expense · Green for income",
+  "appearanceColorSchemeOnDesc": "Red represents income, green represents expense",
+  "appearanceColorSchemeOffDesc": "Red represents expense, green represents income",
   "fontSettingsCurrentScale": "Current scale: x{scale}",
   "fontSettingsPreview": "Live Preview",
   "fontSettingsPreviewText": "Spent 23.50 on lunch today, record it;\nRecorded for 45 days this month, 320 entries;\nPersistence is victory!",
@@ -887,6 +892,10 @@
   "cloudSupabaseUrlHint": "https://xxx.supabase.co",
   "cloudAnonKeyLabel": "Anon Key",
   "cloudSelectServiceType": "Select Cloud Service Type",
+  "cloudMultiDeviceWarningTitle": "Multi-Device Sync Notice",
+  "cloudMultiDeviceWarningMessage": "Multi-device collaborative editing is not currently supported. To use on a new device, please clear local data first, then download ledgers from cloud.",
+  "cloudMultiDeviceWarningDetail": "Multi-Device Sync Instructions:\n\n1. Simultaneous editing on multiple devices is not supported\n2. To switch from Device A to Device B:\n   • Clear all ledgers on Device B\n   • Download latest data from cloud\n3. True multi-device collaboration will be supported in future versions",
+  "cloudMultiDeviceLearnMore": "Learn More",
   "cloudWebdavUrlLabel": "WebDAV Server URL",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "Username",
@@ -2345,5 +2354,9 @@
   "quickActionImage": "Photo Billing",
   "quickActionCamera": "Camera Billing",
   "quickActionVoice": "Voice Billing",
-  "quickActionAiChat": "AI Assistant"
+  "quickActionAiChat": "AI Assistant",
+  "calendarTitle": "Calendar",
+  "calendarToday": "Today",
+  "calendarNoTransactions": "No transactions",
+  "commonUncategorized": "Uncategorized"
 }

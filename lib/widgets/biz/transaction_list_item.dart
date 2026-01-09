@@ -240,7 +240,13 @@ class TransactionListItem extends ConsumerWidget {
                     hide: hide,
                     signed: !isTransfer, // 转账不显示正负号
                     decimals: 2,
-                    style: BeeTextTokens.title(context)),
+                    style: BeeTextTokens.title(context).copyWith(
+                      color: isTransfer
+                          ? BeeTokens.textPrimary(context)
+                          : isExpense
+                              ? BeeTokens.expenseColor(context, ref)
+                              : BeeTokens.incomeColor(context, ref),
+                    )),
                 // 标签（显示在金额下方）
                 if (tags != null && tags!.isNotEmpty)
                   Padding(

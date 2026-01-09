@@ -1873,6 +1873,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appearanceShowTransactionTimeDesc => '在账单列表显示时分，编辑时可选择时间';
 
   @override
+  String get appearanceColorScheme => '收支颜色方案';
+
+  @override
+  String get appearanceColorSchemeOn => '红色收入 · 绿色支出';
+
+  @override
+  String get appearanceColorSchemeOff => '红色支出 · 绿色收入';
+
+  @override
+  String get appearanceColorSchemeOnDesc => '红色表示收入，绿色表示支出';
+
+  @override
+  String get appearanceColorSchemeOffDesc => '红色表示支出，绿色表示收入';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '当前缩放：x$scale';
   }
@@ -2218,6 +2233,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudSelectServiceType => '选择云服务类型';
+
+  @override
+  String get cloudMultiDeviceWarningTitle => '多设备同步提示';
+
+  @override
+  String get cloudMultiDeviceWarningMessage => '当前暂不支持多设备协同编辑。如需在新设备使用，请先清空新设备的本地数据，然后从云端下载账本。';
+
+  @override
+  String get cloudMultiDeviceWarningDetail => '多设备同步说明：\n\n1. 目前不支持多设备同时编辑同一账本\n2. 如果在设备A编辑后，切换到设备B使用：\n   • 需要在设备B上清空所有账本\n   • 然后从云端下载最新数据\n3. 未来版本将支持真正的多设备协同';
+
+  @override
+  String get cloudMultiDeviceLearnMore => '了解详情';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV 服务器地址';
@@ -5244,6 +5271,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get quickActionAiChat => 'AI 小助手';
+
+  @override
+  String get calendarTitle => '日历';
+
+  @override
+  String get calendarToday => '今天';
+
+  @override
+  String get calendarNoTransactions => '当天无交易';
+
+  @override
+  String get commonUncategorized => '未分类';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -7117,6 +7156,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get appearanceShowTransactionTimeDesc => '在帳單列表顯示時分，編輯時可選擇時間';
 
   @override
+  String get appearanceColorScheme => '收支顏色方案';
+
+  @override
+  String get appearanceColorSchemeOn => '紅色收入 · 綠色支出';
+
+  @override
+  String get appearanceColorSchemeOff => '紅色支出 · 綠色收入';
+
+  @override
+  String get appearanceColorSchemeOnDesc => '紅色表示收入，綠色表示支出';
+
+  @override
+  String get appearanceColorSchemeOffDesc => '紅色表示支出，綠色表示收入';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '當前縮放：x$scale';
   }
@@ -7462,6 +7516,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudSelectServiceType => '選擇雲端服務類型';
+
+  @override
+  String get cloudMultiDeviceWarningTitle => '多設備同步提示';
+
+  @override
+  String get cloudMultiDeviceWarningMessage => '目前暫不支援多設備協同編輯。如需在新設備使用，請先清空新設備的本機資料，然後從雲端下載帳本。';
+
+  @override
+  String get cloudMultiDeviceWarningDetail => '多設備同步說明：\n\n1. 目前不支援多設備同時編輯同一帳本\n2. 如果在設備A編輯後，切換到設備B使用：\n   • 需要在設備B上清空所有帳本\n   • 然後從雲端下載最新資料\n3. 未來版本將支援真正的多設備協同';
+
+  @override
+  String get cloudMultiDeviceLearnMore => '了解詳情';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV 伺服器地址';
@@ -10488,4 +10554,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get quickActionAiChat => 'AI 小助手';
+
+  @override
+  String get calendarTitle => '日曆';
+
+  @override
+  String get calendarToday => '今天';
+
+  @override
+  String get calendarNoTransactions => '當天無交易';
+
+  @override
+  String get commonUncategorized => '未分類';
 }

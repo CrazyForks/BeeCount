@@ -981,6 +981,50 @@ class CloudRepository extends BaseRepository {
   }) =>
       _transaction.updateTransactionLedger(id: id, ledgerId: ledgerId);
 
+  // ==================== 日历功能相关 ====================
+
+  @override
+  Future<Map<String, (double income, double expense)>> getDailyTotalsByMonth({
+    required int ledgerId,
+    required DateTime month,
+  }) =>
+      _transaction.getDailyTotalsByMonth(ledgerId: ledgerId, month: month);
+
+  @override
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDate({
+    required int ledgerId,
+    required DateTime date,
+  }) =>
+      _transaction.getTransactionsByDate(ledgerId: ledgerId, date: date);
+
+  @override
+  Future<List<({
+    Transaction t,
+    Category? category,
+    List<Tag> tags,
+    List<TransactionAttachment> attachments,
+    Account? account,
+  })>> getTransactionsByDateRange({
+    required int ledgerId,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) =>
+      _transaction.getTransactionsByDateRange(
+          ledgerId: ledgerId, startDate: startDate, endDate: endDate);
+
+  @override
+  Future<List<String>> getTransactionDatesByMonth({
+    required int ledgerId,
+    required DateTime month,
+  }) =>
+      _transaction.getTransactionDatesByMonth(ledgerId: ledgerId, month: month);
+
   // ============================================
   // TagRepository 接口实现（云端模式暂不支持标签功能）
   // ============================================

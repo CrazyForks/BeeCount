@@ -153,3 +153,20 @@ final headerDecorationStyleInitProvider = FutureProvider<void>((ref) async {
     await prefs.setString('headerDecorationStyle', next);
   });
 });
+
+// 收支颜色方案Provider（默认中国方案：红色收入、绿色支出）
+// false = 国际方案（红色支出、绿色收入）
+// true = 中国方案（红色收入、绿色支出）
+final chineseColorSchemeProvider = StateProvider<bool>((ref) => true);
+
+// 收支颜色方案持久化初始化
+final chineseColorSchemeInitProvider = FutureProvider<void>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final saved = prefs.getBool('chineseColorScheme');
+  if (saved != null) {
+    ref.read(chineseColorSchemeProvider.notifier).state = saved;
+  }
+  ref.listen<bool>(chineseColorSchemeProvider, (prev, next) async {
+    await prefs.setBool('chineseColorScheme', next);
+  });
+});

@@ -3552,6 +3552,36 @@ abstract class AppLocalizations {
   /// **'Display time in transaction list, allow time selection when editing'**
   String get appearanceShowTransactionTimeDesc;
 
+  /// No description provided for @appearanceColorScheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Income/Expense Color Scheme'**
+  String get appearanceColorScheme;
+
+  /// No description provided for @appearanceColorSchemeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Red for income · Green for expense'**
+  String get appearanceColorSchemeOn;
+
+  /// No description provided for @appearanceColorSchemeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Red for expense · Green for income'**
+  String get appearanceColorSchemeOff;
+
+  /// No description provided for @appearanceColorSchemeOnDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Red represents income, green represents expense'**
+  String get appearanceColorSchemeOnDesc;
+
+  /// No description provided for @appearanceColorSchemeOffDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Red represents expense, green represents income'**
+  String get appearanceColorSchemeOffDesc;
+
   /// No description provided for @fontSettingsCurrentScale.
   ///
   /// In en, this message translates to:
@@ -4205,6 +4235,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Cloud Service Type'**
   String get cloudSelectServiceType;
+
+  /// No description provided for @cloudMultiDeviceWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-Device Sync Notice'**
+  String get cloudMultiDeviceWarningTitle;
+
+  /// No description provided for @cloudMultiDeviceWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-device collaborative editing is not currently supported. To use on a new device, please clear local data first, then download ledgers from cloud.'**
+  String get cloudMultiDeviceWarningMessage;
+
+  /// No description provided for @cloudMultiDeviceWarningDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-Device Sync Instructions:\n\n1. Simultaneous editing on multiple devices is not supported\n2. To switch from Device A to Device B:\n   • Clear all ledgers on Device B\n   • Download latest data from cloud\n3. True multi-device collaboration will be supported in future versions'**
+  String get cloudMultiDeviceWarningDetail;
+
+  /// No description provided for @cloudMultiDeviceLearnMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn More'**
+  String get cloudMultiDeviceLearnMore;
 
   /// No description provided for @cloudWebdavUrlLabel.
   ///
@@ -10001,6 +10055,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI Assistant'**
   String get quickActionAiChat;
+
+  /// No description provided for @calendarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendarTitle;
+
+  /// No description provided for @calendarToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get calendarToday;
+
+  /// No description provided for @calendarNoTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get calendarNoTransactions;
+
+  /// No description provided for @commonUncategorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Uncategorized'**
+  String get commonUncategorized;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

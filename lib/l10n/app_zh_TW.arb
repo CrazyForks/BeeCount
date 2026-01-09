@@ -296,6 +296,11 @@
   "appearanceSettingsPageTitle": "外觀設定",
   "appearanceShowTransactionTime": "顯示交易時間",
   "appearanceShowTransactionTimeDesc": "在帳單列表顯示時分，編輯時可選擇時間",
+  "appearanceColorScheme": "收支顏色方案",
+  "appearanceColorSchemeOn": "紅色收入 · 綠色支出",
+  "appearanceColorSchemeOff": "紅色支出 · 綠色收入",
+  "appearanceColorSchemeOnDesc": "紅色表示收入，綠色表示支出",
+  "appearanceColorSchemeOffDesc": "紅色表示支出，綠色表示收入",
   "appearanceThemeMode": "外觀模式",
   "appearanceThemeModeDark": "暗黑模式",
   "appearanceThemeModeLight": "亮色模式",
@@ -764,6 +769,10 @@
   "cloudS3UseSSLLabel": "使用 HTTPS",
   "cloudSaveFailed": "儲存失敗",
   "cloudSelectServiceType": "選擇雲端服務類型",
+  "cloudMultiDeviceWarningTitle": "多設備同步提示",
+  "cloudMultiDeviceWarningMessage": "目前暫不支援多設備協同編輯。如需在新設備使用，請先清空新設備的本機資料，然後從雲端下載帳本。",
+  "cloudMultiDeviceWarningDetail": "多設備同步說明：\n\n1. 目前不支援多設備同時編輯同一帳本\n2. 如果在設備A編輯後，切換到設備B使用：\n   • 需要在設備B上清空所有帳本\n   • 然後從雲端下載最新資料\n3. 未來版本將支援真正的多設備協同",
+  "cloudMultiDeviceLearnMore": "了解詳情",
   "cloudStatusFailed": "連線失敗",
   "cloudStatusNormal": "連線正常",
   "cloudStatusNotTested": "未測試",
@@ -2071,5 +2080,9 @@
   "widgetPreview": "小組件預覽",
   "widgetPreviewDesc": "小組件会自動顯示當前帳本的實際數據，主題色跟隨應用設置",
   "widgetTodayExpense": "今日支出",
-  "widgetTodayIncome": "今日收入"
+  "widgetTodayIncome": "今日收入",
+  "calendarTitle": "日曆",
+  "calendarToday": "今天",
+  "calendarNoTransactions": "當天無交易",
+  "commonUncategorized": "未分類"
 }

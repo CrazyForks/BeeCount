@@ -130,6 +130,16 @@ class AppearanceSettingsPage extends ConsumerWidget {
                           ref.read(showTransactionTimeProvider.notifier).state = !current;
                         },
                       ),
+                      BeeTokens.cardDivider(context),
+                      // 收支颜色方案
+                      AppListTile(
+                        leading: Icons.palette_outlined,
+                        title: l10n.appearanceColorScheme,
+                        subtitle: ref.watch(chineseColorSchemeProvider)
+                            ? l10n.appearanceColorSchemeOn
+                            : l10n.appearanceColorSchemeOff,
+                        onTap: () => _showColorSchemeDialog(context, ref, l10n),
+                      ),
                     ],
                   ),
                 ),
@@ -440,6 +450,84 @@ class AppearanceSettingsPage extends ConsumerWidget {
           : null,
       onTap: () {
         ref.read(compactAmountProvider.notifier).state = value;
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  /// 显示收支颜色方案选择对话框
+  void _showColorSchemeDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    final currentScheme = ref.read(chineseColorSchemeProvider);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: BeeTokens.surfaceElevated(context),
+        title: Text(
+          l10n.appearanceColorScheme,
+          style: TextStyle(color: BeeTokens.textPrimary(context)),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildColorSchemeOption(
+              context, ref,
+              title: l10n.appearanceColorSchemeOn,
+              subtitle: l10n.appearanceColorSchemeOnDesc,
+              value: true,
+              currentValue: currentScheme,
+              icon: Icons.trending_up,
+            ),
+            _buildColorSchemeOption(
+              context, ref,
+              title: l10n.appearanceColorSchemeOff,
+              subtitle: l10n.appearanceColorSchemeOffDesc,
+              value: false,
+              currentValue: currentScheme,
+              icon: Icons.trending_down,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildColorSchemeOption(
+    BuildContext context,
+    WidgetRef ref, {
+    required String title,
+    required String subtitle,
+    required bool value,
+    required bool currentValue,
+    required IconData icon,
+  }) {
+    final isSelected = value == currentValue;
+    final primaryColor = ref.watch(primaryColorProvider);
+
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: isSelected ? primaryColor : BeeTokens.iconSecondary(context),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isSelected ? primaryColor : BeeTokens.textPrimary(context),
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: BeeTokens.textSecondary(context),
+          fontSize: 12,
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(Icons.check, color: primaryColor)
+          : null,
+      onTap: () {
+        ref.read(chineseColorSchemeProvider.notifier).state = value;
         Navigator.pop(context);
       },
     );

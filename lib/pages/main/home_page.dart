@@ -18,6 +18,7 @@ import '../../l10n/app_localizations.dart';
 import '../../services/system/logger_service.dart';
 import '../../services/export/share_poster_service.dart';
 import '../report/annual_report_page.dart';
+import '../calendar/calendar_page.dart';
 
 // 优化版首页 - 使用FlutterListView实现精准定位和丝滑跳转
 class HomePage extends ConsumerStatefulWidget {
@@ -47,7 +48,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   // 年度账单提醒状态（12月15日 - 次年1月31日显示）
   bool _showAnnualReportReminder = false;
-  static const String _annualReportDismissedKey = 'annual_report_reminder_dismissed';
+  static const String _annualReportDismissedKey =
+      'annual_report_reminder_dismissed';
 
   @override
   void initState() {
@@ -293,7 +295,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 TextSpan(
                                   text: ' ${l10n.homeLastMonthReportSubtitle}',
                                   style: TextStyle(
-                                    color: isDark ? Colors.white70 : Colors.black54,
+                                    color: isDark
+                                        ? Colors.white70
+                                        : Colors.black54,
                                   ),
                                 ),
                               ],
@@ -417,7 +421,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => AnnualReportPage(initialYear: reportYear),
+                          builder: (_) =>
+                              AnnualReportPage(initialYear: reportYear),
                         ),
                       );
                       // 临时隐藏
@@ -549,7 +554,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                               constraints: const BoxConstraints(),
                               onPressed: () {
                                 // 用户离开首页，切换到 Stream 模式
-                                _transactionListKey.currentState?.switchToStreamMode();
+                                _transactionListKey.currentState
+                                    ?.switchToStreamMode();
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => const AIChatPage(),
@@ -573,27 +579,52 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                             ),
                           ),
-                        // 上层：右侧搜索按钮
+                        // 上层：右侧按钮（日历 + 搜索）
                         Positioned(
                           right: 0,
                           top: 0,
                           bottom: 0,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(context).homeSearch,
-                            onPressed: () {
-                              // 用户离开首页，切换到 Stream 模式
-                              _transactionListKey.currentState?.switchToStreamMode();
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const SearchPage(),
+                          child: Row(
+                            children: [
+                              // 日历按钮
+                              IconButton(
+                                tooltip:
+                                    AppLocalizations.of(context).calendarTitle,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const CalendarPage(),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.calendar_month_outlined,
+                                  size: 20,
+                                  color: Theme.of(context).iconTheme.color,
                                 ),
-                              );
-                            },
-                            icon: Icon(
-                              Icons.search,
-                              size: 20,
-                              color: Theme.of(context).iconTheme.color,
-                            ),
+                              ),
+                              // 搜索按钮
+                              IconButton(
+                                tooltip:
+                                    AppLocalizations.of(context).homeSearch,
+                                onPressed: () {
+                                  // 用户离开首页，切换到 Stream 模式
+                                  _transactionListKey.currentState
+                                      ?.switchToStreamMode();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const SearchPage(),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.search,
+                                  size: 20,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -687,8 +718,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           }),
           const SizedBox(height: 0),
           // 月初提醒卡片
-          if (_showLastMonthReminder)
-            _buildLastMonthReminderCard(context),
+          if (_showLastMonthReminder) _buildLastMonthReminderCard(context),
           // 年度账单提醒卡片（12月15日 - 次年1月31日）
           if (_showAnnualReportReminder)
             _buildAnnualReportReminderCard(context),
@@ -699,12 +729,17 @@ class _HomePageState extends ConsumerState<HomePage> {
               builder: (context, snapshot) {
                 // Stream 数据到来前，使用预加载数据；到来后使用 Stream 数据
                 final streamData = snapshot.data;
-                final hasStreamData = streamData != null && streamData.isNotEmpty;
+                final hasStreamData =
+                    streamData != null && streamData.isNotEmpty;
 
                 // 如果 Stream 没数据，从预加载数据构建基础列表
                 final transactions = hasStreamData
                     ? streamData
-                    : (cachedFullData?.map((item) => (t: item.t, category: item.category)).toList() ?? []);
+                    : (cachedFullData
+                            ?.map(
+                                (item) => (t: item.t, category: item.category))
+                            .toList() ??
+                        []);
 
                 return TransactionList(
                   key: _transactionListKey,

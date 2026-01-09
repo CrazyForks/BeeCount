@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/theme_providers.dart';
 
 /// BeeCount Design Token 系统
 ///
@@ -423,6 +425,22 @@ class BeeTokens {
   /// - 亮色模式：#3B82F6
   /// - 暗黑模式：#60A5FA
   static Color chartTransfer(BuildContext context) => info(context);
+
+  /// 收入颜色（动态方案，根据用户设置）
+  /// - 国际方案：绿色
+  /// - 中国方案：红色
+  static Color incomeColor(BuildContext context, WidgetRef ref) {
+    final useChineseScheme = ref.watch(chineseColorSchemeProvider);
+    return useChineseScheme ? error(context) : success(context);
+  }
+
+  /// 支出颜色（动态方案，根据用户设置）
+  /// - 国际方案：红色
+  /// - 中国方案：绿色
+  static Color expenseColor(BuildContext context, WidgetRef ref) {
+    final useChineseScheme = ref.watch(chineseColorSchemeProvider);
+    return useChineseScheme ? success(context) : error(context);
+  }
 
   // ========== 遮罩层 Token (Overlay) ==========
 

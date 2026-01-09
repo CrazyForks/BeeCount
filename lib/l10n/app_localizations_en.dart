@@ -1873,6 +1873,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appearanceShowTransactionTimeDesc => 'Display time in transaction list, allow time selection when editing';
 
   @override
+  String get appearanceColorScheme => 'Income/Expense Color Scheme';
+
+  @override
+  String get appearanceColorSchemeOn => 'Red for income · Green for expense';
+
+  @override
+  String get appearanceColorSchemeOff => 'Red for expense · Green for income';
+
+  @override
+  String get appearanceColorSchemeOnDesc => 'Red represents income, green represents expense';
+
+  @override
+  String get appearanceColorSchemeOffDesc => 'Red represents expense, green represents income';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return 'Current scale: x$scale';
   }
@@ -2218,6 +2233,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudSelectServiceType => 'Select Cloud Service Type';
+
+  @override
+  String get cloudMultiDeviceWarningTitle => 'Multi-Device Sync Notice';
+
+  @override
+  String get cloudMultiDeviceWarningMessage => 'Multi-device collaborative editing is not currently supported. To use on a new device, please clear local data first, then download ledgers from cloud.';
+
+  @override
+  String get cloudMultiDeviceWarningDetail => 'Multi-Device Sync Instructions:\n\n1. Simultaneous editing on multiple devices is not supported\n2. To switch from Device A to Device B:\n   • Clear all ledgers on Device B\n   • Download latest data from cloud\n3. True multi-device collaboration will be supported in future versions';
+
+  @override
+  String get cloudMultiDeviceLearnMore => 'Learn More';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV Server URL';
@@ -5244,4 +5271,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quickActionAiChat => 'AI Assistant';
+
+  @override
+  String get calendarTitle => 'Calendar';
+
+  @override
+  String get calendarToday => 'Today';
+
+  @override
+  String get calendarNoTransactions => 'No transactions';
+
+  @override
+  String get commonUncategorized => 'Uncategorized';
 }

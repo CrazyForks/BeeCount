@@ -737,6 +737,11 @@
   "appearanceAmountFormatCompactDesc": "大金额缩写，如 12.3万（仅对账户余额生效）",
   "appearanceShowTransactionTime": "显示交易时间",
   "appearanceShowTransactionTimeDesc": "在账单列表显示时分，编辑时可选择时间",
+  "appearanceColorScheme": "收支颜色方案",
+  "appearanceColorSchemeOn": "红色收入 · 绿色支出",
+  "appearanceColorSchemeOff": "红色支出 · 绿色收入",
+  "appearanceColorSchemeOnDesc": "红色表示收入，绿色表示支出",
+  "appearanceColorSchemeOffDesc": "红色表示支出，绿色表示收入",
   "fontSettingsCurrentScale": "当前缩放：x{scale}",
   "fontSettingsPreview": "实时预览",
   "fontSettingsPreviewText": "今天吃饭花了 23.50 元，记一笔；\n本月已记账 45 天，共 320 条记录；\n坚持就是胜利！",
@@ -876,6 +881,10 @@
   "cloudSupabaseUrlHint": "https://xxx.supabase.co",
   "cloudAnonKeyLabel": "Anon Key",
   "cloudSelectServiceType": "选择云服务类型",
+  "cloudMultiDeviceWarningTitle": "多设备同步提示",
+  "cloudMultiDeviceWarningMessage": "当前暂不支持多设备协同编辑。如需在新设备使用，请先清空新设备的本地数据，然后从云端下载账本。",
+  "cloudMultiDeviceWarningDetail": "多设备同步说明：\n\n1. 目前不支持多设备同时编辑同一账本\n2. 如果在设备A编辑后，切换到设备B使用：\n   • 需要在设备B上清空所有账本\n   • 然后从云端下载最新数据\n3. 未来版本将支持真正的多设备协同",
+  "cloudMultiDeviceLearnMore": "了解详情",
   "cloudWebdavUrlLabel": "WebDAV 服务器地址",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "用户名",
@@ -2305,5 +2314,9 @@
   "quickActionImage": "图片记账",
   "quickActionCamera": "拍照记账",
   "quickActionVoice": "语音记账",
-  "quickActionAiChat": "AI 小助手"
+  "quickActionAiChat": "AI 小助手",
+  "calendarTitle": "日历",
+  "calendarToday": "今天",
+  "calendarNoTransactions": "当天无交易",
+  "commonUncategorized": "未分类"
 }

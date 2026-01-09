@@ -190,6 +190,11 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
   }
   
   Widget _buildSummaryCard(({int totalCount, double totalAmount, double averageAmount}) summary) {
+    // 获取分类信息以确定颜色
+    final categoryAsync = ref.watch(_categoryStreamProvider(widget.categoryId));
+    final category = categoryAsync.value;
+    final isIncome = category?.kind == 'income';
+
     return Container(
       margin: const EdgeInsets.all(16),
       child: SectionCard(
@@ -233,9 +238,9 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                       label: AppLocalizations.of(context).categoryDetailTotalAmount,
                       value: summary.totalAmount,
                       isAmount: true,
-                      color: summary.totalAmount >= 0
-                        ? BeeTokens.success(context)
-                        : BeeTokens.error(context),
+                      color: isIncome
+                        ? BeeTokens.incomeColor(context, ref)
+                        : BeeTokens.expenseColor(context, ref),
                     ),
                   ),
                   Expanded(

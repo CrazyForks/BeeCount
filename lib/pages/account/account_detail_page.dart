@@ -76,7 +76,7 @@ class AccountDetailPage extends ConsumerWidget {
                               label: l10n.homeIncome,
                               value: stats.income,
                               currencyCode: currencyCode,
-                              color: BeeTokens.success(context),
+                              color: BeeTokens.incomeColor(context, ref),
                             ),
                           ),
                           Container(
@@ -89,7 +89,7 @@ class AccountDetailPage extends ConsumerWidget {
                               label: l10n.homeExpense,
                               value: stats.expense,
                               currencyCode: currencyCode,
-                              color: BeeTokens.error(context),
+                              color: BeeTokens.expenseColor(context, ref),
                             ),
                           ),
                         ],
@@ -320,14 +320,14 @@ class _TransactionTile extends ConsumerWidget {
 
     switch (transaction.type) {
       case 'income':
-        amountColor = BeeTokens.success(context);
+        amountColor = BeeTokens.incomeColor(context, ref);
         break;
       case 'expense':
-        amountColor = BeeTokens.error(context);
+        amountColor = BeeTokens.expenseColor(context, ref);
         break;
       case 'transfer':
-        // 转出显示红色，转入显示绿色
-        amountColor = isTransferOut ? BeeTokens.error(context) : BeeTokens.success(context);
+        // 转出使用支出颜色，转入使用收入颜色
+        amountColor = isTransferOut ? BeeTokens.expenseColor(context, ref) : BeeTokens.incomeColor(context, ref);
         break;
       default:
         amountColor = BeeTokens.textPrimary(context);
