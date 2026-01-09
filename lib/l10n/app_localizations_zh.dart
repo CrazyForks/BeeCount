@@ -1873,6 +1873,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appearanceShowTransactionTimeDesc => '在账单列表显示时分，编辑时可选择时间';
 
   @override
+  String get appearanceColorScheme => '收支颜色方案';
+
+  @override
+  String get appearanceColorSchemeOn => '红色收入 · 绿色支出';
+
+  @override
+  String get appearanceColorSchemeOff => '红色支出 · 绿色收入';
+
+  @override
+  String get appearanceColorSchemeOnDesc => '红色表示收入，绿色表示支出';
+
+  @override
+  String get appearanceColorSchemeOffDesc => '红色表示支出，绿色表示收入';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return '当前缩放：x$scale';
   }
@@ -7127,6 +7142,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get appearanceShowTransactionTimeDesc => '在帳單列表顯示時分，編輯時可選擇時間';
+
+  @override
+  String get appearanceColorScheme => '收支顏色方案';
+
+  @override
+  String get appearanceColorSchemeOn => '紅色收入 · 綠色支出';
+
+  @override
+  String get appearanceColorSchemeOff => '紅色支出 · 綠色收入';
+
+  @override
+  String get appearanceColorSchemeOnDesc => '紅色表示收入，綠色表示支出';
+
+  @override
+  String get appearanceColorSchemeOffDesc => '紅色表示支出，綠色表示收入';
 
   @override
   String fontSettingsCurrentScale(Object scale) {

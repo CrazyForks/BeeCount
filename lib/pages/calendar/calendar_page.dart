@@ -368,7 +368,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                         ? '-${(expense / 1000).toStringAsFixed(1)}k'
                         : '-${expense.toInt()}',
                 style: TextStyle(
-                  color: BeeTokens.chartExpense(context),
+                  color: BeeTokens.expenseColor(context, ref),
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   height: 1.1,
@@ -385,7 +385,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                         ? '+${(income / 1000).toStringAsFixed(1)}k'
                         : '+${income.toInt()}',
                 style: TextStyle(
-                  color: BeeTokens.chartIncome(context),
+                  color: BeeTokens.incomeColor(context, ref),
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   height: 1.1,

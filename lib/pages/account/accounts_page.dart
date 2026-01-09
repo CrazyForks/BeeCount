@@ -232,7 +232,7 @@ class AccountsPage extends ConsumerWidget {
                                   child: _StatCell(
                                     label: l10n.accountTotalIncome,
                                     value: stats.totalIncome,
-                                    color: BeeTokens.success(context),
+                                    color: BeeTokens.incomeColor(context, ref),
                                   ),
                                 ),
                                 Container(
@@ -244,7 +244,7 @@ class AccountsPage extends ConsumerWidget {
                                   child: _StatCell(
                                     label: l10n.accountTotalExpense,
                                     value: stats.totalExpense,
-                                    color: BeeTokens.error(context),
+                                    color: BeeTokens.expenseColor(context, ref),
                                   ),
                                 ),
                               ],

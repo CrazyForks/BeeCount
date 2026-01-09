@@ -238,7 +238,7 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
                       label: l10n.tagDetailTotalExpense,
                       value: stats?.expense ?? 0.0,
                       isAmount: true,
-                      color: BeeTokens.error(context),
+                      color: BeeTokens.expenseColor(context, ref),
                     ),
                   ),
                   Expanded(
@@ -246,7 +246,7 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
                       label: l10n.tagDetailTotalIncome,
                       value: stats?.income ?? 0.0,
                       isAmount: true,
-                      color: BeeTokens.success(context),
+                      color: BeeTokens.incomeColor(context, ref),
                     ),
                   ),
                 ],

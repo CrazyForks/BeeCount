@@ -3552,6 +3552,36 @@ abstract class AppLocalizations {
   /// **'Display time in transaction list, allow time selection when editing'**
   String get appearanceShowTransactionTimeDesc;
 
+  /// No description provided for @appearanceColorScheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Income/Expense Color Scheme'**
+  String get appearanceColorScheme;
+
+  /// No description provided for @appearanceColorSchemeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Red for income · Green for expense'**
+  String get appearanceColorSchemeOn;
+
+  /// No description provided for @appearanceColorSchemeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Red for expense · Green for income'**
+  String get appearanceColorSchemeOff;
+
+  /// No description provided for @appearanceColorSchemeOnDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Red represents income, green represents expense'**
+  String get appearanceColorSchemeOnDesc;
+
+  /// No description provided for @appearanceColorSchemeOffDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Red represents expense, green represents income'**
+  String get appearanceColorSchemeOffDesc;
+
   /// No description provided for @fontSettingsCurrentScale.
   ///
   /// In en, this message translates to:

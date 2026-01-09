@@ -244,8 +244,8 @@ class TransactionListItem extends ConsumerWidget {
                       color: isTransfer
                           ? BeeTokens.textPrimary(context)
                           : isExpense
-                              ? BeeTokens.chartExpense(context)
-                              : BeeTokens.chartIncome(context),
+                              ? BeeTokens.expenseColor(context, ref)
+                              : BeeTokens.incomeColor(context, ref),
                     )),
                 // 标签（显示在金额下方）
                 if (tags != null && tags!.isNotEmpty)

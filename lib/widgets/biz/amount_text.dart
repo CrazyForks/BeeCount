@@ -98,7 +98,7 @@ class AmountText extends ConsumerWidget {
             ?.copyWith(color: BeeTokens.textPrimary(context));
 
     final finalStyle = (colorizeIncome && isIncome)
-        ? baseStyle?.copyWith(color: BeeTokens.chartIncome(context))
+        ? baseStyle?.copyWith(color: BeeTokens.incomeColor(context, ref))
         : baseStyle;
 
     return Text(

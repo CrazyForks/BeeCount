@@ -1873,6 +1873,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appearanceShowTransactionTimeDesc => 'Display time in transaction list, allow time selection when editing';
 
   @override
+  String get appearanceColorScheme => 'Income/Expense Color Scheme';
+
+  @override
+  String get appearanceColorSchemeOn => 'Red for income · Green for expense';
+
+  @override
+  String get appearanceColorSchemeOff => 'Red for expense · Green for income';
+
+  @override
+  String get appearanceColorSchemeOnDesc => 'Red represents income, green represents expense';
+
+  @override
+  String get appearanceColorSchemeOffDesc => 'Red represents expense, green represents income';
+
+  @override
   String fontSettingsCurrentScale(Object scale) {
     return 'Current scale: x$scale';
   }
