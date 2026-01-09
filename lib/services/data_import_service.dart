@@ -29,6 +29,7 @@ class ImportCategory {
   final String name;
   final String kind; // 'income' or 'expense'
   final int level; // 1 or 2
+  final int sortOrder; // 排序顺序
   final String? icon;
   final String? parentName; // 二级分类的父分类名称
   final String? iconType; // 图标类型: material / custom / community
@@ -39,6 +40,7 @@ class ImportCategory {
     required this.name,
     required this.kind,
     this.level = 1,
+    this.sortOrder = 0,
     this.icon,
     this.parentName,
     this.iconType,
@@ -279,6 +281,7 @@ class DataImportService {
             name: cat.name,
             kind: cat.kind,
             icon: cat.icon,
+            sortOrder: cat.sortOrder,
           );
           categoryCache[key] = id;
 
@@ -310,6 +313,7 @@ class DataImportService {
               name: cat.name,
               kind: cat.kind,
               icon: cat.icon,
+              sortOrder: cat.sortOrder,
             );
             categoryCache[key] = id;
 

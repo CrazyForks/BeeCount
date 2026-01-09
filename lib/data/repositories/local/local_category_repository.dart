@@ -17,12 +17,14 @@ class LocalCategoryRepository implements CategoryRepository {
     required String name,
     required String kind,
     String? icon,
+    int? sortOrder,
   }) async {
     return await db.into(db.categories).insert(
       CategoriesCompanion.insert(
         name: name,
         kind: kind,
         icon: d.Value(icon),
+        sortOrder: d.Value(sortOrder ?? 0),
       ),
     );
   }

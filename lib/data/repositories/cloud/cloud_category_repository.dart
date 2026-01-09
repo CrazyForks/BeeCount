@@ -19,8 +19,9 @@ class CloudCategoryRepository implements CategoryRepository {
     required String name,
     required String kind,
     String? icon,
+    int? sortOrder,
   }) async {
-    logger.info('CloudCategoryRepository', '📝 创建分类: name=$name, kind=$kind, icon=$icon');
+    logger.info('CloudCategoryRepository', '📝 创建分类: name=$name, kind=$kind, icon=$icon, sortOrder=$sortOrder');
 
     final result = await supabase.databaseService!.insert(
       table: 'categories',
@@ -29,7 +30,7 @@ class CloudCategoryRepository implements CategoryRepository {
         'kind': kind,
         'icon': icon,
         'level': 1,
-        'sort_order': 0,
+        'sort_order': sortOrder ?? 0,
       },
     );
 

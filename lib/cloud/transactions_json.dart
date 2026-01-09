@@ -227,6 +227,7 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
       'name': _sanitizeString(cat.name),
       'kind': cat.kind,
       'level': cat.level,
+      'sortOrder': cat.sortOrder, // 保存排序顺序
       'iconType': cat.iconType, // 图标类型: material / custom / community
     };
 
@@ -320,6 +321,7 @@ ImportData parseJsonToImportData(String jsonStr) {
         name: cat['name'] as String,
         kind: cat['kind'] as String,
         level: cat['level'] as int? ?? 1,
+        sortOrder: cat['sortOrder'] as int? ?? 0,
         icon: cat['icon'] as String?,
         parentName: cat['parentName'] as String?,
         iconType: cat['iconType'] as String?,

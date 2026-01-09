@@ -288,8 +288,8 @@ class LocalRepository extends BaseRepository {
   // ============================================
 
   @override
-  Future<int> createCategory({required String name, required String kind, String? icon}) =>
-      _categoryRepo.createCategory(name: name, kind: kind, icon: icon);
+  Future<int> createCategory({required String name, required String kind, String? icon, int? sortOrder}) =>
+      _categoryRepo.createCategory(name: name, kind: kind, icon: icon, sortOrder: sortOrder);
 
   @override
   Future<int> createSubCategory({

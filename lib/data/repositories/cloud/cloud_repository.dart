@@ -287,11 +287,13 @@ class CloudRepository extends BaseRepository {
     required String name,
     required String kind,
     String? icon,
+    int? sortOrder,
   }) =>
       _category.createCategory(
         name: name,
         kind: kind,
         icon: icon,
+        sortOrder: sortOrder,
       );
 
   @override

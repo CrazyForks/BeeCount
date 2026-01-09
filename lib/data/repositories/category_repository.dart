@@ -8,6 +8,7 @@ abstract class CategoryRepository {
     required String name,
     required String kind,
     String? icon,
+    int? sortOrder,
   });
 
   /// 创建二级分类
