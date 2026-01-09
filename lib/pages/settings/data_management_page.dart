@@ -312,15 +312,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     final l10n = AppLocalizations.of(context);
     final service = ref.read(attachmentExportImportServiceProvider);
 
-    // 检查是否有附件
+    // 获取附件数量用于进度显示
     final repo = ref.read(repositoryProvider);
     final attachments = await repo.getAllAttachments();
-    if (attachments.isEmpty) {
-      if (mounted) {
-        showToast(context, l10n.attachmentExportEmpty);
-      }
-      return;
-    }
 
     setState(() {
       _isExporting = true;
@@ -356,7 +350,8 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         showToast(context, l10n.attachmentExportSavedTo(exportPath));
       }
     } else {
-      showToast(context, l10n.attachmentExportFailed);
+      // exportPath 为 null 表示没有内容需要导出
+      showToast(context, l10n.attachmentExportEmpty);
     }
   }
 
@@ -530,15 +525,35 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     if (!mounted) return;
 
     if (result.success) {
-      showToast(
-        context,
-        l10n.attachmentImportResult(
+      // 构建详细的导入结果消息
+      final parts = <String>[];
+
+      // 交易附件结果
+      if (result.imported > 0 || result.skipped > 0 || result.overwritten > 0 || result.failed > 0) {
+        parts.add(l10n.attachmentImportResult(
           result.imported,
           result.skipped,
           result.overwritten,
           result.failed,
-        ),
-      );
+        ));
+      }
+
+      // 头像导入结果
+      if (result.avatarImported) {
+        parts.add('头像已导入');
+      }
+
+      // 自定义图标导入结果
+      if (result.customIconsImported > 0 || result.customIconsSkipped > 0) {
+        parts.add('自定义图标：导入${result.customIconsImported}个${result.customIconsSkipped > 0 ? '，跳过${result.customIconsSkipped}个' : ''}');
+      }
+
+      // 如果没有任何导入结果，显示提示
+      if (parts.isEmpty && !result.avatarImported && result.customIconsImported == 0) {
+        parts.add('未导入任何内容');
+      }
+
+      showToast(context, parts.join('；'));
     } else {
       showToast(context, result.message ?? l10n.attachmentImportFailed);
     }

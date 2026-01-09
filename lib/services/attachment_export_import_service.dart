@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/db.dart';
 import '../providers.dart';
 import 'attachment_service.dart';
+import 'custom_icon_service.dart';
 import 'system/logger_service.dart';
 import 'ui/avatar_service.dart';
 
@@ -50,9 +51,22 @@ class AttachmentExportImportService {
         }
       }
 
-      // 如果没有附件也没有头像，则无需导出
-      if (allAttachments.isEmpty && avatarFile == null) {
-        logger.info('AttachmentExportImport', '没有附件和头像需要导出');
+      // 检查自定义图标
+      final customIconService = CustomIconService();
+      final customIconDir = await customIconService.getIconDirectory();
+      final customIconFiles = <File>[];
+      if (await customIconDir.exists()) {
+        final entities = customIconDir.listSync();
+        for (final entity in entities) {
+          if (entity is File && (entity.path.endsWith('.png') || entity.path.endsWith('.jpg') || entity.path.endsWith('.jpeg'))) {
+            customIconFiles.add(entity);
+          }
+        }
+      }
+
+      // 如果没有附件、头像和自定义图标，则无需导出
+      if (allAttachments.isEmpty && avatarFile == null && customIconFiles.isEmpty) {
+        logger.info('AttachmentExportImport', '没有附件、头像和自定义图标需要导出');
         return null;
       }
 
@@ -70,8 +84,26 @@ class AttachmentExportImportService {
         logger.debug('AttachmentExportImport', '添加头像文件: $avatarFileName');
       }
 
-      // 添加元数据文件（包含头像信息）
-      final metadata = _buildMetadata(allAttachments, avatarFileName: avatarFileName);
+      // 添加自定义图标文件
+      final customIconFileNames = <String>[];
+      for (final iconFile in customIconFiles) {
+        final fileName = path.basename(iconFile.path);
+        final bytes = await iconFile.readAsBytes();
+        archive.addFile(ArchiveFile(
+          'custom_icons/$fileName',
+          bytes.length,
+          bytes,
+        ));
+        customIconFileNames.add(fileName);
+        logger.debug('AttachmentExportImport', '添加自定义图标: $fileName');
+      }
+
+      // 添加元数据文件（包含头像和自定义图标信息）
+      final metadata = _buildMetadata(
+        allAttachments,
+        avatarFileName: avatarFileName,
+        customIconFileNames: customIconFileNames.isEmpty ? null : customIconFileNames,
+      );
       final metadataBytes = utf8.encode(jsonEncode(metadata));
       archive.addFile(ArchiveFile(
         'metadata.json',
@@ -126,9 +158,13 @@ class AttachmentExportImportService {
   }
 
   /// 构建元数据
-  Map<String, dynamic> _buildMetadata(List<TransactionAttachment> attachments, {String? avatarFileName}) {
+  Map<String, dynamic> _buildMetadata(
+    List<TransactionAttachment> attachments, {
+    String? avatarFileName,
+    List<String>? customIconFileNames,
+  }) {
     final metadata = <String, dynamic>{
-      'version': 2, // 升级版本号以支持头像
+      'version': 3, // 升级版本号以支持自定义图标
       'exportedAt': DateTime.now().toIso8601String(),
       'count': attachments.length,
       'attachments': attachments.map((a) => {
@@ -147,6 +183,11 @@ class AttachmentExportImportService {
     // 添加头像信息（如果存在）
     if (avatarFileName != null) {
       metadata['avatar'] = avatarFileName;
+    }
+
+    // 添加自定义图标列表（如果存在）
+    if (customIconFileNames != null && customIconFileNames.isNotEmpty) {
+      metadata['customIcons'] = customIconFileNames;
     }
 
     return metadata;
@@ -362,8 +403,65 @@ class AttachmentExportImportService {
         }
       }
 
+      // 处理自定义图标导入（如果存在）
+      int customIconsImported = 0;
+      int customIconsSkipped = 0;
+      final customIconFileNames = metadata['customIcons'] as List<dynamic>?;
+      if (customIconFileNames != null && customIconFileNames.isNotEmpty) {
+        // 获取自定义图标目录
+        final customIconService = CustomIconService();
+        final customIconDir = await customIconService.getIconDirectory();
+        if (!await customIconDir.exists()) {
+          await customIconDir.create(recursive: true);
+        }
+
+        // 构建文件名到归档文件的映射
+        final customIconArchiveFiles = <String, ArchiveFile>{};
+        for (final file in archive) {
+          if (file.name.startsWith('custom_icons/')) {
+            final fileName = path.basename(file.name);
+            customIconArchiveFiles[fileName] = file;
+          }
+        }
+
+        // 导入每个自定义图标
+        for (final iconFileName in customIconFileNames) {
+          try {
+            final fileName = iconFileName as String;
+            final archiveFile = customIconArchiveFiles[fileName];
+
+            if (archiveFile == null) {
+              logger.warning('AttachmentExportImport', '归档中没有找到自定义图标: $fileName');
+              continue;
+            }
+
+            // 检查本地是否已存在同名文件
+            final localIconPath = path.join(customIconDir.path, fileName);
+            final localIconFile = File(localIconPath);
+
+            if (await localIconFile.exists()) {
+              if (conflictStrategy == conflictOverwrite) {
+                await localIconFile.delete();
+                await localIconFile.writeAsBytes(archiveFile.content as List<int>);
+                customIconsImported++;
+                logger.debug('AttachmentExportImport', '覆盖自定义图标: $fileName');
+              } else {
+                customIconsSkipped++;
+                logger.debug('AttachmentExportImport', '跳过已存在的自定义图标: $fileName');
+              }
+            } else {
+              await localIconFile.writeAsBytes(archiveFile.content as List<int>);
+              customIconsImported++;
+              logger.debug('AttachmentExportImport', '导入自定义图标: $fileName');
+            }
+          } catch (e) {
+            logger.error('AttachmentExportImport', '导入自定义图标失败: $iconFileName', e);
+          }
+        }
+      }
+
       logger.info('AttachmentExportImport',
-          '附件导入完成: 导入 $imported, 跳过 $skipped, 覆盖 $overwritten, 失败 $failed${avatarImported ? ', 头像已导入' : ''}');
+          '附件导入完成: 导入 $imported, 跳过 $skipped, 覆盖 $overwritten, 失败 $failed${avatarImported ? ', 头像已导入' : ''}${customIconsImported > 0 ? ', 自定义图标已导入 $customIconsImported' : ''}${customIconsSkipped > 0 ? ', 自定义图标已跳过 $customIconsSkipped' : ''}');
 
       return AttachmentImportResult(
         success: true,
@@ -372,6 +470,8 @@ class AttachmentExportImportService {
         failed: failed,
         overwritten: overwritten,
         avatarImported: avatarImported,
+        customIconsImported: customIconsImported,
+        customIconsSkipped: customIconsSkipped,
         message: null,
       );
     } catch (e, stackTrace) {
@@ -406,12 +506,15 @@ class AttachmentExportImportService {
           final metadataJson = utf8.decode(file.content as List<int>);
           final metadata = jsonDecode(metadataJson) as Map<String, dynamic>;
 
+          final customIcons = metadata['customIcons'] as List<dynamic>?;
+
           return AttachmentArchiveInfo(
             version: metadata['version'] as int? ?? 1,
             exportedAt: DateTime.tryParse(metadata['exportedAt'] as String? ?? ''),
             count: metadata['count'] as int? ?? 0,
             fileSize: await archiveFile.length(),
             hasAvatar: metadata['avatar'] != null,
+            customIconCount: customIcons?.length ?? 0,
           );
         }
       }
@@ -452,6 +555,8 @@ class AttachmentImportResult {
   final int failed;
   final int overwritten;
   final bool avatarImported;
+  final int customIconsImported;
+  final int customIconsSkipped;
   final String? message;
 
   AttachmentImportResult({
@@ -461,6 +566,8 @@ class AttachmentImportResult {
     required this.failed,
     required this.overwritten,
     this.avatarImported = false,
+    this.customIconsImported = 0,
+    this.customIconsSkipped = 0,
     this.message,
   });
 }
@@ -472,6 +579,7 @@ class AttachmentArchiveInfo {
   final int count;
   final int fileSize;
   final bool hasAvatar;
+  final int customIconCount;
 
   AttachmentArchiveInfo({
     required this.version,
@@ -479,6 +587,7 @@ class AttachmentArchiveInfo {
     required this.count,
     required this.fileSize,
     this.hasAvatar = false,
+    this.customIconCount = 0,
   });
 }
 
