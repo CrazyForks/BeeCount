@@ -130,13 +130,7 @@ class GenericBillParser implements BillParser {
       return 'amount';
     }
     // 先匹配"交易类型"等更具体的分类字段（避免被"类型"匹配为type）
-    // 新增：优先匹配二级分类相关字段（注意：必须先匹配更长的字符串，避免被短字符串提前匹配）
-    if (_containsAny(s, ['二级分类图标', '子分类图标', 'Subcategory Icon', 'SubcategoryIcon'])) {
-      return 'sub_category_icon';
-    }
-    if (_containsAny(s, ['分类图标', 'Category Icon', 'CategoryIcon'])) {
-      return 'category_icon';
-    }
+    // 优先匹配二级分类相关字段（注意：必须先匹配更长的字符串，避免被短字符串提前匹配）
     if (_containsAny(s, ['二级分类', '子分类', '次分类', 'Subcategory', 'Sub Category'])) {
       return 'sub_category';
     }

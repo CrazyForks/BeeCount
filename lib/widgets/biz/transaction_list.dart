@@ -483,6 +483,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                         icon: isTransfer
                           ? Icons.swap_horiz
                           : getCategoryIconData(category: it.category, categoryName: categoryName),
+                        category: isTransfer ? null : it.category,
                         title: isTransfer
                           ? (subtitle.isNotEmpty ? subtitle : AppLocalizations.of(context).transferTitle)
                           : (subtitle.isNotEmpty ? subtitle : categoryName),

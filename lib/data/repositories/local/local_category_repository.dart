@@ -17,12 +17,14 @@ class LocalCategoryRepository implements CategoryRepository {
     required String name,
     required String kind,
     String? icon,
+    int? sortOrder,
   }) async {
     return await db.into(db.categories).insert(
       CategoriesCompanion.insert(
         name: name,
         kind: kind,
         icon: d.Value(icon),
+        sortOrder: d.Value(sortOrder ?? 0),
       ),
     );
   }
@@ -489,6 +491,9 @@ class LocalCategoryRepository implements CategoryRepository {
           sortOrder: row.read<int>('sort_order'),
           parentId: row.read<int?>('parent_id'),
           level: row.read<int>('level'),
+          iconType: row.read<String?>('icon_type') ?? 'material',
+          customIconPath: row.read<String?>('custom_icon_path'),
+          communityIconId: row.read<String?>('community_icon_id'),
         );
       }).toList();
     });
@@ -506,10 +511,13 @@ class LocalCategoryRepository implements CategoryRepository {
         c.sort_order as category_sort_order,
         c.parent_id as category_parent_id,
         c.level as category_level,
+        c.icon_type as category_icon_type,
+        c.custom_icon_path as category_custom_icon_path,
+        c.community_icon_id as category_community_icon_id,
         COALESCE(COUNT(t.id), 0) as transaction_count
       FROM categories c
       LEFT JOIN transactions t ON t.category_id = c.id
-      GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order, c.parent_id, c.level
+      GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order, c.parent_id, c.level, c.icon_type, c.custom_icon_path, c.community_icon_id
       ORDER BY c.sort_order
       ''',
       readsFrom: {db.categories, db.transactions},
@@ -526,6 +534,9 @@ class LocalCategoryRepository implements CategoryRepository {
           sortOrder: row.read<int>('category_sort_order'),
           parentId: row.read<int?>('category_parent_id'),
           level: row.read<int>('category_level'),
+          iconType: row.read<String?>('category_icon_type') ?? 'material',
+          customIconPath: row.read<String?>('category_custom_icon_path'),
+          communityIconId: row.read<String?>('category_community_icon_id'),
         );
         final directCount = row.read<int>('transaction_count');
 
@@ -556,5 +567,49 @@ class LocalCategoryRepository implements CategoryRepository {
   @override
   Future<int> insertCategory(CategoriesCompanion category) async {
     return await db.into(db.categories).insert(category);
+  }
+
+  @override
+  Future<void> updateCategoryIcon(
+    int id, {
+    required String iconType,
+    String? icon,
+    String? customIconPath,
+    String? communityIconId,
+  }) async {
+    await (db.update(db.categories)..where((c) => c.id.equals(id))).write(
+      CategoriesCompanion(
+        iconType: d.Value(iconType),
+        icon: d.Value(icon),
+        customIconPath: d.Value(customIconPath),
+        communityIconId: d.Value(communityIconId),
+      ),
+    );
+    logger.info('LocalCategoryRepository', '分类图标已更新: id=$id, type=$iconType');
+  }
+
+  @override
+  Future<void> clearCategoryCustomIcon(int id, {String? materialIcon}) async {
+    await (db.update(db.categories)..where((c) => c.id.equals(id))).write(
+      CategoriesCompanion(
+        iconType: const d.Value('material'),
+        icon: d.Value(materialIcon),
+        customIconPath: const d.Value(null),
+        communityIconId: const d.Value(null),
+      ),
+    );
+    logger.info('LocalCategoryRepository', '分类自定义图标已清除: id=$id');
+  }
+
+  @override
+  Future<List<String>> getCustomIconPaths() async {
+    final result = await (db.select(db.categories)
+          ..where((c) => c.iconType.equals('custom'))
+          ..where((c) => c.customIconPath.isNotNull()))
+        .get();
+    return result
+        .where((c) => c.customIconPath != null)
+        .map((c) => c.customIconPath!)
+        .toList();
   }
 }

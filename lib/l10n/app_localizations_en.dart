@@ -1516,6 +1516,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryIconLabel => 'Category Icon';
 
   @override
+  String get categoryCustomIconTitle => 'Custom Icon';
+
+  @override
+  String get categoryCustomIconTapToSelect => 'Tap to select image';
+
+  @override
+  String get categoryCustomIconTapToChange => 'Tap to change image';
+
+  @override
+  String get categoryCustomIconError => 'Error selecting image';
+
+  @override
+  String get categoryCustomIconRequired => 'Please select a custom icon image';
+
+  @override
   String get categoryDangerousOperations => 'Dangerous Operations';
 
   @override
@@ -2397,12 +2412,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportCsvHeaderSubCategory => 'Subcategory';
-
-  @override
-  String get exportCsvHeaderCategoryIcon => 'Category Icon';
-
-  @override
-  String get exportCsvHeaderSubCategoryIcon => 'Subcategory Icon';
 
   @override
   String get exportCsvHeaderAmount => 'Amount';
@@ -5054,6 +5063,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String attachmentExportProgressDetail(int attachmentCount, int iconCount, int current, int total) {
+    return 'Exporting $attachmentCount attachment(s) + $iconCount icon(s) ($current/$total)';
+  }
+
+  @override
   String get attachmentExportSuccess => 'Attachments exported successfully';
 
   @override
@@ -5093,6 +5107,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get attachmentStartImport => 'Start Import';
+
+  @override
+  String get attachmentPreview => 'Preview Attachments';
+
+  @override
+  String attachmentPreviewSubtitle(int count) {
+    return '$count images in total';
+  }
+
+  @override
+  String get attachmentPreviewEmpty => 'No attachments';
+
+  @override
+  String get attachmentExportPreviewTitle => 'Export Preview';
+
+  @override
+  String get attachmentImportPreviewTitle => 'Import Preview';
 
   @override
   String get shortcutsGuide => 'Shortcuts';

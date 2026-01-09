@@ -2886,6 +2886,36 @@ abstract class AppLocalizations {
   /// **'Category Icon'**
   String get categoryIconLabel;
 
+  /// No description provided for @categoryCustomIconTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Icon'**
+  String get categoryCustomIconTitle;
+
+  /// No description provided for @categoryCustomIconTapToSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select image'**
+  String get categoryCustomIconTapToSelect;
+
+  /// No description provided for @categoryCustomIconTapToChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to change image'**
+  String get categoryCustomIconTapToChange;
+
+  /// No description provided for @categoryCustomIconError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error selecting image'**
+  String get categoryCustomIconError;
+
+  /// No description provided for @categoryCustomIconRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a custom icon image'**
+  String get categoryCustomIconRequired;
+
   /// No description provided for @categoryDangerousOperations.
   ///
   /// In en, this message translates to:
@@ -4547,18 +4577,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Subcategory'**
   String get exportCsvHeaderSubCategory;
-
-  /// No description provided for @exportCsvHeaderCategoryIcon.
-  ///
-  /// In en, this message translates to:
-  /// **'Category Icon'**
-  String get exportCsvHeaderCategoryIcon;
-
-  /// No description provided for @exportCsvHeaderSubCategoryIcon.
-  ///
-  /// In en, this message translates to:
-  /// **'Subcategory Icon'**
-  String get exportCsvHeaderSubCategoryIcon;
 
   /// No description provided for @exportCsvHeaderAmount.
   ///
@@ -9642,6 +9660,12 @@ abstract class AppLocalizations {
   /// **'Exporting attachments ({current}/{total})'**
   String attachmentExportProgress(int current, int total);
 
+  /// No description provided for @attachmentExportProgressDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting {attachmentCount} attachment(s) + {iconCount} icon(s) ({current}/{total})'**
+  String attachmentExportProgressDetail(int attachmentCount, int iconCount, int current, int total);
+
   /// No description provided for @attachmentExportSuccess.
   ///
   /// In en, this message translates to:
@@ -9707,6 +9731,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Import'**
   String get attachmentStartImport;
+
+  /// No description provided for @attachmentPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview Attachments'**
+  String get attachmentPreview;
+
+  /// No description provided for @attachmentPreviewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} images in total'**
+  String attachmentPreviewSubtitle(int count);
+
+  /// No description provided for @attachmentPreviewEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No attachments'**
+  String get attachmentPreviewEmpty;
+
+  /// No description provided for @attachmentExportPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Preview'**
+  String get attachmentExportPreviewTitle;
+
+  /// No description provided for @attachmentImportPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Preview'**
+  String get attachmentImportPreviewTitle;
 
   /// No description provided for @shortcutsGuide.
   ///

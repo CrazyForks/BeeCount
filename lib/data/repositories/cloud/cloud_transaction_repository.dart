@@ -645,6 +645,9 @@ class CloudTransactionRepository implements TransactionRepository {
       parentId: json['parent_id'] as int?,
       sortOrder: json['sort_order'] as int? ?? 0,
       level: json['level'] as int? ?? 1,
+      iconType: json['icon_type'] as String? ?? 'material',
+      customIconPath: json['custom_icon_path'] as String?,
+      communityIconId: json['community_icon_id'] as String?,
     );
   }
 

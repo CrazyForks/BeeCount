@@ -287,11 +287,13 @@ class CloudRepository extends BaseRepository {
     required String name,
     required String kind,
     String? icon,
+    int? sortOrder,
   }) =>
       _category.createCategory(
         name: name,
         kind: kind,
         icon: icon,
+        sortOrder: sortOrder,
       );
 
   @override
@@ -907,6 +909,29 @@ class CloudRepository extends BaseRepository {
   @override
   Future<int> insertCategory(CategoriesCompanion category) =>
       _category.insertCategory(category);
+
+  @override
+  Future<void> updateCategoryIcon(
+    int id, {
+    required String iconType,
+    String? icon,
+    String? customIconPath,
+    String? communityIconId,
+  }) =>
+      _category.updateCategoryIcon(
+        id,
+        iconType: iconType,
+        icon: icon,
+        customIconPath: customIconPath,
+        communityIconId: communityIconId,
+      );
+
+  @override
+  Future<void> clearCategoryCustomIcon(int id, {String? materialIcon}) =>
+      _category.clearCategoryCustomIcon(id, materialIcon: materialIcon);
+
+  @override
+  Future<List<String>> getCustomIconPaths() => _category.getCustomIconPaths();
 
   @override
   Future<void> batchInsertRecurringTransactions(

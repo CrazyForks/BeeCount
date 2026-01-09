@@ -42,8 +42,6 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
     'amount': null,
     'category': null,
     'sub_category': null,       // 二级分类
-    'category_icon': null,       // 分类图标
-    'sub_category_icon': null,   // 二级分类图标
     'account': null,
     'from_account': null,
     'to_account': null,
@@ -176,10 +174,6 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
                           'category', items()),
                       _mapRow(AppLocalizations.of(context)!.exportCsvHeaderSubCategory,
                           'sub_category', items()),
-                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderCategoryIcon,
-                          'category_icon', items()),
-                      _mapRow(AppLocalizations.of(context)!.exportCsvHeaderSubCategoryIcon,
-                          'sub_category_icon', items()),
                       _mapRow(AppLocalizations.of(context)!.importFieldAccount,
                           'account', items()),
                       _mapRow(AppLocalizations.of(context)!.exportCsvHeaderFromAccount,

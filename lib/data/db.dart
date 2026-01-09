@@ -44,6 +44,11 @@ class Categories extends Table {
   IntColumn get parentId => integer().nullable()(); // 父分类ID，null 表示一级分类
   IntColumn get level =>
       integer().withDefault(const Constant(1))(); // 层级：1=一级，2=二级
+  // v13: 自定义图标支持
+  TextColumn get iconType =>
+      text().withDefault(const Constant('material'))(); // material / custom / community
+  TextColumn get customIconPath => text().nullable()(); // 自定义图标本地路径
+  TextColumn get communityIconId => text().nullable()(); // 社区图标ID（预留）
 }
 
 class Transactions extends Table {
@@ -190,7 +195,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 12; // v12: 添加交易附件功能（TransactionAttachments）
+  int get schemaVersion => 13; // v13: 分类自定义图标支持
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -420,6 +425,40 @@ class BeeDatabase extends _$BeeDatabase {
             logger.info('DB', 'v12: 附件索引已创建');
 
             print('[DB Migration] v12 迁移完成');
+          }
+          if (from < 13) {
+            // v13: 分类自定义图标支持
+            print('[DB Migration] 开始迁移到 v13: 分类自定义图标支持');
+
+            // 检查字段是否已存在，避免重复添加
+            final tableInfo =
+                await customSelect('PRAGMA table_info(categories)').get();
+            final hasIconType =
+                tableInfo.any((row) => row.data['name'] == 'icon_type');
+            final hasCustomIconPath =
+                tableInfo.any((row) => row.data['name'] == 'custom_icon_path');
+            final hasCommunityIconId =
+                tableInfo.any((row) => row.data['name'] == 'community_icon_id');
+
+            if (!hasIconType) {
+              await customStatement(
+                  "ALTER TABLE categories ADD COLUMN icon_type TEXT NOT NULL DEFAULT 'material';");
+              logger.info('DB', 'v13: icon_type 字段已添加');
+            }
+
+            if (!hasCustomIconPath) {
+              await customStatement(
+                  'ALTER TABLE categories ADD COLUMN custom_icon_path TEXT;');
+              logger.info('DB', 'v13: custom_icon_path 字段已添加');
+            }
+
+            if (!hasCommunityIconId) {
+              await customStatement(
+                  'ALTER TABLE categories ADD COLUMN community_icon_id TEXT;');
+              logger.info('DB', 'v13: community_icon_id 字段已添加');
+            }
+
+            print('[DB Migration] v13 迁移完成');
           }
         },
       );

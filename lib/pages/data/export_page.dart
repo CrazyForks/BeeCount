@@ -108,8 +108,6 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         l10n.exportCsvHeaderType,
         l10n.exportCsvHeaderCategory,
         l10n.exportCsvHeaderSubCategory, // 二级分类名称
-        l10n.exportCsvHeaderCategoryIcon, // 分类图标
-        l10n.exportCsvHeaderSubCategoryIcon, // 二级分类图标
         l10n.exportCsvHeaderAmount,
         l10n.exportCsvHeaderAccount,
         l10n.exportCsvHeaderFromAccount, // 转出账户
@@ -167,8 +165,6 @@ class _ExportPageState extends ConsumerState<ExportPage> {
         String toAccountName;
         String categoryName;
         String subCategoryName;
-        String categoryIcon;
-        String subCategoryIcon;
 
         if (t.type == 'transfer') {
           // 转账记录：账户列留空，填充转出账户和转入账户
@@ -179,8 +175,6 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           toAccountName = toAccount?.name ?? '';
           categoryName = ''; // 转账没有分类
           subCategoryName = '';
-          categoryIcon = '';
-          subCategoryIcon = '';
         } else {
           // 收入或支出：正常填充账户列，转出转入账户留空
           accountName = a?.name ?? '';
@@ -194,20 +188,14 @@ class _ExportPageState extends ConsumerState<ExportPage> {
               final parentCategory = allCategories[c.parentId];
               categoryName = CategoryUtils.getDisplayName(parentCategory?.name, context);
               subCategoryName = CategoryUtils.getDisplayName(c.name, context);
-              categoryIcon = parentCategory?.icon ?? '';
-              subCategoryIcon = c.icon ?? '';
             } else {
               // 一级分类：分类列填当前分类，二级分类列留空
               categoryName = CategoryUtils.getDisplayName(c.name, context);
               subCategoryName = '';
-              categoryIcon = c.icon ?? '';
-              subCategoryIcon = '';
             }
           } else {
             categoryName = '';
             subCategoryName = '';
-            categoryIcon = '';
-            subCategoryIcon = '';
           }
         }
 
@@ -223,8 +211,6 @@ class _ExportPageState extends ConsumerState<ExportPage> {
           typeStr,
           categoryName,
           subCategoryName,
-          categoryIcon,
-          subCategoryIcon,
           t.amount.toStringAsFixed(2),
           accountName,
           fromAccountName,

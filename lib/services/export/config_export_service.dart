@@ -790,6 +790,9 @@ class CategoryItem {
   final int sortOrder;
   final String? parentName; // 使用父分类名称而非ID
   final int level;
+  final String? iconType; // material / custom / community
+  final String? customIconPath; // 自定义图标相对路径
+  final String? communityIconId; // 社区图标ID
 
   const CategoryItem({
     required this.name,
@@ -798,6 +801,9 @@ class CategoryItem {
     required this.sortOrder,
     this.parentName,
     required this.level,
+    this.iconType,
+    this.customIconPath,
+    this.communityIconId,
   });
 
   Map<String, dynamic> toMap() {
@@ -809,6 +815,9 @@ class CategoryItem {
     };
     if (icon != null) map['icon'] = icon;
     if (parentName != null) map['parent_name'] = parentName;
+    if (iconType != null) map['icon_type'] = iconType;
+    if (customIconPath != null) map['custom_icon_path'] = customIconPath;
+    if (communityIconId != null) map['community_icon_id'] = communityIconId;
     return map;
   }
 
@@ -820,6 +829,9 @@ class CategoryItem {
       sortOrder: map['sort_order'] as int? ?? 0,
       parentName: map['parent_name'] as String?,
       level: map['level'] as int? ?? 1,
+      iconType: map['icon_type'] as String?,
+      customIconPath: map['custom_icon_path'] as String?,
+      communityIconId: map['community_icon_id'] as String?,
     );
   }
 
@@ -831,6 +843,9 @@ class CategoryItem {
       sortOrder: category.sortOrder,
       parentName: parentName,
       level: category.level,
+      iconType: category.iconType,
+      customIconPath: category.customIconPath,
+      communityIconId: category.communityIconId,
     );
   }
 }
@@ -1729,6 +1744,16 @@ class ConfigExportService {
             buffer.writeln('      parent_name: "${itemMap['parent_name']}"');
           }
           buffer.writeln('      level: ${itemMap['level']}');
+          // 自定义图标字段
+          if (itemMap.containsKey('icon_type') && itemMap['icon_type'] != null) {
+            buffer.writeln('      icon_type: "${itemMap['icon_type']}"');
+          }
+          if (itemMap.containsKey('custom_icon_path') && itemMap['custom_icon_path'] != null) {
+            buffer.writeln('      custom_icon_path: "${itemMap['custom_icon_path']}"');
+          }
+          if (itemMap.containsKey('community_icon_id') && itemMap['community_icon_id'] != null) {
+            buffer.writeln('      community_icon_id: "${itemMap['community_icon_id']}"');
+          }
         }
       }
       buffer.writeln();
@@ -1984,32 +2009,49 @@ class ConfigExportService {
       try {
         final items = config.categories!.items;
 
-        // 第一步：在事务外批量插入一级分类
-        final level1Items = items.where((item) => item.parentName == null).toList();
-        final level1Companions = level1Items.map((item) => CategoriesCompanion.insert(
-          name: item.name,
-          kind: item.kind,
-          icon: d.Value(item.icon),
-          sortOrder: d.Value(item.sortOrder),
-          parentId: const d.Value(null),
-          level: d.Value(item.level),
-        )).toList();
+        // 获取现有分类名称集合（用于去重）
+        final existingCategories = await repository.getAllCategories();
+        final existingNames = existingCategories.map((c) => c.name.toLowerCase()).toSet();
 
-        if (level1Companions.isNotEmpty) {
+        // 第一步：过滤并批量插入一级分类
+        final level1Items = items.where((item) => item.parentName == null).toList();
+        final newLevel1Items = level1Items.where((item) =>
+          !existingNames.contains(item.name.toLowerCase())
+        ).toList();
+
+        if (newLevel1Items.isNotEmpty) {
+          final level1Companions = newLevel1Items.map((item) => CategoriesCompanion.insert(
+            name: item.name,
+            kind: item.kind,
+            icon: d.Value(item.icon),
+            sortOrder: d.Value(item.sortOrder),
+            parentId: const d.Value(null),
+            level: d.Value(item.level),
+            iconType: d.Value(item.iconType ?? 'material'),
+            customIconPath: d.Value(item.customIconPath),
+            communityIconId: d.Value(item.communityIconId),
+          )).toList();
+
           await repository.batchInsertCategories(level1Companions);
         }
 
-        // 第二步：在事务外查询刚插入的一级分类，构建名称到ID的映射
+        // 第二步：查询所有分类，构建名称到ID的映射
         final allCategories = await repository.getAllCategories();
         final nameToIdMap = <String, int>{
           for (var cat in allCategories) cat.name: cat.id
         };
 
-        // 第三步：批量插入二级分类
+        // 更新现有分类名称集合（包含刚插入的一级分类）
+        final updatedExistingNames = allCategories.map((c) => c.name.toLowerCase()).toSet();
+
+        // 第三步：过滤并批量插入二级分类
         final level2Items = items.where((item) => item.parentName != null).toList();
+        final newLevel2Items = level2Items.where((item) =>
+          !updatedExistingNames.contains(item.name.toLowerCase())
+        ).toList();
         final level2Companions = <CategoriesCompanion>[];
 
-        for (final item in level2Items) {
+        for (final item in newLevel2Items) {
           final parentId = nameToIdMap[item.parentName];
           if (parentId != null) {
             level2Companions.add(CategoriesCompanion.insert(
@@ -2019,6 +2061,9 @@ class ConfigExportService {
               sortOrder: d.Value(item.sortOrder),
               parentId: d.Value(parentId),
               level: d.Value(item.level),
+              iconType: d.Value(item.iconType ?? 'material'),
+              customIconPath: d.Value(item.customIconPath),
+              communityIconId: d.Value(item.communityIconId),
             ));
           } else {
             logger.warning('ConfigImport', '找不到父分类 "${item.parentName}"，跳过二级分类: ${item.name}');
@@ -2029,7 +2074,11 @@ class ConfigExportService {
           await repository.batchInsertCategories(level2Companions);
         }
 
-        logger.info('ConfigImport', '分类已批量导入: 一级${level1Items.length}条, 二级${level2Companions.length}条');
+        final skippedCount = (level1Items.length - newLevel1Items.length) +
+                             (level2Items.length - newLevel2Items.length);
+        logger.info('ConfigImport',
+          '分类已批量导入: 一级${newLevel1Items.length}条, 二级${level2Companions.length}条'
+          '${skippedCount > 0 ? ' (跳过已存在: $skippedCount条)' : ''}');
       } catch (e) {
         logger.error('ConfigImport', '导入分类失败: $e');
       }

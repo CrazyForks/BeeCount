@@ -605,6 +605,11 @@
   "categoryNameTooLong": "分类名称不能超过4个字",
   "categoryNameDuplicate": "分类名称已存在",
   "categoryIconLabel": "分类图标",
+  "categoryCustomIconTitle": "自定义图标",
+  "categoryCustomIconTapToSelect": "点击选择图片",
+  "categoryCustomIconTapToChange": "点击更换图片",
+  "categoryCustomIconError": "选择图片时出错",
+  "categoryCustomIconRequired": "请选择自定义图标图片",
   "categoryDangerousOperations": "危险操作",
   "categoryDeleteTitle": "删除分类",
   "categoryDeleteSubtitle": "删除后无法恢复",
@@ -984,8 +989,6 @@
   "exportCsvHeaderType": "类型",
   "exportCsvHeaderCategory": "分类",
   "exportCsvHeaderSubCategory": "二级分类",
-  "exportCsvHeaderCategoryIcon": "分类图标",
-  "exportCsvHeaderSubCategoryIcon": "二级分类图标",
   "exportCsvHeaderAmount": "金额",
   "exportCsvHeaderAccount": "账户",
   "exportCsvHeaderFromAccount": "转出账户",
@@ -2180,6 +2183,23 @@
       }
     }
   },
+  "attachmentExportProgressDetail": "正在导出 {attachmentCount} 个附件 + {iconCount} 个图标 ({current}/{total})",
+  "@attachmentExportProgressDetail": {
+    "placeholders": {
+      "attachmentCount": {
+        "type": "int"
+      },
+      "iconCount": {
+        "type": "int"
+      },
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "attachmentExportSuccess": "附件导出成功",
   "attachmentExportFailed": "附件导出失败",
   "attachmentExportSavedTo": "已保存到: {path}",
@@ -2234,6 +2254,18 @@
     }
   },
   "attachmentStartImport": "开始导入",
+  "attachmentPreview": "预览附件",
+  "attachmentPreviewSubtitle": "共 {count} 张图片",
+  "@attachmentPreviewSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentPreviewEmpty": "暂无附件",
+  "attachmentExportPreviewTitle": "导出预览",
+  "attachmentImportPreviewTitle": "导入预览",
   "shortcutsGuide": "快捷指令",
   "shortcutsGuideDesc": "快速打开语音、拍照等记账方式",
   "shortcutsIntroTitle": "快速记账",

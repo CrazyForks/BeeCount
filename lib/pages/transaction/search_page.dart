@@ -963,6 +963,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                             children: [
                               TransactionListItem(
                                 icon: iconData,
+                                category: item.category,
                                 title: subtitle.isNotEmpty
                                     ? subtitle
                                     : categoryName,

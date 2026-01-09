@@ -363,7 +363,16 @@ class _CategoryItem extends StatelessWidget {
     this.expanded = false,
   });
 
-  IconData _iconFor(Category c) => getCategoryIconData(category: c);
+  /// 构建图标组件（支持自定义图标）
+  Widget _buildIcon(BuildContext context, double size, Color color) {
+    // 使用统一的 CategoryIconWidget
+    return CategoryIconWidget(
+      category: category,
+      size: size,
+      color: color,
+      circular: true, // 使用圆形
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -392,12 +401,10 @@ class _CategoryItem extends StatelessWidget {
                           : BeeTokens.surfaceCategoryIcon(context),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  _iconFor(category),
-                  size: isSubCategory ? 20 : 24,
-                  color: selected
-                      ? primaryColor
-                      : BeeTokens.iconCategory(context),
+                child: _buildIcon(
+                  context,
+                  isSubCategory ? 20 : 24,
+                  selected ? primaryColor : BeeTokens.iconCategory(context),
                 ),
               ),
               // 有子分类时在图标右下角显示三个点（完全分开，不重叠）

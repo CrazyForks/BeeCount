@@ -227,11 +227,23 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
       'name': _sanitizeString(cat.name),
       'kind': cat.kind,
       'level': cat.level,
+      'sortOrder': cat.sortOrder, // 保存排序顺序
+      'iconType': cat.iconType, // 图标类型: material / custom / community
     };
 
     // 添加图标信息（如果存在）
     if (cat.icon != null && cat.icon!.isNotEmpty) {
       categoryItem['icon'] = cat.icon;
+    }
+
+    // 添加自定义图标路径（如果存在）
+    if (cat.customIconPath != null && cat.customIconPath!.isNotEmpty) {
+      categoryItem['customIconPath'] = cat.customIconPath;
+    }
+
+    // 添加社区图标ID（如果存在）
+    if (cat.communityIconId != null && cat.communityIconId!.isNotEmpty) {
+      categoryItem['communityIconId'] = cat.communityIconId;
     }
 
     // 添加父分类名称（如果是二级分类）
@@ -309,8 +321,12 @@ ImportData parseJsonToImportData(String jsonStr) {
         name: cat['name'] as String,
         kind: cat['kind'] as String,
         level: cat['level'] as int? ?? 1,
+        sortOrder: cat['sortOrder'] as int? ?? 0,
         icon: cat['icon'] as String?,
         parentName: cat['parentName'] as String?,
+        iconType: cat['iconType'] as String?,
+        customIconPath: cat['customIconPath'] as String?,
+        communityIconId: cat['communityIconId'] as String?,
       ));
     }
   }

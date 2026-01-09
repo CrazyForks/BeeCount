@@ -660,6 +660,11 @@
   "categoryNameTooLong": "Category name cannot exceed 4 characters",
   "categoryNameDuplicate": "Category name already exists",
   "categoryIconLabel": "Category Icon",
+  "categoryCustomIconTitle": "Custom Icon",
+  "categoryCustomIconTapToSelect": "Tap to select image",
+  "categoryCustomIconTapToChange": "Tap to change image",
+  "categoryCustomIconError": "Error selecting image",
+  "categoryCustomIconRequired": "Please select a custom icon image",
   "categoryDangerousOperations": "Dangerous Operations",
   "categoryDeleteTitle": "Delete Category",
   "categoryDeleteSubtitle": "Cannot be recovered after deletion",
@@ -965,8 +970,6 @@
   "exportCsvHeaderType": "Type",
   "exportCsvHeaderCategory": "Category",
   "exportCsvHeaderSubCategory": "Subcategory",
-  "exportCsvHeaderCategoryIcon": "Category Icon",
-  "exportCsvHeaderSubCategoryIcon": "Subcategory Icon",
   "exportCsvHeaderAmount": "Amount",
   "exportCsvHeaderAccount": "Account",
   "exportCsvHeaderFromAccount": "From Account",
@@ -2220,6 +2223,23 @@
       }
     }
   },
+  "attachmentExportProgressDetail": "Exporting {attachmentCount} attachment(s) + {iconCount} icon(s) ({current}/{total})",
+  "@attachmentExportProgressDetail": {
+    "placeholders": {
+      "attachmentCount": {
+        "type": "int"
+      },
+      "iconCount": {
+        "type": "int"
+      },
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "attachmentExportSuccess": "Attachments exported successfully",
   "attachmentExportFailed": "Failed to export attachments",
   "attachmentExportSavedTo": "Saved to: {path}",
@@ -2274,6 +2294,18 @@
     }
   },
   "attachmentStartImport": "Start Import",
+  "attachmentPreview": "Preview Attachments",
+  "attachmentPreviewSubtitle": "{count} images in total",
+  "@attachmentPreviewSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "attachmentPreviewEmpty": "No attachments",
+  "attachmentExportPreviewTitle": "Export Preview",
+  "attachmentImportPreviewTitle": "Import Preview",
   "shortcutsGuide": "Shortcuts",
   "shortcutsGuideDesc": "Quick access to voice, camera billing, etc.",
   "shortcutsIntroTitle": "Quick Billing",
