@@ -154,19 +154,19 @@ final headerDecorationStyleInitProvider = FutureProvider<void>((ref) async {
   });
 });
 
-// 收支颜色方案Provider（默认中国方案：红色收入、绿色支出）
-// false = 国际方案（红色支出、绿色收入）
-// true = 中国方案（红色收入、绿色支出）
-final chineseColorSchemeProvider = StateProvider<bool>((ref) => true);
+// 收支颜色方案Provider（默认红色收入、绿色支出）
+// true = 红色收入、绿色支出
+// false = 红色支出、绿色收入
+final incomeExpenseColorSchemeProvider = StateProvider<bool>((ref) => true);
 
 // 收支颜色方案持久化初始化
-final chineseColorSchemeInitProvider = FutureProvider<void>((ref) async {
+final incomeExpenseColorSchemeInitProvider = FutureProvider<void>((ref) async {
   final prefs = await SharedPreferences.getInstance();
-  final saved = prefs.getBool('chineseColorScheme');
+  final saved = prefs.getBool('incomeExpenseColorScheme');
   if (saved != null) {
-    ref.read(chineseColorSchemeProvider.notifier).state = saved;
+    ref.read(incomeExpenseColorSchemeProvider.notifier).state = saved;
   }
-  ref.listen<bool>(chineseColorSchemeProvider, (prev, next) async {
-    await prefs.setBool('chineseColorScheme', next);
+  ref.listen<bool>(incomeExpenseColorSchemeProvider, (prev, next) async {
+    await prefs.setBool('incomeExpenseColorScheme', next);
   });
 });

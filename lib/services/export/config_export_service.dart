@@ -374,6 +374,7 @@ class AppSettingsConfig {
   final String? darkModePatternStyle;
   final bool? compactAmount;
   final bool? showTransactionTime;
+  final bool? incomeExpenseColorScheme; // 收支颜色方案：true=红色收入/绿色支出，false=红色支出/绿色收入
 
   // 云服务选择
   final String? cloudServiceType;
@@ -399,6 +400,7 @@ class AppSettingsConfig {
     this.darkModePatternStyle,
     this.compactAmount,
     this.showTransactionTime,
+    this.incomeExpenseColorScheme,
     this.cloudServiceType,
     this.autoSync,
     this.autoScreenshotEnabled,
@@ -453,6 +455,9 @@ class AppSettingsConfig {
     if (showTransactionTime != null) {
       map['show_transaction_time'] = showTransactionTime;
     }
+    if (incomeExpenseColorScheme != null) {
+      map['income_expense_color_scheme'] = incomeExpenseColorScheme;
+    }
     if (cloudServiceType != null && cloudServiceType!.isNotEmpty) {
       map['cloud_service_type'] = cloudServiceType;
     }
@@ -488,6 +493,7 @@ class AppSettingsConfig {
         darkModePatternStyle: map['dark_mode_pattern_style'] as String?,
         compactAmount: map['compact_amount'] as bool?,
         showTransactionTime: map['show_transaction_time'] as bool?,
+        incomeExpenseColorScheme: map['income_expense_color_scheme'] as bool?,
         cloudServiceType: map['cloud_service_type'] as String?,
         autoSync: map['auto_sync'] as bool?,
         autoScreenshotEnabled: map['auto_screenshot_enabled'] as bool?,
@@ -1158,6 +1164,7 @@ class ConfigExportService {
     final darkModePatternStyle = prefs.getString('darkModePatternStyle');
     final compactAmount = prefs.getBool('compactAmount');
     final showTransactionTime = prefs.getBool('showTransactionTime');
+    final incomeExpenseColorScheme = prefs.getBool('incomeExpenseColorScheme');
     final cloudServiceType = prefs.getString('cloud_active_type');
     final autoSync = prefs.getBool('auto_sync');
     final autoScreenshotEnabled = prefs.getBool('auto_screenshot_billing_enabled');
@@ -1195,6 +1202,7 @@ class ConfigExportService {
         darkModePatternStyle != null ||
         compactAmount != null ||
         showTransactionTime != null ||
+        incomeExpenseColorScheme != null ||
         cloudServiceType != null ||
         autoSync != null ||
         autoScreenshotEnabled != null ||
@@ -1215,6 +1223,7 @@ class ConfigExportService {
         darkModePatternStyle: darkModePatternStyle,
         compactAmount: compactAmount,
         showTransactionTime: showTransactionTime,
+        incomeExpenseColorScheme: incomeExpenseColorScheme,
         cloudServiceType: cloudServiceType,
         autoSync: autoSync,
         autoScreenshotEnabled: autoScreenshotEnabled,
@@ -1952,6 +1961,9 @@ class ConfigExportService {
       }
       if (settings.showTransactionTime != null) {
         await prefs.setBool('showTransactionTime', settings.showTransactionTime!);
+      }
+      if (settings.incomeExpenseColorScheme != null) {
+        await prefs.setBool('incomeExpenseColorScheme', settings.incomeExpenseColorScheme!);
       }
 
       // 云服务

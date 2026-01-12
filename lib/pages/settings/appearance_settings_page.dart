@@ -135,7 +135,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
                       AppListTile(
                         leading: Icons.palette_outlined,
                         title: l10n.appearanceColorScheme,
-                        subtitle: ref.watch(chineseColorSchemeProvider)
+                        subtitle: ref.watch(incomeExpenseColorSchemeProvider)
                             ? l10n.appearanceColorSchemeOn
                             : l10n.appearanceColorSchemeOff,
                         onTap: () => _showColorSchemeDialog(context, ref, l10n),
@@ -457,7 +457,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
 
   /// 显示收支颜色方案选择对话框
   void _showColorSchemeDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
-    final currentScheme = ref.read(chineseColorSchemeProvider);
+    final currentScheme = ref.read(incomeExpenseColorSchemeProvider);
 
     showDialog(
       context: context,
@@ -527,7 +527,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
           ? Icon(Icons.check, color: primaryColor)
           : null,
       onTap: () {
-        ref.read(chineseColorSchemeProvider.notifier).state = value;
+        ref.read(incomeExpenseColorSchemeProvider.notifier).state = value;
         Navigator.pop(context);
       },
     );

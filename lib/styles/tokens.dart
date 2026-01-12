@@ -427,19 +427,19 @@ class BeeTokens {
   static Color chartTransfer(BuildContext context) => info(context);
 
   /// 收入颜色（动态方案，根据用户设置）
-  /// - 国际方案：绿色
-  /// - 中国方案：红色
+  /// - true：红色
+  /// - false：绿色
   static Color incomeColor(BuildContext context, WidgetRef ref) {
-    final useChineseScheme = ref.watch(chineseColorSchemeProvider);
-    return useChineseScheme ? error(context) : success(context);
+    final redForIncome = ref.watch(incomeExpenseColorSchemeProvider);
+    return redForIncome ? error(context) : success(context);
   }
 
   /// 支出颜色（动态方案，根据用户设置）
-  /// - 国际方案：红色
-  /// - 中国方案：绿色
+  /// - true：绿色
+  /// - false：红色
   static Color expenseColor(BuildContext context, WidgetRef ref) {
-    final useChineseScheme = ref.watch(chineseColorSchemeProvider);
-    return useChineseScheme ? success(context) : error(context);
+    final redForIncome = ref.watch(incomeExpenseColorSchemeProvider);
+    return redForIncome ? success(context) : error(context);
   }
 
   // ========== 遮罩层 Token (Overlay) ==========
