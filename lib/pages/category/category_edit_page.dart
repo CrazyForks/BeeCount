@@ -762,7 +762,8 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       final croppedFile = await ImageCropper().cropImage(
         sourcePath: image.path,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-        compressQuality: 90,
+        compressQuality: 100,
+        compressFormat: ImageCompressFormat.png,
         maxWidth: 512,
         maxHeight: 512,
         uiSettings: [
@@ -839,7 +840,8 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       setState(() => _isPickingImage = false);
       logger.error('CategoryEditPage', '选择图片时出错', e, stackTrace);
       if (!mounted) return;
-      showToast(context, '${AppLocalizations.of(context).categoryCustomIconError}\n错误: $e');
+      showToast(context,
+          '${AppLocalizations.of(context).categoryCustomIconError}\n错误: $e');
     }
   }
 
