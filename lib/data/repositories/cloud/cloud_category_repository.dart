@@ -670,14 +670,35 @@ class CloudCategoryRepository implements CategoryRepository {
       orderBy: 'sort_order',
     );
 
-    // 获取交易数量统计
-    final counts = await getAllCategoryTransactionCounts();
+    // 获取交易数量统计（直接交易数）
+    final directCounts = await getAllCategoryTransactionCounts();
 
-    return categories.map((data) {
+    // 构建分类映射
+    final categoryMap = <int, Category>{};
+    for (final data in categories) {
       final category = _categoryFromJson(data);
-      final count = counts[category.id] ?? 0;
-      return (category: category, transactionCount: count);
-    }).toList();
+      categoryMap[category.id] = category;
+    }
+
+    // 计算包含子分类的总交易数
+    final results = <({Category category, int transactionCount})>[];
+    for (final data in categories) {
+      final category = _categoryFromJson(data);
+      var totalCount = directCounts[category.id] ?? 0;
+
+      // 如果是父分类（level=1），累加所有子分类的交易数
+      if (category.level == 1) {
+        for (final child in categoryMap.values) {
+          if (child.parentId == category.id && child.level == 2) {
+            totalCount += directCounts[child.id] ?? 0;
+          }
+        }
+      }
+
+      results.add((category: category, transactionCount: totalCount));
+    }
+
+    return results;
   }
 
   // ============================================

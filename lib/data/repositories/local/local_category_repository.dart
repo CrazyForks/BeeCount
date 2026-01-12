@@ -524,7 +524,9 @@ class LocalCategoryRepository implements CategoryRepository {
     ).watch()) {
       final startTime = DateTime.now();
       final results = <({Category category, int transactionCount})>[];
+      final categoryMap = <int, ({Category category, int directCount})>{};
 
+      // 第一遍：构建分类映射，记录直接交易数
       for (final row in rows) {
         final category = Category(
           id: row.read<int>('category_id'),
@@ -539,8 +541,24 @@ class LocalCategoryRepository implements CategoryRepository {
           communityIconId: row.read<String?>('category_community_icon_id'),
         );
         final directCount = row.read<int>('transaction_count');
+        categoryMap[category.id] = (category: category, directCount: directCount);
+      }
 
-        results.add((category: category, transactionCount: directCount));
+      // 第二遍：计算包含子分类的总交易数
+      for (final entry in categoryMap.values) {
+        final category = entry.category;
+        var totalCount = entry.directCount;
+
+        // 如果是父分类（level=1），累加所有子分类的交易数
+        if (category.level == 1) {
+          for (final child in categoryMap.values) {
+            if (child.category.parentId == category.id && child.category.level == 2) {
+              totalCount += child.directCount;
+            }
+          }
+        }
+
+        results.add((category: category, transactionCount: totalCount));
       }
 
       final totalTime = DateTime.now().difference(startTime);

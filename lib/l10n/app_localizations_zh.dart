@@ -1578,6 +1578,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get categoryClearUnusedListTitle => '将被删除的分类：';
+
+  @override
   String get categoryClearUnusedEmpty => '没有未使用的分类';
 
   @override
@@ -6859,6 +6862,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String categoryClearUnusedMessage(Object count) {
     return '確定要刪除 $count 個未使用的分類嗎？此操作無法撤銷。';
   }
+
+  @override
+  String get categoryClearUnusedListTitle => '將被刪除的分類：';
 
   @override
   String get categoryClearUnusedEmpty => '沒有未使用的分類';

@@ -2994,6 +2994,12 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete {count} unused categories? This action cannot be undone.'**
   String categoryClearUnusedMessage(Object count);
 
+  /// No description provided for @categoryClearUnusedListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories to be deleted:'**
+  String get categoryClearUnusedListTitle;
+
   /// No description provided for @categoryClearUnusedEmpty.
   ///
   /// In en, this message translates to:

@@ -1578,6 +1578,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get categoryClearUnusedListTitle => 'Categories to be deleted:';
+
+  @override
   String get categoryClearUnusedEmpty => 'No unused categories';
 
   @override

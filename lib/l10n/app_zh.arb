@@ -630,6 +630,7 @@
       }
     }
   },
+  "categoryClearUnusedListTitle": "将被删除的分类：",
   "categoryClearUnusedEmpty": "没有未使用的分类",
   "categoryClearUnusedSuccess": "已删除 {count} 个分类",
   "@categoryClearUnusedSuccess": {

@@ -534,6 +534,7 @@
   "categoryClearUnusedEmpty": "沒有未使用的分類",
   "categoryClearUnusedFailed": "清空失敗",
   "categoryClearUnusedMessage": "確定要刪除 {count} 個未使用的分類嗎？此操作無法撤銷。",
+  "categoryClearUnusedListTitle": "將被刪除的分類：",
   "categoryClearUnusedSuccess": "已刪除 {count} 個分類",
   "categoryClearUnusedTitle": "清空未使用分類",
   "categoryCreated": "分類\"{name}\"已建立",

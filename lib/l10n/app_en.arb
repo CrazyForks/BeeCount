@@ -678,6 +678,7 @@
   "categoryClearUnused": "Clear Unused Categories",
   "categoryClearUnusedTitle": "Clear Unused Categories",
   "categoryClearUnusedMessage": "Are you sure you want to delete {count} unused categories? This action cannot be undone.",
+  "categoryClearUnusedListTitle": "Categories to be deleted:",
   "categoryClearUnusedEmpty": "No unused categories",
   "categoryClearUnusedSuccess": "Deleted {count} categories",
   "categoryClearUnusedFailed": "Clear failed",

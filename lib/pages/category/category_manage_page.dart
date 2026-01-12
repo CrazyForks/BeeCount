@@ -437,7 +437,7 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
     final l10n = AppLocalizations.of(context);
     final categoriesWithCount = ref.read(categoriesWithCountProvider).valueOrNull ?? [];
 
-    // 找出交易数为0的分类
+    // 找出交易数为0的分类（统计已包含子分类交易数）
     final unusedCategories = categoriesWithCount
         .where((item) => item.transactionCount == 0)
         .toList();
@@ -447,12 +447,46 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
       return;
     }
 
+    // 收集将被删除的分类信息（包括子分类）
+    final toDeleteList = <String>[];
+    for (final item in unusedCategories) {
+      final categoryName = CategoryUtils.getDisplayName(item.category.name, context);
+      toDeleteList.add(categoryName);
+
+      // 如果是父分类，添加其所有将被删除的子分类
+      if (item.category.level == 1) {
+        final children = unusedCategories
+            .where((c) => c.category.parentId == item.category.id)
+            .toList();
+        for (final child in children) {
+          final childName = CategoryUtils.getDisplayName(child.category.name, context);
+          toDeleteList.add('  ├─ $childName');
+        }
+      }
+    }
+
     // 确认对话框
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.categoryClearUnusedTitle),
-        content: Text(l10n.categoryClearUnusedMessage(unusedCategories.length)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.categoryClearUnusedMessage(unusedCategories.length)),
+            const SizedBox(height: 16),
+            Text(
+              l10n.categoryClearUnusedListTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              toDeleteList.join('\n'),
+              style: const TextStyle(fontSize: 13),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -555,24 +589,10 @@ class _CategoryGridViewState extends ConsumerState<_CategoryGridView> {
       // 直接从内存数据判断是否有子分类
       final hasSubCategories = parentIds.contains(topItem.category.id);
 
-      // 获取所有子分类
-      final subCategories = widget.categoriesWithCount
-          .where((item) => item.category.parentId == topItem.category.id)
-          .toList();
-
-      // 计算一级分类的总交易数（自己的 + 所有子分类的）
-      int totalCount = topItem.transactionCount; // 自己的交易数
-      if (hasSubCategories) {
-        // 累加所有子分类的交易数
-        final subCategoryCounts = subCategories
-            .map((item) => item.transactionCount)
-            .fold(0, (sum, count) => sum + count);
-        totalCount += subCategoryCounts;
-      }
-
+      // transactionCount 已经包含了所有子分类的交易数，不需要再累加
       flatList.add(_CategoryItem(
         category: topItem.category,
-        transactionCount: totalCount, // 使用计算后的总数
+        transactionCount: topItem.transactionCount,
         isDefault: false,
         isSubCategory: false,
         hasSubCategories: hasSubCategories,
