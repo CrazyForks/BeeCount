@@ -29,7 +29,6 @@ class CustomIconService {
   static const int maxUploadSize = 5 * 1024 * 1024; // 5MB 上传限制
   static const int maxDimension = 2048; // 最大边长
   static const int minDimension = 64; // 最小边长
-  static const int maxIconCount = 100; // 用户图标数上限
 
   final ImagePicker _picker = ImagePicker();
 
@@ -116,18 +115,13 @@ class CustomIconService {
       // 1. 验证文件
       await validateImage(sourceFile);
 
-      // 2. 检查图标数量上限
-      if (!await canAddIcon()) {
-        throw CustomIconException('已达到图标数量上限（$maxIconCount个），请先清理不需要的图标');
-      }
-
-      // 3. 生成文件名
+      // 2. 生成文件名
       final dir = await getIconDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final fileName = '${categoryId}_$timestamp.png';
       final destPath = '${dir.path}/$fileName';
 
-      // 4. 压缩并保存（正方形裁剪）
+      // 3. 压缩并保存（正方形裁剪）
       final result = await FlutterImageCompress.compressAndGetFile(
         sourceFile.path,
         destPath,
@@ -143,7 +137,7 @@ class CustomIconService {
         throw CustomIconException('图片压缩失败');
       }
 
-      // 5. 删除源文件（如果是临时文件）
+      // 4. 删除源文件（如果是临时文件）
       if (sourceFile.path.contains('cache') ||
           sourceFile.path.contains('tmp')) {
         try {
@@ -151,9 +145,10 @@ class CustomIconService {
         } catch (_) {}
       }
 
-      // 6. 返回相对路径（用于跨设备同步）
+      // 5. 返回相对路径（用于跨设备同步）
       final relativePath = 'custom_icons/$fileName';
-      logger.info('CustomIconService', '自定义图标已保存: $destPath (相对路径: $relativePath)');
+      logger.info(
+          'CustomIconService', '自定义图标已保存: $destPath (相对路径: $relativePath)');
 
       return relativePath;
     } catch (e) {
@@ -197,11 +192,6 @@ class CustomIconService {
       }
     }
     return count;
-  }
-
-  /// 检查是否可以添加新图标
-  Future<bool> canAddIcon() async {
-    return await getIconCount() < maxIconCount;
   }
 
   /// 清理未使用的图标
@@ -250,6 +240,4 @@ class CustomIconService {
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
   }
-
 }
-
