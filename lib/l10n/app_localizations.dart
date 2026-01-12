@@ -2916,6 +2916,12 @@ abstract class AppLocalizations {
   /// **'Please select a custom icon image'**
   String get categoryCustomIconRequired;
 
+  /// No description provided for @categoryCustomIconCrop.
+  ///
+  /// In en, this message translates to:
+  /// **'Crop Icon'**
+  String get categoryCustomIconCrop;
+
   /// No description provided for @categoryDangerousOperations.
   ///
   /// In en, this message translates to:

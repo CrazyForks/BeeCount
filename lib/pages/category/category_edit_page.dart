@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/category_selector_dialog.dart';
@@ -669,7 +670,8 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
                                 width: 48,
                                 height: 48,
                                 child: Center(
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 ),
                               );
                             }
@@ -745,8 +747,6 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       final picker = ImagePicker();
       final image = await picker.pickImage(
         source: ImageSource.gallery,
-        maxWidth: 2048,
-        maxHeight: 2048,
       );
 
       if (image == null) {
@@ -754,7 +754,41 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
         return;
       }
 
-      final file = File(image.path);
+      // 在异步调用前提取需要的值
+      final l10n = AppLocalizations.of(context);
+      final primaryColor = ref.read(primaryColorProvider);
+
+      // 裁剪图片为 1:1 比例
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: image.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 90,
+        maxWidth: 512,
+        maxHeight: 512,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: l10n.categoryCustomIconCrop,
+            toolbarColor: primaryColor,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+            hideBottomControls: false,
+          ),
+          IOSUiSettings(
+            title: l10n.categoryCustomIconCrop,
+            aspectRatioLockEnabled: true,
+            resetAspectRatioEnabled: false,
+            aspectRatioPickerButtonHidden: true,
+          ),
+        ],
+      );
+
+      if (croppedFile == null) {
+        setState(() => _isPickingImage = false);
+        return;
+      }
+
+      final file = File(croppedFile.path);
       final customIconService = CustomIconService();
 
       // 验证图片
@@ -789,21 +823,23 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
           _isPickingImage = false;
         });
       } else {
-        // 新建分类：暂时使用原始路径，保存时再处理
+        // 新建分类：暂时使用裁剪后的路径，保存时再处理
         setState(() {
           _iconType = 'custom';
-          _customIconPath = image.path;
+          _customIconPath = croppedFile.path;
           _isPickingImage = false;
         });
       }
-    } on CustomIconException catch (e) {
+    } on CustomIconException catch (e, stackTrace) {
       setState(() => _isPickingImage = false);
+      logger.error('CategoryEditPage', '自定义图标异常: ${e.message}', e, stackTrace);
       if (!mounted) return;
       showToast(context, e.message);
-    } catch (e) {
+    } catch (e, stackTrace) {
       setState(() => _isPickingImage = false);
+      logger.error('CategoryEditPage', '选择图片时出错', e, stackTrace);
       if (!mounted) return;
-      showToast(context, AppLocalizations.of(context).categoryCustomIconError);
+      showToast(context, '${AppLocalizations.of(context).categoryCustomIconError}\n错误: $e');
     }
   }
 

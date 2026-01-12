@@ -610,6 +610,7 @@
   "categoryCustomIconTapToChange": "点击更换图片",
   "categoryCustomIconError": "选择图片时出错",
   "categoryCustomIconRequired": "请选择自定义图标图片",
+  "categoryCustomIconCrop": "裁剪图标",
   "categoryDangerousOperations": "危险操作",
   "categoryDeleteTitle": "删除分类",
   "categoryDeleteSubtitle": "删除后无法恢复",

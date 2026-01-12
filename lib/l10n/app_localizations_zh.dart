@@ -1531,6 +1531,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryCustomIconRequired => '请选择自定义图标图片';
 
   @override
+  String get categoryCustomIconCrop => '裁剪图标';
+
+  @override
   String get categoryDangerousOperations => '危险操作';
 
   @override
@@ -6821,6 +6824,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryCustomIconRequired => '請選擇自訂圖示圖片';
+
+  @override
+  String get categoryCustomIconCrop => '裁剪圖示';
 
   @override
   String get categoryDangerousOperations => '危險操作';

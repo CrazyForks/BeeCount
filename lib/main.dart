@@ -18,6 +18,7 @@ import 'services/platform/image_share_handler_service.dart';
 import 'services/platform/app_link_service.dart';
 import 'services/system/logger_service.dart';
 import 'services/data/migration_service.dart';
+import 'services/data/seed_service.dart';
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
@@ -80,6 +81,9 @@ Future<void> main() async {
 
   // v1.15.0: 自动执行账户独立迁移
   await _autoMigrateToV2();
+
+  // v2.7.1: 自动迁移转账记录到虚拟转账分类
+  await _autoMigrateTransferTransactions();
 
   // 注册小组件交互回调
   try {
@@ -265,6 +269,26 @@ Future<void> _autoMigrateToV2() async {
     await db.close();
   } catch (e) {
     logger.error('App', '❌ [v1.15.0] 迁移检测失败', e);
+    // 不抛出异常，避免影响应用启动
+  }
+}
+
+/// v2.7.1: 自动迁移转账记录到虚拟转账分类
+///
+/// 在应用启动时检查是否有未迁移的转账记录，如果有则自动执行迁移
+/// 这对云同步下载的旧数据特别重要
+Future<void> _autoMigrateTransferTransactions() async {
+  try {
+    logger.info('App', '🔍 [v2.7.1] 检查转账记录迁移状态...');
+    final db = BeeDatabase();
+
+    // 使用 SeedService 的幂等迁移方法
+    await SeedService.migrateTransferTransactions(db);
+
+    await db.close();
+    logger.info('App', '✅ [v2.7.1] 转账记录迁移检查完成');
+  } catch (e, stackTrace) {
+    logger.error('App', '❌ [v2.7.1] 转账记录迁移失败', e, stackTrace);
     // 不抛出异常，避免影响应用启动
   }
 }

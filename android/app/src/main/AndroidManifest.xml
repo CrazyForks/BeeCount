@@ -71,7 +71,13 @@
                 <data android:scheme="beecount"/>
             </intent-filter>
         </activity>
-        
+
+        <!-- Image cropper activity -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <!-- FileProvider for sharing APK files on Android 7.0+ -->
         <provider
             android:name="androidx.core.content.FileProvider"

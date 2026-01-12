@@ -594,6 +594,7 @@
   "categoryCustomIconTapToChange": "點擊更換圖片",
   "categoryCustomIconError": "選擇圖片時出錯",
   "categoryCustomIconRequired": "請選擇自訂圖示圖片",
+  "categoryCustomIconCrop": "裁剪圖示",
   "categoryImport": "匯入分類",
   "categoryImportFailed": "匯入失敗",
   "categoryImportInvalidFile": "請選擇 YAML 配置檔案",

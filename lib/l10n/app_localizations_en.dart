@@ -1531,6 +1531,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryCustomIconRequired => 'Please select a custom icon image';
 
   @override
+  String get categoryCustomIconCrop => 'Crop Icon';
+
+  @override
   String get categoryDangerousOperations => 'Dangerous Operations';
 
   @override

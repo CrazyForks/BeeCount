@@ -43,6 +43,7 @@ dependencies:
   google_mlkit_text_recognition: ^0.15.0
   image_picker: ^1.1.2
   flutter_image_compress: ^2.3.0
+  image_cropper: 8.0.2
   gbk_codec: ^0.4.0
   app_links: ^6.4.1
   record: ^5.1.2
@@ -86,6 +87,8 @@ dev_dependencies:
 dependency_overrides:
   # Fix record_linux compatibility issue (we target iOS/Android only)
   record_platform_interface: 1.2.0
+  # Fix image_cropper compatibility with Flutter 3.27.3
+  image_cropper_platform_interface: 7.1.0
 
 flutter_launcher_icons:
   android: true

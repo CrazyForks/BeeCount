@@ -665,6 +665,7 @@
   "categoryCustomIconTapToChange": "Tap to change image",
   "categoryCustomIconError": "Error selecting image",
   "categoryCustomIconRequired": "Please select a custom icon image",
+  "categoryCustomIconCrop": "Crop Icon",
   "categoryDangerousOperations": "Dangerous Operations",
   "categoryDeleteTitle": "Delete Category",
   "categoryDeleteSubtitle": "Cannot be recovered after deletion",
