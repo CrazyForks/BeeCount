@@ -290,9 +290,9 @@ class _CategoryMigrationPageState extends ConsumerState<CategoryMigrationPage> {
       context,
       title: AppLocalizations.of(context).categoryMigrationConfirmTitle,
       message: AppLocalizations.of(context).categoryMigrationConfirmMessage(
-        CategoryUtils.getDisplayName(fromCategory.name, context),
-        migrationInfo.transactionCount.toString(),
-        CategoryUtils.getDisplayName(toCategory.name, context),
+        migrationInfo.transactionCount.toString(),  // count
+        CategoryUtils.getDisplayName(fromCategory.name, context),  // fromName
+        CategoryUtils.getDisplayName(toCategory.name, context),  // toName
       ),
       okLabel: AppLocalizations.of(context).categoryMigrationConfirmOk,
       cancelLabel: AppLocalizations.of(context).commonCancel,
