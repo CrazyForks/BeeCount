@@ -11,6 +11,7 @@ import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/transaction_edit_utils.dart';
 import '../../services/data/category_service.dart';
+import '../../widgets/category_icon.dart';
 
 /// 账户详情页面
 /// 显示账户的统计信息和相关交易
@@ -32,6 +33,7 @@ class AccountDetailPage extends ConsumerWidget {
     final currentLedgerAsync = ref.watch(currentLedgerProvider);
     final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
     final categoriesAsync = ref.watch(categoriesProvider);
+    final transferCategory = ref.watch(transferCategoryProvider).valueOrNull;
 
     return Scaffold(
       backgroundColor: BeeTokens.scaffoldBackground(context),
@@ -309,6 +311,7 @@ class _TransactionTile extends ConsumerWidget {
     // 交易类型颜色
     Color amountColor;
     final l10n = AppLocalizations.of(context);
+    final transferCategory = ref.watch(transferCategoryProvider).valueOrNull;
 
     // 判断转账方向（在账户详情页中）
     bool isTransferOut = false;
@@ -334,12 +337,16 @@ class _TransactionTile extends ConsumerWidget {
     }
 
     // v1.15.0: 获取分类信息
-    final category = transaction.categoryId != null
-        ? categories.cast<db.Category?>().firstWhere(
-              (c) => c?.id == transaction.categoryId,
-              orElse: () => null,
-            )
-        : null;
+    // 对于转账，category_id 现在指向虚拟转账分类，但 categories 列表不包含它
+    // 所以对于转账，使用 transferCategory
+    final category = transaction.type == 'transfer'
+        ? transferCategory
+        : (transaction.categoryId != null
+            ? categories.cast<db.Category?>().firstWhere(
+                  (c) => c?.id == transaction.categoryId,
+                  orElse: () => null,
+                )
+            : null);
 
     // v1.15.0: 标题显示逻辑
     String displayTitle;
@@ -402,20 +409,17 @@ class _TransactionTile extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            // v1.15.0: 显示分类图标（转账显示特殊图标）
+            // v1.15.0: 显示分类图标（与 TransactionListItem 保持一致的样式）
             Container(
-              width: 40.0.scaled(context, ref),
-              height: 40.0.scaled(context, ref),
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
                 color: primaryColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                transaction.type == 'transfer'
-                    ? Icons.swap_horiz
-                    : CategoryService.getCategoryIcon(category?.icon),
-                color: primaryColor,
-                size: 20.0.scaled(context, ref),
+              child: CategoryIconWidget(
+                category: category,
+                size: 18,
               ),
             ),
             SizedBox(width: 12.0.scaled(context, ref)),

@@ -480,10 +480,8 @@ class TransactionListState extends ConsumerState<TransactionList> {
                       final attachmentCount = _getAttachmentCountForTransaction(it.t.id);
 
                       return TransactionListItem(
-                        icon: isTransfer
-                          ? Icons.swap_horiz
-                          : getCategoryIconData(category: it.category, categoryName: categoryName),
-                        category: isTransfer ? null : it.category,
+                        icon: getCategoryIconData(category: it.category, categoryName: categoryName),
+                        category: it.category,
                         title: isTransfer
                           ? (subtitle.isNotEmpty ? subtitle : AppLocalizations.of(context).transferTitle)
                           : (subtitle.isNotEmpty ? subtitle : categoryName),

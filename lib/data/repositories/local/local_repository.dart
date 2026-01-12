@@ -508,6 +508,9 @@ class LocalRepository extends BaseRepository {
   @override
   Future<List<String>> getCustomIconPaths() => _categoryRepo.getCustomIconPaths();
 
+  @override
+  Future<Category> getTransferCategory() => _categoryRepo.getTransferCategory();
+
   // ============================================
   // AccountRepository 接口实现 - 委托给 LocalAccountRepository
   // ============================================

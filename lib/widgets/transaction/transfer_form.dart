@@ -124,6 +124,10 @@ class _TransferFormState extends ConsumerState<TransferForm> {
         editingTransactionId: widget.editingTransactionId,
         onSubmit: (result) async {
           final attachmentService = ref.read(attachmentServiceProvider);
+          // 获取虚拟转账分类ID
+          final transferCategory = await ref.read(transferCategoryProvider.future);
+          final transferCategoryId = transferCategory.id;
+
           try {
             if (widget.editingTransactionId != null) {
               // 编辑模式：更新现有转账记录
@@ -131,7 +135,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
                 id: widget.editingTransactionId!,
                 type: 'transfer',
                 amount: result.amount,
-                categoryId: null, // 转账清空分类
+                categoryId: transferCategoryId, // 使用虚拟转账分类ID
                 note: result.note,
                 happenedAt: result.date,
                 accountId: _fromAccountId,
@@ -182,6 +186,7 @@ class _TransferFormState extends ConsumerState<TransferForm> {
                 ledgerId: ledgerId,
                 type: 'transfer',
                 amount: result.amount,
+                categoryId: transferCategoryId, // 使用虚拟转账分类ID
                 accountId: _fromAccountId,
                 toAccountId: _toAccountId,
                 note: result.note,

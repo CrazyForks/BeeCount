@@ -150,4 +150,8 @@ abstract class CategoryRepository {
 
   /// 获取所有使用自定义图标的分类路径列表
   Future<List<String>> getCustomIconPaths();
+
+  /// 获取虚拟转账分类
+  /// 如果不存在则创建
+  Future<Category> getTransferCategory();
 }

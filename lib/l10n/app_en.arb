@@ -1863,6 +1863,8 @@
   },
   "commonNotice": "Notice",
   "transferTitle": "Transfer",
+  "transferIconSettings": "Transfer Icon Settings",
+  "transferIconSettingsDesc": "Customize the display icon for transfer records",
   "transferFromAccount": "From Account",
   "transferToAccount": "To Account",
   "transferSelectAccount": "Select Account",

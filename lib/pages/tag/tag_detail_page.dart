@@ -258,7 +258,10 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
     );
   }
 
-  Widget _buildTransactionsList(List<db.Transaction> transactions, AppLocalizations l10n) {
+  Widget _buildTransactionsList(
+    List<db.Transaction> transactions,
+    AppLocalizations l10n,
+  ) {
     if (transactions.isEmpty) {
       return AppEmpty(
         text: l10n.tagDetailNoTransactions,
@@ -302,10 +305,8 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
               // 和首页保持一致：有备注显示备注，无备注显示分类名称
               final hasNote = transaction.note?.isNotEmpty == true;
               return TransactionListItem(
-                icon: isTransfer
-                    ? Icons.swap_horiz
-                    : getCategoryIconData(category: category, categoryName: categoryName),
-                category: isTransfer ? null : category,
+                icon: getCategoryIconData(category: category, categoryName: categoryName),
+                category: category,
                 title: hasNote ? transaction.note! : categoryName,
                 categoryName: hasNote ? null : categoryName,
                 amount: transaction.amount,

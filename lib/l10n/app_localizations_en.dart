@@ -4277,6 +4277,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transferTitle => 'Transfer';
 
   @override
+  String get transferIconSettings => 'Transfer Icon Settings';
+
+  @override
+  String get transferIconSettingsDesc => 'Customize the display icon for transfer records';
+
+  @override
   String get transferFromAccount => 'From Account';
 
   @override

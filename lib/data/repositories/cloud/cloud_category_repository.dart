@@ -664,10 +664,13 @@ class CloudCategoryRepository implements CategoryRepository {
 
   Future<List<({Category category, int transactionCount})>>
       _fetchCategoriesWithCount() async {
-    // 获取所有分类
+    // 获取所有分类（过滤掉虚拟转账分类）
     final categories = await supabase.databaseService!.query(
       table: 'categories',
       orderBy: 'sort_order',
+      filters: [
+        QueryFilter(column: 'kind', operator: 'neq', value: 'transfer'),
+      ],
     );
 
     // 获取交易数量统计（直接交易数）
@@ -769,5 +772,35 @@ class CloudCategoryRepository implements CategoryRepository {
   @override
   Future<List<String>> getCustomIconPaths() async {
     throw UnimplementedError('云端获取自定义图标路径暂不支持');
+  }
+
+  @override
+  Future<Category> getTransferCategory() async {
+    // 查找现有的转账分类
+    final categories = await supabase.databaseService!.query(
+      table: 'categories',
+      filters: [
+        QueryFilter(column: 'kind', operator: 'eq', value: 'transfer'),
+      ],
+    );
+
+    if (categories.isNotEmpty) {
+      return _categoryFromJson(categories.first);
+    }
+
+    // 不存在则创建（理论上seed时已创建，这里是兜底逻辑）
+    logger.warning('CloudCategoryRepository', '转账分类不存在，正在创建...');
+    final result = await supabase.databaseService!.insert(
+      table: 'categories',
+      data: {
+        'name': '转账',
+        'kind': 'transfer',
+        'icon': 'swap_horiz',
+        'sort_order': -1,
+        'level': 1,
+      },
+    );
+
+    return _categoryFromJson(result);
   }
 }

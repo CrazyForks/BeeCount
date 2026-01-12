@@ -4277,6 +4277,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get transferTitle => '转账';
 
   @override
+  String get transferIconSettings => '转账图标设置';
+
+  @override
+  String get transferIconSettingsDesc => '自定义转账记录的显示图标';
+
+  @override
   String get transferFromAccount => '转出账户';
 
   @override

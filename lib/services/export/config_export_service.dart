@@ -1324,12 +1324,20 @@ class ConfigExportService {
     CategoriesConfig? categoriesConfig;
     if (repository != null && (options.categories || requiredCategoryIds.isNotEmpty)) {
       try {
-        // 获取所有分类（收入和支出）
+        // 获取所有分类（收入、支出和转账）
         final expenseCategories = await repository.getTopLevelCategories('expense');
         final incomeCategories = await repository.getTopLevelCategories('income');
         final categoriesList = <Category>[];
         categoriesList.addAll(expenseCategories);
         categoriesList.addAll(incomeCategories);
+
+        // 获取虚拟转账分类
+        try {
+          final transferCategory = await repository.getTransferCategory();
+          categoriesList.add(transferCategory);
+        } catch (e) {
+          // 转账分类不存在时忽略
+        }
 
         // 获取所有子分类
         for (final category in [...expenseCategories, ...incomeCategories]) {
@@ -2024,6 +2032,32 @@ class ConfigExportService {
         // 获取现有分类名称集合（用于去重）
         final existingCategories = await repository.getAllCategories();
         final existingNames = existingCategories.map((c) => c.name.toLowerCase()).toSet();
+
+        // 特殊处理：更新虚拟转账分类（如果存在）
+        final transferItem = items.firstWhere(
+          (item) => item.kind == 'transfer',
+          orElse: () => CategoryItem(name: '', kind: '', sortOrder: 0, level: 1),
+        );
+        if (transferItem.name.isNotEmpty) {
+          try {
+            final existingTransfer = existingCategories.firstWhere(
+              (c) => c.kind == 'transfer',
+              orElse: () => throw Exception('转账分类不存在'),
+            );
+            // 更新现有转账分类的图标设置
+            await repository.updateCategoryIcon(
+              existingTransfer.id,
+              iconType: transferItem.iconType ?? 'material',
+              icon: transferItem.icon,
+              customIconPath: transferItem.customIconPath,
+              communityIconId: transferItem.communityIconId,
+            );
+            logger.info('ConfigImport', '转账分类图标已更新');
+          } catch (e) {
+            // 转账分类不存在，将在后续插入逻辑中创建
+            logger.debug('ConfigImport', '转账分类不存在，将创建: $e');
+          }
+        }
 
         // 第一步：过滤并批量插入一级分类
         final level1Items = items.where((item) => item.parentName == null).toList();

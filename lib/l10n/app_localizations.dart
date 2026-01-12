@@ -8148,6 +8148,18 @@ abstract class AppLocalizations {
   /// **'Transfer'**
   String get transferTitle;
 
+  /// No description provided for @transferIconSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Icon Settings'**
+  String get transferIconSettings;
+
+  /// No description provided for @transferIconSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize the display icon for transfer records'**
+  String get transferIconSettingsDesc;
+
   /// No description provided for @transferFromAccount.
   ///
   /// In en, this message translates to:

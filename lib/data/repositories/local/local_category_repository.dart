@@ -517,6 +517,7 @@ class LocalCategoryRepository implements CategoryRepository {
         COALESCE(COUNT(t.id), 0) as transaction_count
       FROM categories c
       LEFT JOIN transactions t ON t.category_id = c.id
+      WHERE c.kind != 'transfer'
       GROUP BY c.id, c.name, c.kind, c.icon, c.sort_order, c.parent_id, c.level, c.icon_type, c.custom_icon_path, c.community_icon_id
       ORDER BY c.sort_order
       ''',
@@ -629,5 +630,32 @@ class LocalCategoryRepository implements CategoryRepository {
         .where((c) => c.customIconPath != null)
         .map((c) => c.customIconPath!)
         .toList();
+  }
+
+  @override
+  Future<Category> getTransferCategory() async {
+    // 查找现有的转账分类
+    final existing = await (db.select(db.categories)
+          ..where((c) => c.kind.equals('transfer')))
+        .getSingleOrNull();
+
+    if (existing != null) {
+      return existing;
+    }
+
+    // 不存在则创建（理论上seed时已创建，这里是兜底逻辑）
+    logger.warning('LocalCategoryRepository', '转账分类不存在，正在创建...');
+    final id = await db.into(db.categories).insert(
+      CategoriesCompanion.insert(
+        name: '转账', // 使用中文默认名称
+        kind: 'transfer',
+        icon: const d.Value('swap_horiz'),
+        sortOrder: const d.Value(-1),
+        level: const d.Value(1),
+      ),
+    );
+
+    final created = await getCategoryById(id);
+    return created!;
   }
 }

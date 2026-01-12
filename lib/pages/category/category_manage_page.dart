@@ -80,6 +80,7 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
               Tab(text: l10n.categoryIncome),
             ],
           ),
+          _buildTransferIconSetting(context, l10n, primaryColor),
           Expanded(
             child: categoriesWithCountAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -530,6 +531,90 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
     final repo = ref.read(repositoryProvider);
     final ids = unusedCategories.map((item) => item.category.id).toList();
     await repo.deleteCategoriesByIds(ids);
+  }
+
+  /// 构建转账图标设置区域
+  Widget _buildTransferIconSetting(BuildContext context, AppLocalizations l10n, Color primaryColor) {
+    return FutureBuilder<db.Category>(
+      future: ref.read(repositoryProvider).getTransferCategory(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox.shrink();
+        }
+
+        final transferCategory = snapshot.data!;
+
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: BeeTokens.surface(context),
+            border: Border.all(
+              color: BeeTokens.isDark(context)
+                ? primaryColor.withValues(alpha: 0.3)
+                : BeeTokens.border(context),
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => CategoryEditPage(
+                      category: transferCategory,
+                      kind: 'transfer',
+                    ),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    CategoryIconWidget(
+                      category: transferCategory,
+                      size: 28,
+                      showBackground: true,
+                      circular: true,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.transferIconSettings,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: BeeTokens.textPrimary(context),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            l10n.transferIconSettingsDesc,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: BeeTokens.textSecondary(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: BeeTokens.iconSecondary(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

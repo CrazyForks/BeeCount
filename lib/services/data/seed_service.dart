@@ -742,6 +742,75 @@ class SeedService {
       logger.info('seed', '跳过分类创建');
     }
 
+    // 3. 创建虚拟转账分类（用于自定义转账图标）
+    await createTransferCategory(db, l10n);
+    logger.info('seed', '已创建虚拟转账分类');
+
+    // 4. 迁移旧转账记录的 category_id
+    await migrateTransferTransactions(db);
+    logger.info('seed', '已迁移转账记录');
+
     logger.info('seed', '数据库初始化完成');
+  }
+
+  /// 创建虚拟转账分类
+  /// 此分类不在普通分类列表中显示，仅用于存储转账的自定义图标
+  static Future<void> createTransferCategory(
+    BeeDatabase db,
+    AppLocalizations l10n,
+  ) async {
+    // 检查是否已存在
+    final existing = await (db.select(db.categories)
+      ..where((t) => t.kind.equals('transfer')))
+        .getSingleOrNull();
+
+    if (existing != null) {
+      logger.info('seed_service', '虚拟转账分类已存在，跳过创建');
+      return;
+    }
+
+    await db.into(db.categories).insert(
+      CategoriesCompanion.insert(
+        name: l10n.transferTitle, // 使用国际化的"转账"
+        kind: 'transfer', // 特殊kind标识虚拟分类
+        icon: const Value('swap_horiz'), // 默认图标
+        sortOrder: const Value(-1), // 使用负数排序，确保不会影响正常分类
+        level: const Value(1),
+      ),
+    );
+
+    logger.info('seed_service', '虚拟转账分类已创建');
+  }
+
+  /// 迁移历史转账记录的 category_id
+  /// 将所有 type='transfer' 且 category_id 为 NULL 的记录设置为虚拟转账分类 ID
+  /// 此方法设计为幂等，可以多次调用
+  static Future<void> migrateTransferTransactions(BeeDatabase db) async {
+    // 获取虚拟转账分类
+    final transferCategory = await (db.select(db.categories)
+      ..where((t) => t.kind.equals('transfer')))
+        .getSingleOrNull();
+
+    if (transferCategory == null) {
+      logger.warning('seed_service', '虚拟转账分类不存在，跳过迁移');
+      return;
+    }
+
+    // 只更新 category_id 为 NULL 或不等于转账分类ID 的转账记录
+    // 使用原始 SQL 以支持复杂的 WHERE 条件
+    final affected = await db.customUpdate(
+      'UPDATE transactions SET category_id = ?1 WHERE type = ?2 AND (category_id IS NULL OR category_id != ?1)',
+      variables: [
+        Variable<int>(transferCategory.id),
+        const Variable<String>('transfer'),
+      ],
+      updates: {db.transactions},
+    );
+
+    if (affected > 0) {
+      logger.info('seed_service', '已迁移 $affected 条转账记录的分类ID');
+    } else {
+      logger.debug('seed_service', '无需迁移转账记录（已是最新）');
+    }
   }
 }

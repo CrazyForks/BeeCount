@@ -934,6 +934,9 @@ class CloudRepository extends BaseRepository {
   Future<List<String>> getCustomIconPaths() => _category.getCustomIconPaths();
 
   @override
+  Future<Category> getTransferCategory() => _category.getTransferCategory();
+
+  @override
   Future<void> batchInsertRecurringTransactions(
           List<RecurringTransactionsCompanion> items) =>
       _recurringTransaction.batchInsertRecurringTransactions(items);

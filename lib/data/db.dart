@@ -195,7 +195,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 13; // v13: 分类自定义图标支持
+  int get schemaVersion => 14; // v14: 迁移转账记录到虚拟转账分类
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -459,6 +459,13 @@ class BeeDatabase extends _$BeeDatabase {
             }
 
             print('[DB Migration] v13 迁移完成');
+          }
+          if (from < 14) {
+            // v14: 迁移转账记录到虚拟转账分类
+            print('[DB Migration] 开始迁移到 v14: 迁移转账记录到虚拟转账分类');
+            await SeedService.migrateTransferTransactions(this);
+            logger.info('DB', 'v14 迁移完成: 转账记录已关联到虚拟转账分类');
+            print('[DB Migration] v14 迁移完成');
           }
         },
       );

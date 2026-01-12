@@ -449,10 +449,8 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                   .toList();
 
               return TransactionListItem(
-                icon: isTransfer
-                    ? Icons.swap_horiz
-                    : getCategoryIconData(category: category, categoryName: categoryName),
-                category: isTransfer ? null : category,
+                icon: getCategoryIconData(category: category, categoryName: categoryName),
+                category: category,
                 title: isTransfer
                     ? (subtitle.isNotEmpty ? subtitle : l10n.transferTitle)
                     : (subtitle.isNotEmpty ? subtitle : categoryName),
@@ -546,11 +544,8 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                   .toList();
 
               return TransactionListItem(
-                icon: isTransfer
-                    ? Icons.swap_horiz
-                    : getCategoryIconData(
-                        category: category, categoryName: categoryName),
-                category: isTransfer ? null : category,
+                icon: getCategoryIconData(category: category, categoryName: categoryName),
+                category: category,
                 title: isTransfer
                     ? (subtitle.isNotEmpty ? subtitle : l10n.transferTitle)
                     : (subtitle.isNotEmpty ? subtitle : categoryName),

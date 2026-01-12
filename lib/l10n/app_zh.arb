@@ -1823,6 +1823,8 @@
   },
   "commonNotice": "提示",
   "transferTitle": "转账",
+  "transferIconSettings": "转账图标设置",
+  "transferIconSettingsDesc": "自定义转账记录的显示图标",
   "transferFromAccount": "转出账户",
   "transferToAccount": "转入账户",
   "transferSelectAccount": "选择账户",

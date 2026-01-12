@@ -148,6 +148,11 @@ final categoriesWithCountProvider = StreamProvider.autoDispose<List<({Category c
   return repo.watchCategoriesWithCount();
 });
 
+// 虚拟转账分类Provider（全局缓存，用于获取转账图标）
+final transferCategoryProvider = FutureProvider<Category>((ref) async {
+  final repo = ref.watch(repositoryProvider);
+  return await repo.getTransferCategory();
+});
 
 // 重复交易Provider（按账本过滤）
 // 注意：此 provider 已废弃，请使用 allRecurringTransactionsProvider 并在业务层过滤

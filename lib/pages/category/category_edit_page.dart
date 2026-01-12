@@ -537,6 +537,11 @@ class _CategoryEditPageState extends ConsumerState<CategoryEditPage> {
       // 刷新分类列表
       ref.invalidate(categoriesProvider);
 
+      // 如果修改的是虚拟转账分类，也刷新 transferCategoryProvider
+      if (isEditing && widget.category!.kind == 'transfer') {
+        ref.invalidate(transferCategoryProvider);
+      }
+
       if (!mounted) return;
       Navigator.of(context).pop(true); // 返回true表示有更新
     } catch (e) {
