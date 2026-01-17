@@ -5,11 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
+import '../providers/ai_config_providers.dart';
 import '../services/system/logger_service.dart';
-import '../services/ai/ai_constants.dart';
 import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
 import '../services/billing/post_processor.dart';
@@ -28,15 +27,22 @@ class VoiceBillingHelper {
     final l10n = AppLocalizations.of(context);
 
     try {
-      // 0. 检查AI是否启用且GLM API key是否已配置
-      final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
-      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
+      // 0. 检查AI是否启用且API key是否已配置（使用新的 aiConfigProvider）
+      final aiConfig = ref.read(aiConfigProvider);
 
-      if (!aiEnabled || apiKey.isEmpty) {
+      if (!aiConfig.enabled || aiConfig.apiKey.isEmpty) {
         if (!context.mounted) return;
         showToast(context, l10n.fabActionVoiceDisabled);
         return;
+      }
+
+      // 自定义服务商还需要检查 Base URL 和默认模型
+      if (aiConfig.provider == AIServiceProvider.custom) {
+        if (aiConfig.customBaseUrl == null || aiConfig.customBaseUrl!.isEmpty) {
+          if (!context.mounted) return;
+          showToast(context, l10n.fabActionVoiceDisabled);
+          return;
+        }
       }
 
       // 1. 检查并请求麦克风权限
@@ -101,9 +107,9 @@ class VoiceBillingHelper {
       // 2. 创建录音器
       final recorder = AudioRecorder();
 
-      // 3. 准备录音文件路径
+      // 3. 准备录音文件路径（使用 wav 格式，兼容更多服务商）
       final tempDir = await getTemporaryDirectory();
-      final audioPath = '${tempDir.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      final audioPath = '${tempDir.path}/voice_${DateTime.now().millisecondsSinceEpoch}.wav';
 
       // 4. 显示录音对话框
       if (!context.mounted) return;
@@ -172,7 +178,7 @@ class _VoiceRecordingDialogState extends ConsumerState<_VoiceRecordingDialog> {
     try {
       await widget.recorder.start(
         const RecordConfig(
-          encoder: AudioEncoder.aacLc,
+          encoder: AudioEncoder.wav,  // 使用 wav 格式，兼容硅基流动等服务商
         ),
         path: widget.audioPath,
       );

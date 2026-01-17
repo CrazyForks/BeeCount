@@ -7,9 +7,30 @@ import '../../data/db.dart';
 import '../../data/repositories/base_repository.dart';
 import '../system/logger_service.dart';
 import '../ai/ai_constants.dart';
+import '../ai/ai_provider_config.dart';
+import '../ai/ai_provider_manager.dart';
 
 // 导入 OrderingTerm
 typedef OrderingTerm = d.OrderingTerm;
+
+/// 递归转换 Map 为 Map<String, dynamic>
+/// YAML 解析后的 Map 可能是 YamlMap，键可能不是 String 类型
+Map<String, dynamic> _convertToStringDynamicMap(Map map) {
+  return map.map((key, value) {
+    final stringKey = key.toString();
+    if (value is Map) {
+      return MapEntry(stringKey, _convertToStringDynamicMap(value));
+    } else if (value is List) {
+      return MapEntry(stringKey, value.map((item) {
+        if (item is Map) {
+          return _convertToStringDynamicMap(item);
+        }
+        return item;
+      }).toList());
+    }
+    return MapEntry(stringKey, value);
+  });
+}
 
 /// 导出选项 - 控制导出哪些内容
 class ExportOptions {
@@ -19,7 +40,8 @@ class ExportOptions {
   final bool tags;
   final bool recurringTransactions;
   final bool budgets;
-  final bool appSettings; // 包含云服务配置、AI配置等
+  final bool appSettings; // 包含云服务配置等
+  final bool ai; // AI 服务商配置、能力绑定等
 
   const ExportOptions({
     this.ledgers = true,
@@ -29,6 +51,7 @@ class ExportOptions {
     this.recurringTransactions = true,
     this.budgets = true,
     this.appSettings = true,
+    this.ai = true,
   });
 
   /// 全选
@@ -43,6 +66,7 @@ class ExportOptions {
     recurringTransactions: false,
     budgets: false,
     appSettings: false,
+    ai: false,
   );
 }
 
@@ -139,7 +163,7 @@ class AppConfig {
               Map<String, dynamic>.from(yaml['s3'] as Map))
           : null,
       ai: yaml.containsKey('ai')
-          ? AIConfig.fromMap(Map<String, dynamic>.from(yaml['ai'] as Map))
+          ? AIConfig.fromMap(_convertToStringDynamicMap(yaml['ai'] as Map))
           : null,
       appSettings: yaml.containsKey('app_settings')
           ? AppSettingsConfig.fromMap(
@@ -299,12 +323,19 @@ class S3Config {
 
 /// AI配置
 class AIConfig {
+  // 基础设置（向后兼容）
   final String? glmApiKey;
   final String? glmModel;
   final String? glmVisionModel;
   final String? strategy;
   final bool? enabled;
   final bool? useVision;
+
+  // 新增：服务商列表
+  final List<AIServiceProviderConfig>? providers;
+
+  // 新增：能力绑定
+  final AICapabilityBinding? capabilityBinding;
 
   const AIConfig({
     this.glmApiKey,
@@ -313,10 +344,14 @@ class AIConfig {
     this.strategy,
     this.enabled,
     this.useVision,
+    this.providers,
+    this.capabilityBinding,
   });
 
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
+
+    // 基础设置（向后兼容）
     if (glmApiKey != null && glmApiKey!.isNotEmpty) {
       map[AIConstants.keyGlmApiKey] = glmApiKey;
     }
@@ -335,17 +370,56 @@ class AIConfig {
     if (useVision != null) {
       map[AIConstants.keyAiUseVision] = useVision;
     }
+
+    // 服务商列表
+    if (providers != null && providers!.isNotEmpty) {
+      map['providers'] = providers!.map((p) => p.toJson()).toList();
+    }
+
+    // 能力绑定
+    if (capabilityBinding != null) {
+      map['capability_binding'] = capabilityBinding!.toJson();
+    }
+
     return map;
   }
 
-  static AIConfig fromMap(Map<String, dynamic> map) => AIConfig(
-        glmApiKey: map[AIConstants.keyGlmApiKey] as String?,
-        glmModel: map[AIConstants.keyGlmModel] as String?,
-        glmVisionModel: map[AIConstants.keyGlmVisionModel] as String?,
-        strategy: map[AIConstants.keyAiStrategy] as String?,
-        enabled: map[AIConstants.keyAiBillExtractionEnabled] as bool?,
-        useVision: map[AIConstants.keyAiUseVision] as bool?,
-      );
+  static AIConfig fromMap(Map<String, dynamic> map) {
+    logger.debug('AIConfig', 'fromMap keys: ${map.keys.toList()}');
+
+    // 解析服务商列表
+    List<AIServiceProviderConfig>? providers;
+    if (map['providers'] != null) {
+      final providersList = map['providers'] as List;
+      providers = providersList
+          .map((p) => AIServiceProviderConfig.fromJson(_convertToStringDynamicMap(p as Map)))
+          .toList();
+      logger.debug('AIConfig', '解析到 ${providers.length} 个服务商');
+    }
+
+    // 解析能力绑定
+    AICapabilityBinding? capabilityBinding;
+    if (map['capability_binding'] != null) {
+      logger.debug('AIConfig', 'capability_binding raw: ${map['capability_binding']}');
+      final bindingMap = _convertToStringDynamicMap(map['capability_binding'] as Map);
+      logger.debug('AIConfig', 'capability_binding converted: $bindingMap');
+      capabilityBinding = AICapabilityBinding.fromJson(bindingMap);
+      logger.debug('AIConfig', '解析到能力绑定: text=${capabilityBinding.textProviderId}, vision=${capabilityBinding.visionProviderId}');
+    } else {
+      logger.debug('AIConfig', 'capability_binding 为 null');
+    }
+
+    return AIConfig(
+      glmApiKey: map[AIConstants.keyGlmApiKey] as String?,
+      glmModel: map[AIConstants.keyGlmModel] as String?,
+      glmVisionModel: map[AIConstants.keyGlmVisionModel] as String?,
+      strategy: map[AIConstants.keyAiStrategy] as String?,
+      enabled: map[AIConstants.keyAiBillExtractionEnabled] as bool?,
+      useVision: map[AIConstants.keyAiUseVision] as bool?,
+      providers: providers,
+      capabilityBinding: capabilityBinding,
+    );
+  }
 }
 
 /// 应用设置配置
@@ -983,7 +1057,8 @@ class ConfigContentInfo {
   final bool hasTags;
   final bool hasRecurringTransactions;
   final bool hasBudgets;
-  final bool hasAppSettings; // 包含云服务配置、AI配置、应用设置中的任意一项
+  final bool hasAppSettings; // 包含云服务配置、应用设置
+  final bool hasAi; // AI 服务商配置、能力绑定
 
   const ConfigContentInfo({
     this.hasLedgers = false,
@@ -993,6 +1068,7 @@ class ConfigContentInfo {
     this.hasRecurringTransactions = false,
     this.hasBudgets = false,
     this.hasAppSettings = false,
+    this.hasAi = false,
   });
 }
 
@@ -1016,8 +1092,8 @@ class ConfigExportService {
         hasAppSettings: doc.containsKey('supabase') ||
             doc.containsKey('webdav') ||
             doc.containsKey('s3') ||
-            doc.containsKey('ai') ||
             doc.containsKey('app_settings'),
+        hasAi: doc.containsKey('ai'),
       );
     } catch (_) {
       return const ConfigContentInfo();
@@ -1111,7 +1187,24 @@ class ConfigExportService {
     final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled);
     final aiUseVision = prefs.getBool(AIConstants.keyAiUseVision);
 
-    if (glmApiKey != null || aiStrategy != null || aiEnabled != null || aiUseVision != null|| glmModel != null|| glmVisionModel != null) {
+    // 读取服务商列表和能力绑定
+    List<AIServiceProviderConfig>? aiProviders;
+    AICapabilityBinding? aiCapabilityBinding;
+    try {
+      aiProviders = await AIProviderManager.getProviders();
+      aiCapabilityBinding = await AIProviderManager.getCapabilityBinding();
+      logger.info('ConfigExport', 'AI服务商数量: ${aiProviders.length}');
+      for (final p in aiProviders) {
+        logger.info('ConfigExport', '  服务商: ${p.name} (${p.id}), isBuiltIn=${p.isBuiltIn}');
+      }
+      logger.info('ConfigExport', 'AI能力绑定: text=${aiCapabilityBinding.textProviderId}, vision=${aiCapabilityBinding.visionProviderId}, speech=${aiCapabilityBinding.speechProviderId}');
+    } catch (e) {
+      logger.warning('ConfigExport', '读取AI服务商配置失败: $e');
+    }
+
+    if (glmApiKey != null || aiStrategy != null || aiEnabled != null ||
+        aiUseVision != null || glmModel != null || glmVisionModel != null ||
+        aiProviders != null || aiCapabilityBinding != null) {
       aiConfig = AIConfig(
         glmApiKey: glmApiKey,
         glmModel: glmModel,
@@ -1119,6 +1212,8 @@ class ConfigExportService {
         strategy: aiStrategy,
         enabled: aiEnabled,
         useVision: aiUseVision,
+        providers: aiProviders,
+        capabilityBinding: aiCapabilityBinding,
       );
     }
 
@@ -1441,8 +1536,13 @@ class ConfigExportService {
     final exportSupabase = options.appSettings ? supabaseConfig : null;
     final exportWebdav = options.appSettings ? webdavConfig : null;
     final exportS3 = options.appSettings ? s3Config : null;
-    final exportAi = options.appSettings ? aiConfig : null;
+    final exportAi = options.ai ? aiConfig : null;
     final exportAppSettings = options.appSettings ? appSettings : null;
+
+    logger.info('ConfigExport', '导出选项: ai=${options.ai}, aiConfig是否存在=${aiConfig != null}');
+    if (exportAi != null) {
+      logger.info('ConfigExport', '导出AI配置: providers数量=${exportAi.providers?.length ?? 0}');
+    }
 
     final config = AppConfig(
       supabase: exportSupabase,
@@ -1537,6 +1637,46 @@ class ConfigExportService {
       }
       if (ai.containsKey(AIConstants.keyAiUseVision)) {
         buffer.writeln('  ${AIConstants.keyAiUseVision}: ${ai[AIConstants.keyAiUseVision]}');
+      }
+      // 服务商列表
+      if (ai.containsKey('providers')) {
+        buffer.writeln('  providers:');
+        final providers = ai['providers'] as List;
+        for (final p in providers) {
+          final provider = p as Map<String, dynamic>;
+          buffer.writeln('    - id: "${provider['id']}"');
+          buffer.writeln('      name: "${provider['name']}"');
+          buffer.writeln('      isBuiltIn: ${provider['isBuiltIn']}');
+          if (provider['apiKey'] != null && (provider['apiKey'] as String).isNotEmpty) {
+            buffer.writeln('      apiKey: "${provider['apiKey']}"');
+          }
+          if (provider['baseUrl'] != null && (provider['baseUrl'] as String).isNotEmpty) {
+            buffer.writeln('      baseUrl: "${provider['baseUrl']}"');
+          }
+          if (provider['textModel'] != null && (provider['textModel'] as String).isNotEmpty) {
+            buffer.writeln('      textModel: "${provider['textModel']}"');
+          }
+          if (provider['visionModel'] != null && (provider['visionModel'] as String).isNotEmpty) {
+            buffer.writeln('      visionModel: "${provider['visionModel']}"');
+          }
+          if (provider['audioModel'] != null && (provider['audioModel'] as String).isNotEmpty) {
+            buffer.writeln('      audioModel: "${provider['audioModel']}"');
+          }
+        }
+      }
+      // 能力绑定
+      if (ai.containsKey('capability_binding')) {
+        buffer.writeln('  capability_binding:');
+        final binding = ai['capability_binding'] as Map<String, dynamic>;
+        if (binding['textProviderId'] != null) {
+          buffer.writeln('    textProviderId: "${binding['textProviderId']}"');
+        }
+        if (binding['visionProviderId'] != null) {
+          buffer.writeln('    visionProviderId: "${binding['visionProviderId']}"');
+        }
+        if (binding['speechProviderId'] != null) {
+          buffer.writeln('    speechProviderId: "${binding['speechProviderId']}"');
+        }
       }
       buffer.writeln();
     }
@@ -1890,7 +2030,8 @@ class ConfigExportService {
     }
 
     // 导入AI配置
-    if (options.appSettings && config.ai != null) {
+    if (options.ai && config.ai != null) {
+      // 基础设置（向后兼容）
       if (config.ai!.glmApiKey != null) {
         await prefs.setString(AIConstants.keyGlmApiKey, config.ai!.glmApiKey!);
       }
@@ -1909,6 +2050,54 @@ class ConfigExportService {
       if (config.ai!.useVision != null) {
         await prefs.setBool(AIConstants.keyAiUseVision, config.ai!.useVision!);
       }
+
+      // 导入服务商列表
+      if (config.ai!.providers != null && config.ai!.providers!.isNotEmpty) {
+        // 获取现有服务商
+        final existingProviders = await AIProviderManager.getProviders();
+        final existingIds = existingProviders.map((p) => p.id).toSet();
+        final existingNames = existingProviders.map((p) => p.name).toSet();
+
+        for (final provider in config.ai!.providers!) {
+          if (provider.isBuiltIn) {
+            // 内置服务商：更新配置（如API Key）
+            final existingIndex = existingProviders.indexWhere((p) => p.id == provider.id);
+            if (existingIndex >= 0) {
+              final updated = existingProviders[existingIndex].copyWith(
+                apiKey: provider.apiKey.isNotEmpty ? provider.apiKey : null,
+                textModel: provider.textModel.isNotEmpty ? provider.textModel : null,
+                visionModel: provider.visionModel.isNotEmpty ? provider.visionModel : null,
+                audioModel: provider.audioModel.isNotEmpty ? provider.audioModel : null,
+              );
+              await AIProviderManager.updateProvider(updated);
+            }
+          } else {
+            // 自定义服务商：保留原始 ID 导入
+            if (existingIds.contains(provider.id)) {
+              // ID 已存在，更新配置
+              await AIProviderManager.updateProvider(provider);
+            } else if (existingNames.contains(provider.name)) {
+              // 名称已存在但 ID 不同，跳过避免重复
+              logger.info('ConfigImport', '跳过已存在的服务商: ${provider.name}');
+            } else {
+              // 直接添加，保留原始 ID（用于能力绑定匹配）
+              await AIProviderManager.addProviderWithConfig(provider);
+            }
+          }
+        }
+        logger.info('ConfigImport', 'AI服务商配置已导入 (${config.ai!.providers!.length}个)');
+      }
+
+      // 导入能力绑定
+      if (config.ai!.capabilityBinding != null) {
+        final binding = config.ai!.capabilityBinding!;
+        logger.info('ConfigImport', '准备导入AI能力绑定: text=${binding.textProviderId}, vision=${binding.visionProviderId}, speech=${binding.speechProviderId}');
+        await AIProviderManager.saveCapabilityBinding(binding);
+        logger.info('ConfigImport', 'AI能力绑定已导入');
+      } else {
+        logger.warning('ConfigImport', 'AI配置中没有能力绑定');
+      }
+
       logger.info('ConfigImport', 'AI配置已导入');
     }
 

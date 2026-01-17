@@ -8,7 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../data/db.dart' as db;
-import '../../services/export/config_export_service.dart';
+import '../../services/category_package_service.dart';
 import '../../services/system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/category_utils.dart';
@@ -198,58 +198,44 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
 
     try {
       final repo = ref.read(repositoryProvider);
-      final ledgerId = ref.read(currentLedgerIdProvider);
 
-      // 生成只包含分类的配置
-      final options = ExportOptions(
-        categories: true,
-        accounts: false,
-        tags: false,
-        budgets: false,
-        recurringTransactions: false,
-        appSettings: false,
-      );
-
-      final yamlContent = await ConfigExportService.exportToYaml(
-        repository: repo,
-        ledgerId: ledgerId,
-        options: options,
-      );
-
-      // 如果只导出当前类型，过滤内容
-      String finalContent = yamlContent;
+      // 确定过滤类型
+      String? filterKind;
       if (scope == 'current') {
-        final currentKind = _tabController.index == 0 ? 'expense' : 'income';
-        finalContent = await _filterCategoriesByKind(yamlContent, currentKind);
+        filterKind = _tabController.index == 0 ? 'expense' : 'income';
       }
 
-      if (!mounted) return;
-
-      // 生成文件并分享
+      // 生成文件名
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
-      final fileName = 'beecount_categories_$timestamp.yml';
+      final fileName = 'beecount_categories_$timestamp.zip';
 
+      String outputPath;
       if (Platform.isAndroid) {
         final downloadPath = '/storage/emulated/0/Download/BeeCount';
         final dir = Directory(downloadPath);
         if (!await dir.exists()) {
           await dir.create(recursive: true);
         }
-        final filePath = '$downloadPath/$fileName';
-        final file = File(filePath);
-        await file.writeAsString(finalContent);
-
-        if (!mounted) return;
-        showToast(context, l10n.categoryShareSuccess(filePath.replaceAll('/storage/emulated/0/', '')));
+        outputPath = '$downloadPath/$fileName';
       } else {
         final tempDir = await getTemporaryDirectory();
-        final filePath = '${tempDir.path}/$fileName';
-        final file = File(filePath);
-        await file.writeAsString(finalContent);
+        outputPath = '${tempDir.path}/$fileName';
+      }
 
-        if (!mounted) return;
+      // 导出分类包
+      await CategoryPackageService.exportPackage(
+        repository: repo,
+        outputPath: outputPath,
+        filterKind: filterKind,
+      );
+
+      if (!mounted) return;
+
+      if (Platform.isAndroid) {
+        showToast(context, l10n.categoryShareSuccess(outputPath.replaceAll('/storage/emulated/0/', '')));
+      } else {
         await Share.shareXFiles(
-          [XFile(filePath)],
+          [XFile(outputPath)],
           subject: l10n.categoryShareSubject,
         );
       }
@@ -258,65 +244,6 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
       if (!mounted) return;
       showToast(context, l10n.categoryShareFailed);
     }
-  }
-
-  /// 过滤只保留指定类型的分类
-  Future<String> _filterCategoriesByKind(String yamlContent, String kind) async {
-    // 简单处理：解析 YAML，过滤分类，重新生成
-    // 由于 YAML 结构相对简单，这里用字符串处理
-    final lines = yamlContent.split('\n');
-    final filteredLines = <String>[];
-    bool inCategories = false;
-    bool skipCategory = false;
-    int categoryIndent = 0;
-
-    for (final line in lines) {
-      if (line.trim() == 'categories:') {
-        inCategories = true;
-        filteredLines.add(line);
-        continue;
-      }
-
-      if (inCategories) {
-        if (line.trim().startsWith('- name:')) {
-          categoryIndent = line.indexOf('-');
-          // 检查下一行是否是我们要的 kind
-          skipCategory = false;
-          filteredLines.add(line);
-        } else if (line.trim().startsWith('kind:')) {
-          final lineKind = line.split(':').last.trim();
-          if (lineKind != kind) {
-            skipCategory = true;
-            // 移除上一行（- name:）
-            if (filteredLines.isNotEmpty) {
-              filteredLines.removeLast();
-            }
-          } else {
-            filteredLines.add(line);
-          }
-        } else if (skipCategory) {
-          // 跳过当前分类的其他行
-          if (line.trim().startsWith('- name:') || !line.startsWith(' ' * (categoryIndent + 2))) {
-            skipCategory = false;
-            if (line.trim().startsWith('- name:')) {
-              filteredLines.add(line);
-            } else if (!line.trim().startsWith('-') && line.contains(':')) {
-              inCategories = false;
-              filteredLines.add(line);
-            }
-          }
-        } else {
-          if (!line.trim().startsWith('-') && line.contains(':') && !line.startsWith(' ')) {
-            inCategories = false;
-          }
-          filteredLines.add(line);
-        }
-      } else {
-        filteredLines.add(line);
-      }
-    }
-
-    return filteredLines.join('\n');
   }
 
   /// 导入分类
@@ -329,7 +256,7 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
       try {
         result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
-          allowedExtensions: ['yml', 'yaml'],
+          allowedExtensions: ['zip'],
         );
       } catch (e) {
         result = await FilePicker.platform.pickFiles(type: FileType.any);
@@ -345,20 +272,8 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
 
       // 验证文件扩展名
       final fileName = filePath.toLowerCase();
-      if (!fileName.endsWith('.yml') && !fileName.endsWith('.yaml')) {
+      if (!fileName.endsWith('.zip')) {
         showToast(context, l10n.categoryImportInvalidFile);
-        return;
-      }
-
-      // 读取文件
-      final file = File(filePath);
-      final yamlContent = await file.readAsString();
-
-      // 检测内容
-      final contentInfo = ConfigExportService.detectContent(yamlContent);
-      if (!contentInfo.hasCategories) {
-        if (!mounted) return;
-        showToast(context, l10n.categoryImportNoCategories);
         return;
       }
 
@@ -399,16 +314,6 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
 
       // 执行导入
       final repo = ref.read(repositoryProvider);
-      final ledgerId = ref.read(currentLedgerIdProvider);
-
-      final options = ExportOptions(
-        categories: true,
-        accounts: false,
-        tags: false,
-        budgets: false,
-        recurringTransactions: false,
-        appSettings: false,
-      );
 
       if (mode == 'overwrite') {
         // 覆盖模式：先清空未使用的分类
@@ -416,15 +321,21 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
         await _clearUnusedCategoriesSilent();
       }
 
-      await ConfigExportService.importFromFile(
-        filePath,
+      final importResult = await CategoryPackageService.importPackage(
+        filePath: filePath,
         repository: repo,
-        ledgerId: ledgerId,
-        options: options,
+        mode: mode,
       );
 
       if (!mounted) return;
-      showToast(context, l10n.categoryImportSuccess);
+      showToast(
+        context,
+        l10n.categoryImportSuccessDetail(
+          importResult.imported,
+          importResult.skipped,
+          importResult.iconsImported,
+        ),
+      );
       ref.invalidate(categoriesWithCountProvider);
     } catch (e) {
       logger.error('CategoryManage', '导入分类失败: $e');

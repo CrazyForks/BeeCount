@@ -397,6 +397,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  flutter_ai_kit_openai:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_ai_kit_openai"
+      relative: true
+    source: path
+    version: "1.0.0"
   flutter_ai_kit_tflite:
     dependency: "direct main"
     description:

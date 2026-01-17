@@ -865,6 +865,7 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
   bool _budgets = true;
   bool _recurringTransactions = true;
   bool _appSettings = true;
+  bool _ai = true;
 
   @override
   Widget build(BuildContext context) {
@@ -964,6 +965,21 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
                   contentPadding: EdgeInsets.zero,
                 ),
                 CheckboxListTile(
+                  value: _ai,
+                  onChanged: (v) => setState(() => _ai = v ?? true),
+                  title: Text(l10n.configIncludeAI),
+                  subtitle: Text(
+                    l10n.configIncludeAISubtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: BeeTokens.textSecondary(context),
+                    ),
+                  ),
+                  secondary: Icon(Icons.smart_toy_outlined, color: primary),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                CheckboxListTile(
                   value: _appSettings,
                   onChanged: (v) => setState(() => _appSettings = v ?? true),
                   title: Text(l10n.configIncludeOtherSettings),
@@ -1003,6 +1019,7 @@ class _ExportOptionsDialogState extends State<_ExportOptionsDialog> {
                       budgets: _budgets,
                       recurringTransactions: _recurringTransactions,
                       appSettings: _appSettings,
+                      ai: _ai,
                     );
                     Navigator.pop(context, options);
                   },
@@ -1138,6 +1155,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
   late bool _budgets;
   late bool _recurringTransactions;
   late bool _appSettings;
+  late bool _ai;
 
   @override
   void initState() {
@@ -1149,6 +1167,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
     _budgets = widget.contentInfo.hasBudgets;
     _recurringTransactions = widget.contentInfo.hasRecurringTransactions;
     _appSettings = widget.contentInfo.hasAppSettings;
+    _ai = widget.contentInfo.hasAi;
   }
 
   @override
@@ -1328,6 +1347,23 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
                       contentPadding: EdgeInsets.zero,
                       dense: true,
                     ),
+                  if (info.hasAi)
+                    CheckboxListTile(
+                      value: _ai,
+                      onChanged: (v) => setState(() => _ai = v ?? true),
+                      title: Text(l10n.configIncludeAI),
+                      subtitle: Text(
+                        l10n.configIncludeAISubtitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: BeeTokens.textSecondary(context),
+                        ),
+                      ),
+                      secondary: Icon(Icons.smart_toy_outlined, color: primary),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
                   if (info.hasAppSettings)
                     CheckboxListTile(
                       value: _appSettings,
@@ -1377,6 +1413,7 @@ class _ImportPreviewDialogState extends State<_ImportPreviewDialog> {
                       budgets: _budgets,
                       recurringTransactions: _recurringTransactions,
                       appSettings: _appSettings,
+                      ai: _ai,
                     );
                     Navigator.pop(context, options);
                   },
