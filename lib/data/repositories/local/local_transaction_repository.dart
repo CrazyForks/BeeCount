@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart' as d;
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import '../../db.dart';
 import '../transaction_repository.dart';
+import '../../../services/system/logger_service.dart';
 
 /// 本地交易Repository实现
 /// 基于 Drift 数据库实现
@@ -226,7 +231,56 @@ class LocalTransactionRepository implements TransactionRepository {
 
   @override
   Future<void> deleteTransaction(int id) async {
+    // 先删除关联的附件
+    await _deleteAttachmentsForTransaction(id);
+
+    // 再删除交易记录
     await (db.delete(db.transactions)..where((t) => t.id.equals(id))).go();
+  }
+
+  /// 删除交易关联的所有附件（包括文件和数据库记录）
+  Future<void> _deleteAttachmentsForTransaction(int transactionId) async {
+    try {
+      // 获取该交易的所有附件
+      final attachments = await (db.select(db.transactionAttachments)
+            ..where((a) => a.transactionId.equals(transactionId)))
+          .get();
+
+      if (attachments.isEmpty) return;
+
+      // 获取附件存储目录
+      final appDir = await getApplicationDocumentsDirectory();
+      final attachmentDir = Directory('${appDir.path}/attachments');
+      final cacheDir = await getTemporaryDirectory();
+      final thumbDir = Directory('${cacheDir.path}/attachment_thumbs');
+
+      // 删除每个附件的文件
+      for (final attachment in attachments) {
+        // 删除原图
+        final file = File('${attachmentDir.path}/${attachment.fileName}');
+        if (await file.exists()) {
+          await file.delete();
+          logger.debug('LocalTransactionRepository', '删除附件文件: ${attachment.fileName}');
+        }
+
+        // 删除缩略图
+        final thumbName = '${path.basenameWithoutExtension(attachment.fileName)}_thumb.jpg';
+        final thumbFile = File('${thumbDir.path}/$thumbName');
+        if (await thumbFile.exists()) {
+          await thumbFile.delete();
+        }
+      }
+
+      // 删除数据库记录
+      await (db.delete(db.transactionAttachments)
+            ..where((a) => a.transactionId.equals(transactionId)))
+          .go();
+
+      logger.info('LocalTransactionRepository', '已删除交易 $transactionId 的 ${attachments.length} 个附件');
+    } catch (e, stackTrace) {
+      logger.error('LocalTransactionRepository', '删除交易附件失败', e, stackTrace);
+      // 不抛出异常，继续删除交易
+    }
   }
 
   @override
