@@ -1615,7 +1615,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryShareFailed => 'Share failed';
 
   @override
-  String get categoryImportInvalidFile => 'Please select a YAML configuration file';
+  String get categoryImportInvalidFile => 'Please select a category package file (.zip)';
 
   @override
   String get categoryImportNoCategories => 'No category data in file';
@@ -1637,6 +1637,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryImportSuccess => 'Import successful';
+
+  @override
+  String categoryImportSuccessDetail(int imported, int skipped, int icons) {
+    return 'Imported $imported categories, skipped $skipped, imported $icons icons';
+  }
 
   @override
   String get categoryImportFailed => 'Import failed';

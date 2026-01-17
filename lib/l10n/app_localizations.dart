@@ -3063,7 +3063,7 @@ abstract class AppLocalizations {
   /// No description provided for @categoryImportInvalidFile.
   ///
   /// In en, this message translates to:
-  /// **'Please select a YAML configuration file'**
+  /// **'Please select a category package file (.zip)'**
   String get categoryImportInvalidFile;
 
   /// No description provided for @categoryImportNoCategories.
@@ -3107,6 +3107,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Import successful'**
   String get categoryImportSuccess;
+
+  /// No description provided for @categoryImportSuccessDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {imported} categories, skipped {skipped}, imported {icons} icons'**
+  String categoryImportSuccessDetail(int imported, int skipped, int icons);
 
   /// No description provided for @categoryImportFailed.
   ///

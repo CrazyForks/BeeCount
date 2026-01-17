@@ -655,7 +655,7 @@
   },
   "categoryShareSubject": "BeeCount 分类配置",
   "categoryShareFailed": "分享失败",
-  "categoryImportInvalidFile": "请选择 YAML 配置文件",
+  "categoryImportInvalidFile": "请选择分类包文件（.zip）",
   "categoryImportNoCategories": "文件中没有分类数据",
   "categoryImportModeTitle": "选择导入模式",
   "categoryImportModeMerge": "合并",
@@ -663,6 +663,14 @@
   "categoryImportModeOverwrite": "覆盖",
   "categoryImportModeOverwriteDesc": "清空未使用分类后导入",
   "categoryImportSuccess": "导入成功",
+  "categoryImportSuccessDetail": "已导入 {imported} 个分类，跳过 {skipped} 个，导入 {icons} 个图标",
+  "@categoryImportSuccessDetail": {
+    "placeholders": {
+      "imported": {"type": "int"},
+      "skipped": {"type": "int"},
+      "icons": {"type": "int"}
+    }
+  },
   "categoryImportFailed": "导入失败",
   "categoryDeleteConfirmTitle": "删除分类",
   "categoryDeleteConfirmMessage": "确定要删除分类\"{name}\"吗？此操作无法撤销。",

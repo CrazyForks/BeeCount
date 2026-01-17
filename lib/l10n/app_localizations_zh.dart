@@ -1615,7 +1615,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryShareFailed => '分享失败';
 
   @override
-  String get categoryImportInvalidFile => '请选择 YAML 配置文件';
+  String get categoryImportInvalidFile => '请选择分类包文件（.zip）';
 
   @override
   String get categoryImportNoCategories => '文件中没有分类数据';
@@ -1637,6 +1637,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categoryImportSuccess => '导入成功';
+
+  @override
+  String categoryImportSuccessDetail(int imported, int skipped, int icons) {
+    return '已导入 $imported 个分类，跳过 $skipped 个，导入 $icons 个图标';
+  }
 
   @override
   String get categoryImportFailed => '导入失败';
@@ -7005,7 +7010,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get categoryShareFailed => '分享失敗';
 
   @override
-  String get categoryImportInvalidFile => '請選擇 YAML 配置檔案';
+  String get categoryImportInvalidFile => '請選擇分類包檔案（.zip）';
 
   @override
   String get categoryImportNoCategories => '檔案中沒有分類資料';
@@ -7027,6 +7032,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryImportSuccess => '匯入成功';
+
+  @override
+  String categoryImportSuccessDetail(int imported, int skipped, int icons) {
+    return '已匯入 $imported 個分類，跳過 $skipped 個，匯入 $icons 個圖示';
+  }
 
   @override
   String get categoryImportFailed => '匯入失敗';

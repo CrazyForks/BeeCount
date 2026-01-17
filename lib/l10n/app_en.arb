@@ -689,7 +689,7 @@
   "categoryShareSuccess": "Saved to {path}",
   "categoryShareSubject": "BeeCount Category Configuration",
   "categoryShareFailed": "Share failed",
-  "categoryImportInvalidFile": "Please select a YAML configuration file",
+  "categoryImportInvalidFile": "Please select a category package file (.zip)",
   "categoryImportNoCategories": "No category data in file",
   "categoryImportModeTitle": "Select Import Mode",
   "categoryImportModeMerge": "Merge",
@@ -697,6 +697,14 @@
   "categoryImportModeOverwrite": "Overwrite",
   "categoryImportModeOverwriteDesc": "Clear unused categories then import",
   "categoryImportSuccess": "Import successful",
+  "categoryImportSuccessDetail": "Imported {imported} categories, skipped {skipped}, imported {icons} icons",
+  "@categoryImportSuccessDetail": {
+    "placeholders": {
+      "imported": {"type": "int"},
+      "skipped": {"type": "int"},
+      "icons": {"type": "int"}
+    }
+  },
   "categoryImportFailed": "Import failed",
   "categoryDeleteConfirmTitle": "Delete Category",
   "categoryDeleteConfirmMessage": "Are you sure you want to delete category \"{name}\"? This action cannot be undone.",
