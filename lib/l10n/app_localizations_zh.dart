@@ -19,9 +19,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tabMine => '我的';
 
   @override
-  String get tabAdd => '记账';
-
-  @override
   String get commonCancel => '取消';
 
   @override
@@ -79,7 +76,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fabActionVoice => '语音';
 
   @override
-  String get fabActionVoiceDisabled => '需要启用AI并配置 GLM API';
+  String get fabActionVoiceDisabled => '需要启用AI并配置API Key';
 
   @override
   String get voiceRecordingTitle => '语音记账';
@@ -2250,9 +2247,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudMultiDeviceWarningDetail => '多设备同步说明：\n\n1. 目前不支持多设备同时编辑同一账本\n2. 如果在设备A编辑后，切换到设备B使用：\n   • 需要在设备B上清空所有账本\n   • 然后从云端下载最新数据\n3. 未来版本将支持真正的多设备协同';
 
   @override
-  String get cloudMultiDeviceLearnMore => '了解详情';
-
-  @override
   String get cloudWebdavUrlLabel => 'WebDAV 服务器地址';
 
   @override
@@ -3717,9 +3711,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiStrategyLocalFirst => '本地优先（推荐）';
 
   @override
-  String get aiStrategyLocalFirstDesc => '优先使用本地模型，失败后自动切换云端';
-
-  @override
   String get aiStrategyCloudFirst => '云端优先';
 
   @override
@@ -3727,9 +3718,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiStrategyLocalOnly => '仅本地';
-
-  @override
-  String get aiStrategyLocalOnlyDesc => '只使用本地模型，完全离线';
 
   @override
   String get aiStrategyCloudOnly => '仅云端';
@@ -3746,13 +3734,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get aiCloudApiTitle => '智谱GLM API';
-
-  @override
-  String get aiCloudApiKeyLabel => 'API Key';
-
-  @override
   String get aiCloudApiKeyHint => '输入智谱AI的API Key';
+
+  @override
+  String get aiCloudApiKeyHintCustom => '输入API Key';
 
   @override
   String get aiCloudApiKeyHelper => 'GLM-*-Flash模型完全免费';
@@ -3767,15 +3752,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiCloudApiTestKey => '测试连接';
 
   @override
-  String get aiCloudApiKeyValid => '✅ API Key 有效，AI功能可正常使用';
-
-  @override
-  String get aiCloudApiKeyInvalid => '❌ API Key 无效，请检查后重新输入';
-
-  @override
-  String get aiCloudApiKeyRequired => '⚠️ 未配置 API Key，AI对话和AI增强识别功能将无法使用';
-
-  @override
   String get aiChatConfigWarning => '未配置或配置错误智谱 API Key，AI 功能不可用';
 
   @override
@@ -3786,9 +3762,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiLocalModelTraining => '训练中';
-
-  @override
-  String get aiLocalModelManagement => '模型管理';
 
   @override
   String get aiLocalModelUnavailable => '本地模型训练中，暂不可用';
@@ -4107,6 +4080,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI 智能识别配置';
+
+  @override
+  String get configIncludeAISubtitle => '服务商、能力绑定、模型设置等';
 
   @override
   String get configIncludeAppSettings => '应用设置（语言、外观、提醒、默认账户等）';
@@ -4582,6 +4558,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiPromptAdvancedSettings => '高级设置';
 
   @override
+  String get aiAdvancedSettingsDesc => '模型选择、执行策略、本地模型、提示词';
+
+  @override
   String get aiPromptEditEntry => '提示词编辑';
 
   @override
@@ -4648,12 +4627,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiPromptVarAccounts => '用户的账户列表（可能为空）';
 
   @override
-  String get aiModelSelectEntry => 'AI模型选择';
-
-  @override
-  String get aiModelSelectEntryDesc => '允许选择不同的文本推理、视觉AI模型用于账单识别和对话';
-
-  @override
   String get aiModelTitle => '文本推理模型';
 
   @override
@@ -4684,6 +4657,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiUnUseVisionDesc => '仅使用文本模型分析OCR结果';
+
+  @override
+  String get aiCustomBaseUrlHelper => 'OpenAI兼容的API地址，如 https://api.openai.com/v1';
+
+  @override
+  String get aiTextModelTitle => '文本模型';
+
+  @override
+  String get aiAudioModelTitle => '语音模型';
 
   @override
   String get tagManageTitle => '标签管理';
@@ -5110,9 +5092,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get attachmentExportSuccess => '附件导出成功';
 
   @override
-  String get attachmentExportFailed => '附件导出失败';
-
-  @override
   String attachmentExportSavedTo(String path) {
     return '已保存到: $path';
   }
@@ -5295,6 +5274,122 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get commonUncategorized => '未分类';
+
+  @override
+  String get commonSaved => '已保存';
+
+  @override
+  String get aiProviderManageTitle => '服务商管理';
+
+  @override
+  String get aiProviderManageSubtitle => '管理AI服务商配置';
+
+  @override
+  String get aiProviderAdd => '添加服务商';
+
+  @override
+  String get aiProviderBuiltIn => '内置';
+
+  @override
+  String get aiProviderEmpty => '暂无服务商配置';
+
+  @override
+  String get aiProviderNoApiKey => '未配置 API Key';
+
+  @override
+  String get aiProviderTapToEdit => '点击编辑';
+
+  @override
+  String get aiProviderDeleteTitle => '删除服务商';
+
+  @override
+  String aiProviderDeleteConfirm(String name) {
+    return '确定删除服务商「$name」吗？使用该服务商的能力将自动切换到默认服务商。';
+  }
+
+  @override
+  String get aiProviderDeleted => '服务商已删除';
+
+  @override
+  String get aiProviderEditTitle => '编辑服务商';
+
+  @override
+  String get aiProviderAddTitle => '添加服务商';
+
+  @override
+  String get aiProviderBasicInfo => '基本信息';
+
+  @override
+  String get aiProviderName => '服务商名称';
+
+  @override
+  String get aiProviderNameHint => '如：硅基流动、DeepSeek';
+
+  @override
+  String get aiProviderNameRequired => '请输入服务商名称';
+
+  @override
+  String get aiProviderBaseUrlRequired => '请输入 Base URL';
+
+  @override
+  String get aiProviderModels => '模型配置';
+
+  @override
+  String get aiProviderModelsHint => '留空的能力将无法使用该服务商';
+
+  @override
+  String get aiCapabilityText => '文本';
+
+  @override
+  String get aiCapabilityVision => '视觉';
+
+  @override
+  String get aiCapabilitySpeech => '语音';
+
+  @override
+  String get aiCapabilitySelectTitle => '能力绑定';
+
+  @override
+  String get aiCapabilitySelectSubtitle => '为每个AI能力选择服务商';
+
+  @override
+  String get aiCapabilityTextChat => '文本对话';
+
+  @override
+  String get aiCapabilityTextChatDesc => '用于AI对话和文本账单提取';
+
+  @override
+  String get aiCapabilityImageUnderstand => '图片理解';
+
+  @override
+  String get aiCapabilityImageUnderstandDesc => '用于图片账单识别';
+
+  @override
+  String get aiCapabilitySpeechToText => '语音转文字';
+
+  @override
+  String get aiCapabilitySpeechToTextDesc => '用于语音记账';
+
+  @override
+  String get aiProviderTestRun => '点击测试';
+
+  @override
+  String get aiProviderTestRunning => '测试中...';
+
+  @override
+  String get aiProviderTestSuccess => '测试通过';
+
+  @override
+  String get aiProviderTestFailed => '测试失败';
+
+  @override
+  String get aiProviderTestAll => '一键测试全部';
+
+  @override
+  String get aiProviderTestAllRetry => '重新测试';
+
+  @override
+  String get aiModelInputHelper => '留空则使用默认模型';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -5312,9 +5407,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tabMine => '我的';
-
-  @override
-  String get tabAdd => '記帳';
 
   @override
   String get commonCancel => '取消';
@@ -7545,9 +7637,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudMultiDeviceWarningDetail => '多設備同步說明：\n\n1. 目前不支援多設備同時編輯同一帳本\n2. 如果在設備A編輯後，切換到設備B使用：\n   • 需要在設備B上清空所有帳本\n   • 然後從雲端下載最新資料\n3. 未來版本將支援真正的多設備協同';
 
   @override
-  String get cloudMultiDeviceLearnMore => '了解詳情';
-
-  @override
   String get cloudWebdavUrlLabel => 'WebDAV 伺服器地址';
 
   @override
@@ -9012,9 +9101,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiStrategyLocalFirst => '本機優先（推薦）';
 
   @override
-  String get aiStrategyLocalFirstDesc => '優先使用本機模型，失敗後自動切換雲端';
-
-  @override
   String get aiStrategyCloudFirst => '雲端優先';
 
   @override
@@ -9022,9 +9108,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiStrategyLocalOnly => '僅本機';
-
-  @override
-  String get aiStrategyLocalOnlyDesc => '只使用本機模型，完全離線';
 
   @override
   String get aiStrategyCloudOnly => '僅雲端';
@@ -9041,13 +9124,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get aiCloudApiTitle => '智譜 GLM API';
-
-  @override
-  String get aiCloudApiKeyLabel => 'API Key';
-
-  @override
   String get aiCloudApiKeyHint => '輸入智譜 AI 的 API Key';
+
+  @override
+  String get aiCloudApiKeyHintCustom => '輸入 API Key';
 
   @override
   String get aiCloudApiKeyHelper => 'GLM-*-Flash 模型完全免費';
@@ -9062,15 +9142,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiCloudApiTestKey => '測試連線';
 
   @override
-  String get aiCloudApiKeyValid => '✅ API Key 有效，AI 功能可正常使用';
-
-  @override
-  String get aiCloudApiKeyInvalid => '❌ API Key 無效，請檢查後重新輸入';
-
-  @override
-  String get aiCloudApiKeyRequired => '⚠️ 未設定 API Key，AI 對話和 AI 增強辨識功能將無法使用';
-
-  @override
   String get aiChatConfigWarning => '未設定或設定錯誤智譜 API Key，AI 功能不可用';
 
   @override
@@ -9081,9 +9152,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiLocalModelTraining => '訓練中';
-
-  @override
-  String get aiLocalModelManagement => '模型管理';
 
   @override
   String get aiLocalModelUnavailable => '本機模型訓練中，暫不可用';
@@ -9404,6 +9472,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get configIncludeAI => 'AI 智慧識別配置';
 
   @override
+  String get configIncludeAISubtitle => '服務商、能力綁定、模型設定等';
+
+  @override
   String get configIncludeAppSettings => '應用程式設定（語言、外觀、提醒、預設帳戶等）';
 
   @override
@@ -9573,6 +9644,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get transferTitle => '轉帳';
+
+  @override
+  String get transferIconSettings => '轉帳圖示設定';
+
+  @override
+  String get transferIconSettingsDesc => '自訂轉帳記錄的顯示圖示';
 
   @override
   String get transferFromAccount => '轉出帳戶';
@@ -9871,6 +9948,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiPromptAdvancedSettings => '進階設定';
 
   @override
+  String get aiAdvancedSettingsDesc => '模型選擇、執行策略、本地模型、提示詞';
+
+  @override
   String get aiPromptEditEntry => '提示詞編輯';
 
   @override
@@ -9937,12 +10017,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiPromptVarAccounts => '使用者的帳戶清單（可能為空）';
 
   @override
-  String get aiModelSelectEntry => 'AI模型選擇';
-
-  @override
-  String get aiModelSelectEntryDesc => '允許選擇不同的文字推理、視覺AI模型用於帳單識別和對話';
-
-  @override
   String get aiModelTitle => '文字推理模型';
 
   @override
@@ -9973,6 +10047,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiUnUseVisionDesc => '僅使用文字模型分析OCR結果';
+
+  @override
+  String get aiCustomBaseUrlHelper => 'OpenAI相容的API位址，如 https://api.openai.com/v1';
+
+  @override
+  String get aiTextModelTitle => '文字模型';
+
+  @override
+  String get aiAudioModelTitle => '語音模型';
 
   @override
   String get tagManageTitle => '標籤管理';
@@ -10399,9 +10482,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get attachmentExportSuccess => '附件匯出成功';
 
   @override
-  String get attachmentExportFailed => '附件匯出失敗';
-
-  @override
   String attachmentExportSavedTo(String path) {
     return '已儲存到: $path';
   }
@@ -10584,4 +10664,120 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonUncategorized => '未分類';
+
+  @override
+  String get commonSaved => '已儲存';
+
+  @override
+  String get aiProviderManageTitle => '服務商管理';
+
+  @override
+  String get aiProviderManageSubtitle => '管理AI服務商設定';
+
+  @override
+  String get aiProviderAdd => '新增服務商';
+
+  @override
+  String get aiProviderBuiltIn => '內建';
+
+  @override
+  String get aiProviderEmpty => '暫無服務商設定';
+
+  @override
+  String get aiProviderNoApiKey => '未設定 API Key';
+
+  @override
+  String get aiProviderTapToEdit => '點擊編輯';
+
+  @override
+  String get aiProviderDeleteTitle => '刪除服務商';
+
+  @override
+  String aiProviderDeleteConfirm(String name) {
+    return '確定刪除服務商「$name」嗎？使用該服務商的能力將自動切換到預設服務商。';
+  }
+
+  @override
+  String get aiProviderDeleted => '服務商已刪除';
+
+  @override
+  String get aiProviderEditTitle => '編輯服務商';
+
+  @override
+  String get aiProviderAddTitle => '新增服務商';
+
+  @override
+  String get aiProviderBasicInfo => '基本資訊';
+
+  @override
+  String get aiProviderName => '服務商名稱';
+
+  @override
+  String get aiProviderNameHint => '如：矽基流動、DeepSeek';
+
+  @override
+  String get aiProviderNameRequired => '請輸入服務商名稱';
+
+  @override
+  String get aiProviderBaseUrlRequired => '請輸入 Base URL';
+
+  @override
+  String get aiProviderModels => '模型設定';
+
+  @override
+  String get aiProviderModelsHint => '留空的能力將無法使用該服務商';
+
+  @override
+  String get aiCapabilityText => '文字';
+
+  @override
+  String get aiCapabilityVision => '視覺';
+
+  @override
+  String get aiCapabilitySpeech => '語音';
+
+  @override
+  String get aiCapabilitySelectTitle => '能力綁定';
+
+  @override
+  String get aiCapabilitySelectSubtitle => '為每個AI能力選擇服務商';
+
+  @override
+  String get aiCapabilityTextChat => '文字對話';
+
+  @override
+  String get aiCapabilityTextChatDesc => '用於AI對話和文字帳單提取';
+
+  @override
+  String get aiCapabilityImageUnderstand => '圖片理解';
+
+  @override
+  String get aiCapabilityImageUnderstandDesc => '用於圖片帳單識別';
+
+  @override
+  String get aiCapabilitySpeechToText => '語音轉文字';
+
+  @override
+  String get aiCapabilitySpeechToTextDesc => '用於語音記帳';
+
+  @override
+  String get aiProviderTestRun => '點擊測試';
+
+  @override
+  String get aiProviderTestRunning => '測試中...';
+
+  @override
+  String get aiProviderTestSuccess => '測試通過';
+
+  @override
+  String get aiProviderTestFailed => '測試失敗';
+
+  @override
+  String get aiProviderTestAll => '一鍵測試全部';
+
+  @override
+  String get aiProviderTestAllRetry => '重新測試';
+
+  @override
+  String get aiModelInputHelper => '留空則使用預設模型';
 }

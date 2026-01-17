@@ -1,11 +1,7 @@
-import 'dart:io';
-
-import 'package:flutter_ai_kit/flutter_ai_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flutter_ai_kit_zhipu/flutter_ai_kit_zhipu.dart';
 import 'ai_bill_service.dart';
-import 'ai_constants.dart';
+import 'ai_provider_factory.dart';
 import '../billing/bill_creation_service.dart';
 import '../billing/ocr_service.dart';
 import '../data/tag_seed_service.dart';
@@ -37,7 +33,7 @@ class AIConfigValidationResult {
 ///
 /// 支持两种模式:
 /// 1. 对话记账 - 复用 AIBillService 和 BillCreationService
-/// 2. 自由对话 - 使用智谱 GLM 进行对话
+/// 2. 自由对话 - 使用 AIProviderFactory 自动选择服务商（智谱GLM/自定义OpenAI兼容）
 class AIChatService {
   final AIBillService _aiBillService = AIBillService();
   final BaseRepository _repo;
@@ -45,49 +41,16 @@ class AIChatService {
   AIChatService({required BaseRepository repo}) : _repo = repo;
 
   /// 验证 API Key 是否有效（静态方法）
-  /// 使用快速文本模型 glm-4-flash 进行验证，速度快且免费
+  /// 使用 AIProviderFactory 统一验证
   static Future<AIConfigValidationResult> validateApiKey() async {
-    logger.info('AIChat', '开始验证 API Key 配置');
+    final (success, error) = await AIProviderFactory.validateConfig(
+      logTag: 'AIChat',
+    );
 
-    final prefs = await SharedPreferences.getInstance();
-    final apiKey = prefs.getString(AIConstants.keyGlmApiKey);
-
-    // 检查是否配置了 API Key
-    if (apiKey == null || apiKey.isEmpty) {
-      logger.warning('AIChat', 'API Key 未配置');
-      return AIConfigValidationResult.invalid('未配置 API Key');
-    }
-
-    try {
-      // 测试 API Key 是否有效（使用快速文本模型）
-      final aiKit = FlutterAIKit();
-      final zhipuProvider = ZhipuGLMProvider(
-        apiKey: apiKey,
-        model: 'glm-4-flash', // 使用快速模型验证，速度快
-        temperature: 0.7,
-      );
-      aiKit.registerProvider(zhipuProvider);
-
-      // 创建简单的测试任务
-      final task = _SimpleChatTask('hi');
-      final result = await aiKit.execute(
-        task,
-        context: AIExecutionContext(
-          hasNetwork: true,
-          timeout: const Duration(seconds: 10),
-        ),
-      );
-
-      if (result.success) {
-        logger.info('AIChat', 'API Key 验证成功');
-        return AIConfigValidationResult.valid();
-      } else {
-        logger.warning('AIChat', 'API Key 验证失败: ${result.error}');
-        return AIConfigValidationResult.invalid('API Key 无效');
-      }
-    } catch (e, st) {
-      logger.error('AIChat', 'API Key 验证异常', e, st);
-      return AIConfigValidationResult.invalid('API Key 验证失败');
+    if (success) {
+      return AIConfigValidationResult.valid();
+    } else {
+      return AIConfigValidationResult.invalid(error ?? '验证失败');
     }
   }
 
@@ -201,36 +164,12 @@ class AIChatService {
     }
   }
 
-  /// 处理自由对话 - 使用智谱 GLM
+  /// 处理自由对话 - 使用 AIProviderFactory.chat()
   Future<AIResponse> _handleFreeChat(String input, {String? languageCode}) async {
     logger.info('AIChat', '开始自由对话 (语言: ${languageCode ?? "默认"})');
 
-    final prefs = await SharedPreferences.getInstance();
-    final apiKey = prefs.getString(AIConstants.keyGlmApiKey);
-
-    if (apiKey == null || apiKey.isEmpty) {
-      logger.warning('AIChat', 'API Key 未配置');
-      return AIResponse.error(
-        '需要配置智谱 GLM API Key 才能使用对话功能。\n\n'
-        '前往 设置 > AI设置 进行配置。',
-      );
-    }
-
     try {
-      // 使用 flutter_ai_kit 的 ZhipuGLMProvider
-      final aiKit = FlutterAIKit();
-
-      // 注册智谱 Provider (使用 glm-4 通用对话模型)
-      final glmModel = prefs.getString(AIConstants.keyGlmModel) ?? AIConstants.defaultGlmVisionModel;
-      logger.info('AIChat', '自由对话使用模型: $glmModel');
-      final zhipuProvider = ZhipuGLMProvider(
-        apiKey: apiKey,
-        model: glmModel,
-        temperature: 0.7,
-      );
-      aiKit.registerProvider(zhipuProvider);
-
-      // 创建对话任务 - 根据语言构建系统提示
+      // 根据语言构建系统提示
       String systemPrompt;
       if (languageCode == 'en') {
         systemPrompt = 'You are BeeCount\'s AI assistant, mainly helping users with bookkeeping. '
@@ -242,24 +181,23 @@ class AIChatService {
             '请用中文回复。';
       }
 
-      final task = _SimpleChatTask('$systemPrompt\n\n用户: $input\nAI:');
-
-      // 执行任务
-      final result = await aiKit.execute(
-        task,
-        context: AIExecutionContext(
-          hasNetwork: await _checkNetwork(),
-          timeout: const Duration(seconds: 30),
-        ),
+      final response = await AIProviderFactory.chat(
+        input,
+        systemPrompt: systemPrompt,
+        logTag: 'AIChat',
       );
 
-      if (result.success) {
-        logger.info('AIChat', '对话响应成功');
-        return AIResponse.text(result.data!);
-      } else {
-        logger.error('AIChat', '对话响应失败: ${result.error}');
-        return AIResponse.error('AI服务暂时不可用,请稍后重试');
+      logger.info('AIChat', '对话响应成功');
+      return AIResponse.text(response);
+    } on AIException catch (e) {
+      logger.warning('AIChat', '对话响应失败: ${e.message}');
+      if (e.message.contains('配置无效')) {
+        return AIResponse.error(
+          '需要配置 API Key 才能使用对话功能。\n\n'
+          '前往 设置 > AI设置 进行配置。',
+        );
       }
+      return AIResponse.error('AI服务暂时不可用,请稍后重试');
     } catch (e, st) {
       logger.error('AIChat', '自由对话失败', e, st);
       return AIResponse.error('网络连接失败,请检查网络');
@@ -352,16 +290,6 @@ class AIChatService {
     }
   }
 
-  /// 检查网络连接
-  Future<bool> _checkNetwork() async {
-    try {
-      final result = await InternetAddress.lookup('google.com')
-          .timeout(const Duration(seconds: 3));
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } catch (_) {
-      return false;
-    }
-  }
 }
 
 /// AI 响应模型
@@ -394,23 +322,4 @@ class AIResponse {
   factory AIResponse.error(String message) {
     return AIResponse(type: 'error', text: message);
   }
-}
-
-/// 简单对话任务
-class _SimpleChatTask extends AITask<String, String> {
-  final String prompt;
-
-  _SimpleChatTask(this.prompt);
-
-  @override
-  String get taskType => 'chat';
-
-  @override
-  String get input => prompt;
-
-  @override
-  Map<String, dynamic> toJson() => {
-        'task_type': taskType,
-        'prompt': prompt,
-      };
 }

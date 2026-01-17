@@ -120,12 +120,6 @@ abstract class AppLocalizations {
   /// **'Mine'**
   String get tabMine;
 
-  /// No description provided for @tabAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get tabAdd;
-
   /// No description provided for @commonCancel.
   ///
   /// In en, this message translates to:
@@ -243,7 +237,7 @@ abstract class AppLocalizations {
   /// No description provided for @fabActionVoiceDisabled.
   ///
   /// In en, this message translates to:
-  /// **'AI enabled & GLM API required'**
+  /// **'AI enabled & API Key required'**
   String get fabActionVoiceDisabled;
 
   /// No description provided for @voiceRecordingTitle.
@@ -4266,12 +4260,6 @@ abstract class AppLocalizations {
   /// **'Multi-Device Sync Instructions:\n\n1. Simultaneous editing on multiple devices is not supported\n2. To switch from Device A to Device B:\n   • Clear all ledgers on Device B\n   • Download latest data from cloud\n3. True multi-device collaboration will be supported in future versions'**
   String get cloudMultiDeviceWarningDetail;
 
-  /// No description provided for @cloudMultiDeviceLearnMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Learn More'**
-  String get cloudMultiDeviceLearnMore;
-
   /// No description provided for @cloudWebdavUrlLabel.
   ///
   /// In en, this message translates to:
@@ -7080,12 +7068,6 @@ abstract class AppLocalizations {
   /// **'Local First (Recommended)'**
   String get aiStrategyLocalFirst;
 
-  /// No description provided for @aiStrategyLocalFirstDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Use local model first, fallback to cloud if failed'**
-  String get aiStrategyLocalFirstDesc;
-
   /// No description provided for @aiStrategyCloudFirst.
   ///
   /// In en, this message translates to:
@@ -7103,12 +7085,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Local Only'**
   String get aiStrategyLocalOnly;
-
-  /// No description provided for @aiStrategyLocalOnlyDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Use local model only, completely offline'**
-  String get aiStrategyLocalOnlyDesc;
 
   /// No description provided for @aiStrategyCloudOnly.
   ///
@@ -7134,23 +7110,17 @@ abstract class AppLocalizations {
   /// **'Switched to: {strategy}'**
   String aiStrategySwitched(String strategy);
 
-  /// No description provided for @aiCloudApiTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Zhipu GLM API'**
-  String get aiCloudApiTitle;
-
-  /// No description provided for @aiCloudApiKeyLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'API Key'**
-  String get aiCloudApiKeyLabel;
-
   /// No description provided for @aiCloudApiKeyHint.
   ///
   /// In en, this message translates to:
   /// **'Enter your Zhipu AI API Key'**
   String get aiCloudApiKeyHint;
+
+  /// No description provided for @aiCloudApiKeyHintCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter API Key'**
+  String get aiCloudApiKeyHintCustom;
 
   /// No description provided for @aiCloudApiKeyHelper.
   ///
@@ -7176,24 +7146,6 @@ abstract class AppLocalizations {
   /// **'Test Connection'**
   String get aiCloudApiTestKey;
 
-  /// No description provided for @aiCloudApiKeyValid.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ API Key is valid, AI features are available'**
-  String get aiCloudApiKeyValid;
-
-  /// No description provided for @aiCloudApiKeyInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'❌ API Key is invalid, please check and re-enter'**
-  String get aiCloudApiKeyInvalid;
-
-  /// No description provided for @aiCloudApiKeyRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'⚠️ API Key not configured. AI chat and enhanced recognition will be unavailable'**
-  String get aiCloudApiKeyRequired;
-
   /// No description provided for @aiChatConfigWarning.
   ///
   /// In en, this message translates to:
@@ -7217,12 +7169,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Training'**
   String get aiLocalModelTraining;
-
-  /// No description provided for @aiLocalModelManagement.
-  ///
-  /// In en, this message translates to:
-  /// **'Model Management'**
-  String get aiLocalModelManagement;
 
   /// No description provided for @aiLocalModelUnavailable.
   ///
@@ -7847,6 +7793,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI smart recognition config'**
   String get configIncludeAI;
+
+  /// No description provided for @configIncludeAISubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Providers, capability binding, model settings, etc.'**
+  String get configIncludeAISubtitle;
 
   /// No description provided for @configIncludeAppSettings.
   ///
@@ -8742,6 +8694,12 @@ abstract class AppLocalizations {
   /// **'Advanced Settings'**
   String get aiPromptAdvancedSettings;
 
+  /// No description provided for @aiAdvancedSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Model selection, strategy, local model, prompt'**
+  String get aiAdvancedSettingsDesc;
+
   /// No description provided for @aiPromptEditEntry.
   ///
   /// In en, this message translates to:
@@ -8874,18 +8832,6 @@ abstract class AppLocalizations {
   /// **'User\'s account list (may be empty)'**
   String get aiPromptVarAccounts;
 
-  /// No description provided for @aiModelSelectEntry.
-  ///
-  /// In en, this message translates to:
-  /// **'AI Model Selection'**
-  String get aiModelSelectEntry;
-
-  /// No description provided for @aiModelSelectEntryDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Allows selection of visual and text reasoning models'**
-  String get aiModelSelectEntryDesc;
-
   /// No description provided for @aiModelTitle.
   ///
   /// In en, this message translates to:
@@ -8945,6 +8891,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Analyze OCR results using only text models'**
   String get aiUnUseVisionDesc;
+
+  /// No description provided for @aiCustomBaseUrlHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'OpenAI-compatible API URL, e.g. https://api.openai.com/v1'**
+  String get aiCustomBaseUrlHelper;
+
+  /// No description provided for @aiTextModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Text Model'**
+  String get aiTextModelTitle;
+
+  /// No description provided for @aiAudioModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Model'**
+  String get aiAudioModelTitle;
 
   /// No description provided for @tagManageTitle.
   ///
@@ -9750,12 +9714,6 @@ abstract class AppLocalizations {
   /// **'Attachments exported successfully'**
   String get attachmentExportSuccess;
 
-  /// No description provided for @attachmentExportFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to export attachments'**
-  String get attachmentExportFailed;
-
   /// No description provided for @attachmentExportSavedTo.
   ///
   /// In en, this message translates to:
@@ -10103,6 +10061,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Uncategorized'**
   String get commonUncategorized;
+
+  /// No description provided for @commonSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get commonSaved;
+
+  /// No description provided for @aiProviderManageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider Management'**
+  String get aiProviderManageTitle;
+
+  /// No description provided for @aiProviderManageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage AI service providers'**
+  String get aiProviderManageSubtitle;
+
+  /// No description provided for @aiProviderAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Provider'**
+  String get aiProviderAdd;
+
+  /// No description provided for @aiProviderBuiltIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in'**
+  String get aiProviderBuiltIn;
+
+  /// No description provided for @aiProviderEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No providers configured'**
+  String get aiProviderEmpty;
+
+  /// No description provided for @aiProviderNoApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'API Key not configured'**
+  String get aiProviderNoApiKey;
+
+  /// No description provided for @aiProviderTapToEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to edit'**
+  String get aiProviderTapToEdit;
+
+  /// No description provided for @aiProviderDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Provider'**
+  String get aiProviderDeleteTitle;
+
+  /// No description provided for @aiProviderDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete provider \"{name}\"? Capabilities using this provider will switch to default.'**
+  String aiProviderDeleteConfirm(String name);
+
+  /// No description provided for @aiProviderDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider deleted'**
+  String get aiProviderDeleted;
+
+  /// No description provided for @aiProviderEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Provider'**
+  String get aiProviderEditTitle;
+
+  /// No description provided for @aiProviderAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Provider'**
+  String get aiProviderAddTitle;
+
+  /// No description provided for @aiProviderBasicInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Info'**
+  String get aiProviderBasicInfo;
+
+  /// No description provided for @aiProviderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider Name'**
+  String get aiProviderName;
+
+  /// No description provided for @aiProviderNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., SiliconFlow, DeepSeek'**
+  String get aiProviderNameHint;
+
+  /// No description provided for @aiProviderNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter provider name'**
+  String get aiProviderNameRequired;
+
+  /// No description provided for @aiProviderBaseUrlRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter Base URL'**
+  String get aiProviderBaseUrlRequired;
+
+  /// No description provided for @aiProviderModels.
+  ///
+  /// In en, this message translates to:
+  /// **'Model Configuration'**
+  String get aiProviderModels;
+
+  /// No description provided for @aiProviderModelsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty capabilities cannot use this provider'**
+  String get aiProviderModelsHint;
+
+  /// No description provided for @aiCapabilityText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get aiCapabilityText;
+
+  /// No description provided for @aiCapabilityVision.
+  ///
+  /// In en, this message translates to:
+  /// **'Vision'**
+  String get aiCapabilityVision;
+
+  /// No description provided for @aiCapabilitySpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech'**
+  String get aiCapabilitySpeech;
+
+  /// No description provided for @aiCapabilitySelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Capability Binding'**
+  String get aiCapabilitySelectTitle;
+
+  /// No description provided for @aiCapabilitySelectSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select provider for each AI capability'**
+  String get aiCapabilitySelectSubtitle;
+
+  /// No description provided for @aiCapabilityTextChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Text Chat'**
+  String get aiCapabilityTextChat;
+
+  /// No description provided for @aiCapabilityTextChatDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For AI chat and text bill extraction'**
+  String get aiCapabilityTextChatDesc;
+
+  /// No description provided for @aiCapabilityImageUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Understanding'**
+  String get aiCapabilityImageUnderstand;
+
+  /// No description provided for @aiCapabilityImageUnderstandDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For image bill recognition'**
+  String get aiCapabilityImageUnderstandDesc;
+
+  /// No description provided for @aiCapabilitySpeechToText.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech to Text'**
+  String get aiCapabilitySpeechToText;
+
+  /// No description provided for @aiCapabilitySpeechToTextDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For voice billing'**
+  String get aiCapabilitySpeechToTextDesc;
+
+  /// No description provided for @aiProviderTestRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to test'**
+  String get aiProviderTestRun;
+
+  /// No description provided for @aiProviderTestRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing...'**
+  String get aiProviderTestRunning;
+
+  /// No description provided for @aiProviderTestSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Test passed'**
+  String get aiProviderTestSuccess;
+
+  /// No description provided for @aiProviderTestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Test failed'**
+  String get aiProviderTestFailed;
+
+  /// No description provided for @aiProviderTestAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Test All'**
+  String get aiProviderTestAll;
+
+  /// No description provided for @aiProviderTestAllRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry Test'**
+  String get aiProviderTestAllRetry;
+
+  /// No description provided for @aiModelInputHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty to use default model'**
+  String get aiModelInputHelper;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

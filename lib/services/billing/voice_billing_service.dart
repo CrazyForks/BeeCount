@@ -1,11 +1,7 @@
 import 'dart:io';
-import 'package:flutter_ai_kit/flutter_ai_kit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
-import '../../ai/providers/bill_extraction_glm_provider.dart';
-import '../../ai/providers/speech_to_text_glm_provider.dart';
 import '../system/logger_service.dart';
-import '../ai/ai_constants.dart';
+import '../ai/bill_extraction_service.dart';
 import '../../data/repositories/base_repository.dart';
 import '../../data/db.dart';
 
@@ -22,33 +18,18 @@ class VoiceRecognitionResult {
 
 /// 语音记账服务
 ///
-/// 使用GLM-4-Voice直接从语音提取账单信息
+/// 使用 AI 从语音提取账单信息
 class VoiceBillingService {
-  final FlutterAIKit _aiKit = FlutterAIKit();
-
   /// 步骤1：将语音转为文字（快速）
   Future<String> convertVoiceToText(File audioFile) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
+    final service = BillExtractionService();
+    final text = await service.speechToText(audioFile);
 
-      if (apiKey.isEmpty) {
-        throw Exception('未配置GLM API Key，请先在设置中配置');
-      }
-
-      final speechProvider = SpeechToTextGLMProvider(apiKey: apiKey);
-      final speechTask = SpeechToTextTask(audioFile);
-      final speechResult = await speechProvider.execute(speechTask);
-
-      if (!speechResult.success) {
-        throw Exception('语音识别失败: ${speechResult.error}');
-      }
-
-      return speechResult.data!;
-    } catch (e, stackTrace) {
-      logger.error('VoiceBilling', '语音转文字失败', e, stackTrace);
-      rethrow;
+    if (text == null) {
+      throw Exception('语音识别失败，请检查 AI 配置');
     }
+
+    return text;
   }
 
   /// 步骤2：从文字提取账单信息（较慢）
@@ -59,10 +40,6 @@ class VoiceBillingService {
     required int ledgerId,
   }) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
-      final glmModel = prefs.getString(AIConstants.keyGlmModel) ?? AIConstants.defaultGlmModel;
-
       // 获取可用分类列表（排除有子分类的父分类，只获取叶子分类）
       final expenseCategories = await repository.getUsableCategories('expense');
       final incomeCategories = await repository.getUsableCategories('income');
@@ -82,34 +59,30 @@ class VoiceBillingService {
         accountNames = matchingAccounts.map((a) => a.name).toList();
       }
 
-      // 使用GLM-4（文本模型）从文字提取账单信息
-      _aiKit.registerProvider(BillExtractionGLMProvider(
-        apiKey,
-        glmModel,
+      // 使用新的 BillExtractionService
+      final service = BillExtractionService(
         expenseCategories: expenseCategoryNames,
         incomeCategories: incomeCategoryNames,
         accounts: accountNames,
-      ));
+      );
+      await service.init();
 
-      _aiKit.setStrategy(CloudFirstStrategy());
+      final billInfo = await service.extractFromText(text);
 
-      final task = BillExtractionTask(text);
-      final result = await _aiKit.execute(task);
-
-      if (result.success) {
-        logger.info('VoiceBilling', '账单提取成功: ${result.data?.category ?? "未识别"}');
-        return result.data;
+      if (billInfo != null) {
+        logger.info('VoiceBilling', '账单提取成功: ${billInfo.category ?? "未识别"}');
       } else {
-        logger.warning('VoiceBilling', '账单提取失败: ${result.error}');
-        return null;
+        logger.warning('VoiceBilling', '账单提取失败');
       }
+
+      return billInfo;
     } catch (e, stackTrace) {
       logger.error('VoiceBilling', '提取账单信息失败', e, stackTrace);
       rethrow;
     }
   }
 
-  /// 识别语音并提取账单信息（完整流程，保留兼容性）
+  /// 识别语音并提取账单信息（完整流程）
   ///
   /// [audioFile] 录音文件
   /// [repository] 数据库仓库（用于查询账户）

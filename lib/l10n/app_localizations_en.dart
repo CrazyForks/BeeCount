@@ -19,9 +19,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabMine => 'Mine';
 
   @override
-  String get tabAdd => 'Add';
-
-  @override
   String get commonCancel => 'Cancel';
 
   @override
@@ -79,7 +76,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fabActionVoice => 'Voice';
 
   @override
-  String get fabActionVoiceDisabled => 'AI enabled & GLM API required';
+  String get fabActionVoiceDisabled => 'AI enabled & API Key required';
 
   @override
   String get voiceRecordingTitle => 'Voice Billing';
@@ -2250,9 +2247,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudMultiDeviceWarningDetail => 'Multi-Device Sync Instructions:\n\n1. Simultaneous editing on multiple devices is not supported\n2. To switch from Device A to Device B:\n   • Clear all ledgers on Device B\n   • Download latest data from cloud\n3. True multi-device collaboration will be supported in future versions';
 
   @override
-  String get cloudMultiDeviceLearnMore => 'Learn More';
-
-  @override
   String get cloudWebdavUrlLabel => 'WebDAV Server URL';
 
   @override
@@ -3717,9 +3711,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiStrategyLocalFirst => 'Local First (Recommended)';
 
   @override
-  String get aiStrategyLocalFirstDesc => 'Use local model first, fallback to cloud if failed';
-
-  @override
   String get aiStrategyCloudFirst => 'Cloud First';
 
   @override
@@ -3727,9 +3718,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiStrategyLocalOnly => 'Local Only';
-
-  @override
-  String get aiStrategyLocalOnlyDesc => 'Use local model only, completely offline';
 
   @override
   String get aiStrategyCloudOnly => 'Cloud Only';
@@ -3746,13 +3734,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get aiCloudApiTitle => 'Zhipu GLM API';
-
-  @override
-  String get aiCloudApiKeyLabel => 'API Key';
-
-  @override
   String get aiCloudApiKeyHint => 'Enter your Zhipu AI API Key';
+
+  @override
+  String get aiCloudApiKeyHintCustom => 'Enter API Key';
 
   @override
   String get aiCloudApiKeyHelper => 'GLM-*-Flash model is completely free';
@@ -3767,15 +3752,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCloudApiTestKey => 'Test Connection';
 
   @override
-  String get aiCloudApiKeyValid => '✅ API Key is valid, AI features are available';
-
-  @override
-  String get aiCloudApiKeyInvalid => '❌ API Key is invalid, please check and re-enter';
-
-  @override
-  String get aiCloudApiKeyRequired => '⚠️ API Key not configured. AI chat and enhanced recognition will be unavailable';
-
-  @override
   String get aiChatConfigWarning => 'Zhipu API Key is not configured or invalid, AI features are unavailable';
 
   @override
@@ -3786,9 +3762,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiLocalModelTraining => 'Training';
-
-  @override
-  String get aiLocalModelManagement => 'Model Management';
 
   @override
   String get aiLocalModelUnavailable => 'Local model in training, not available yet';
@@ -4107,6 +4080,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get configIncludeAI => 'AI smart recognition config';
+
+  @override
+  String get configIncludeAISubtitle => 'Providers, capability binding, model settings, etc.';
 
   @override
   String get configIncludeAppSettings => 'App settings (language, appearance, reminder, default account, etc.)';
@@ -4582,6 +4558,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiPromptAdvancedSettings => 'Advanced Settings';
 
   @override
+  String get aiAdvancedSettingsDesc => 'Model selection, strategy, local model, prompt';
+
+  @override
   String get aiPromptEditEntry => 'Prompt Editor';
 
   @override
@@ -4648,12 +4627,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiPromptVarAccounts => 'User\'s account list (may be empty)';
 
   @override
-  String get aiModelSelectEntry => 'AI Model Selection';
-
-  @override
-  String get aiModelSelectEntryDesc => 'Allows selection of visual and text reasoning models';
-
-  @override
   String get aiModelTitle => 'Text Reasoning Model';
 
   @override
@@ -4684,6 +4657,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiUnUseVisionDesc => 'Analyze OCR results using only text models';
+
+  @override
+  String get aiCustomBaseUrlHelper => 'OpenAI-compatible API URL, e.g. https://api.openai.com/v1';
+
+  @override
+  String get aiTextModelTitle => 'Text Model';
+
+  @override
+  String get aiAudioModelTitle => 'Audio Model';
 
   @override
   String get tagManageTitle => 'Tags';
@@ -5110,9 +5092,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attachmentExportSuccess => 'Attachments exported successfully';
 
   @override
-  String get attachmentExportFailed => 'Failed to export attachments';
-
-  @override
   String attachmentExportSavedTo(String path) {
     return 'Saved to: $path';
   }
@@ -5295,4 +5274,120 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonUncategorized => 'Uncategorized';
+
+  @override
+  String get commonSaved => 'Saved';
+
+  @override
+  String get aiProviderManageTitle => 'Provider Management';
+
+  @override
+  String get aiProviderManageSubtitle => 'Manage AI service providers';
+
+  @override
+  String get aiProviderAdd => 'Add Provider';
+
+  @override
+  String get aiProviderBuiltIn => 'Built-in';
+
+  @override
+  String get aiProviderEmpty => 'No providers configured';
+
+  @override
+  String get aiProviderNoApiKey => 'API Key not configured';
+
+  @override
+  String get aiProviderTapToEdit => 'Tap to edit';
+
+  @override
+  String get aiProviderDeleteTitle => 'Delete Provider';
+
+  @override
+  String aiProviderDeleteConfirm(String name) {
+    return 'Delete provider \"$name\"? Capabilities using this provider will switch to default.';
+  }
+
+  @override
+  String get aiProviderDeleted => 'Provider deleted';
+
+  @override
+  String get aiProviderEditTitle => 'Edit Provider';
+
+  @override
+  String get aiProviderAddTitle => 'Add Provider';
+
+  @override
+  String get aiProviderBasicInfo => 'Basic Info';
+
+  @override
+  String get aiProviderName => 'Provider Name';
+
+  @override
+  String get aiProviderNameHint => 'e.g., SiliconFlow, DeepSeek';
+
+  @override
+  String get aiProviderNameRequired => 'Please enter provider name';
+
+  @override
+  String get aiProviderBaseUrlRequired => 'Please enter Base URL';
+
+  @override
+  String get aiProviderModels => 'Model Configuration';
+
+  @override
+  String get aiProviderModelsHint => 'Empty capabilities cannot use this provider';
+
+  @override
+  String get aiCapabilityText => 'Text';
+
+  @override
+  String get aiCapabilityVision => 'Vision';
+
+  @override
+  String get aiCapabilitySpeech => 'Speech';
+
+  @override
+  String get aiCapabilitySelectTitle => 'Capability Binding';
+
+  @override
+  String get aiCapabilitySelectSubtitle => 'Select provider for each AI capability';
+
+  @override
+  String get aiCapabilityTextChat => 'Text Chat';
+
+  @override
+  String get aiCapabilityTextChatDesc => 'For AI chat and text bill extraction';
+
+  @override
+  String get aiCapabilityImageUnderstand => 'Image Understanding';
+
+  @override
+  String get aiCapabilityImageUnderstandDesc => 'For image bill recognition';
+
+  @override
+  String get aiCapabilitySpeechToText => 'Speech to Text';
+
+  @override
+  String get aiCapabilitySpeechToTextDesc => 'For voice billing';
+
+  @override
+  String get aiProviderTestRun => 'Tap to test';
+
+  @override
+  String get aiProviderTestRunning => 'Testing...';
+
+  @override
+  String get aiProviderTestSuccess => 'Test passed';
+
+  @override
+  String get aiProviderTestFailed => 'Test failed';
+
+  @override
+  String get aiProviderTestAll => 'Test All';
+
+  @override
+  String get aiProviderTestAllRetry => 'Retry Test';
+
+  @override
+  String get aiModelInputHelper => 'Leave empty to use default model';
 }

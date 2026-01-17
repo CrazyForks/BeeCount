@@ -10,7 +10,7 @@ import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers/theme_providers.dart';
 import '../../l10n/app_localizations.dart';
-import '../../ai/providers/bill_extraction_glm_base_provider.dart';
+import '../../services/ai/bill_extraction_service.dart';
 import '../../services/ai/ai_constants.dart';
 
 /// AI提示词编辑页面
@@ -27,8 +27,8 @@ class _AIPromptEditPageState extends ConsumerState<AIPromptEditPage> {
   bool _hasChanges = false;
   String _savedPrompt = '';
 
-  /// 使用 BillExtractionGLMBaseProvider 中定义的默认模板
-  static String get defaultPrompt => BillExtractionGLMBaseProvider.defaultPromptTemplate;
+  /// 使用 BillExtractionService 中定义的默认模板
+  static String get defaultPrompt => BillExtractionService.defaultPromptTemplate;
 
   /// 获取变量说明列表（使用国际化文案）
   List<Map<String, String>> _getVariables(AppLocalizations l10n) => [
