@@ -595,12 +595,16 @@ A:
 
 #### 🌍 国际用户
 
+- **GitHub Sponsors**: <https://github.com/sponsors/TNT-Likely> （推荐，0% 手续费）
+- **Open Collective**: <https://opencollective.com/beecount>
 - **PayPal**: <https://paypal.me/sunxiaoyes>
 
 #### 🇨🇳 中国用户
 
+- **爱发电**: <https://afdian.com/a/sunxiaoyes> （支持订阅）
+
 <details>
-<summary>点击查看二维码</summary>
+<summary>点击查看支付宝/微信二维码</summary>
 
 | 支付宝 | 微信支付 |
 |:---:|:---:|

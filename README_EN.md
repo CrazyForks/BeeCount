@@ -593,12 +593,16 @@ Your donation will be used for:
 
 #### 🌍 International
 
+- **GitHub Sponsors**: <https://github.com/sponsors/TNT-Likely> (Recommended, 0% fee)
+- **Open Collective**: <https://opencollective.com/beecount>
 - **PayPal**: <https://paypal.me/sunxiaoyes>
 
 #### 🇨🇳 China
 
+- **Afdian (爱发电)**: <https://afdian.com/a/sunxiaoyes> (Subscription supported)
+
 <details>
-<summary>Click to view QR codes</summary>
+<summary>Click to view Alipay/WeChat QR codes</summary>
 
 | Alipay | WeChat Pay |
 |:---:|:---:|
