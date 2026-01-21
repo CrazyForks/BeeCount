@@ -348,6 +348,26 @@ jobs:
           fi
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
+      - name: Select latest Xcode
+        run: |
+          echo "📱 Available Xcode versions:"
+          ls -la /Applications/ | grep Xcode || true
+
+          # 选择最新的 Xcode 版本 (包含 iOS 26 SDK)
+          LATEST_XCODE=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$LATEST_XCODE" ]; then
+            echo "🔧 Selecting Xcode: $LATEST_XCODE"
+            sudo xcode-select -s "$LATEST_XCODE"
+          fi
+
+          echo ""
+          echo "📋 Current Xcode version:"
+          xcodebuild -version
+
+          echo ""
+          echo "📋 Available iOS SDKs:"
+          xcodebuild -showsdks | grep -i ios || true
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
