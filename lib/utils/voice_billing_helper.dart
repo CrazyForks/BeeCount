@@ -27,7 +27,10 @@ class VoiceBillingHelper {
     final l10n = AppLocalizations.of(context);
 
     try {
-      // 0. 检查AI是否启用且API key是否已配置（使用新的 aiConfigProvider）
+      // 0. 确保 AI 配置已加载完成（修复首次使用报错问题）
+      await ref.read(aiConfigProvider.notifier).ensureLoaded();
+
+      // 检查AI是否启用且API key是否已配置
       final aiConfig = ref.read(aiConfigProvider);
 
       if (!aiConfig.enabled || aiConfig.apiKey.isEmpty) {

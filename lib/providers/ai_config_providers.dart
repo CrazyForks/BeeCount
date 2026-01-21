@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -179,9 +181,17 @@ class AIConfigData {
 
 /// AI 配置 Notifier
 class AIConfigNotifier extends StateNotifier<AIConfigData> {
+  /// 加载完成标志
+  final Completer<void> _loadCompleter = Completer<void>();
+
   AIConfigNotifier() : super(const AIConfigData()) {
     _loadFromPrefs();
   }
+
+  /// 确保配置已加载完成
+  ///
+  /// 在需要读取配置前调用此方法，确保异步加载已完成
+  Future<void> ensureLoaded() => _loadCompleter.future;
 
   /// 从 SharedPreferences 加载配置
   Future<void> _loadFromPrefs() async {
@@ -214,6 +224,11 @@ class AIConfigNotifier extends StateNotifier<AIConfigData> {
       useVision: prefs.getBool(AIConstants.keyAiUseVision) ?? true,
       strategy: strategy,
     );
+
+    // 标记加载完成
+    if (!_loadCompleter.isCompleted) {
+      _loadCompleter.complete();
+    }
   }
 
   AIStrategy _parseStrategy(String str) {
