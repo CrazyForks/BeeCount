@@ -7542,6 +7542,24 @@ abstract class AppLocalizations {
   /// **'Buy me a coffee'**
   String get aboutSupportDevelopmentSubtitle;
 
+  /// No description provided for @aboutRelatedProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Bee Family'**
+  String get aboutRelatedProducts;
+
+  /// No description provided for @aboutBeeDNS.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeDNS'**
+  String get aboutBeeDNS;
+
+  /// No description provided for @aboutBeeDNSSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple and efficient DNS management tool'**
+  String get aboutBeeDNSSubtitle;
+
   /// No description provided for @logCenterTitle.
   ///
   /// In en, this message translates to:

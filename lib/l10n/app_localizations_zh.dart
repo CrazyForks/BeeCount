@@ -3956,6 +3956,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => '请开发者喝杯咖啡';
 
   @override
+  String get aboutRelatedProducts => '蜜蜂家族';
+
+  @override
+  String get aboutBeeDNS => '蜜蜂域名 BeeDNS';
+
+  @override
+  String get aboutBeeDNSSubtitle => '简洁高效的 DNS 管理工具';
+
+  @override
   String get logCenterTitle => '日志中心';
 
   @override
@@ -9349,6 +9358,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aboutSupportDevelopmentSubtitle => '請開發者喝杯咖啡';
+
+  @override
+  String get aboutRelatedProducts => '蜜蜂家族';
+
+  @override
+  String get aboutBeeDNS => '蜜蜂域名 BeeDNS';
+
+  @override
+  String get aboutBeeDNSSubtitle => '簡潔高效的 DNS 管理工具';
 
   @override
   String get logCenterTitle => '日誌中心';

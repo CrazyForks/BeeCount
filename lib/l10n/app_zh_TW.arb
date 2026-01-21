@@ -1,6 +1,9 @@
 {
   "about": "關於",
   "aboutDesc": "版本資訊、說明與回饋",
+  "aboutBeeDNS": "蜜蜂域名 BeeDNS",
+  "aboutBeeDNSSubtitle": "簡潔高效的 DNS 管理工具",
+  "aboutRelatedProducts": "蜜蜂家族",
   "aboutDouyin": "抖音",
   "aboutGitHubRepo": "GitHub 儲存庫",
   "aboutPageLoadingVersion": "載入版本號中...",

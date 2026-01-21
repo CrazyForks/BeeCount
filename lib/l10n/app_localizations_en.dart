@@ -3956,6 +3956,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
 
   @override
+  String get aboutRelatedProducts => 'Bee Family';
+
+  @override
+  String get aboutBeeDNS => 'BeeDNS';
+
+  @override
+  String get aboutBeeDNSSubtitle => 'Simple and efficient DNS management tool';
+
+  @override
   String get logCenterTitle => 'Log Center';
 
   @override
