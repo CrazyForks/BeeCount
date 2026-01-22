@@ -9,6 +9,8 @@ import '../l10n/app_localizations.dart';
 import '../providers.dart';
 import '../providers/ai_config_providers.dart';
 import '../services/system/logger_service.dart';
+import '../services/ai/ai_provider_manager.dart';
+import '../services/ai/ai_provider_config.dart';
 import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
 import '../services/billing/post_processor.dart';
@@ -30,22 +32,22 @@ class VoiceBillingHelper {
       // 0. 确保 AI 配置已加载完成（修复首次使用报错问题）
       await ref.read(aiConfigProvider.notifier).ensureLoaded();
 
-      // 检查AI是否启用且API key是否已配置
+      // 检查AI是否启用
       final aiConfig = ref.read(aiConfigProvider);
-
-      if (!aiConfig.enabled || aiConfig.apiKey.isEmpty) {
+      if (!aiConfig.enabled) {
         if (!context.mounted) return;
         showToast(context, l10n.fabActionVoiceDisabled);
         return;
       }
 
-      // 自定义服务商还需要检查 Base URL 和默认模型
-      if (aiConfig.provider == AIServiceProvider.custom) {
-        if (aiConfig.customBaseUrl == null || aiConfig.customBaseUrl!.isEmpty) {
-          if (!context.mounted) return;
-          showToast(context, l10n.fabActionVoiceDisabled);
-          return;
-        }
+      // 检查语音能力对应的服务商是否已配置 API Key（使用新的 Provider 系统）
+      final speechProvider = await AIProviderManager.getProviderForCapability(
+        AICapabilityType.speech,
+      );
+      if (speechProvider == null || !speechProvider.isValid) {
+        if (!context.mounted) return;
+        showToast(context, l10n.fabActionVoiceDisabled);
+        return;
       }
 
       // 1. 检查并请求麦克风权限
