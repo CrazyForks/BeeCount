@@ -515,31 +515,49 @@ class _HomePageState extends ConsumerState<HomePage> {
                     height: 48, // IconButton默认高度
                     child: Stack(
                       children: [
-                        // 底层：居中的图标和文字
-                        Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              BeeIcon(
-                                color: Theme.of(context).colorScheme.primary,
-                                size: 32,
+                        // 底层：居中的图标和文字（为左右按钮预留空间，避免英文标题重叠）
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: aiEnabled ? 48 : 8,
+                                right: 96, // 2个IconButton的标准宽度
                               ),
-                              Text(
-                                AppLocalizations.of(context).homeAppTitle,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.color,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      BeeIcon(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 32,
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context).homeAppTitle,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.color,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                         // 上层：左侧AI助手按钮（仅在开启时显示）
