@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../styles/tokens.dart';
 import '../../providers.dart';
+import '../../utils/currencies.dart';
 import '../../utils/format_utils.dart';
 import 'format_money.dart';
 
@@ -72,7 +73,8 @@ class AmountText extends ConsumerWidget {
               formatMoneyCompact(value, maxDecimals: decimals, signed: signed);
           // 但如果需要币种符号,添加上去
           if (showCurrency) {
-            final currencySymbol = _getCurrencySymbol(effectiveCurrencyCode);
+            final currencySymbol =
+                getCurrencySymbol(effectiveCurrencyCode.toUpperCase());
             displayText = '$currencySymbol$displayText';
           }
         } else {
@@ -108,25 +110,5 @@ class AmountText extends ConsumerWidget {
       textAlign: TextAlign.right,
       style: finalStyle,
     );
-  }
-
-  // 获取币种符号
-  String _getCurrencySymbol(String currencyCode) {
-    switch (currencyCode.toUpperCase()) {
-      case 'CNY':
-        return '¥';
-      case 'USD':
-        return '\$';
-      case 'EUR':
-        return '€';
-      case 'GBP':
-        return '£';
-      case 'JPY':
-        return '¥';
-      case 'KRW':
-        return '₩';
-      default:
-        return currencyCode;
-    }
   }
 }

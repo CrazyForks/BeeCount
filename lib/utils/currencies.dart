@@ -86,7 +86,8 @@ String getCurrencyName(String code, BuildContext context) {
 
 /// 获取币种符号
 String getCurrencySymbol(String code) {
-  switch (code) {
+  final normalizedCode = code.toUpperCase();
+  switch (normalizedCode) {
     case 'CNY':
       return '¥';
     case 'USD':
@@ -140,6 +141,6 @@ String getCurrencySymbol(String code) {
     case 'MXN':
       return 'MX\$';
     default:
-      return code;
+      return normalizedCode;
   }
 }

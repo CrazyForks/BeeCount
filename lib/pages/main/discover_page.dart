@@ -8,6 +8,7 @@ import '../../providers.dart';
 import '../../providers/budget_providers.dart';
 import '../../services/data/category_service.dart';
 import '../../styles/tokens.dart';
+import '../../utils/currencies.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/website_urls.dart';
 import '../../widgets/biz/amount_text.dart';
@@ -241,6 +242,9 @@ class _BudgetCard extends ConsumerWidget {
         budget.budget > 0 ? (budget.used / budget.budget).clamp(0.0, 1.0) : 0.0;
     final progressColor = _getProgressColor(context, rate);
     final hideAmounts = ref.watch(hideAmountsProvider);
+    final currencyCode =
+        ref.watch(currentLedgerProvider).asData?.value?.currency ?? 'CNY';
+    final currencySymbol = getCurrencySymbol(currencyCode);
 
     return Container(
       padding: EdgeInsets.all(12.0.scaled(context, ref)),
@@ -257,7 +261,7 @@ class _BudgetCard extends ConsumerWidget {
             children: [
               hideAmounts
                   ? Text(
-                      '¥****',
+                      '$currencySymbol****',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -265,7 +269,7 @@ class _BudgetCard extends ConsumerWidget {
                       ),
                     )
                   : Text(
-                      '¥${budget.used.toStringAsFixed(0)}',
+                      '$currencySymbol${budget.used.toStringAsFixed(0)}',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -283,7 +287,7 @@ class _BudgetCard extends ConsumerWidget {
                         ),
                       )
                     : Text(
-                        ' / ¥${budget.budget.toStringAsFixed(0)}',
+                        ' / $currencySymbol${budget.budget.toStringAsFixed(0)}',
                         style: TextStyle(
                           fontSize: 13,
                           color: BeeTokens.textTertiary(context),
@@ -334,7 +338,12 @@ class _BudgetCard extends ConsumerWidget {
           // 分类预算（最多显示3个）
           if (overview.categoryBudgets.isNotEmpty) ...[
             SizedBox(height: 10.0.scaled(context, ref)),
-            _buildCategoryBudgets(context, ref, overview.categoryBudgets),
+            _buildCategoryBudgets(
+              context,
+              ref,
+              overview.categoryBudgets,
+              currencySymbol,
+            ),
           ],
         ],
       ),
@@ -345,6 +354,7 @@ class _BudgetCard extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     List<CategoryBudgetUsage> categoryBudgets,
+    String currencySymbol,
   ) {
     // 只显示前3个
     final displayBudgets = categoryBudgets.take(3).toList();
@@ -353,7 +363,12 @@ class _BudgetCard extends ConsumerWidget {
       children: [
         for (var i = 0; i < displayBudgets.length; i++) ...[
           if (i > 0) SizedBox(height: 6.0.scaled(context, ref)),
-          _buildCategoryBudgetItem(context, ref, displayBudgets[i]),
+          _buildCategoryBudgetItem(
+            context,
+            ref,
+            displayBudgets[i],
+            currencySymbol,
+          ),
         ],
         if (categoryBudgets.length > 3) ...[
           SizedBox(height: 4.0.scaled(context, ref)),
@@ -373,6 +388,7 @@ class _BudgetCard extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     CategoryBudgetUsage usage,
+    String currencySymbol,
   ) {
     final rate = usage.usage.budget > 0
         ? (usage.usage.used / usage.usage.budget).clamp(0.0, 1.0)
@@ -419,7 +435,7 @@ class _BudgetCard extends ConsumerWidget {
                           ),
                         )
                       : Text(
-                          '¥${usage.usage.used.toStringAsFixed(0)}/${usage.usage.budget.toStringAsFixed(0)}',
+                          '$currencySymbol${usage.usage.used.toStringAsFixed(0)}/${usage.usage.budget.toStringAsFixed(0)}',
                           style: TextStyle(
                             fontSize: 11,
                             color: BeeTokens.textSecondary(context),
@@ -498,7 +514,6 @@ class _AccountsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final accountsAsync = ref.watch(allAccountsStreamProvider);
-    final totalStatsAsync = ref.watch(allAccountsTotalStatsProvider);
     final allStatsAsync = ref.watch(allAccountStatsProvider);
 
     return GestureDetector(
@@ -565,18 +580,13 @@ class _AccountsCard extends ConsumerWidget {
                 if (accounts.isEmpty) {
                   return _buildEmptyState(context, ref, l10n);
                 }
-                return totalStatsAsync.when(
-                  data: (totalStats) => allStatsAsync.when(
-                    data: (accountStats) => _buildAccountsContent(
-                      context,
-                      ref,
-                      accounts,
-                      totalStats,
-                      accountStats,
-                      l10n,
-                    ),
-                    loading: () => _buildLoadingState(context, ref),
-                    error: (_, __) => _buildEmptyState(context, ref, l10n),
+                return allStatsAsync.when(
+                  data: (accountStats) => _buildAccountsContent(
+                    context,
+                    ref,
+                    accounts,
+                    accountStats,
+                    l10n,
                   ),
                   loading: () => _buildLoadingState(context, ref),
                   error: (_, __) => _buildEmptyState(context, ref, l10n),
@@ -634,11 +644,14 @@ class _AccountsCard extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     List<dynamic> accounts,
-    ({double totalBalance, double totalExpense, double totalIncome}) totalStats,
     Map<int, ({double balance, double expense, double income})> accountStats,
     AppLocalizations l10n,
   ) {
     final useCompact = ref.watch(compactAmountProvider);
+    final balancesByCurrency =
+        _calculateBalancesByCurrency(accounts, accountStats);
+    final currencyCodes = balancesByCurrency.keys.toList()..sort();
+    final isSingleCurrency = currencyCodes.length == 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -664,19 +677,43 @@ class _AccountsCard extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(height: 2.0.scaled(context, ref)),
-                  AmountText(
-                    value: totalStats.totalBalance,
-                    signed: false,
-                    showCurrency: true,
-                    useCompactFormat: useCompact,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: totalStats.totalBalance >= 0
-                          ? BeeTokens.textPrimary(context)
-                          : Colors.red,
+                  if (isSingleCurrency)
+                    AmountText(
+                      value: balancesByCurrency[currencyCodes.first]!,
+                      signed: false,
+                      showCurrency: true,
+                      useCompactFormat: useCompact,
+                      currencyCode: currencyCodes.first,
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: balancesByCurrency[currencyCodes.first]! >= 0
+                            ? BeeTokens.textPrimary(context)
+                            : Colors.red,
+                      ),
+                    )
+                  else
+                    Wrap(
+                      spacing: 10.0.scaled(context, ref),
+                      runSpacing: 4.0.scaled(context, ref),
+                      children: [
+                        for (final currencyCode in currencyCodes)
+                          AmountText(
+                            value: balancesByCurrency[currencyCode]!,
+                            signed: false,
+                            showCurrency: true,
+                            useCompactFormat: useCompact,
+                            currencyCode: currencyCode,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: balancesByCurrency[currencyCode]! >= 0
+                                  ? BeeTokens.textPrimary(context)
+                                  : Colors.red,
+                            ),
+                          ),
+                      ],
                     ),
-                  ),
                 ],
               ),
               Text(
@@ -775,6 +812,7 @@ class _AccountsCard extends ConsumerWidget {
             signed: false,
             showCurrency: true,
             useCompactFormat: useCompact,
+            currencyCode: account.currency,
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -784,6 +822,27 @@ class _AccountsCard extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Map<String, double> _calculateBalancesByCurrency(
+    List<dynamic> accounts,
+    Map<int, ({double balance, double expense, double income})> accountStats,
+  ) {
+    final balancesByCurrency = <String, double>{};
+
+    for (final account in accounts) {
+      final currencyCode = (account.currency as String?)?.toUpperCase() ?? 'CNY';
+      final stats = accountStats[account.id];
+      final balance = stats?.balance ?? account.initialBalance ?? 0.0;
+
+      balancesByCurrency.update(
+        currencyCode,
+        (value) => value + balance,
+        ifAbsent: () => balance,
+      );
+    }
+
+    return balancesByCurrency;
   }
 }
 
