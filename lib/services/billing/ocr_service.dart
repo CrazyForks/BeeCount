@@ -16,7 +16,7 @@ class OcrResult {
   final List<String> allNumbers;
   final int? suggestedCategoryId; // 推荐的分类ID
   final String? aiCategoryName; // AI识别的分类名称
-  final String? aiType; // AI识别的类型 (income/expense)
+  final String? aiType; // AI识别的类型 (income/expense/transfer)
   final String? aiAccountName; // AI识别的账户名称
   final String? aiProvider; // AI提供商（用于日志）
   final bool aiEnhanced; // 是否经过AI增强
@@ -105,7 +105,8 @@ class OcrService {
         // 方式2: 先复制文件到App私有目录,再读取
         // 华为系统对Screenshots目录有特殊权限保护
         final appDir = await getTemporaryDirectory();
-        final tempFile = File('${appDir.path}/temp_screenshot_${DateTime.now().millisecondsSinceEpoch}.jpg');
+        final tempFile = File(
+            '${appDir.path}/temp_screenshot_${DateTime.now().millisecondsSinceEpoch}.jpg');
 
         // 复制文件
         await imageFile.copy(tempFile.path);
@@ -134,7 +135,8 @@ class OcrService {
       final time = _extractTime(rawText);
       final ruleDuration = DateTime.now().difference(ruleStartTime);
 
-      logger.info(_tag, '[规则提取] ${ruleDuration.inMilliseconds}ms | 金额:${amount ?? "无"} 备注:${note ?? "无"} 时间:${time ?? "无"} 候选:$allNumbers');
+      logger.info(_tag,
+          '[规则提取] ${ruleDuration.inMilliseconds}ms | 金额:${amount ?? "无"} 备注:${note ?? "无"} 时间:${time ?? "无"} 候选:$allNumbers');
 
       final baseResult = OcrResult(
         amount: amount,
@@ -174,7 +176,8 @@ class OcrService {
     try {
       // 检查是否启用AI
       final prefs = await SharedPreferences.getInstance();
-      final aiEnabled = prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
+      final aiEnabled =
+          prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
 
       if (!aiEnabled) {
         return baseResult;
@@ -193,7 +196,8 @@ class OcrService {
           final incomeCats = await repo.getUsableCategories('income');
           expenseCategories = expenseCats.map((c) => c.name).toList();
           incomeCategories = incomeCats.map((c) => c.name).toList();
-          logger.debug(_tag, '[分类列表] 支出${expenseCategories.length}个 收入${incomeCategories.length}个');
+          logger.debug(_tag,
+              '[分类列表] 支出${expenseCategories.length}个 收入${incomeCategories.length}个');
         } catch (e) {
           logger.warning(_tag, '[分类列表] 获取失败: $e');
         }
@@ -201,12 +205,14 @@ class OcrService {
 
       // 获取用户账户列表（如果账户功能已启用且提供了Repository实例）
       List<String>? accounts;
-      final accountFeatureEnabled = prefs.getBool('account_feature_enabled') ?? true; // 默认启用
+      final accountFeatureEnabled =
+          prefs.getBool('account_feature_enabled') ?? true; // 默认启用
       if (accountFeatureEnabled && repo != null) {
         try {
           final allAccounts = await repo.getAllAccounts();
           accounts = allAccounts.map((a) => a.name).toList();
-          logger.debug(_tag, '[账户列表] ${accounts.length}个: ${accounts.join('、')}');
+          logger.debug(
+              _tag, '[账户列表] ${accounts.length}个: ${accounts.join('、')}');
         } catch (e) {
           logger.warning(_tag, '[账户列表] 获取失败: $e');
           accounts = null;
@@ -241,7 +247,8 @@ class OcrService {
 
         final typeText = billInfo.type?.toString().split('.').last ?? '未知';
         final timeStr = mergedTime?.toString().substring(0, 16) ?? '无';
-        logger.info(_tag, '[AI增强] ${aiDuration.inMilliseconds}ms | $typeText 金额:$mergedAmount 备注:$mergedNote 分类:${billInfo.category ?? "无"} 账户:${mergedAccount ?? "无"} 时间:$timeStr');
+        logger.info(_tag,
+            '[AI增强] ${aiDuration.inMilliseconds}ms | $typeText 金额:$mergedAmount 备注:$mergedNote 分类:${billInfo.category ?? "无"} 账户:${mergedAccount ?? "无"} 时间:$timeStr');
 
         return baseResult.copyWithAI(
           amount: mergedAmount,

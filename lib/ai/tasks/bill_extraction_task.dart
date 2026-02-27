@@ -39,6 +39,15 @@ class BillInfo {
   /// 账户名称
   final String? account;
 
+  /// 转账来源账户名称（可选）
+  final String? fromAccount;
+
+  /// 转账目标账户名称（可选）
+  final String? toAccount;
+
+  /// 标签列表（可选）
+  final List<String>? tags;
+
   /// 账本ID
   final int? ledgerId;
 
@@ -52,6 +61,9 @@ class BillInfo {
     this.category,
     this.type,
     this.account,
+    this.fromAccount,
+    this.toAccount,
+    this.tags,
     this.ledgerId,
     this.confidence = 0.0,
   });
@@ -68,6 +80,9 @@ class BillInfo {
       category: json['category'],
       type: json['type'] != null ? _parseBillType(json['type']) : null,
       account: json['account'],
+      fromAccount: json['from_account'] ?? json['fromAccount'],
+      toAccount: json['to_account'] ?? json['toAccount'],
+      tags: _parseTags(json['tags'] ?? json['tag']),
       ledgerId: json['ledgerId'],
       confidence: json['confidence']?.toDouble() ?? 0.8,
     );
@@ -81,6 +96,9 @@ class BillInfo {
         'category': category,
         'type': type?.toString().split('.').last,
         'account': account,
+        'from_account': fromAccount,
+        'to_account': toAccount,
+        'tags': tags,
         'ledgerId': ledgerId,
         'confidence': confidence,
       };
@@ -90,12 +108,34 @@ class BillInfo {
     final str = value.toString().toLowerCase();
     if (str.contains('income') || str == '收入') return BillType.income;
     if (str.contains('expense') || str == '支出') return BillType.expense;
+    if (str.contains('transfer') || str == '转账' || str == '轉帳') {
+      return BillType.transfer;
+    }
     return null;
+  }
+
+  static List<String>? _parseTags(dynamic value) {
+    if (value == null) return null;
+
+    final tags = <String>[];
+
+    if (value is String) {
+      tags.addAll(value
+          .split(RegExp(r'[,\n，、;；|]+'))
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty));
+    } else if (value is List) {
+      tags.addAll(value
+          .map((item) => item.toString().trim())
+          .where((s) => s.isNotEmpty));
+    }
+
+    return tags.isEmpty ? null : tags;
   }
 
   @override
   String toString() {
-    return 'BillInfo(amount: $amount, time: $time, note: $note, category: $category, type: $type, account: $account)';
+    return 'BillInfo(amount: $amount, time: $time, note: $note, category: $category, type: $type, account: $account, fromAccount: $fromAccount, toAccount: $toAccount, tags: $tags)';
   }
 }
 
@@ -106,4 +146,7 @@ enum BillType {
 
   /// 支出
   expense,
+
+  /// 转账
+  transfer,
 }

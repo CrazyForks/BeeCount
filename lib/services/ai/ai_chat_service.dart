@@ -127,6 +127,9 @@ class AIChatService {
         category: billInfo.category,
         type: billInfo.type,
         account: billInfo.account,
+        fromAccount: billInfo.fromAccount,
+        toAccount: billInfo.toAccount,
+        tags: billInfo.tags,
         ledgerId: ledgerId,
         confidence: billInfo.confidence,
       );
@@ -134,7 +137,8 @@ class AIChatService {
       logger.info('AIChat', '附加账本ID到BillInfo: ledgerId=$ledgerId');
 
       // 保存到数据库并获取实际的分类和账户名称
-      final (transactionId, actualCategory, actualAccount) = await _saveBill(billInfo, l10n: l10n);
+      final (transactionId, actualCategory, actualAccount) =
+          await _saveBill(billInfo, l10n: l10n);
 
       // 使用实际的分类和账户名称更新 billInfo
       final updatedBillInfo = BillInfo(
@@ -144,6 +148,9 @@ class AIChatService {
         category: actualCategory ?? billInfo.category,
         type: billInfo.type,
         account: actualAccount ?? billInfo.account,
+        fromAccount: billInfo.fromAccount,
+        toAccount: billInfo.toAccount,
+        tags: billInfo.tags,
         ledgerId: ledgerId,
         confidence: billInfo.confidence,
       );
@@ -165,14 +172,16 @@ class AIChatService {
   }
 
   /// 处理自由对话 - 使用 AIProviderFactory.chat()
-  Future<AIResponse> _handleFreeChat(String input, {String? languageCode}) async {
+  Future<AIResponse> _handleFreeChat(String input,
+      {String? languageCode}) async {
     logger.info('AIChat', '开始自由对话 (语言: ${languageCode ?? "默认"})');
 
     try {
       // 根据语言构建系统提示
       String systemPrompt;
       if (languageCode == 'en') {
-        systemPrompt = 'You are BeeCount\'s AI assistant, mainly helping users with bookkeeping. '
+        systemPrompt =
+            'You are BeeCount\'s AI assistant, mainly helping users with bookkeeping. '
             'If users ask about statistics, queries and other functions, please inform them that they are not supported yet and guide them to use the bookkeeping function. '
             'Please respond in English.';
       } else {
@@ -206,8 +215,10 @@ class AIChatService {
 
   /// 保存账单 - 复用 BillCreationService 的逻辑
   /// 返回 (transactionId, actualCategoryName, actualAccountName)
-  Future<(int, String?, String?)> _saveBill(BillInfo bill, {AppLocalizations? l10n}) async {
-    logger.info('AIChat', '开始保存账单: amount=${bill.amount}, category=${bill.category}, ledgerId=${bill.ledgerId}');
+  Future<(int, String?, String?)> _saveBill(BillInfo bill,
+      {AppLocalizations? l10n}) async {
+    logger.info('AIChat',
+        '开始保存账单: amount=${bill.amount}, category=${bill.category}, ledgerId=${bill.ledgerId}');
 
     // 使用 BillInfo 中的 ledgerId，如果为空则使用第一个账本
     int ledgerId;
@@ -220,8 +231,13 @@ class AIChatService {
       logger.warning('AIChat', '未指定账本ID，使用第一个账本: $ledgerId');
     }
 
-    // 确定交易类型
-    final transactionType = bill.type == BillType.expense ? 'expense' : 'income';
+    // 确定交易类型（修复：type 为空时不再默认收入）
+    final transactionType = _resolveTransactionType(bill);
+
+    // 转账场景优先使用 from_account 作为转出账户
+    final aiAccountName = transactionType == 'transfer'
+        ? (bill.fromAccount ?? bill.account)
+        : bill.account;
 
     // 将 BillInfo 转换为 OcrResult（复用 BillCreationService 的逻辑）
     final ocrResult = OcrResult(
@@ -231,7 +247,7 @@ class AIChatService {
       rawText: bill.note ?? '',
       allNumbers: bill.amount != null ? [bill.amount!.abs().toString()] : [],
       aiCategoryName: bill.category,
-      aiAccountName: bill.account,
+      aiAccountName: aiAccountName,
       aiType: transactionType,
     );
 
@@ -246,6 +262,9 @@ class AIChatService {
       ledgerId: ledgerId,
       note: bill.note,
       billingTypes: [TagSeedService.billingTypeAi],
+      fromAccountName: bill.fromAccount,
+      toAccountName: bill.toAccount,
+      customTagNames: bill.tags,
       l10n: l10n,
       autoAddTags: autoAddTags,
     );
@@ -271,7 +290,8 @@ class AIChatService {
         }
       }
 
-      logger.info('AIChat', '记账成功: id=$id, category=$actualCategoryName, account=$actualAccountName');
+      logger.info('AIChat',
+          '记账成功: id=$id, category=$actualCategoryName, account=$actualAccountName');
       return (id, actualCategoryName, actualAccountName);
     } else {
       throw Exception('创建交易失败');
@@ -290,6 +310,20 @@ class AIChatService {
     }
   }
 
+  String _resolveTransactionType(BillInfo bill) {
+    if (bill.type == BillType.transfer) return 'transfer';
+    if (bill.type == BillType.expense) return 'expense';
+    if (bill.type == BillType.income) return 'income';
+
+    final category = bill.category?.trim();
+    if (category == '转账' ||
+        category == '轉帳' ||
+        category?.toLowerCase() == 'transfer') {
+      return 'transfer';
+    }
+
+    return 'expense';
+  }
 }
 
 /// AI 响应模型

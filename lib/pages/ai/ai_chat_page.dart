@@ -409,7 +409,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
                   color: isUser
                       ? ref.watch(primaryColorProvider).withOpacity(0.1)
                       : BeeTokens.surface(context),
-                  borderRadius: BorderRadius.circular(12.0.scaled(context, ref)),
+                  borderRadius:
+                      BorderRadius.circular(12.0.scaled(context, ref)),
                   border: Border.all(
                     color: isUser
                         ? ref.watch(primaryColorProvider).withOpacity(0.3)
@@ -911,8 +912,11 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         time: transaction.happenedAt,
         note: transaction.note,
         category: categoryName,
-        type:
-            transaction.type == 'expense' ? BillType.expense : BillType.income,
+        type: transaction.type == 'expense'
+            ? BillType.expense
+            : (transaction.type == 'transfer'
+                ? BillType.transfer
+                : BillType.income),
         account: accountName,
         ledgerId: transaction.ledgerId,
         confidence: 1.0,
@@ -995,10 +999,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         ref.read(statsRefreshProvider.notifier).state++;
 
         // 触发云同步（旧账本和新账本都需要同步）
-        await PostProcessor.sync(ref,
-            ledgerId: transaction.ledgerId);
-        await PostProcessor.sync(ref,
-            ledgerId: selectedLedgerId);
+        await PostProcessor.sync(ref, ledgerId: transaction.ledgerId);
+        await PostProcessor.sync(ref, ledgerId: selectedLedgerId);
 
         logger.info('AIChat',
             '修改账本成功: ${transaction.ledgerId} -> $selectedLedgerId,已刷新统计信息和触发云同步');

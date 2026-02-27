@@ -196,14 +196,18 @@ class BillExtractionService {
    - 商品名称（长标题需简化，如"2025春季新款黑色斜纹格纹半身裙"→"黑色半身裙"）
    - 用户描述（如"给女儿买"）
    - 没有则留空
-4. category: 从分类列表选择
-5. type: income或expense
-6. account: 支付账户（可选）
+4. category: 从分类列表选择（转账可填"转账"）
+5. type: income、expense 或 transfer
+6. account: 支付账户（收入/支出可用）
+7. from_account: 转出账户（仅转账可用）
+8. to_account: 转入账户（仅转账可用）
+9. tag/tags: 标签（可选，单个字符串或字符串数组）
 
 示例：
 输入"昨天中午吃饭50" → {"amount":-50,"time":"2025-11-24T12:00:00","category":"餐饮","type":"expense"}
 输入"早上在星巴克买咖啡30" → {"amount":-30,"time":"{{CURRENT_DATE}}T09:00:00","note":"星巴克","category":"咖啡","type":"expense"}
 输入"商品:2025春季新款黑色半身裙 金额:￥299" → {"amount":-299,"note":"黑色半身裙","category":"服装","type":"expense"}
+输入"从建行转800到零钱包" → {"amount":800,"category":"转账","type":"transfer","from_account":"建行","to_account":"零钱包","tag":"自己"}
 
 注意：只返回JSON，尽量推断时间不要返回null，note必须≤15字（长标题要精简）''';
 

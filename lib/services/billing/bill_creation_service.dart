@@ -39,7 +39,8 @@ class BillCreationService {
           (cat) => cat.name == aiCategory,
         );
         final transactionType = result.aiType ?? 'expense';
-        logger.debug(_tag, '[分类匹配-完全] AI分类"$aiCategory"($transactionType) → ${matchedCategory.name}(ID:${matchedCategory.id})');
+        logger.debug(_tag,
+            '[分类匹配-完全] AI分类"$aiCategory"($transactionType) → ${matchedCategory.name}(ID:${matchedCategory.id})');
         return matchedCategory.id;
       } catch (_) {
         // 完全匹配失败，继续尝试模糊匹配
@@ -69,7 +70,8 @@ class BillCreationService {
 
       if (fuzzyMatch != null) {
         final transactionType = result.aiType ?? 'expense';
-        logger.debug(_tag, '[分类匹配-模糊] AI分类"$aiCategory"($transactionType) → ${fuzzyMatch.name}(ID:${fuzzyMatch.id})');
+        logger.debug(_tag,
+            '[分类匹配-模糊] AI分类"$aiCategory"($transactionType) → ${fuzzyMatch.name}(ID:${fuzzyMatch.id})');
         return fuzzyMatch.id;
       }
 
@@ -100,7 +102,8 @@ class BillCreationService {
   }) async {
     // 1. 检查账户功能是否启用
     final prefs = await SharedPreferences.getInstance();
-    final accountFeatureEnabled = prefs.getBool('account_feature_enabled') ?? true;
+    final accountFeatureEnabled =
+        prefs.getBool('account_feature_enabled') ?? true;
 
     if (!accountFeatureEnabled) {
       logger.debug(_tag, '[账户匹配] 账户功能未启用，跳过匹配');
@@ -109,11 +112,31 @@ class BillCreationService {
 
     // 2. 检查是否有AI识别的账户名称，如果没有则尝试使用默认账户
     if (result.aiAccountName == null || result.aiAccountName!.isEmpty) {
+      if (transactionType == 'transfer') {
+        logger.debug(_tag, '[账户匹配] 转账未识别到账户，跳过默认账户');
+        return null;
+      }
       logger.debug(_tag, '[账户匹配] AI未识别账户，尝试使用默认账户');
       return await _getDefaultAccountId(transactionType, ledgerId, prefs);
     }
 
-    // 3. 获取账本信息以确定币种
+    // 3. 根据账户名称匹配（多级优先级匹配）
+    final matchedAccountId =
+        await _matchAccountByName(result.aiAccountName!, ledgerId);
+    if (matchedAccountId != null) {
+      return matchedAccountId;
+    }
+
+    if (transactionType == 'transfer') {
+      logger.debug(_tag, '[账户匹配] 转账账户"${result.aiAccountName}"未匹配，跳过默认账户');
+      return null;
+    }
+    logger.debug(_tag, '[账户匹配] "${result.aiAccountName}"未匹配，尝试默认账户');
+    return await _getDefaultAccountId(transactionType, ledgerId, prefs);
+  }
+
+  /// 按名称匹配账户ID（仅匹配与账本币种相同的账户）
+  Future<int?> _matchAccountByName(String accountName, int ledgerId) async {
     final repository = repo;
     final ledger = await repository.getLedgerById(ledgerId);
 
@@ -122,20 +145,18 @@ class BillCreationService {
       return null;
     }
 
-    // 4. 查询与账本币种相同的所有账户
     final allAccounts = await repository.getAllAccounts();
-    final matchingAccounts = allAccounts
-        .where((a) => a.currency == ledger.currency)
-        .toList();
+    final matchingAccounts =
+        allAccounts.where((a) => a.currency == ledger.currency).toList();
 
-    // 5. 根据账户名称匹配（多级优先级匹配）
-    final aiAccountName = result.aiAccountName!.toLowerCase().trim();
+    final aiAccountName = accountName.toLowerCase().trim();
 
     // 第一优先级：名称完全相等（忽略大小写和空格）
     for (final account in matchingAccounts) {
       final accountNameLower = account.name.toLowerCase().trim();
       if (accountNameLower == aiAccountName) {
-        logger.debug(_tag, '[账户匹配-完全] "${result.aiAccountName}" → ${account.name}(ID:${account.id})');
+        logger.debug(_tag,
+            '[账户匹配-完全] "$accountName" → ${account.name}(ID:${account.id})');
         return account.id;
       }
     }
@@ -145,7 +166,8 @@ class BillCreationService {
       final accountNameLower = account.name.toLowerCase().trim();
       if (accountNameLower.contains(aiAccountName) ||
           aiAccountName.contains(accountNameLower)) {
-        logger.debug(_tag, '[账户匹配-模糊] "${result.aiAccountName}" → ${account.name}(ID:${account.id})');
+        logger.debug(_tag,
+            '[账户匹配-模糊] "$accountName" → ${account.name}(ID:${account.id})');
         return account.id;
       }
     }
@@ -166,19 +188,20 @@ class BillCreationService {
         final accountNameLower = account.name.toLowerCase().trim();
         for (final type in relatedTypes) {
           if (accountNameLower.contains(type.toLowerCase())) {
-            logger.debug(_tag, '[账户匹配-类型] "${result.aiAccountName}" → ${account.name}(ID:${account.id})');
+            logger.debug(_tag,
+                '[账户匹配-类型] "$accountName" → ${account.name}(ID:${account.id})');
             return account.id;
           }
         }
       }
     }
 
-    logger.debug(_tag, '[账户匹配] "${result.aiAccountName}"未匹配，尝试默认账户');
-    return await _getDefaultAccountId(transactionType, ledgerId, prefs);
+    return null;
   }
 
   /// 获取默认账户ID（验证币种匹配）
-  Future<int?> _getDefaultAccountId(String transactionType, int ledgerId, SharedPreferences prefs) async {
+  Future<int?> _getDefaultAccountId(
+      String transactionType, int ledgerId, SharedPreferences prefs) async {
     try {
       // 1. 根据类型获取默认账户ID
       final defaultAccountId = transactionType == 'income'
@@ -186,7 +209,8 @@ class BillCreationService {
           : prefs.getInt('default_expense_account_id');
 
       if (defaultAccountId == null) {
-        logger.debug(_tag, '[默认账户] 未设置默认${transactionType == 'income' ? '收入' : '支出'}账户');
+        logger.debug(
+            _tag, '[默认账户] 未设置默认${transactionType == 'income' ? '收入' : '支出'}账户');
         return null;
       }
 
@@ -204,11 +228,13 @@ class BillCreationService {
 
       // 4. 验证币种匹配
       if (account.currency != ledger.currency) {
-        logger.debug(_tag, '[默认账户] 币种不匹配: ${account.currency} vs ${ledger.currency}');
+        logger.debug(
+            _tag, '[默认账户] 币种不匹配: ${account.currency} vs ${ledger.currency}');
         return null;
       }
 
-      logger.debug(_tag, '[默认账户] 使用${transactionType == 'income' ? '收入' : '支出'}账户 → ${account.name}(ID:${account.id})');
+      logger.debug(_tag,
+          '[默认账户] 使用${transactionType == 'income' ? '收入' : '支出'}账户 → ${account.name}(ID:${account.id})');
       return defaultAccountId;
     } catch (e) {
       logger.error(_tag, '[默认账户] 获取失败', e);
@@ -230,6 +256,9 @@ class BillCreationService {
     required int ledgerId,
     String? note,
     List<String>? billingTypes,
+    String? fromAccountName,
+    String? toAccountName,
+    List<String>? customTagNames,
     AppLocalizations? l10n,
     bool autoAddTags = true,
   }) async {
@@ -255,14 +284,25 @@ class BillCreationService {
       final hasPlusSign = RegExp(r'\+\s*\d+\.?\d*').hasMatch(rawText);
 
       // 明确的收入关键字（优先级最高）
-      final strongIncomeKeywords = ['转入成功', '转入', '收款', '收入', '到账', '退款', '入账', '收益'];
+      final strongIncomeKeywords = [
+        '转入成功',
+        '转入',
+        '收款',
+        '收入',
+        '到账',
+        '退款',
+        '入账',
+        '收益'
+      ];
       // 明确的支出关键字
       final strongExpenseKeywords = ['付款', '支付', '支出', '消费', '转出'];
 
       // 检查明确的收入关键字
-      bool hasStrongIncomeKeyword = strongIncomeKeywords.any((k) => rawTextLower.contains(k));
+      bool hasStrongIncomeKeyword =
+          strongIncomeKeywords.any((k) => rawTextLower.contains(k));
       // 检查明确的支出关键字
-      bool hasStrongExpenseKeyword = strongExpenseKeywords.any((k) => rawTextLower.contains(k));
+      bool hasStrongExpenseKeyword =
+          strongExpenseKeywords.any((k) => rawTextLower.contains(k));
 
       if (hasPlusSign) {
         // 有加号，明确表示收入
@@ -295,11 +335,13 @@ class BillCreationService {
       }
     }
 
-    logger.debug(_tag, '[类型判断] $typeSource → ${transactionType == 'income' ? '收入' : '支出'}');
+    logger.debug(_tag,
+        '[类型判断] $typeSource → ${transactionType == 'income' ? '收入' : (transactionType == 'transfer' ? '转账' : '支出')}');
 
     // 3. 查询对应类型的所有分类
     final repository = repo;
-    final topLevelCategories = await repository.getTopLevelCategories(transactionType);
+    final topLevelCategories =
+        await repository.getTopLevelCategories(transactionType);
     final allCategories = <Category>[];
     allCategories.addAll(topLevelCategories);
     // 获取所有子分类
@@ -319,8 +361,24 @@ class BillCreationService {
       categoryId = await _getFallbackCategoryId(categories, transactionType);
     }
 
-    // 5. 匹配账户（在账户功能启用的前提下，未匹配时使用默认账户）
-    final accountId = await matchAccount(result, ledgerId, transactionType: transactionType);
+    // 5. 匹配账户
+    int? accountId;
+    int? toAccountId;
+    if (transactionType == 'transfer') {
+      final sourceName = fromAccountName ?? result.aiAccountName;
+      if (sourceName != null && sourceName.trim().isNotEmpty) {
+        accountId = await _matchAccountByName(sourceName, ledgerId);
+      }
+      if (toAccountName != null && toAccountName.trim().isNotEmpty) {
+        toAccountId = await _matchAccountByName(toAccountName, ledgerId);
+      }
+      if (accountId != null && accountId == toAccountId) {
+        toAccountId = null;
+      }
+    } else {
+      accountId = await matchAccount(result, ledgerId,
+          transactionType: transactionType);
+    }
 
     // 6. 确定交易时间（优先使用识别的时间，否则使用当前时间）
     final DateTime happenedAt = result.time ?? DateTime.now();
@@ -348,33 +406,65 @@ class BillCreationService {
       amount: finalAmount,
       categoryId: categoryId,
       accountId: accountId,
+      toAccountId: toAccountId,
       happenedAt: happenedAt,
       note: finalNote,
     );
 
-    // 10. 自动添加记账方式标签（根据设置开关）
-    if (autoAddTags && billingTypes != null && billingTypes.isNotEmpty && l10n != null) {
-      await _addBillingTypeTags(transactionId, billingTypes, l10n);
+    // 10. 自动添加标签（记账方式标签 + AI识别标签）
+    if (autoAddTags) {
+      await _addTags(
+        transactionId,
+        billingTypes: billingTypes,
+        customTagNames: customTagNames,
+        l10n: l10n,
+      );
     }
 
     // 11. 打印最终交易信息汇总（一行）
-    final typeStr = transactionType == 'income' ? '收入' : '支出';
+    final typeStr = transactionType == 'income'
+        ? '收入'
+        : (transactionType == 'transfer' ? '转账' : '支出');
     final timeStr = _formatDateTime(happenedAt);
     final categoryStr = categoryName ?? '未设置';
     final accountStr = accountName ?? '未设置';
     final noteStr = finalNote ?? '无';
-    final tagsStr = billingTypes?.join(',') ?? '无';
+    final allTagSources = <String>[
+      ...?billingTypes,
+      ...?customTagNames,
+    ];
+    final tagsStr = allTagSources.isNotEmpty ? allTagSources.join(',') : '无';
 
-    logger.info(_tag, '[自动记账] 成功 | ID:$transactionId | $finalAmount元 | $typeStr | 分类:$categoryStr | 账户:$accountStr | 时间:$timeStr | 备注:$noteStr | 标签:$tagsStr');
+    logger.info(_tag,
+        '[自动记账] 成功 | ID:$transactionId | $finalAmount元 | $typeStr | 分类:$categoryStr | 账户:$accountStr | 时间:$timeStr | 备注:$noteStr | 标签:$tagsStr');
 
     return transactionId;
   }
 
-  /// 为交易添加记账方式标签
-  Future<void> _addBillingTypeTags(int transactionId, List<String> billingTypes, AppLocalizations l10n) async {
+  /// 为交易添加标签（记账方式标签 + AI识别标签）
+  Future<void> _addTags(
+    int transactionId, {
+    List<String>? billingTypes,
+    List<String>? customTagNames,
+    AppLocalizations? l10n,
+  }) async {
     try {
-      final tagNames = TagSeedService.getBillingTagNames(billingTypes, l10n);
-      if (tagNames.isEmpty) return;
+      final tagNameSet = <String>{};
+
+      if (billingTypes != null && billingTypes.isNotEmpty && l10n != null) {
+        tagNameSet
+            .addAll(TagSeedService.getBillingTagNames(billingTypes, l10n));
+      }
+      if (customTagNames != null && customTagNames.isNotEmpty) {
+        tagNameSet.addAll(
+          customTagNames
+              .map((name) => name.trim())
+              .where((name) => name.isNotEmpty),
+        );
+      }
+      if (tagNameSet.isEmpty) return;
+
+      final tagNames = tagNameSet.toList();
 
       final tagIds = <int>[];
       for (final tagName in tagNames) {
@@ -394,7 +484,8 @@ class BillCreationService {
 
       // 关联标签到交易
       if (tagIds.isNotEmpty) {
-        await repo.addTagsToTransaction(transactionId: transactionId, tagIds: tagIds);
+        await repo.addTagsToTransaction(
+            transactionId: transactionId, tagIds: tagIds);
         logger.info(_tag, '[标签] 已为交易 $transactionId 添加 ${tagIds.length} 个标签');
       }
     } catch (e, stackTrace) {
@@ -405,29 +496,33 @@ class BillCreationService {
   /// 格式化日期时间
   String _formatDateTime(DateTime dt) {
     return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
-           '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+        '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
   }
 
   /// 获取兜底分类ID
   /// 优先使用"其他"分类，如果没有则使用第一个分类
-  Future<int?> _getFallbackCategoryId(List<Category> categories, String transactionType) async {
+  Future<int?> _getFallbackCategoryId(
+      List<Category> categories, String transactionType) async {
     if (categories.isEmpty) return null;
 
     // 尝试查找"其他"分类（支持多种命名方式）
     final otherKeywords = ['其他', 'other', '其它', '杂项', 'misc'];
     for (final keyword in otherKeywords) {
-      final otherCategory = categories.where(
-        (c) => c.name.toLowerCase().contains(keyword.toLowerCase())
-      ).toList().firstOrNull;
+      final otherCategory = categories
+          .where((c) => c.name.toLowerCase().contains(keyword.toLowerCase()))
+          .toList()
+          .firstOrNull;
       if (otherCategory != null) {
-        logger.debug(_tag, '[分类兜底] 使用"${otherCategory.name}"(ID:${otherCategory.id})');
+        logger.debug(
+            _tag, '[分类兜底] 使用"${otherCategory.name}"(ID:${otherCategory.id})');
         return otherCategory.id;
       }
     }
 
     // 如果没有"其他"分类，使用排序最后的分类
     final lastCategory = categories.last;
-    logger.debug(_tag, '[分类兜底] 使用"${lastCategory.name}"(ID:${lastCategory.id})');
+    logger.debug(
+        _tag, '[分类兜底] 使用"${lastCategory.name}"(ID:${lastCategory.id})');
     return lastCategory.id;
   }
 
