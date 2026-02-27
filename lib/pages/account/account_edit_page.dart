@@ -329,7 +329,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                             decoration: InputDecoration(
                               hintText: l10n.accountInitialBalanceHint,
                               hintStyle: TextStyle(color: Colors.grey[400]),
-                              prefixText: '¥ ',
+                              prefixText: '${getCurrencySymbol(_selectedCurrency)} ',
                               prefixStyle: TextStyle(
                                 fontSize: 16,
                                 color: BeeTokens.textPrimary(context),
