@@ -134,7 +134,7 @@ class _RecurringTransactionEditPageState extends ConsumerState<RecurringTransact
                       labelText: l10n.importFieldAmount,
                       border: const OutlineInputBorder(),
                     ),
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return l10n.commonError;
