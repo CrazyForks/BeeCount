@@ -36,14 +36,6 @@
 
 ---
 
-> ## 💬 加入微信交流群
->
-> 由于微信群已满200人，无法通过自由扫码加入，请添加微信 **"LinYiXiao_Sx"** 邀请入群，备注 **"BeeCount"**。
->
-> **加入微信群，获取最新动态、功能建议、问题反馈**
-
----
-
 > ## 📱 平台支持
 >
 > 🤖 **Android** - [Google Play](https://play.google.com/store/apps/details?id=com.tntlikely.beecount) | [下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | 支持 Android 5.0+
