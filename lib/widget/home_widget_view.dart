@@ -8,6 +8,7 @@ class HomeWidgetView extends StatelessWidget {
   final String monthExpense;
   final String monthIncome;
   final Color themeColor;
+  final bool redForIncome;
   final String appName;
   final String monthSuffix;
   final String todayExpenseLabel;
@@ -24,6 +25,7 @@ class HomeWidgetView extends StatelessWidget {
     required this.monthExpense,
     required this.monthIncome,
     required this.themeColor,
+    required this.redForIncome,
     required this.appName,
     required this.monthSuffix,
     required this.todayExpenseLabel,
@@ -33,6 +35,12 @@ class HomeWidgetView extends StatelessWidget {
     required this.width,
     required this.height,
   });
+
+  static const Color _redColor = Color(0xFFFF6B6B);
+  static const Color _greenColor = Color(0xFF51CF66);
+
+  Color get _incomeColor => redForIncome ? _redColor : _greenColor;
+  Color get _expenseColor => redForIncome ? _greenColor : _redColor;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +124,7 @@ class HomeWidgetView extends StatelessWidget {
                   child: _buildStatCard(
                     todayExpenseLabel,
                     todayExpense,
-                    const Color(0xFFFF6B6B),
+                    _expenseColor,
                     Icons.arrow_upward,
                     true,
                   ),
@@ -127,7 +135,7 @@ class HomeWidgetView extends StatelessWidget {
                   child: _buildStatCard(
                     todayIncomeLabel,
                     todayIncome,
-                    const Color(0xFF51CF66),
+                    _incomeColor,
                     Icons.arrow_downward,
                     true,
                   ),
@@ -144,7 +152,7 @@ class HomeWidgetView extends StatelessWidget {
                   child: _buildStatCard(
                     monthExpenseLabel,
                     monthExpense,
-                    const Color(0xFFFF6B6B),
+                    _expenseColor,
                     Icons.trending_up,
                     false,
                   ),
@@ -155,7 +163,7 @@ class HomeWidgetView extends StatelessWidget {
                   child: _buildStatCard(
                     monthIncomeLabel,
                     monthIncome,
-                    const Color(0xFF51CF66),
+                    _incomeColor,
                     Icons.trending_down,
                     false,
                   ),

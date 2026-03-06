@@ -21,6 +21,7 @@ class WidgetManager {
     BaseRepository repository,
     int ledgerId,
     Color themeColor, {
+    bool redForIncome = true,
     String appName = '蜜蜂记账',
     String monthSuffix = '月',
     String todayExpenseLabel = '今日支出',
@@ -98,6 +99,7 @@ class WidgetManager {
           monthExpense: _currencyFormat.format(monthExpenseTotal),
           monthIncome: _currencyFormat.format(monthIncomeTotal),
           themeColor: themeColor,
+          redForIncome: redForIncome,
           appName: appName,
           monthSuffix: monthSuffix,
           todayExpenseLabel: todayExpenseLabel,
