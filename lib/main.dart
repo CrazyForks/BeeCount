@@ -131,9 +131,15 @@ class _WidgetUpdateObserver extends ProviderObserver {
       final repository = container.read(repositoryProvider);
       final ledgerId = container.read(currentLedgerIdProvider);
       final primaryColor = container.read(primaryColorProvider);
+      final redForIncome = container.read(incomeExpenseColorSchemeProvider);
 
       final widgetManager = WidgetManager();
-      await widgetManager.updateWidget(repository, ledgerId, primaryColor);
+      await widgetManager.updateWidget(
+        repository,
+        ledgerId,
+        primaryColor,
+        redForIncome: redForIncome,
+      );
 
       print('✅ 小组件数据已更新');
     } catch (e) {
