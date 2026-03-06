@@ -1416,8 +1416,9 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
             break;
 
           case CloudBackendType.supabase:
-            // Supabase 连接测试 - 尝试访问 REST API
-            final testUrl = Uri.parse('${config.supabaseUrl}/rest/v1/');
+            // Supabase 连接测试 - 查询不存在的表验证 URL 和 anon key
+            // 200 或 404 表示连接正常且 key 有效，401/403 表示 key 无效
+            final testUrl = Uri.parse('${config.supabaseUrl}/rest/v1/_beecount_health_check?select=id&limit=1');
             final response = await http.get(
               testUrl,
               headers: {
@@ -1426,7 +1427,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
               },
             ).timeout(const Duration(seconds: 10));
 
-            if (response.statusCode == 200 || response.statusCode == 404) {
+            if (response.statusCode == 200 || response.statusCode == 404 || response.statusCode == 406) {
               connectionSuccess = true;
             } else if (response.statusCode == 401 || response.statusCode == 403) {
               throw Exception(AppLocalizations.of(context).cloudErrorAuthFailed);
