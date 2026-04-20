@@ -2,7 +2,10 @@ blank_issues_enabled: false
 contact_links:
   - name: 📖 使用文档 / Documentation
     url: https://beecount-website.pages.dev/docs/intro
-    about: 查看详细的使用文档和常见问题 / View detailed documentation and FAQ
+    about: 查看详细使用文档和常见问题。Detailed docs and FAQ.
   - name: 💬 讨论区 / Discussions
     url: https://github.com/TNT-Likely/BeeCount/discussions
-    about: 在讨论区分享使用经验或参与讨论 / Share experiences or participate in discussions
+    about: 分享使用经验、交流技巧、非 bug 求助请用 Discussions。Share experience, tips, non-bug questions.
+  - name: ☁️ 云同步服务端问题 / Cloud Backend Issues
+    url: https://github.com/TNT-Likely/BeeCount-Cloud/issues
+    about: 自建 BeeCount Cloud 服务端 / Web 控制台相关的 bug 请去 Cloud 仓库。Self-hosted Cloud / Web console issues belong in the Cloud repo.
