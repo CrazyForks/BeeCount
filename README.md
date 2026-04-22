@@ -134,6 +134,28 @@
 
 </details>
 
+## 🌐 Web 端预览
+
+除了 iOS / Android,蜜蜂记账还提供 **Web 端**(3.0 起随 BeeCount Cloud 自建镜像附带)——
+一个 Docker 镜像 = 同步服务 + 浏览器端,多设备实时协同,PWA 支持装到桌面当独立 App 用。
+
+<div align="center">
+  <img src="demo/preview/web/zh-01-home.png" alt="Web 仪表盘" width="720" />
+  <br/>
+  <sub>💰 仪表盘:收支、资产构成、分类热力、趋势 —— 一屏总览(暗黑模式)</sub>
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="demo/preview/web/zh-02-transactions.png" alt="Web 交易列表" width="720" />
+  <br/>
+  <sub>📒 交易列表:关键字 / 分类 / 账户 / 日期 / 标签多维筛选,分类图标一屏可见</sub>
+</div>
+
+> 🚀 **一键自建**:参考下方 [BeeCount Cloud 自建指南](#-beecount-cloud自建云同步--web-端),
+> `docker compose up -d` 就能跑。访问 `http://<你的服务器 IP>:8869` 即用。
+
 ## 🌟 核心特性
 
 <details>

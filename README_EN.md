@@ -132,6 +132,28 @@ A lightweight, open-source, privacy-focused **personal finance management** and 
 
 </details>
 
+## 🌐 Web Preview
+
+Beyond iOS / Android, BeeCount also ships a **Web client** (bundled with BeeCount Cloud self-host image since 3.0).
+One Docker image = sync server + browser UI. Real-time multi-device collaboration, PWA-installable as a desktop app.
+
+<div align="center">
+  <img src="demo/preview/web/en-01-home.png" alt="Web dashboard" width="720" />
+  <br/>
+  <sub>💰 Dashboard: income/expense, net worth, category heatmap, trends — at a glance (dark mode)</sub>
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="demo/preview/web/en-02-transactions.png" alt="Web transactions" width="720" />
+  <br/>
+  <sub>📒 Transactions: filter by keyword / category / account / date / tag, with category icons in-line</sub>
+</div>
+
+> 🚀 **One-click self-host**: see [BeeCount Cloud setup](#-beecount-cloud-self-hosted-sync--web) below.
+> `docker compose up -d` and open `http://<your-server-ip>:8869`.
+
 ## 🌟 Key Features
 
 <details>
