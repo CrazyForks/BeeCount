@@ -43,6 +43,10 @@ class CategoryBudgetUsage {
   final int categoryId;
   final String categoryName;
   final String? categoryIcon;
+  /// 完整的 Category 对象 —— 让 UI 走 CategoryIconWidget 拿 iconType /
+  /// customIconPath / iconCloudFileId,自定义图片预算也能正常渲染图标。
+  /// 老调用方还在读 categoryIcon 字段,这里两边并存。
+  final Category? category;
   final BudgetUsage usage;
 
   const CategoryBudgetUsage({
@@ -50,6 +54,7 @@ class CategoryBudgetUsage {
     required this.categoryId,
     required this.categoryName,
     this.categoryIcon,
+    this.category,
     required this.usage,
   });
 }

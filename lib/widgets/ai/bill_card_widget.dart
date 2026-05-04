@@ -8,6 +8,7 @@ import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../providers.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/format_utils.dart';
 
 /// 记账成功卡片组件
 class BillCardWidget extends ConsumerWidget {
@@ -34,7 +35,9 @@ class BillCardWidget extends ConsumerWidget {
     final ledger = billInfo.ledgerId != null
         ? ref.watch(ledgerByIdProvider(billInfo.ledgerId!)).asData?.value
         : null;
-    final ledgerName = ledger?.name ?? AppLocalizations.of(context).billCardUnknownLedger;
+    final ledgerName = ledger?.name != null
+        ? translateLedgerName(context, ledger!.name)
+        : AppLocalizations.of(context).billCardUnknownLedger;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -87,14 +90,14 @@ class BillCardWidget extends ConsumerWidget {
               context,
               ref,
               AppLocalizations.of(context).billCardCategory,
-              billInfo.category ?? '其他',
+              billInfo.category ?? AppLocalizations.of(context).commonOther,
             ),
             SizedBox(height: 8.0.scaled(context, ref)),
             _buildInfoRow(
               context,
               ref,
               AppLocalizations.of(context).billCardTime,
-              _formatTime(billInfo.time),
+              _formatTime(context, billInfo.time),
             ),
             if (billInfo.note != null && billInfo.note!.isNotEmpty) ...[
               SizedBox(height: 8.0.scaled(context, ref)),
@@ -247,21 +250,24 @@ class BillCardWidget extends ConsumerWidget {
     );
   }
 
-  String _formatTime(DateTime? time) {
-    if (time == null) return '今天';
+  String _formatTime(BuildContext context, DateTime? time) {
+    final l10n = AppLocalizations.of(context);
+    if (time == null) return l10n.calendarToday;
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final targetDay = DateTime(time.year, time.month, time.day);
+    final localeName = Localizations.localeOf(context).toLanguageTag();
+    final hm = DateFormat('HH:mm').format(time);
 
     if (targetDay == today) {
-      return '今天 ${DateFormat('HH:mm').format(time)}';
+      return '${l10n.calendarToday} $hm';
     } else if (targetDay == today.subtract(const Duration(days: 1))) {
-      return '昨天 ${DateFormat('HH:mm').format(time)}';
+      return '${l10n.commonYesterday} $hm';
     } else if (time.year == now.year) {
-      return DateFormat('MM月dd日 HH:mm').format(time);
+      return '${DateFormat.MMMd(localeName).format(time)} $hm';
     } else {
-      return DateFormat('yyyy年MM月dd日 HH:mm').format(time);
+      return '${DateFormat.yMMMd(localeName).format(time)} $hm';
     }
   }
 }

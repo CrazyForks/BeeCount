@@ -37,23 +37,15 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
   SyncHealthReport? _latestReport;
   bool _checking = false;
   bool _autoSyncing = false;
-  String _serverVersion = ''; // BeeCount Cloud 版本(从 /version 拉)
 
   @override
   void initState() {
     super.initState();
-    // 页面一进来就拉一次 server 版本 + 一次 sync health,让"同步状态"面板
-    // 开屏即有内容,而不是"下拉刷新才出"。
+    // 页面一进来就拉一次 sync health,让"同步状态"面板开屏即有内容。
+    // server 版本号改用 [beecountCloudServerVersionProvider] 自动获取(它依赖
+    // syncStatusRefreshProvider,每次同步完成自动重新拉一次),不再用本地
+    // setState 缓存的死值——server 升级后用户在 app 内任何同步操作完都会刷新。
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        final cloud = ref.read(beecountCloudProviderInstance).valueOrNull;
-        if (cloud == null) return;
-        final v = await cloud.fetchServerVersion();
-        if (!mounted) return;
-        setState(() => _serverVersion = v.version);
-      } catch (_) {
-        /* 忽略 —— version 拉不到无伤大雅 */
-      }
       if (!mounted) return;
       unawaited(_onRefresh());
     });
@@ -192,19 +184,28 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
                         ),
                         // BeeCount Cloud server 版本号,底部弱展示。
                         // 跟 web header 的 vX.Y.Z 对齐,方便确认 server 哪版。
-                        if (_serverVersion.isNotEmpty)
-                          Padding(
+                        // 通过 provider 监听,server 升级后跟着 sync ticker 自
+                        // 动刷新,不依赖死缓存。
+                        Consumer(builder: (ctx, r, _) {
+                          final v = r
+                              .watch(beecountCloudServerVersionProvider)
+                              .valueOrNull;
+                          if (v == null || v.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return Padding(
                             padding: const EdgeInsets.only(top: 16, bottom: 8),
                             child: Center(
                               child: Text(
-                                'BeeCount Cloud v$_serverVersion',
+                                'BeeCount Cloud v$v',
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: BeeTokens.textTertiary(context),
                                 ),
                               ),
                             ),
-                          ),
+                          );
+                        }),
                       ],
                     ),
                   );

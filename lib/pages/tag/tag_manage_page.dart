@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -456,6 +457,15 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
       final repo = ref.read(repositoryProvider);
       for (final item in unusedTags) {
         await repo.deleteTag(item.tag.id);
+      }
+
+      // 显式触发 active ledger 的 sync,把刚才登记的 N 条 user-global
+      // tag:delete change(在 ledgerId=0)推到 server。SyncCoordinator 的反应
+      // 式触发理论上也能 cover,但显式 trigger 更稳——不依赖 coordinator 是否
+      // 启动 / debounce 时序。跟 _clearUnusedCategories 对齐。
+      final activeLedgerId = ref.read(currentLedgerIdProvider);
+      if (activeLedgerId > 0) {
+        unawaited(PostProcessor.sync(ref, ledgerId: activeLedgerId));
       }
 
       if (!mounted) return;

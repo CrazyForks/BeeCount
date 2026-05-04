@@ -56,7 +56,10 @@ class _AIPromptEditPageState extends ConsumerState<AIPromptEditPage> {
 
   Future<void> _loadPrompt() async {
     final prefs = await SharedPreferences.getInstance();
-    final customPrompt = prefs.getString(AIConstants.keyAiCustomPrompt) ?? defaultPrompt;
+    final saved = prefs.getString(AIConstants.keyAiCustomPrompt);
+    // 空字符串也回退到默认，避免编辑页显示空内容
+    final customPrompt =
+        (saved != null && saved.trim().isNotEmpty) ? saved : defaultPrompt;
 
     setState(() {
       _promptController.text = customPrompt;

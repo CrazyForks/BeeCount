@@ -11,6 +11,7 @@ import '../../services/import/bill_parser.dart';
 import '../../services/import/parsers/generic_parser.dart';
 import '../../services/import/parsers/alipay_parser.dart';
 import '../../services/import/parsers/wechat_parser.dart';
+import '../../services/billing/post_processor.dart';
 import '../../services/data_import_service.dart';
 import '../../utils/date_parser.dart';
 import '../../styles/tokens.dart';
@@ -515,6 +516,17 @@ class _ImportConfirmPageState extends ConsumerState<ImportConfirmPage> {
       fail = result.failed;
       skipped = skippedTypes.values.fold(0, (a, b) => a + b);
       done = total;
+
+      // 显式触发一次同步上推。SyncCoordinator 监听 local_changes 表已经会
+      // 自动调度,这里作为兜底:provider 重建瞬间 / 边界条件下 coordinator
+      // 还没就位时,UI 显式触发也能把刚导入的数据推上云端。
+      // fire-and-forget:不阻塞导入完成动画。
+      try {
+        // ignore: unawaited_futures
+        PostProcessor.syncC(container, ledgerId: ledgerId);
+      } catch (_) {
+        // 忽略同步触发错误,导入本身已经成功
+      }
     } catch (e) {
       // 导入失败
       if (mounted) {

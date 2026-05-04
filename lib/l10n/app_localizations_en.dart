@@ -13,7 +13,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabHome => 'Home';
 
   @override
-  String get tabInsights => 'Insights';
+  String get tabInsights => 'Stats';
 
   @override
   String get tabAssets => 'Assets';
@@ -153,6 +153,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonOther => 'Other';
+
+  @override
+  String get commonYesterday => 'Yesterday';
 
   @override
   String get commonSearch => 'Search';
@@ -4132,10 +4135,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutRelatedProducts => 'More Products';
 
   @override
+  String get aboutBeeAssets => 'BeeAssets';
+
+  @override
+  String get aboutBeeAssetsSubtitle => 'Visualize your full asset portfolio';
+
+  @override
+  String get aboutBeeAssetsIntro => 'BeeCount focuses on daily cash flow; BeeAssets is its sibling product, focused on asset portfolio visualization: net worth trends across accounts, property / investment / crypto classification, returns, holding period, and allocation breakdown.';
+
+  @override
   String get aboutBeeDNS => 'BeeDNS';
 
   @override
   String get aboutBeeDNSSubtitle => 'Simple and efficient DNS management tool';
+
+  @override
+  String get aboutBeeDNSIntro => 'Got domains across Cloudflare and Aliyun? BeeDNS unifies them in one place: batch edit records, A/AAAA toggles, resolution migration, subdomain bulk management — no more switching between provider consoles.';
+
+  @override
+  String get productPromoAndroidTitle => 'Request Beta Access';
+
+  @override
+  String get productPromoAndroidMessage => 'This app is still in closed testing on Google Play — invitation only.\n\nHow to apply: email us with your Google account address (required) and a brief use case (optional). We\'ll reply within 1-3 days and add you to the beta whitelist.';
+
+  @override
+  String get productPromoOpenStore => 'Open in App Store';
+
+  @override
+  String get productPromoLearnMore => 'Pro';
+
+  @override
+  String get productPromoEmailLabel => 'Application Email (tap to copy)';
+
+  @override
+  String get productPromoCopiedToast => 'Email copied to clipboard';
+
+  @override
+  String get productPromoMailUnavailable => 'No email app detected. The address has been copied — paste it into any mail app to send.';
+
+  @override
+  String get productPromoEmailButton => 'Send Email';
+
+  @override
+  String get productPromoWebsiteButton => 'Visit Website';
+
+  @override
+  String productPromoEmailSubject(String productName) {
+    return 'Beta access request - $productName';
+  }
+
+  @override
+  String productPromoEmailBody(String productName) {
+    return 'Hi,\n\nI\'d like to join the closed beta for $productName on Google Play. My Google account email is:\n\n(please fill in your Gmail / Google account email)\n\nThanks!';
+  }
 
   @override
   String get logCenterTitle => 'Log Center';

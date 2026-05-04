@@ -2,16 +2,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 应用模式枚举
-/// - local: 本地优先模式，本地 SQLite + 可选云端同步
-/// - cloud: 仅云端模式，所有数据仅存储在 Supabase（带 Realtime 实时同步）
+///
+/// 历史上还有过一个 `cloud`(仅云端模式)值,数据完全存 Supabase。
+/// 但 BeeCount Cloud 上线后,所有云同步统一走「LocalRepository + ChangeTracker
+/// + 推送到 BeeCount Cloud」 — 离线优先 + 多设备实时秒同步,跟「数据存远端」
+/// 完全是两条范式,cloud-only 没有用户入口,清理时已删。
+///
+/// 保留 enum 而非改 bool 是为了:
+/// 1) SharedPreferences 旧数据 `app_mode=cloud` 能 fallback 到 local,不崩
+/// 2) 未来如果又出现"另一种模式"(比如 demo / readonly),不用再改类型
 enum AppMode {
-  local('本地优先模式'),
-  cloud('仅云端模式');
+  local('本地优先模式');
 
   final String label;
   const AppMode(this.label);
 
-  /// 从字符串解析
+  /// 从字符串解析,未知值(包括历史 `cloud`)统一回退到 local
   static AppMode fromString(String value) {
     return AppMode.values.firstWhere(
       (mode) => mode.name == value,
@@ -21,7 +27,6 @@ enum AppMode {
 }
 
 /// 当前应用模式 Provider
-/// 默认为本地模式
 final appModeProvider = StateNotifierProvider<AppModeNotifier, AppMode>((ref) {
   return AppModeNotifier();
 });
@@ -32,7 +37,6 @@ class AppModeNotifier extends StateNotifier<AppMode> {
     _loadMode();
   }
 
-  /// 从 SharedPreferences 加载模式
   Future<void> _loadMode() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -41,39 +45,19 @@ class AppModeNotifier extends StateNotifier<AppMode> {
         state = AppMode.fromString(modeStr);
       }
     } catch (e) {
-      // 加载失败，保持默认的本地模式
       state = AppMode.local;
     }
   }
 
-  /// 切换到指定模式
   Future<void> switchMode(AppMode mode) async {
     state = mode;
-
-    // 持久化到 SharedPreferences
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('app_mode', mode.name);
     } catch (e) {
-      // 保存失败，但状态已经切换
+      // 保存失败,但状态已经切换
     }
   }
 
-  /// 切换到本地模式
   Future<void> switchToLocal() => switchMode(AppMode.local);
-
-  /// 切换到云端模式
-  Future<void> switchToCloud() => switchMode(AppMode.cloud);
 }
-
-/// 判断当前是否为云端模式
-final isCloudModeProvider = Provider<bool>((ref) {
-  final mode = ref.watch(appModeProvider);
-  return mode == AppMode.cloud;
-});
-
-/// 判断当前是否为本地模式
-final isLocalModeProvider = Provider<bool>((ref) {
-  final mode = ref.watch(appModeProvider);
-  return mode == AppMode.local;
-});

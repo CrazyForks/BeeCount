@@ -155,6 +155,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonOther => '其他';
 
   @override
+  String get commonYesterday => '昨天';
+
+  @override
   String get commonSearch => '搜索';
 
   @override
@@ -4132,10 +4135,59 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutRelatedProducts => '更多产品';
 
   @override
+  String get aboutBeeAssets => '蜜蜂家当 BeeAssets';
+
+  @override
+  String get aboutBeeAssetsSubtitle => '可视化你的全部资产配置';
+
+  @override
+  String get aboutBeeAssetsIntro => '蜜蜂记账侧重日常流水,蜜蜂家当是它的姐妹产品,专注资产配置可视化:跨账户净资产趋势、房产 / 投资 / 加密资产分类、收益率与持仓时长、配置占比一目了然。';
+
+  @override
   String get aboutBeeDNS => '蜜蜂域名 BeeDNS';
 
   @override
   String get aboutBeeDNSSubtitle => '简洁高效的 DNS 管理工具';
+
+  @override
+  String get aboutBeeDNSIntro => '如果你的域名分散在 Cloudflare 和阿里云,蜜蜂域名把它们聚合在一处管理:批量改记录、A/AAAA 切换、解析迁移、子域名批量管理 — 不用在两家控制台来回切。';
+
+  @override
+  String get productPromoAndroidTitle => '申请加入内测';
+
+  @override
+  String get productPromoAndroidMessage => '这款 App 还在 Google Play 内测阶段,需要邀请才能下载。\n\n申请方式:发邮件给我们,告诉我们你的 Google 账号邮箱(必填),以及简单说明使用场景(可选)。我们会在 1-3 天内回复并加你到内测白名单。';
+
+  @override
+  String get productPromoOpenStore => '前往应用商店';
+
+  @override
+  String get productPromoLearnMore => 'Pro';
+
+  @override
+  String get productPromoEmailLabel => '申请邮箱(点击复制)';
+
+  @override
+  String get productPromoCopiedToast => '邮箱已复制到剪贴板';
+
+  @override
+  String get productPromoMailUnavailable => '未检测到邮件应用,邮箱已复制到剪贴板,请打开任意邮件应用粘贴发送';
+
+  @override
+  String get productPromoEmailButton => '发送邮件';
+
+  @override
+  String get productPromoWebsiteButton => '前往官网';
+
+  @override
+  String productPromoEmailSubject(String productName) {
+    return '申请内测 - $productName';
+  }
+
+  @override
+  String productPromoEmailBody(String productName) {
+    return '你好,\n\n我希望加入「$productName」的 Google Play 内测,我的 Google 账号邮箱是:\n\n(请填写你的 Gmail / Google 账号邮箱)\n\n谢谢!';
+  }
 
   @override
   String get logCenterTitle => '日志中心';
@@ -6169,6 +6221,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get commonOther => '其他';
+
+  @override
+  String get commonYesterday => '昨天';
 
   @override
   String get commonSearch => '搜尋';
@@ -10148,10 +10203,59 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aboutRelatedProducts => '更多產品';
 
   @override
+  String get aboutBeeAssets => '蜜蜂家當 BeeAssets';
+
+  @override
+  String get aboutBeeAssetsSubtitle => '視覺化你的全部資產配置';
+
+  @override
+  String get aboutBeeAssetsIntro => '蜜蜂記帳側重日常流水,蜜蜂家當是它的姐妹產品,專注資產配置視覺化:跨帳戶淨資產趨勢、房產 / 投資 / 加密資產分類、收益率與持倉時長、配置占比一目了然。';
+
+  @override
   String get aboutBeeDNS => '蜜蜂域名 BeeDNS';
 
   @override
   String get aboutBeeDNSSubtitle => '簡潔高效的 DNS 管理工具';
+
+  @override
+  String get aboutBeeDNSIntro => '如果你的域名分散在 Cloudflare 和阿里雲,蜜蜂域名把它們聚合在一處管理:批次改記錄、A/AAAA 切換、解析遷移、子網域批次管理 — 不用在兩家控制台來回切。';
+
+  @override
+  String get productPromoAndroidTitle => '申請加入內測';
+
+  @override
+  String get productPromoAndroidMessage => '這款 App 還在 Google Play 內測階段,需要邀請才能下載。\n\n申請方式:寄信給我們,告訴我們你的 Google 帳號信箱(必填),以及簡單說明使用場景(選填)。我們會在 1-3 天內回覆並加你到內測白名單。';
+
+  @override
+  String get productPromoOpenStore => '前往應用商店';
+
+  @override
+  String get productPromoLearnMore => 'Pro';
+
+  @override
+  String get productPromoEmailLabel => '申請信箱(點擊複製)';
+
+  @override
+  String get productPromoCopiedToast => '信箱已複製到剪貼簿';
+
+  @override
+  String get productPromoMailUnavailable => '未偵測到郵件應用,信箱已複製到剪貼簿,請開啟任意郵件應用貼上寄出';
+
+  @override
+  String get productPromoEmailButton => '寄送郵件';
+
+  @override
+  String get productPromoWebsiteButton => '前往官網';
+
+  @override
+  String productPromoEmailSubject(String productName) {
+    return '申請內測 - $productName';
+  }
+
+  @override
+  String productPromoEmailBody(String productName) {
+    return '你好,\n\n我希望加入「$productName」的 Google Play 內測,我的 Google 帳號信箱是:\n\n(請填寫你的 Gmail / Google 帳號信箱)\n\n謝謝!';
+  }
 
   @override
   String get logCenterTitle => '日誌中心';

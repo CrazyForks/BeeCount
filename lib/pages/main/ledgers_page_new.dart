@@ -613,24 +613,39 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
     try {
       final sync = ref.read(syncServiceProvider);
       final current = ref.read(currentLedgerIdProvider);
+      final deletedLedgerId = ledger.id;
 
       // 如果删除的是当前账本，需要切换到另一个账本
-      if (current == ledger.id) {
-        final remainAfterDelete = allLedgers.where((l) => l.id != ledger.id).toList();
+      if (current == deletedLedgerId) {
+        final remainAfterDelete =
+            allLedgers.where((l) => l.id != deletedLedgerId).toList();
         // 由于已经检查过账本数量 > 1，这里一定有剩余账本
         final newId = remainAfterDelete.first.id;
         ref.read(currentLedgerIdProvider.notifier).state = newId;
       }
 
-      // 删除本地账本
-      await repo.deleteLedger(ledger.id);
-
-      // 删除远程备份（忽略错误）
+      // 先调 deleteRemoteBackup:此刻 ledger 行还在,deleteRemoteBackup 内部能
+      // 查到 syncId 构造正确的 storage path。如果放到 deleteLedger 之后,
+      // ledger 行已被删,fallback 到 ledger.id.toString() 对 UUID 账本会
+      // miss(404),storage 快照清不掉。
       try {
-        await sync.deleteRemoteBackup(ledgerId: ledger.id);
+        await sync.deleteRemoteBackup(ledgerId: deletedLedgerId);
       } catch (e) {
         logger.warning('ledger', '删除云端备份失败（忽略）：$e');
       }
+
+      // 删除本地账本(repo.deleteLedger 内部会捕获 syncId,登记
+      // ledger_snapshot:delete + 级联 transaction:delete + budget:delete change)
+      await repo.deleteLedger(deletedLedgerId);
+
+      // 显式触发对被删账本的 sync,把 delete change 推到 server 清掉 canonical
+      // state。SyncCoordinator 的 ledgerIdResolver 拿的是新切换的 currentLedger,
+      // 不会触发被删账本的 sync,不调这里 → delete change 永远 stranded → server
+      // 还保留账本和它的全部记录,remote ledgers 列表里还会显示。
+      // sync_engine.sync() 内部已对 ledgerRow==null 短路:跳过 hasRemote/fullPush/
+      // pull,只走 _push 把 delete change 推上去。
+      // ignore: unawaited_futures
+      PostProcessor.sync(ref, ledgerId: deletedLedgerId);
 
       if (!mounted) return;
 
@@ -769,12 +784,21 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
     try {
       final repo = ref.read(repositoryProvider);
-      await repo.createLedger(
+      final newLedgerId = await repo.createLedger(
         name: result.name.trim(),
         currency: result.currency,
       );
 
       ref.read(ledgerListRefreshProvider.notifier).state++;
+
+      // 显式触发新账本的同步。createLedger 不会切换 currentLedger,所以
+      // SyncCoordinator 的 ledgerIdResolver 拿的还是旧账本,新账本的同步永
+      // 远不会被自动触发。这里直接对 newLedgerId 调一次 sync,让 server 立
+      // 即创建对应账本(走 sync 内的 !hasRemote → fullPush 路径)。
+      // 不调的话,要等到用户切到新账本并加第一笔交易才会被动同步,违反"创
+      // 建后立即可见"预期。
+      // ignore: unawaited_futures
+      PostProcessor.sync(ref, ledgerId: newLedgerId);
 
       if (!mounted) return;
       showToast(context, '账本创建成功');

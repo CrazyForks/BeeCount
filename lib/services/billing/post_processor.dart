@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers.dart';
-import '../../providers/cloud_mode_providers.dart';
 import '../../cloud/sync/sync_engine.dart';
 import '../attachment_service.dart';
 import '../system/logger_service.dart';
@@ -94,8 +93,6 @@ class PostProcessor {
   // ============ 内部同步实现 ============
 
   static Future<void> _doSync(WidgetRef ref, int ledgerId) async {
-    if (ref.read(appModeProvider) == AppMode.cloud) return;
-
     final sync = ref.read(syncServiceProvider);
     try {
       sync.markLocalChanged(ledgerId: ledgerId);
@@ -136,8 +133,6 @@ class PostProcessor {
   }
 
   static Future<void> _doSyncC(ProviderContainer c, int ledgerId) async {
-    if (c.read(appModeProvider) == AppMode.cloud) return;
-
     final sync = c.read(syncServiceProvider);
     try {
       sync.markLocalChanged(ledgerId: ledgerId);
@@ -178,8 +173,6 @@ class PostProcessor {
   }
 
   static Future<void> _doSyncR(Ref ref, int ledgerId) async {
-    if (ref.read(appModeProvider) == AppMode.cloud) return;
-
     final sync = ref.read(syncServiceProvider);
     try {
       sync.markLocalChanged(ledgerId: ledgerId);

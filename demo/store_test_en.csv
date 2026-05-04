@@ -1,0 +1,101 @@
+Date,Type,Amount,Category,Note,Tags,Account
+2026-04-29 14:46:02,Expense,188.58,Travel,Train ticket,Business Trip,Chase Credit
+2026-04-29 09:28:17,Income,498.66,Part-time,,,Apple Pay
+2026-04-28 20:35:20,Expense,12.06,Transport,Bus,,PayPal
+2026-04-28 18:44:19,Expense,155.90,Utilities,Gas,,Chase Credit
+2026-04-27 19:06:58,Expense,22.66,Delivery,,Eleme,Chase Credit
+2026-04-27 07:12:56,Expense,47.73,Entertainment,,,PayPal
+2026-04-26 22:36:28,Expense,5.32,Beverage,,,BoA Checking
+2026-04-26 09:42:41,Expense,17.98,Dining,,,Apple Pay
+2026-04-26 08:05:08,Expense,25.58,Dining,,,PayPal
+2026-04-25 19:12:48,Expense,120.49,Utilities,,,Chase Credit
+2026-04-25 14:40:28,Expense,22.65,Dining,,,PayPal
+2026-04-25 09:50:07,Expense,54.13,Education,,Taobao,Cash
+2026-04-23 22:22:38,Expense,25.06,Daily Goods,,Sam's Club,Chase Credit
+2026-04-22 20:33:35,Expense,5.35,Transport,Commute,Daily,BoA Checking
+2026-04-21 14:24:13,Expense,36.74,Beauty,Haircut,Taobao,Chase Credit
+2026-04-20 10:31:49,Expense,5.88,Transport,Bus,,Chase Credit
+2026-04-19 13:00:14,Expense,53.00,Shopping,,Pinduoduo,Chase Credit
+2026-04-18 22:08:27,Expense,11.30,Snacks,,,Chase Credit
+2026-04-18 13:37:01,Expense,5.13,Transport,,Daily,Apple Pay
+2026-04-18 10:47:37,Expense,11.38,Express,Shipping,,BoA Checking
+2026-04-16 20:04:34,Expense,28.04,Shopping,Daily restock,Online Shopping,Chase Credit
+2026-04-15 21:53:29,Expense,25.93,Taxi,,,Chase Credit
+2026-04-14 13:03:11,Expense,10.87,Taxi,Uber home,,Chase Credit
+2026-04-12 08:52:24,Income,19.59,Interest,,,BoA Checking
+2026-04-11 21:16:45,Expense,77.03,Shopping,,Pinduoduo,Chase Credit
+2026-04-10 19:44:21,Expense,19.04,Dining,,Dining Out,Apple Pay
+2026-04-09 22:14:54,Income,88.65,Receive Red Packet,Birthday gift,,PayPal
+2026-04-09 21:52:10,Expense,60.72,Home,,,Chase Credit
+2026-04-09 13:10:52,Expense,8.23,Transport,Subway card top-up,,Apple Pay
+2026-04-08 13:14:49,Expense,321.17,Digital,,JD.com,Chase Credit
+2026-04-06 18:26:54,Expense,118.44,Clothing,,Online Shopping,Chase Credit
+2026-04-06 12:01:37,Expense,13.07,Book,,JD.com,Chase Credit
+2026-04-06 11:29:29,Income,5696.45,Salary,Monthly salary,,BoA Checking
+2026-04-06 10:12:05,Expense,15.43,Dining,Dinner,,Apple Pay
+2026-04-05 22:56:18,Expense,20.53,Taxi,,,Chase Credit
+2026-04-05 12:38:29,Expense,10.60,Dining,,,Apple Pay
+2026-04-05 09:12:42,Expense,11.48,Book,E-book,,Apple Pay
+2026-04-04 17:08:39,Expense,2407.78,Housing,Rent,,BoA Checking
+2026-04-04 09:41:30,Expense,38.05,Entertainment,Show,,PayPal
+2026-04-03 14:21:31,Expense,424.61,Digital,,Online Shopping,Chase Credit
+2026-04-03 13:38:52,Expense,3.64,Subway,Subway,,Chase Credit
+2026-04-03 12:17:47,Expense,14.51,Fruit,,,BoA Checking
+2026-04-01 09:07:36,Expense,5.55,Beverage,,,PayPal
+2026-03-29 08:43:02,Income,1730.88,Bonus,Project bonus,,PayPal
+2026-03-28 08:47:32,Expense,26.61,Dining,,,PayPal
+2026-03-27 07:54:08,Expense,6.26,Beverage,Coffee,,Chase Credit
+2026-03-26 19:39:08,Expense,13.69,Dining,,,Apple Pay
+2026-03-26 12:13:28,Expense,14.78,Fruit,,,PayPal
+2026-03-25 10:47:36,Expense,83.80,Medical,,Reimbursable,PayPal
+2026-03-23 12:08:09,Expense,60.56,Medical,,,Chase Credit
+2026-03-23 10:02:59,Expense,25.96,Taxi,,,Apple Pay
+2026-03-23 08:21:40,Expense,13.35,Delivery,,Eleme,Chase Credit
+2026-03-22 21:48:46,Expense,4.86,Snacks,Cookies,,Chase Credit
+2026-03-19 21:40:08,Expense,11.88,Dining,,,Apple Pay
+2026-03-15 21:33:16,Expense,2.44,Transport,,,BoA Checking
+2026-03-14 14:38:16,Expense,7.09,Snacks,,,Apple Pay
+2026-03-14 09:36:19,Expense,23.11,Sports,,Daily,PayPal
+2026-03-13 14:42:41,Expense,40.99,Home,,Hema,Chase Credit
+2026-03-12 18:01:09,Expense,15.27,Delivery,,Eleme,Chase Credit
+2026-03-11 19:15:53,Expense,34.60,Beauty,Skincare,,Chase Credit
+2026-03-11 13:45:33,Expense,52.68,Entertainment,Show,,BoA Checking
+2026-03-10 12:15:55,Expense,14.56,Dining,Breakfast,,Chase Credit
+2026-03-10 07:22:52,Expense,14.25,Dining,Company lunch,,Chase Credit
+2026-03-06 09:09:44,Income,7234.07,Salary,Monthly salary,,BoA Checking
+2026-03-04 08:09:52,Expense,7.86,Snacks,Snack restock,Sam's Club,Chase Credit
+2026-03-02 13:55:58,Expense,2040.97,Housing,Rent,,BoA Checking
+2026-03-01 18:04:52,Expense,6.33,Snacks,,,Apple Pay
+2026-02-26 19:15:42,Expense,145.18,Medical,,,BoA Checking
+2026-02-25 20:44:54,Expense,23.76,Delivery,Weekend delivery,Eleme,Apple Pay
+2026-02-24 18:10:17,Expense,25.98,Dining,,,PayPal
+2026-02-23 21:25:03,Expense,18.26,Dining,,Starbucks,Chase Credit
+2026-02-23 07:30:29,Expense,27.22,Dining,,,Apple Pay
+2026-02-21 20:31:21,Expense,19.59,Dining,,Starbucks,Chase Credit
+2026-02-20 21:02:17,Expense,51.06,Shopping,,,Apple Pay
+2026-02-20 18:44:57,Expense,36.90,Home,,,Chase Credit
+2026-02-18 22:48:02,Expense,17.74,Shopping,,,BoA Checking
+2026-02-18 21:02:38,Expense,3.58,Transport,,,PayPal
+2026-02-18 07:08:52,Expense,22.75,Sports,,,Chase Credit
+2026-02-10 22:54:21,Expense,100.87,Pets,Vet visit,,BoA Checking
+2026-02-10 07:42:10,Expense,14.79,Delivery,,"Meituan,Eleme",Chase Credit
+2026-02-08 09:24:19,Income,6683.73,Salary,Monthly salary,,BoA Checking
+2026-02-05 14:22:26,Expense,15.23,Dining,Breakfast,,Chase Credit
+2026-02-04 22:40:18,Expense,130.91,Family,For parents,,BoA Checking
+2026-02-03 22:52:08,Expense,31.12,Dining,,,Apple Pay
+2026-02-01 13:21:56,Expense,2190.24,Housing,Rent,,BoA Checking
+2026-01-29 09:10:45,Expense,24.42,Taxi,Uber home,Daily,Apple Pay
+2026-01-25 10:16:16,Expense,64.93,Communication,,,Chase Credit
+2026-01-23 13:57:57,Expense,2.52,Subway,,,BoA Checking
+2026-01-22 14:40:22,Income,1745.88,Bonus,,,Apple Pay
+2026-01-21 14:57:27,Income,182.59,Receive Red Packet,Birthday gift,,BoA Checking
+2026-01-19 20:28:37,Expense,9.16,Express,Shipping,Online Shopping,Chase Credit
+2026-01-19 18:13:46,Expense,27.63,Daily Goods,,,Apple Pay
+2026-01-15 21:22:02,Expense,19.78,Dining,,,BoA Checking
+2026-01-13 13:06:12,Expense,7.22,Snacks,Snack restock,,Apple Pay
+2026-01-13 08:31:03,Expense,138.94,Utilities,,,Chase Credit
+2026-01-07 09:34:24,Expense,32.05,Shopping,,Taobao,Apple Pay
+2026-01-06 12:48:38,Expense,34.49,Dining,Dinner,,PayPal
+2026-01-05 10:13:26,Income,6484.94,Salary,Monthly salary,,BoA Checking
+2026-01-03 14:29:13,Expense,1772.57,Housing,Rent,,BoA Checking
+2026-01-01 09:18:12,Expense,12.19,Transport,,,Apple Pay

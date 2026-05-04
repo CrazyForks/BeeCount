@@ -1,0 +1,54 @@
+BeeCount is a fully free, open-source personal ledger app that puts privacy protection and data sovereignty first.
+
+Open and Transparent
+- 100% open-source code, trusted by 1500+ users on GitHub
+- All code is publicly auditable, community-supervised
+- Business Source License — completely free for personal use
+- Active developer community with continuous updates
+
+Self-Hosted and Multi-Device Sync
+- Full control of your data — the defining feature of BeeCount
+- Sync via BeeCountCloud, Supabase, S3, WebDAV, iCloud, and more
+- A great fit for users with Synology, UGREEN, Nextcloud, and other NAS
+- Your data sovereignty is yours alone; developers cannot access anything
+
+AI Smart Bookkeeping
+- Snap Alipay or WeChat bill screenshots and AI auto-detects amount and merchant
+- Categories are auto-matched by merchant name
+- Customizable AI: built-in Zhipu GLM, plus any OpenAI-compatible provider
+- API keys are stored on-device only — fully local-first
+
+Complete Ledger Features
+- Transactions with amount, category, date, note, and attachments
+- Multiple ledgers — separate personal, work, and investment
+- Multiple accounts — cash, debit card, credit card
+- Two-level categories and a tag system for flexible labeling
+- Image attachments per transaction
+- Recurring entries for rent, salary, and other fixed flows
+- Budget management to keep monthly spending in check
+
+Data Insights
+- Monthly and yearly reports with category rankings at a glance
+- Income and expense trend analysis to stay on top of your finances
+- Beautiful annual recap posters, one-tap shareable
+
+Data Safety
+- Offline-first — works without a network connection
+- CSV and TSV import and export, compatible with major apps
+- One-tap export of categories, tags, budgets, and other settings
+- Privacy mode to hide sensitive amounts
+
+Personalization
+- Multiple theme colors to express your style
+- Dark mode for comfortable nighttime use
+- Font scaling for accessibility
+- Three languages supported: Simplified Chinese, Traditional Chinese, English
+
+Why BeeCount
+Traditional ledger apps store your data on third-party servers, raise privacy concerns, can lose your data when services shut down, paywall premium features, and push ads. BeeCount lets you self-host with full data control, is 100% open-source and auditable, works offline, is completely free for personal use with no ads, and is community-driven with ongoing updates.
+
+More than a ledger — a lifestyle of data sovereignty.
+
+Join BeeCount and take charge of your financial data.
+
+GitHub: https://github.com/TNT-Likely/BeeCount

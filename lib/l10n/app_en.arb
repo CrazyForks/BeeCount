@@ -5,7 +5,7 @@
     "description": "The application title"
   },
   "tabHome": "Home",
-  "tabInsights": "Insights",
+  "tabInsights": "Stats",
   "tabAssets": "Assets",
   "tabRecord": "Record",
   "tabMine": "Mine",
@@ -84,6 +84,7 @@
   "commonFinish": "Finish",
   "commonClose": "Close",
   "commonOther": "Other",
+  "commonYesterday": "Yesterday",
   "commonSearch": "Search",
   "commonNoteHint": "Note...",
   "commonSettings": "Settings",
@@ -1750,8 +1751,33 @@
   "aboutDeveloperStoryTitle": "From the Developer",
   "aboutDeveloperStory": "I started tracking my expenses in 2015 as an intern, and I've kept the habit for over a decade. Concerned about ads, paywalls, privacy risks, and apps shutting down, I decided to build my own — first as a small tool for myself and my family.\n\nIn September 2025, BeeCount launched its first version. Honestly, I had no idea if anyone would use it. But gradually, feedback started coming in — someone said they finally found a clean budgeting app, others offered great suggestions, and some quietly left five-star reviews. Every single message reminded me this was worth continuing.\n\nBeeCount is ad-free, subscription-free, and fully open source. All your data stays on your device and is never uploaded to any third-party server. But publishing and maintaining an app isn't free — developer accounts, servers, and other costs are currently covered by community donations, and every system update, bug fix, and new feature is built outside of my day job.\n\nIf BeeCount has been helpful to you, a rating, a share, or a donation would help this little project go further. Thank you for your trust.",
   "aboutRelatedProducts": "More Products",
+  "aboutBeeAssets": "BeeAssets",
+  "aboutBeeAssetsSubtitle": "Visualize your full asset portfolio",
+  "aboutBeeAssetsIntro": "BeeCount focuses on daily cash flow; BeeAssets is its sibling product, focused on asset portfolio visualization: net worth trends across accounts, property / investment / crypto classification, returns, holding period, and allocation breakdown.",
   "aboutBeeDNS": "BeeDNS",
   "aboutBeeDNSSubtitle": "Simple and efficient DNS management tool",
+  "aboutBeeDNSIntro": "Got domains across Cloudflare and Aliyun? BeeDNS unifies them in one place: batch edit records, A/AAAA toggles, resolution migration, subdomain bulk management — no more switching between provider consoles.",
+  "productPromoAndroidTitle": "Request Beta Access",
+  "productPromoAndroidMessage": "This app is still in closed testing on Google Play — invitation only.\n\nHow to apply: email us with your Google account address (required) and a brief use case (optional). We'll reply within 1-3 days and add you to the beta whitelist.",
+  "productPromoOpenStore": "Open in App Store",
+  "productPromoLearnMore": "Pro",
+  "productPromoEmailLabel": "Application Email (tap to copy)",
+  "productPromoCopiedToast": "Email copied to clipboard",
+  "productPromoMailUnavailable": "No email app detected. The address has been copied — paste it into any mail app to send.",
+  "productPromoEmailButton": "Send Email",
+  "productPromoWebsiteButton": "Visit Website",
+  "productPromoEmailSubject": "Beta access request - {productName}",
+  "@productPromoEmailSubject": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "productPromoEmailBody": "Hi,\n\nI'd like to join the closed beta for {productName} on Google Play. My Google account email is:\n\n(please fill in your Gmail / Google account email)\n\nThanks!",
+  "@productPromoEmailBody": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
   "logCenterTitle": "Log Center",
   "logCenterSubtitle": "View app runtime logs",
   "logCenterSearchHint": "Search log content or tags...",

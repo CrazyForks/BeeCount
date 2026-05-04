@@ -63,8 +63,12 @@ class AmountText extends ConsumerWidget {
             isChineseLocale: isChinese);
 
         if (!showCurrency) {
-          // 移除币种符号(¥/$等)
-          formatted = formatted.replaceAll(RegExp(r'^[¥$€£₩]+'), '');
+          // 移除 formatBalance 加进去的币种符号。要按实际币种动态算 —
+          // 老的硬编码字符类 [¥$€£₩] 漏了 ฿ ₹ ₽ ₫ Rp HK$ NT$ C$ 等。
+          final symbol = getCurrencySymbol(effectiveCurrencyCode.toUpperCase());
+          if (symbol.isNotEmpty && formatted.startsWith(symbol)) {
+            formatted = formatted.substring(symbol.length).trimLeft();
+          }
         }
 
         if (!useCompactFormat) {

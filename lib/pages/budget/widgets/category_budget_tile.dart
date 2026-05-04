@@ -5,6 +5,7 @@ import '../../../data/repositories/budget_repository.dart';
 import '../../../services/data/category_service.dart';
 import '../../../styles/tokens.dart';
 import '../../../utils/ui_scale_extensions.dart';
+import '../../../widgets/category_icon.dart';
 import 'budget_progress_bar.dart';
 
 /// 分类预算条目组件
@@ -35,7 +36,9 @@ class CategoryBudgetTile extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            // 分类图标
+            // 分类图标 —— 优先用 CategoryIconWidget(支持 iconType='custom' 的
+            // 上传图片);Category 缺失(老数据 / 云端模式)才回退到 switch 拿
+            // Material icon。
             Container(
               width: 36.0.scaled(context, ref),
               height: 36.0.scaled(context, ref),
@@ -43,11 +46,18 @@ class CategoryBudgetTile extends ConsumerWidget {
                 color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
               ),
-              child: Icon(
-                CategoryService.getCategoryIcon(usage.categoryIcon),
-                size: 20.0.scaled(context, ref),
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              alignment: Alignment.center,
+              child: usage.category != null
+                  ? CategoryIconWidget(
+                      category: usage.category,
+                      size: 20.0.scaled(context, ref),
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : Icon(
+                      CategoryService.getCategoryIcon(usage.categoryIcon),
+                      size: 20.0.scaled(context, ref),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
             ),
             SizedBox(width: 12.0.scaled(context, ref)),
             // 分类信息和进度

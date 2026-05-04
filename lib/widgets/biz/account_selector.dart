@@ -7,6 +7,7 @@ import '../../utils/lru_cache.dart';
 import '../../utils/account_type_utils.dart';
 import '../../providers.dart';
 import '../../services/system/logger_service.dart';
+import '../../l10n/app_localizations.dart';
 
 /// 账户选择器组件
 /// 横滑标签形式，支持 LRU 排序
@@ -151,14 +152,14 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 2),
-        itemCount: sortedAccounts.length + 1, // +1 for "无账户" option
+        itemCount: sortedAccounts.length + 1, // +1 for "no account" option
         separatorBuilder: (_, __) => const SizedBox(width: 6),
         itemBuilder: (context, index) {
           // "无账户"永远在第一位
           if (index == 0) {
             final isSelected = widget.selectedAccountId == null;
             return _buildAccountChip(
-              label: '无账户',
+              label: AppLocalizations.of(context).accountNone,
               isSelected: isSelected,
               onTap: () => _onAccountTap(null),
             );
