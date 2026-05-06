@@ -15,7 +15,67 @@ import '../core/exceptions.dart';
 import '../core/storage_service.dart';
 import '../utils/path_helper.dart';
 
+// ============================================================================
+// 2FA(TOTP)— 见 BeeCount 主仓 .docs/2fa-design.md
+// ============================================================================
+// 设计要点:
+// - 启用 / 管理 UI 只在 Web 端;App 仅承担"登录时若 server 要 2FA → 弹出输码视图"
+// - 两处登录入口(cloud_service_page 配置确认 / beecount_cloud_sync_page 重新登录)
+//   不感知 2FA — 只 await `signInWithEmail()`,2FA 流程被封装在 service 内部
+// - service 通过 `BeeCountCloudProvider.globalTwoFactorHandler` 拿到回调,
+//   handler 由 App 在启动时注册(典型实现:用全局 navigator key push 一个
+//   `Login2FAChallengeView`,等用户输完码后 resolve)
+
+/// 当 server 返回 requires_2fa=true 时,通过 [TwoFactorChallengeHandler] 传给 App。
+///
+/// `verify` 由 service 注入:UI 在用户输完码点验证后调它,
+/// 返回 null = 验证通过(UI 应关闭对话框并让 handler 返回 true),
+/// 返回非 null 字符串 = 错误信息(UI 就地展示,让用户重试)。
+///
+/// 这样 view 留在原地,失败可重试,不再"输错就跳走没提示"。
+class TwoFactorChallengeRequest {
+  final String challengeToken;
+  final List<String> availableMethods; // ['totp', 'recovery_code']
+  final String email;
+  final Future<String?> Function(String method, String code) verify;
+
+  const TwoFactorChallengeRequest({
+    required this.challengeToken,
+    required this.availableMethods,
+    required this.email,
+    required this.verify,
+  });
+}
+
+/// 处理 2FA challenge 的回调。返回 true = 验证已通过(view 内调 verify 返回 null),
+/// false = 用户取消 / 关闭对话框。
+typedef TwoFactorChallengeHandler = Future<bool> Function(
+  TwoFactorChallengeRequest request,
+);
+
+/// `/auth/2fa/status` 响应。
+class TwoFactorStatus {
+  final bool enabled;
+  final DateTime? enabledAt;
+
+  const TwoFactorStatus({required this.enabled, this.enabledAt});
+}
+
+/// 用户在 2FA 输码视图取消了流程 — 把它当成普通登录失败抛出去。
+class TwoFactorCancelledException implements Exception {
+  final String message;
+  const TwoFactorCancelledException([this.message = '2FA verification cancelled']);
+  @override
+  String toString() => 'TwoFactorCancelledException: $message';
+}
+
 class BeeCountCloudProvider implements CloudProvider {
+  /// 在 App 启动时设置一次。auth service 处理 signInWithEmail 时,server
+  /// 若返回 requires_2fa=true,会调这个 handler 让 App 弹输码 UI。
+  /// 不设置 = 老 App / 服务端未启 2FA 行为不变;若 server 要求 2FA 而 App
+  /// 没注册 handler,signInWithEmail 会抛 [CloudAuthException]。
+  static TwoFactorChallengeHandler? globalTwoFactorHandler;
+
   BeeCountCloudAuthService? _auth;
   BeeCountCloudStorageService? _storage;
   BeeCountCloudRealtimeClient? _realtime;
@@ -61,6 +121,7 @@ class BeeCountCloudProvider implements CloudProvider {
     final authService = BeeCountCloudAuthService(
       baseUrl: baseUrl,
       apiPrefix: apiPrefix,
+      twoFactorHandler: BeeCountCloudProvider.globalTwoFactorHandler,
     );
     await authService.initialize();
 
@@ -129,6 +190,16 @@ class BeeCountCloudProvider implements CloudProvider {
           'BeeCount Cloud storage is not initialized.');
     }
     return storage.getMyProfile();
+  }
+
+  /// 转发到 BeeCountCloudAuthService.getTwoFactorStatus,云同步页用它展示状态行。
+  Future<TwoFactorStatus> getTwoFactorStatus() async {
+    final auth = _auth;
+    if (auth == null) {
+      throw CloudConfigurationException(
+          'BeeCount Cloud auth is not initialized.');
+    }
+    return auth.getTwoFactorStatus();
   }
 
   Future<BeeCountCloudProfile> updateMyProfileDisplayName({
@@ -883,11 +954,14 @@ class BeeCountCloudAuthService implements CloudAuthService {
     required this.baseUrl,
     required this.apiPrefix,
     http.Client? httpClient,
-  }) : _httpClient = httpClient ?? http.Client();
+    TwoFactorChallengeHandler? twoFactorHandler,
+  })  : _httpClient = httpClient ?? http.Client(),
+        _twoFactorHandler = twoFactorHandler;
 
   final String baseUrl;
   final String apiPrefix;
   final http.Client _httpClient;
+  final TwoFactorChallengeHandler? _twoFactorHandler;
 
   final StreamController<CloudUser?> _authStateController =
       StreamController<CloudUser?>.broadcast();
@@ -903,10 +977,25 @@ class BeeCountCloudAuthService implements CloudAuthService {
   String? _recoveryPassword;
   Future<CloudUser>? _recoveryInFlight;
 
+  /// 静默恢复失败后冷却到这个时间点,期间所有 currentUser / requireAccessToken
+  /// 调用都直接返 null,**不再发新的 /auth/login 请求**。
+  /// 防止 UI 频繁 rebuild 导致 silent recovery 狂打 login 撞上 server 30/min 限流,
+  /// 后果是用户主动点「重新登录」时反而被 429 挡掉。
+  /// 触发场景:
+  ///   - 服务端开了 2FA,silent 模式拿到 requires_2fa=true 后立即 cancel
+  ///   - 邮密被改了 / 账号被禁
+  ///   - server 暂时 5xx
+  /// 登录成功后会清掉(见 _saveSession)。
+  DateTime? _silentRecoveryCooldownUntil;
+  static const _silentRecoveryCooldown = Duration(seconds: 30);
+
   void setRecoveryCredentials({String? email, String? password}) {
     _recoveryEmail = (email != null && email.isNotEmpty) ? email : null;
     _recoveryPassword =
         (password != null && password.isNotEmpty) ? password : null;
+    // 凭证更新 = 用户在 cloud 配置页保存了新邮密 / 切回 BeeCount,清掉旧冷却,
+    // 让下一次 currentUser 立刻尝试一次新凭证的登录。
+    _silentRecoveryCooldownUntil = null;
   }
 
   String get _sessionStorageKey {
@@ -989,10 +1078,21 @@ class BeeCountCloudAuthService implements CloudAuthService {
 
   /// 凭恢复邮密自动重登一次。并发多次调用只跑一个请求,其他调用方共享结果。
   /// 没邮密 / 登录失败都返回 null(不抛),让上层按"未登录"路径处理。
+  ///
+  /// 失败后进 30 秒冷却期(见 [_silentRecoveryCooldownUntil] 注释):
+  /// 防止 UI 频繁 rebuild 导致每次都 POST /auth/login,撞 server 30/min 限流,
+  /// 让用户主动点「重新登录」时反而被 429 挡掉。
   Future<CloudUser?> _tryRecoveryLogin() async {
     final email = _recoveryEmail;
     final password = _recoveryPassword;
     if (email == null || password == null) return null;
+
+    // 冷却期内直接返 null,不打网络请求
+    final cooldown = _silentRecoveryCooldownUntil;
+    if (cooldown != null && DateTime.now().isBefore(cooldown)) {
+      return null;
+    }
+
     final existing = _recoveryInFlight;
     if (existing != null) {
       try {
@@ -1001,11 +1101,17 @@ class BeeCountCloudAuthService implements CloudAuthService {
         return null;
       }
     }
-    final future = signInWithEmail(email: email, password: password);
+    // 后台恢复用 silent 模式:遇到 2FA 不弹 dialog,直接当登录失败处理,
+    // 让用户在 sync page 主动点「重新登录」时再触发。
+    final future =
+        _signInWithEmailSilent(email: email, password: password);
     _recoveryInFlight = future;
     try {
       return await future;
     } catch (_) {
+      // 失败 → 启冷却,30 秒内别再敲 server
+      _silentRecoveryCooldownUntil =
+          DateTime.now().add(_silentRecoveryCooldown);
       return null;
     } finally {
       _recoveryInFlight = null;
@@ -1015,7 +1121,33 @@ class BeeCountCloudAuthService implements CloudAuthService {
   String? get currentDeviceId => _session?.deviceId;
   String? get currentUserId => _session?.userId;
 
+  /// Refresh 请求去重的 in-flight future。
+  ///
+  /// server 用 rotating refresh token:每次 /auth/refresh 都旋转 — 老 token 立刻
+  /// revoke,返回新 token。如果 cold start 时 initialize() 看到 access_token 过期
+  /// 同步触发一次 refresh,UI 又同时调 currentUser/requireAccessToken 触发另一次,
+  /// 两个 POST 用的是 SAME 老 refresh_token → 第一个成功(新 token 入库,老 token
+  /// revoke)→ 第二个用已 revoke 的老 token → 401 → _clearSession() 把刚保存的
+  /// 新 session 也清掉。下次启动就回到"silent recovery 撞 2FA"的循环。
+  ///
+  /// 用 in-flight dedup 让并发调用共享同一个 refresh future,只发一次 server 请求。
+  Future<bool>? _refreshInFlight;
+
   Future<bool> tryRefreshSession() async {
+    final existing = _refreshInFlight;
+    if (existing != null) {
+      return existing;
+    }
+    final future = _doRefreshSession();
+    _refreshInFlight = future;
+    try {
+      return await future;
+    } finally {
+      _refreshInFlight = null;
+    }
+  }
+
+  Future<bool> _doRefreshSession() async {
     try {
       await _refreshSession();
       return true;
@@ -1232,6 +1364,24 @@ class BeeCountCloudAuthService implements CloudAuthService {
     return _toCloudUser(session);
   }
 
+  /// 内部用:登录但**不弹** 2FA dialog。供后台 token recovery / 自动登录场景调用,
+  /// 避免用户没主动操作就被弹出输码框。如果服务端要求 2FA 而我们处于 silent 模式,
+  /// 抛 [TwoFactorCancelledException],调用方用 try/catch 当作"恢复失败"处理,
+  /// 让 UI 上的「重新登录」按钮继续兜底(那条路径走的是公开 signInWithEmail,会弹)。
+  Future<CloudUser> _signInWithEmailSilent({
+    required String email,
+    required String password,
+  }) async {
+    final body = await _buildAuthBody(email: email, password: password);
+    final session = await _authenticate(
+      path: '/auth/login',
+      body: body,
+      actionName: 'login',
+      silent2fa: true,
+    );
+    return _toCloudUser(session);
+  }
+
   @override
   Future<CloudUser> signUpWithEmail({
     required String email,
@@ -1288,6 +1438,7 @@ class BeeCountCloudAuthService implements CloudAuthService {
     required String path,
     required Map<String, dynamic> body,
     required String actionName,
+    bool silent2fa = false,
   }) async {
     final response = await _request(method: 'POST', path: path, body: body);
     if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -1296,17 +1447,117 @@ class BeeCountCloudAuthService implements CloudAuthService {
     }
 
     final payload = _decodeJsonObject(response.body);
+
+    // server 返回 requires_2fa=true → 弹 challenge UI 拿 6 位码,POST /auth/2fa/verify
+    // 兑换真 token。register 不会要 2FA(新用户尚未启用),仅 login 路径会进这个分支。
+    if (payload['requires_2fa'] == true) {
+      // 后台 token recovery / 自动恢复登录场景:silent2fa=true,直接跑 cancel 异常,
+      // 不弹 dialog。让 UI 上的「重新登录」按钮触发用户感知到的登录,那条路径走的是
+      // 公开 signInWithEmail,会正常弹。
+      if (silent2fa) {
+        throw const TwoFactorCancelledException(
+            '2FA required but skipped in silent recovery mode');
+      }
+      return _handleTwoFactorChallenge(
+        loginBody: body,
+        challengePayload: payload,
+      );
+    }
+
     final session = _BeeCountCloudSession.fromAuthResponse(payload);
     await _saveSession(session);
     return session;
   }
 
-  Future<void> _refreshSessionOrClear() async {
-    try {
-      await _refreshSession();
-    } catch (_) {
-      await _clearSession();
+  Future<_BeeCountCloudSession> _handleTwoFactorChallenge({
+    required Map<String, dynamic> loginBody,
+    required Map<String, dynamic> challengePayload,
+  }) async {
+    final challengeToken = challengePayload['challenge_token'];
+    if (challengeToken is! String || challengeToken.isEmpty) {
+      throw CloudAuthException(
+          'Login response advertised requires_2fa but no challenge_token.');
     }
+    final rawMethods = challengePayload['available_methods'];
+    final methods = (rawMethods is List)
+        ? rawMethods.whereType<String>().toList()
+        : <String>['totp', 'recovery_code'];
+
+    final handler = _twoFactorHandler;
+    if (handler == null) {
+      throw CloudAuthException(
+          'Server requires 2FA but no TwoFactorChallengeHandler is registered. '
+          'Set BeeCountCloudProvider.globalTwoFactorHandler at app startup.');
+    }
+
+    // verify callback:UI 输完码点验证 → 调这个 → 命中就保存 session,
+    // 返回 null,UI 关闭;失败返回 server 错误消息,UI 就地展示让用户重试。
+    _BeeCountCloudSession? successSession;
+
+    Future<String?> verify(String method, String code) async {
+      final verifyBody = Map<String, dynamic>.of(loginBody)
+        ..remove('email')
+        ..remove('password');
+      verifyBody['challenge_token'] = challengeToken;
+      verifyBody['method'] = method;
+      verifyBody['code'] = code;
+      verifyBody['client_type'] ??= 'app';
+
+      final verifyResp = await _request(
+        method: 'POST',
+        path: '/auth/2fa/verify',
+        body: verifyBody,
+      );
+      if (verifyResp.statusCode < 200 || verifyResp.statusCode >= 300) {
+        return _extractErrorMessage(verifyResp);
+      }
+      final verifyPayload = _decodeJsonObject(verifyResp.body);
+      final session = _BeeCountCloudSession.fromAuthResponse(verifyPayload);
+      await _saveSession(session);
+      successSession = session;
+      return null;
+    }
+
+    final ok = await handler(TwoFactorChallengeRequest(
+      challengeToken: challengeToken,
+      availableMethods: methods,
+      email: (loginBody['email'] as String?) ?? '',
+      verify: verify,
+    ));
+    if (!ok || successSession == null) {
+      throw const TwoFactorCancelledException();
+    }
+    return successSession!;
+  }
+
+  /// GET /auth/2fa/status — UI 用来在云同步页展示「已启用 ✓ / 未启用」状态行。
+  Future<TwoFactorStatus> getTwoFactorStatus() async {
+    final accessToken = await requireAccessToken();
+    final response = await _request(
+      method: 'GET',
+      path: '/auth/2fa/status',
+      accessToken: accessToken,
+    );
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw CloudAuthException(
+          'Get 2FA status failed: ${_extractErrorMessage(response)}');
+    }
+    final payload = _decodeJsonObject(response.body);
+    final enabledAtRaw = payload['enabled_at'];
+    DateTime? enabledAt;
+    if (enabledAtRaw is String && enabledAtRaw.isNotEmpty) {
+      enabledAt = DateTime.tryParse(enabledAtRaw)?.toLocal();
+    }
+    return TwoFactorStatus(
+      enabled: payload['enabled'] == true,
+      enabledAt: enabledAt,
+    );
+  }
+
+  Future<void> _refreshSessionOrClear() async {
+    // 走 tryRefreshSession 拿到 in-flight 去重保护,避免跟 currentUser/requireAccessToken
+    // 并发的 refresh 撞 server 的 rotating refresh token 机制。
+    await tryRefreshSession();
   }
 
   Future<void> _refreshSession() async {
@@ -1332,6 +1583,8 @@ class BeeCountCloudAuthService implements CloudAuthService {
 
   Future<void> _saveSession(_BeeCountCloudSession session) async {
     _session = session;
+    // 任何成功登录路径都清掉静默恢复冷却,避免之前的失败状态拖到现在。
+    _silentRecoveryCooldownUntil = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_sessionStorageKey, jsonEncode(session.toJson()));
     await prefs.setString(_localDeviceIdStorageKey, session.deviceId);

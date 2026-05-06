@@ -6071,6 +6071,55 @@ class AppLocalizationsZh extends AppLocalizations {
   String syncHealthValueRemoteMissing(int local) {
     return '本地 $local · 云端 —';
   }
+
+  @override
+  String get twofaChallengeTitle => '二次验证';
+
+  @override
+  String get twofaMethodTotp => '动态码';
+
+  @override
+  String get twofaMethodRecovery => '恢复码';
+
+  @override
+  String get twofaTotpHint => '请输入 authenticator app(Google Authenticator / 1Password / Authy 等)上的 6 位动态码。';
+
+  @override
+  String get twofaRecoveryHint => '请输入启用 2FA 时保存的恢复码(如 abcd-efgh),每个码只能使用一次。';
+
+  @override
+  String get twofaTotpInputPlaceholder => '输入 6 位动态码';
+
+  @override
+  String get twofaRecoveryInputPlaceholder => '输入恢复码';
+
+  @override
+  String twofaCountdown(String time) {
+    return '剩余时间 $time';
+  }
+
+  @override
+  String get twofaVerifyButton => '验证';
+
+  @override
+  String get twofaStatusTitle => '二次验证';
+
+  @override
+  String get twofaStatusEnabled => '已启用 ✓';
+
+  @override
+  String get twofaStatusDisabled => '未启用';
+
+  @override
+  String twofaStatusEnabledAt(String date) {
+    return '启用于 $date';
+  }
+
+  @override
+  String get twofaStatusManageHint => '请前往 Web 端管理(启用 / 禁用 / 重新生成恢复码)';
+
+  @override
+  String get twofaStatusOpenWeb => '前往 Web 端启用 →';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -12115,4 +12164,53 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String syncHealthValueRemoteMissing(int local) {
     return '本地 $local · 雲端 —';
   }
+
+  @override
+  String get twofaChallengeTitle => '二次驗證';
+
+  @override
+  String get twofaMethodTotp => '動態碼';
+
+  @override
+  String get twofaMethodRecovery => '恢復碼';
+
+  @override
+  String get twofaTotpHint => '請輸入 authenticator app(Google Authenticator / 1Password / Authy 等)上的 6 位動態碼。';
+
+  @override
+  String get twofaRecoveryHint => '請輸入啟用 2FA 時保存的恢復碼(如 abcd-efgh),每個碼只能使用一次。';
+
+  @override
+  String get twofaTotpInputPlaceholder => '輸入 6 位動態碼';
+
+  @override
+  String get twofaRecoveryInputPlaceholder => '輸入恢復碼';
+
+  @override
+  String twofaCountdown(String time) {
+    return '剩餘時間 $time';
+  }
+
+  @override
+  String get twofaVerifyButton => '驗證';
+
+  @override
+  String get twofaStatusTitle => '二次驗證';
+
+  @override
+  String get twofaStatusEnabled => '已啟用 ✓';
+
+  @override
+  String get twofaStatusDisabled => '未啟用';
+
+  @override
+  String twofaStatusEnabledAt(String date) {
+    return '啟用於 $date';
+  }
+
+  @override
+  String get twofaStatusManageHint => '請前往 Web 端管理(啟用 / 禁用 / 重新生成恢復碼)';
+
+  @override
+  String get twofaStatusOpenWeb => '前往 Web 端啟用 →';
 }

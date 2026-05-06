@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'widgets/biz/login_2fa_challenge_view.dart';
 import 'theme.dart';
 import 'providers.dart';
 import 'providers/font_scale_provider.dart';
@@ -31,6 +33,10 @@ import 'dart:ui';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+
+/// 全局 navigator key — 给 service 层(没有 BuildContext)push 路由使用。
+/// 当前用途:BeeCount Cloud 登录拿到 requires_2fa 时弹出 [Login2FAChallengeView]。
+final GlobalKey<NavigatorState> globalNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -115,6 +121,18 @@ Future<void> main() async {
 
   // 启动 URL 监听（用于快捷指令/AppLink 自动记账）
   _setupUrlListener(container);
+
+  // 注册 BeeCount Cloud 2FA challenge handler。当 server 返回 requires_2fa=true,
+  // service 层会调这个 handler 弹出 Login2FAChallengeDialog 让用户输码。
+  // 验证失败留在对话框就地展示错误,验证通过 / 用户取消才关闭。详见 .docs/2fa-design.md
+  BeeCountCloudProvider.globalTwoFactorHandler = (request) async {
+    final ctx = globalNavigatorKey.currentContext;
+    if (ctx == null) {
+      // 极端场景:cloud auth 在 navigator 还没 attach 之前触发,只能视为取消
+      return false;
+    }
+    return await Login2FAChallengeDialog.show(ctx, request);
+  };
 
   // 启动一次性磁盘孤立文件 GC(attachments / attachment_thumbs / custom_icons),
   // 清理历史版本遗留的文件。标志位 SharedPreferences 保证只跑一次。后台异步
@@ -448,6 +466,7 @@ class MainApp extends ConsumerWidget {
     return MediaQuery(
       data: media.copyWith(textScaler: newScaler),
       child: MaterialApp(
+        navigatorKey: globalNavigatorKey,
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         scrollBehavior: const NoGlowScrollBehavior(),
         debugShowCheckedModeBanner: false,

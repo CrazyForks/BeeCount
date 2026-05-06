@@ -2745,5 +2745,31 @@
     "placeholders": {
       "local": { "type": "int" }
     }
-  }
+  },
+
+  "twofaChallengeTitle": "Two-factor authentication",
+  "twofaMethodTotp": "Code",
+  "twofaMethodRecovery": "Recovery code",
+  "twofaTotpHint": "Enter the 6-digit code from your authenticator app (Google Authenticator / 1Password / Authy / etc).",
+  "twofaRecoveryHint": "Enter a recovery code saved when you enabled 2FA (e.g. abcd-efgh). Each code works once.",
+  "twofaTotpInputPlaceholder": "6-digit code",
+  "twofaRecoveryInputPlaceholder": "Recovery code",
+  "twofaCountdown": "Time remaining {time}",
+  "@twofaCountdown": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "twofaVerifyButton": "Verify",
+  "twofaStatusTitle": "Two-factor authentication",
+  "twofaStatusEnabled": "Enabled ✓",
+  "twofaStatusDisabled": "Not enabled",
+  "twofaStatusEnabledAt": "Enabled on {date}",
+  "@twofaStatusEnabledAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "twofaStatusManageHint": "Manage from the Web app (enable / disable / regenerate recovery codes)",
+  "twofaStatusOpenWeb": "Enable on the Web app →"
 }

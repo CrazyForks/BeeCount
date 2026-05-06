@@ -6071,4 +6071,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String syncHealthValueRemoteMissing(int local) {
     return 'Local $local · Cloud —';
   }
+
+  @override
+  String get twofaChallengeTitle => 'Two-factor authentication';
+
+  @override
+  String get twofaMethodTotp => 'Code';
+
+  @override
+  String get twofaMethodRecovery => 'Recovery code';
+
+  @override
+  String get twofaTotpHint => 'Enter the 6-digit code from your authenticator app (Google Authenticator / 1Password / Authy / etc).';
+
+  @override
+  String get twofaRecoveryHint => 'Enter a recovery code saved when you enabled 2FA (e.g. abcd-efgh). Each code works once.';
+
+  @override
+  String get twofaTotpInputPlaceholder => '6-digit code';
+
+  @override
+  String get twofaRecoveryInputPlaceholder => 'Recovery code';
+
+  @override
+  String twofaCountdown(String time) {
+    return 'Time remaining $time';
+  }
+
+  @override
+  String get twofaVerifyButton => 'Verify';
+
+  @override
+  String get twofaStatusTitle => 'Two-factor authentication';
+
+  @override
+  String get twofaStatusEnabled => 'Enabled ✓';
+
+  @override
+  String get twofaStatusDisabled => 'Not enabled';
+
+  @override
+  String twofaStatusEnabledAt(String date) {
+    return 'Enabled on $date';
+  }
+
+  @override
+  String get twofaStatusManageHint => 'Manage from the Web app (enable / disable / regenerate recovery codes)';
+
+  @override
+  String get twofaStatusOpenWeb => 'Enable on the Web app →';
 }

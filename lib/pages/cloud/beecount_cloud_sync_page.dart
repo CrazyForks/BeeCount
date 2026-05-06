@@ -177,6 +177,11 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
                         SectionCard(
                           child: _buildAccountSection(context, user),
                         ),
+                        // Section 1.5: 2FA 状态行 — 内部根据是否能拉到 status 决定显示
+                        // 与否(未登录 / 拉取失败 → 自动隐藏)。不在外层 gate user,
+                        // 这样切换 cloud scheme 来回时,只要重新登录成功就会自动出现。
+                        const SizedBox(height: 8),
+                        const _TwoFactorStatusRow(),
                         const SizedBox(height: 8),
                         // Section 2: 同步状态(深度检测结果)
                         SectionCard(
@@ -446,6 +451,106 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 2FA 状态展示行(只读)。
+///
+/// 拉取 GET /auth/2fa/status,展示「已启用 ✓ · 启用于 YYYY-MM-DD」或「未启用」。
+/// 拉取失败(未登录 / 网络错 / 不是 BeeCount Cloud)→ 整行隐藏,不展示假数据。
+///
+/// 监听 [syncStatusRefreshProvider] tick(用户重新登录 / 同步成功后会 bump),
+/// 自动重新拉取,所以切换云方案再切回来也能拿到最新状态。
+///
+/// 设计文档:.docs/2fa-design.md(第 4.6 节,App 端 only-read 状态)。
+class _TwoFactorStatusRow extends ConsumerStatefulWidget {
+  const _TwoFactorStatusRow();
+
+  @override
+  ConsumerState<_TwoFactorStatusRow> createState() =>
+      _TwoFactorStatusRowState();
+}
+
+class _TwoFactorStatusRowState extends ConsumerState<_TwoFactorStatusRow> {
+  TwoFactorStatus? _status;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final provider =
+          await ref.read(beecountCloudProviderInstance.future);
+      if (provider == null) {
+        if (mounted) {
+          setState(() {
+            _loaded = true;
+            _status = null;
+          });
+        }
+        return;
+      }
+      // currentUser 是 null 时再请求会拿到 401 / 走 silent recovery 也拿不到
+      // session,所以提前判断登录态,避免无谓请求 + 闪烁。
+      final user = await provider.auth.currentUser;
+      if (user == null) {
+        if (mounted) {
+          setState(() {
+            _loaded = true;
+            _status = null;
+          });
+        }
+        return;
+      }
+      final s = await provider.getTwoFactorStatus();
+      if (!mounted) return;
+      setState(() {
+        _status = s;
+        _loaded = true;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loaded = true;
+        _status = null;
+      });
+      logger.warning('2fa.status.fetch.failed', e.toString());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    // syncStatusRefreshProvider 在「重新登录成功 / 同步完成」时 bump,
+    // 监听它就能让切换云方案后回来 / 用户重新登录后自动重新拉取 2FA 状态。
+    ref.listen<int>(syncStatusRefreshProvider, (_, __) => _load());
+
+    // 还没加载完 / 拉取失败 / 未登录 / 不是 BeeCount Cloud → 整行隐藏。
+    // 不显示 loading 占位避免初次进入页面时闪一下。
+    if (!_loaded || _status == null) {
+      return const SizedBox.shrink();
+    }
+    final status = _status!;
+
+    final enabledLabel =
+        status.enabled ? l10n.twofaStatusEnabled : l10n.twofaStatusDisabled;
+    final subtitle = status.enabled && status.enabledAt != null
+        ? l10n.twofaStatusEnabledAt(
+            '${status.enabledAt!.year}-${status.enabledAt!.month.toString().padLeft(2, '0')}-${status.enabledAt!.day.toString().padLeft(2, '0')}',
+          )
+        : null;
+
+    return SectionCard(
+      child: AppListTile(
+        leading: status.enabled ? Icons.verified_user : Icons.lock_outline,
+        title: '${l10n.twofaStatusTitle} · $enabledLabel',
+        subtitle: subtitle,
       ),
     );
   }

@@ -11567,6 +11567,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Local {local} · Cloud —'**
   String syncHealthValueRemoteMissing(int local);
+
+  /// No description provided for @twofaChallengeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-factor authentication'**
+  String get twofaChallengeTitle;
+
+  /// No description provided for @twofaMethodTotp.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get twofaMethodTotp;
+
+  /// No description provided for @twofaMethodRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get twofaMethodRecovery;
+
+  /// No description provided for @twofaTotpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code from your authenticator app (Google Authenticator / 1Password / Authy / etc).'**
+  String get twofaTotpHint;
+
+  /// No description provided for @twofaRecoveryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a recovery code saved when you enabled 2FA (e.g. abcd-efgh). Each code works once.'**
+  String get twofaRecoveryHint;
+
+  /// No description provided for @twofaTotpInputPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'6-digit code'**
+  String get twofaTotpInputPlaceholder;
+
+  /// No description provided for @twofaRecoveryInputPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get twofaRecoveryInputPlaceholder;
+
+  /// No description provided for @twofaCountdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Time remaining {time}'**
+  String twofaCountdown(String time);
+
+  /// No description provided for @twofaVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get twofaVerifyButton;
+
+  /// No description provided for @twofaStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-factor authentication'**
+  String get twofaStatusTitle;
+
+  /// No description provided for @twofaStatusEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled ✓'**
+  String get twofaStatusEnabled;
+
+  /// No description provided for @twofaStatusDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enabled'**
+  String get twofaStatusDisabled;
+
+  /// No description provided for @twofaStatusEnabledAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled on {date}'**
+  String twofaStatusEnabledAt(String date);
+
+  /// No description provided for @twofaStatusManageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage from the Web app (enable / disable / regenerate recovery codes)'**
+  String get twofaStatusManageHint;
+
+  /// No description provided for @twofaStatusOpenWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable on the Web app →'**
+  String get twofaStatusOpenWeb;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

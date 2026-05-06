@@ -2408,5 +2408,31 @@
     "placeholders": {
       "local": { "type": "int" }
     }
-  }
+  },
+
+  "twofaChallengeTitle": "二次驗證",
+  "twofaMethodTotp": "動態碼",
+  "twofaMethodRecovery": "恢復碼",
+  "twofaTotpHint": "請輸入 authenticator app(Google Authenticator / 1Password / Authy 等)上的 6 位動態碼。",
+  "twofaRecoveryHint": "請輸入啟用 2FA 時保存的恢復碼(如 abcd-efgh),每個碼只能使用一次。",
+  "twofaTotpInputPlaceholder": "輸入 6 位動態碼",
+  "twofaRecoveryInputPlaceholder": "輸入恢復碼",
+  "twofaCountdown": "剩餘時間 {time}",
+  "@twofaCountdown": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "twofaVerifyButton": "驗證",
+  "twofaStatusTitle": "二次驗證",
+  "twofaStatusEnabled": "已啟用 ✓",
+  "twofaStatusDisabled": "未啟用",
+  "twofaStatusEnabledAt": "啟用於 {date}",
+  "@twofaStatusEnabledAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "twofaStatusManageHint": "請前往 Web 端管理(啟用 / 禁用 / 重新生成恢復碼)",
+  "twofaStatusOpenWeb": "前往 Web 端啟用 →"
 }
