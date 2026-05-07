@@ -13,6 +13,7 @@ import '../cloud/sync/sync_providers.dart' as sync_p;
 import '../cloud/transactions_sync_manager.dart';
 import '../models/ledger_display_item.dart';
 import '../services/ai/ai_provider_manager.dart';
+import '../pages/ai/ai_provider_manage_page.dart' show aiProviderListRefreshProvider;
 import 'ai_config_providers.dart';
 import '../services/attachment_service.dart' show attachmentListRefreshProvider;
 import '../services/system/logger_service.dart';
@@ -223,6 +224,10 @@ final syncServiceProvider = Provider<SyncService>((ref) {
         try {
           ref.read(aiCapabilityBindingRefreshProvider.notifier).state++;
           ref.read(aiProviderListForCapabilityRefreshProvider.notifier).state++;
+          // 「AI 服务商管理」页面用的是另一个独立 ticker(`aiProviderListRefreshProvider`,
+          // 定义在 ai_provider_manage_page.dart),也得 bump,否则 web 端改 provider
+          // 后 mobile 管理页停在旧列表,得手动 pull-to-refresh / 重启 app 才更新。
+          ref.read(aiProviderListRefreshProvider.notifier).state++;
           // aiConfigProvider 是 StateNotifierProvider,notifier 里的 state
           // 在构造时从 prefs 读一次后就不再管。invalidate 让 notifier 重建,
           // 触发 _loadFromPrefs 重新拉新值。
