@@ -81,6 +81,7 @@
   "commonFinish": "完成",
   "commonClose": "关闭",
   "commonOther": "其他",
+  "commonYesterday": "昨天",
   "commonSearch": "搜索",
   "commonNoteHint": "备注…",
   "commonSettings": "设置",
@@ -1644,8 +1645,33 @@
   "aboutDeveloperStoryTitle": "开发者的话",
   "aboutDeveloperStory": "从 2015 年实习起，我坚持记账至今已超过十年。因为担心记账软件的广告、付费、隐私泄露和停运跑路，我决定自己做一个——最初只是给自己和家人用的小工具。\n\n2025 年 9 月，蜜蜂记账发布了第一个版本。说实话，那时候心里没什么底，不知道会不会有人用。但慢慢地，开始收到用户的反馈——有人说终于找到了一款干净的记账软件，有人提了很好的建议，也有人默默给了五星好评。每一条反馈都让我觉得，这件事值得继续做下去。\n\n蜜蜂记账没有广告、没有会员、完全免费开源。你的每一笔数据都只存在你自己的手机里，不会被上传到任何第三方服务器。但上架和维护一款 App 并非零成本——开发者账号、服务器等开支目前靠社区捐赠勉强支撑，每一次适配新系统、修复 Bug、开发新功能，也都是工作之余一点点完成的。\n\n如果你觉得蜜蜂记账对你有帮助，一个好评、一次分享或一笔捐赠，都能让这个小项目走得更远。谢谢你的信任。",
   "aboutRelatedProducts": "更多产品",
+  "aboutBeeAssets": "蜜蜂家当 BeeAssets",
+  "aboutBeeAssetsSubtitle": "可视化你的全部资产配置",
+  "aboutBeeAssetsIntro": "蜜蜂记账侧重日常流水,蜜蜂家当是它的姐妹产品,专注资产配置可视化:跨账户净资产趋势、房产 / 投资 / 加密资产分类、收益率与持仓时长、配置占比一目了然。",
   "aboutBeeDNS": "蜜蜂域名 BeeDNS",
   "aboutBeeDNSSubtitle": "简洁高效的 DNS 管理工具",
+  "aboutBeeDNSIntro": "如果你的域名分散在 Cloudflare 和阿里云,蜜蜂域名把它们聚合在一处管理:批量改记录、A/AAAA 切换、解析迁移、子域名批量管理 — 不用在两家控制台来回切。",
+  "productPromoAndroidTitle": "申请加入内测",
+  "productPromoAndroidMessage": "这款 App 还在 Google Play 内测阶段,需要邀请才能下载。\n\n申请方式:发邮件给我们,告诉我们你的 Google 账号邮箱(必填),以及简单说明使用场景(可选)。我们会在 1-3 天内回复并加你到内测白名单。",
+  "productPromoOpenStore": "前往应用商店",
+  "productPromoLearnMore": "Pro",
+  "productPromoEmailLabel": "申请邮箱(点击复制)",
+  "productPromoCopiedToast": "邮箱已复制到剪贴板",
+  "productPromoMailUnavailable": "未检测到邮件应用,邮箱已复制到剪贴板,请打开任意邮件应用粘贴发送",
+  "productPromoEmailButton": "发送邮件",
+  "productPromoWebsiteButton": "前往官网",
+  "productPromoEmailSubject": "申请内测 - {productName}",
+  "@productPromoEmailSubject": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "productPromoEmailBody": "你好,\n\n我希望加入「{productName}」的 Google Play 内测,我的 Google 账号邮箱是:\n\n(请填写你的 Gmail / Google 账号邮箱)\n\n谢谢!",
+  "@productPromoEmailBody": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
   "logCenterTitle": "日志中心",
   "logCenterSubtitle": "查看应用运行日志",
   "logCenterSearchHint": "搜索日志内容或标签...",
@@ -2679,5 +2705,31 @@
     "placeholders": {
       "local": { "type": "int" }
     }
-  }
+  },
+
+  "twofaChallengeTitle": "二次验证",
+  "twofaMethodTotp": "动态码",
+  "twofaMethodRecovery": "恢复码",
+  "twofaTotpHint": "请输入 authenticator app(Google Authenticator / 1Password / Authy 等)上的 6 位动态码。",
+  "twofaRecoveryHint": "请输入启用 2FA 时保存的恢复码(如 abcd-efgh),每个码只能使用一次。",
+  "twofaTotpInputPlaceholder": "输入 6 位动态码",
+  "twofaRecoveryInputPlaceholder": "输入恢复码",
+  "twofaCountdown": "剩余时间 {time}",
+  "@twofaCountdown": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "twofaVerifyButton": "验证",
+  "twofaStatusTitle": "二次验证",
+  "twofaStatusEnabled": "已启用 ✓",
+  "twofaStatusDisabled": "未启用",
+  "twofaStatusEnabledAt": "启用于 {date}",
+  "@twofaStatusEnabledAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "twofaStatusManageHint": "请前往 Web 端管理(启用 / 禁用 / 重新生成恢复码)",
+  "twofaStatusOpenWeb": "前往 Web 端启用 →"
 }

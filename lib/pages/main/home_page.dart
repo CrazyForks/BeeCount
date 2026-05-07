@@ -17,6 +17,7 @@ import '../transaction/search_page.dart';
 import '../ai/ai_chat_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/system/logger_service.dart';
+import '../../utils/format_utils.dart';
 import '../../services/export/share_poster_service.dart';
 import '../report/annual_report_page.dart';
 import '../calendar/calendar_page.dart';
@@ -650,82 +651,106 @@ class _HomePageState extends ConsumerState<HomePage> {
                     height: 48,
                     child: Row(
                       children: [
-                        // 左侧：BeeIcon + 标题 + 账本切换胶囊
+                        // 左侧：BeeIcon + 标题 + 账本切换胶囊（用 Expanded 包住，
+                        // 标题在空间富余时显示自然宽度，仅在不够时 ellipsis）
                         BeeIcon(
                           color: Theme.of(context).colorScheme.primary,
                           size: 28,
                         ),
-                        Text(
-                          AppLocalizations.of(context).homeAppTitle,
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.color,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                        ),
-                        const SizedBox(width: 6),
-                        Consumer(builder: (context, ref, _) {
-                          final currentLedger =
-                              ref.watch(currentLedgerProvider);
-                          return currentLedger.when(
-                            data: (ledger) => GestureDetector(
-                              onTap: () => showLedgerPicker(context),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white.withValues(alpha: 0.1)
-                                      : Colors.black.withValues(alpha: 0.05),
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flexible(
-                                      child: ConstrainedBox(
-                                        constraints:
-                                            const BoxConstraints(maxWidth: 120),
-                                        child: Text(
-                                          ledger?.name ?? '',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              // 标题取自然宽度,溢出时优先压缩账本名而不是 app 名
+                              Text(
+                                AppLocalizations.of(context).homeAppTitle,
+                                maxLines: 1,
+                                softWrap: false,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Align(
+                                  alignment: AlignmentDirectional.centerStart,
+                                  child: Consumer(builder: (context, ref, _) {
+                                    final currentLedger =
+                                        ref.watch(currentLedgerProvider);
+                                    return currentLedger.when(
+                                      data: (ledger) => GestureDetector(
+                                        onTap: () => showLedgerPicker(context),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
                                             color: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.color,
+                                                        .brightness ==
+                                                    Brightness.dark
+                                                ? Colors.white
+                                                    .withValues(alpha: 0.1)
+                                                : Colors.black
+                                                    .withValues(alpha: 0.05),
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  ledger?.name == null
+                                                      ? ''
+                                                      : translateLedgerName(
+                                                          context,
+                                                          ledger!.name),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.color,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 2),
+                                              Icon(
+                                                Icons.keyboard_arrow_down,
+                                                size: 16,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.color
+                                                    ?.withOpacity(0.5),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 2),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 16,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color
-                                          ?.withOpacity(0.5),
-                                    ),
-                                  ],
+                                      loading: () => const SizedBox.shrink(),
+                                      error: (_, __) => const SizedBox.shrink(),
+                                    );
+                                  }),
                                 ),
                               ),
-                            ),
-                            loading: () => const SizedBox.shrink(),
-                            error: (_, __) => const SizedBox.shrink(),
-                          );
-                        }),
-                        const Spacer(),
+                            ],
+                          ),
+                        ),
                         // 右侧操作按钮
                         if (aiEnabled)
                           IconButton(

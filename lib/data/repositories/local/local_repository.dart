@@ -1,5 +1,9 @@
+import 'package:drift/drift.dart' as d;
+import 'package:uuid/uuid.dart';
+
 import '../../db.dart';
 import '../../../cloud/sync/change_tracker.dart';
+import '../../../services/system/logger_service.dart';
 import '../base_repository.dart';
 import '../budget_repository.dart';
 import 'local_ledger_repository.dart';
@@ -23,6 +27,9 @@ class LocalRepository extends BaseRepository {
 
   /// 可选的变更追踪器，用于云同步
   ChangeTracker? changeTracker;
+
+  /// UUID 生成器,批量方法需要预填 syncId 才能查回插入的行登记变更。
+  static const _uuid = Uuid();
 
   // 子 Repository 实例
   late final LocalLedgerRepository _ledgerRepo;
@@ -102,7 +109,7 @@ class LocalRepository extends BaseRepository {
       final row =
           await (db.select(db.ledgers)..where((l) => l.id.equals(id))).getSingleOrNull();
       if (row != null && row.syncId != null && row.syncId!.isNotEmpty) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordLedgerChange(
           entityType: 'ledger',
           entityId: id,
           entitySyncId: row.syncId!,
@@ -115,19 +122,81 @@ class LocalRepository extends BaseRepository {
 
   @override
   Future<void> deleteLedger(int id) async {
-    await _ledgerRepo.deleteLedger(id);
-    if (changeTracker != null) {
-      // Ledger 表没有 syncId 列，mobile 向 server 推送 ledger_snapshot 时
-      // 都用本地 id 的字符串形式（见 sync_engine.fullPush line 1025）作为
-      // external_id / entity_sync_id，这里保持一致。
-      await changeTracker!.recordChange(
+    if (changeTracker == null) {
+      await _ledgerRepo.deleteLedger(id);
+      return;
+    }
+    // 删除前预查级联会消失的 transactions 和 budgets,删完后逐条登记 delete
+    // change。之前只记 ledger_snapshot:delete 一条,server 端如果不做级联
+    // (或对端 mobile 各按自己的契约 apply),本地删干净的 tx 在云端可能继续
+    // 残留。多记不会错,server 重复 delete 是幂等的。
+    //
+    // 顺便清掉 budgets:子仓库 deleteLedger 当前只 cascade tx,budgets 留着
+    // 会成 ledgerId 悬空的孤儿行(pre-existing 小 bug)。在同一个 db.transaction
+    // 里清掉,登记 budget:delete 推到 server。
+    //
+    // 关键修复:必须先把 ledger.syncId 拿出来,否则 _ledgerRepo.deleteLedger
+    // 之后 ledger 行就没了,后续 _push 拿不到 syncId 推不掉云端账本。
+    await db.transaction(() async {
+      final ledgerRow = await (db.select(db.ledgers)
+            ..where((l) => l.id.equals(id)))
+          .getSingleOrNull();
+      // ledger.syncId 是 server 端的 external_id(v21 migration 把老数据回填
+      // 成 id.toString(),新建账本是 UUID)。删本地行之后这个值就丢了,所以
+      // 必须现在捕获。fallback id.toString() 只为兼容缺 syncId 的极老数据。
+      final ledgerSyncId = ledgerRow?.syncId ?? id.toString();
+
+      final txs = await (db.select(db.transactions)
+            ..where((t) => t.ledgerId.equals(id)))
+          .get();
+      final budgets = await (db.select(db.budgets)
+            ..where((b) => b.ledgerId.equals(id)))
+          .get();
+
+      await _ledgerRepo.deleteLedger(id);
+      // 顺便把残留的 budgets 一起清,见上面注释。
+      if (budgets.isNotEmpty) {
+        await (db.delete(db.budgets)..where((b) => b.ledgerId.equals(id)))
+            .go();
+      }
+
+      for (final tx in txs) {
+        if (tx.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: tx.id,
+          entitySyncId: tx.syncId!,
+          ledgerId: id,
+          action: 'delete',
+        );
+      }
+      for (final b in budgets) {
+        if (b.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'budget',
+          entityId: b.id,
+          entitySyncId: b.syncId!,
+          ledgerId: id,
+          action: 'delete',
+        );
+      }
+      // ledger_snapshot:delete 用 ledger.syncId 作为 entity_sync_id,server
+      // 才能按 external_id 找到对应的 ledger 删掉(server 用 syncId/UUID 做
+      // external_id,不是本地 int id)。这点跟 sync_engine._pushAllEntities
+      // line 2116 `final ledgerId = ledger.syncId ?? ledger.id.toString()`
+      // 完全一致。
+      await changeTracker!.recordLedgerChange(
         entityType: 'ledger_snapshot',
         entityId: id,
-        entitySyncId: id.toString(),
+        entitySyncId: ledgerSyncId,
         ledgerId: id,
         action: 'delete',
       );
-    }
+      logger.info('LocalRepository',
+          'deleteLedger($id) 已登记 ${txs.length} 条 transaction:delete + '
+          '${budgets.length} 条 budget:delete + 1 条 ledger_snapshot:delete '
+          '(ledgerSyncId=$ledgerSyncId)');
+    });
   }
 
   @override
@@ -141,8 +210,31 @@ class LocalRepository extends BaseRepository {
       _ledgerRepo.reassignLedgerId(fromId: fromId, toId: toId);
 
   @override
-  Future<int> clearLedgerTransactions(int ledgerId) =>
-      _ledgerRepo.clearLedgerTransactions(ledgerId);
+  Future<int> clearLedgerTransactions(int ledgerId) async {
+    if (changeTracker == null) {
+      return _ledgerRepo.clearLedgerTransactions(ledgerId);
+    }
+    // 删除前预查 (id, syncId),删完才能登记 N 条 transaction:delete 变更。
+    // 之前清空账本走裸 SQL bulk delete 不登记变更,UI 调了 sync 但
+    // ChangeTracker 是空,云端永远删不掉。
+    return db.transaction(() async {
+      final txs = await (db.select(db.transactions)
+            ..where((t) => t.ledgerId.equals(ledgerId)))
+          .get();
+      final n = await _ledgerRepo.clearLedgerTransactions(ledgerId);
+      for (final tx in txs) {
+        if (tx.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: tx.id,
+          entitySyncId: tx.syncId!,
+          ledgerId: ledgerId,
+          action: 'delete',
+        );
+      }
+      return n;
+    });
+  }
 
   @override
   Future<double> getTotalInitialBalance(int ledgerId) =>
@@ -220,7 +312,7 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final tx = await _transactionRepo.getTransactionById(id);
       if (tx != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordLedgerChange(
           entityType: 'transaction',
           entityId: id,
           entitySyncId: tx.syncId!,
@@ -233,8 +325,40 @@ class LocalRepository extends BaseRepository {
   }
 
   @override
-  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) =>
-      _transactionRepo.insertTransactionsBatch(items);
+  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) async {
+    if (changeTracker == null || items.isEmpty) {
+      return _transactionRepo.insertTransactionsBatch(items);
+    }
+    // 预填充 syncId,这样插入完能根据 syncId 查回行,逐条登记 create change。
+    // 子仓库虽然也会自动补 syncId,但补完是局部变量,wrapper 这里看不到,所
+    // 以不能依赖。
+    final effective = items.map((item) {
+      if (item.syncId == const d.Value.absent() || item.syncId.value == null) {
+        return item.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return item;
+    }).toList();
+    return db.transaction(() async {
+      final n = await _transactionRepo.insertTransactionsBatch(effective);
+      final syncIds =
+          effective.map((c) => c.syncId.value).whereType<String>().toList();
+      if (syncIds.isEmpty) return n;
+      final inserted = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      for (final tx in inserted) {
+        if (tx.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: tx.id,
+          entitySyncId: tx.syncId!,
+          ledgerId: tx.ledgerId,
+          action: 'create',
+        );
+      }
+      return n;
+    });
+  }
 
   @override
   Future<void> updateTransaction({
@@ -254,7 +378,7 @@ class LocalRepository extends BaseRepository {
           categoryId: categoryId, note: note,
           happenedAt: happenedAt, accountId: accountId,
         );
-        await changeTracker!.recordChange(
+        await changeTracker!.recordLedgerChange(
           entityType: 'transaction',
           entityId: id,
           entitySyncId: tx!.syncId!,
@@ -276,7 +400,7 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final tx = await _transactionRepo.getTransactionById(id);
       if (tx?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordLedgerChange(
           entityType: 'transaction',
           entityId: id,
           entitySyncId: tx!.syncId!,
@@ -292,8 +416,28 @@ class LocalRepository extends BaseRepository {
   Future<Transaction?> getTransactionById(int id) => _transactionRepo.getTransactionById(id);
 
   @override
-  Future<int> insertTransactionCompanion(TransactionsCompanion item) =>
-      _transactionRepo.insertTransactionCompanion(item);
+  Future<int> insertTransactionCompanion(TransactionsCompanion item) async {
+    if (changeTracker == null) {
+      return _transactionRepo.insertTransactionCompanion(item);
+    }
+    // 带标签/附件的交易走这条单条插入路径(见 data_import_service.dart:510)。
+    // 之前此处只 delegate,导入完没登记 transaction:create 变更,云端拿不到
+    // 这部分交易。现在跟 insertTransactionsBatch 一样补登记。
+    return db.transaction(() async {
+      final id = await _transactionRepo.insertTransactionCompanion(item);
+      final tx = await _transactionRepo.getTransactionById(id);
+      if (tx != null && tx.syncId != null) {
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: id,
+          entitySyncId: tx.syncId!,
+          ledgerId: tx.ledgerId,
+          action: 'create',
+        );
+      }
+      return id;
+    });
+  }
 
   @override
   Stream<List<({Transaction t, Category? category})>> transactionsWithCategoryAll({int? ledgerId}) =>
@@ -461,9 +605,9 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final cat = await _categoryRepo.getCategoryById(id);
       if (cat?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'category', entityId: id,
-          entitySyncId: cat!.syncId!, ledgerId: 0, action: 'create',
+          entitySyncId: cat!.syncId!, action: 'create',
         );
       }
     }
@@ -484,9 +628,9 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final cat = await _categoryRepo.getCategoryById(id);
       if (cat?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'category', entityId: id,
-          entitySyncId: cat!.syncId!, ledgerId: 0, action: 'create',
+          entitySyncId: cat!.syncId!, action: 'create',
         );
       }
     }
@@ -498,9 +642,9 @@ class LocalRepository extends BaseRepository {
     final cat = changeTracker != null ? await _categoryRepo.getCategoryById(id) : null;
     await _categoryRepo.updateCategory(id, name: name, icon: icon, parentId: parentId, level: level);
     if (cat?.syncId != null) {
-      await changeTracker!.recordChange(
+      await changeTracker!.recordUserGlobalChange(
         entityType: 'category', entityId: id,
-        entitySyncId: cat!.syncId!, ledgerId: 0, action: 'update',
+        entitySyncId: cat!.syncId!, action: 'update',
       );
     }
   }
@@ -510,9 +654,9 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final cat = await _categoryRepo.getCategoryById(id);
       if (cat?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'category', entityId: id,
-          entitySyncId: cat!.syncId!, ledgerId: 0, action: 'delete',
+          entitySyncId: cat!.syncId!, action: 'delete',
         );
       }
     }
@@ -520,8 +664,40 @@ class LocalRepository extends BaseRepository {
   }
 
   @override
-  Future<void> deleteCategoriesByIds(List<int> ids) =>
-      _categoryRepo.deleteCategoriesByIds(ids);
+  Future<void> deleteCategoriesByIds(List<int> ids) async {
+    if (changeTracker == null || ids.isEmpty) {
+      logger.info('LocalRepository',
+          'deleteCategoriesByIds(${ids.length}): changeTracker=null=${changeTracker == null} → 不登记 change');
+      return _categoryRepo.deleteCategoriesByIds(ids);
+    }
+    // 子仓库会同时删 ids 自身和 parent_id 在 ids 里的子分类,所以这里也要把
+    // 子分类的 syncId 一并预查出来登记 delete change。
+    await db.transaction(() async {
+      final cats = await (db.select(db.categories)
+            ..where((c) => c.id.isIn(ids) | c.parentId.isIn(ids)))
+          .get();
+      await _categoryRepo.deleteCategoriesByIds(ids);
+      var recorded = 0;
+      var skippedNoSyncId = 0;
+      for (final c in cats) {
+        if (c.syncId == null) {
+          skippedNoSyncId++;
+          continue;
+        }
+        await changeTracker!.recordUserGlobalChange(
+          entityType: 'category',
+          entityId: c.id,
+          entitySyncId: c.syncId!,
+          action: 'delete',
+        );
+        recorded++;
+      }
+      logger.info('LocalRepository',
+          'deleteCategoriesByIds(${ids.length}): 预查到 ${cats.length} 行,'
+          '登记 $recorded 条 category:delete change'
+          '${skippedNoSyncId > 0 ? ", $skippedNoSyncId 条因 syncId=null 跳过(本地未同步过的种子分类)" : ""}');
+    });
+  }
 
   @override
   Future<int> upsertCategory({required String name, required String kind}) =>
@@ -584,21 +760,104 @@ class LocalRepository extends BaseRepository {
       );
 
   @override
-  Future<int> migrateCategory({required int fromCategoryId, required int toCategoryId}) =>
-      _categoryRepo.migrateCategory(
+  Future<int> migrateCategory({required int fromCategoryId, required int toCategoryId}) async {
+    if (changeTracker == null) {
+      return _categoryRepo.migrateCategory(
         fromCategoryId: fromCategoryId,
         toCategoryId: toCategoryId,
       );
+    }
+    return db.transaction(() async {
+      // 预查受影响的交易,迁移完后逐条登记 update change。
+      final affected = await (db.select(db.transactions)
+            ..where((t) => t.categoryId.equals(fromCategoryId)))
+          .get();
+      final n = await _categoryRepo.migrateCategory(
+        fromCategoryId: fromCategoryId,
+        toCategoryId: toCategoryId,
+      );
+      for (final tx in affected) {
+        if (tx.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: tx.id,
+          entitySyncId: tx.syncId!,
+          ledgerId: tx.ledgerId,
+          action: 'update',
+        );
+      }
+      return n;
+    });
+  }
 
   @override
   Future<({int migratedTransactions, int migratedSubCategories})> migrateCategoryTransactions({
     required int fromCategoryId,
     required int toCategoryId,
-  }) =>
-      _categoryRepo.migrateCategoryTransactions(
+  }) async {
+    if (changeTracker == null) {
+      return _categoryRepo.migrateCategoryTransactions(
         fromCategoryId: fromCategoryId,
         toCategoryId: toCategoryId,
       );
+    }
+    return db.transaction(() async {
+      // 预查 fromCategory + 子分类(level=1 时),以及所有可能受影响的交易。
+      // 子分类有两种命运:
+      //   - 目标父类下已有同名 → 子分类被合并(删除)
+      //   - 没有同名 → 子分类被移动(parentId 改变)
+      // 用"迁移前 vs 迁移后"对比来区分这两种情况,避免提前 hardcode 决策。
+      final fromCategory = await _categoryRepo.getCategoryById(fromCategoryId);
+      final subCategories = fromCategory?.level == 1
+          ? await _categoryRepo.getSubCategories(fromCategoryId)
+          : <Category>[];
+      final affectedCategoryIds = [
+        fromCategoryId,
+        ...subCategories.map((s) => s.id),
+      ];
+      final affectedTxs = await (db.select(db.transactions)
+            ..where((t) => t.categoryId.isIn(affectedCategoryIds)))
+          .get();
+
+      final result = await _categoryRepo.migrateCategoryTransactions(
+        fromCategoryId: fromCategoryId,
+        toCategoryId: toCategoryId,
+      );
+
+      // 受影响交易: categoryId 变了,登记 update。
+      for (final tx in affectedTxs) {
+        if (tx.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: tx.id,
+          entitySyncId: tx.syncId!,
+          ledgerId: tx.ledgerId,
+          action: 'update',
+        );
+      }
+      // 子分类:迁移后查不到 → 被合并删除;parentId 变了 → 被移动。
+      for (final sub in subCategories) {
+        if (sub.syncId == null) continue;
+        final after = await _categoryRepo.getCategoryById(sub.id);
+        if (after == null) {
+          await changeTracker!.recordUserGlobalChange(
+            entityType: 'category',
+            entityId: sub.id,
+            entitySyncId: sub.syncId!,
+            action: 'delete',
+          );
+        } else if (after.parentId != sub.parentId) {
+          await changeTracker!.recordUserGlobalChange(
+            entityType: 'category',
+            entityId: sub.id,
+            entitySyncId: sub.syncId!,
+            action: 'update',
+          );
+        }
+      }
+      return result;
+    });
+  }
 
   @override
   Future<({int transactionCount, bool canMigrate})> getCategoryMigrationInfo({
@@ -638,8 +897,37 @@ class LocalRepository extends BaseRepository {
   Future<List<Category>> getAllCategories() => _categoryRepo.getAllCategories();
 
   @override
-  Future<void> batchInsertCategories(List<CategoriesCompanion> categories) =>
-      _categoryRepo.batchInsertCategories(categories);
+  Future<void> batchInsertCategories(List<CategoriesCompanion> categories) async {
+    if (changeTracker == null || categories.isEmpty) {
+      return _categoryRepo.batchInsertCategories(categories);
+    }
+    // 预填充 syncId 以便插入后查回登记 create change。子仓库 batchInsert
+    // 不会自动补 syncId,companion 里没有的会被插成 NULL,跨设备同步对不上。
+    final effective = categories.map((c) {
+      if (c.syncId == const d.Value.absent() || c.syncId.value == null) {
+        return c.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return c;
+    }).toList();
+    await db.transaction(() async {
+      await _categoryRepo.batchInsertCategories(effective);
+      final syncIds =
+          effective.map((c) => c.syncId.value).whereType<String>().toList();
+      if (syncIds.isEmpty) return;
+      final inserted = await (db.select(db.categories)
+            ..where((c) => c.syncId.isIn(syncIds)))
+          .get();
+      for (final c in inserted) {
+        if (c.syncId == null) continue;
+        await changeTracker!.recordUserGlobalChange(
+          entityType: 'category',
+          entityId: c.id,
+          entitySyncId: c.syncId!,
+          action: 'create',
+        );
+      }
+    });
+  }
 
   @override
   Future<int> insertCategory(CategoriesCompanion category) =>
@@ -665,9 +953,9 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final cat = await _categoryRepo.getCategoryById(id);
       if (cat?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'category', entityId: id,
-          entitySyncId: cat!.syncId!, ledgerId: 0, action: 'update',
+          entitySyncId: cat!.syncId!, action: 'update',
         );
       }
     }
@@ -679,9 +967,9 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final cat = await _categoryRepo.getCategoryById(id);
       if (cat?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'category', entityId: id,
-          entitySyncId: cat!.syncId!, ledgerId: 0, action: 'update',
+          entitySyncId: cat!.syncId!, action: 'update',
         );
       }
     }
@@ -691,7 +979,79 @@ class LocalRepository extends BaseRepository {
   Future<List<String>> getCustomIconPaths() => _categoryRepo.getCustomIconPaths();
 
   @override
-  Future<Category> getTransferCategory() => _categoryRepo.getTransferCategory();
+  Future<Category> getTransferCategory() async {
+    // 干净数据下 transfer 分类应该恰好 1 条。少数历史脏数据用户(早期
+    // seed 多次 / 云同步重复 pull / 手动改 kind)出现过多条,会让原来
+    // .getSingleOrNull() 直接 throw、UI 卡死(编辑转账时表现明显)。
+    //
+    // 这里发现 >1 条时被动合并:保留 id 最小的 keeper,把所有指向 dupes
+    // 的 transactions 改写到 keeper 上,再删除 dupes,所有变更一次性
+    // 通过 ChangeTracker 推到云端 — 同账号的其它设备下次 pull 时也能
+    // 自动擦掉脏数据。
+    final all = await _categoryRepo.getAllTransferCategories();
+    if (all.length <= 1) {
+      // 0 条走子仓库的兜底创建,1 条直接返
+      return _categoryRepo.getTransferCategory();
+    }
+
+    final keeper = all.first;
+    final dupes = all.sublist(1);
+    final dupeIds = dupes.map((c) => c.id).toList();
+    logger.warning(
+      'LocalRepository',
+      'transfer 分类发现 ${all.length} 条,合并 → keeper=${keeper.id} dupes=$dupeIds',
+    );
+
+    // 预查受影响的 transactions(为 ChangeTracker 记录)
+    final affectedTxs = await (db.select(db.transactions)
+          ..where((t) => t.categoryId.isIn(dupeIds)))
+        .get();
+
+    await db.transaction(() async {
+      // 1) 把 transactions.categoryId 从 dupes 改写到 keeper
+      await (db.update(db.transactions)
+            ..where((t) => t.categoryId.isIn(dupeIds)))
+          .write(TransactionsCompanion(categoryId: d.Value(keeper.id)));
+
+      // 2) 同步把 budgets / recurring_transactions 上引用的 dupe 也搬到 keeper
+      await (db.update(db.budgets)
+            ..where((b) => b.categoryId.isIn(dupeIds)))
+          .write(BudgetsCompanion(categoryId: d.Value(keeper.id)));
+      await (db.update(db.recurringTransactions)
+            ..where((r) => r.categoryId.isIn(dupeIds)))
+          .write(RecurringTransactionsCompanion(categoryId: d.Value(keeper.id)));
+
+      // 3) 删 dupe categories
+      await (db.delete(db.categories)
+            ..where((c) => c.id.isIn(dupeIds)))
+          .go();
+    });
+
+    // ChangeTracker 记录:受影响 transactions 的 update + dupe categories 的 delete
+    if (changeTracker != null) {
+      for (final tx in affectedTxs) {
+        if (tx.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: tx.id,
+          entitySyncId: tx.syncId!,
+          ledgerId: tx.ledgerId,
+          action: 'update',
+        );
+      }
+      for (final dupe in dupes) {
+        if (dupe.syncId == null) continue;
+        await changeTracker!.recordUserGlobalChange(
+          entityType: 'category',
+          entityId: dupe.id,
+          entitySyncId: dupe.syncId!,
+          action: 'delete',
+        );
+      }
+    }
+
+    return keeper;
+  }
 
   // ============================================
   // AccountRepository 接口实现 - 委托给 LocalAccountRepository
@@ -752,11 +1112,10 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final account = await _accountRepo.getAccount(id);
       if (account?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'account',
           entityId: id,
           entitySyncId: account!.syncId!,
-          ledgerId: ledgerId,
           action: 'create',
         );
       }
@@ -797,11 +1156,10 @@ class LocalRepository extends BaseRepository {
       clearMetadataFields: clearMetadataFields,
     );
     if (account?.syncId != null) {
-      await changeTracker!.recordChange(
+      await changeTracker!.recordUserGlobalChange(
         entityType: 'account',
         entityId: id,
         entitySyncId: account!.syncId!,
-        ledgerId: account.ledgerId,
         action: 'update',
       );
     }
@@ -820,12 +1178,11 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final account = await _accountRepo.getAccount(id);
       if (account?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'account',
           entityId: id,
           entitySyncId: account!.syncId!,
-          ledgerId: account.ledgerId,
-          action: 'delete',
+            action: 'delete',
         );
       }
     }
@@ -877,11 +1234,37 @@ class LocalRepository extends BaseRepository {
       _accountRepo.getAccountUsageInLedgers(accountId);
 
   @override
-  Future<int> migrateAccount({required int fromAccountId, required int toAccountId}) =>
-      _accountRepo.migrateAccount(
+  Future<int> migrateAccount({required int fromAccountId, required int toAccountId}) async {
+    if (changeTracker == null) {
+      return _accountRepo.migrateAccount(
         fromAccountId: fromAccountId,
         toAccountId: toAccountId,
       );
+    }
+    return db.transaction(() async {
+      // 既要迁移作为主账户的交易,也要迁移作为转入账户的交易,两处都要预查。
+      final affected = await (db.select(db.transactions)
+            ..where((t) =>
+                t.accountId.equals(fromAccountId) |
+                t.toAccountId.equals(fromAccountId)))
+          .get();
+      final n = await _accountRepo.migrateAccount(
+        fromAccountId: fromAccountId,
+        toAccountId: toAccountId,
+      );
+      for (final tx in affected) {
+        if (tx.syncId == null) continue;
+        await changeTracker!.recordLedgerChange(
+          entityType: 'transaction',
+          entityId: tx.id,
+          entitySyncId: tx.syncId!,
+          ledgerId: tx.ledgerId,
+          action: 'update',
+        );
+      }
+      return n;
+    });
+  }
 
   @override
   Future<bool> hasTransactions(int accountId) =>
@@ -896,8 +1279,35 @@ class LocalRepository extends BaseRepository {
       _accountRepo.watchAccountTransactions(accountId);
 
   @override
-  Future<void> batchInsertAccounts(List<AccountsCompanion> accounts) =>
-      _accountRepo.batchInsertAccounts(accounts);
+  Future<void> batchInsertAccounts(List<AccountsCompanion> accounts) async {
+    if (changeTracker == null || accounts.isEmpty) {
+      return _accountRepo.batchInsertAccounts(accounts);
+    }
+    final effective = accounts.map((a) {
+      if (a.syncId == const d.Value.absent() || a.syncId.value == null) {
+        return a.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return a;
+    }).toList();
+    await db.transaction(() async {
+      await _accountRepo.batchInsertAccounts(effective);
+      final syncIds =
+          effective.map((c) => c.syncId.value).whereType<String>().toList();
+      if (syncIds.isEmpty) return;
+      final inserted = await (db.select(db.accounts)
+            ..where((a) => a.syncId.isIn(syncIds)))
+          .get();
+      for (final a in inserted) {
+        if (a.syncId == null) continue;
+        await changeTracker!.recordUserGlobalChange(
+          entityType: 'account',
+          entityId: a.id,
+          entitySyncId: a.syncId!,
+          action: 'create',
+        );
+      }
+    });
+  }
 
   @override
   Future<List<Account>> getAccountsByIds(List<int> accountIds) =>
@@ -1228,9 +1638,9 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       final tag = await _tagRepo.getTagById(id);
       if (tag?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'tag', entityId: id,
-          entitySyncId: tag!.syncId!, ledgerId: 0, action: 'create',
+          entitySyncId: tag!.syncId!, action: 'create',
         );
       }
     }
@@ -1247,25 +1657,34 @@ class LocalRepository extends BaseRepository {
     final tag = changeTracker != null ? await _tagRepo.getTagById(id) : null;
     await _tagRepo.updateTag(id, name: name, color: color, sortOrder: sortOrder);
     if (tag?.syncId != null) {
-      await changeTracker!.recordChange(
+      await changeTracker!.recordUserGlobalChange(
         entityType: 'tag', entityId: id,
-        entitySyncId: tag!.syncId!, ledgerId: 0, action: 'update',
+        entitySyncId: tag!.syncId!, action: 'update',
       );
     }
   }
 
   @override
   Future<void> deleteTag(int id) async {
+    var recorded = false;
     if (changeTracker != null) {
       final tag = await _tagRepo.getTagById(id);
       if (tag?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordUserGlobalChange(
           entityType: 'tag', entityId: id,
-          entitySyncId: tag!.syncId!, ledgerId: 0, action: 'delete',
+          entitySyncId: tag!.syncId!, action: 'delete',
         );
+        recorded = true;
+      } else if (tag != null) {
+        logger.info('LocalRepository',
+            'deleteTag($id) tag.syncId=null,跳过 change 登记(本地未同步过的种子标签)');
       }
     }
     await _tagRepo.deleteTag(id);
+    if (changeTracker != null && !recorded) {
+      logger.debug('LocalRepository',
+          'deleteTag($id): changeTracker 在但没登记 change(syncId 缺失)');
+    }
   }
 
   @override
@@ -1278,8 +1697,35 @@ class LocalRepository extends BaseRepository {
   Future<List<Tag>> getAllTags() => _tagRepo.getAllTags();
 
   @override
-  Future<void> batchInsertTags(List<TagsCompanion> tags) =>
-      _tagRepo.batchInsertTags(tags);
+  Future<void> batchInsertTags(List<TagsCompanion> tags) async {
+    if (changeTracker == null || tags.isEmpty) {
+      return _tagRepo.batchInsertTags(tags);
+    }
+    final effective = tags.map((t) {
+      if (t.syncId == const d.Value.absent() || t.syncId.value == null) {
+        return t.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return t;
+    }).toList();
+    await db.transaction(() async {
+      await _tagRepo.batchInsertTags(effective);
+      final syncIds =
+          effective.map((c) => c.syncId.value).whereType<String>().toList();
+      if (syncIds.isEmpty) return;
+      final inserted = await (db.select(db.tags)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      for (final t in inserted) {
+        if (t.syncId == null) continue;
+        await changeTracker!.recordUserGlobalChange(
+          entityType: 'tag',
+          entityId: t.id,
+          entitySyncId: t.syncId!,
+          action: 'create',
+        );
+      }
+    });
+  }
 
   @override
   Future<void> addTagToTransaction({
@@ -1404,7 +1850,7 @@ class LocalRepository extends BaseRepository {
       final row = await (db.select(db.budgets)..where((b) => b.id.equals(id)))
           .getSingleOrNull();
       if (row?.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordLedgerChange(
           entityType: 'budget',
           entityId: id,
           entitySyncId: row!.syncId!,
@@ -1433,7 +1879,7 @@ class LocalRepository extends BaseRepository {
       final row = await (db.select(db.budgets)..where((b) => b.id.equals(id)))
           .getSingleOrNull();
       if (row != null && row.syncId != null) {
-        await changeTracker!.recordChange(
+        await changeTracker!.recordLedgerChange(
           entityType: 'budget',
           entityId: id,
           entitySyncId: row.syncId!,
@@ -1466,7 +1912,7 @@ class LocalRepository extends BaseRepository {
     if (changeTracker != null) {
       for (final b in toRecord) {
         if (b.syncId == null) continue;
-        await changeTracker!.recordChange(
+        await changeTracker!.recordLedgerChange(
           entityType: 'budget',
           entityId: b.id,
           entitySyncId: b.syncId!,
@@ -1575,7 +2021,7 @@ class LocalRepository extends BaseRepository {
     if (changeTracker == null) return;
     final tx = await _transactionRepo.getTransactionById(transactionId);
     if (tx == null || tx.syncId == null) return;
-    await changeTracker!.recordChange(
+    await changeTracker!.recordLedgerChange(
       entityType: 'transaction',
       entityId: transactionId,
       entitySyncId: tx.syncId!,

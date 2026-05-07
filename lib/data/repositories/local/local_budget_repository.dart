@@ -271,6 +271,11 @@ class LocalBudgetRepository implements BudgetRepository {
         categoryId: category.id,
         categoryName: category.name,
         categoryIcon: category.icon,
+        // 透传完整 Category 给 UI,让 CategoryBudgetTile 能用 CategoryIconWidget
+        // 渲染 iconType='custom' 的自定义图片图标(只有 categoryIcon 字符串时
+        // 走 CategoryService.getCategoryIcon switch,自定义路径会兜底成
+        // Icons.category 通用占位 — 这是用户报"分类预算图标不正确"的根因)。
+        category: category,
         usage: usage,
       ));
     }

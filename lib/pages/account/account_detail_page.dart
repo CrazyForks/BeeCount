@@ -174,8 +174,9 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
     final statsAsync = ref.watch(accountStatsProvider(widget.account.id));
     final paginationState =
         ref.watch(accountTransactionsPaginatedProvider(widget.account.id));
-    final currentLedgerAsync = ref.watch(currentLedgerProvider);
-    final currencyCode = currentLedgerAsync.asData?.value?.currency ?? 'CNY';
+    // 货币符号跟随账户(每个账户有自己的 currency 字段),不是账本 —
+    // 用户在一个 CNY 账本里可能有 USD 账户,详情页应显示账户自己的 $。
+    final currencyCode = widget.account.currency;
     final categoriesAsync = ref.watch(categoriesProvider);
 
     // 分类统计数据

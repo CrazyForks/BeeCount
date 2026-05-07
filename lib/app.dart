@@ -709,6 +709,10 @@ class _BeeBottomBar extends StatelessWidget {
                 const SizedBox(height: 1),
                 Text(
                   label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  textScaler: TextScaler.noScaling,
                   style: TextStyle(
                     fontSize: 10,
                     color: isActive ? primaryColor : inactiveColor,
@@ -741,6 +745,10 @@ class _BeeBottomBar extends StatelessWidget {
               const SizedBox(height: 1),
               Text(
                 l10n.tabRecord,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   fontSize: 10,
                   color: inactiveColor,
@@ -799,6 +807,10 @@ class _BeeBottomBar extends StatelessWidget {
                 const SizedBox(height: 1),
                 Text(
                   label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  textScaler: TextScaler.noScaling,
                   style: TextStyle(
                     fontSize: 10,
                     color: isActive ? primaryColor : inactiveColor,

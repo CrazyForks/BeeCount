@@ -1,16 +1,16 @@
-# 蜜蜂记账（BeeCount）
+# 蜜蜂记账(BeeCount)
 
 <div align="center">
 
 ![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
-![License](https://img.shields.io/badge/license-商业源代码许可-orange.svg)
+![License](https://img.shields.io/badge/license-Business%20Source%20License-orange.svg)
 ![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web-lightgrey.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
-**你的数据，你做主的开源记账应用**
+**你的数据,你做主的开源记账应用**
 
-**核心优势：支持 BeeCount Cloud 自建云（多端实时同步 + Web 端）/ iCloud / Supabase / WebDAV / S3，数据完全掌控在你手中**
+支持 BeeCount Cloud 自建云端 / iCloud / Supabase / WebDAV / S3 五种同步方案。
 
 <br/>
 
@@ -30,321 +30,156 @@
 <br/>
 <br/>
 
-[🌐 官网](https://beecount-website.pages.dev) | [📖 使用文档](https://beecount-website.pages.dev/docs/intro) | [💝 捐赠支持](#-捐赠) | [💬 Telegram](https://t.me/beecount) | [🌐 English](README_EN.md)
+[🌐 官网](https://beecount-website.pages.dev) · [📖 文档](https://beecount-website.pages.dev/docs/intro) · [💝 捐赠](#-捐赠支持) · [💬 Telegram](https://t.me/beecount) · [🌐 English](README_EN.md)
 
 </div>
 
 ---
 
-> ## 📱 平台支持
+## 💡 为什么选择蜜蜂记账
+
+一款轻量、开源、隐私可控的**个人财务管理**和**支出追踪** App。
+
+| 传统记账应用 | 蜜蜂记账 |
+|---|---|
+| ❌ 数据存第三方,无法审计 | ✅ **完全开源**,代码可审计 |
+| ❌ 隐私可能被分析利用 | ✅ **离线优先** + 自建云端,开发者无法访问 |
+| ❌ 服务商倒闭数据丢失 | ✅ **数据主权**,5 种同步方案任选 |
+| ❌ 高级功能付费墙 | ✅ **完全免费**(包括 AI / OCR / 语音记账) |
+| ❌ 广告 / 理财推荐 | ✅ **零广告 / 零追踪 / 零数据收集** |
+
+> **平台支持**:🤖 Android 5.0+ · 🍎 iOS 15.5+ · 🌐 Web(BeeCount Cloud 自带,见下文)
 >
-> 🤖 **Android** - [Google Play](https://play.google.com/store/apps/details?id=com.tntlikely.beecount) | [下载 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) | 支持 Android 5.0+
->
-> 🍎 **iOS** - [App Store](https://apps.apple.com/app/id6754611670) | [TestFlight 公测版](https://testflight.apple.com/join/Eaw2rWxa) | 支持 iOS 15.5+
->
-> 🌐 **Web** - 内置于 [BeeCount Cloud](#-beecount-cloud自建云同步--web-端) 自部署镜像,浏览器直接访问服务器地址即可
->
-> 💡 在 App Store 或 Google Play 搜索 **"蜜蜂记账 - 简洁记账本"** 即可下载
->
-> ~~📱 **HarmonyOS** - 已停止更新，不再上架~~ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
+> ~~📱 HarmonyOS — [已停止更新](https://github.com/TNT-Likely/beecount-openharmony)~~
 
 ---
 
-## 💡 为什么选择蜜蜂记账？
+## 🌟 核心功能
 
-<table>
-<tr>
-<td width="50%">
+<details>
+<summary><b>🤖 AI 智能记账</b> — AI 对话 / OCR / 语音 / 截图自动识别</summary>
 
-### 🔒 传统记账应用的问题
+- **AI 小助手** — 自然语言对话记账,智能理解意图,基于智谱 GLM-4
+- **OCR 拍照记账** — 双引擎(本地 TFLite + GLM 云端),识别支付宝/微信/云闪付截图
+- **语音记账** — 按住说话,GLM 模型理解口语化表达("今天买菜花了 50 块")
+- **截图自动记账** — Android 无障碍服务监听 / iOS 快捷指令双击背部触发
 
-- ❌ 数据存储在第三方服务器
-- ❌ 隐私无法保证，可能被分析利用
-- ❌ 服务商倒闭数据可能丢失
-- ❌ 高级功能需要付费订阅
-- ❌ 强制广告和理财产品推荐
-- ❌ 闭源软件，无法审计代码
+</details>
 
-</td>
-<td width="50%">
+<details>
+<summary><b>📝 基础记账</b> — 多账本 / 多账户 / 二级分类 / 预算 / 周期记账 / 标签 / 图表 / 导入导出</summary>
 
-### ✅ 蜜蜂记账的优势
+- **多账本** — 生活/工作/投资分开管理,每本独立币种
+- **多账户** — 现金/银行卡/信用卡等独立账户,转账自动更新双方余额
+- **二级分类** — 父子分类层级
+- **预算管理** — 月度总预算 + 分类预算 + 超支提醒
+- **周期记账** — 每日/每周/每月/每年自动记账,适合固定收支
+- **标签系统** — 多标签 + 颜色标记,灵活筛选
+- **图表分析** — 月度报表 / 分类排行 / 趋势分析 / 年度报告
+- **数据导入导出** — CSV(支付宝/微信账单)+ YAML 配置导出
 
-- ✅ **自建服务器**，数据完全自主
-- ✅ **开源透明**，代码可审计
-- ✅ **离线优先**，无网也能用
-- ✅ **个人免费**，无广告无付费墙（包括自动记账等核心功能）
-- ✅ **隐私保护**，开发者无法访问你的数据
-- ✅ **源代码公开**，代码可审计
+</details>
 
-</td>
-</tr>
-</table>
+<details>
+<summary><b>🎨 体验</b> — 暗黑模式 / 三语 / 桌面小组件 / 主题装扮</summary>
 
-一款轻量、开源、隐私可控的**个人财务管理**和**支出追踪** App，支持 iOS/Android 双平台。内置完整的账本管理、**收支记录**、**OCR 图片识别**、**拍照记账**、**语音记账**、**截图自动记账**、**账户转账**、**二级分类**、分类统计、**图表分析**、数据导入导出功能，并支持 iCloud（iOS）/自建 Supabase/WebDAV/S3 协议（Cloudflare R2/AWS S3/MinIO 等）云服务器同步。支持**多语言**（简繁中文/英文）和**暗黑模式**，适合注重隐私的个人和家庭进行日常**费用记录**和**收支管理**。
+- **暗黑模式** — 纯黑 + 主题色边框,OLED 友好
+- **3 语言** — 简中 / 繁中 / English,本地化日期/数字格式
+- **桌面小组件** — iOS / Android 桌面快速记账
+- **主题装扮** — 多主题色
 
-## 📱 核心功能展示
+</details>
+
+---
+
+## 📸 截图预览
 
 <div align="center">
   <img src="demo/videos/zh/01-add-transaction.gif" alt="快速记账" width="200" />
-  <img src="demo/videos/zh/02-ocr-recognition.gif" alt="🤖 AI OCR 智能识别" width="200" />
-  <img src="demo/videos/zh/03-import-ledger.gif" alt="数据导入" width="200" />
-  <img src="demo/videos/zh/04-data-analysis.gif" alt="📊 数据分析" width="200" />
+  <img src="demo/videos/zh/02-ocr-recognition.gif" alt="AI OCR 智能识别" width="200" />
+  <img src="demo/videos/zh/04-data-analysis.gif" alt="数据分析" width="200" />
 </div>
 
 <details>
-<summary>📸 查看更多截图</summary>
+<summary>更多截图(9 大主题 / 暗黑模式)</summary>
 
-### 数据管理功能
-
-<div align="center">
-  <img src="demo/preview/zh/02-search.png" alt="智能搜索" width="200" />
-  <img src="demo/preview/zh/03-edit-transaction.png" alt="编辑交易" width="200" />
-  <img src="demo/preview/zh/05-ledger-management.png" alt="账本管理" width="200" />
-  <img src="demo/preview/zh/07-category-detail.png" alt="分类详情" width="200" />
-</div>
-
-### 个性化与管理
+### 9 大功能主题
 
 <div align="center">
-  <img src="demo/preview/zh/06-profile.png" alt="个人中心" width="200" />
-  <img src="demo/preview/zh/08-category-migration.png" alt="分类迁移" width="200" />
-  <img src="demo/preview/zh/09-category-management.png" alt="分类管理" width="200" />
-  <img src="demo/preview/zh/10-personalization.png" alt="个性装扮" width="200" />
+  <img src="assets/store/screenshots/raw/zh/01-home.png" alt="首页" width="200" />
+  <img src="assets/store/screenshots/raw/zh/02-open-source.png" alt="云服务" width="200" />
+  <img src="assets/store/screenshots/raw/zh/03-analytics.png" alt="数据分析" width="200" />
 </div>
-
-### 数据导入导出
 
 <div align="center">
-  <img src="demo/preview/zh/12-import-confirm.png" alt="导入确认" width="200" />
+  <img src="assets/store/screenshots/raw/zh/04-ai.png" alt="AI 智能记账" width="200" />
+  <img src="assets/store/screenshots/raw/zh/05-add.png" alt="记一笔" width="200" />
+  <img src="assets/store/screenshots/raw/zh/06-ledgers.png" alt="多账本" width="200" />
 </div>
 
-### 🌙 暗黑模式
+<div align="center">
+  <img src="assets/store/screenshots/raw/zh/07-tags.png" alt="彩色标签" width="200" />
+  <img src="assets/store/screenshots/raw/zh/08-accounts.png" alt="资产管理" width="200" />
+  <img src="assets/store/screenshots/raw/zh/09-mine.png" alt="设置中心" width="200" />
+</div>
+
+### 暗黑模式
 
 <div align="center">
   <img src="demo/preview/dark/01-home.png" alt="首页-暗黑" width="200" />
   <img src="demo/preview/dark/02-chart-analysis.png" alt="图表分析-暗黑" width="200" />
-  <img src="demo/preview/dark/03-discover.png" alt="发现-暗黑" width="200" />
   <img src="demo/preview/dark/04-profile.png" alt="我的-暗黑" width="200" />
-</div>
-
-<div align="center">
   <img src="demo/preview/dark/05-ai-chat.png" alt="AI对话-暗黑" width="200" />
 </div>
 
 </details>
 
-## 🌐 Web 端预览
+---
 
-除了 iOS / Android,蜜蜂记账还提供 **Web 端**(3.0 起随 BeeCount Cloud 自建镜像附带)——
-一个 Docker 镜像 = 同步服务 + 浏览器端,多设备实时协同,PWA 支持装到桌面当独立 App 用。
+## ☁️ 云同步方案
 
-<div align="center">
-  <img src="demo/preview/web/zh-01-home.png" alt="Web 仪表盘" width="720" />
-  <br/>
-  <sub>💰 仪表盘:收支、资产构成、分类热力、趋势 —— 一屏总览(暗黑模式)</sub>
-</div>
+蜜蜂记账提供 5 种同步方案,所有方案数据完全由你掌控,**详细配置教程见 [docs/cloud-setup.md](docs/cloud-setup.md)**。
 
-<br/>
+| 方案 | 适用场景 | 特点 |
+|---|---|---|
+| **BeeCount Cloud** | 多端实时协同 + 自托管 | Docker 一键、秒同步、自带 Web 端、多用户 |
+| **iCloud** | iOS 单平台用户 | 零配置、原生集成 |
+| **Supabase** | 无 NAS 的跨平台用户 | 免费额度充足、配置简单 |
+| **WebDAV** | NAS 用户 | 数据本地化、群晖/绿联云/Nextcloud |
+| **S3 协议** | 灵活云存储 | Cloudflare R2 / AWS S3 / MinIO,免费额度大 |
 
-<div align="center">
-  <img src="demo/preview/web/zh-02-transactions.png" alt="Web 交易列表" width="720" />
-  <br/>
-  <sub>📒 交易列表:关键字 / 分类 / 账户 / 日期 / 标签多维筛选,分类图标一屏可见</sub>
-</div>
-
-> 🚀 **一键自建**:参考下方 [BeeCount Cloud 自建指南](#-beecount-cloud自建云同步--web-端),
-> `docker compose up -d` 就能跑。访问 `http://<你的服务器 IP>:8869` 即用。
-
-## 🌟 核心特性
-
-<details>
-<summary><b>查看核心特性</b></summary>
-
-### ☁️ 自建云服务 - 核心差异化优势
-
-> **这是蜜蜂记账最大的特色：数据完全由你掌控！**
-
-| 云同步方案 | 适用场景 | 特点 |
-|---------|---------|------|
-| **BeeCount Cloud** | 追求多端实时协同的用户 | 🆕 Docker 一键自建 + 多设备实时秒同步 + 自带 Web 管理端 + 多用户 |
-| **iCloud** | iOS 用户 | 零配置、原生集成、Apple 生态无缝同步 |
-| **Supabase** | 无 NAS 的用户 | 免费额度充足、配置简单、云端托管 |
-| **WebDAV** | 有 NAS 的用户 | 数据完全本地化、支持群晖/绿联云/Nextcloud |
-| **S3 协议** | 追求灵活性的用户 | 支持 Cloudflare R2/AWS S3/MinIO,免费额度大 |
-
-**为什么选择自建？**
-
-- 🔐 **隐私第一**：开发者无法访问你的数据
-- 💰 **成本可控**：Supabase/Cloudflare R2 免费额度够用，WebDAV 一次性投入
-- 🛡️ **数据安全**：不担心服务商倒闭或数据泄露
-- 🔓 **开源审计**：所有云同步代码开源，可审计
-
-[📖 查看云服务配置教程](#️-云备份配置可选)
-
-### 🔒 数据安全与隐私
-
-- **离线优先**：基于本地 SQLite，无网也能用
-- **开源透明**：源代码公开，代码可审计
-- **可选同步**：不配置云服务也能完整使用
-- **零追踪**：无统计、无广告、无数据收集
-
-### 📊 完整记账功能
-
-#### 🤖 AI 智能记账
-
-- **🤖 AI 小助手**（New!）
-  - **智能对话记账**：自然语言交互，智能理解记账意图
-  - **上下文记忆**：记住对话历史，支持连续对话
-  - **账单信息提取**：智能识别金额、商家、分类等信息
-  - **一键确认记账**：AI 提取信息后，确认即可完成记账
-  - 基于智谱 GLM-4 大模型，支持复杂语义理解
-
-- **📸 OCR 图片识别 / 拍照记账**
-  - 支持拍照或从相册选择支付截图
-  - AI 自动识别金额、商家、分类等账单信息
-  - 双引擎支持：本地 TFLite 模型 + GLM 云端模型
-  - 准确识别支付宝、微信支付、云闪付等主流支付方式
-
-- **🎤 语音记账**
-  - 按住说话，松手即完成记账
-  - GLM 语音模型智能理解自然语言
-  - 支持口语化表达，如："今天买菜花了50块"
-  - 自动识别金额、分类、备注等信息
-
-- **⚡ 截图自动记账**
-  - **Android**：无障碍服务自动监听截图，支付后自动记账
-  - **iOS**：快捷指令集成，支持双击背部触发
-  - 智能识别支付宝、微信支付信息
-  - 自动创建账单，实时更新账本数据
-
-#### 📝 基础记账功能
-
-- **手动记账**：收入/支出分类、金额、日期、备注
-- **多账本管理**：生活、工作、投资分开管理
-- **独立账户管理**：支持现金、银行卡、信用卡等多种账户类型，每个账户独立记录余额
-- **账户转账功能**：支持账户间转账记录，自动更新双方账户余额
-- **二级分类系统**：支持父子分类层级，更细致的账单归类（可选择一级或二级分类模式）
-- **标签管理**（New!）：为交易添加自定义标签，支持多标签、颜色标记，灵活归类和筛选
-- **预算管理**（New!）：设置月度总预算和分类预算，实时追踪支出进度，超支提醒
-- **周期记账**（New!）：支持每日/每周/每月/每年自动记账，适合固定收支（房租、工资等）
-- **图表分析**：月度报表、分类排行、趋势分析
-- **数据导入导出**：CSV 格式，兼容主流应用；支持配置导入导出（YAML 格式）
-- **桌面小组件**：iOS/Android 桌面小组件，快速查看收支情况
-
-### 🎨 个性化与国际化
-
-- **暗黑模式**：完整的深色主题支持，护眼且 OLED 友好
-  - 纯黑背景 + 主题色点缀，极简高级感
-  - 所有页面、弹窗、键盘均已适配
-  - 跟随系统自动切换或手动设置
-- **主题装扮**：多种主题色彩，打造专属风格
-- **3 种语言**：简体中文、繁体中文、English
-  - 完整界面翻译 + 智能分类映射
-  - 本地化日期/数字格式
-  - CSV 导入自动识别多语言分类
-
-> 💡 需要添加新语言？欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出！
-
-</details>
-
-## ☁️ 云备份配置（可选）
-
-<details>
-<summary><b>📖 点击查看详细配置教程</b></summary>
-
-### 为什么选择自建云服务？
-
-- **数据主权**：数据完全存储在你自己控制的服务器或云平台中
-- **隐私保护**：开发者无法访问你的任何数据
-- **成本可控**：大多数方案都提供免费额度或一次性购买
-- **稳定可靠**：不依赖第三方托管服务，自主掌控
-- **灵活选择**：根据自己的需求选择最合适的方案
+> 🔐 **为什么自建?** 隐私第一、成本可控、数据安全、开源可审计。所有同步代码开源。
 
 ---
 
-### 🆕 BeeCount Cloud（自建云同步 + Web 端)
+## 🆕 BeeCount Cloud 自建云
 
-**适用场景**:想要多设备(手机 A + 手机 B + Web)**实时**秒级同步 + 在浏览器直接管理账本的用户;
-有 NAS / VPS / 群晖 / 本机 Docker 环境的用户。
+> **多端实时秒级同步 + Web 管理端 + 多用户独立 + AES-256 加密备份** — 推荐有 NAS / VPS / Docker 环境的用户。
 
-**核心能力**:
+### 核心能力
 
-- 📱 **多设备实时协同**:手机 A 改一笔,手机 B 和 Web 几秒内看到(WebSocket 推送)
-- 🌐 **自带 Web 管理端**:一个 Docker 镜像 = server + web,浏览器直接打开服务器地址即用
-- 👥 **多用户独立**:一个服务器可以多人注册账号,数据互相隔离,各自只看自己的
+- 📱 **多设备实时协同** — 手机 A 改一笔,手机 B 和 Web 几秒内看到(WebSocket 推送)
+- 🌐 **自带 Web 管理端** — 一个 Docker 镜像 = server + web,浏览器直接打开服务器地址即用
+- 👥 **多用户独立** — 一个服务器多人注册,数据互相隔离
+- 🔐 **AES-256 加密备份** — 多远端 fan-out(R2 / S3 / WebDAV / B2),备份用 AES zip 加密,丢失服务也能用标准解压工具自助恢复
 - 🔜 **规划中**:共享账本(邀请家人 / 团队一起记同一本)
-- 🐳 **一键部署**:下面这份 `docker-compose.yml` 就能跑起来
-- 🔒 **完整开源**:server 代码在 [BeeCount-Cloud](https://github.com/TNT-Likely/BeeCount-Cloud) 仓库
 
-**一键部署**:
+### 部署 + 完整文档
 
-把下面内容存为 `docker-compose.yml`:
+完整 Docker Compose 部署教程、备份系统、PWA、运维细节都在 Cloud 仓库:
 
-```yaml
-services:
-  beecount-cloud:
-    image: sunxiao0721/beecount-cloud:latest
-    restart: unless-stopped
-    ports:
-      - "8869:8080"
-    volumes:
-      - ./data:/data
-```
+**[👉 BeeCount-Cloud 仓库 — 一键 Docker 部署 + 完整文档](https://github.com/TNT-Likely/BeeCount-Cloud)**
 
-然后:
-
-```bash
-docker compose up -d
-# 查看首次启动生成的随机管理员账号密码:
-docker compose logs beecount-cloud | grep -A 10 "初次启动"
-```
-
-看到类似:
-
-```
- BeeCount Cloud — 初次启动,已自动创建管理员账号:
-
-   邮箱:    owner@example.com
-   密码:    FIDodUnwprkw1zUi
-```
-
-拿这个账号:
-
-- 浏览器访问 `http://<你的服务器 IP>:8869` 即可用 **Web 管理端**
-- App 里选「BeeCount Cloud」,填服务器地址 + 上面账号登录
-
-**添加家人 / 队友**:Web 后台 →「用户」→「新增用户」输入对方邮箱和密码 → 告诉他们登录就行。
-每个用户数据互相隔离,看不到别人的账本(未来支持共享账本后才会互相可见)。
-
-**进阶配置**:
-
-```yaml
-services:
-  beecount-cloud:
-    image: sunxiao0721/beecount-cloud:latest
-    restart: unless-stopped
-    ports:
-      - "8869:8080"
-    environment:
-      # 自指定管理员账号(替代默认随机生成):
-      BOOTSTRAP_ADMIN_EMAIL: me@example.com
-      BOOTSTRAP_ADMIN_PASSWORD: <你的强密码>
-      # 自指定 JWT 密钥(默认会自动生成到 /data/.jwt_secret):
-      # JWT_SECRET: <32+ 字节随机串>
-    volumes:
-      - ./data:/data
-```
-
-**Web 管理端预览**:
+### Web 管理端预览
 
 <div align="center">
   <img src="demo/preview/web/zh-01-home.png" alt="Web 首页" width="600" />
   <br/>
-  <sub>💰 首页:收支、资产构成、分类热力、趋势 —— 一屏总览(暗黑模式)</sub>
+  <sub>💰 首页:收支、资产构成、分类热力、趋势 — 一屏总览(暗黑模式)</sub>
 </div>
 
-<br/>
+<details>
+<summary>更多 Web 截图</summary>
 
 <div align="center">
   <img src="demo/preview/web/zh-02-transactions.png" alt="Web 交易列表" width="600" />
@@ -357,233 +192,8 @@ services:
 <div align="center">
   <img src="demo/preview/web/zh-03-devices.png" alt="Web 在线设备" width="600" />
   <br/>
-  <sub>📱 在线设备:管理员可以看到当前所有登录设备 + 最近活跃 / IP</sub>
+  <sub>📱 在线设备 + 备份归档管理</sub>
 </div>
-
-> 💡 **支持 PWA(渐进式网页应用)**:Web 管理端已接入 PWA,浏览器地址栏右侧会出现"安装"图标,
-> 点一下就能把 Web 作为独立 app 装到桌面 / Dock / 开始菜单,打开后没浏览器地址栏,
-> 跟原生 app 体感几乎一致。网络断开时能离线读缓存的数据,恢复后自动同步。
-
-> 💡 **数据位置**:SQLite 数据库 + 附件 + JWT 密钥全部在 `./data/` 目录,迁移/备份整个目录就行。
-
-> 💡 **公网部署**:建议在前面套一层 nginx / caddy 做 HTTPS + 域名。App 和 Web 都支持 `https://` 地址。
-
-[📖 更多详情 + 代码审查报告 → BeeCount-Cloud 仓库](https://github.com/TNT-Likely/BeeCount-Cloud)
-
----
-
-### 方案一：iCloud（推荐 iOS 用户）🆕
-
-**适用场景**：iOS 用户，追求零配置、无缝同步体验
-
-**优势**：
-
-- ✅ **零配置**：无需任何设置，开箱即用
-- ✅ **原生集成**：使用 Apple ID 自动同步
-- ✅ **隐私保护**：数据存储在你的 iCloud Drive 中
-- ✅ **多设备同步**：iPhone、iPad 数据自动同步
-
-**使用方式**：
-
-1. 确保 iOS 设备已登录 iCloud 并开启 iCloud Drive
-2. 打开蜜蜂记账 → 个人中心 → 云服务
-3. 选择 **iCloud**，即可开始同步
-
-> 💡 **提示**：iCloud 同步仅支持 iOS 设备。如果你需要跨平台同步（iOS + Android），请使用 Supabase 或 WebDAV。
-
----
-
-### 方案二：Supabase（推荐新手）
-
-**适用场景**：适合没有 NAS 设备，想要快速开始的用户
-
-**配置步骤**：
-
-1. **创建 Supabase 项目**
-   - 访问 [supabase.com](https://supabase.com) 注册账号
-   - 创建新项目，选择合适的区域
-   - 在项目设置中获取 URL 和 anon key
-
-2. **配置 Storage**
-   - 在 Supabase 控制台创建名为 `beecount-backups` 的 Storage Bucket
-   - 设置为 Private（不勾选 Public bucket）
-   - **配置 RLS 访问策略**：需要创建 4 条策略，确保用户只能访问自己的数据
-     - 进入 bucket 的 Policies 标签页
-     - 分别创建以下 4 条策略（每条策略配置相同）：
-       - **SELECT**：允许用户读取自己的备份文件
-       - **INSERT**：允许用户创建新的备份文件
-       - **UPDATE**：允许用户更新自己的备份文件
-       - **DELETE**：允许用户删除自己的备份文件
-     - 每条策略的配置：
-       - **Policy name**: 可自定义（如 `Allow user access to own backups`）
-       - **Target roles**: 选择 `authenticated`
-       - **Policy definition**: 输入以下表达式
-
-         ```sql
-         ((bucket_id = 'beecount-backups'::text) AND ((storage.foldername(name))[1] = 'users'::text) AND ((storage.foldername(name))[2] = (auth.uid())::text))
-         ```
-
-       - 此策略确保用户只能访问 `beecount-backups/users/<自己的用户ID>/` 路径下的文件
-
-3. **应用内配置**
-   - 打开蜜蜂记账 → 个人中心 → 云服务
-   - 点击"添加自定义云服务"
-   - 选择服务类型：**Supabase**
-   - 填入你的 Supabase URL 和 anon key
-   - 保存并启用配置
-   - 点击"登录"，注册/登录账号后即可开始同步
-
-### 方案三：WebDAV 服务器（推荐有 NAS 的用户）
-
-**适用场景**：已有 NAS 设备或私有云存储的用户
-
-**支持的服务**：
-
-- ✅ 绿联云 NAS
-- ✅ 群晖 Synology NAS
-- ✅ Nextcloud
-- ✅ 坚果云 WebDAV
-- ✅ ownCloud
-- ✅ 其他支持 WebDAV 协议的服务器
-
-**配置步骤**：
-
-1. **启用 WebDAV 服务**
-   - 在 NAS 或云存储平台启用 WebDAV 功能
-   - 记录 WebDAV 服务器地址（如 `http://nas.local:5005`）
-   - 创建或使用现有的用户账号
-
-2. **准备存储目录**（可选）
-   - 在 WebDAV 根目录下创建 `BeeCount` 文件夹
-   - 或使用任意路径（配置时指定即可）
-
-3. **应用内配置**
-   - 打开蜜蜂记账 → 个人中心 → 云服务
-   - 点击"添加自定义云服务"
-   - 选择服务类型：**WebDAV**
-   - 填写配置信息：
-     - **WebDAV 服务器 URL**：如 `http://nas.local:5005`
-     - **用户名**：你的 WebDAV 用户名
-     - **密码**：你的 WebDAV 密码
-     - **远程路径**：存储路径（如 `/home/BeeCount` 或 `/BeeCount`）
-   - 点击"测试连接"验证配置
-   - 保存并启用配置
-   - WebDAV 无需额外登录，配置后即可直接同步
-
-**常见 WebDAV 配置示例**：
-
-```
-绿联云 NAS：
-- URL: http://你的NAS地址:5005
-- 远程路径: /home/BeeCount
-
-群晖 NAS：
-- URL: http://你的NAS地址:5005 或 https://你的域名
-- 远程路径: /BeeCount
-
-坚果云：
-- URL: https://dav.jianguoyun.com/dav/
-- 远程路径: /BeeCount
-```
-
----
-
-### 方案四：S3 协议存储（推荐追求灵活性的用户）🆕
-
-**适用场景**：需要灵活选择云服务商，或想利用免费额度的用户
-
-**支持的服务**：
-
-- ✅ **Cloudflare R2**（推荐，10GB 免费存储）
-- ✅ **AWS S3**（全球最流行的对象存储）
-- ✅ **MinIO**（开源自建方案）
-- ✅ **阿里云 OSS**（兼容 S3 协议）
-- ✅ **腾讯云 COS**（兼容 S3 协议）
-- ✅ 其他兼容 S3 协议的对象存储服务
-
-**优势**：
-
-- ✅ **免费额度大**：Cloudflare R2 提供 10GB 免费存储
-- ✅ **灵活选择**：支持多家云服务商，随时切换
-- ✅ **标准协议**：S3 协议是业界标准，兼容性强
-- ✅ **性能优异**：CDN 加速，全球访问快速
-
-**配置步骤（以 Cloudflare R2 为例）**：
-
-1. **创建 R2 存储桶**
-   - 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
-   - 进入 **R2** 服务
-   - 创建新存储桶（Bucket），如命名为 `beecount-backups`
-   - 记录存储桶名称
-
-2. **获取 API 凭证**
-   - 在 R2 页面点击 **Manage R2 API Tokens**
-   - 创建新的 API Token
-   - 权限选择 **Object Read & Write**
-   - 记录以下信息：
-     - **Access Key ID**（访问密钥）
-     - **Secret Access Key**（私密密钥）
-     - **Endpoint**（如 `<账户ID>.r2.cloudflarestorage.com`）
-
-3. **应用内配置**
-   - 打开蜜蜂记账 → 个人中心 → 云服务
-   - 点击"添加自定义云服务"
-   - 选择服务类型：**S3 协议存储**
-   - 填写配置信息：
-     - **端点地址**：Cloudflare R2 endpoint（不含 `https://`）
-     - **区域**：`auto`（R2 自动选择区域）
-     - **Access Key**：你的 Access Key ID
-     - **Secret Key**：你的 Secret Access Key
-     - **存储桶名称**：创建的存储桶名称（如 `beecount-backups`）
-     - **使用 HTTPS**：开启（推荐）
-     - **端口**：留空（使用默认端口）
-   - 点击"测试连接"验证配置
-   - 保存并启用配置
-   - S3 无需额外登录，配置后即可直接同步
-
-**其他 S3 服务配置示例**：
-
-```
-Cloudflare R2：
-- 端点地址: <账户ID>.r2.cloudflarestorage.com
-- 区域: auto
-- 使用 HTTPS: 是
-
-AWS S3：
-- 端点地址: s3.amazonaws.com
-- 区域: us-east-1（根据你的存储桶区域填写）
-- 使用 HTTPS: 是
-
-MinIO（自建）：
-- 端点地址: minio.example.com
-- 区域: us-east-1 或 auto
-- 使用 HTTPS: 根据配置选择
-- 端口: 9000（或自定义端口）
-
-阿里云 OSS（S3 兼容模式）：
-- 端点地址: oss-cn-hangzhou.aliyuncs.com
-- 区域: oss-cn-hangzhou
-- 使用 HTTPS: 是
-```
-
-> 💡 **提示**：
->
-> - 端点地址请**不要**包含 `http://` 或 `https://` 前缀
-> - Cloudflare R2 免费额度：10GB 存储 + 每月 1000 万次 A 类操作
-> - S3 协议支持跨平台同步（iOS + Android）
-
----
-
-### 后续计划
-
-我们将持续扩展云服务支持，计划添加：
-
-- 📦 Google Drive
-- 📦 Dropbox
-- 📦 OneDrive
-- 📦 更多...
-
-如果你希望优先支持某个云服务，欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出需求！
 
 </details>
 
@@ -592,14 +202,14 @@ MinIO（自建）：
 ## 🛠️ 开发指南
 
 <details>
-<summary><b>查看开发指南</b></summary>
+<summary>技术栈 + 快速开始</summary>
 
 ### 技术栈
 
-- **Flutter 3.27+**：跨平台 UI 框架
-- **Riverpod**：状态管理解决方案
-- **Drift (SQLite)**：本地数据库 ORM
-- **Supabase**：云端备份和同步服务
+- **Flutter 3.27+** · 跨平台 UI 框架
+- **Riverpod** · 状态管理
+- **Drift (SQLite)** · 本地数据库 ORM
+- **Supabase / 自建 BeeCount Cloud / WebDAV / S3** · 云端同步多方案
 
 ### 快速开始
 
@@ -613,37 +223,26 @@ dart run build_runner build --delete-conflicting-outputs
 # 运行应用
 flutter run --flavor dev
 
-# 构建发布版本
+# 构建发布
 flutter build apk --flavor prod --release
 ```
+
+更多开发规范见 [docs/contributing/CONTRIBUTING_ZH.md](docs/contributing/CONTRIBUTING_ZH.md)。
 
 </details>
 
 ---
 
-## 🤝 贡献指南
+## 🤝 贡献
 
 <details>
-<summary><b>查看贡献方式</b></summary>
-
-我们欢迎所有形式的贡献！
+<summary>欢迎所有形式的贡献</summary>
 
 - 🐛 [报告 Bug](https://github.com/TNT-Likely/BeeCount/issues/new)
-- 💡 [提出功能建议](https://github.com/TNT-Likely/BeeCount/discussions/new?category=ideas)
-- 💻 [贡献代码](docs/contributing/CONTRIBUTING_ZH.md#代码贡献流程)
-- 🌍 [贡献翻译](docs/contributing/CONTRIBUTING_ZH.md#翻译贡献)
-- 📝 [完善文档](docs/contributing/CONTRIBUTING_ZH.md#文档贡献)
-- 🎨 [设计师招募](docs/contributing/CONTRIBUTING_ZH.md#designer-recruitment)
+- 💡 [功能建议](https://github.com/TNT-Likely/BeeCount/discussions/new?category=ideas)
+- 💻 [代码贡献](docs/contributing/CONTRIBUTING_ZH.md#代码贡献流程) · 🌍 [翻译](docs/contributing/CONTRIBUTING_ZH.md#翻译贡献) · 📝 [文档](docs/contributing/CONTRIBUTING_ZH.md#文档贡献) · 🎨 [设计师招募](docs/contributing/CONTRIBUTING_ZH.md#designer-recruitment)
 
-**快速开始**：
-
-1. Fork 本项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'feat: 添加某个功能'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 创建 Pull Request
-
-详细规范请参考[完整贡献指南](docs/contributing/CONTRIBUTING_ZH.md)。
+**快速开始**:Fork → 创建 feature 分支 → 提交 → PR。详细规范见 [完整贡献指南](docs/contributing/CONTRIBUTING_ZH.md)。
 
 </details>
 
@@ -652,155 +251,84 @@ flutter build apk --flavor prod --release
 ## 💬 常见问题
 
 <details>
-<summary><b>查看常见问题解答</b></summary>
+<summary>查看常见问题解答</summary>
 
-<br/>
+**Q: 不配置云服务能正常使用吗?**
+A: 完全可以!应用默认本地存储,所有功能都能正常使用。可随时导出 CSV 备份。
 
-**Q: 不配置云服务能正常使用吗？**
-A: 完全可以！应用默认使用本地存储，所有功能都能正常使用。你仍可随时导出 CSV 进行备份。
-
-**Q: 应该选择 iCloud、Supabase、WebDAV 还是 S3？**
+**Q: 应该选哪个云方案?**
 A:
+- iOS 单设备 → **iCloud**(零配置)
+- 跨平台 + 多端实时协同 → **BeeCount Cloud**(自托管,推荐)
+- 跨平台无 NAS → **Supabase / S3**
+- 有 NAS → **WebDAV**
 
-- 如果你是 iOS 用户且只在 Apple 设备间同步，推荐使用 **iCloud**（零配置、原生集成）
-- 如果你需要跨平台同步（iOS + Android），推荐使用 **Supabase** 或 **S3**（免费、稳定、易配置）
-- 如果你有 NAS 设备或私有云，推荐使用 **WebDAV**（数据完全本地化）
-- 如果你想要灵活选择云服务商，推荐使用 **S3**（支持 Cloudflare R2/AWS S3/MinIO 等）
+**Q: 如何确保数据安全?**
+A: 使用自己的服务器 / Storage / Bucket,WebDAV 和 S3 建议 HTTPS 加密传输。BeeCount Cloud 备份默认 AES-256 加密。
 
-**Q: 如何在多设备间同步数据？**
-A:
-
-- **iCloud**：iOS 设备登录同一 Apple ID，数据自动同步
-- **Supabase**：所有设备配置相同的 URL 和 anon key，登录同一账号
-- **WebDAV**：所有设备配置相同的 WebDAV 服务器地址和凭据
-- **S3**：所有设备配置相同的 S3 端点、Access Key 和存储桶名称
-
-**Q: 如何确保数据安全？**
-A:
-
-- 使用自己的 Supabase 项目、WebDAV 服务器或 S3 存储桶
-- 定期导出 CSV 备份到本地
-- WebDAV 和 S3 建议使用 HTTPS 加密传输
-- S3 的 Access Key 和 Secret Key 请妥善保管
-
-**Q: WebDAV 配置后为什么无法上传？**
-A:
-
-- 检查 WebDAV 服务是否启用且端口正确
-- 确认用户名和密码正确
-- 某些 NAS 的 WebDAV 需要在特定路径下才能写入（如绿联云需要 `/home/` 路径）
-- 点击"测试连接"按钮查看详细错误信息
-
-**Q: S3 配置后为什么连接失败？**
-A:
-
-- 确认端点地址**不包含** `http://` 或 `https://` 前缀
-- 检查 Access Key 和 Secret Key 是否正确
-- 确认存储桶名称拼写正确
-- 检查存储桶区域是否匹配（AWS S3 需要准确区域，Cloudflare R2 使用 `auto`）
-- 点击"测试连接"按钮查看详细错误信息
-
-> 💡 更多问题请访问 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 或 [Discussions](https://github.com/TNT-Likely/BeeCount/discussions)
+更多详情见 [docs/cloud-setup.md](docs/cloud-setup.md) 或 [Issues](https://github.com/TNT-Likely/BeeCount/issues)。
 
 </details>
 
 ---
 
-## 💝 捐赠
+## 💝 捐赠支持
 
-### 为什么需要您的支持？
-
-蜜蜂记账是**完全免费开源**的项目，没有任何广告和付费功能。为了保持项目的持续运营，我们需要您的支持。
-
-您的捐赠将直接用于：
-
-- 📱 **续费 Apple 开发者账号** - 保持 iOS TestFlight 公测可用（$99/年）
-- 🔧 **维护项目持续开发** - 支持持续开发和维护
+蜜蜂记账完全免费开源,**无广告无付费功能**。如果觉得有用,请作者喝杯咖啡 ☕ 支持持续开发。
 
 ### 捐赠方式
 
-#### 🌍 国际用户
+[![PayPal](https://img.shields.io/badge/PayPal-Donate-0070BA?logo=paypal&logoColor=white&style=for-the-badge)](https://paypal.me/sunxiaoyes)
 
-- **PayPal**: <https://paypal.me/sunxiaoyes>
-
-#### 🇨🇳 中国用户
-
-<details>
-<summary>点击查看支付宝/微信二维码</summary>
+<details><summary>支付宝 / 微信二维码</summary>
 
 | 支付宝 | 微信支付 |
 |:---:|:---:|
-| ![支付宝](docs/donate/alipay.png) | ![微信支付](docs/donate/wechat.png) |
+| <img src="docs/donate/alipay.png" width="160" alt="支付宝"/> | <img src="docs/donate/wechat.png" width="160" alt="微信支付"/> |
 
 </details>
 
-#### 🪙 加密货币
+**USDT (TRC20)**:`TKBV69B2AoU67p3vDhnJUbMJtZ1DxuUF5C` · <details><summary>币安二维码</summary>![币安](docs/donate/binance.png)</details>
 
-- **USDT (TRC20)**: `TKBV69B2AoU67p3vDhnJUbMJtZ1DxuUF5C`
-- **币安**:
+### 资金透明度
 
-<details>
-<summary>点击查看二维码</summary>
+| 项 | 金额 |
+|---|---|
+| Apple 开发者账号续费 | ¥688 / 年 |
+| 轻量云服务器(ICP 备案) | ¥79 / 年 |
+| 域名 | ¥80 / 年 |
+| Google Play 开发者账号(一次性) | ¥177 |
+| **年度持续成本** | **¥847 / 年** |
 
-![币安](docs/donate/binance.png)
+### 感谢支持者
 
-</details>
+| | | | | | | | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="assets/avatars/qiao.svg" width="44"/> | <img src="assets/avatars/rui.svg" width="44"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="44"/></a> | <img src="assets/avatars/shao.svg" width="44"/> | <img src="assets/avatars/ge.svg" width="44"/> | <img src="assets/avatars/te.svg" width="44"/> | <img src="assets/avatars/wen.svg" width="44"/> | <img src="assets/avatars/anon.svg" width="44"/> | <a href="https://github.com/birdnofoots"><img src="https://github.com/birdnofoots.png" width="44"/></a> | <a href="https://github.com/charieswang72-pro"><img src="https://github.com/charieswang72-pro.png" width="44"/></a> | <a href="https://github.com/542474846"><img src="https://github.com/542474846.png" width="44"/></a> | <a href="https://github.com/JOHN-2025"><img src="https://github.com/JOHN-2025.png" width="44"/></a> |
+| *桥 ¥12 | *睿 ¥720 | fishdivinity ¥100 | *邵 ¥15 | *哥 ¥6 | *特 ¥15 | *文 ¥50 | 匿名 ¥50 | birdnofoots ¥10 | Charies ¥10 | 542474846 ¥66 | JOHN-2025 ¥30 |
 
-### 📊 资金使用透明度
-
-**已完成**：
-
-- ✅ Apple 开发者账号注册（¥688/年）
-- ✅ iOS TestFlight 公测上线
-- ✅ 轻量云服务器（¥79/年）- 用于办理ICP备案
-- ✅ Google Play 开发者账号注册（¥177，一次性）
-
-**持续成本**：
-
-- 📱 Apple 开发者账号续费：¥688/年
-- ☁️ 轻量云服务器：¥79/年
-
-**总计年度成本**：¥767/年（+ 已投入一次性成本 ¥177）
-
-所有捐赠资金的使用情况都会在这里公开透明地说明。
-
-### 🌟 感谢支持者
-
-感谢以下朋友的慷慨支持（按时间排序）：
-
-> 💡 已捐赠？[点击这里提交您的信息](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml)，展示在支持者列表中！
-
-| | | | | | | | | | | |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| <img src="assets/avatars/qiao.svg" width="50"/> | <img src="assets/avatars/rui.svg" width="50"/> | <a href="https://github.com/fishdivinity"><img src="assets/avatars/fishdivinity.png" width="50"/></a> | <img src="assets/avatars/shao.svg" width="50"/> | <img src="assets/avatars/ge.svg" width="50"/> | <img src="assets/avatars/te.svg" width="50"/> | <img src="assets/avatars/wen.svg" width="50"/> | <img src="assets/avatars/anon.svg" width="50"/> | <a href="https://github.com/birdnofoots"><img src="https://github.com/birdnofoots.png" width="50"/></a> | <a href="https://github.com/charieswang72-pro"><img src="https://github.com/charieswang72-pro.png" width="50"/></a> | <a href="https://github.com/542474846"><img src="https://github.com/542474846.png" width="50"/></a> |
-| *桥 ¥12 | *睿 ¥720 | [fishdivinity](https://github.com/fishdivinity) ¥100 | *邵 ¥15 | *哥 ¥6 | *特 ¥15 | *文 ¥50 | 匿名者 ¥50 | [birdnofoots](https://github.com/birdnofoots) ¥10 | [Charies](https://github.com/charieswang72-pro) ¥10 | [542474846](https://github.com/542474846) ¥66 |
+> 💡 已捐赠?[提交信息](https://github.com/TNT-Likely/BeeCount/issues/new?template=donation_info.yml) 展示在列表中。
 
 ---
 
 ## 📄 开源协议
 
+本项目采用 **商业源代码许可证(Business Source License,BSL)**。
+
+| 用途 | 许可 |
+|---|---|
+| ✅ **个人使用 / 学习研究 / 开源贡献** | 完全免费 |
+| ❌ **商业使用** | 需要付费授权 |
+
 <details>
-<summary><b>查看许可证详情</b></summary>
-
-本项目采用 **商业源代码许可证（Business Source License）**：
-
-- ✅ **个人使用** - 完全免费
-- ✅ **学习研究** - 完全免费
-- ✅ **开源贡献** - 欢迎参与
-- ❌ **商业使用** - 需要付费授权
-
-### 什么是商业使用？
-
-以下情况需要获得商业许可：
+<summary>什么算商业使用</summary>
 
 - 将本软件作为商业产品或服务提供给客户
 - 在盈利性组织中使用本软件
 - 基于本软件开发商业产品
 - 提供基于本软件的付费云服务
 
-如需商业使用，请通过 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 联系。
-
-详见 [LICENSE](LICENSE) 文件。
+如需商业授权,请通过 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 联系。详见 [LICENSE](LICENSE)。
 
 </details>
 
@@ -809,16 +337,18 @@ A:
 ## 📦 相关仓库
 
 | 仓库 | 说明 |
-|------|------|
-| [BeeCount-Cloud](https://github.com/TNT-Likely/BeeCount-Cloud) | 🆕 自建云同步服务端 + Web 管理端(FastAPI + React) |
-| [BeeCount-Website](https://github.com/TNT-Likely/BeeCount-Website) | 官网/文档仓库 |
-| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | 鸿蒙版本仓库（已停止更新） |
+|---|---|
+| [BeeCount-Cloud](https://github.com/TNT-Likely/BeeCount-Cloud) | 自建云同步服务端 + Web 管理端(FastAPI + React) |
+| [BeeCount-Website](https://github.com/TNT-Likely/BeeCount-Website) | 官网 / 文档仓库 |
+| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | 鸿蒙版本(已停止更新) |
 | [BeeShot](https://github.com/TNT-Likely/BeeShot) | App Store 截图生成器 |
 
 ---
 
+## ⭐ Star History
+
 <details>
-<summary><b>⭐ Star History</b></summary>
+<summary>查看 Star 历史曲线</summary>
 
 <a href="https://www.star-history.com/?repos=tnt-likely%2Fbeecount&type=date&legend=top-left">
  <picture>
@@ -834,10 +364,10 @@ A:
 
 ## 🙏 致谢
 
-感谢 [果核剥壳 - 互联网的净土](https://www.ghxi.com/)、[星之墨辰](https://mp.weixin.qq.com/s/HieVbKzpdUvnoaCa_9xjkA) 对本项目的宣传
+感谢 [果核剥壳 - 互联网的净土](https://www.ghxi.com/)、[星之墨辰](https://mp.weixin.qq.com/s/HieVbKzpdUvnoaCa_9xjkA) 对本项目的宣传。
 
-感谢所有为蜜蜂记账项目贡献代码、提出建议和反馈问题的朋友们！
+感谢所有为蜜蜂记账项目贡献代码、提出建议和反馈问题的朋友们!
 
-如有问题或建议，欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出，或在 [Discussions](https://github.com/TNT-Likely/BeeCount/discussions) 中参与讨论。
+如有问题或建议,欢迎在 [Issues](https://github.com/TNT-Likely/BeeCount/issues) 中提出,或在 [Discussions](https://github.com/TNT-Likely/BeeCount/discussions) 中参与讨论。
 
-**蜜蜂记账 🐝 - 让记账变得简单而安全**
+**蜜蜂记账 🐝 — 让记账变得简单而安全**

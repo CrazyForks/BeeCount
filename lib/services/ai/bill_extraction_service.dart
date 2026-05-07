@@ -37,7 +37,10 @@ class BillExtractionService {
   /// 初始化（加载用户配置）
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
-    _customPromptTemplate = prefs.getString(AIConstants.keyAiCustomPrompt);
+    final saved = prefs.getString(AIConstants.keyAiCustomPrompt);
+    // 空字符串视为未配置，避免新装/异常下走出空提示词导致 AI 无法识账
+    _customPromptTemplate =
+        (saved != null && saved.trim().isNotEmpty) ? saved : null;
   }
 
   // ============================================================
@@ -227,8 +230,11 @@ class BillExtractionService {
     final currentMinute = now.minute.toString().padLeft(2, '0');
     final currentTime = '$currentDate $currentHour:$currentMinute';
 
-    // 使用用户自定义模板或默认模板
-    final template = _customPromptTemplate ?? defaultPromptTemplate;
+    // 使用用户自定义模板或默认模板（空字符串也回退到默认）
+    final custom = _customPromptTemplate;
+    final template = (custom != null && custom.trim().isNotEmpty)
+        ? custom
+        : defaultPromptTemplate;
 
     // 替换变量
     return template

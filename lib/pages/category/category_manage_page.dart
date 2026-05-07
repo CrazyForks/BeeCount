@@ -450,6 +450,14 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
     final repo = ref.read(repositoryProvider);
     final ids = unusedCategories.map((item) => item.category.id).toList();
     await repo.deleteCategoriesByIds(ids);
+
+    // 跟非 silent 版本对齐:显式 sync 触发,user-global category:delete change
+    // 才能跨设备 push 到 server。覆盖导入流程后续也会再触发一次 sync,这里
+    // 重复 trigger 也无害(SyncEngine 单飞 + 2s debounce 自动合并)。
+    final activeLedgerId = ref.read(currentLedgerIdProvider);
+    if (activeLedgerId > 0) {
+      unawaited(PostProcessor.sync(ref, ledgerId: activeLedgerId));
+    }
   }
 
   /// 构建转账图标设置区域

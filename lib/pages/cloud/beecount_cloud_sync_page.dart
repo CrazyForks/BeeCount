@@ -37,23 +37,15 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
   SyncHealthReport? _latestReport;
   bool _checking = false;
   bool _autoSyncing = false;
-  String _serverVersion = ''; // BeeCount Cloud 版本(从 /version 拉)
 
   @override
   void initState() {
     super.initState();
-    // 页面一进来就拉一次 server 版本 + 一次 sync health,让"同步状态"面板
-    // 开屏即有内容,而不是"下拉刷新才出"。
+    // 页面一进来就拉一次 sync health,让"同步状态"面板开屏即有内容。
+    // server 版本号改用 [beecountCloudServerVersionProvider] 自动获取(它依赖
+    // syncStatusRefreshProvider,每次同步完成自动重新拉一次),不再用本地
+    // setState 缓存的死值——server 升级后用户在 app 内任何同步操作完都会刷新。
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        final cloud = ref.read(beecountCloudProviderInstance).valueOrNull;
-        if (cloud == null) return;
-        final v = await cloud.fetchServerVersion();
-        if (!mounted) return;
-        setState(() => _serverVersion = v.version);
-      } catch (_) {
-        /* 忽略 —— version 拉不到无伤大雅 */
-      }
       if (!mounted) return;
       unawaited(_onRefresh());
     });
@@ -185,6 +177,11 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
                         SectionCard(
                           child: _buildAccountSection(context, user),
                         ),
+                        // Section 1.5: 2FA 状态行 — 内部根据是否能拉到 status 决定显示
+                        // 与否(未登录 / 拉取失败 → 自动隐藏)。不在外层 gate user,
+                        // 这样切换 cloud scheme 来回时,只要重新登录成功就会自动出现。
+                        const SizedBox(height: 8),
+                        const _TwoFactorStatusRow(),
                         const SizedBox(height: 8),
                         // Section 2: 同步状态(深度检测结果)
                         SectionCard(
@@ -192,19 +189,28 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
                         ),
                         // BeeCount Cloud server 版本号,底部弱展示。
                         // 跟 web header 的 vX.Y.Z 对齐,方便确认 server 哪版。
-                        if (_serverVersion.isNotEmpty)
-                          Padding(
+                        // 通过 provider 监听,server 升级后跟着 sync ticker 自
+                        // 动刷新,不依赖死缓存。
+                        Consumer(builder: (ctx, r, _) {
+                          final v = r
+                              .watch(beecountCloudServerVersionProvider)
+                              .valueOrNull;
+                          if (v == null || v.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return Padding(
                             padding: const EdgeInsets.only(top: 16, bottom: 8),
                             child: Center(
                               child: Text(
-                                'BeeCount Cloud v$_serverVersion',
+                                'BeeCount Cloud v$v',
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: BeeTokens.textTertiary(context),
                                 ),
                               ),
                             ),
-                          ),
+                          );
+                        }),
                       ],
                     ),
                   );
@@ -445,6 +451,106 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 2FA 状态展示行(只读)。
+///
+/// 拉取 GET /auth/2fa/status,展示「已启用 ✓ · 启用于 YYYY-MM-DD」或「未启用」。
+/// 拉取失败(未登录 / 网络错 / 不是 BeeCount Cloud)→ 整行隐藏,不展示假数据。
+///
+/// 监听 [syncStatusRefreshProvider] tick(用户重新登录 / 同步成功后会 bump),
+/// 自动重新拉取,所以切换云方案再切回来也能拿到最新状态。
+///
+/// 设计文档:.docs/2fa-design.md(第 4.6 节,App 端 only-read 状态)。
+class _TwoFactorStatusRow extends ConsumerStatefulWidget {
+  const _TwoFactorStatusRow();
+
+  @override
+  ConsumerState<_TwoFactorStatusRow> createState() =>
+      _TwoFactorStatusRowState();
+}
+
+class _TwoFactorStatusRowState extends ConsumerState<_TwoFactorStatusRow> {
+  TwoFactorStatus? _status;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final provider =
+          await ref.read(beecountCloudProviderInstance.future);
+      if (provider == null) {
+        if (mounted) {
+          setState(() {
+            _loaded = true;
+            _status = null;
+          });
+        }
+        return;
+      }
+      // currentUser 是 null 时再请求会拿到 401 / 走 silent recovery 也拿不到
+      // session,所以提前判断登录态,避免无谓请求 + 闪烁。
+      final user = await provider.auth.currentUser;
+      if (user == null) {
+        if (mounted) {
+          setState(() {
+            _loaded = true;
+            _status = null;
+          });
+        }
+        return;
+      }
+      final s = await provider.getTwoFactorStatus();
+      if (!mounted) return;
+      setState(() {
+        _status = s;
+        _loaded = true;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loaded = true;
+        _status = null;
+      });
+      logger.warning('2fa.status.fetch.failed', e.toString());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    // syncStatusRefreshProvider 在「重新登录成功 / 同步完成」时 bump,
+    // 监听它就能让切换云方案后回来 / 用户重新登录后自动重新拉取 2FA 状态。
+    ref.listen<int>(syncStatusRefreshProvider, (_, __) => _load());
+
+    // 还没加载完 / 拉取失败 / 未登录 / 不是 BeeCount Cloud → 整行隐藏。
+    // 不显示 loading 占位避免初次进入页面时闪一下。
+    if (!_loaded || _status == null) {
+      return const SizedBox.shrink();
+    }
+    final status = _status!;
+
+    final enabledLabel =
+        status.enabled ? l10n.twofaStatusEnabled : l10n.twofaStatusDisabled;
+    final subtitle = status.enabled && status.enabledAt != null
+        ? l10n.twofaStatusEnabledAt(
+            '${status.enabledAt!.year}-${status.enabledAt!.month.toString().padLeft(2, '0')}-${status.enabledAt!.day.toString().padLeft(2, '0')}',
+          )
+        : null;
+
+    return SectionCard(
+      child: AppListTile(
+        leading: status.enabled ? Icons.verified_user : Icons.lock_outline,
+        title: '${l10n.twofaStatusTitle} · $enabledLabel',
+        subtitle: subtitle,
       ),
     );
   }

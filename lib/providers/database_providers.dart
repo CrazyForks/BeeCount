@@ -1,16 +1,12 @@
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:drift/drift.dart';
 import '../data/db.dart';
 import '../data/repositories/local/local_repository.dart';
-import '../data/repositories/cloud/cloud_repository.dart';
 import '../data/repositories/base_repository.dart';
 import '../cloud/sync/change_tracker.dart';
 import '../services/system/logger_service.dart';
 import 'sync_providers.dart';
-import 'cloud_mode_providers.dart';
-import 'supabase_providers.dart';
 
 // 数据库Provider
 final databaseProvider = Provider<BeeDatabase>((ref) {
@@ -19,65 +15,20 @@ final databaseProvider = Provider<BeeDatabase>((ref) {
   return db;
 });
 
-// 仓储Provider - 根据 AppMode 自动切换实现
-// 返回 BaseRepository 类型，确保类型安全
-// LocalRepository (本地模式) 和 CloudRepository (云端模式) 都继承 BaseRepository
+// 仓储Provider — 一律 LocalRepository(本地优先 + ChangeTracker 推 BeeCount Cloud)。
+// 历史上还有过 CloudRepository(数据全存 Supabase),但 BeeCount Cloud 上线后
+// 整条范式从「云优先」迁到「本地优先 + 推送」,Cloud* 仓库整组随之删掉。
 final repositoryProvider = Provider<BaseRepository>((ref) {
-  final mode = ref.watch(appModeProvider);
   final db = ref.watch(databaseProvider);
 
-  logger.info('RepositoryProvider', '当前模式: ${mode.label}');
-
-  switch (mode) {
-    case AppMode.local:
-      // 本地优先模式：使用 LocalRepository（基于 Drift）
-      // 仅 BeeCount Cloud 模式注入 ChangeTracker（增量同步变更追踪）
-      final config = ref.watch(activeCloudConfigProvider).valueOrNull;
-      final tracker = (config?.type == CloudBackendType.beecountCloud && config!.valid)
-          ? ChangeTracker(db)
-          : null;
-      logger.info('RepositoryProvider', '✅ 使用 LocalRepository (本地模式, changeTracker=${tracker != null})');
-      return LocalRepository(db, changeTracker: tracker);
-
-    case AppMode.cloud:
-      // 仅云端模式：使用 CloudRepository（基于 Supabase）
-      final supabaseAsync = ref.watch(supabaseInstanceProvider);
-
-      logger.info('RepositoryProvider', 'Supabase 状态: hasValue=${supabaseAsync.hasValue}, value=${supabaseAsync.value != null ? "已加载" : "null"}');
-
-      // 如果 Supabase 未加载完成或为 null，回退到本地模式
-      if (!supabaseAsync.hasValue || supabaseAsync.value == null) {
-        logger.warning('RepositoryProvider', '⚠️ Supabase 未就绪，回退到 LocalRepository');
-        return LocalRepository(db);
-      }
-
-      logger.info('RepositoryProvider', '✅ 使用 CloudRepository (仅云端模式)');
-      return CloudRepository(supabaseAsync.value!);
-  }
-});
-
-// 新增：根据 AppMode 返回对应的 Repository 实现
-// 这个 Provider 返回抽象接口类型，可以是本地或云端实现
-final dynamicRepositoryProvider = Provider<Object>((ref) {
-  final mode = ref.watch(appModeProvider);
-  final db = ref.watch(databaseProvider);
-
-  switch (mode) {
-    case AppMode.local:
-      // 本地模式：使用 LocalRepository（基于 Drift）
-      return LocalRepository(db);
-
-    case AppMode.cloud:
-      // 云端模式：使用 CloudRepository（基于 Supabase）
-      final supabaseAsync = ref.watch(supabaseInstanceProvider);
-
-      // 如果 Supabase 未加载完成或为 null，回退到本地模式
-      if (!supabaseAsync.hasValue || supabaseAsync.value == null) {
-        return LocalRepository(db);
-      }
-
-      return CloudRepository(supabaseAsync.value!);
-  }
+  // 仅 BeeCount Cloud 后端激活时注入 ChangeTracker(记录增量变更供同步引擎推送)。
+  // 其它备份后端(iCloud / WebDAV / S3 / Supabase)走快照备份路径,不需要变更追踪。
+  final config = ref.watch(activeCloudConfigProvider).valueOrNull;
+  final tracker = (config?.type == CloudBackendType.beecountCloud && config!.valid)
+      ? ChangeTracker(db)
+      : null;
+  logger.info('RepositoryProvider', '✅ LocalRepository (changeTracker=${tracker != null})');
+  return LocalRepository(db, changeTracker: tracker);
 });
 
 // 记住当前账本：启动时加载，切换时持久化

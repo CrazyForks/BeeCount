@@ -15,6 +15,7 @@ import '../../services/system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/website_urls.dart';
+import '../../services/marketing/product_promos.dart';
 import 'log_center_page.dart';
 
 /// 是否为 Google Play 版本（通过 CI 构建时 --dart-define=GOOGLE_PLAY=true 注入）
@@ -310,14 +311,10 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                         ),
                   ),
                 ),
-                // BeeDNS 推广卡片
-                _BeeDNSCard(onTap: () async {
-                  // iOS 跳转 App Store，Android 跳转官网
-                  final url = Platform.isIOS
-                      ? 'https://apps.apple.com/app/id6757992815'
-                      : 'https://beedns.youths.cc';
-                  await _tryOpenUrl(Uri.parse(url));
-                }),
+                // 更多产品 — 2 列 grid 紧凑卡(蜜蜂家当前置)。
+                // 数据 + 文案在下方 _buildProductPromos() 里集中维护,
+                // 加新产品只要往那个 list push 一项即可。
+                _buildProductPromos(context),
                 // ICP 备案号（仅简体中文显示）
                 if (Localizations.localeOf(context).languageCode == 'zh' &&
                     Localizations.localeOf(context).countryCode != 'TW') ...[
@@ -340,6 +337,26 @@ class _AboutPageState extends ConsumerState<AboutPage> {
       ),
     );
   }
+}
+
+/// 「更多产品」section — 单列大卡。蜜蜂家当前置。
+///
+/// ProductPromo 数据从 `lib/services/marketing/product_promos.dart` 集中获取,
+/// 多处页面(关于页 / 资产管理页 banner)共用同一份产品信息。
+Widget _buildProductPromos(BuildContext context) {
+  final l10n = AppLocalizations.of(context);
+  final products = <(ProductPromo info, ProductPromoTexts texts)>[
+    (beeAssetsPromo(context), buildPromoTexts(context, l10n.aboutBeeAssets)),
+    (beeDnsPromo(context), buildPromoTexts(context, l10n.aboutBeeDNS)),
+  ];
+  return Column(
+    children: [
+      for (var i = 0; i < products.length; i++) ...[
+        if (i > 0) const SizedBox(height: 12),
+        ProductPromoCard(info: products[i].$1, texts: products[i].$2),
+      ],
+    ],
+  );
 }
 
 // -------- 工具方法：关于与更新 --------
@@ -367,159 +384,25 @@ Future<_AppInfo> _getAppInfo() async {
       buildTime: buildTime.isEmpty ? null : buildTime);
 }
 
-/// BeeDNS 推广卡片组件（带动画）
-class _BeeDNSCard extends StatefulWidget {
-  final VoidCallback onTap;
-  const _BeeDNSCard({required this.onTap});
-
-  @override
-  State<_BeeDNSCard> createState() => _BeeDNSCardState();
-}
-
-class _BeeDNSCardState extends State<_BeeDNSCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _fadeAnimation;
-  bool _isPressed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    // 入场动画
-    Future.delayed(const Duration(milliseconds: 200), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // BeeDNS 品牌色（琥珀橙）
-    const beeDNSColor = Color(0xFFF59E0B);
-
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _scaleAnimation.value,
-          child: Opacity(
-            opacity: _fadeAnimation.value,
-            child: child,
-          ),
-        );
-      },
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: widget.onTap,
-        child: AnimatedScale(
-          scale: _isPressed ? 0.98 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  beeDNSColor.withValues(alpha: 0.12),
-                  beeDNSColor.withValues(alpha: 0.05),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: beeDNSColor.withValues(alpha: 0.3),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                // Logo - BeeDNS 图标
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    'assets/images/beedns_logo.png',
-                    width: 52,
-                    height: 52,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                // 文字内容
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).aboutBeeDNS,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: beeDNSColor,
-                            ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        AppLocalizations.of(context).aboutBeeDNSSubtitle,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: BeeTokens.textSecondary(context),
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                // 箭头
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: beeDNSColor.withValues(alpha: 0.6),
-                  size: 16,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+// _BeeDNSCard 已抽到 lib/widgets/biz/product_promo_card.dart 通用化。
+// 此处保留 _tryOpenUrl,因为本页其他链接(GitHub / Telegram / TestFlight 等)
+// 还在用。
 
 /// 尝试使用多种方式打开URL，提供更好的兼容性
 Future<bool> _tryOpenUrl(Uri url) async {
   try {
-    // 方式1: 默认外部应用打开
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
       return true;
     }
-
-    // 方式2: 浏览器内打开
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalNonBrowserApplication);
       return true;
     }
-
-    // 方式3: 平台默认方式
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.platformDefault);
       return true;
     }
-
     logger.error('AboutPage', '无法打开URL: $url');
     return false;
   } catch (e) {

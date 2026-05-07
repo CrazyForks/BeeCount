@@ -111,7 +111,7 @@ abstract class AppLocalizations {
   /// No description provided for @tabInsights.
   ///
   /// In en, this message translates to:
-  /// **'Insights'**
+  /// **'Stats'**
   String get tabInsights;
 
   /// No description provided for @tabAssets.
@@ -371,6 +371,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get commonOther;
+
+  /// No description provided for @commonYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get commonYesterday;
 
   /// No description provided for @commonSearch.
   ///
@@ -7902,6 +7908,24 @@ abstract class AppLocalizations {
   /// **'More Products'**
   String get aboutRelatedProducts;
 
+  /// No description provided for @aboutBeeAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeAssets'**
+  String get aboutBeeAssets;
+
+  /// No description provided for @aboutBeeAssetsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Visualize your full asset portfolio'**
+  String get aboutBeeAssetsSubtitle;
+
+  /// No description provided for @aboutBeeAssetsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'BeeCount focuses on daily cash flow; BeeAssets is its sibling product, focused on asset portfolio visualization: net worth trends across accounts, property / investment / crypto classification, returns, holding period, and allocation breakdown.'**
+  String get aboutBeeAssetsIntro;
+
   /// No description provided for @aboutBeeDNS.
   ///
   /// In en, this message translates to:
@@ -7913,6 +7937,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Simple and efficient DNS management tool'**
   String get aboutBeeDNSSubtitle;
+
+  /// No description provided for @aboutBeeDNSIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Got domains across Cloudflare and Aliyun? BeeDNS unifies them in one place: batch edit records, A/AAAA toggles, resolution migration, subdomain bulk management — no more switching between provider consoles.'**
+  String get aboutBeeDNSIntro;
+
+  /// No description provided for @productPromoAndroidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Beta Access'**
+  String get productPromoAndroidTitle;
+
+  /// No description provided for @productPromoAndroidMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is still in closed testing on Google Play — invitation only.\n\nHow to apply: email us with your Google account address (required) and a brief use case (optional). We\'ll reply within 1-3 days and add you to the beta whitelist.'**
+  String get productPromoAndroidMessage;
+
+  /// No description provided for @productPromoOpenStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in App Store'**
+  String get productPromoOpenStore;
+
+  /// No description provided for @productPromoLearnMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get productPromoLearnMore;
+
+  /// No description provided for @productPromoEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Email (tap to copy)'**
+  String get productPromoEmailLabel;
+
+  /// No description provided for @productPromoCopiedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Email copied to clipboard'**
+  String get productPromoCopiedToast;
+
+  /// No description provided for @productPromoMailUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No email app detected. The address has been copied — paste it into any mail app to send.'**
+  String get productPromoMailUnavailable;
+
+  /// No description provided for @productPromoEmailButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Email'**
+  String get productPromoEmailButton;
+
+  /// No description provided for @productPromoWebsiteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Visit Website'**
+  String get productPromoWebsiteButton;
+
+  /// No description provided for @productPromoEmailSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Beta access request - {productName}'**
+  String productPromoEmailSubject(String productName);
+
+  /// No description provided for @productPromoEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi,\n\nI\'d like to join the closed beta for {productName} on Google Play. My Google account email is:\n\n(please fill in your Gmail / Google account email)\n\nThanks!'**
+  String productPromoEmailBody(String productName);
 
   /// No description provided for @logCenterTitle.
   ///
@@ -11471,6 +11567,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Local {local} · Cloud —'**
   String syncHealthValueRemoteMissing(int local);
+
+  /// No description provided for @twofaChallengeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-factor authentication'**
+  String get twofaChallengeTitle;
+
+  /// No description provided for @twofaMethodTotp.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get twofaMethodTotp;
+
+  /// No description provided for @twofaMethodRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get twofaMethodRecovery;
+
+  /// No description provided for @twofaTotpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code from your authenticator app (Google Authenticator / 1Password / Authy / etc).'**
+  String get twofaTotpHint;
+
+  /// No description provided for @twofaRecoveryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a recovery code saved when you enabled 2FA (e.g. abcd-efgh). Each code works once.'**
+  String get twofaRecoveryHint;
+
+  /// No description provided for @twofaTotpInputPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'6-digit code'**
+  String get twofaTotpInputPlaceholder;
+
+  /// No description provided for @twofaRecoveryInputPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get twofaRecoveryInputPlaceholder;
+
+  /// No description provided for @twofaCountdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Time remaining {time}'**
+  String twofaCountdown(String time);
+
+  /// No description provided for @twofaVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get twofaVerifyButton;
+
+  /// No description provided for @twofaStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-factor authentication'**
+  String get twofaStatusTitle;
+
+  /// No description provided for @twofaStatusEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled ✓'**
+  String get twofaStatusEnabled;
+
+  /// No description provided for @twofaStatusDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enabled'**
+  String get twofaStatusDisabled;
+
+  /// No description provided for @twofaStatusEnabledAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled on {date}'**
+  String twofaStatusEnabledAt(String date);
+
+  /// No description provided for @twofaStatusManageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage from the Web app (enable / disable / regenerate recovery codes)'**
+  String get twofaStatusManageHint;
+
+  /// No description provided for @twofaStatusOpenWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable on the Web app →'**
+  String get twofaStatusOpenWeb;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

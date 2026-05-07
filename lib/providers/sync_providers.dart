@@ -7,11 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../cloud/sync_service.dart';
+import '../cloud/sync/sync_coordinator.dart';
 import '../cloud/sync/sync_engine.dart';
 import '../cloud/sync/sync_providers.dart' as sync_p;
 import '../cloud/transactions_sync_manager.dart';
 import '../models/ledger_display_item.dart';
 import '../services/ai/ai_provider_manager.dart';
+import '../pages/ai/ai_provider_manage_page.dart' show aiProviderListRefreshProvider;
 import 'ai_config_providers.dart';
 import '../services/attachment_service.dart' show attachmentListRefreshProvider;
 import '../services/system/logger_service.dart';
@@ -222,6 +224,10 @@ final syncServiceProvider = Provider<SyncService>((ref) {
         try {
           ref.read(aiCapabilityBindingRefreshProvider.notifier).state++;
           ref.read(aiProviderListForCapabilityRefreshProvider.notifier).state++;
+          // 「AI 服务商管理」页面用的是另一个独立 ticker(`aiProviderListRefreshProvider`,
+          // 定义在 ai_provider_manage_page.dart),也得 bump,否则 web 端改 provider
+          // 后 mobile 管理页停在旧列表,得手动 pull-to-refresh / 重启 app 才更新。
+          ref.read(aiProviderListRefreshProvider.notifier).state++;
           // aiConfigProvider 是 StateNotifierProvider,notifier 里的 state
           // 在构造时从 prefs 读一次后就不再管。invalidate 让 notifier 重建,
           // 触发 _loadFromPrefs 重新拉新值。
@@ -251,6 +257,12 @@ final syncServiceProvider = Provider<SyncService>((ref) {
 
     engine.startListeningRealtime();
 
+    // 反应式同步触发器:监听 local_changes 表,任何 mutation 写进未推送
+    // 行都会自动调度 sync。把"是否触发同步"的责任完全转移到"是否记录
+    // 变更"——后者是数据层的天然职责。详见 sync_coordinator.dart 的注释。
+    final coordinator = SyncCoordinator(db: db, engine: engine);
+    coordinator.start();
+
     // 监听网络连接状态：从"无网"恢复时触发一次 sync 把离线累积的
     // local_changes 推出去。SyncEngine 内部有 2 秒防抖，WS 重连和 connectivity
     // 恢复几乎同时命中时最终只会触发 1 次 sync。
@@ -274,6 +286,7 @@ final syncServiceProvider = Provider<SyncService>((ref) {
     ref.onDispose(() {
       connectivityDebounce?.cancel();
       connectivitySubscription.cancel();
+      coordinator.dispose();
       engine.dispose();
     });
 
@@ -446,10 +459,20 @@ final beecountCloudProviderInstance =
   return null;
 });
 
-/// BeeCount Cloud 服务端版本号。拉一次后 keepAlive,Mine 页面 / 云同步页
-/// 都能直接用;失败就 null,UI 自己隐藏。非 BeeCount Cloud 模式直接 null。
+/// BeeCount Cloud 服务端版本号。Mine 页面 / 云同步页都能直接用;失败就
+/// null,UI 自己隐藏。非 BeeCount Cloud 模式直接 null。
+///
+/// **自动刷新**:依赖 [syncStatusRefreshProvider],每次同步完成会 bump 这个
+/// ticker,版本号 provider 重新跑 fetchServerVersion。这样 server 升级后用户
+/// 不需要重登/手动到云配置页点确认,下一次同步触发后版本号就更新了。
+///
+/// /version 是个轻量 endpoint,跟着每次 sync 多发一次 HTTP 请求开销可忽略。
 final beecountCloudServerVersionProvider =
     FutureProvider<String?>((ref) async {
+  // server 升级后用户在 app 内做任何会触发同步的操作(加交易 / 切账本 / 进
+  // Mine 页面 bump refresh 等)都能让版本号刷新。
+  ref.watch(syncStatusRefreshProvider);
+
   final cloud = await ref.watch(beecountCloudProviderInstance.future);
   if (cloud == null) return null;
   try {

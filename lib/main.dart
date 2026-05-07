@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'widgets/biz/login_2fa_challenge_view.dart';
 import 'theme.dart';
 import 'providers.dart';
 import 'providers/font_scale_provider.dart';
@@ -24,9 +26,17 @@ import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:app_links/app_links.dart';
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
+
+/// 全局 navigator key — 给 service 层(没有 BuildContext)push 路由使用。
+/// 当前用途:BeeCount Cloud 登录拿到 requires_2fa 时弹出 [Login2FAChallengeView]。
+final GlobalKey<NavigatorState> globalNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -111,6 +121,23 @@ Future<void> main() async {
 
   // 启动 URL 监听（用于快捷指令/AppLink 自动记账）
   _setupUrlListener(container);
+
+  // 注册 BeeCount Cloud 2FA challenge handler。当 server 返回 requires_2fa=true,
+  // service 层会调这个 handler 弹出 Login2FAChallengeDialog 让用户输码。
+  // 验证失败留在对话框就地展示错误,验证通过 / 用户取消才关闭。详见 .docs/2fa-design.md
+  BeeCountCloudProvider.globalTwoFactorHandler = (request) async {
+    final ctx = globalNavigatorKey.currentContext;
+    if (ctx == null) {
+      // 极端场景:cloud auth 在 navigator 还没 attach 之前触发,只能视为取消
+      return false;
+    }
+    return await Login2FAChallengeDialog.show(ctx, request);
+  };
+
+  // 启动一次性磁盘孤立文件 GC(attachments / attachment_thumbs / custom_icons),
+  // 清理历史版本遗留的文件。标志位 SharedPreferences 保证只跑一次。后台异步
+  // 执行,失败不致命。
+  unawaited(_runOrphanFileGcOnce(container));
 
   runApp(ProviderScope(
     parent: container,
@@ -439,6 +466,7 @@ class MainApp extends ConsumerWidget {
     return MediaQuery(
       data: media.copyWith(textScaler: newScaler),
       child: MaterialApp(
+        navigatorKey: globalNavigatorKey,
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         scrollBehavior: const NoGlowScrollBehavior(),
         debugShowCheckedModeBanner: false,
@@ -496,5 +524,117 @@ class MainApp extends ConsumerWidget {
         },
       ),
     );
+  }
+}
+
+/// 一次性磁盘孤立文件清理 —— 清历史版本遗留的:
+///   - `attachments/*.jpg` + `attachment_thumbs/*.jpg`:历史 sync pull 删交易时
+///     只删表行不清磁盘,或者用户端在某版本之前没有完整清理的附件
+///   - `custom_icons/*.png`:旧版 deleteCategory 只删分类行,customIconPath 指向
+///     的本地图标文件遗留
+///
+/// SharedPreferences 标志位 `orphan_file_gc_v1_done` 保证只跑一次。失败全部
+/// try/catch 吞掉 —— 这是 nice-to-have,不应 block app 启动。
+Future<void> _runOrphanFileGcOnce(ProviderContainer container) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    const flagKey = 'orphan_file_gc_v1_done';
+    if (prefs.getBool(flagKey) == true) return;
+
+    final db = container.read(databaseProvider);
+
+    // 给主线程让路,启动关键路径先跑完
+    await Future.delayed(const Duration(seconds: 3));
+
+    var attCleaned = 0;
+    var thumbCleaned = 0;
+    var iconCleaned = 0;
+
+    // --- attachments / attachment_thumbs ---
+    try {
+      final appDir = await getApplicationDocumentsDirectory();
+      final attDir = Directory('${appDir.path}/attachments');
+      if (await attDir.exists()) {
+        final usedNames = <String>{
+          for (final row in await db.select(db.transactionAttachments).get())
+            row.fileName,
+        };
+        await for (final entity in attDir.list()) {
+          if (entity is! File) continue;
+          final name = p.basename(entity.path);
+          if (!usedNames.contains(name)) {
+            try {
+              await entity.delete();
+              attCleaned++;
+            } catch (e) {
+              logger.warning('OrphanGC', 'unlink attachment failed $name: $e');
+            }
+          }
+        }
+      }
+
+      final cacheDir = await getTemporaryDirectory();
+      final thumbDir = Directory('${cacheDir.path}/attachment_thumbs');
+      if (await thumbDir.exists()) {
+        // 缩略图命名规则:`<basename(fileName)>_thumb.jpg`
+        final usedThumbNames = <String>{
+          for (final row in await db.select(db.transactionAttachments).get())
+            '${p.basenameWithoutExtension(row.fileName)}_thumb.jpg',
+        };
+        await for (final entity in thumbDir.list()) {
+          if (entity is! File) continue;
+          final name = p.basename(entity.path);
+          if (!usedThumbNames.contains(name)) {
+            try {
+              await entity.delete();
+              thumbCleaned++;
+            } catch (_) {/* best effort */}
+          }
+        }
+      }
+    } catch (e, st) {
+      logger.warning('OrphanGC', 'attachment scan failed: $e\n$st');
+    }
+
+    // --- custom_icons ---
+    try {
+      final appDir = await getApplicationDocumentsDirectory();
+      final iconDir = Directory('${appDir.path}/custom_icons');
+      if (await iconDir.exists()) {
+        final usedIconNames = <String>{};
+        final categoryRows = await (db.select(db.categories)
+              ..where((c) => c.customIconPath.isNotNull()))
+            .get();
+        for (final row in categoryRows) {
+          final cp = row.customIconPath;
+          if (cp != null && cp.trim().isNotEmpty) {
+            usedIconNames.add(p.basename(cp));
+          }
+        }
+        await for (final entity in iconDir.list()) {
+          if (entity is! File) continue;
+          final name = p.basename(entity.path);
+          if (!usedIconNames.contains(name)) {
+            try {
+              await entity.delete();
+              iconCleaned++;
+            } catch (e) {
+              logger.warning('OrphanGC', 'unlink custom icon failed $name: $e');
+            }
+          }
+        }
+      }
+    } catch (e, st) {
+      logger.warning('OrphanGC', 'custom_icons scan failed: $e\n$st');
+    }
+
+    await prefs.setBool(flagKey, true);
+    logger.info(
+      'OrphanGC',
+      '一次性清理完成 attachments=$attCleaned thumbs=$thumbCleaned icons=$iconCleaned',
+    );
+  } catch (e, st) {
+    // 任何异常都不该影响 app 启动。下次启动还会重试(因为没设 flag)。
+    logger.warning('OrphanGC', '一次性清理异常(会在下次启动重试): $e\n$st');
   }
 }

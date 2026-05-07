@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart' as d;
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -436,7 +437,23 @@ class SyncEngine implements app.SyncService {
       final ledgerRow = await (db.select(db.ledgers)
             ..where((l) => l.id.equals(ledgerIdInt)))
           .getSingleOrNull();
-      final checkPath = ledgerRow?.syncId ?? ledgerId.toString();
+
+      // 短路:本地账本已删除(deleteLedger 路径)。这种情况下:
+      //   - hasRemote 检查没意义(syncId 已经丢,fallback 到 int id 对 UUID 账本
+      //     会误判)
+      //   - fullPush 会 getSingle 抛错(ledger 行不存在)
+      //   - pull 也没意义(账本都没了拉啥)
+      // 唯一要做的是把 deleteLedger 已登记到 local_changes 的 ledger_snapshot:
+      // delete + transaction:delete + budget:delete 推到 server,清掉 canonical
+      // state,否则 remote ledgers 列表里还会显示这个被删的账本。
+      if (ledgerRow == null) {
+        final pushed = await _push(ledgerId);
+        logger.info('SyncEngine',
+            '账本 $ledgerId 已本地删除,push delete changes: $pushed 条');
+        return SyncResult(pushed: pushed, pulled: 0);
+      }
+
+      final checkPath = ledgerRow.syncId ?? ledgerId.toString();
       bool hasRemote = true;
       try {
         hasRemote = await provider.storage.exists(path: checkPath);
@@ -450,16 +467,28 @@ class SyncEngine implements app.SyncService {
               ..where((t) => t.ledgerId.equals(ledgerIdInt)))
             .get()).length;
         logger.info('SyncEngine',
-            '远端无快照，本地 $localTxCount 条交易，'
-            '${localTxCount > 0 ? "触发 fullPush" : "跳过 push"}');
+            '远端无快照，本地 $localTxCount 条交易，触发 fullPush');
+        // 无条件 fullPush:即使本地是 0 笔交易的空账本也要 push,否则用户在
+        // app 创建的新账本要等到第一笔交易才被动同步,违反"创建后立即可见"
+        // 预期。fullPush 内部会 storage.upload 一份(几乎空的)snapshot 创建
+        // server 端 ledger 行,后续同步走增量。
+        // 多余开销:fullPush 还会 _pushAllEntities re-upload user-global
+        // accounts/categories/tags。LWW 保证幂等,可接受;只有"远端无快照"
+        // 时跑这一次。
         if (localTxCount > 0) {
           // 远端重建/切换后，本地 attachments.cloudFileId 指向的文件已失效。
           // 清掉云端引用，让 uploadAttachments 重新上传并回填新 ID；否则
           // 交易 payload 里带的是旧 ID，web 那边会 404。
           await _resetAttachmentCloudRefs(ledgerIdInt);
-          await fullPush(ledgerId: ledgerIdInt);
-          pushed = localTxCount;
         }
+        await fullPush(ledgerId: ledgerIdInt);
+        // fullPush 不处理 delete change(_pushAllEntities 只 upsert 当前实体,
+        // delete change 对应的本地行已经没了不会被 upsert)。fullPush 已经把
+        // 非 delete change 都 markPushed,这里 _push 一遍把剩下的 delete change
+        // 实际推到 server,清掉 canonical state。
+        // 否则:用户先 clear 后导入,server 会保留旧数据 + 新数据。
+        final extraPushed = await _push(ledgerId);
+        pushed = localTxCount + extraPushed;
       } else {
         pushed = await _push(ledgerId);
         logger.info('SyncEngine', '增量推送: $pushed 条');
@@ -667,25 +696,51 @@ class SyncEngine implements app.SyncService {
     final ledger = await (db.select(db.ledgers)
           ..where((l) => l.id.equals(ledgerIdInt)))
         .getSingleOrNull();
-    if (ledger == null) {
-      logger.warning('SyncEngine', 'push: 未找到本地账本 $ledgerId');
-      return 0;
-    }
 
+    // 关键:ledger 已被本地删除时不能直接 return 0。因为 deleteLedger 会先
+    // 登记 ledger_snapshot:delete change 再 hard-delete ledger 行,这条 delete
+    // change 的 ledger_id 字段就是这个本地 id。如果这里因 ledger==null 短路,
+    // 这条 delete change 永远卡在本地不推,云端账本和它的快照永远删不掉,
+    // remote ledgers list 还会继续显示。
+    //
+    // 所以策略改为:先按这个 ledgerIdInt 查未推送变更,有变更就继续推,没
+    // 变更才安全 return。
+    final ledgerChanges =
+        await changeTracker.getUnpushedChangesForLedger(ledgerIdInt);
     // 当前账本的变更 + user-scoped（ledgerId=0：tag / category）的未推变更。
     // 后者是"账户/分类/标签属于用户而非单个账本"的对齐：LocalRepository 在
     // create/update/deleteTag/Category 时用 ledgerId=0 记录变更，getUnpushed-
     // ChangesForLedger(ledger.id) 永远查不到它们 → 移动端重命名标签/分类在
     // web 永远看不到。把 ledgerId=0 的也一起捎带。
-    final ledgerChanges =
-        await changeTracker.getUnpushedChangesForLedger(ledger.id);
-    final globalChanges = ledger.id == 0
+    final globalChanges = ledgerIdInt == 0
         ? const <LocalChange>[]
         : await changeTracker.getUnpushedChangesForLedger(0);
     final changes = [...ledgerChanges, ...globalChanges];
     if (changes.isEmpty) {
-      logger.debug('SyncEngine', 'push: 无待推送变更');
+      if (ledger == null) {
+        logger.warning('SyncEngine',
+            'push: 本地账本 $ledgerId 已删除且无待推送变更,跳过');
+      } else {
+        logger.debug('SyncEngine', 'push: 无待推送变更');
+      }
       return 0;
+    }
+    // 当本地 ledger 行已删,从同批 changes 里捞 ledger_snapshot:delete 的
+    // entity_sync_id(= 被删账本的 syncId / UUID),用它给所有相关 change 的
+    // push payload 设置 ledger_id 字段。否则 fallback 到 ledgerId 字符串
+    // (本地 int id),server 端会把它当成一个不存在的账本 → 整批 delete 静
+    // 默失败,canonical state 不变,远端数据看着像没删。
+    String? deletedLedgerSyncId;
+    if (ledger == null) {
+      for (final c in changes) {
+        if (c.entityType == 'ledger_snapshot' && c.action == 'delete') {
+          deletedLedgerSyncId = c.entitySyncId;
+          break;
+        }
+      }
+      logger.info('SyncEngine',
+          'push: 本地账本 $ledgerId 已删除,但还有 ${changes.length} 条未推送变更(应包含 ledger_snapshot:delete),'
+          '从 snapshot change 拿到 ledgerSyncId=$deletedLedgerSyncId,继续 push');
     }
 
     // 构建服务端 push 格式：从 DB 读取最新数据序列化
@@ -697,11 +752,13 @@ class SyncEngine implements app.SyncService {
       if (change.action == 'delete') {
         payload = <String, dynamic>{};
       } else {
-        // 从数据库读取最新实体并序列化
+        // 从数据库读取最新实体并序列化。注意:正常流程到这里 ledger 一定非
+        // null —— ledger==null 的唯一来源是 deleteLedger,而它只产生 delete
+        // changes(已被 if 分支拦走)。这里用 ledgerIdInt 兜底防御,避免 NPE。
         payload = await _serializeEntityForPush(
           entityType: change.entityType,
           entityId: change.entityId,
-          ledgerId: ledger.id,
+          ledgerId: ledger?.id ?? ledgerIdInt,
         );
       }
 
@@ -713,9 +770,14 @@ class SyncEngine implements app.SyncService {
       // 写到 B 本地 ledger 行，B push 时 `ledger.syncId` 跟 A 相同 →
       // server 不会 auto-create 新 ledger，同一账本始终单份存在。
       //
-      // fallback 到 ledger.id.toString() 只覆盖 migration 前写死的极老数据
-      // （理论上不会发生），不作为主路径。
-      final pushLedgerId = ledger.syncId ?? ledgerId;
+      // 优先级:
+      //   1. ledger.syncId (常规路径,ledger 行还在)
+      //   2. deletedLedgerSyncId (deleteLedger 路径,从 ledger_snapshot:delete
+      //      change 现场捞回的被删账本 syncId,保证 server 端 ledger_id 字段
+      //      仍是它认得的 external_id 而不是本地 int id)
+      //   3. ledgerId 字符串 (兜底,理论上不会用到)
+      final pushLedgerId =
+          ledger?.syncId ?? deletedLedgerSyncId ?? ledgerId;
       syncChanges.add({
         // ledgerId=0 的 user-global 变更依附到当前账本 push 上。服务端按
         // entity_type + entity_sync_id 做 LWW / 物化，不依赖这里的 ledger_id
@@ -1004,6 +1066,10 @@ class SyncEngine implements app.SyncService {
         .get();
     final localLedgerTx = ledgerTxRows.length;
     final ledgerTxIds = ledgerTxRows.map((t) => t.id).toList();
+    // 本地附件按"实际占盘数"算 —— transaction_attachments 每 tx 独立一行,
+    // 磁盘上也是每行一个物理文件(mobile 不做 sha256 dedup)。服务端那边
+    // 要对齐这个"引用条目数"口径,见 server read.py::get_ledger_stats 里
+    // attachment_count 改成按 attachments_json 条目 SUM。
     int localLedgerTxAttachments = 0;
     if (ledgerTxIds.isNotEmpty) {
       localLedgerTxAttachments = (await (db.select(db.transactionAttachments)
@@ -1130,11 +1196,10 @@ class SyncEngine implements app.SyncService {
       if (tag.syncId == null || tag.syncId!.isEmpty) continue;
       if (allPushedIds.contains(tag.syncId)) continue;
       try {
-        await changeTracker.recordChange(
+        await changeTracker.recordUserGlobalChange(
           entityType: 'tag',
           entityId: tag.id,
           entitySyncId: tag.syncId!,
-          ledgerId: 0,
           action: 'create',
         );
         backfilled++;
@@ -1150,11 +1215,10 @@ class SyncEngine implements app.SyncService {
       if (acc.syncId == null || acc.syncId!.isEmpty) continue;
       if (allPushedIds.contains(acc.syncId)) continue;
       try {
-        await changeTracker.recordChange(
+        await changeTracker.recordUserGlobalChange(
           entityType: 'account',
           entityId: acc.id,
           entitySyncId: acc.syncId!,
-          ledgerId: 0,
           action: 'create',
         );
         backfilled++;
@@ -1169,11 +1233,10 @@ class SyncEngine implements app.SyncService {
       if (cat.syncId == null || cat.syncId!.isEmpty) continue;
       if (allPushedIds.contains(cat.syncId)) continue;
       try {
-        await changeTracker.recordChange(
+        await changeTracker.recordUserGlobalChange(
           entityType: 'category',
           entityId: cat.id,
           entitySyncId: cat.syncId!,
-          ledgerId: 0,
           action: 'create',
         );
         backfilled++;
@@ -1241,6 +1304,12 @@ class SyncEngine implements app.SyncService {
             ..where((t) => t.syncId.equals(syncId)))
           .getSingleOrNull();
       if (existing != null) {
+        // 先清磁盘附件(原图 + 缩略图),再删 transaction_attachments 行 ——
+        // 反过来就查不到 fileName 了。历史 bug:这段只做 db.delete 不清磁盘,
+        // 设备 A 删交易时设备 B sync pull 下来只删表,attachments/*.jpg 永远
+        // 残留。跟主动删交易路径(LocalTransactionRepository.deleteTransaction)
+        // 对齐。
+        await _cleanupTxAttachmentFilesOnDisk(existing.id);
         await (db.delete(db.transactionTags)
               ..where((tt) => tt.transactionId.equals(existing.id)))
             .go();
@@ -1455,6 +1524,13 @@ class SyncEngine implements app.SyncService {
             ..where((c) => c.syncId.equals(syncId)))
           .getSingleOrNull();
       if (existing != null) {
+        // 先收集自身 + 子分类的 customIconPath 清磁盘。跟 LocalCategoryRepository
+        // .deleteCategory 路径对齐,防止 sync pull 下来的分类删除留下孤立图标。
+        await _cleanupCategoryIconFilesOnDisk([existing.id]);
+        // 先删子分类再删自身(跟 LocalCategoryRepository 一致)
+        await (db.delete(db.categories)
+              ..where((c) => c.parentId.equals(existing.id)))
+            .go();
         await (db.delete(db.categories)
               ..where((c) => c.id.equals(existing.id)))
             .go();
@@ -1991,13 +2067,35 @@ class SyncEngine implements app.SyncService {
     final ledger = await (db.select(db.ledgers)
           ..where((l) => l.id.equals(ledgerId)))
         .getSingle();
+    final pathForSnapshot = ledger.syncId ?? ledger.id.toString();
 
-    // 1. 先上传 JSON 快照：这一步在服务端 auto-create ledger 行。
-    //    必须先做，否则后续 /attachments/upload 会拿不到 ledger 抛 "Ledger not found"。
-    //
+    // 0. 先用专用的 writeCreateLedger API(POST /write/ledgers)显式带 currency
+    //    创建 server 端账本。这是修复"app 选 JPY 创建账本,server 端却是 CNY"的
+    //    关键:之前 fullPush 只走 storage.upload,server auto-create ledger 时
+    //    可能不读 metadata 的 currency,fallback 到默认 CNY;后续的 ledger:upsert
+    //    change 在某些 server 实现下也只更新已存在 ledger,不能改它的 currency。
+    //    用 dedicated API 显式声明 ledger_id + ledger_name + currency,server
+    //    能正确建账本。
+    //    幂等性:如果账本已存在(例如老数据 / 重试),server 会返回 409 或类似错误,
+    //    这里 try/catch 吞掉,不阻塞后续 storage.upload + _pushAllEntities。
+    try {
+      await provider.writeCreateLedger(
+        ledgerId: pathForSnapshot,
+        ledgerName: ledger.name,
+        currency: ledger.currency,
+      );
+      logger.info('SyncEngine',
+          'writeCreateLedger 成功: ledgerId=$pathForSnapshot, name=${ledger.name}, currency=${ledger.currency}');
+    } catch (e, st) {
+      // 已存在 / 其他错误都不阻断流程,后续 storage.upload + _pushAllEntities
+      // 仍会跑,部分 server 实现会从这两条路径 auto-create / 修正 meta。
+      logger.warning('SyncEngine',
+          'writeCreateLedger 失败（已存在或其他原因,继续走 storage 上传）: $e', st);
+    }
+
+    // 1. 上传 JSON 快照
     //    path 用 ledger.syncId，跟 _push/_pushAllEntities 的 ledger_id 一致，
     //    避免 server 出现两条 external_id 指向同一账本的分裂。
-    final pathForSnapshot = ledger.syncId ?? ledger.id.toString();
     try {
       final jsonData = await _exportLedgerJson(ledger);
       await provider.storage.upload(
@@ -2025,14 +2123,29 @@ class SyncEngine implements app.SyncService {
     // 3. 推送所有实体的个体变更（用于 Web 端和增量同步）
     await _pushAllEntities(ledger);
 
-    // 标记所有已有变更为已推送
+    // 标记本次 fullPush 已经覆盖的变更为已推送。
+    //
+    // 关键:**只 mark 非 delete change**。`_pushAllEntities` 是从当前 DB
+    // 实体 build syncChanges,只会 upsert 当前还存在的行;对应 delete change
+    // 的实体已经被本地删掉、不在当前 DB 里、不在 _pushAllEntities 的输出里,
+    // 所以 server 没收到 delete 操作,canonical state 还保留旧数据。
+    //
+    // 之前这里是把所有 unpushed 一并 markPushed,结果 delete change 静默被吃
+    // 掉,server 永远删不掉对应数据(典型症状:用户清空账本后 remote 还显示
+    // 旧记录,导入新数据后 remote 数 = 旧 + 新)。
+    //
+    // 修复:把 delete change 留作未推送,sync() 在 fullPush 之后会再调一次
+    // _push 把它们推上去 + markPushed。
     final unpushed =
         await changeTracker.getUnpushedChangesForLedger(ledgerId);
-    if (unpushed.isNotEmpty) {
-      await changeTracker.markPushed(unpushed.map((c) => c.id).toList());
+    final nonDeletes =
+        unpushed.where((c) => c.action != 'delete').toList();
+    if (nonDeletes.isNotEmpty) {
+      await changeTracker.markPushed(nonDeletes.map((c) => c.id).toList());
     }
 
-    logger.info('SyncEngine', '全量推送完成 ledger=${ledger.name}');
+    logger.info('SyncEngine',
+        '全量推送完成 ledger=${ledger.name},markPushed ${nonDeletes.length}/${unpushed.length}(剩余 delete change 留给 _push)');
   }
 
   /// 清掉某账本下所有附件的 cloudFileId / cloudSha256。
@@ -2101,6 +2214,22 @@ class SyncEngine implements app.SyncService {
     final ledgerId = ledger.syncId ?? ledger.id.toString();
     final now = DateTime.now().toUtc().toIso8601String();
     final syncChanges = <Map<String, dynamic>>[];
+
+    // 先推一条 ledger:upsert,显式带 ledgerName + currency。否则:
+    //   - storage.upload 的 metadata 虽然带了 currency,但 server 端 auto-create
+    //     ledger 时不一定从 metadata 读 currency(字段名可能对不上,或默认走 CNY)
+    //   - _pushAllEntities 后续推的 accounts/categories/... 都不会带账本币种
+    //   - 结果:用户在 app 选 JPY 创建账本,server 端 canonical state 是 CNY
+    // 推一条显式的 ledger upsert 可以兜底,server 收到后用 payload 里的 currency
+    // 覆盖默认值。
+    syncChanges.add({
+      'ledger_id': ledgerId,
+      'entity_type': 'ledger',
+      'entity_sync_id': ledgerId,
+      'action': 'upsert',
+      'payload': EntitySerializer.serializeLedger(ledger),
+      'updated_at': now,
+    });
 
     // 先上传分类自定义图标，拿到每个分类对应的 cloudFileId/sha256。
     final categoryIconCloudRefs = await _uploadCategoryIcons(ledgerId);
@@ -2565,6 +2694,92 @@ class SyncEngine implements app.SyncService {
     } catch (e) {
       logger.error('SyncEngine', '获取附件路径失败: $fileName', e);
       return null;
+    }
+  }
+
+  /// 清理给定交易的本地磁盘附件(原图 + 缩略图)。在 transaction_attachments
+  /// 行被 db.delete **之前** 调 —— 之后 fileName 就查不到了。
+  ///
+  /// 跟 `LocalTransactionRepository._deleteAttachmentsForTransaction` 几乎一样,
+  /// 但那个是 private;这里是 sync pull 路径独立使用(不想走完整 repo 接口,
+  /// 因为 repo 的 deleteTransaction 会 record changeTracker,会造成 pull →
+  /// record → push 的回环)。失败只 warn 不抛,不 block 事件 apply。
+  Future<void> _cleanupTxAttachmentFilesOnDisk(int transactionId) async {
+    try {
+      final attachments = await (db.select(db.transactionAttachments)
+            ..where((a) => a.transactionId.equals(transactionId)))
+          .get();
+      if (attachments.isEmpty) return;
+
+      final appDir = await getApplicationDocumentsDirectory();
+      final attachmentDir = Directory('${appDir.path}/attachments');
+      final cacheDir = await getTemporaryDirectory();
+      final thumbDir = Directory('${cacheDir.path}/attachment_thumbs');
+
+      for (final att in attachments) {
+        final file = File('${attachmentDir.path}/${att.fileName}');
+        if (await file.exists()) {
+          try {
+            await file.delete();
+          } catch (e) {
+            logger.warning('SyncEngine',
+                'pull delete: unlink attachment failed ${att.fileName}: $e');
+          }
+        }
+        final thumbName =
+            '${p.basenameWithoutExtension(att.fileName)}_thumb.jpg';
+        final thumbFile = File('${thumbDir.path}/$thumbName');
+        if (await thumbFile.exists()) {
+          try {
+            await thumbFile.delete();
+          } catch (_) {/* best effort */}
+        }
+      }
+    } catch (e, st) {
+      logger.warning(
+          'SyncEngine', 'pull delete: 清理附件磁盘文件异常 tx=$transactionId: $e\n$st');
+    }
+  }
+
+  /// 清理给定分类(含直接子分类)的本地自定义图标文件。
+  /// 跟 LocalCategoryRepository 的 _deleteLocalIconFiles 对齐。删 categories
+  /// 行之前调。best-effort。
+  Future<void> _cleanupCategoryIconFilesOnDisk(List<int> categoryIds) async {
+    if (categoryIds.isEmpty) return;
+    try {
+      final paths = <String>[];
+      final selfRows = await (db.select(db.categories)
+            ..where((c) => c.id.isIn(categoryIds)))
+          .get();
+      for (final r in selfRows) {
+        final cp = r.customIconPath;
+        if (cp != null && cp.trim().isNotEmpty) paths.add(cp);
+      }
+      final childRows = await (db.select(db.categories)
+            ..where((c) => c.parentId.isIn(categoryIds)))
+          .get();
+      for (final r in childRows) {
+        final cp = r.customIconPath;
+        if (cp != null && cp.trim().isNotEmpty) paths.add(cp);
+      }
+      if (paths.isEmpty) return;
+
+      final appDir = await getApplicationDocumentsDirectory();
+      final iconDir = Directory('${appDir.path}/custom_icons');
+      for (final rel in paths) {
+        final fileName = p.basename(rel);
+        final file = File('${iconDir.path}/$fileName');
+        if (await file.exists()) {
+          try {
+            await file.delete();
+          } catch (e) {
+            logger.warning(
+                'SyncEngine', 'pull delete: unlink custom icon failed $fileName: $e');
+          }
+        }
+      }
+    } catch (e, st) {
+      logger.warning('SyncEngine', 'pull delete: 清理分类图标磁盘文件异常: $e\n$st');
     }
   }
 }

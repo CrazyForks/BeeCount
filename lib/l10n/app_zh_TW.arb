@@ -1,8 +1,33 @@
 {
   "about": "關於",
   "aboutDesc": "版本資訊、說明與回饋",
+  "aboutBeeAssets": "蜜蜂家當 BeeAssets",
+  "aboutBeeAssetsSubtitle": "視覺化你的全部資產配置",
+  "aboutBeeAssetsIntro": "蜜蜂記帳側重日常流水,蜜蜂家當是它的姐妹產品,專注資產配置視覺化:跨帳戶淨資產趨勢、房產 / 投資 / 加密資產分類、收益率與持倉時長、配置占比一目了然。",
   "aboutBeeDNS": "蜜蜂域名 BeeDNS",
   "aboutBeeDNSSubtitle": "簡潔高效的 DNS 管理工具",
+  "aboutBeeDNSIntro": "如果你的域名分散在 Cloudflare 和阿里雲,蜜蜂域名把它們聚合在一處管理:批次改記錄、A/AAAA 切換、解析遷移、子網域批次管理 — 不用在兩家控制台來回切。",
+  "productPromoAndroidTitle": "申請加入內測",
+  "productPromoAndroidMessage": "這款 App 還在 Google Play 內測階段,需要邀請才能下載。\n\n申請方式:寄信給我們,告訴我們你的 Google 帳號信箱(必填),以及簡單說明使用場景(選填)。我們會在 1-3 天內回覆並加你到內測白名單。",
+  "productPromoOpenStore": "前往應用商店",
+  "productPromoLearnMore": "Pro",
+  "productPromoEmailLabel": "申請信箱(點擊複製)",
+  "productPromoCopiedToast": "信箱已複製到剪貼簿",
+  "productPromoMailUnavailable": "未偵測到郵件應用,信箱已複製到剪貼簿,請開啟任意郵件應用貼上寄出",
+  "productPromoEmailButton": "寄送郵件",
+  "productPromoWebsiteButton": "前往官網",
+  "productPromoEmailSubject": "申請內測 - {productName}",
+  "@productPromoEmailSubject": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "productPromoEmailBody": "你好,\n\n我希望加入「{productName}」的 Google Play 內測,我的 Google 帳號信箱是:\n\n(請填寫你的 Gmail / Google 帳號信箱)\n\n謝謝!",
+  "@productPromoEmailBody": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
   "aboutDeveloperStoryTitle": "開發者的話",
   "aboutDeveloperStory": "從 2015 年實習起，我堅持記帳至今已超過十年。因為擔心記帳軟體的廣告、付費、隱私洩露和停運跑路，我決定自己做一個——最初只是給自己和家人用的小工具。\n\n2025 年 9 月，蜜蜂記帳發佈了第一個版本。說實話，那時候心裡沒什麼底，不知道會不會有人用。但慢慢地，開始收到用戶的回饋——有人說終於找到了一款乾淨的記帳軟體，有人提了很好的建議，也有人默默給了五星好評。每一條回饋都讓我覺得，這件事值得繼續做下去。\n\n蜜蜂記帳沒有廣告、沒有會員、完全免費開源。你的每一筆資料都只存在你自己的手機裡，不會被上傳到任何第三方伺服器。但上架和維護一款 App 並非零成本——開發者帳號、伺服器等開支目前靠社群捐贈勉強支撐，每一次適配新系統、修復 Bug、開發新功能，也都是工作之餘一點點完成的。\n\n如果你覺得蜜蜂記帳對你有幫助，一個好評、一次分享或一筆捐贈，都能讓這個小專案走得更遠。謝謝你的信任。",
   "aboutRelatedProducts": "更多產品",
@@ -907,6 +932,7 @@
   "commonCancel": "取消",
   "commonClose": "關閉",
   "commonOther": "其他",
+  "commonYesterday": "昨天",
   "commonConfigure": "配置",
   "commonConfirm": "確定",
   "commonCurrent": "當前",
@@ -2382,5 +2408,31 @@
     "placeholders": {
       "local": { "type": "int" }
     }
-  }
+  },
+
+  "twofaChallengeTitle": "二次驗證",
+  "twofaMethodTotp": "動態碼",
+  "twofaMethodRecovery": "恢復碼",
+  "twofaTotpHint": "請輸入 authenticator app(Google Authenticator / 1Password / Authy 等)上的 6 位動態碼。",
+  "twofaRecoveryHint": "請輸入啟用 2FA 時保存的恢復碼(如 abcd-efgh),每個碼只能使用一次。",
+  "twofaTotpInputPlaceholder": "輸入 6 位動態碼",
+  "twofaRecoveryInputPlaceholder": "輸入恢復碼",
+  "twofaCountdown": "剩餘時間 {time}",
+  "@twofaCountdown": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "twofaVerifyButton": "驗證",
+  "twofaStatusTitle": "二次驗證",
+  "twofaStatusEnabled": "已啟用 ✓",
+  "twofaStatusDisabled": "未啟用",
+  "twofaStatusEnabledAt": "啟用於 {date}",
+  "@twofaStatusEnabledAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "twofaStatusManageHint": "請前往 Web 端管理(啟用 / 禁用 / 重新生成恢復碼)",
+  "twofaStatusOpenWeb": "前往 Web 端啟用 →"
 }
