@@ -1,16 +1,10 @@
-# BeeCount
+# BeeCount &nbsp; [中文](README.md) &nbsp; ![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social) ![License](https://img.shields.io/badge/license-Business%20Source%20License-orange.svg)
 
 <div align="center">
 
-![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
-![License](https://img.shields.io/badge/license-Business%20Source%20License-orange.svg)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web-lightgrey.svg)
-![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
-![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
-
 **Your Data, Your Control — Open Source Accounting App**
 
-5 sync options: BeeCount Cloud (self-hosted) / iCloud / Supabase / WebDAV / S3.
+Sync via BeeCount Cloud (self-hosted) / iCloud / Supabase / WebDAV / S3
 
 <br/>
 
@@ -20,17 +14,14 @@
 <a href="https://play.google.com/store/apps/details?id=com.tntlikely.beecount">
   <img src="https://img.shields.io/badge/Google_Play-Download-414141?style=for-the-badge&logo=google-play&logoColor=white" alt="Get it on Google Play" height="50"/>
 </a>
-<a href="https://testflight.apple.com/join/Eaw2rWxa">
-  <img src="https://img.shields.io/badge/TestFlight-Beta-0D96F6?style=for-the-badge&logo=app-store&logoColor=white" alt="Join TestFlight" height="50"/>
-</a>
-<a href="https://github.com/TNT-Likely/BeeCount/releases/latest">
-  <img src="https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" height="50"/>
+<a href="https://github.com/TNT-Likely/BeeCount-Cloud/blob/main/README.en.md">
+  <img src="https://img.shields.io/badge/Web-Self_Hosted-4A90E2?style=for-the-badge&logo=docker&logoColor=white" alt="Self-host Web" height="50"/>
 </a>
 
 <br/>
 <br/>
 
-[🌐 Website](https://beecount-website.pages.dev/en/) · [📖 Docs](https://beecount-website.pages.dev/en/docs/intro) · [💝 Donate](#-donate) · [💬 Telegram](https://t.me/beecount) · [🇨🇳 中文](README.md)
+[🌐 Website](https://beecount-website.pages.dev/en/) · [📖 Docs](https://beecount-website.pages.dev/en/docs/intro) · [💝 Donate](#-donate) · [💬 Telegram](https://t.me/beecount) · [📦 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) · [🚀 TestFlight](https://testflight.apple.com/join/Eaw2rWxa)
 
 </div>
 
