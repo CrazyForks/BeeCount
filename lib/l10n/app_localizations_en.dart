@@ -4881,7 +4881,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiUnUseVisionDesc => 'Analyze OCR results using only text models';
 
   @override
-  String get aiCustomBaseUrlHelper => 'OpenAI-compatible API URL, e.g. https://api.openai.com/v1';
+  String get aiCustomBaseUrlHelper => 'Standard chat completion API URL, e.g. https://api.example.com/v1';
 
   @override
   String get aiTextModelTitle => 'Text Model';

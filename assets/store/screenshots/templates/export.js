@@ -14,7 +14,7 @@
 // 商店缩略图前 3 张曝光最高，4 张卖点（home/open-source/ai/mine）3 张放在前 4 位，
 // 中间穿插 analytics 功能展示避免连续卖点疲劳。最后一张 mine 用 Local-first 收尾。
 //   #1 home (免费/无广告) → #2 open-source (开源) → #3 analytics (功能展示)
-//   → #4 ai (OpenAI) → #5-#8 功能 → #9 mine (Local-first)
+//   → #4 ai (LLM 智能记账) → #5-#8 功能 → #9 mine (Local-first)
 const themes = [
   {
     id: 'home',

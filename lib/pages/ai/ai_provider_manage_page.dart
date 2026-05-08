@@ -469,7 +469,7 @@ class _AIProviderEditPageState extends ConsumerState<AIProviderEditPage> {
                           enabled: !_isBuiltIn,
                           decoration: InputDecoration(
                             labelText: 'Base URL',
-                            hintText: 'https://api.openai.com/v1',
+                            hintText: 'https://api.example.com/v1',
                             helperText: _isBuiltIn ? null : l10n.aiCustomBaseUrlHelper,
                             border: const OutlineInputBorder(),
                             isDense: true,

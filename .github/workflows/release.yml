@@ -163,13 +163,19 @@ jobs:
           export GIT_COMMIT='${{ github.sha }}'
           export BUILD_TIME='${{ github.run_id }}'
 
-          # For Google Play: remove REQUEST_INSTALL_PACKAGES permission
-          # Google Play handles updates automatically, so in-app APK installation is not needed
+          # For Google Play: strip permissions that Play policy disallows for non-gallery apps.
+          # - REQUEST_INSTALL_PACKAGES: Google Play handles updates, in-app APK install not needed
+          # - READ_MEDIA_IMAGES / READ_EXTERNAL_STORAGE: 截屏自动记账功能在 Google Play 版本被砍掉
+          #   (Photo & Video Permissions 政策, https://support.google.com/googleplay/android-developer/answer/14115180)
           mkdir -p android/app/src/prod
           cat > android/app/src/prod/AndroidManifest.xml << 'MANIFEST_EOF'
           <manifest xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools">
               <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"
+                  tools:node="remove" />
+              <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
+                  tools:node="remove" />
+              <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
                   tools:node="remove" />
           </manifest>
           MANIFEST_EOF

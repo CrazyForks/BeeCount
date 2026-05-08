@@ -15,7 +15,7 @@ Self-Hosted and Multi-Device Sync
 AI Smart Bookkeeping
 - Snap Alipay or WeChat bill screenshots and AI auto-detects amount and merchant
 - Categories are auto-matched by merchant name
-- Customizable AI: built-in Zhipu GLM, plus any OpenAI-compatible provider
+- Customizable AI: built-in Zhipu GLM, plus other compatible LLM providers (Zhipu / DeepSeek / SiliconFlow / etc.)
 - API keys are stored on-device only — fully local-first
 
 Complete Ledger Features

@@ -4881,7 +4881,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiUnUseVisionDesc => '仅使用文本模型分析OCR结果';
 
   @override
-  String get aiCustomBaseUrlHelper => 'OpenAI兼容的API地址，如 https://api.openai.com/v1';
+  String get aiCustomBaseUrlHelper => '标准聊天补全API地址，例如 https://api.example.com/v1';
 
   @override
   String get aiTextModelTitle => '文本模型';
@@ -10998,7 +10998,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiUnUseVisionDesc => '僅使用文字模型分析OCR結果';
 
   @override
-  String get aiCustomBaseUrlHelper => 'OpenAI相容的API位址，如 https://api.openai.com/v1';
+  String get aiCustomBaseUrlHelper => '標準聊天補全API位址，例如 https://api.example.com/v1';
 
   @override
   String get aiTextModelTitle => '文字模型';

@@ -2057,7 +2057,7 @@
   "aiUploadImage": "上传图片到AI",
   "aiUseVisionDesc": "使用视觉模型，识别更准确",
   "aiUnUseVisionDesc": "仅使用文本模型分析OCR结果",
-  "aiCustomBaseUrlHelper": "OpenAI兼容的API地址，如 https://api.openai.com/v1",
+  "aiCustomBaseUrlHelper": "标准聊天补全API地址，例如 https://api.example.com/v1",
   "aiTextModelTitle": "文本模型",
   "aiAudioModelTitle": "语音模型",
   "tagManageTitle": "标签管理",

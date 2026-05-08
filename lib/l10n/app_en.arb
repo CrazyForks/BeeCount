@@ -2097,7 +2097,7 @@
   "aiUploadImage": "Upload images to AI",
   "aiUseVisionDesc": "Use visual models for more accurate recognition",
   "aiUnUseVisionDesc": "Analyze OCR results using only text models",
-  "aiCustomBaseUrlHelper": "OpenAI-compatible API URL, e.g. https://api.openai.com/v1",
+  "aiCustomBaseUrlHelper": "Standard chat completion API URL, e.g. https://api.example.com/v1",
   "aiTextModelTitle": "Text Model",
   "aiAudioModelTitle": "Audio Model",
   "tagManageTitle": "Tags",

@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../automation/auto_billing_service.dart';
 
+/// Google Play 版本(CI 注入)。Photo & Video Permissions 政策禁止记账类 app
+/// 长期持有 READ_MEDIA_IMAGES,所以 Google Play 版本砍掉截屏自动记账功能。
+const _isGooglePlayBuild = bool.fromEnvironment('GOOGLE_PLAY', defaultValue: false);
+
 /// 截图监听服务（Android专用）
 /// 监听系统截图事件，并调用通用的AutoBillingService进行OCR识别和记账
 class ScreenshotMonitorService {
@@ -44,6 +48,7 @@ class ScreenshotMonitorService {
 
   /// 检查是否已启用
   Future<bool> isEnabled() async {
+    if (_isGooglePlayBuild) return false;
     final prefs = await SharedPreferences.getInstance();
     _isEnabled = prefs.getBool(_enabledKey) ?? false;
     return _isEnabled;
@@ -53,6 +58,10 @@ class ScreenshotMonitorService {
   Future<void> enable() async {
     try {
       print('📸 [ScreenshotMonitor] 开始启用截图监听...');
+
+      if (_isGooglePlayBuild) {
+        throw UnsupportedError('Screenshot monitoring is not available in Google Play builds');
+      }
 
       // 只在 Android 平台启用
       if (!Platform.isAndroid) {

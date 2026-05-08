@@ -203,7 +203,7 @@
   "aiVisionModelTitle": "視覺模型",
   "aiTextModelTitle": "文字模型",
   "aiAudioModelTitle": "語音模型",
-  "aiCustomBaseUrlHelper": "OpenAI相容的API位址，如 https://api.openai.com/v1",
+  "aiCustomBaseUrlHelper": "標準聊天補全API位址，例如 https://api.example.com/v1",
   "analyticsAll": "全部",
   "analyticsAllYears": "全部年份",
   "analyticsAverage": "{avgLabel}： ",

@@ -9339,7 +9339,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiCustomBaseUrlHelper.
   ///
   /// In en, this message translates to:
-  /// **'OpenAI-compatible API URL, e.g. https://api.openai.com/v1'**
+  /// **'Standard chat completion API URL, e.g. https://api.example.com/v1'**
   String get aiCustomBaseUrlHelper;
 
   /// No description provided for @aiTextModelTitle.
