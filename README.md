@@ -28,9 +28,13 @@
 <br/>
 <br/>
 
-[🌐 官网](https://beecount-website.pages.dev) · [📖 文档](https://beecount-website.pages.dev/docs/intro) · [💝 捐赠](#-捐赠支持) · [💬 Telegram](https://t.me/beecount) · [📦 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) · [🚀 TestFlight](https://testflight.apple.com/join/Eaw2rWxa)
+[🌐 官网](https://count.beejz.com) · [📖 文档](https://count.beejz.com/docs/intro) · [💝 捐赠](#-捐赠支持) · [💬 Telegram](https://t.me/beecount) · [📦 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) · [🚀 TestFlight](https://testflight.apple.com/join/Eaw2rWxa)
 
 </div>
+
+---
+
+> 🤖 **新:[MCP](https://count.beejz.com/docs/mcp) 支持** — 搭配 [BeeCount Cloud](https://github.com/TNT-Likely/BeeCount-Cloud),用 LLM 直接管账本。
 
 ---
 

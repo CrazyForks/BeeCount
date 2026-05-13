@@ -359,6 +359,24 @@ class BeeCountCloudProvider implements CloudProvider {
     );
   }
 
+  /// 上传分类自定义图标 — user-global,不绑 ledger。
+  Future<BeeCountCloudAttachmentUploadResult> uploadCategoryIcon({
+    required Uint8List bytes,
+    required String fileName,
+    String? mimeType,
+  }) async {
+    final storage = _storage;
+    if (storage == null) {
+      throw CloudConfigurationException(
+          'BeeCount Cloud storage is not initialized.');
+    }
+    return storage.uploadCategoryIcon(
+      bytes: bytes,
+      fileName: fileName,
+      mimeType: mimeType,
+    );
+  }
+
   Future<Uint8List> downloadAttachment({required String fileId}) async {
     final storage = _storage;
     if (storage == null) {
@@ -2185,6 +2203,49 @@ class BeeCountCloudStorageService implements CloudStorageService {
     return BeeCountCloudAttachmentUploadResult.fromJson(payload);
   }
 
+  /// 上传分类自定义图标(user-global,不绑 ledger)。
+  ///
+  /// 走专用 endpoint `/attachments/category-icons/upload`,server 端按
+  /// (user_id, sha256) 去重,落库 attachment_files 行的 ledger_id=NULL、
+  /// attachment_kind='category_icon'。跨账本只需上传一次,避免历史按 ledger
+  /// 重复上传 N 份的问题。
+  Future<BeeCountCloudAttachmentUploadResult> uploadCategoryIcon({
+    required Uint8List bytes,
+    required String fileName,
+    String? mimeType,
+  }) async {
+    if (bytes.isEmpty) {
+      throw CloudStorageException('Category icon upload failed: empty file');
+    }
+    var token = await auth.requireAccessToken();
+    var response = await _categoryIconMultipartRequest(
+      bytes: bytes,
+      fileName: fileName,
+      mimeType: mimeType,
+      token: token,
+    );
+    if (response.statusCode == 401) {
+      final refreshed = await auth.tryRefreshSession();
+      if (!refreshed) {
+        throw CloudNotAuthenticatedException(
+            'Session expired, please login again.');
+      }
+      token = await auth.requireAccessToken();
+      response = await _categoryIconMultipartRequest(
+        bytes: bytes,
+        fileName: fileName,
+        mimeType: mimeType,
+        token: token,
+      );
+    }
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw CloudStorageException(
+          'Category icon upload failed: ${_extractErrorMessage(response)}');
+    }
+    final payload = _decodeJsonObject(response.body);
+    return BeeCountCloudAttachmentUploadResult.fromJson(payload);
+  }
+
   Future<Uint8List> downloadAttachment({required String fileId}) async {
     final response = await _authedRequest(
       method: 'GET',
@@ -2969,6 +3030,31 @@ class BeeCountCloudStorageService implements CloudStorageService {
     return http.Response.fromStream(streamed);
   }
 
+  /// 分类图标上传的 multipart 请求。跟 [_multipartRequest] 的差别:
+  /// 走 `/attachments/category-icons/upload`,不传 ledger_id form 字段。
+  Future<http.Response> _categoryIconMultipartRequest({
+    required Uint8List bytes,
+    required String fileName,
+    required String token,
+    String? mimeType,
+  }) async {
+    final uri = Uri.parse('$baseUrl$apiPrefix/attachments/category-icons/upload');
+    final request = http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] = 'Bearer $token';
+    request.files.add(
+      http.MultipartFile.fromBytes(
+        'file',
+        bytes,
+        filename: fileName,
+      ),
+    );
+    if (mimeType != null && mimeType.trim().isNotEmpty) {
+      request.fields['mime_type'] = mimeType.trim();
+    }
+    final streamed = await _httpClient.send(request);
+    return http.Response.fromStream(streamed);
+  }
+
   Future<http.Response> _profileAvatarMultipartRequest({
     required Uint8List bytes,
     required String fileName,
@@ -3273,6 +3359,7 @@ class BeeCountCloudLedgerStats {
     required this.transactionTotal,
     required this.attachmentCount,
     required this.attachmentTotal,
+    required this.categoryAttachmentTotal,
     required this.budgetCount,
     required this.budgetTotal,
     required this.accountCount,
@@ -3286,10 +3373,15 @@ class BeeCountCloudLedgerStats {
   /// `*Count`:当前账本口径。`*Total`:当前用户全量账本合计。
   /// user-level 实体(account/category/tag)两者同值,tx/attachment/budget 则
   /// 一般 total 比 count 大。Server 没返 total 字段时(老版本兼容)回退到 count。
+  ///
+  /// `attachmentCount` / `attachmentTotal` 现在只统计交易附件(server
+  /// attachment_kind='transaction')。`categoryAttachmentTotal` 是分类自定
+  /// 义图标的全量(user-global,不分账本),老版本 server 没返这个字段时回退到 0。
   final int transactionCount;
   final int transactionTotal;
   final int attachmentCount;
   final int attachmentTotal;
+  final int categoryAttachmentTotal;
   final int budgetCount;
   final int budgetTotal;
   final int accountCount;
@@ -3311,6 +3403,7 @@ class BeeCountCloudLedgerStats {
       transactionTotal: readTotalOrFallback('transaction_total', 'transaction_count'),
       attachmentCount: readCount('attachment_count'),
       attachmentTotal: readTotalOrFallback('attachment_total', 'attachment_count'),
+      categoryAttachmentTotal: readCount('category_attachment_total'),
       budgetCount: readCount('budget_count'),
       budgetTotal: readTotalOrFallback('budget_total', 'budget_count'),
       accountCount: readCount('account_count'),

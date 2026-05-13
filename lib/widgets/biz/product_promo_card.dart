@@ -34,6 +34,12 @@ class ProductPromo {
   /// **null = iOS 还没上架**,iOS 设备点击走「内测弹窗」。
   final String? appStoreId;
 
+  /// TestFlight 公开 join URL(`https://testflight.apple.com/join/XXXX`)。
+  /// 跟 [appStoreId] **并存**:已上架时主按钮跳 App Store,这个作为次要按钮
+  /// 让重度用户/想要最新构建的用户能走 TestFlight 装预发版。null = 不展示
+  /// TestFlight 入口。仅 iOS 设备显示。
+  final String? testFlightUrl;
+
   /// Google Play 完整 URL。
   /// **null = Android 还没上架**,Android 设备点击走「内测弹窗」。
   final String? googlePlayUrl;
@@ -55,6 +61,7 @@ class ProductPromo {
     required this.introBody,
     required this.brandColor,
     this.appStoreId,
+    this.testFlightUrl,
     this.googlePlayUrl,
     required this.websiteUrl,
     required this.contactEmail,
@@ -83,6 +90,9 @@ class ProductPromoTexts {
   final String websiteButton;
   /// 「前往应用商店」按钮(已上架平台显示,主行动)
   final String openStoreButton;
+  /// 「TestFlight 内测」按钮(iOS + testFlightUrl 非空时显示;App Store 跟
+  /// TestFlight 并存,前者主行动后者次要)
+  final String testFlightButton;
   final String emailSubject;
   final String emailBody;
 
@@ -95,6 +105,7 @@ class ProductPromoTexts {
     required this.emailButton,
     required this.websiteButton,
     required this.openStoreButton,
+    required this.testFlightButton,
     required this.emailSubject,
     required this.emailBody,
   });
@@ -148,6 +159,11 @@ class ProductPromoLauncher {
         // 弹窗交互元素跟随 app 主题色(用户自定义),不用产品 brand color。
         final themeColor = Theme.of(ctx).colorScheme.primary;
         return AlertDialog(
+          // TF+商店并排那一支 actions 只剩一个"前往官网",居中放视觉更平衡;
+          // 其他场景仍是 [官网] + [商店/邮箱] 两个按钮,默认 end 对齐就好
+          actionsAlignment: _showTestFlightRow(info, hasStore)
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.end,
           contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
           // SizedBox(width: maxFinite) 给 ScrollView 显式 width,否则下面
           // Image.asset 用 width: infinity + fitWidth 时 layout 算不出来,
@@ -275,12 +291,57 @@ class ProductPromoLauncher {
                     },
                   ),
                 ],
+                // iOS + 有 TestFlight URL + 已上架:把 [TestFlight 内测] 和
+                // [前往应用商店] 并排放进 content 顶部第一排;[前往官网] 落到
+                // 下面的 actions 区单独成第二排。
+                // 视觉上"两个分发渠道"同权,官网作为可选辅助。
+                if (_showTestFlightRow(info, hasStore)) ...[
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(ctx).pop();
+                            await _tryOpenUrl(Uri.parse(info.testFlightUrl!));
+                          },
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: themeColor,
+                            side: BorderSide(color: themeColor),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(texts.testFlightButton),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: () async {
+                            Navigator.of(ctx).pop();
+                            await _tryOpenUrl(storeUri!);
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: themeColor,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(texts.openStoreButton),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
                 ],
               ),
             ),
           ),
           actions: [
-            // 次要:前往官网
+            // 次要:前往官网 — 永远显示
             TextButton(
               onPressed: () async {
                 Navigator.of(ctx).pop();
@@ -289,41 +350,49 @@ class ProductPromoLauncher {
               style: TextButton.styleFrom(foregroundColor: themeColor),
               child: Text(texts.websiteButton),
             ),
-            // 主行动:已上架 → 跳商店;未上架 → 申请内测
-            if (hasStore)
-              FilledButton(
-                onPressed: () async {
-                  Navigator.of(ctx).pop();
-                  await _tryOpenUrl(storeUri);
-                },
-                style: FilledButton.styleFrom(backgroundColor: themeColor),
-                child: Text(texts.openStoreButton),
-              )
-            else
-              FilledButton(
-                onPressed: () async {
-                  // 双保险:先 clipboard 兜底,再 launchUrl,失败 toast 提示
-                  await Clipboard.setData(ClipboardData(text: info.contactEmail));
-                  final uri = Uri(
-                    scheme: 'mailto',
-                    path: info.contactEmail,
-                    query: _encodeMailtoQuery({
-                      'subject': texts.emailSubject,
-                      'body': texts.emailBody,
-                    }),
-                  );
-                  final ok = await _tryOpenUrl(uri);
-                  if (!ctx.mounted) return;
-                  Navigator.of(ctx).pop();
-                  if (!ok) showToast(context, texts.mailUnavailableToast);
-                },
-                style: FilledButton.styleFrom(backgroundColor: themeColor),
-                child: Text(texts.emailButton),
-              ),
+            // 主行动:仅当上面没出 TF+商店并排行时,这里出商店或申请内测
+            // (TF+商店已经在 content 第一排展示了,不再重复)
+            if (!_showTestFlightRow(info, hasStore))
+              if (hasStore)
+                FilledButton(
+                  onPressed: () async {
+                    Navigator.of(ctx).pop();
+                    await _tryOpenUrl(storeUri);
+                  },
+                  style: FilledButton.styleFrom(backgroundColor: themeColor),
+                  child: Text(texts.openStoreButton),
+                )
+              else
+                FilledButton(
+                  onPressed: () async {
+                    // 双保险:先 clipboard 兜底,再 launchUrl,失败 toast 提示
+                    await Clipboard.setData(ClipboardData(text: info.contactEmail));
+                    final uri = Uri(
+                      scheme: 'mailto',
+                      path: info.contactEmail,
+                      query: _encodeMailtoQuery({
+                        'subject': texts.emailSubject,
+                        'body': texts.emailBody,
+                      }),
+                    );
+                    final ok = await _tryOpenUrl(uri);
+                    if (!ctx.mounted) return;
+                    Navigator.of(ctx).pop();
+                    if (!ok) showToast(context, texts.mailUnavailableToast);
+                  },
+                  style: FilledButton.styleFrom(backgroundColor: themeColor),
+                  child: Text(texts.emailButton),
+                ),
           ],
         );
       },
     );
+  }
+
+  /// 用 TestFlight + AppStore 两按钮并排的"双轨分发"布局?
+  /// 仅 iOS + 有 TF URL + 已上架时为 true。其他场景退回常规布局。
+  static bool _showTestFlightRow(ProductPromo info, bool hasStore) {
+    return Platform.isIOS && info.testFlightUrl != null && hasStore;
   }
 
   /// 当前平台已上架时返回商店 URI,否则返回 null。

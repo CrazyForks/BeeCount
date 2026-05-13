@@ -15,7 +15,7 @@ body:
     attributes:
       label: Pre-flight checks
       options:
-        - label: I read the [documentation](https://beecount-website.pages.dev/docs/intro) — no answer
+        - label: I read the [documentation](https://count.beejz.com/docs/intro) — no answer
           required: true
         - label: I searched [Issues](https://github.com/TNT-Likely/BeeCount/issues) and [Discussions](https://github.com/TNT-Likely/BeeCount/discussions) — no similar question
           required: true

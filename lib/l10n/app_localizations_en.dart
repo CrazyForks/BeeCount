@@ -4162,6 +4162,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productPromoOpenStore => 'Open in App Store';
 
   @override
+  String get productPromoTestFlight => 'TestFlight beta';
+
+  @override
   String get productPromoLearnMore => 'Pro';
 
   @override
@@ -6046,6 +6049,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncHealthRowAttachment => 'Attachments';
+
+  @override
+  String get syncHealthRowCategoryIcon => 'Category icons';
 
   @override
   String get syncHealthRowBudget => 'Budgets';

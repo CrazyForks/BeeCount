@@ -13,7 +13,7 @@ body:
     attributes:
       label: Pre-flight checks
       options:
-        - label: I read the [documentation](https://beecount-website.pages.dev/docs/intro) — this feature doesn't exist yet
+        - label: I read the [documentation](https://count.beejz.com/docs/intro) — this feature doesn't exist yet
           required: true
         - label: I searched [existing issues / discussions](https://github.com/TNT-Likely/BeeCount/issues?q=is%3Aissue) — no duplicate
           required: true
