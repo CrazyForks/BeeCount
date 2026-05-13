@@ -25,6 +25,9 @@ ProductPromo beeAssetsPromo(BuildContext context) {
     // 跟 logo 黑黄基调对齐:深金黄(蜂蜡 / 老金)
     brandColor: const Color(0xFFD4A017),
     appStoreId: '6763686675',
+    // App Store 审核期间走 TestFlight,审过后两个并存(App Store 主、TestFlight
+    // 次)— TestFlight 永远是"最新构建"通道,重度用户喜欢用
+    testFlightUrl: 'https://testflight.apple.com/join/49vTpmDA',
     // googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.tntlikely.beeassets',
     websiteUrl: 'https://assets.beejz.com',
     contactEmail: 'sunxiaoyes@outlook.com',
@@ -67,6 +70,7 @@ ProductPromoTexts buildPromoTexts(BuildContext context, String productName) {
     emailButton: l10n.productPromoEmailButton,
     websiteButton: l10n.productPromoWebsiteButton,
     openStoreButton: l10n.productPromoOpenStore,
+    testFlightButton: l10n.productPromoTestFlight,
     emailSubject: l10n.productPromoEmailSubject(productName),
     emailBody: l10n.productPromoEmailBody(productName),
   );

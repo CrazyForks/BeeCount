@@ -28,9 +28,13 @@ Sync via BeeCount Cloud (self-hosted) / iCloud / Supabase / WebDAV / S3
 <br/>
 <br/>
 
-[🌐 Website](https://beecount-website.pages.dev/en/) · [📖 Docs](https://beecount-website.pages.dev/en/docs/intro) · [💝 Donate](#-donate) · [💬 Telegram](https://t.me/beecount) · [📦 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) · [🚀 TestFlight](https://testflight.apple.com/join/Eaw2rWxa)
+[🌐 Website](https://count.beejz.com/en/) · [📖 Docs](https://count.beejz.com/en/docs/intro) · [💝 Donate](#-donate) · [💬 Telegram](https://t.me/beecount) · [📦 APK](https://github.com/TNT-Likely/BeeCount/releases/latest) · [🚀 TestFlight](https://testflight.apple.com/join/Eaw2rWxa)
 
 </div>
+
+---
+
+> 🤖 **New: [MCP](https://count.beejz.com/en/docs/mcp) support** — pair with [BeeCount Cloud](https://github.com/TNT-Likely/BeeCount-Cloud) to drive your ledger from any MCP client.
 
 ---
 

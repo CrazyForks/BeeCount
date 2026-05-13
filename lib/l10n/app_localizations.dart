@@ -7962,6 +7962,12 @@ abstract class AppLocalizations {
   /// **'Open in App Store'**
   String get productPromoOpenStore;
 
+  /// No description provided for @productPromoTestFlight.
+  ///
+  /// In en, this message translates to:
+  /// **'TestFlight beta'**
+  String get productPromoTestFlight;
+
   /// No description provided for @productPromoLearnMore.
   ///
   /// In en, this message translates to:
@@ -11525,6 +11531,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attachments'**
   String get syncHealthRowAttachment;
+
+  /// No description provided for @syncHealthRowCategoryIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Category icons'**
+  String get syncHealthRowCategoryIcon;
 
   /// No description provided for @syncHealthRowBudget.
   ///

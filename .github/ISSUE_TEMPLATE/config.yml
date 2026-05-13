@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: 📖 使用文档 / Documentation
-    url: https://beecount-website.pages.dev/docs/intro
+    url: https://count.beejz.com/docs/intro
     about: 查看详细使用文档和常见问题。Detailed docs and FAQ.
   - name: 💬 讨论区 / Discussions
     url: https://github.com/TNT-Likely/BeeCount/discussions

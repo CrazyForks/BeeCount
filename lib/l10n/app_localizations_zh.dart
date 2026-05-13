@@ -4162,6 +4162,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get productPromoOpenStore => '前往应用商店';
 
   @override
+  String get productPromoTestFlight => 'TestFlight 内测';
+
+  @override
   String get productPromoLearnMore => 'Pro';
 
   @override
@@ -6046,6 +6049,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get syncHealthRowAttachment => '附件';
+
+  @override
+  String get syncHealthRowCategoryIcon => '分类图标';
 
   @override
   String get syncHealthRowBudget => '预算';
@@ -10277,6 +10283,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get productPromoOpenStore => '前往應用商店';
+
+  @override
+  String get productPromoTestFlight => 'TestFlight 內測';
 
   @override
   String get productPromoLearnMore => 'Pro';
