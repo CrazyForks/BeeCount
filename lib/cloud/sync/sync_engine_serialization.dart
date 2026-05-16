@@ -82,6 +82,23 @@ extension _SyncEngineSerialization on SyncEngine {
                   if (a.cloudSha256 != null) 'cloudSha256': a.cloudSha256,
                 })
             .toList();
+        // 早期警告:tx 有附件但部分 cloudFileId 缺失。push 出去后 server 端
+        // 会把 attachments 当 "仅元数据" 处理,web 预览报错。理论上 sync 顺序
+        // upload → push 应该让这里永远不触发;触发了说明 upload 跨 sync 边界
+        // 出过 race(参考 sync_engine_attachments.dart::uploadAttachments 注释)。
+        if (attMaps.isNotEmpty) {
+          final withCloud = attMaps
+              .where((a) => a['cloudFileId'] != null)
+              .length;
+          if (withCloud < attMaps.length) {
+            logger.warning(
+              'SyncEngine',
+              'push tx=$entityId(syncId=${tx.syncId}) attachments=${attMaps.length} '
+              'cloud_ready=$withCloud — 部分附件缺 cloudFileId,server 端会报"仅元数据"。'
+              '若 uploadAttachments 这轮上传了新附件应已重登记 tx update,此条不应再出现。',
+            );
+          }
+        }
 
         return EntitySerializer.serializeTransaction(
           tx,
