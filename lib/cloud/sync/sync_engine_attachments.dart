@@ -111,8 +111,41 @@ extension _SyncEngineAttachments on SyncEngine {
           cloudFileId: d.Value(result.fileId),
           cloudSha256: d.Value(result.sha256),
         ));
+
+        // 回填后给父 tx 登记一条 update change,确保下次 push 把含 cloudFileId
+        // 的 attachments_json 推到 server。
+        //
+        // 不加这条登记的失败链路(2026-05-15 用户上报 "仅元数据"):
+        //   1. 用户离线 / 弱网保存 tx + 加附件 → tx 写本地 + record change,
+        //      attachment 落本地但 cloudFileId=null
+        //   2. 联网,sync 触发 → uploadAttachments 由于网络抖动失败一次,_push
+        //      仍然把 tx 推上去(attachments_json[*].cloudFileId 全 null)→
+        //      tx 的 LocalChange 已 markPushed
+        //   3. 下次 sync → uploadAttachments 终于成功 → cloudFileId 写回本地
+        //      → _push: 无待推送变更(tx 没记 change)→ server 永远停在 null
+        //   4. web 拉到 attachments 缺 cloudFileId → 报 "transactions.
+        //      attachment.metadataOnly"
+        //
+        // sync 顺序 upload → push 在 happy path 下能让 push 看到回填后的
+        // cloudFileId;但只要 upload 跨过 sync 边界(任一步 retry / 失败),
+        // 就会落入上面的 race。这条 record 是 idempotent 兜底。
+        final txRow = await (db.select(db.transactions)
+              ..where((t) => t.id.equals(att.transactionId)))
+            .getSingleOrNull();
+        if (txRow?.syncId != null) {
+          await changeTracker.recordLedgerChange(
+            entityType: 'transaction',
+            entityId: att.transactionId,
+            entitySyncId: txRow!.syncId!,
+            ledgerId: txRow.ledgerId,
+            action: 'update',
+          );
+        }
+
         uploaded++;
-        logger.debug('SyncEngine', '附件上传成功: ${att.fileName} -> ${result.fileId}');
+        logger.debug('SyncEngine',
+            '附件上传成功: ${att.fileName} -> ${result.fileId}'
+            ' (tx=${att.transactionId} 已重登记 update change)');
       } catch (e, st) {
         logger.error('SyncEngine', '附件上传失败: ${att.fileName}', e, st);
       }

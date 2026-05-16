@@ -510,6 +510,9 @@ class SyncEngine implements app.SyncService {
     final syncChanges = <Map<String, dynamic>>[];
 
     for (final change in changes) {
+      final isUserGlobal =
+          ChangeTracker.userGlobalEntityTypes.contains(change.entityType);
+
       Map<String, dynamic> payload;
 
       if (change.action == 'delete') {
@@ -525,27 +528,24 @@ class SyncEngine implements app.SyncService {
         );
       }
 
-      // push 侧用 ledger.syncId 作为跨设备唯一的 external_id。对 v21 以前
-      // 就同步过的账本，migration 把 syncId 回填成了原 int id（如 "1"、"5"），
-      // 兼容 server 已有数据；对 v21 之后新建的账本，syncId 是 UUID。
-      //
-      // 第二台设备看到同一账本后，syncLedgersFromServer 已把 A 的 syncId
-      // 写到 B 本地 ledger 行，B push 时 `ledger.syncId` 跟 A 相同 →
-      // server 不会 auto-create 新 ledger，同一账本始终单份存在。
-      //
-      // 优先级:
-      //   1. ledger.syncId (常规路径,ledger 行还在)
-      //   2. deletedLedgerSyncId (deleteLedger 路径,从 ledger_snapshot:delete
-      //      change 现场捞回的被删账本 syncId,保证 server 端 ledger_id 字段
-      //      仍是它认得的 external_id 而不是本地 int id)
-      //   3. ledgerId 字符串 (兜底,理论上不会用到)
-      final pushLedgerId =
-          ledger?.syncId ?? deletedLedgerSyncId ?? ledgerId;
+      // user-global 重构后协议(参考 .docs/user-global-refactor/plan.md):
+      //   - scope='user' (category/account/tag):ledger_id 发 null,server 按
+      //     entity_type 强制按 user-scope 路由,不再依附任何 ledger。
+      //   - scope='ledger' (transaction/budget/ledger/ledger_snapshot):
+      //     ledger_id 用 ledger.syncId(跨设备唯一 external_id)。删账本路径
+      //     从 ledger_snapshot:delete change 拉回 syncId,保证 server 认得。
+      final String? pushLedgerId;
+      final String pushScope;
+      if (isUserGlobal) {
+        pushLedgerId = null;
+        pushScope = 'user';
+      } else {
+        pushLedgerId = ledger?.syncId ?? deletedLedgerSyncId ?? ledgerId;
+        pushScope = 'ledger';
+      }
       syncChanges.add({
-        // ledgerId=0 的 user-global 变更依附到当前账本 push 上。服务端按
-        // entity_type + entity_sync_id 做 LWW / 物化，不依赖这里的 ledger_id
-        // 字段，这样挂一下能让 mobile 的全局实体改动搭上任一账本的同步链。
         'ledger_id': pushLedgerId,
+        'scope': pushScope,
         'entity_type': change.entityType,
         'entity_sync_id': change.entitySyncId,
         'action': change.action == 'delete' ? 'delete' : 'upsert',

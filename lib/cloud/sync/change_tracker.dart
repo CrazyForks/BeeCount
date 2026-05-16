@@ -35,6 +35,10 @@ class ChangeTracker {
   /// 调用方误用(把 transaction 之类传进来也能通过,但被 assert 拦住)。
   static const Set<String> _userGlobalEntityTypes = {'account', 'category', 'tag'};
 
+  /// 公开 read-only 视图给 sync_engine 的 push 路径用,判断"这条 change 是否
+  /// 是 user-global 类型",决定 push 时 scope 字段。
+  static const Set<String> userGlobalEntityTypes = _userGlobalEntityTypes;
+
   /// 记录一条 user-global 实体(account / category / tag)的变更。
   /// 自动挂 ledgerId=0,调用方不用操心 scope 选择。
   ///
