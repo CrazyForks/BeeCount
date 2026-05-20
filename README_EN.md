@@ -108,30 +108,30 @@ A lightweight, open-source, privacy-first **personal finance** and **expense tra
 ### 9 Core Themes
 
 <div align="center">
-  <img src="assets/store/screenshots/raw/en/01-home.png" alt="Home" width="200" />
-  <img src="assets/store/screenshots/raw/en/02-open-source.png" alt="Cloud Service" width="200" />
-  <img src="assets/store/screenshots/raw/en/03-analytics.png" alt="Analytics" width="200" />
+  <img src="preview/store-en/01-home.png" alt="Home" width="200" />
+  <img src="preview/store-en/02-open-source.png" alt="Cloud Service" width="200" />
+  <img src="preview/store-en/03-analytics.png" alt="Analytics" width="200" />
 </div>
 
 <div align="center">
-  <img src="assets/store/screenshots/raw/en/04-ai.png" alt="AI Smart Logging" width="200" />
-  <img src="assets/store/screenshots/raw/en/05-add.png" alt="Quick Entry" width="200" />
-  <img src="assets/store/screenshots/raw/en/06-ledgers.png" alt="Multi-Ledger" width="200" />
+  <img src="preview/store-en/04-ai.png" alt="AI Smart Logging" width="200" />
+  <img src="preview/store-en/05-add.png" alt="Quick Entry" width="200" />
+  <img src="preview/store-en/06-ledgers.png" alt="Multi-Ledger" width="200" />
 </div>
 
 <div align="center">
-  <img src="assets/store/screenshots/raw/en/07-tags.png" alt="Color Tags" width="200" />
-  <img src="assets/store/screenshots/raw/en/08-accounts.png" alt="Net Worth" width="200" />
-  <img src="assets/store/screenshots/raw/en/09-mine.png" alt="Settings" width="200" />
+  <img src="preview/store-en/07-tags.png" alt="Color Tags" width="200" />
+  <img src="preview/store-en/08-accounts.png" alt="Net Worth" width="200" />
+  <img src="preview/store-en/09-mine.png" alt="Settings" width="200" />
 </div>
 
 ### Dark Mode
 
 <div align="center">
-  <img src="demo/preview/dark/01-home.png" alt="Home dark" width="200" />
-  <img src="demo/preview/dark/02-chart-analysis.png" alt="Charts dark" width="200" />
-  <img src="demo/preview/dark/04-profile.png" alt="Profile dark" width="200" />
-  <img src="demo/preview/dark/05-ai-chat.png" alt="AI chat dark" width="200" />
+  <img src="preview/dark/01-home.png" alt="Home dark" width="200" />
+  <img src="preview/dark/02-chart-analysis.png" alt="Charts dark" width="200" />
+  <img src="preview/dark/04-profile.png" alt="Profile dark" width="200" />
+  <img src="preview/dark/05-ai-chat.png" alt="AI chat dark" width="200" />
 </div>
 
 </details>
@@ -175,7 +175,7 @@ Full Docker Compose deployment, backup system, PWA, and ops details live in the 
 ### Web Admin Preview
 
 <div align="center">
-  <img src="demo/preview/web/en-01-home.png" alt="Web home" width="600" />
+  <img src="preview/web/en-01-home.png" alt="Web home" width="600" />
   <br/>
   <sub>💰 Home: income/expense, asset breakdown, category heatmap, trends — at a glance (dark mode)</sub>
 </div>
@@ -184,7 +184,7 @@ Full Docker Compose deployment, backup system, PWA, and ops details live in the 
 <summary>More Web screenshots</summary>
 
 <div align="center">
-  <img src="demo/preview/web/en-02-transactions.png" alt="Web transactions" width="600" />
+  <img src="preview/web/en-02-transactions.png" alt="Web transactions" width="600" />
   <br/>
   <sub>📒 Transactions: keyword / category / account / date / tag multi-filter</sub>
 </div>
@@ -192,7 +192,7 @@ Full Docker Compose deployment, backup system, PWA, and ops details live in the 
 <br/>
 
 <div align="center">
-  <img src="demo/preview/web/en-03-devices.png" alt="Web devices" width="600" />
+  <img src="preview/web/en-03-devices.png" alt="Web devices" width="600" />
   <br/>
   <sub>📱 Online devices + backup archive management</sub>
 </div>

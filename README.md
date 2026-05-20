@@ -108,30 +108,30 @@
 ### 9 大功能主题
 
 <div align="center">
-  <img src="assets/store/screenshots/raw/zh/01-home.png" alt="首页" width="200" />
-  <img src="assets/store/screenshots/raw/zh/02-open-source.png" alt="云服务" width="200" />
-  <img src="assets/store/screenshots/raw/zh/03-analytics.png" alt="数据分析" width="200" />
+  <img src="preview/store-zh/01-home.png" alt="首页" width="200" />
+  <img src="preview/store-zh/02-open-source.png" alt="云服务" width="200" />
+  <img src="preview/store-zh/03-analytics.png" alt="数据分析" width="200" />
 </div>
 
 <div align="center">
-  <img src="assets/store/screenshots/raw/zh/04-ai.png" alt="AI 智能记账" width="200" />
-  <img src="assets/store/screenshots/raw/zh/05-add.png" alt="记一笔" width="200" />
-  <img src="assets/store/screenshots/raw/zh/06-ledgers.png" alt="多账本" width="200" />
+  <img src="preview/store-zh/04-ai.png" alt="AI 智能记账" width="200" />
+  <img src="preview/store-zh/05-add.png" alt="记一笔" width="200" />
+  <img src="preview/store-zh/06-ledgers.png" alt="多账本" width="200" />
 </div>
 
 <div align="center">
-  <img src="assets/store/screenshots/raw/zh/07-tags.png" alt="彩色标签" width="200" />
-  <img src="assets/store/screenshots/raw/zh/08-accounts.png" alt="资产管理" width="200" />
-  <img src="assets/store/screenshots/raw/zh/09-mine.png" alt="设置中心" width="200" />
+  <img src="preview/store-zh/07-tags.png" alt="彩色标签" width="200" />
+  <img src="preview/store-zh/08-accounts.png" alt="资产管理" width="200" />
+  <img src="preview/store-zh/09-mine.png" alt="设置中心" width="200" />
 </div>
 
 ### 暗黑模式
 
 <div align="center">
-  <img src="demo/preview/dark/01-home.png" alt="首页-暗黑" width="200" />
-  <img src="demo/preview/dark/02-chart-analysis.png" alt="图表分析-暗黑" width="200" />
-  <img src="demo/preview/dark/04-profile.png" alt="我的-暗黑" width="200" />
-  <img src="demo/preview/dark/05-ai-chat.png" alt="AI对话-暗黑" width="200" />
+  <img src="preview/dark/01-home.png" alt="首页-暗黑" width="200" />
+  <img src="preview/dark/02-chart-analysis.png" alt="图表分析-暗黑" width="200" />
+  <img src="preview/dark/04-profile.png" alt="我的-暗黑" width="200" />
+  <img src="preview/dark/05-ai-chat.png" alt="AI对话-暗黑" width="200" />
 </div>
 
 </details>
@@ -175,7 +175,7 @@
 ### Web 管理端预览
 
 <div align="center">
-  <img src="demo/preview/web/zh-01-home.png" alt="Web 首页" width="600" />
+  <img src="preview/web/zh-01-home.png" alt="Web 首页" width="600" />
   <br/>
   <sub>💰 首页:收支、资产构成、分类热力、趋势 — 一屏总览(暗黑模式)</sub>
 </div>
@@ -184,7 +184,7 @@
 <summary>更多 Web 截图</summary>
 
 <div align="center">
-  <img src="demo/preview/web/zh-02-transactions.png" alt="Web 交易列表" width="600" />
+  <img src="preview/web/zh-02-transactions.png" alt="Web 交易列表" width="600" />
   <br/>
   <sub>📒 交易列表:关键字 / 分类 / 账户 / 日期 / 标签多维筛选</sub>
 </div>
@@ -192,7 +192,7 @@
 <br/>
 
 <div align="center">
-  <img src="demo/preview/web/zh-03-devices.png" alt="Web 在线设备" width="600" />
+  <img src="preview/web/zh-03-devices.png" alt="Web 在线设备" width="600" />
   <br/>
   <sub>📱 在线设备 + 备份归档管理</sub>
 </div>
