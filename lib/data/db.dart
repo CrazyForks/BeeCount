@@ -941,45 +941,50 @@ class BeeDatabase extends _$BeeDatabase {
             // v24: 共享账本完整 schema(合并自 v24/v25/v26/v27 的迭代,测试阶段
             // 一次落地最终态)。
             //
-            // Schema 变更:
-            // - Ledgers 加 my_role / member_count / is_shared / owner_user_id
-            // - Transactions 加 created_by_user_id / last_edited_by_user_id
-            //   + categorySyncIdOverride / accountSyncIdOverride /
-            //     toAccountSyncIdOverride / tagSyncIdsOverride
-            // - 新表 LedgerMembers / SharedLedger{Categories,Accounts,Tags} +
-            //   TransactionTagOverrides
-            //
-            // §7 决策:Editor 在共享账本下不 mirror Owner 资源到主表,picker /
-            // tx write 都走 SharedLedger* + *SyncIdOverride 字段。
+            // 重要:所有 ALTER / createTable 都包"存在则跳过"防御 — 用户从
+            // 3.1.3 升级到带 bug 的 3.2.0 时 v25 ALTER 失败,但 v24 的 DDL
+            // 已经隐式 commit(SQLite DDL 不可回滚),user_version 仍 23。
+            // 装新版本再跑 onUpgrade(from=23) 时 v24 第一句又会 duplicate column
+            // 卡死。每条都要幂等。
             print('[DB Migration] 开始迁移到 v24: 共享账本完整 schema');
 
-            await customStatement(
+            await _addColumnIfMissing(
+                'ledgers', 'my_role',
                 "ALTER TABLE ledgers ADD COLUMN my_role TEXT NOT NULL DEFAULT 'owner';");
-            await customStatement(
+            await _addColumnIfMissing(
+                'ledgers', 'member_count',
                 "ALTER TABLE ledgers ADD COLUMN member_count INTEGER NOT NULL DEFAULT 1;");
-            await customStatement(
+            await _addColumnIfMissing(
+                'ledgers', 'is_shared',
                 "ALTER TABLE ledgers ADD COLUMN is_shared INTEGER NOT NULL DEFAULT 0;");
-            await customStatement(
+            await _addColumnIfMissing(
+                'ledgers', 'owner_user_id',
                 "ALTER TABLE ledgers ADD COLUMN owner_user_id TEXT;");
 
-            await customStatement(
+            await _addColumnIfMissing(
+                'transactions', 'created_by_user_id',
                 "ALTER TABLE transactions ADD COLUMN created_by_user_id TEXT;");
-            await customStatement(
+            await _addColumnIfMissing(
+                'transactions', 'last_edited_by_user_id',
                 "ALTER TABLE transactions ADD COLUMN last_edited_by_user_id TEXT;");
-            await customStatement(
+            await _addColumnIfMissing(
+                'transactions', 'category_sync_id_override',
                 'ALTER TABLE transactions ADD COLUMN category_sync_id_override TEXT;');
-            await customStatement(
+            await _addColumnIfMissing(
+                'transactions', 'account_sync_id_override',
                 'ALTER TABLE transactions ADD COLUMN account_sync_id_override TEXT;');
-            await customStatement(
+            await _addColumnIfMissing(
+                'transactions', 'to_account_sync_id_override',
                 'ALTER TABLE transactions ADD COLUMN to_account_sync_id_override TEXT;');
-            await customStatement(
+            await _addColumnIfMissing(
+                'transactions', 'tag_sync_ids_override',
                 'ALTER TABLE transactions ADD COLUMN tag_sync_ids_override TEXT;');
 
-            await migrator.createTable(ledgerMembers);
-            await migrator.createTable(sharedLedgerCategories);
-            await migrator.createTable(sharedLedgerAccounts);
-            await migrator.createTable(sharedLedgerTags);
-            await migrator.createTable(transactionTagOverrides);
+            await _createTableIfMissing(migrator, 'ledger_members', ledgerMembers);
+            await _createTableIfMissing(migrator, 'shared_ledger_categories', sharedLedgerCategories);
+            await _createTableIfMissing(migrator, 'shared_ledger_accounts', sharedLedgerAccounts);
+            await _createTableIfMissing(migrator, 'shared_ledger_tags', sharedLedgerTags);
+            await _createTableIfMissing(migrator, 'transaction_tag_overrides', transactionTagOverrides);
 
             // 重置 server_cursor — 强制下次启动全量重拉,确保 sync_engine_apply
             // 用最新的 override 写入逻辑填回 *SyncIdOverride 字段。
@@ -988,14 +993,18 @@ class BeeDatabase extends _$BeeDatabase {
             print('[DB Migration] v24 迁移完成');
           }
           if (from < 25) {
-            // v25: SharedLedgerCategories 加 parent_sync_id 列,共享账本二级
-            // 分类用稳定 FK(syncId)而非 parent_name 建父子关系。
-            // 数据回填:对每个 level=2 行,在同 ledger_sync_id + kind 内按
-            // parent_name 反查 level=1 行的 syncId,填进 parent_sync_id。
+            // v25: SharedLedgerCategories 加 parent_sync_id 列。
+            // 注:v24 `createTable(sharedLedgerCategories)` 用**当前 schema**
+            // 建表,已经带 parent_sync_id 列 — 干净 from=23 升级时这里 ALTER
+            // 会 duplicate。用 helper PRAGMA 检查后再 ALTER。
             logger.info('DBMigration',
                 '开始迁移到 v25: SharedLedgerCategories.parent_sync_id');
-            await customStatement(
+            await _addColumnIfMissing(
+                'shared_ledger_categories', 'parent_sync_id',
                 'ALTER TABLE shared_ledger_categories ADD COLUMN parent_sync_id TEXT;');
+            // 数据回填:对每个 level=2 行,在同 ledger_sync_id + kind 内按
+            // parent_name 反查 level=1 行的 syncId 填进 parent_sync_id。
+            // 用 IS NULL/'' 守护让 UPDATE 可幂等重跑。
             await customStatement('''
               UPDATE shared_ledger_categories AS child
               SET parent_sync_id = (
@@ -1009,15 +1018,49 @@ class BeeDatabase extends _$BeeDatabase {
               )
               WHERE COALESCE(child.level, 1) >= 2
                 AND child.parent_name IS NOT NULL
+                AND (child.parent_sync_id IS NULL OR child.parent_sync_id = '')
             ''');
-            // reset server_cursor 让后续 pull 重拉 user-global category change,
-            // server 端 0013 alembic 已经在 projection 回填 parent_sync_id,
-            // mobile 后续 fetchAndStoreSharedResources 会重新覆盖一遍。
+            // reset server_cursor 让后续 pull 重拉 user-global category change。
             await customStatement('UPDATE sync_state SET server_cursor = 0');
             logger.info('DBMigration', 'v25 迁移完成');
           }
         },
       );
+
+  /// Migration helper: 列不存在再 ALTER ADD,避免 partial state 重跑时
+  /// "duplicate column" 把启动卡死。
+  ///
+  /// SQLite DDL 隐式 commit 且不可回滚;上次 onUpgrade 跑到一半失败时,前面
+  /// 已成功的 ALTER 已写入文件但 user_version 没更新,下次启动同一段重跑就
+  /// 报 duplicate。每条 ALTER 都通过这里走 PRAGMA 检查可幂等。
+  Future<void> _addColumnIfMissing(
+      String table, String column, String ddl) async {
+    final cols =
+        await customSelect("PRAGMA table_info($table)").get();
+    final exists =
+        cols.any((r) => r.read<String>('name') == column);
+    if (exists) {
+      logger.info(
+          'DBMigration', '$table.$column 已存在,跳过 ALTER');
+      return;
+    }
+    await customStatement(ddl);
+  }
+
+  /// Migration helper: 表不存在再 createTable,避免 partial state 重跑时
+  /// "table already exists"。
+  Future<void> _createTableIfMissing(
+      Migrator m, String tableName, dynamic table) async {
+    final row = await customSelect(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name = ?",
+      variables: [Variable<String>(tableName)],
+    ).getSingleOrNull();
+    if (row != null) {
+      logger.info('DBMigration', '$tableName 表已存在,跳过 createTable');
+      return;
+    }
+    await m.createTable(table);
+  }
 
   // Seed minimal data
   /// [l10n] 国际化对象，如果为null则使用英文作为默认语言
