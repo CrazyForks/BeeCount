@@ -994,8 +994,21 @@ class BeeDatabase extends _$BeeDatabase {
             // parent_name 反查 level=1 行的 syncId,填进 parent_sync_id。
             logger.info('DBMigration',
                 '开始迁移到 v25: SharedLedgerCategories.parent_sync_id');
-            await customStatement(
-                'ALTER TABLE shared_ledger_categories ADD COLUMN parent_sync_id TEXT;');
+            // Drift 陷阱:from<24 用户走 v24 `createTable(sharedLedgerCategories)`,
+            // Drift 用**当前 schema 定义**建表 — 表已经带 parent_sync_id。
+            // 此时再 ALTER ADD COLUMN 就 duplicate column 报错卡启动。
+            // 改用 PRAGMA table_info 显式检查,不存在才加。
+            final cols = await customSelect(
+                "PRAGMA table_info(shared_ledger_categories)").get();
+            final hasParentSyncId =
+                cols.any((r) => r.read<String>('name') == 'parent_sync_id');
+            if (!hasParentSyncId) {
+              await customStatement(
+                  'ALTER TABLE shared_ledger_categories ADD COLUMN parent_sync_id TEXT;');
+            } else {
+              logger.info('DBMigration',
+                  'v25: parent_sync_id 已存在(v24 createTable 已带),跳过 ALTER');
+            }
             await customStatement('''
               UPDATE shared_ledger_categories AS child
               SET parent_sync_id = (
