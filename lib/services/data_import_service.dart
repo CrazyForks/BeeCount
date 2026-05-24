@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as d;
 import '../data/db.dart';
 import '../data/repositories/base_repository.dart';
+import '../data/repositories/transaction_repository.dart' show BatchAttachmentData;
 import 'system/logger_service.dart';
 
 /// 统一的数据导入服务
@@ -397,7 +398,16 @@ class DataImportService {
     return tagNameToId;
   }
 
-  /// 导入交易（批量写入 + 标签关联）
+  /// 导入交易(统一 batch 路径,tag/attachment 跟 tx 一起 batch insert)
+  ///
+  /// **历史**:之前"有标签/附件"的 tx 走单条 await 路径,
+  ///   `insertTransactionCompanion` → `updateTransactionTags` → `createAttachment`
+  /// 各开自己的 BEGIN/COMMIT,N+1 + 嵌套事务双重放大,1 万条带标签数据要几十
+  /// 分钟。
+  ///
+  /// **现在**:全部走 `insertTransactionsBatchWithRelations`,500 条 / 批,
+  /// 一个 db.transaction 内 batch insert tx + tag + attachment + local_changes,
+  /// 把 N 次 BEGIN/COMMIT/fsync 折叠成 1 次。
   Future<ImportResult> _importTransactions(
     BaseRepository repo,
     int ledgerId,
@@ -413,24 +423,46 @@ class DataImportService {
     int processed = 0;
     final total = transactions.length;
 
-    // 批量待插入列表
-    final toInsert = <TransactionsCompanion>[];
     const batchSize = 500;
+    // 批次缓冲:tx 列表 + 按 batch 内 index 索引的关联数据
+    final batchTx = <TransactionsCompanion>[];
+    final batchTagsByIndex = <int, List<int>>{};
+    final batchAttachmentsByIndex = <int, List<BatchAttachmentData>>{};
 
-    // 分类缓存（用于动态创建）
     final localCategoryCache = Map<String, int>.from(categoryCache);
+
+    // 把当前缓冲 flush 到 repo。捕获异常时整批算 failed,继续下一批。
+    Future<void> flush() async {
+      if (batchTx.isEmpty) return;
+      final size = batchTx.length;
+      try {
+        final ids = await repo.insertTransactionsBatchWithRelations(
+          transactions: List.of(batchTx),
+          tagIdsByIndex: Map.of(batchTagsByIndex),
+          attachmentsByIndex: Map.of(batchAttachmentsByIndex),
+          recordChanges: recordChanges,
+        );
+        inserted += ids.length;
+      } catch (e, st) {
+        logger.error('DataImport', '批次 flush 失败,本批 $size 条算 failed', e, st);
+        failed += size;
+      }
+      processed += size;
+      batchTx.clear();
+      batchTagsByIndex.clear();
+      batchAttachmentsByIndex.clear();
+      if (onProgress != null) onProgress(processed, total);
+    }
 
     for (final tx in transactions) {
       // 解析分类ID
       int? categoryId;
-      // 优先使用预解析的分类ID
       if (tx.categoryId != null) {
         categoryId = tx.categoryId;
       } else if (tx.categoryName != null && tx.categoryKind != null) {
         final key = '${tx.categoryKind}|${tx.categoryName}';
         categoryId = localCategoryCache[key];
         if (categoryId == null && tx.type != 'transfer') {
-          // 动态创建分类
           try {
             categoryId = await repo.upsertCategory(
               name: tx.categoryName!,
@@ -444,12 +476,9 @@ class DataImportService {
       // 解析账户ID
       int? accountId;
       int? toAccountId;
-
       if (tx.type == 'transfer') {
-        // 转账：使用 fromAccountName 和 toAccountName
         if (tx.fromAccountName != null) {
           accountId = accountNameToId[tx.fromAccountName];
-          // 提供了账户名但找不到对应账户 -> 失败
           if (accountId == null) {
             failed++;
             processed++;
@@ -458,28 +487,24 @@ class DataImportService {
         }
         if (tx.toAccountName != null) {
           toAccountId = accountNameToId[tx.toAccountName];
-          // 提供了账户名但找不到对应账户 -> 失败
           if (toAccountId == null) {
             failed++;
             processed++;
             continue;
           }
         }
-        // 注意：旧版本数据可能没有账户信息，允许导入（账户为空）
       } else {
-        // 收入或支出：使用 accountName
         if (tx.accountName != null) {
           accountId = accountNameToId[tx.accountName];
         }
       }
 
-      // 解析标签ID
+      // 解析标签ID — toSet().toList() 去重,因为底层 batch insert 不查重
       final tagIds = <int>[];
       if (tx.tagNames != null) {
         for (final tagName in tx.tagNames!) {
           var tagId = tagNameToId[tagName];
           if (tagId == null) {
-            // 动态创建标签
             try {
               final existingTag = await repo.getTagByName(tagName);
               if (existingTag != null) {
@@ -495,6 +520,7 @@ class DataImportService {
           }
         }
       }
+      final uniqueTagIds = tagIds.toSet().toList();
 
       // 构建交易记录
       final txCompanion = TransactionsCompanion.insert(
@@ -509,85 +535,33 @@ class DataImportService {
         syncId: d.Value(tx.syncId),
       );
 
-      // 如果有标签或附件，单独插入并关联
-      final hasAttachments = tx.attachments != null && tx.attachments!.isNotEmpty;
-      if (tagIds.isNotEmpty || hasAttachments) {
-        try {
-          final txId = await repo.insertTransactionCompanion(
-            txCompanion,
-            recordChanges: recordChanges,
-          );
-          // 关联标签
-          if (tagIds.isNotEmpty) {
-            await repo.updateTransactionTags(
-              transactionId: txId,
-              tagIds: tagIds,
-            );
-          }
-          // 创建附件元数据记录（注意：仅创建记录，实际图片文件需单独导入）
-          if (hasAttachments) {
-            for (final attachment in tx.attachments!) {
-              try {
-                await repo.createAttachment(
-                  transactionId: txId,
-                  fileName: attachment.fileName,
-                  originalName: attachment.originalName,
-                  fileSize: attachment.fileSize,
-                  width: attachment.width,
-                  height: attachment.height,
-                  sortOrder: attachment.sortOrder,
-                  cloudFileId: attachment.cloudFileId,
-                  cloudSha256: attachment.cloudSha256,
-                );
-              } catch (_) {
-                // 附件记录创建失败不影响交易导入
-              }
-            }
-          }
-          inserted++;
-        } catch (_) {
-          failed++;
-        }
-        processed++;
-      } else {
-        // 没有标签和附件，批量插入
-        toInsert.add(txCompanion);
+      final indexInBatch = batchTx.length;
+      batchTx.add(txCompanion);
+      if (uniqueTagIds.isNotEmpty) {
+        batchTagsByIndex[indexInBatch] = uniqueTagIds;
+      }
+      if (tx.attachments != null && tx.attachments!.isNotEmpty) {
+        batchAttachmentsByIndex[indexInBatch] = tx.attachments!
+            .map((a) => BatchAttachmentData(
+                  fileName: a.fileName,
+                  originalName: a.originalName,
+                  fileSize: a.fileSize,
+                  width: a.width,
+                  height: a.height,
+                  sortOrder: a.sortOrder,
+                  cloudFileId: a.cloudFileId,
+                  cloudSha256: a.cloudSha256,
+                ))
+            .toList();
       }
 
-      // 批量写入
-      if (toInsert.length >= batchSize) {
-        try {
-          final n = await repo.insertTransactionsBatch(
-            List.of(toInsert),
-            recordChanges: recordChanges,
-          );
-          inserted += n;
-          processed += n;
-        } catch (_) {
-          failed += toInsert.length;
-          processed += toInsert.length;
-        }
-        toInsert.clear();
-        if (onProgress != null) onProgress(processed, total);
+      if (batchTx.length >= batchSize) {
+        await flush();
       }
     }
 
-    // 刷新剩余缓冲
-    if (toInsert.isNotEmpty) {
-      try {
-        final n = await repo.insertTransactionsBatch(
-          toInsert,
-          recordChanges: recordChanges,
-        );
-        inserted += n;
-        processed += n;
-      } catch (_) {
-        failed += toInsert.length;
-        processed += toInsert.length;
-      }
-    }
-
-    if (onProgress != null) onProgress(processed, total);
+    // 刷剩余
+    await flush();
 
     return ImportResult(inserted: inserted, failed: failed);
   }

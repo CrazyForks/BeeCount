@@ -6,6 +6,7 @@ import '../../../cloud/sync/change_tracker.dart';
 import '../../../services/system/logger_service.dart';
 import '../base_repository.dart';
 import '../budget_repository.dart';
+import '../transaction_repository.dart' show BatchAttachmentData;
 import 'local_ledger_repository.dart';
 import 'local_transaction_repository.dart';
 import 'local_category_repository.dart';
@@ -435,6 +436,63 @@ class LocalRepository extends BaseRepository {
 
   @override
   Future<Transaction?> getTransactionById(int id) => _transactionRepo.getTransactionById(id);
+
+  @override
+  Future<List<int>> insertTransactionsBatchWithRelations({
+    required List<TransactionsCompanion> transactions,
+    Map<int, List<int>> tagIdsByIndex = const {},
+    Map<int, List<BatchAttachmentData>> attachmentsByIndex = const {},
+    bool recordChanges = true,
+  }) async {
+    if (transactions.isEmpty) return const [];
+    // recordChanges=false / 没挂 changeTracker → 直接走子仓库,不补 change log。
+    if (!recordChanges || changeTracker == null) {
+      return _transactionRepo.insertTransactionsBatchWithRelations(
+        transactions: transactions,
+        tagIdsByIndex: tagIdsByIndex,
+        attachmentsByIndex: attachmentsByIndex,
+      );
+    }
+    // 预填充 syncId 让 wrapper 也能根据 syncId 查回行后登记 change(子仓库会
+    // 看到这些已填的 syncId,不会重复生成)。
+    final effective = transactions.map((tx) {
+      if (tx.syncId == const d.Value.absent() || tx.syncId.value == null) {
+        return tx.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return tx;
+    }).toList();
+    return db.transaction(() async {
+      final ids = await _transactionRepo.insertTransactionsBatchWithRelations(
+        transactions: effective,
+        tagIdsByIndex: tagIdsByIndex,
+        attachmentsByIndex: attachmentsByIndex,
+      );
+      // 一次性 batch insert N 条 transaction:create change,代替逐条
+      // recordLedgerChange,把 N 次跨 isolate boundary 摊成 1 次。
+      final syncIds =
+          effective.map((c) => c.syncId.value).whereType<String>().toList();
+      if (syncIds.isEmpty) return ids;
+      final inserted = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      await db.batch((b) {
+        for (final tx in inserted) {
+          if (tx.syncId == null) continue;
+          b.insert(
+            db.localChanges,
+            LocalChangesCompanion.insert(
+              entityType: 'transaction',
+              entityId: tx.id,
+              entitySyncId: tx.syncId!,
+              ledgerId: tx.ledgerId,
+              action: 'create',
+            ),
+          );
+        }
+      });
+      return ids;
+    });
+  }
 
   @override
   Future<int> insertTransactionCompanion(

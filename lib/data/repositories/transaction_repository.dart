@@ -1,5 +1,29 @@
 import '../db.dart';
 
+/// 批量插入交易时附带的附件元数据。交易行还没插入,txId 未知,
+/// repo 内部按 batch 内 index 找到刚插入的 txId 再组装 AttachmentsCompanion。
+class BatchAttachmentData {
+  final String fileName;
+  final String? originalName;
+  final int? fileSize;
+  final int? width;
+  final int? height;
+  final int sortOrder;
+  final String? cloudFileId;
+  final String? cloudSha256;
+
+  const BatchAttachmentData({
+    required this.fileName,
+    this.originalName,
+    this.fileSize,
+    this.width,
+    this.height,
+    this.sortOrder = 0,
+    this.cloudFileId,
+    this.cloudSha256,
+  });
+}
+
 /// 交易Repository接口
 /// 定义交易相关的所有数据操作
 abstract class TransactionRepository {
@@ -91,6 +115,26 @@ abstract class TransactionRepository {
   /// [recordChanges] 同 [insertTransactionsBatch]。
   Future<int> insertTransactionCompanion(
     TransactionsCompanion item, {
+    bool recordChanges = true,
+  });
+
+  /// 批量插入交易 + 关联数据(tag / attachment),全部在单事务内完成。
+  ///
+  /// 用于带标签 / 带附件的 import 路径 — 原本的"单条 insert + 单条
+  /// updateTransactionTags + 单条 createAttachment"会引发 N+1 + 嵌套事务,
+  /// 1 万条带标签数据耗时数十分钟;本方法把 N 次单条事务折叠成 1 次,
+  /// 并用 `db.batch` 合并 tag / attachment / local_changes 的 INSERT。
+  ///
+  /// [tagIdsByIndex] - 批次内 index → tagId 列表。调用方需保证 tagIds 去重
+  ///   (TransactionTags 表无 UNIQUE 约束,本方法不做 select 防重)。
+  /// [attachmentsByIndex] - 批次内 index → 附件元数据列表。
+  /// [recordChanges] - 同 [insertTransactionsBatch]。
+  ///
+  /// 返回插入的 tx id 列表,顺序跟 [transactions] 输入对齐。
+  Future<List<int>> insertTransactionsBatchWithRelations({
+    required List<TransactionsCompanion> transactions,
+    Map<int, List<int>> tagIdsByIndex = const {},
+    Map<int, List<BatchAttachmentData>> attachmentsByIndex = const {},
     bool recordChanges = true,
   });
 

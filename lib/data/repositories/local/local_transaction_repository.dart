@@ -384,6 +384,85 @@ class LocalTransactionRepository implements TransactionRepository {
   }
 
   @override
+  Future<List<int>> insertTransactionsBatchWithRelations({
+    required List<TransactionsCompanion> transactions,
+    Map<int, List<int>> tagIdsByIndex = const {},
+    Map<int, List<BatchAttachmentData>> attachmentsByIndex = const {},
+    bool recordChanges = true,
+  }) async {
+    if (transactions.isEmpty) return const [];
+    // 预填充 syncId — batch insertAll 不返回 row id,必须靠 syncId 反查。
+    final effective = transactions.map((tx) {
+      if (tx.syncId == const d.Value.absent() || tx.syncId.value == null) {
+        return tx.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return tx;
+    }).toList();
+
+    return db.transaction(() async {
+      // 1. 一次性 batch insert 所有 tx
+      await db.batch((b) => b.insertAll(db.transactions, effective));
+
+      // 2. SELECT 回拿 (id, syncId) 映射,按 effective 顺序对齐
+      final syncIds = effective.map((c) => c.syncId.value!).toList();
+      final inserted = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      final idBySyncId = <String, int>{
+        for (final tx in inserted)
+          if (tx.syncId != null) tx.syncId!: tx.id,
+      };
+      final ids = syncIds.map((s) => idBySyncId[s]!).toList();
+
+      // 3. batch insert tag 关联 — 调用方需保证 tagIds 已去重,本方法不查重
+      //   (TransactionTags 表没 UNIQUE 约束,select 防重就是 N+1 来源)
+      if (tagIdsByIndex.isNotEmpty) {
+        await db.batch((b) {
+          for (final entry in tagIdsByIndex.entries) {
+            final txId = ids[entry.key];
+            for (final tagId in entry.value) {
+              b.insert(
+                db.transactionTags,
+                TransactionTagsCompanion.insert(
+                  transactionId: txId,
+                  tagId: tagId,
+                ),
+              );
+            }
+          }
+        });
+      }
+
+      // 4. batch insert attachment 元数据(文件本身在另一个流程下载)
+      if (attachmentsByIndex.isNotEmpty) {
+        await db.batch((b) {
+          for (final entry in attachmentsByIndex.entries) {
+            final txId = ids[entry.key];
+            for (final att in entry.value) {
+              b.insert(
+                db.transactionAttachments,
+                TransactionAttachmentsCompanion.insert(
+                  transactionId: txId,
+                  fileName: att.fileName,
+                  originalName: d.Value(att.originalName),
+                  fileSize: d.Value(att.fileSize),
+                  width: d.Value(att.width),
+                  height: d.Value(att.height),
+                  sortOrder: d.Value(att.sortOrder),
+                  cloudFileId: d.Value(att.cloudFileId),
+                  cloudSha256: d.Value(att.cloudSha256),
+                ),
+              );
+            }
+          }
+        });
+      }
+
+      return ids;
+    });
+  }
+
+  @override
   Future<void> updateTransaction({
     required int id,
     required String type,
