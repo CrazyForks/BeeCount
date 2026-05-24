@@ -1547,6 +1547,7 @@
   "welcomeTitle": "Welcome to BeeCount",
   "welcomeDescription": "An accounting app that truly respects your privacy",
   "welcomeCurrencyDescription": "Choose your preferred currency, you can change it anytime in settings",
+  "welcomeCreateDefaultLedger": "Create a default ledger",
   "welcomePrivacyTitle": "Open Source · Community Driven",
   "welcomePrivacyFeature1": "100% open source code, supervised by community",
   "welcomePrivacyFeature2": "No privacy concerns, data stored locally",

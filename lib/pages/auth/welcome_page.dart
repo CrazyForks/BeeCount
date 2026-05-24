@@ -13,7 +13,6 @@ import '../../providers/theme_providers.dart';
 import '../../providers/font_scale_provider.dart';
 import '../../services/system/logger_service.dart';
 import '../../services/export/config_export_service.dart';
-import '../../services/data/seed_service.dart';
 import '../../services/attachment_export_import_service.dart';
 import '../../utils/currencies.dart';
 import '../../widgets/ui/ui.dart';
@@ -31,6 +30,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   String _selectedCurrency = 'CNY'; // 默认货币
+  bool _createDefaultLedger = true; // 是否创建默认账本(币种页复选框)
   // 分类模式: 'flat' = 一级分类, 'hierarchical' = 二级分类, 'none' = 不创建分类
   String _categoryMode = 'flat'; // 默认使用一级分类
   bool _isInitializing = false; // 初始化状态
@@ -193,8 +193,10 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               shape: BoxShape.circle,
             ),
             child: Center(
+              // 用主题色填充 SVG 的 currentColor(肚子/翅膀等),传 Colors.white
+              // 会让整个蜜蜂变成纯白与背景圆几乎融为一体。
               child: BeeIcon(
-                color: Colors.white,
+                color: theme.colorScheme.primary,
                 size: 72,
               ),
             ),
@@ -333,7 +335,6 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // 货币图标
           Container(
@@ -373,79 +374,125 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
 
           const SizedBox(height: 32),
 
-          // 货币选择列表
+          // 货币选择列表占满"上方文字 + 底部复选框"之外的剩余空间。Expanded
+          // + Column 不指定 mainAxisAlignment,让 ListView 内部自己滚动。
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListView.separated(
+                itemCount: currencies.length,
+                separatorBuilder: (context, index) => Divider(
+                  height: 1,
+                  color: Colors.white.withValues(alpha: 0.2),
+                ),
+                itemBuilder: (context, index) {
+                  final currency = currencies[index];
+                  final isSelected = _selectedCurrency == currency.code;
+                  final symbol = getCurrencySymbol(currency.code);
+
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedCurrency = currency.code;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      child: Row(
+                        children: [
+                          // 选中标记
+                          Icon(
+                            isSelected
+                                ? Icons.radio_button_checked
+                                : Icons.radio_button_unchecked,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+
+                          // 货币符号
+                          SizedBox(
+                            width: 40,
+                            child: Text(
+                              symbol,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+
+                          // 货币名称
+                          Expanded(
+                            child: Text(
+                              '${currency.name} (${currency.code})',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // 创建默认账本复选框
           Container(
-            constraints: const BoxConstraints(maxHeight: 300),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: currencies.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: Colors.white.withValues(alpha: 0.2),
-              ),
-              itemBuilder: (context, index) {
-                final currency = currencies[index];
-                final isSelected = _selectedCurrency == currency.code;
-                final symbol = getCurrencySymbol(currency.code);
-
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedCurrency = currency.code;
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    child: Row(
-                      children: [
-                        // 选中标记
-                        Icon(
-                          isSelected
-                              ? Icons.radio_button_checked
-                              : Icons.radio_button_unchecked,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 12),
-
-                        // 货币符号
-                        SizedBox(
-                          width: 40,
-                          child: Text(
-                            symbol,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-
-                        // 货币名称
-                        Expanded(
-                          child: Text(
-                            '${currency.name} (${currency.code})',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight:
-                                  isSelected ? FontWeight.w600 : FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                setState(() {
+                  _createDefaultLedger = !_createDefaultLedger;
+                });
               },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 12),
+                child: Row(
+                  children: [
+                    Icon(
+                      _createDefaultLedger
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        l10n.welcomeCreateDefaultLedger,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -700,6 +747,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             l10n: l10n,
             currency: _selectedCurrency,
             useHierarchicalCategories: _categoryMode == 'hierarchical',
+            createDefaultLedger: _createDefaultLedger,
           );
         } else {
           // 只创建默认账本，不创建分类
@@ -707,6 +755,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             l10n: l10n,
             currency: _selectedCurrency,
             skipCategories: true,
+            createDefaultLedger: _createDefaultLedger,
           );
         }
 
@@ -760,8 +809,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
 
       logger.info('welcome', '开始导入配置文件');
 
-      // 获取数据库和仓库
-      final db = ref.read(databaseProvider);
+      // 不再调 ensureSeed:删了"配置无账本时自动创建默认账本"后 db 变量没用了。
       final repo = ref.read(repositoryProvider);
 
       // 导入配置
@@ -772,15 +820,10 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
 
       logger.info('welcome', '配置文件导入成功');
 
-      // 检查是否有账本，如果没有则创建默认 CNY 账本
+      // 不再自动创建默认账本 — 即使配置不含账本也尊重用户意图(可能就是想从
+      // 空状态开始)。没账本时进入应用,LedgersPage 空态会引导新建。
       final ledgers = await repo.getAllLedgers();
-      if (ledgers.isEmpty) {
-        logger.info('welcome', '配置不包含账本，创建默认账本');
-        await SeedService.createDefaultLedger(db, l10n, 'CNY');
-        logger.info('welcome', '已创建默认 CNY 账本');
-      } else {
-        logger.info('welcome', '配置已包含 ${ledgers.length} 个账本');
-      }
+      logger.info('welcome', '配置包含 ${ledgers.length} 个账本');
 
       // 标记欢迎页面已完成
       final prefs = await SharedPreferences.getInstance();

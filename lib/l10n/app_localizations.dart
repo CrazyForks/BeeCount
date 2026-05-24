@@ -6864,6 +6864,12 @@ abstract class AppLocalizations {
   /// **'Choose your preferred currency, you can change it anytime in settings'**
   String get welcomeCurrencyDescription;
 
+  /// No description provided for @welcomeCreateDefaultLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a default ledger'**
+  String get welcomeCreateDefaultLedger;
+
   /// No description provided for @welcomePrivacyTitle.
   ///
   /// In en, this message translates to:

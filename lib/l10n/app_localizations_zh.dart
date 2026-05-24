@@ -3605,6 +3605,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeCurrencyDescription => '选择您常用的货币，之后可以随时在设置中更改';
 
   @override
+  String get welcomeCreateDefaultLedger => '创建默认账本';
+
+  @override
   String get welcomePrivacyTitle => '开源透明 · 社群驱动';
 
   @override
@@ -10027,6 +10030,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get welcomeCurrencyDescription => '選擇您常用的貨幣，之後可以隨時在設定中更改';
+
+  @override
+  String get welcomeCreateDefaultLedger => '建立預設帳本';
 
   @override
   String get welcomePrivacyTitle => '開源透明 · 社群驅動';

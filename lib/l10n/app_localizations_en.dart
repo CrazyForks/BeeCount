@@ -3605,6 +3605,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeCurrencyDescription => 'Choose your preferred currency, you can change it anytime in settings';
 
   @override
+  String get welcomeCreateDefaultLedger => 'Create a default ledger';
+
+  @override
   String get welcomePrivacyTitle => 'Open Source · Community Driven';
 
   @override

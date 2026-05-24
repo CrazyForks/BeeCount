@@ -2116,6 +2116,7 @@
   "welcomeCloudSyncFeature3": "iCloud / WebDAV / Supabase / S3 任選",
   "welcomeCloudSyncTitle": "可選的雲端同步",
   "welcomeCurrencyDescription": "選擇您常用的貨幣，之後可以隨時在設定中更改",
+  "welcomeCreateDefaultLedger": "建立預設帳本",
   "welcomeExistingUserTitle": "老用戶？",
   "welcomeExistingUserButton": "匯入配置",
   "welcomeImportingConfig": "正在匯入配置...",

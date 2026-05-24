@@ -1441,6 +1441,7 @@
   "welcomeTitle": "欢迎使用 BeeCount",
   "welcomeDescription": "一个真正尊重您隐私的记账应用",
   "welcomeCurrencyDescription": "选择您常用的货币，之后可以随时在设置中更改",
+  "welcomeCreateDefaultLedger": "创建默认账本",
   "welcomePrivacyTitle": "开源透明 · 社群驱动",
   "welcomePrivacyFeature1": "100% 开源代码，接受社区监督",
   "welcomePrivacyFeature2": "无隐私顾虑，数据完全本地存储",

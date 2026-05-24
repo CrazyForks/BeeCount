@@ -23,6 +23,7 @@ import '../report/annual_report_page.dart';
 import '../calendar/calendar_page.dart';
 import '../../widgets/biz/ledger_picker_sheet.dart';
 import '../../widgets/biz/home_budget_summary.dart';
+import 'ledgers_page_new.dart';
 import '../../providers/shared_ledger_providers.dart';
 
 // 优化版首页 - 使用FlutterListView实现精准定位和丝滑跳转
@@ -712,87 +713,130 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     final currentLedger =
                                         ref.watch(currentLedgerProvider);
                                     return currentLedger.when(
-                                      data: (ledger) => GestureDetector(
-                                        onTap: () => showLedgerPicker(context),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 6,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                        .brightness ==
-                                                    Brightness.dark
-                                                ? Colors.white
-                                                    .withValues(alpha: 0.1)
-                                                : Colors.black
-                                                    .withValues(alpha: 0.05),
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Flexible(
-                                                child: Text(
-                                                  ledger?.name == null
-                                                      ? ''
-                                                      : translateLedgerName(
-                                                          context,
-                                                          ledger!.name),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w500,
+                                      // invalidate(远端改名 / 改币种)期间继续
+                                      // 显示旧值,避免账本名胶囊瞬间消失再出现 —
+                                      // 用户感知"首页全量刷新"的主要来源。
+                                      skipLoadingOnReload: true,
+                                      data: (ledger) {
+                                        // ledger == null:还没有账本(welcome 未勾默认账本
+                                        // / 老用户导入配置不含账本),胶囊直接显示「新建账本」
+                                        // + 加号图标,点击 push LedgersPage 并自动弹创建对
+                                        // 话框,省两步点击。
+                                        final isEmpty = ledger == null;
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (isEmpty) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const LedgersPageNew(
+                                                          autoOpenCreateDialog:
+                                                              true),
+                                                ),
+                                              );
+                                            } else {
+                                              showLedgerPicker(context);
+                                            }
+                                          },
+                                          child: Container(
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 6),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                      .withValues(alpha: 0.1)
+                                                  : Colors.black
+                                                      .withValues(alpha: 0.05),
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                if (isEmpty) ...[
+                                                  Icon(
+                                                    Icons.add,
+                                                    size: 16,
                                                     color: Theme.of(context)
                                                         .textTheme
                                                         .bodyLarge
                                                         ?.color,
                                                   ),
+                                                  const SizedBox(width: 4),
+                                                ],
+                                                Flexible(
+                                                  child: Text(
+                                                    isEmpty
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .ledgersNew
+                                                        : translateLedgerName(
+                                                            context,
+                                                            ledger.name),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    softWrap: false,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyLarge
+                                                          ?.color,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              // v24 共享账本:header 也显示 🤝 角标 + 成员数
-                                              if (ledger != null && ledger.isShared) ...[
-                                                const SizedBox(width: 4),
-                                                Icon(
-                                                  Icons.handshake,
-                                                  size: 12,
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium
-                                                      ?.color
-                                                      ?.withOpacity(0.7),
-                                                ),
-                                                const SizedBox(width: 1),
-                                                Text(
-                                                  '${ledger.memberCount}',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
+                                                // v24 共享账本:header 也显示 🤝 角标 + 成员数
+                                                if (!isEmpty &&
+                                                    ledger.isShared) ...[
+                                                  const SizedBox(width: 4),
+                                                  Icon(
+                                                    Icons.handshake,
+                                                    size: 12,
                                                     color: Theme.of(context)
                                                         .textTheme
                                                         .bodyMedium
                                                         ?.color
                                                         ?.withOpacity(0.7),
                                                   ),
-                                                ),
+                                                  const SizedBox(width: 1),
+                                                  Text(
+                                                    '${ledger.memberCount}',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.color
+                                                          ?.withOpacity(0.7),
+                                                    ),
+                                                  ),
+                                                ],
+                                                // 没账本时不显示下拉箭头(没东西可选)
+                                                if (!isEmpty) ...[
+                                                  const SizedBox(width: 2),
+                                                  Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    size: 16,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.color
+                                                        ?.withOpacity(0.5),
+                                                  ),
+                                                ],
                                               ],
-                                              const SizedBox(width: 2),
-                                              Icon(
-                                                Icons.keyboard_arrow_down,
-                                                size: 16,
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.color
-                                                    ?.withOpacity(0.5),
-                                              ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                       loading: () => const SizedBox.shrink(),
                                       error: (_, __) => const SizedBox.shrink(),
                                     );

@@ -1103,12 +1103,14 @@ class BeeDatabase extends _$BeeDatabase {
     String currency = 'CNY',
     bool useHierarchicalCategories = false,
     bool skipCategories = false,
+    bool createDefaultLedger = true,
   }) async {
     logger.info('db', 'ensureSeed 被调用');
     logger.info('db', 'l10n 是否提供: ${l10n != null}');
     logger.info('db', '货币: $currency');
     logger.info('db', '使用二级分类: $useHierarchicalCategories');
     logger.info('db', '跳过分类创建: $skipCategories');
+    logger.info('db', '创建默认账本: $createDefaultLedger');
 
     // 如果没有提供l10n，使用Lookup创建默认的英文版本
     final effectiveL10n = l10n ?? lookupAppLocalizations(const Locale('en'));
@@ -1120,6 +1122,7 @@ class BeeDatabase extends _$BeeDatabase {
       currency: currency,
       useHierarchicalCategories: useHierarchicalCategories,
       skipCategories: skipCategories,
+      createDefaultLedger: createDefaultLedger,
     );
     logger.info('db', '数据库初始化完成');
   }
