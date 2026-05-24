@@ -63,9 +63,16 @@ android {
     //   - universal:三 ABI 全打,兜底 / 不知道 ABI 的用户
     // 单包 ~30-42 MB(原 universal 52 MB,主流 arm64-only 用户实际下载 ~40 MB)。
     // x86 32-bit ABI 完全去掉(无真机用户,32 位 Intel 模拟器极少)。
+    //
+    // !!! AAB(App Bundle)build 不能开 splits.abi !!!
+    // AAB 本身就按 ABI 自动 split(Google Play 给设备分发对应 ABI),再开
+    // splits.abi 会让 R8 同一次 minify 产出 4 份 shrunk-resources,AGP 报
+    // "Multiple shrunk-resources files found"。所以根据 task name 动态启用:
+    // - assembleProdRelease(APK): splits 开,产 4 个 APK
+    // - bundleProdRelease(AAB):splits 关,正常 AAB
     splits {
         abi {
-            enable true
+            enable = !gradle.startParameter.taskNames.any { it.toLowerCase().contains("bundle") }
             reset()
             include 'arm64-v8a', 'armeabi-v7a', 'x86_64'
             universalApk true
