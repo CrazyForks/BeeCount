@@ -774,6 +774,11 @@ class SyncEngine implements app.SyncService {
     }
 
     final completer = Completer<int>();
+    // 默认订阅 future 让出错时不抛 unhandled async error — 后续 caller
+    // 复用 in-flight 时会自己 await,如果没人 await(单 caller 场景),
+    // completer.completeError 触发的 Future 错误会被 zone 当成 unhandled。
+    // 这里 ignore() 等于说"我已经知道这个错,通过 rethrow 抛给当前 caller 了"。
+    completer.future.ignore();
     _pullInFlight = completer;
     _pullInFlightSince = sinceOverride;
     try {
