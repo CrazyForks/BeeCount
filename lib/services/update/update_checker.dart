@@ -140,16 +140,11 @@ class UpdateChecker {
         logger.info('UpdateChecker', '最新版本: $latestVersion');
 
         if (_isNewerVersion(latestVersion, currentVersion)) {
-          // 找到APK下载链接
+          // 找到 APK 下载链接 — v3.2.1 起 Release 含多个 APK(arm64 主包 /
+          // armeabi-v7a / x86_64 / universal),需要按设备选择,否则 arm64 真机
+          // 装到 armv7 包会走系统 32-bit 兼容层导致严重卡顿
           final assets = data['assets'] as List;
-          String? apkUrl;
-
-          for (final asset in assets) {
-            if (asset['name'].toString().endsWith('.apk')) {
-              apkUrl = asset['browser_download_url'];
-              break;
-            }
-          }
+          final apkUrl = _pickApkUrl(assets, latestVersion);
 
           if (apkUrl != null) {
             return UpdateResult(
@@ -187,6 +182,40 @@ class UpdateChecker {
         message: '__UPDATE_CHECK_EXCEPTION__:$e',
       );
     }
+  }
+
+  /// 从 GitHub Release assets 列表里挑出适配当前设备的 APK。
+  ///
+  /// v3.2.1 起 Release 含多个按 ABI 拆分的 APK:
+  ///   - beecount-<ver>.apk             主分发(arm64-v8a,99% 现役真机)
+  ///   - beecount-<ver>-armeabi-v7a.apk armv7 老 32-bit 设备
+  ///   - beecount-<ver>-x86_64.apk      Intel/Win/Linux 模拟器
+  ///   - beecount-<ver>-universal.apk   三 ABI 全打,兜底
+  ///
+  /// 历史 bug:之前 `endsWith('.apk') break` 取第一个,因 GitHub assets 按
+  /// 字母序排列,第一个就是 `-armeabi-v7a.apk` — arm64 真机装上跑 32-bit 兼容
+  /// 模式 CPU 指令集降级 + 寄存器宽度从 64bit 切 32bit,体感严重卡顿。
+  ///
+  /// 选择策略(按优先级):
+  ///   1. `beecount-<ver>.apk` 主包(arm64)— 现役真机 99% 是 arm64
+  ///   2. universal — 主包不存在时兜底
+  ///   3. 任何 .apk — 都没有时取第一个
+  static String? _pickApkUrl(List assets, String version) {
+    final apkByName = <String, String>{};
+    for (final asset in assets) {
+      final name = asset['name'].toString();
+      if (name.endsWith('.apk')) {
+        apkByName[name] = asset['browser_download_url'];
+      }
+    }
+    if (apkByName.isEmpty) return null;
+
+    final mainPkgName = 'beecount-$version.apk';
+    final universalName = 'beecount-$version-universal.apk';
+
+    if (apkByName.containsKey(mainPkgName)) return apkByName[mainPkgName];
+    if (apkByName.containsKey(universalName)) return apkByName[universalName];
+    return apkByName.values.first;
   }
 
   // 辅助方法
