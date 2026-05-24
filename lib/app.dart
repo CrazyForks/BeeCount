@@ -152,20 +152,24 @@ class _BeeAppState extends ConsumerState<BeeApp>
       }
     });
 
-    // 关键:启动同步**等首帧渲染完成后**再触发,让 UI 先画出来。
-    // 旧实现走 `Future.microtask`,microtask 在帧间隙优先级很高,会在 vsync
-    // 渲染之前抢占主线程跑 await SQLite query / Drift companion / 一堆 native
-    // 工作,导致首屏迟迟出不来。改成 `addPostFrameCallback` 之后,UI 先有
-    // 第一帧,sync 在后续帧间隙慢慢跑(虽然每条 SQLite 仍占主线程,但用户
-    // 能立刻看到 + 操作 UI)。
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // 启动同步走 `Future.microtask` 而**不是** `addPostFrameCallback`。
+    //
+    // 历史:之前为了首屏更快试过 addPostFrameCallback,首帧渲染完才开始 sync,
+    // 代价是 sync 完成后 bump 一堆 refresh ticker → home 已渲染好的内容触发
+    // 二次 cascade rebuild,FutureProvider invalidate 走 loading→data 切换,
+    // 用户感知"进首页 → 出现预算卡片 / 列表展开 → 整页刷新一遍"。
+    //
+    // 改回 microtask:让 sync 在首屏渲染**之前**就开始抢占主线程跑,首屏出
+    // 来时 ticker bump 已经发生或正在发生,跟首屏渲染叠加成单次"加载",没
+    // 有"先显示后又刷新"的二次绘制感。Phase1/Phase2 分层结构保留(下面的
+    // `_triggerInitialCloudSync` 还是分层并行,避免多账本场景重复跑用户级
+    // 操作),只换了 trigger 时机。
+    Future.microtask(() async {
       try {
         final syncService = ref.read(syncServiceProvider);
         if (syncService is TransactionsSyncManager) {
-          Future.microtask(() async {
-            await syncService.refreshAllLedgersStatus();
-            ref.read(ledgerListRefreshProvider.notifier).state++;
-          });
+          await syncService.refreshAllLedgersStatus();
+          ref.read(ledgerListRefreshProvider.notifier).state++;
         } else if (syncService is SyncEngine) {
           _triggerInitialCloudSync(syncService);
         }

@@ -25,7 +25,8 @@ extension SyncEngineRealtime on SyncEngine {
         logger.info('SyncEngine', '收到实时事件: profile_change');
         unawaited(syncMyProfile().then((changed) {
           if (changed) {
-            onAutoPullCompleted?.call(event.ledgerId ?? '');
+            final ledgerId = event.ledgerId ?? '';
+            _emit(PullCompleted(ledgerId: ledgerId));
           }
         }));
       } else if (event.type == 'connected') {
@@ -156,7 +157,7 @@ extension SyncEngineRealtime on SyncEngine {
       if (changeType == 'removed' && affectedUserId != null && affectedUserId == myUserId) {
         // 自己被踢:清本地该 ledger 数据
         await _purgeLocalLedgerByExternalId(ledgerExternalId);
-        onAutoPullCompleted?.call(ledgerExternalId);
+        _emit(PullCompleted(ledgerId: ledgerExternalId));
         logger.info('SyncEngine', '自己被踢出 ledger=$ledgerExternalId,已清本地数据');
         return;
       }
@@ -173,14 +174,14 @@ extension SyncEngineRealtime on SyncEngine {
             '自己加入 ledger=$ledgerExternalId(可能 web 端 accept),触发完整初始化');
         await syncLedgersFromServer();
         await replayAllChanges();
-        onAutoPullCompleted?.call(ledgerExternalId);
+        _emit(PullCompleted(ledgerId: ledgerExternalId));
         return;
       }
 
       // 其他场景(别人 joined / 角色变 / 被踢 / 别人退出):重拉 ledgers
       // list(memberCount / isShared 可能变),不阻塞
       await syncLedgersFromServer();
-      onAutoPullCompleted?.call(ledgerExternalId);
+      _emit(PullCompleted(ledgerId: ledgerExternalId));
     } catch (e, st) {
       logger.warning('SyncEngine', 'handleMemberChange 失败', st);
       logger.warning('SyncEngine', 'error: $e');
@@ -306,9 +307,11 @@ extension SyncEngineRealtime on SyncEngine {
           break;
       }
       // 共享资源变化的精确信号(sharedResourceRefreshProvider 在此 bump),
-      // 跟通用 onAutoPullCompleted 分开避免 home 全局刷新。
-      onSharedResourceChanged?.call(ledgerExternalId);
-      onAutoPullCompleted?.call(ledgerExternalId);
+      // 跟 PullCompleted 分开避免 home 全局刷新 — Owner 改分类/账户/标签时
+      // tx 数据本身没变,home 不该清缓存重建。SharedResourceChanged listener
+      // 走 `forceStreamModeImmediate`,让 Drift table-watch 自然推 stream
+      // 更新(category JOIN 会带新 name/icon)。
+      _emit(SharedResourceChanged(ledgerId: ledgerExternalId));
     } catch (e, st) {
       logger.warning('SyncEngine',
           'handleSharedResourceChange 失败 type=$resourceType action=$action', st);
@@ -359,7 +362,10 @@ extension SyncEngineRealtime on SyncEngine {
     logger.info('SyncEngine',
         '重连共享资源对账完成 ok=$ok fail=$fail');
     if (ok > 0) {
-      onAutoPullCompleted?.call('');
+      // 只 emit SharedResourceChanged — 重连补拉的只是 SharedLedger* 镜像表,
+      // tx 没变,不该让 home 整页刷新。Editor 的 TransactionList 监听
+      // sharedResourceRefreshProvider 走 forceStreamModeImmediate 即可。
+      _emit(const SharedResourceChanged(ledgerId: ''));
     }
   }
 
@@ -451,7 +457,7 @@ extension SyncEngineRealtime on SyncEngine {
     // 共享资源整批刷过,通知 UI 重渲(HomePage StreamBuilder 重订阅 +
     // picker / 反查 widget rebuild)。不在 _refreshAllSharedResourcesAfterReconnect
     // 里调,因为那个方法会逐账本调本函数,每个账本独立 fire。
-    onSharedResourceChanged?.call(ledgerExternalId);
+    _emit(SharedResourceChanged(ledgerId: ledgerExternalId));
   }
 
   Future<void> onInviteAccepted(String ledgerExternalId) async {
@@ -473,7 +479,7 @@ extension SyncEngineRealtime on SyncEngine {
       // 的共享账本)。pullChanges apply 是 idempotent,重复 apply 已存在
       // 的不会出错。
       await replayAllChanges();
-      onAutoPullCompleted?.call(ledgerExternalId);
+      _emit(PullCompleted(ledgerId: ledgerExternalId));
     } catch (e, st) {
       logger.warning('SyncEngine', 'onInviteAccepted 失败 ledger=$ledgerExternalId', st);
       logger.warning('SyncEngine', 'error: $e');
@@ -659,8 +665,8 @@ extension SyncEngineRealtime on SyncEngine {
               if (downloaded > 0) {
                 logger.info('SyncEngine',
                     '自动 pull 后下载了 $downloaded 个附件');
-                // 重新通知 UI 刷新（附件 UI 的 state 可能已经 stale）。
-                onAutoPullCompleted?.call(targetLedgerId);
+                // 重新通知 UI 刷新(附件 UI 的 state 可能已经 stale)。
+                _emit(PullCompleted(ledgerId: targetLedgerId));
               }
             } catch (e, st) {
               logger.warning('SyncEngine', 'auto pull 后下载附件失败: $e', st);
@@ -671,7 +677,7 @@ extension SyncEngineRealtime on SyncEngine {
         // 但等于此刻 WS 事件产生的时候 snapshot 已经由 materialize 更新过,
         // UI 刷一下总没错；派生 Provider 重算也很便宜。
         _statusCache.remove(int.tryParse(targetLedgerId));
-        onAutoPullCompleted?.call(targetLedgerId);
+        _emit(PullCompleted(ledgerId: targetLedgerId, applied: pulled));
       } catch (e, st) {
         logger.error('SyncEngine', '自动 pull 失败', e, st);
       } finally {

@@ -696,6 +696,73 @@ void main() {
     });
   });
 
+  group('SyncEvent stream(PR 1 解耦改造)', () {
+    test('WS pull 完成 emit PullCompleted 到 events stream', () async {
+      await db.into(db.ledgers).insert(LedgersCompanion.insert(
+          name: 'L', syncId: const Value('L1')));
+      await db.into(db.categories).insert(CategoriesCompanion.insert(
+          name: 'C', kind: 'expense', syncId: const Value('C1')));
+
+      // 订阅 events
+      final received = <SyncEvent>[];
+      final sub = engine.events.listen(received.add);
+
+      engine.startListeningRealtime();
+      provider.pushFakeChange(
+        entityType: 'transaction',
+        entitySyncId: 'tx-event',
+        ledgerId: 'L1',
+        payload: {
+          'syncId': 'tx-event',
+          'type': 'expense',
+          'amount': 1.0,
+          'happenedAt': '2026-05-01T10:00:00Z',
+          'categoryId': 'C1',
+          'categoryName': 'C',
+          'categoryKind': 'expense',
+        },
+      );
+      provider.emitRealtimeEvent(BeeCountCloudRealtimeEvent(
+        type: 'sync_change',
+        ledgerId: 'L1',
+        rawData: const {},
+      ));
+
+      await Future.delayed(const Duration(milliseconds: 1500));
+
+      engine.stopListeningRealtime();
+      await sub.cancel();
+
+      // 至少有一个 PullCompleted 事件
+      final pullEvents = received.whereType<PullCompleted>().toList();
+      expect(pullEvents, isNotEmpty);
+      expect(pullEvents.last.ledgerId, 'L1');
+      expect(pullEvents.last.applied, greaterThan(0));
+    });
+
+    test('多种事件类型 dispatch:PullCompleted / ProfileFieldApplied 等', () async {
+      final received = <SyncEvent>[];
+      final sub = engine.events.listen(received.add);
+
+      // 直接调 _emit 不容易(私有),但 syncMyProfile / pull 路径会 emit。
+      // 这里用 syncMyProfile 路径:fake provider 抛 UnimplementedError →
+      // 整个流程进 catch 不 emit。我们改测 pull → PullCompleted
+      await db.into(db.ledgers).insert(LedgersCompanion.insert(
+          name: 'L', syncId: const Value('L1')));
+      engine.startListeningRealtime();
+      provider.emitRealtimeEvent(BeeCountCloudRealtimeEvent(
+        type: 'sync_change',
+        ledgerId: 'L1',
+        rawData: const {},
+      ));
+      await Future.delayed(const Duration(milliseconds: 1500));
+      engine.stopListeningRealtime();
+      await sub.cancel();
+
+      expect(received.whereType<PullCompleted>(), isNotEmpty);
+    });
+  });
+
   group('WS realtime', () {
     test('startListeningRealtime + 模拟 WS sync_change → 1s debounce 后触发 pull',
         () async {

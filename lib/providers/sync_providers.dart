@@ -28,6 +28,22 @@ import 'tag_providers.dart';
 import 'ui_state_providers.dart';
 import 'statistics_providers.dart';
 
+/// SyncEngine 对外广播事件流(PR 1 引入)。
+///
+/// 当前阶段:跟老的 7 个 callback 字段(`onAutoPullCompleted` 等)**并行**运行,
+/// 每个 callback fire 点同时 emit 等价 [SyncEvent]。新的 UI caller 应订阅这
+/// 个 provider;老 caller 暂保留(PR 2 逐个迁移,PR 3 删 callback)。
+///
+/// 不是 SyncEngine 模式时返空 stream,订阅者拿不到事件即可。
+final StreamProvider<SyncEvent> syncEventStreamProvider =
+    StreamProvider<SyncEvent>((ref) {
+  final svc = ref.watch(syncServiceProvider);
+  if (svc is! SyncEngine) {
+    return const Stream<SyncEvent>.empty();
+  }
+  return svc.events;
+});
+
 // 同步状态（根据 ledgerId 与刷新 tick 缓存），避免因 UI 重建重复拉取
 final syncStatusProvider =
     FutureProvider.family<SyncStatus, int>((ref, ledgerId) async {
@@ -170,96 +186,100 @@ final syncServiceProvider = Provider<SyncService>((ref) {
     // 不再 ref.onDispose(engine.dispose())。
     final engine = ref.watch(sync_p.syncEngineProvider(cloudProvider));
 
-    // 共享账本资源(分类/账户/标签)的精确刷新信号 — 跟通用 onAutoPullCompleted
-    // 分开。后者每次 auto-pull 都触发(包括自己 push 完成后的空 pull),
-    // HomePage listen sharedResourceRefreshProvider 会重建 StreamBuilder 子树
-    // → 编辑 tx 时表现为"全局刷新"。这个回调只在 WS shared_resource_change
-    // 或 fetchAndStoreSharedResources 时 fire,避免误触。
-    engine.onSharedResourceChanged = (ledgerId) {
-      ref.read(sharedResourceRefreshProvider.notifier).state++;
-    };
+    // PR 2/3:订阅 SyncEvent stream 替代 7 个 callback 绑定。
+    //
+    // SyncEngine 完全不知道 Riverpod / widget 存在,只往 events stream 写;
+    // 本 listener 把事件 dispatch 到对应的 provider bump / invalidate。
+    //
+    // 直接订阅 `engine.events` 而不是走 [syncEventStreamProvider] —— 否则会跟
+    // syncServiceProvider 形成循环依赖(syncEventStreamProvider 需要 watch
+    // syncServiceProvider 拿 engine,syncServiceProvider 又 listen
+    // syncEventStreamProvider,运行时 Riverpod 抛 CircularDependencyError)。
+    // syncEventStreamProvider 仍然存在,留给 UI/测试直接订阅 SyncEvent 用,
+    // 跟本 listener 互不冲突。
+    //
+    // 历史背景(原 callback 注释保留意图):
+    //   - PullCompleted:每次 auto-pull 都 fire(含空 pull),用于刷新各域 tick;
+    //     `sharedResourceRefreshProvider` 故意不在这里 bump 避免 home 全局刷新,
+    //     它走单独的 SharedResourceChanged event。
+    //   - SharedResourceChanged:Owner 共享资源(分类/账户/标签)变了,Editor 端
+    //     SharedLedger* 镜像表已更新,UI 应重建。
+    //   - AvatarChanged:只在真下载新头像时 fire,不是每次 pull 都触发,避免
+    //     冷启动头像闪一下。
+    //   - ProfileFieldApplied:server 下来的 theme/income/appearance/aiConfig
+    //     回写本地 Riverpod state + SharedPreferences。
+    final eventSub = engine.events.listen((event) {
+      switch (event) {
+        case PullCompleted(:final applied):
+          // pulled=0 是大量"空 sync"场景的常态:WS 重连、connectivity 恢复、
+          // 自我推送回声被过滤掉、profile_change 触发的 pull、新设备首次绑定
+          // 后又被触发的 sync 等等。这些场景下没有任何实质数据变化,如果照样
+          // bump 一堆 refresh tick → home/统计/预算/StreamBuilder 全部 cascade
+          // rebuild,体感就是"莫名其妙首页全量刷一次"。
+          //
+          // 真有数据被 apply 时(applied > 0)才走完整刷新链。
+          if (applied == 0) break;
+          // 同步 bump — 跟 PR3 前的 onAutoPullCompleted callback 等价。配合
+          // SyncEngine 的 broadcast(sync: true),listener 收到 emit 后立即同步
+          // 执行 state 变更,Flutter framework 把所有 markNeedsBuild 合并到当前
+          // 帧的同一次 rebuild,不会跨帧 cascade。
+          ref.read(syncStatusRefreshProvider.notifier).state++;
+          ref.read(ledgerListRefreshProvider.notifier).state++;
+          // currentLedgerProvider 是 FutureProvider,Drift 写入不会自动重算,
+          // 远端改名 / 改币种落库后必须显式 invalidate,否则首页 header
+          // 等 watch 它的 widget 永远显示旧账本名。
+          ref.invalidate(currentLedgerProvider);
+          ref.read(syncGenerationProvider.notifier).state++;
+          ref.read(statsRefreshProvider.notifier).state++;
+          ref.read(budgetRefreshProvider.notifier).state++;
+          ref.read(tagListRefreshProvider.notifier).state++;
+          ref.read(calendarRefreshProvider.notifier).state++;
+          ref.read(attachmentListRefreshProvider.notifier).state++;
+          // 切到 Stream 模式 — 否则 Drift 已更新但 TransactionList 仍用
+          // Splash 阶段 cache 住的 accountName。不清 cachedTransactionsProvider:
+          // 切到 stream 模式后 cache 不再被读取,留旧值给到 stream 推送之前
+          // 平滑过渡。
+          ref.read(homeSwitchToStreamProvider.notifier).state++;
+        case SharedResourceChanged():
+          ref.read(sharedResourceRefreshProvider.notifier).state++;
+        case AvatarChanged():
+          ref.read(avatarRefreshProvider.notifier).state++;
+        case ProfileFieldApplied(:final field, :final value):
+          switch (field) {
+            case ProfileField.themeColor:
+              _applyThemeColorFromServer(ref, value as String);
+            case ProfileField.incomeColor:
+              _applyIncomeColorFromServer(ref, value as bool);
+            case ProfileField.appearance:
+              _applyAppearanceFromServer(
+                  ref, value as Map<String, dynamic>);
+            case ProfileField.aiConfig:
+              unawaited(() async {
+                await AIProviderManager.applyFromServer(
+                    value as Map<String, dynamic>);
+                try {
+                  ref
+                      .read(aiCapabilityBindingRefreshProvider.notifier)
+                      .state++;
+                  ref
+                      .read(aiProviderListForCapabilityRefreshProvider
+                          .notifier)
+                      .state++;
+                  ref.read(aiProviderListRefreshProvider.notifier).state++;
+                  ref.invalidate(aiConfigProvider);
+                } catch (e, st) {
+                  logger.warning(
+                      'CloudSync', 'AI 配置 apply 后 UI bump 失败: $e', st);
+                }
+              }());
+          }
+      }
+    });
 
-    // 开始监听 WebSocket 实时事件，自动触发 pull
-    engine.onAutoPullCompleted = (ledgerId) {
-      // pull 完成把远端变更落到 Drift 之后，把所有"UI 刷新 tick" 全部 +1，
-      // 这样各领域既有的 refresh 机制就能自然触发下游 FutureProvider 重算；
-      // syncGenerationProvider 作为总 bump，覆盖后续新增但没有单独 tick 的。
-      ref.read(syncStatusRefreshProvider.notifier).state++;
-      ref.read(ledgerListRefreshProvider.notifier).state++;
-      // currentLedgerProvider 是 FutureProvider，不会因为 Drift 写入而重算；
-      // 远端 sync_change(entity_type='ledger',改名 / 改币种)落库后必须显
-      // 式 invalidate 否则首页 header / 设置 / 预算等 watch 它的 widget 永远
-      // 显示旧的账本名 — 用户 A 在 web 改名,A/B 移动端 header 不刷新的根因。
-      ref.invalidate(currentLedgerProvider);
-      ref.read(syncGenerationProvider.notifier).state++;
-      ref.read(statsRefreshProvider.notifier).state++;
-      ref.read(budgetRefreshProvider.notifier).state++;
-      ref.read(tagListRefreshProvider.notifier).state++;
-      ref.read(calendarRefreshProvider.notifier).state++;
-      // 注意:`sharedResourceRefreshProvider` **不在这里**无条件 bump。
-      // 它的语义是"Owner 共享资源(分类/账户/标签)变了,Editor 端 SharedLedger*
-      // 镜像表已更新,UI 应重建以显示最新分类名/图标"。HomePage 上 listen 它
-      // 触发 _streamBuilderKey++ 重建整个 StreamBuilder 子树,代价大。
-      // 如果在每次 auto-pull 后都 bump,自己 mobile push 完触发的 pull 也会
-      // bump → home 全局刷新一次,体验差。
-      // 改成只在真有共享资源变化的两个路径 bump:
-      //   - WS `shared_resource_change` → _handleSharedResourceChange
-      //   - reconnect / accept invite 重拉 → fetchAndStoreSharedResources
-      // 附件计数 / 列表的 tick：TransactionList 用它重新 _loadAttachmentCounts，
-      // 另一端删除 / 新增的附件就能在对端实时反映，不需要重启 app。
-      ref.read(attachmentListRefreshProvider.notifier).state++;
-      // 关键：把首页的"预加载交易详情"模式切掉。否则 Drift 里 tx 的 accountId
-      // 已经更新，但 TransactionList 还在用 Splash 阶段 cache 住的 accountName
-      // —— UI 看起来就是"pull 到了但没刷新"。
-      ref.read(homeSwitchToStreamProvider.notifier).state++;
-      ref.read(cachedTransactionsProvider.notifier).state = null;
-      // avatarRefreshProvider 现在改走 engine.onAvatarChanged 回调,只在真
-      // 下载新头像时 bump。这里不再无条件 bump — 否则冷启动 / 任意 pull
-      // 完成都会让头像组件重新读本地文件,UI 闪一次。
-    };
-    engine.onAvatarChanged = () {
-      ref.read(avatarRefreshProvider.notifier).state++;
-    };
     // 让 SyncEngine 在 WS 重连 / 网络恢复触发 auto sync 时能拿到当前 ledgerId
     engine.ledgerIdResolver = () {
       final id = ref.read(currentLedgerIdProvider);
       return id > 0 ? id.toString() : '';
-    };
-
-    // 外观 / 主题色 / 收支配色从 server 拉下来后落到 Riverpod state +
-    // SharedPreferences。值跟当前相同就不设,避免循环触发 ref.listen push。
-    engine.onThemeColorApplied = (hex) {
-      _applyThemeColorFromServer(ref, hex);
-    };
-    engine.onIncomeColorApplied = (incomeIsRed) {
-      _applyIncomeColorFromServer(ref, incomeIsRed);
-    };
-    engine.onAppearanceApplied = (appearance) {
-      _applyAppearanceFromServer(ref, appearance);
-    };
-    engine.onAiConfigApplied = (aiConfig) {
-      unawaited(() async {
-        // 先把 server 下来的配置落到 SharedPreferences。
-        await AIProviderManager.applyFromServer(aiConfig);
-        // 然后把 UI 层的 Provider 全部 bump/invalidate 一遍,让 AI 设置
-        // 页、能力绑定卡片、服务商列表都能从新 prefs 读最新值重新渲染。
-        // 不手动 bump 的话,Riverpod 不知道 prefs 写进来了,UI 停在旧状态
-        // 直到用户手动重启 / 切页面才重读。
-        try {
-          ref.read(aiCapabilityBindingRefreshProvider.notifier).state++;
-          ref.read(aiProviderListForCapabilityRefreshProvider.notifier).state++;
-          // 「AI 服务商管理」页面用的是另一个独立 ticker(`aiProviderListRefreshProvider`,
-          // 定义在 ai_provider_manage_page.dart),也得 bump,否则 web 端改 provider
-          // 后 mobile 管理页停在旧列表,得手动 pull-to-refresh / 重启 app 才更新。
-          ref.read(aiProviderListRefreshProvider.notifier).state++;
-          // aiConfigProvider 是 StateNotifierProvider,notifier 里的 state
-          // 在构造时从 prefs 读一次后就不再管。invalidate 让 notifier 重建,
-          // 触发 _loadFromPrefs 重新拉新值。
-          ref.invalidate(aiConfigProvider);
-        } catch (e, st) {
-          logger.warning('CloudSync', 'AI 配置 apply 后 UI bump 失败: $e', st);
-        }
-      }());
     };
 
     // AI 配置变更时推到 server。包含 providers / binding / custom_prompt /
@@ -320,6 +340,7 @@ final syncServiceProvider = Provider<SyncService>((ref) {
     // 当 Provider 被销毁时停止监听。engine.dispose 归 syncEngineProvider
     // (family),这里只清本 provider 自己持有的资源。
     ref.onDispose(() {
+      eventSub.cancel();
       connectivityDebounce?.cancel();
       connectivitySubscription.cancel();
       coordinator.dispose();

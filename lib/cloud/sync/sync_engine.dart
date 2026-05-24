@@ -19,6 +19,8 @@ import '../sync_service.dart' as app;
 import '../transactions_json.dart';
 import 'change_tracker.dart';
 import 'entity_serializer.dart';
+import 'sync_events.dart';
+export 'sync_events.dart';
 
 // SyncEngine 按职责拆分到多个 part 文件,共享同一 library:
 // - sync_engine_attachments.dart: 附件上传 / 下载 / 本地清理 / 分类图标上传(并发 + retry)
@@ -89,39 +91,37 @@ class SyncEngine implements app.SyncService {
   bool _autoSyncing = false;
   Timer? _autoSyncDebounce;
 
-  /// 外部回调：自动 pull 完成后通知（用于刷新 UI）
-  void Function(String ledgerId)? onAutoPullCompleted;
-
-  /// 外部回调:专门信号"共享账本资源(分类/账户/标签)发生了变化"。跟
-  /// onAutoPullCompleted 分开是因为后者每次 auto-pull 都触发(包括自己
-  /// push 完成后的空 pull),HomePage 等 listener 会重建整个 StreamBuilder
-  /// 子树 → 全局刷新。这个回调只在两个真有共享资源变化的路径触发:
-  ///   - WS `shared_resource_change` → _handleSharedResourceChange
-  ///   - reconnect / accept invite 重拉 → fetchAndStoreSharedResources
-  /// sync_providers 把这个回调绑到 sharedResourceRefreshProvider bump。
-  void Function(String ledgerId)? onSharedResourceChanged;
-
-  /// 外部注入：当前活跃 ledgerId 的解析器。WS 重连 / 网络恢复 时需要知道
-  /// 往哪个 ledger 触发 sync，但 SyncEngine 内部不挂 Riverpod ref，所以让
+  /// 外部注入:当前活跃 ledgerId 的解析器。WS 重连 / 网络恢复 时需要知道
+  /// 往哪个 ledger 触发 sync,但 SyncEngine 内部不挂 Riverpod ref,所以让
   /// sync_providers 构造完之后塞一个函数进来。返回 0 / null 会跳过本次 sync。
+  ///
+  /// 这是 SyncEngine 唯一保留的反向"UI → engine"读通道(因为 sync 触发时机
+  /// 在 engine 内部,需要主动读当前 ledger)。所有正向"engine → UI"通知都
+  /// 走 [events] stream。
   String Function()? ledgerIdResolver;
 
-  /// 外部注入:从 /profile/me 拉到的值回写本地 SharedPreferences + Riverpod
-  /// 的 setter。SyncEngine 不挂 Riverpod ref,sync_providers 构造后 hook
-  /// 进来。三个字段的 null 分别对应"不同步该字段"的 fallback。
-  void Function(String hex)? onThemeColorApplied;
-  void Function(bool incomeIsRed)? onIncomeColorApplied;
-  void Function(Map<String, dynamic> appearance)? onAppearanceApplied;
-  void Function(Map<String, dynamic> aiConfig)? onAiConfigApplied;
-
-  /// 头像**实际下载完成**(remoteVersion > localVersion + 文件写盘成功)时
-  /// 触发。sync_providers 绑到 avatarRefreshProvider bump,让 Mine 页 +
-  /// 悬浮 bar 重新读本地头像文件。
+  /// 对外广播事件总线 — UI 通过 Riverpod `syncEventStreamProvider` 订阅,
+  /// SyncEngine 完全不知道 widget / ref 存在。
   ///
-  /// 跟 onAutoPullCompleted 区分:后者每次 pull 完成都触发(包括空 pull),
-  /// 如果在那里无条件 bump avatar,冷启动 / 同步触发时即使头像没变也会重
-  /// 渲一次,出现"启动后头像闪一下"的体感。
-  void Function()? onAvatarChanged;
+  /// **sync: true 关键**:默认 broadcast 是 async 模式,`_emit` 调 `add` 后
+  /// listener 要延迟到下个 microtask 才跑。这跟 PR3 之前直接 `onXxx?.call(...)`
+  /// 的同步语义不一致 —— 多次 `_emit` 会触发多次独立 microtask,Flutter 有
+  /// 机会在两次 listener 之间 schedule rebuild,导致 state 变更分散到多帧,
+  /// 视觉上看到首页"刷一次又刷一次"。sync: true 让 add 同步调 listener,跟
+  /// 原 callback 行为完全等价,多次 emit 内的 state 变更在同一同步代码段内
+  /// batch 成一帧 rebuild。
+  final StreamController<SyncEvent> _eventsController =
+      StreamController<SyncEvent>.broadcast(sync: true);
+
+  /// 订阅 sync 事件。
+  Stream<SyncEvent> get events => _eventsController.stream;
+
+  /// 内部 helper:emit 新事件到 stream。
+  void _emit(SyncEvent event) {
+    if (!_eventsController.isClosed) {
+      _eventsController.add(event);
+    }
+  }
 
   /// app 侧 cursor + pull 失败 change 持久化的 DAO。
   /// 详见 [AppCursorStore] / [SyncErrorStore](sync_engine_pull.dart)。
@@ -314,6 +314,7 @@ class SyncEngine implements app.SyncService {
   /// 释放资源
   void dispose() {
     stopListeningRealtime();
+    _eventsController.close();
   }
 
   // ==================== 核心同步逻辑 ====================
@@ -617,7 +618,9 @@ class SyncEngine implements app.SyncService {
           }
         }
         // 通知 UI 刷新(picker / 详情页 watch sharedResourceRefreshProvider)
-        onAutoPullCompleted?.call('');
+        // 这里只是拉了 SharedLedger* 镜像表,tx 没变,不该 emit PullCompleted
+        // 触发 home 全刷,走 SharedResourceChanged 精确信号。
+        _emit(const SharedResourceChanged(ledgerId: ''));
       }
 
       return inserted;

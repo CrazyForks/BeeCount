@@ -47,6 +47,17 @@ class _HomePageState extends ConsumerState<HomePage> {
   int _streamBuilderKey = 0;
   int? _lastLedgerId;
 
+  // home build 缓存的 tx stream。repo.transactionsWithCategoryAll 内部每次调
+  // 都 new StreamController,如果在 build 里直接调,只要 home 因任何 setState
+  // (例如 _showBudgetSetupHint / _showLastMonthReminder 异步加载完成)重 build,
+  // StreamBuilder 看到 stream 引用变了就重新订阅 → snapshot.data 短暂为 null
+  // → fallback 到 cachedFullData(只有前 20 条预加载)→ 等 Drift 推数据 → 切回
+  // 完整列表,视觉上"整页闪一下"。这里把 stream 缓存到 State,只在 ledgerId
+  // 变化时重建,无关 setState 重 build 时复用同一 stream 引用。
+  Stream<List<({Transaction t, Category? category, Account? account, Account? toAccount})>>?
+      _txStream;
+  int? _txStreamLedgerId;
+
   // 月初提醒状态
   bool _showLastMonthReminder = false;
   static const String _reminderDismissedKey = 'last_month_reminder_dismissed';
@@ -970,7 +981,16 @@ class _HomePageState extends ConsumerState<HomePage> {
           Expanded(
             child: StreamBuilder<List<({Transaction t, Category? category, Account? account, Account? toAccount})>>(
               key: ValueKey('transactions_$_streamBuilderKey'), // 使用递增key强制重建
-              stream: repo.transactionsWithCategoryAll(ledgerId: ledgerId),
+              stream: () {
+                // ledgerId 变了或第一次进来才重建 stream;无关 setState(预算
+                // 提示卡片、月度提醒等)的 home rebuild 复用同一 stream 引用,
+                // StreamBuilder 不会重新订阅,不会闪到 fallback 数据。
+                if (_txStream == null || _txStreamLedgerId != ledgerId) {
+                  _txStream = repo.transactionsWithCategoryAll(ledgerId: ledgerId);
+                  _txStreamLedgerId = ledgerId;
+                }
+                return _txStream;
+              }(),
               builder: (context, snapshot) {
                 // Stream 数据到来前，使用预加载数据；到来后使用 Stream 数据
                 final streamData = snapshot.data;

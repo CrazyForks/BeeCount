@@ -12,21 +12,9 @@ extension SyncEngineProfile on SyncEngine {
   /// 头像都落回本地(SharedPreferences + 本地文件)。任意字段有更新都返 true,
   /// 让调用方 bump 对应 UI refresh tick。
   ///
-  /// 用 [onAppearanceApplied]/[onThemeApplied]/[onIncomeColorApplied] 回调
-  /// 让 sync_providers 层把值写进 Riverpod state + SharedPreferences,避免
-  /// 这里直接依赖 Riverpod。回调不写就只同步头像(向后兼容)。
-  Future<bool> syncMyProfile({
-    void Function(String hex)? themeApplied,
-    void Function(bool incomeIsRed)? incomeApplied,
-    void Function(Map<String, dynamic> appearance)? appearanceApplied,
-    void Function(Map<String, dynamic> aiConfig)? aiConfigApplied,
-  }) async {
-    // 没显式传参数时走 SyncEngine 的全局回调(sync_providers 在构造时注入)。
-    // 这样 bootstrap / WS profile_change 两个内部调用点都能自动用到。
-    final onThemeApplied = themeApplied ?? onThemeColorApplied;
-    final onIncomeApplied = incomeApplied ?? onIncomeColorApplied;
-    final onAppearanceCallback = appearanceApplied ?? onAppearanceApplied;
-    final onAiConfigCallback = aiConfigApplied ?? onAiConfigApplied;
+  /// PR 3:不再接 callback,所有字段更新走 [events] stream emit
+  /// `ProfileFieldApplied` 事件,UI 通过 syncEventStreamProvider 订阅处理。
+  Future<bool> syncMyProfile() async {
     final localVersion = await AvatarService.getStoredRemoteVersion();
     logger.info('avatar_sync',
         'syncMyProfile start, localVersion=$localVersion');
@@ -36,46 +24,30 @@ extension SyncEngineProfile on SyncEngine {
 
       // === theme_primary_color ===
       final theme = profile.themePrimaryColor;
-      if (theme != null && theme.isNotEmpty && onThemeApplied != null) {
-        try {
-          onThemeApplied(theme);
-          anyChanged = true;
-        } catch (e, st) {
-          logger.warning('profile_sync', 'onThemeApplied 失败: $e', st);
-        }
+      if (theme != null && theme.isNotEmpty) {
+        _emit(ProfileFieldApplied.themeColor(theme));
+        anyChanged = true;
       }
 
       // === income_is_red ===
       final incomeIsRed = profile.incomeIsRed;
-      if (incomeIsRed != null && onIncomeApplied != null) {
-        try {
-          onIncomeApplied(incomeIsRed);
-          anyChanged = true;
-        } catch (e, st) {
-          logger.warning('profile_sync', 'onIncomeApplied 失败: $e', st);
-        }
+      if (incomeIsRed != null) {
+        _emit(ProfileFieldApplied.incomeColor(incomeIsRed));
+        anyChanged = true;
       }
 
       // === appearance (header_decoration_style / compact_amount / show_transaction_time) ===
       final appearance = profile.appearance;
-      if (appearance != null && appearance.isNotEmpty && onAppearanceCallback != null) {
-        try {
-          onAppearanceCallback(appearance);
-          anyChanged = true;
-        } catch (e, st) {
-          logger.warning('profile_sync', 'onAppearanceCallback 失败: $e', st);
-        }
+      if (appearance != null && appearance.isNotEmpty) {
+        _emit(ProfileFieldApplied.appearance(appearance));
+        anyChanged = true;
       }
 
       // === ai_config (providers / binding / custom_prompt / strategy …) ===
       final aiConfig = profile.aiConfig;
-      if (aiConfig != null && aiConfig.isNotEmpty && onAiConfigCallback != null) {
-        try {
-          onAiConfigCallback(aiConfig);
-          anyChanged = true;
-        } catch (e, st) {
-          logger.warning('profile_sync', 'onAiConfigCallback 失败: $e', st);
-        }
+      if (aiConfig != null && aiConfig.isNotEmpty) {
+        _emit(ProfileFieldApplied.aiConfig(aiConfig));
+        anyChanged = true;
       }
 
       // === avatar ===
@@ -106,13 +78,9 @@ extension SyncEngineProfile on SyncEngine {
       await AvatarService.setStoredRemoteVersion(remoteVersion);
       logger.info('avatar_sync',
           'saved to local, bumped localVersion=$remoteVersion');
-      // 真下载了头像才触发回调,让外部 bump avatarRefreshProvider。
+      // 真下载了头像才 emit AvatarChanged,让 UI bump avatarRefreshProvider。
       // up-to-date / no avatar 分支不触发,避免冷启动一次刷新。
-      try {
-        onAvatarChanged?.call();
-      } catch (e, st) {
-        logger.warning('avatar_sync', 'onAvatarChanged 回调失败: $e', st);
-      }
+      _emit(const AvatarChanged());
       return true;
     } catch (e, st) {
       logger.warning('avatar_sync', '同步失败: $e', st);
