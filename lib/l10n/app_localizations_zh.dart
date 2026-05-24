@@ -4078,16 +4078,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get automationPageSubtitle => '周期记账和提醒设置';
 
   @override
-  String get appearanceSettings => '外观设置';
+  String get appearanceSettings => '个性化设置';
 
   @override
-  String get appearanceSettingsDesc => '主题、字体、语言设置';
+  String get appearanceSettingsDesc => '主题、字体、语言、应用锁等';
 
   @override
-  String get appearanceSettingsPageTitle => '外观设置';
+  String get appearanceSettingsPageTitle => '个性化设置';
 
   @override
-  String get appearanceSettingsPageSubtitle => '个性化外观和显示';
+  String get appearanceSettingsPageSubtitle => '外观、显示、安全等应用偏好';
 
   @override
   String get about => '关于';
@@ -10490,16 +10490,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get automationPageSubtitle => '週期記帳和提醒設定';
 
   @override
-  String get appearanceSettings => '外觀設定';
+  String get appearanceSettings => '個性化設定';
 
   @override
-  String get appearanceSettingsDesc => '主題、字體、語言設定';
+  String get appearanceSettingsDesc => '主題、字體、語言、應用鎖等';
 
   @override
-  String get appearanceSettingsPageTitle => '外觀設定';
+  String get appearanceSettingsPageTitle => '個性化設定';
 
   @override
-  String get appearanceSettingsPageSubtitle => '個性化外觀和顯示';
+  String get appearanceSettingsPageSubtitle => '外觀、顯示、安全等應用偏好';
 
   @override
   String get about => '關於';

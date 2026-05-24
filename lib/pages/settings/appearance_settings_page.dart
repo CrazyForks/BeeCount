@@ -9,6 +9,7 @@ import './personalize_page.dart';
 import './font_settings_page.dart';
 import './language_settings_page.dart';
 import './widget_management_page.dart';
+import './app_lock_settings_page.dart';
 import '../../l10n/app_localizations.dart';
 
 /// 外观设置二级页面
@@ -191,6 +192,20 @@ class AppearanceSettingsPage extends ConsumerWidget {
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
+                          );
+                        },
+                      ),
+                      BeeTokens.cardDivider(context),
+                      // 应用锁 — 之前在「数据管理」页面底部独占一个 section,
+                      // 跟"导入导出/清理"语义不搭。挪到个性化设置里作为应用
+                      // 偏好之一。
+                      AppListTile(
+                        leading: Icons.lock_outline,
+                        title: l10n.appLockTitle,
+                        subtitle: l10n.appLockDesc,
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const AppLockSettingsPage()),
                           );
                         },
                       ),

@@ -18,7 +18,6 @@ import '../tag/tag_manage_page.dart';
 import '../settings/config_import_export_page.dart';
 import '../settings/storage_management_page.dart';
 import '../settings/attachment_preview_page.dart';
-import '../settings/app_lock_settings_page.dart';
 import '../maintenance/orphan_cleanup_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
@@ -221,22 +220,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 8.0.scaled(context, ref)),
-                // 安全
-                SectionCard(
-                  margin: EdgeInsets.zero,
-                  child: AppListTile(
-                    leading: Icons.lock_outline,
-                    title: AppLocalizations.of(context).appLockTitle,
-                    subtitle: AppLocalizations.of(context).appLockDesc,
-                    onTap: () async {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => const AppLockSettingsPage()),
-                      );
-                    },
-                  ),
-                ),
+                // 应用锁已挪到「个性化设置」页面(语义上属于应用偏好)。
               ],
             ),
           ),

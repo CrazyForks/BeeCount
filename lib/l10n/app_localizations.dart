@@ -7797,25 +7797,25 @@ abstract class AppLocalizations {
   /// No description provided for @appearanceSettings.
   ///
   /// In en, this message translates to:
-  /// **'Appearance'**
+  /// **'Personalization'**
   String get appearanceSettings;
 
   /// No description provided for @appearanceSettingsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Theme, font and language settings'**
+  /// **'Theme, font, language, app lock, etc.'**
   String get appearanceSettingsDesc;
 
   /// No description provided for @appearanceSettingsPageTitle.
   ///
   /// In en, this message translates to:
-  /// **'Appearance'**
+  /// **'Personalization'**
   String get appearanceSettingsPageTitle;
 
   /// No description provided for @appearanceSettingsPageSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Personalize appearance and display'**
+  /// **'Appearance, display, security and other app preferences'**
   String get appearanceSettingsPageSubtitle;
 
   /// No description provided for @about.

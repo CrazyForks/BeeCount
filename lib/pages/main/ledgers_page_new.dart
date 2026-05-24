@@ -19,6 +19,7 @@ import '../../widgets/biz/biz.dart';
 import '../cloud/member_list_page.dart';
 import '../cloud/member_stats_page.dart';
 import '../cloud/join_shared_ledger_page.dart';
+import '../budget/budget_page.dart';
 import '../../styles/tokens.dart';
 import '../../utils/currencies.dart';
 import '../../services/system/logger_service.dart';
@@ -456,6 +457,18 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
                   ],
                 ),
               ),
+            // 预算管理入口 — 每个账本独立预算,Owner/Editor 都能看(Editor 进
+            // BudgetPage 后 isEditorInShared 隐藏 + 按钮和编辑入口,只看不改)。
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(dctx, 'budget'),
+              child: Row(
+                children: [
+                  Icon(Icons.pie_chart_outline_rounded, color: primary),
+                  const SizedBox(width: 8),
+                  Text(AppLocalizations.of(context).budgetManagement),
+                ],
+              ),
+            ),
             // v24 共享账本:成员管理入口(任意 member 可看,owner 可邀请 / 踢人,
             // Editor 可看列表 + 退出账本)。非 BeeCount Cloud 模式没成员概念,
             // 整个入口隐藏。
@@ -540,6 +553,18 @@ class _LedgersPageNewState extends ConsumerState<LedgersPageNew> {
 
     if (action == 'edit') {
       await _handleEditLedger(context, ledger);
+    } else if (action == 'budget') {
+      // 切到长按的账本(BudgetPage 内部 watch currentLedger,不接 ledgerId 参
+      // 数),再 push。语义上"从账本列表 → 长按 A → 预算管理"自然就是切到 A。
+      if (ref.read(currentLedgerIdProvider) != ledger.id) {
+        ref.read(currentLedgerIdProvider.notifier).state = ledger.id;
+        ref.invalidate(currentLedgerProvider);
+      }
+      if (mounted) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const BudgetPage()),
+        );
+      }
     } else if (action == 'members') {
       // 跳转成员管理 — 需要 ledger.syncId(server external_id)。本地仅 ledger
       // (没 syncId,从未同步过的)无成员概念,提示用户先建云账户。

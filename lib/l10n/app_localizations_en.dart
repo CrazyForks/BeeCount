@@ -4078,16 +4078,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get automationPageSubtitle => 'Recurring transactions and reminder settings';
 
   @override
-  String get appearanceSettings => 'Appearance';
+  String get appearanceSettings => 'Personalization';
 
   @override
-  String get appearanceSettingsDesc => 'Theme, font and language settings';
+  String get appearanceSettingsDesc => 'Theme, font, language, app lock, etc.';
 
   @override
-  String get appearanceSettingsPageTitle => 'Appearance';
+  String get appearanceSettingsPageTitle => 'Personalization';
 
   @override
-  String get appearanceSettingsPageSubtitle => 'Personalize appearance and display';
+  String get appearanceSettingsPageSubtitle => 'Appearance, display, security and other app preferences';
 
   @override
   String get about => 'About';
