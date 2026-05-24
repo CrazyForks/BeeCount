@@ -3871,15 +3871,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiChatGoToSettings => '去设置';
 
   @override
-  String get aiLocalModelTitle => '本地模型';
-
-  @override
-  String get aiLocalModelTraining => '训练中';
-
-  @override
-  String get aiLocalModelUnavailable => '本地模型训练中，暂不可用';
-
-  @override
   String get aiOcrRecognizing => '正在识别账单...';
 
   @override
@@ -10290,15 +10281,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiChatGoToSettings => '前往設定';
-
-  @override
-  String get aiLocalModelTitle => '本機模型';
-
-  @override
-  String get aiLocalModelTraining => '訓練中';
-
-  @override
-  String get aiLocalModelUnavailable => '本機模型訓練中，暫不可用';
 
   @override
   String get aiOcrRecognizing => '正在識別帳單...';

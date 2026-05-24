@@ -3871,15 +3871,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiChatGoToSettings => 'Go to Settings';
 
   @override
-  String get aiLocalModelTitle => 'Local Model';
-
-  @override
-  String get aiLocalModelTraining => 'Training';
-
-  @override
-  String get aiLocalModelUnavailable => 'Local model in training, not available yet';
-
-  @override
   String get aiOcrRecognizing => 'Recognizing bill...';
 
   @override

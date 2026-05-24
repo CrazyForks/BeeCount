@@ -475,40 +475,9 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
             BeeTokens.cardDivider(context),
 
-            // === 本地模型（禁用） ===
-            ListTile(
-              dense: true,
-              leading: Icon(
-                Icons.smartphone,
-                size: 20,
-                color: BeeTokens.textTertiary(context),
-              ),
-              title: Text(
-                l10n.aiLocalModelTitle,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: BeeTokens.textTertiary(context),
-                ),
-              ),
-              subtitle: Text(
-                l10n.aiLocalModelUnavailable,
-                style: const TextStyle(fontSize: 12),
-              ),
-              trailing: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  l10n.aiLocalModelTraining,
-                  style: TextStyle(fontSize: 10, color: primaryColor),
-                ),
-              ),
-              enabled: false,
-            ),
-
-            BeeTokens.cardDivider(context),
+            // 历史「本地模型(训练中)」占位 entry 已删除(2026-05-24)。本地 AI 视觉
+            // 未来走 Apple Foundation Models / Gemini Nano(平台原生 SDK,非 tflite),
+            // 详见 .docs/on-device-vlm/README.md。
 
             // === 自定义提示词 ===
             ListTile(

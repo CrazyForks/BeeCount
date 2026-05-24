@@ -7392,24 +7392,6 @@ abstract class AppLocalizations {
   /// **'Go to Settings'**
   String get aiChatGoToSettings;
 
-  /// No description provided for @aiLocalModelTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Local Model'**
-  String get aiLocalModelTitle;
-
-  /// No description provided for @aiLocalModelTraining.
-  ///
-  /// In en, this message translates to:
-  /// **'Training'**
-  String get aiLocalModelTraining;
-
-  /// No description provided for @aiLocalModelUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Local model in training, not available yet'**
-  String get aiLocalModelUnavailable;
-
   /// No description provided for @aiOcrRecognizing.
   ///
   /// In en, this message translates to:
