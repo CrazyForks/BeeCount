@@ -42,7 +42,6 @@ dependencies:
   reorderable_grid_view: ^2.2.8
   excel: ^4.0.6
   home_widget: ^0.7.0
-  google_mlkit_text_recognition: ^0.15.0
   image_picker: ^1.1.2
   flutter_image_compress: ^2.3.0
   image_cropper: 8.0.2
@@ -59,8 +58,6 @@ dependencies:
     path: packages/flutter_ai_kit
   flutter_ai_kit_zhipu:
     path: packages/flutter_ai_kit_zhipu
-  flutter_ai_kit_tflite:
-    path: packages/flutter_ai_kit_tflite
   flutter_ai_kit_openai:
     path: packages/flutter_ai_kit_openai
   flutter_cloud_sync:

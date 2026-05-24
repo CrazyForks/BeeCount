@@ -14,7 +14,7 @@ import '../services/ai/ai_provider_config.dart';
 import '../services/billing/voice_billing_service.dart';
 import '../services/billing/bill_creation_service.dart';
 import '../services/billing/post_processor.dart';
-import '../services/billing/ocr_service.dart';
+import '../services/billing/bill_recognition_result.dart';
 import '../services/data/tag_seed_service.dart';
 import '../widgets/ui/ui.dart';
 import '../styles/tokens.dart';

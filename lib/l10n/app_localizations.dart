@@ -6864,6 +6864,12 @@ abstract class AppLocalizations {
   /// **'Choose your preferred currency, you can change it anytime in settings'**
   String get welcomeCurrencyDescription;
 
+  /// No description provided for @welcomeCreateDefaultLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a default ledger'**
+  String get welcomeCreateDefaultLedger;
+
   /// No description provided for @welcomePrivacyTitle.
   ///
   /// In en, this message translates to:
@@ -7269,7 +7275,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiEnableSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Use AI to enhance OCR accuracy, extract amount, merchant, time, and support natural language conversation'**
+  /// **'Use AI vision to recognize bill screenshots, extract amount, merchant, time, and support natural language conversation'**
   String get aiEnableSubtitle;
 
   /// No description provided for @aiEnableToastOn.
@@ -7386,24 +7392,6 @@ abstract class AppLocalizations {
   /// **'Go to Settings'**
   String get aiChatGoToSettings;
 
-  /// No description provided for @aiLocalModelTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Local Model'**
-  String get aiLocalModelTitle;
-
-  /// No description provided for @aiLocalModelTraining.
-  ///
-  /// In en, this message translates to:
-  /// **'Training'**
-  String get aiLocalModelTraining;
-
-  /// No description provided for @aiLocalModelUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Local model in training, not available yet'**
-  String get aiLocalModelUnavailable;
-
   /// No description provided for @aiOcrRecognizing.
   ///
   /// In en, this message translates to:
@@ -7415,6 +7403,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No valid amount recognized, please add manually'**
   String get aiOcrNoAmount;
+
+  /// No description provided for @aiNotConfiguredHint.
+  ///
+  /// In en, this message translates to:
+  /// **'AI service not configured. Go to \"Me → AI Settings\" to set up.'**
+  String get aiNotConfiguredHint;
+
+  /// No description provided for @aiNotConfiguredNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Cannot recognize screenshot'**
+  String get aiNotConfiguredNotificationTitle;
+
+  /// No description provided for @aiNotConfiguredNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'AI service not configured. Tap to set up.'**
+  String get aiNotConfiguredNotificationBody;
 
   /// No description provided for @aiOcrNoLedger.
   ///
@@ -7647,7 +7653,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartBillingDesc.
   ///
   /// In en, this message translates to:
-  /// **'AI Assistant, OCR scan, auto billing'**
+  /// **'AI Assistant, smart recognition, auto billing'**
   String get smartBillingDesc;
 
   /// No description provided for @smartBillingPageTitle.
@@ -7683,7 +7689,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartBillingImageBillingGuide.
   ///
   /// In en, this message translates to:
-  /// **'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.'**
+  /// **'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. Requires AI service configured under \"Me → AI Settings\"; the vision model will extract amount, merchant, time, etc. from the screenshot.'**
   String get smartBillingImageBillingGuide;
 
   /// No description provided for @smartBillingAIOptional.
@@ -7707,7 +7713,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartBillingCameraBillingGuide.
   ///
   /// In en, this message translates to:
-  /// **'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.'**
+  /// **'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. Requires AI service configured under \"Me → AI Settings\"; the vision model will extract amount, merchant, time, etc. from the photo.'**
   String get smartBillingCameraBillingGuide;
 
   /// No description provided for @smartBillingVoiceBilling.
@@ -7791,25 +7797,25 @@ abstract class AppLocalizations {
   /// No description provided for @appearanceSettings.
   ///
   /// In en, this message translates to:
-  /// **'Appearance'**
+  /// **'Personalization'**
   String get appearanceSettings;
 
   /// No description provided for @appearanceSettingsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Theme, font and language settings'**
+  /// **'Theme, font, language, app lock, etc.'**
   String get appearanceSettingsDesc;
 
   /// No description provided for @appearanceSettingsPageTitle.
   ///
   /// In en, this message translates to:
-  /// **'Appearance'**
+  /// **'Personalization'**
   String get appearanceSettingsPageTitle;
 
   /// No description provided for @appearanceSettingsPageSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Personalize appearance and display'**
+  /// **'Appearance, display, security and other app preferences'**
   String get appearanceSettingsPageSubtitle;
 
   /// No description provided for @about.
@@ -9267,7 +9273,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiPromptVarOcrText.
   ///
   /// In en, this message translates to:
-  /// **'User input or OCR recognized text content'**
+  /// **'User input text content'**
   String get aiPromptVarOcrText;
 
   /// No description provided for @aiPromptVarCategories.
@@ -9311,36 +9317,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Switched to {modelName}'**
   String aiModelSwitched(String modelName);
-
-  /// No description provided for @aiUsingVisionDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Image recognition is enabled for higher recognition accuracy'**
-  String get aiUsingVisionDesc;
-
-  /// No description provided for @aiUnUsingVisionDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Image recognition turned off, OCR text only'**
-  String get aiUnUsingVisionDesc;
-
-  /// No description provided for @aiUploadImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload images to AI'**
-  String get aiUploadImage;
-
-  /// No description provided for @aiUseVisionDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Use visual models for more accurate recognition'**
-  String get aiUseVisionDesc;
-
-  /// No description provided for @aiUnUseVisionDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Analyze OCR results using only text models'**
-  String get aiUnUseVisionDesc;
 
   /// No description provided for @aiCustomBaseUrlHelper.
   ///
@@ -12155,6 +12131,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cleaned {ok} item(s), {fail} failed'**
   String maintenanceOrphanCleanPartial(int ok, int fail);
+
+  /// No description provided for @syncProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing'**
+  String get syncProgressTitle;
+
+  /// No description provided for @syncProgressCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{applied} / {total}'**
+  String syncProgressCount(int applied, int total);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

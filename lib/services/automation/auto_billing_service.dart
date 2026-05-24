@@ -3,8 +3,12 @@ import 'dart:ui';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../billing/ocr_service.dart';
+import '../billing/bill_recognition_result.dart';
 import '../billing/category_matcher.dart';
+import '../ai/ai_constants.dart';
+import '../ai/ai_provider_config.dart';
+import '../ai/ai_provider_manager.dart';
+import '../ai/bill_extraction_service.dart';
 import '../billing/bill_creation_service.dart';
 import '../billing/post_processor.dart';
 import '../attachment_service.dart';
@@ -23,7 +27,7 @@ class AutoBillingService {
   static const _processedScreenshotsKey = 'processed_screenshots';
 
   final ProviderContainer _container;
-  final OcrService _ocrService = OcrService();
+  final BillExtractionService _billExtraction = BillExtractionService();
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -171,27 +175,84 @@ class AutoBillingService {
         logger.debug('AutoBilling', '文件已就绪，无需等待');
       }
 
+      // 兜底:AI vision 未配置 → 系统通知告警,引导用户去设置(后台路径无 UI
+      // context,只能 push 系统通知。点击跳转由 deep link 处理,这里先不带
+      // payload)
+      if (!await AIProviderManager.isCapabilityConfigured(
+          AICapabilityType.vision)) {
+        logger.warning('AutoBilling', 'AI vision 未配置,跳过自动记账');
+        if (showNotification) {
+          final l10n = lookupAppLocalizations(
+              PlatformDispatcher.instance.locale);
+          await _showNotification(
+            id: notificationId,
+            title: l10n.aiNotConfiguredNotificationTitle,
+            body: l10n.aiNotConfiguredNotificationBody,
+          );
+        }
+        return null;
+      }
+
       // 更新通知：开始识别
       if (showNotification) {
         await _showNotification(
           id: notificationId,
           title: '正在识别截图...',
-          body: '正在分析支付信息,请稍候',
+          body: '正在调用 AI 视觉分析支付信息,请稍候',
         );
       }
 
-      // OCR 识别
-      final ocrStartTime = DateTime.now().millisecondsSinceEpoch;
-      print('⏱️ [性能] 开始OCR识别');
-      logger.info('AutoBilling', '开始OCR识别');
+      // AI 视觉识别(替代历史 OCR + 后处理)
+      final aiStartTime = DateTime.now().millisecondsSinceEpoch;
+      print('⏱️ [性能] 开始 AI 视觉识别');
+      logger.info('AutoBilling', '开始 AI 视觉识别');
 
-      // 获取Repository实例用于账户识别
       final repo = _container.read(repositoryProvider);
-      final result = await _ocrService.recognizePaymentImage(file, repo: repo);
+      final billInfo = await _billExtraction.extractFromImage(file);
 
-      final ocrElapsed = DateTime.now().millisecondsSinceEpoch - ocrStartTime;
-      print('⏱️ [性能] OCR识别完成, 耗时=${ocrElapsed}ms');
-      logger.info('AutoBilling', 'OCR识别完成', '耗时=${ocrElapsed}ms');
+      final aiElapsed = DateTime.now().millisecondsSinceEpoch - aiStartTime;
+      print('⏱️ [性能] AI 识别完成, 耗时=${aiElapsed}ms');
+      logger.info('AutoBilling', 'AI 识别完成', '耗时=${aiElapsed}ms');
+
+      // billInfo == null:AI 调用失败(API 错误 / 网络 / 解析不出账单)
+      if (billInfo == null) {
+        logger.warning('AutoBilling', 'AI 识别返回 null,可能 API 错误或图片非账单');
+        if (showNotification) {
+          await _showNotification(
+            id: notificationId,
+            title: '❌ 识别失败',
+            body: '无法从截图提取账单信息,请检查 AI 配置或图片',
+          );
+        }
+        await _markAsProcessed(imagePath);
+        return null;
+      }
+
+      // BillInfo → OcrResult(下游 _createTransaction 接受 OcrResult)
+      final allCategoriesRaw = await repo.getTopLevelCategories('expense');
+      final allCategories = <Category>[...allCategoriesRaw];
+      for (final cat in allCategoriesRaw) {
+        allCategories.addAll(await repo.getSubCategories(cat.id));
+      }
+      final usableCategories =
+          CategoryHierarchy.getUsableCategories(allCategories);
+      final suggestedCategoryId = billInfo.category != null
+          ? CategoryMatcher.smartMatch(
+              merchant: billInfo.category,
+              fullText: '${billInfo.category ?? ''} ${billInfo.note ?? ''}',
+              categories: usableCategories,
+            )
+          : null;
+      final result = OcrResult(
+        amount: billInfo.amount,
+        note: billInfo.note,
+        time: billInfo.time,
+        suggestedCategoryId: suggestedCategoryId,
+        aiCategoryName: billInfo.category,
+        aiType: billInfo.type?.toString().split('.').last,
+        aiAccountName: billInfo.account,
+        aiEnhanced: true,
+      );
 
       // 打印识别结果用于调试
       print('📋 OCR识别原始文本: ${result.rawText}');
@@ -353,20 +414,35 @@ class AutoBillingService {
     try {
       const notificationId = 1002;
 
+      // 兜底:AI text 未配置 → 系统通知,引导用户去配置
+      if (!await AIProviderManager.isCapabilityConfigured(
+          AICapabilityType.text)) {
+        logger.warning('AutoBilling', 'AI text 未配置,跳过文本记账');
+        if (showNotification) {
+          final l10n = lookupAppLocalizations(
+              PlatformDispatcher.instance.locale);
+          await _showNotification(
+            id: notificationId,
+            title: l10n.aiNotConfiguredNotificationTitle,
+            body: l10n.aiNotConfiguredNotificationBody,
+          );
+        }
+        return null;
+      }
+
       // 显示"正在识别"通知
       if (showNotification) {
         await _showNotification(
           id: notificationId,
           title: '⏳ 正在识别',
-          body: '正在解析支付信息...',
+          body: '正在调用 AI 解析支付信息...',
         );
       }
 
-      // 直接解析文本(无需OCR)
-      final ocrResult = _ocrService.parsePaymentText(text);
-
-      if (ocrResult.amount == null) {
-        print('❌ 未能识别出金额');
+      // AI 文本提取(替代历史 regex parsePaymentText)
+      final billInfo = await _billExtraction.extractFromText(text);
+      if (billInfo == null || billInfo.amount == null) {
+        print('❌ AI 未能从文本提取出金额');
         if (showNotification) {
           await _showNotification(
             id: notificationId,
@@ -377,7 +453,7 @@ class AutoBillingService {
         return null;
       }
 
-      print('✅ 识别成功: 金额=${ocrResult.amount}, 备注=${ocrResult.note}');
+      print('✅ 识别成功: 金额=${billInfo.amount}, 备注=${billInfo.note}');
 
       // 更新通知状态
       if (showNotification) {
@@ -388,33 +464,32 @@ class AutoBillingService {
         );
       }
 
-      // 获取分类并创建交易
+      // 获取分类并匹配
       final repo = _container.read(repositoryProvider);
       final topLevelCategories = await repo.getTopLevelCategories('expense');
       final allCategories = <Category>[];
       allCategories.addAll(topLevelCategories);
-      // 获取所有子分类
       for (final category in topLevelCategories) {
         final subCategories = await repo.getSubCategories(category.id);
         allCategories.addAll(subCategories);
       }
-
-      // 过滤出可用分类（排除有子分类的父分类）
       final categories = CategoryHierarchy.getUsableCategories(allCategories);
 
       final suggestedCategoryId = CategoryMatcher.smartMatch(
-        merchant: ocrResult.note,
-        fullText: ocrResult.rawText,
+        merchant: billInfo.category ?? billInfo.note,
+        fullText: '${billInfo.category ?? ''} ${billInfo.note ?? ''} $text',
         categories: categories,
       );
 
       final resultWithCategory = OcrResult(
-        amount: ocrResult.amount,
-        note: ocrResult.note,
-        time: ocrResult.time,
-        rawText: ocrResult.rawText,
-        allNumbers: ocrResult.allNumbers,
+        amount: billInfo.amount,
+        note: billInfo.note,
+        time: billInfo.time,
         suggestedCategoryId: suggestedCategoryId,
+        aiCategoryName: billInfo.category,
+        aiType: billInfo.type?.toString().split('.').last,
+        aiAccountName: billInfo.account,
+        aiEnhanced: true,
       );
 
       // 创建交易记录
@@ -428,7 +503,7 @@ class AutoBillingService {
           await _showNotification(
             id: notificationId,
             title: '✅ 记账成功',
-            body: '已自动创建支出记录: ¥${ocrResult.amount}',
+            body: '已自动创建支出记录: ¥${billInfo.amount}',
           );
         }
         return txId;
@@ -573,8 +648,6 @@ class AutoBillingService {
     await _notificationsPlugin.show(id, title, body, details);
   }
 
-  /// 释放资源
-  void dispose() {
-    _ocrService.dispose();
-  }
+  /// 释放资源(AI 服务无 native handle,不需要 dispose,保留方法以备后续添加)
+  void dispose() {}
 }

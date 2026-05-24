@@ -1,11 +1,24 @@
-# BeeCount 配置（商店截图测试用）
+# BeeCount 配置（测试 / 截图用）
 # 语言 / 货币：English / USD
-# 导出时间：2026-04-29T16:23:24.661313
+# 导出时间：2026-05-24T16:44:34
 
 version: 1
-exported_at: "2026-04-29T16:23:24.661313"
+exported_at: "2026-05-24T16:44:34"
 
-# ----- 账户（5 个）-----
+# ----- 账本(3 个,第一本是默认账本,CSV 数据导入到它)-----
+ledgers:
+  items:
+    - name: "Default"
+      currency: "USD"
+      type: "personal"
+    - name: "Business Travel"
+      currency: "USD"
+      type: "personal"
+    - name: "Family"
+      currency: "USD"
+      type: "shared"
+
+# ----- 账户(5 个)-----
 accounts:
   items:
     - name: "Chase Credit"
@@ -29,7 +42,7 @@ accounts:
       currency: "USD"
       initial_balance: 0.0
 
-# ----- 分类（45 支出 + 14 收入，含 Material 图标）-----
+# ----- 分类(45 支出一级 + 25 支出二级 + 14 收入一级 + 4 收入二级)-----
 categories:
   items:
     - name: "Dining"
@@ -302,6 +315,181 @@ categories:
       level: 1
       icon: "work_outline"
       icon_type: "material"
+    - name: "Breakfast"
+      kind: "expense"
+      sort_order: 0
+      level: 2
+      parent_name: "Dining"
+      icon: "free_breakfast"
+      icon_type: "material"
+    - name: "Lunch"
+      kind: "expense"
+      sort_order: 1
+      level: 2
+      parent_name: "Dining"
+      icon: "lunch_dining"
+      icon_type: "material"
+    - name: "Dinner"
+      kind: "expense"
+      sort_order: 2
+      level: 2
+      parent_name: "Dining"
+      icon: "dinner_dining"
+      icon_type: "material"
+    - name: "Late Night"
+      kind: "expense"
+      sort_order: 3
+      level: 2
+      parent_name: "Dining"
+      icon: "nightlife"
+      icon_type: "material"
+    - name: "Bus"
+      kind: "expense"
+      sort_order: 4
+      level: 2
+      parent_name: "Transport"
+      icon: "directions_bus"
+      icon_type: "material"
+    - name: "Train"
+      kind: "expense"
+      sort_order: 5
+      level: 2
+      parent_name: "Transport"
+      icon: "train"
+      icon_type: "material"
+    - name: "Coach"
+      kind: "expense"
+      sort_order: 6
+      level: 2
+      parent_name: "Transport"
+      icon: "airport_shuttle"
+      icon_type: "material"
+    - name: "Shoes"
+      kind: "expense"
+      sort_order: 7
+      level: 2
+      parent_name: "Shopping"
+      icon: "ice_skating"
+      icon_type: "material"
+    - name: "Furniture"
+      kind: "expense"
+      sort_order: 8
+      level: 2
+      parent_name: "Shopping"
+      icon: "chair"
+      icon_type: "material"
+    - name: "Appliances"
+      kind: "expense"
+      sort_order: 9
+      level: 2
+      parent_name: "Shopping"
+      icon: "kitchen"
+      icon_type: "material"
+    - name: "Movie"
+      kind: "expense"
+      sort_order: 10
+      level: 2
+      parent_name: "Entertainment"
+      icon: "theaters"
+      icon_type: "material"
+    - name: "KTV"
+      kind: "expense"
+      sort_order: 11
+      level: 2
+      parent_name: "Entertainment"
+      icon: "mic"
+      icon_type: "material"
+    - name: "Concert"
+      kind: "expense"
+      sort_order: 12
+      level: 2
+      parent_name: "Entertainment"
+      icon: "music_note"
+      icon_type: "material"
+    - name: "Outpatient"
+      kind: "expense"
+      sort_order: 13
+      level: 2
+      parent_name: "Medical"
+      icon: "medical_services"
+      icon_type: "material"
+    - name: "Medicine"
+      kind: "expense"
+      sort_order: 14
+      level: 2
+      parent_name: "Medical"
+      icon: "medication"
+      icon_type: "material"
+    - name: "Checkup"
+      kind: "expense"
+      sort_order: 15
+      level: 2
+      parent_name: "Medical"
+      icon: "monitor_heart"
+      icon_type: "material"
+    - name: "Training"
+      kind: "expense"
+      sort_order: 16
+      level: 2
+      parent_name: "Education"
+      icon: "model_training"
+      icon_type: "material"
+    - name: "Online Course"
+      kind: "expense"
+      sort_order: 17
+      level: 2
+      parent_name: "Education"
+      icon: "ondemand_video"
+      icon_type: "material"
+    - name: "Textbook"
+      kind: "expense"
+      sort_order: 18
+      level: 2
+      parent_name: "Education"
+      icon: "auto_stories"
+      icon_type: "material"
+    - name: "Flight"
+      kind: "expense"
+      sort_order: 19
+      level: 2
+      parent_name: "Travel"
+      icon: "flight_takeoff"
+      icon_type: "material"
+    - name: "Hotel"
+      kind: "expense"
+      sort_order: 20
+      level: 2
+      parent_name: "Travel"
+      icon: "hotel"
+      icon_type: "material"
+    - name: "Ticket"
+      kind: "expense"
+      sort_order: 21
+      level: 2
+      parent_name: "Travel"
+      icon: "confirmation_number"
+      icon_type: "material"
+    - name: "Accessories"
+      kind: "expense"
+      sort_order: 22
+      level: 2
+      parent_name: "Digital"
+      icon: "cable"
+      icon_type: "material"
+    - name: "Phone"
+      kind: "expense"
+      sort_order: 23
+      level: 2
+      parent_name: "Digital"
+      icon: "phone_iphone"
+      icon_type: "material"
+    - name: "Computer"
+      kind: "expense"
+      sort_order: 24
+      level: 2
+      parent_name: "Digital"
+      icon: "laptop"
+      icon_type: "material"
     - name: "Salary"
       kind: "income"
       sort_order: 0
@@ -386,8 +574,36 @@ categories:
       level: 1
       icon: "account_balance_wallet"
       icon_type: "material"
+    - name: "Base Salary"
+      kind: "income"
+      sort_order: 0
+      level: 2
+      parent_name: "Salary"
+      icon: "payments"
+      icon_type: "material"
+    - name: "Overtime"
+      kind: "income"
+      sort_order: 1
+      level: 2
+      parent_name: "Salary"
+      icon: "more_time"
+      icon_type: "material"
+    - name: "Dividend"
+      kind: "income"
+      sort_order: 2
+      level: 2
+      parent_name: "Investment Income"
+      icon: "savings"
+      icon_type: "material"
+    - name: "Fund Distribution"
+      kind: "income"
+      sort_order: 3
+      level: 2
+      parent_name: "Investment Income"
+      icon: "pie_chart"
+      icon_type: "material"
 
-# ----- 标签（24 个，含 Material 调色板颜色）-----
+# ----- 标签(24 个,含 Material 调色板颜色)-----
 tags:
   items:
     - name: "Meituan"
@@ -424,7 +640,7 @@ tags:
       color: "#536DFE"
     - name: "Daily"
       color: "#8BC34A"
-    - name: "Reimbursable"
+    - name: "Reimbursement"
       color: "#9C27B0"
     - name: "Refundable"
       color: "#CDDC39"
@@ -434,7 +650,59 @@ tags:
       color: "#FF9800"
     - name: "Image"
       color: "#4CAF50"
-    - name: "Camera"
+    - name: "Photo"
       color: "#2196F3"
     - name: "AI"
       color: "#9C27B0"
+
+# ----- 预算(2 个总预算 + 8 个分类预算)-----
+budgets:
+  items:
+    - ledger_name: "Default"
+      type: "total"
+      amount: 1500.0
+      start_day: 1
+    - ledger_name: "Business Travel"
+      type: "total"
+      amount: 500.0
+      start_day: 1
+    - ledger_name: "Default"
+      type: "category"
+      amount: 300.0
+      start_day: 1
+      category_name: "Dining"
+    - ledger_name: "Default"
+      type: "category"
+      amount: 250.0
+      start_day: 1
+      category_name: "Shopping"
+    - ledger_name: "Default"
+      type: "category"
+      amount: 120.0
+      start_day: 1
+      category_name: "Transport"
+    - ledger_name: "Default"
+      type: "category"
+      amount: 100.0
+      start_day: 1
+      category_name: "Entertainment"
+    - ledger_name: "Default"
+      type: "category"
+      amount: 80.0
+      start_day: 1
+      category_name: "Utilities"
+    - ledger_name: "Default"
+      type: "category"
+      amount: 40.0
+      start_day: 1
+      category_name: "Communication"
+    - ledger_name: "Default"
+      type: "category"
+      amount: 150.0
+      start_day: 1
+      category_name: "Delivery"
+    - ledger_name: "Default"
+      type: "category"
+      amount: 40.0
+      start_day: 1
+      category_name: "Beverage"

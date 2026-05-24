@@ -714,9 +714,11 @@ class SeedService {
     String currency = 'CNY',
     bool useHierarchicalCategories = false,
     bool skipCategories = false,
+    bool createDefaultLedger = true,
   }) async {
     logger.info('seed', '开始初始化数据库');
     logger.info('seed', '货币: $currency');
+    logger.info('seed', '创建默认账本: $createDefaultLedger');
     if (skipCategories) {
       logger.info('seed', '分类模式: 不创建分类');
     } else {
@@ -725,9 +727,14 @@ class SeedService {
     logger.info('seed', '账本名称: ${l10n.ledgerDefaultName}');
     logger.info('seed', '现金账户名: ${l10n.accountTypeCash}');
 
-    // 1. 创建默认账本
-    final ledgerId = await createDefaultLedger(db, l10n, currency);
-    logger.info('seed', '已创建账本 ID: $ledgerId');
+    // 1. 创建默认账本(可选 — 关掉之后用户进首页空状态自己新建,避免每次测试
+    //    清数据都在 server 上留一个默认账本)
+    if (createDefaultLedger) {
+      final ledgerId = await SeedService.createDefaultLedger(db, l10n, currency);
+      logger.info('seed', '已创建账本 ID: $ledgerId');
+    } else {
+      logger.info('seed', '跳过默认账本创建');
+    }
 
     // 2. 创建默认分类（可选）
     if (!skipCategories) {

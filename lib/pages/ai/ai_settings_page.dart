@@ -95,28 +95,9 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
             subtitle: Text(l10n.aiEnableSubtitle),
             activeColor: primaryColor,
           ),
-          BeeTokens.cardDivider(context),
-          SwitchListTile(
-            value: config.useVision,
-            onChanged: config.enabled
-                ? (value) async {
-                    await notifier.setUseVision(value);
-                    if (mounted) {
-                      showToast(
-                        context,
-                        value ? l10n.aiUsingVisionDesc : l10n.aiUnUsingVisionDesc,
-                      );
-                    }
-                  }
-                : null,
-            title: Text(
-              l10n.aiUploadImage,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            subtitle: Text(
-                config.useVision ? l10n.aiUseVisionDesc : l10n.aiUnUseVisionDesc),
-            activeColor: primaryColor,
-          ),
+          // v3.2.1 删 OCR 后,图片识别完全走 AI 视觉,无需用户开关。原「上传
+          // 图片到 AI」(useVision)开关在此移除;底层 pref key 保留以兼容
+          // 老配置导入导出。
         ],
       ),
     );
@@ -494,40 +475,9 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
 
             BeeTokens.cardDivider(context),
 
-            // === 本地模型（禁用） ===
-            ListTile(
-              dense: true,
-              leading: Icon(
-                Icons.smartphone,
-                size: 20,
-                color: BeeTokens.textTertiary(context),
-              ),
-              title: Text(
-                l10n.aiLocalModelTitle,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: BeeTokens.textTertiary(context),
-                ),
-              ),
-              subtitle: Text(
-                l10n.aiLocalModelUnavailable,
-                style: const TextStyle(fontSize: 12),
-              ),
-              trailing: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  l10n.aiLocalModelTraining,
-                  style: TextStyle(fontSize: 10, color: primaryColor),
-                ),
-              ),
-              enabled: false,
-            ),
-
-            BeeTokens.cardDivider(context),
+            // 历史「本地模型(训练中)」占位 entry 已删除(2026-05-24)。本地 AI 视觉
+            // 未来走 Apple Foundation Models / Gemini Nano(平台原生 SDK,非 tflite),
+            // 详见 .docs/on-device-vlm/README.md。
 
             // === 自定义提示词 ===
             ListTile(

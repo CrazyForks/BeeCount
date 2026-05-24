@@ -6,11 +6,17 @@ part of 'sync_engine.dart';
 extension _SyncEngineResolvers on SyncEngine {
   /// 按 syncId 查 ledger 的本地 int id。用于 apply remote change 时把
   /// server 的 external_id（string）映射成本地 autoIncrement id。
+  ///
+  /// pull 路径上 [activePullCache] 非空,先查缓存(prime 时全表加载),
+  /// miss 才走 DB — 消除 N+1 SELECT。详见 [LookupCache]。
   Future<int?> _resolveLedgerIdBySyncId(String? syncId) async {
     if (syncId == null || syncId.isEmpty) return null;
+    final cached = activePullCache?.ledgerId(syncId);
+    if (cached != null) return cached;
     final led = await (db.select(db.ledgers)
           ..where((l) => l.syncId.equals(syncId)))
         .getSingleOrNull();
+    if (led != null) activePullCache?.putLedger(syncId, led.id);
     return led?.id;
   }
 
@@ -22,9 +28,12 @@ extension _SyncEngineResolvers on SyncEngine {
   /// SharedLedgerCategories 表显示。tx UI 应该按 override 优先。
   Future<int?> _resolveCategoryIdBySyncId(String? syncId) async {
     if (syncId == null || syncId.isEmpty) return null;
+    final cached = activePullCache?.categoryId(syncId);
+    if (cached != null) return cached;
     final cat = await (db.select(db.categories)
           ..where((c) => c.syncId.equals(syncId)))
         .getSingleOrNull();
+    if (cat != null) activePullCache?.putCategory(syncId, cat.id);
     return cat?.id;
   }
 
@@ -33,9 +42,12 @@ extension _SyncEngineResolvers on SyncEngine {
   /// 字段。
   Future<int?> _resolveAccountIdBySyncId(String? syncId) async {
     if (syncId == null || syncId.isEmpty) return null;
+    final cached = activePullCache?.accountId(syncId);
+    if (cached != null) return cached;
     final acc = await (db.select(db.accounts)
           ..where((a) => a.syncId.equals(syncId)))
         .getSingleOrNull();
+    if (acc != null) activePullCache?.putAccount(syncId, acc.id);
     return acc?.id;
   }
 

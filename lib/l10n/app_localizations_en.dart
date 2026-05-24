@@ -3605,6 +3605,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeCurrencyDescription => 'Choose your preferred currency, you can change it anytime in settings';
 
   @override
+  String get welcomeCreateDefaultLedger => 'Create a default ledger';
+
+  @override
   String get welcomePrivacyTitle => 'Open Source · Community Driven';
 
   @override
@@ -3806,7 +3809,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiEnableTitle => 'Enable AI Assistant';
 
   @override
-  String get aiEnableSubtitle => 'Use AI to enhance OCR accuracy, extract amount, merchant, time, and support natural language conversation';
+  String get aiEnableSubtitle => 'Use AI vision to recognize bill screenshots, extract amount, merchant, time, and support natural language conversation';
 
   @override
   String get aiEnableToastOn => 'AI Assistant enabled';
@@ -3868,19 +3871,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiChatGoToSettings => 'Go to Settings';
 
   @override
-  String get aiLocalModelTitle => 'Local Model';
-
-  @override
-  String get aiLocalModelTraining => 'Training';
-
-  @override
-  String get aiLocalModelUnavailable => 'Local model in training, not available yet';
-
-  @override
   String get aiOcrRecognizing => 'Recognizing bill...';
 
   @override
   String get aiOcrNoAmount => 'No valid amount recognized, please add manually';
+
+  @override
+  String get aiNotConfiguredHint => 'AI service not configured. Go to \"Me → AI Settings\" to set up.';
+
+  @override
+  String get aiNotConfiguredNotificationTitle => '❌ Cannot recognize screenshot';
+
+  @override
+  String get aiNotConfiguredNotificationBody => 'AI service not configured. Tap to set up.';
 
   @override
   String get aiOcrNoLedger => 'Ledger not found';
@@ -4003,7 +4006,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get smartBilling => 'Smart Billing';
 
   @override
-  String get smartBillingDesc => 'AI Assistant, OCR scan, auto billing';
+  String get smartBillingDesc => 'AI Assistant, smart recognition, auto billing';
 
   @override
   String get smartBillingPageTitle => 'Smart Billing';
@@ -4021,7 +4024,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get smartBillingImageBillingDesc => 'Select payment screenshots from gallery for recognition';
 
   @override
-  String get smartBillingImageBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.';
+  String get smartBillingImageBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Gallery\' to use image billing. Requires AI service configured under \"Me → AI Settings\"; the vision model will extract amount, merchant, time, etc. from the screenshot.';
 
   @override
   String get smartBillingAIOptional => 'AI recognition is optional, configuration can improve recognition accuracy';
@@ -4033,7 +4036,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get smartBillingCameraBillingDesc => 'Capture payment screenshots for recognition';
 
   @override
-  String get smartBillingCameraBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. With AI configured, it can intelligently recognize bill information; without AI, it can still extract text via OCR.';
+  String get smartBillingCameraBillingGuide => 'Long press the + button at the bottom center of the home page and select \'Camera\' to use camera billing. Requires AI service configured under \"Me → AI Settings\"; the vision model will extract amount, merchant, time, etc. from the photo.';
 
   @override
   String get smartBillingVoiceBilling => 'Voice Billing';
@@ -4075,16 +4078,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get automationPageSubtitle => 'Recurring transactions and reminder settings';
 
   @override
-  String get appearanceSettings => 'Appearance';
+  String get appearanceSettings => 'Personalization';
 
   @override
-  String get appearanceSettingsDesc => 'Theme, font and language settings';
+  String get appearanceSettingsDesc => 'Theme, font, language, app lock, etc.';
 
   @override
-  String get appearanceSettingsPageTitle => 'Appearance';
+  String get appearanceSettingsPageTitle => 'Personalization';
 
   @override
-  String get appearanceSettingsPageSubtitle => 'Personalize appearance and display';
+  String get appearanceSettingsPageSubtitle => 'Appearance, display, security and other app preferences';
 
   @override
   String get about => 'About';
@@ -4843,7 +4846,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiPromptVarCurrentDate => 'Current date, e.g. \"2025-01-15\"';
 
   @override
-  String get aiPromptVarOcrText => 'User input or OCR recognized text content';
+  String get aiPromptVarOcrText => 'User input text content';
 
   @override
   String get aiPromptVarCategories => 'Expense and income category list';
@@ -4867,21 +4870,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String aiModelSwitched(String modelName) {
     return 'Switched to $modelName';
   }
-
-  @override
-  String get aiUsingVisionDesc => 'Image recognition is enabled for higher recognition accuracy';
-
-  @override
-  String get aiUnUsingVisionDesc => 'Image recognition turned off, OCR text only';
-
-  @override
-  String get aiUploadImage => 'Upload images to AI';
-
-  @override
-  String get aiUseVisionDesc => 'Use visual models for more accurate recognition';
-
-  @override
-  String get aiUnUseVisionDesc => 'Analyze OCR results using only text models';
 
   @override
   String get aiCustomBaseUrlHelper => 'Standard chat completion API URL, e.g. https://api.example.com/v1';
@@ -6418,5 +6406,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String maintenanceOrphanCleanPartial(int ok, int fail) {
     return 'Cleaned $ok item(s), $fail failed';
+  }
+
+  @override
+  String get syncProgressTitle => 'Syncing';
+
+  @override
+  String syncProgressCount(int applied, int total) {
+    return '$applied / $total';
   }
 }

@@ -364,9 +364,13 @@ class LocalTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) async {
+  Future<int> insertTransactionsBatch(
+    List<TransactionsCompanion> items, {
+    bool recordChanges = true,
+  }) async {
+    // 子仓库不挂 changeTracker,recordChanges 参数对它无作用 — 真正的 record
+    // 在 LocalRepository wrapper 那一层。这里保留参数只是为了接口一致。
     if (items.isEmpty) return 0;
-    // 自动补上 syncId
     final effectiveItems = items.map((item) {
       if (item.syncId == const d.Value.absent() || item.syncId.value == null) {
         return item.copyWith(syncId: d.Value(_uuid.v4()));
@@ -376,6 +380,85 @@ class LocalTransactionRepository implements TransactionRepository {
     return db.transaction(() async {
       await db.batch((b) => b.insertAll(db.transactions, effectiveItems));
       return effectiveItems.length;
+    });
+  }
+
+  @override
+  Future<List<int>> insertTransactionsBatchWithRelations({
+    required List<TransactionsCompanion> transactions,
+    Map<int, List<int>> tagIdsByIndex = const {},
+    Map<int, List<BatchAttachmentData>> attachmentsByIndex = const {},
+    bool recordChanges = true,
+  }) async {
+    if (transactions.isEmpty) return const [];
+    // 预填充 syncId — batch insertAll 不返回 row id,必须靠 syncId 反查。
+    final effective = transactions.map((tx) {
+      if (tx.syncId == const d.Value.absent() || tx.syncId.value == null) {
+        return tx.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return tx;
+    }).toList();
+
+    return db.transaction(() async {
+      // 1. 一次性 batch insert 所有 tx
+      await db.batch((b) => b.insertAll(db.transactions, effective));
+
+      // 2. SELECT 回拿 (id, syncId) 映射,按 effective 顺序对齐
+      final syncIds = effective.map((c) => c.syncId.value!).toList();
+      final inserted = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      final idBySyncId = <String, int>{
+        for (final tx in inserted)
+          if (tx.syncId != null) tx.syncId!: tx.id,
+      };
+      final ids = syncIds.map((s) => idBySyncId[s]!).toList();
+
+      // 3. batch insert tag 关联 — 调用方需保证 tagIds 已去重,本方法不查重
+      //   (TransactionTags 表没 UNIQUE 约束,select 防重就是 N+1 来源)
+      if (tagIdsByIndex.isNotEmpty) {
+        await db.batch((b) {
+          for (final entry in tagIdsByIndex.entries) {
+            final txId = ids[entry.key];
+            for (final tagId in entry.value) {
+              b.insert(
+                db.transactionTags,
+                TransactionTagsCompanion.insert(
+                  transactionId: txId,
+                  tagId: tagId,
+                ),
+              );
+            }
+          }
+        });
+      }
+
+      // 4. batch insert attachment 元数据(文件本身在另一个流程下载)
+      if (attachmentsByIndex.isNotEmpty) {
+        await db.batch((b) {
+          for (final entry in attachmentsByIndex.entries) {
+            final txId = ids[entry.key];
+            for (final att in entry.value) {
+              b.insert(
+                db.transactionAttachments,
+                TransactionAttachmentsCompanion.insert(
+                  transactionId: txId,
+                  fileName: att.fileName,
+                  originalName: d.Value(att.originalName),
+                  fileSize: d.Value(att.fileSize),
+                  width: d.Value(att.width),
+                  height: d.Value(att.height),
+                  sortOrder: d.Value(att.sortOrder),
+                  cloudFileId: d.Value(att.cloudFileId),
+                  cloudSha256: d.Value(att.cloudSha256),
+                ),
+              );
+            }
+          }
+        });
+      }
+
+      return ids;
     });
   }
 
@@ -505,8 +588,11 @@ class LocalTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<int> insertTransactionCompanion(TransactionsCompanion item) async {
-    // 自动补上 syncId（如果未提供）
+  Future<int> insertTransactionCompanion(
+    TransactionsCompanion item, {
+    bool recordChanges = true,
+  }) async {
+    // 子仓库不挂 changeTracker,recordChanges 仅为接口一致保留。
     final effective = item.syncId == const d.Value.absent() || item.syncId.value == null
         ? item.copyWith(syncId: d.Value(_uuid.v4()))
         : item;
@@ -1194,6 +1280,71 @@ class LocalTransactionRepository implements TransactionRepository {
     if (tx != null) {
       await deleteTransaction(tx.id);
     }
+  }
+
+  @override
+  Future<Map<String, int>> updateTransactionsBatchBySyncId(
+    List<TransactionUpdateBySyncIdData> updates, {
+    bool recordChanges = true,
+  }) async {
+    if (updates.isEmpty) return const {};
+    return db.transaction(() async {
+      await db.batch((b) {
+        for (final u in updates) {
+          b.update(
+            db.transactions,
+            TransactionsCompanion(
+              type: d.Value(u.type),
+              amount: d.Value(u.amount),
+              categoryId: d.Value(u.categoryId),
+              accountId: d.Value(u.accountId),
+              toAccountId: d.Value(u.toAccountId),
+              happenedAt: d.Value(u.happenedAt),
+              note: d.Value(u.note),
+            ),
+            where: (t) => t.syncId.equals(u.syncId),
+          );
+        }
+      });
+      // 反查 (syncId, txId) 映射,caller 用它批量更新 tag 关联
+      final syncIds = updates.map((u) => u.syncId).toList();
+      final rows = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      return {
+        for (final tx in rows)
+          if (tx.syncId != null) tx.syncId!: tx.id,
+      };
+    });
+  }
+
+  @override
+  Future<int> deleteTransactionsBatchBySyncIds(
+    List<String> syncIds, {
+    bool recordChanges = true,
+  }) async {
+    // recordChanges 由 LocalRepository wrapper 处理(子仓库无 changeTracker)。
+    if (syncIds.isEmpty) return 0;
+    return db.transaction(() async {
+      // 先 SELECT 拿到 tx id 列表(用来删 transactionTags / attachments 关联)
+      final rows = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      final txIds = rows.map((r) => r.id).toList();
+      if (txIds.isEmpty) return 0;
+      // 删关联数据(级联)
+      await (db.delete(db.transactionTags)
+            ..where((t) => t.transactionId.isIn(txIds)))
+          .go();
+      await (db.delete(db.transactionAttachments)
+            ..where((t) => t.transactionId.isIn(txIds)))
+          .go();
+      // 主表 DELETE WHERE IN — 一次 SQL 删 N 条
+      final deleted = await (db.delete(db.transactions)
+            ..where((t) => t.id.isIn(txIds)))
+          .go();
+      return deleted;
+    });
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as d;
 import '../data/db.dart';
 import '../data/repositories/base_repository.dart';
+import '../data/repositories/transaction_repository.dart' show BatchAttachmentData;
 import 'system/logger_service.dart';
 
 /// 统一的数据导入服务
@@ -167,12 +168,16 @@ class DataImportService {
   /// [data] - 导入数据
   /// [defaultCurrency] - 默认货币（用于创建账户）
   /// [onProgress] - 进度回调 (done, total)
+  /// [recordChanges] - 默认 true,会调 repo.insertTransactionsBatch 时登记
+  ///   changeTracker。FullPull 路径传 false,避免"从云端拉下来的数据又反向推
+  ///   回去"。
   Future<ImportResult> importData(
     BaseRepository repo,
     int ledgerId,
     ImportData data, {
     String defaultCurrency = 'CNY',
     void Function(int done, int total)? onProgress,
+    bool recordChanges = true,
   }) async {
     // 1. 更新账本信息（如果提供）
     if (data.ledgerName != null || data.currency != null) {
@@ -186,20 +191,20 @@ class DataImportService {
     }
 
     // 2. 导入账户
-    final accountNameToId = await _importAccounts(
+    final accountNameToId = await importAccounts(
       repo,
       data.accounts,
       defaultCurrency: data.currency ?? defaultCurrency,
     );
 
     // 3. 导入分类
-    final categoryCache = await _importCategories(repo, data.categories);
+    final categoryCache = await importCategories(repo, data.categories);
 
     // 4. 导入标签
-    final tagNameToId = await _importTags(repo, data.tags);
+    final tagNameToId = await importTags(repo, data.tags);
 
     // 5. 导入交易
-    final result = await _importTransactions(
+    final result = await importTransactions(
       repo,
       ledgerId,
       data.transactions,
@@ -207,13 +212,14 @@ class DataImportService {
       categoryCache: categoryCache,
       tagNameToId: tagNameToId,
       onProgress: onProgress,
+      recordChanges: recordChanges,
     );
 
     return result;
   }
 
-  /// 导入账户（全局按名称去重）
-  Future<Map<String, int>> _importAccounts(
+  /// 导入账户(全局按名称去重)。public — sync_diff_service 也复用,避免维护两套。
+  Future<Map<String, int>> importAccounts(
     BaseRepository repo,
     List<ImportAccount> accounts,
     {String defaultCurrency = 'CNY'}
@@ -221,42 +227,49 @@ class DataImportService {
     final accountNameToId = <String, int>{};
 
     if (accounts.isEmpty) return accountNameToId;
+    logger.info('AccountImport', '开始导入账户: ${accounts.length} 个');
+    final sw = Stopwatch()..start();
+    int created = 0;
 
     try {
-      // 获取所有现有账户（全局去重）
       final existingAccounts = await repo.getAllAccounts();
       for (final acc in existingAccounts) {
         accountNameToId[acc.name] = acc.id;
       }
 
-      // 创建不存在的账户
       for (final acc in accounts) {
         if (!accountNameToId.containsKey(acc.name)) {
           final id = await repo.createAccount(
-            ledgerId: 0, // 账户独立，不绑定账本
+            ledgerId: 0, // 账户独立,不绑定账本
             name: acc.name,
             type: acc.type ?? 'cash',
             currency: acc.currency ?? defaultCurrency,
             initialBalance: acc.initialBalance ?? 0.0,
           );
           accountNameToId[acc.name] = id;
+          created++;
         }
       }
-    } catch (_) {
-      // 账户导入失败不影响交易导入
+      logger.info('AccountImport',
+          '账户导入完成: 新增=$created 已存在=${accounts.length - created} 耗时=${sw.elapsedMilliseconds}ms');
+    } catch (e, st) {
+      logger.error('AccountImport', '账户导入失败', e, st);
     }
 
     return accountNameToId;
   }
 
-  /// 导入分类（先一级后二级）
-  Future<Map<String, int>> _importCategories(
+  /// 导入分类(先一级后二级)。public — sync_diff_service 复用。
+  Future<Map<String, int>> importCategories(
     BaseRepository repo,
     List<ImportCategory> categories,
   ) async {
     final categoryCache = <String, int>{}; // key: kind|name -> id
 
     if (categories.isEmpty) return categoryCache;
+    logger.info('CategoryImport', '开始导入分类: ${categories.length} 个');
+    final sw = Stopwatch()..start();
+    int created = 0;
 
     try {
       // 获取所有现有分类
@@ -290,6 +303,7 @@ class DataImportService {
             sortOrder: cat.sortOrder,
           );
           categoryCache[key] = id;
+          created++;
 
           // 如果有自定义图标信息，更新图标
           if (cat.iconType != null && cat.iconType != 'material') {
@@ -336,15 +350,17 @@ class DataImportService {
           }
         }
       }
-    } catch (_) {
-      // 分类导入失败不影响交易导入
+      logger.info('CategoryImport',
+          '分类导入完成: 新增=$created 已存在=${categories.length - created} 耗时=${sw.elapsedMilliseconds}ms');
+    } catch (e, st) {
+      logger.error('CategoryImport', '分类导入失败', e, st);
     }
 
     return categoryCache;
   }
 
-  /// 导入标签
-  Future<Map<String, int>> _importTags(
+  /// 导入标签。public — sync_diff_service 复用。
+  Future<Map<String, int>> importTags(
     BaseRepository repo,
     List<ImportTag> tags,
   ) async {
@@ -352,10 +368,12 @@ class DataImportService {
 
     if (tags.isEmpty) return tagNameToId;
 
-    logger.info('TagImport', '开始导入标签: ${tags.length}个');
+    logger.info('TagImport', '开始导入标签: ${tags.length} 个');
+    final sw = Stopwatch()..start();
+    int created = 0;
+    int updated = 0;
 
     try {
-      // 获取所有现有标签
       final existingTags = await repo.getAllTags();
       final existingTagMap = <String, Tag>{};
       for (final tag in existingTags) {
@@ -363,37 +381,44 @@ class DataImportService {
         existingTagMap[tag.name] = tag;
       }
 
-      // 创建不存在的标签，更新已存在标签的颜色
+      // 单条 await 循环 — 标签量通常小(<100),没批量接口暂保持,但去掉 per-row
+      // INFO 日志:N 个标签会打 3N 条 INFO,把 logger 队列冲爆,导致后续 import
+      // 阶段的日志被淹没,用户感知"日志不全"。
       for (final tag in tags) {
-        logger.info('TagImport', '处理标签: name="${tag.name}", color="${tag.color}"');
         if (!tagNameToId.containsKey(tag.name)) {
-          // 创建新标签
-          logger.info('TagImport', '创建新标签: name="${tag.name}", color="${tag.color}"');
           final id = await repo.createTag(name: tag.name, color: tag.color);
           tagNameToId[tag.name] = id;
-          // 验证创建结果
-          final created = await repo.getTagById(id);
-          logger.info('TagImport', '创建结果: id=$id, name="${created?.name}", color="${created?.color}"');
+          created++;
         } else if (tag.color != null) {
-          // 标签已存在，检查是否需要更新颜色
           final existingTag = existingTagMap[tag.name];
           if (existingTag != null && existingTag.color != tag.color) {
-            logger.info('TagImport', '更新标签颜色: ${tag.name}, "${existingTag.color}" -> "${tag.color}"');
             await repo.updateTag(existingTag.id, color: tag.color);
+            updated++;
           }
         }
       }
-      logger.info('TagImport', '标签导入完成');
-    } catch (e) {
-      logger.error('TagImport', '标签导入失败', e);
-      // 标签导入失败不影响交易导入
+      logger.info('TagImport',
+          '标签导入完成: 新增=$created 更新=$updated 耗时=${sw.elapsedMilliseconds}ms');
+    } catch (e, st) {
+      logger.error('TagImport', '标签导入失败', e, st);
     }
 
     return tagNameToId;
   }
 
-  /// 导入交易（批量写入 + 标签关联）
-  Future<ImportResult> _importTransactions(
+  /// 导入交易(统一 batch 路径,tag/attachment 跟 tx 一起 batch insert)
+  ///
+  /// **历史**:之前"有标签/附件"的 tx 走单条 await 路径,
+  ///   `insertTransactionCompanion` → `updateTransactionTags` → `createAttachment`
+  /// 各开自己的 BEGIN/COMMIT,N+1 + 嵌套事务双重放大,1 万条带标签数据要几十
+  /// 分钟。
+  ///
+  /// **现在**:全部走 `insertTransactionsBatchWithRelations`,500 条 / 批,
+  /// 一个 db.transaction 内 batch insert tx + tag + attachment + local_changes,
+  /// 把 N 次 BEGIN/COMMIT/fsync 折叠成 1 次。
+  ///
+  /// public — sync_diff_service 复用。
+  Future<ImportResult> importTransactions(
     BaseRepository repo,
     int ledgerId,
     List<ImportTransaction> transactions, {
@@ -401,30 +426,59 @@ class DataImportService {
     required Map<String, int> categoryCache,
     required Map<String, int> tagNameToId,
     void Function(int done, int total)? onProgress,
+    bool recordChanges = true,
   }) async {
     int inserted = 0;
     int failed = 0;
     int processed = 0;
     final total = transactions.length;
+    logger.info('TxImport',
+        '开始导入交易: $total 条 (recordChanges=$recordChanges)');
+    final overallSw = Stopwatch()..start();
 
-    // 批量待插入列表
-    final toInsert = <TransactionsCompanion>[];
     const batchSize = 500;
+    // 批次缓冲:tx 列表 + 按 batch 内 index 索引的关联数据
+    final batchTx = <TransactionsCompanion>[];
+    final batchTagsByIndex = <int, List<int>>{};
+    final batchAttachmentsByIndex = <int, List<BatchAttachmentData>>{};
 
-    // 分类缓存（用于动态创建）
     final localCategoryCache = Map<String, int>.from(categoryCache);
+
+    // 把当前缓冲 flush 到 repo。捕获异常时整批算 failed,继续下一批。
+    Future<void> flush() async {
+      if (batchTx.isEmpty) return;
+      final size = batchTx.length;
+      final batchSw = Stopwatch()..start();
+      try {
+        final ids = await repo.insertTransactionsBatchWithRelations(
+          transactions: List.of(batchTx),
+          tagIdsByIndex: Map.of(batchTagsByIndex),
+          attachmentsByIndex: Map.of(batchAttachmentsByIndex),
+          recordChanges: recordChanges,
+        );
+        inserted += ids.length;
+        logger.info('TxImport',
+            'flush 批次: size=$size 耗时=${batchSw.elapsedMilliseconds}ms 累计=${processed + size}/$total');
+      } catch (e, st) {
+        logger.error('TxImport', '批次 flush 失败,本批 $size 条算 failed', e, st);
+        failed += size;
+      }
+      processed += size;
+      batchTx.clear();
+      batchTagsByIndex.clear();
+      batchAttachmentsByIndex.clear();
+      if (onProgress != null) onProgress(processed, total);
+    }
 
     for (final tx in transactions) {
       // 解析分类ID
       int? categoryId;
-      // 优先使用预解析的分类ID
       if (tx.categoryId != null) {
         categoryId = tx.categoryId;
       } else if (tx.categoryName != null && tx.categoryKind != null) {
         final key = '${tx.categoryKind}|${tx.categoryName}';
         categoryId = localCategoryCache[key];
         if (categoryId == null && tx.type != 'transfer') {
-          // 动态创建分类
           try {
             categoryId = await repo.upsertCategory(
               name: tx.categoryName!,
@@ -438,12 +492,9 @@ class DataImportService {
       // 解析账户ID
       int? accountId;
       int? toAccountId;
-
       if (tx.type == 'transfer') {
-        // 转账：使用 fromAccountName 和 toAccountName
         if (tx.fromAccountName != null) {
           accountId = accountNameToId[tx.fromAccountName];
-          // 提供了账户名但找不到对应账户 -> 失败
           if (accountId == null) {
             failed++;
             processed++;
@@ -452,28 +503,24 @@ class DataImportService {
         }
         if (tx.toAccountName != null) {
           toAccountId = accountNameToId[tx.toAccountName];
-          // 提供了账户名但找不到对应账户 -> 失败
           if (toAccountId == null) {
             failed++;
             processed++;
             continue;
           }
         }
-        // 注意：旧版本数据可能没有账户信息，允许导入（账户为空）
       } else {
-        // 收入或支出：使用 accountName
         if (tx.accountName != null) {
           accountId = accountNameToId[tx.accountName];
         }
       }
 
-      // 解析标签ID
+      // 解析标签ID — toSet().toList() 去重,因为底层 batch insert 不查重
       final tagIds = <int>[];
       if (tx.tagNames != null) {
         for (final tagName in tx.tagNames!) {
           var tagId = tagNameToId[tagName];
           if (tagId == null) {
-            // 动态创建标签
             try {
               final existingTag = await repo.getTagByName(tagName);
               if (existingTag != null) {
@@ -489,6 +536,7 @@ class DataImportService {
           }
         }
       }
+      final uniqueTagIds = tagIds.toSet().toList();
 
       // 构建交易记录
       final txCompanion = TransactionsCompanion.insert(
@@ -503,77 +551,36 @@ class DataImportService {
         syncId: d.Value(tx.syncId),
       );
 
-      // 如果有标签或附件，单独插入并关联
-      final hasAttachments = tx.attachments != null && tx.attachments!.isNotEmpty;
-      if (tagIds.isNotEmpty || hasAttachments) {
-        try {
-          final txId = await repo.insertTransactionCompanion(txCompanion);
-          // 关联标签
-          if (tagIds.isNotEmpty) {
-            await repo.updateTransactionTags(
-              transactionId: txId,
-              tagIds: tagIds,
-            );
-          }
-          // 创建附件元数据记录（注意：仅创建记录，实际图片文件需单独导入）
-          if (hasAttachments) {
-            for (final attachment in tx.attachments!) {
-              try {
-                await repo.createAttachment(
-                  transactionId: txId,
-                  fileName: attachment.fileName,
-                  originalName: attachment.originalName,
-                  fileSize: attachment.fileSize,
-                  width: attachment.width,
-                  height: attachment.height,
-                  sortOrder: attachment.sortOrder,
-                  cloudFileId: attachment.cloudFileId,
-                  cloudSha256: attachment.cloudSha256,
-                );
-              } catch (_) {
-                // 附件记录创建失败不影响交易导入
-              }
-            }
-          }
-          inserted++;
-        } catch (_) {
-          failed++;
-        }
-        processed++;
-      } else {
-        // 没有标签和附件，批量插入
-        toInsert.add(txCompanion);
+      final indexInBatch = batchTx.length;
+      batchTx.add(txCompanion);
+      if (uniqueTagIds.isNotEmpty) {
+        batchTagsByIndex[indexInBatch] = uniqueTagIds;
+      }
+      if (tx.attachments != null && tx.attachments!.isNotEmpty) {
+        batchAttachmentsByIndex[indexInBatch] = tx.attachments!
+            .map((a) => BatchAttachmentData(
+                  fileName: a.fileName,
+                  originalName: a.originalName,
+                  fileSize: a.fileSize,
+                  width: a.width,
+                  height: a.height,
+                  sortOrder: a.sortOrder,
+                  cloudFileId: a.cloudFileId,
+                  cloudSha256: a.cloudSha256,
+                ))
+            .toList();
       }
 
-      // 批量写入
-      if (toInsert.length >= batchSize) {
-        try {
-          final n = await repo.insertTransactionsBatch(List.of(toInsert));
-          inserted += n;
-          processed += n;
-        } catch (_) {
-          failed += toInsert.length;
-          processed += toInsert.length;
-        }
-        toInsert.clear();
-        if (onProgress != null) onProgress(processed, total);
+      if (batchTx.length >= batchSize) {
+        await flush();
       }
     }
 
-    // 刷新剩余缓冲
-    if (toInsert.isNotEmpty) {
-      try {
-        final n = await repo.insertTransactionsBatch(toInsert);
-        inserted += n;
-        processed += n;
-      } catch (_) {
-        failed += toInsert.length;
-        processed += toInsert.length;
-      }
-    }
+    // 刷剩余
+    await flush();
 
-    if (onProgress != null) onProgress(processed, total);
-
+    logger.info('TxImport',
+        '交易导入完成: 总数=$total 成功=$inserted 失败=$failed 总耗时=${overallSw.elapsedMilliseconds}ms');
     return ImportResult(inserted: inserted, failed: failed);
   }
 }

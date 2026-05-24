@@ -6,6 +6,8 @@ import '../../../cloud/sync/change_tracker.dart';
 import '../../../services/system/logger_service.dart';
 import '../base_repository.dart';
 import '../budget_repository.dart';
+import '../transaction_repository.dart'
+    show BatchAttachmentData, TransactionUpdateBySyncIdData;
 import 'local_ledger_repository.dart';
 import 'local_transaction_repository.dart';
 import 'local_category_repository.dart';
@@ -331,8 +333,14 @@ class LocalRepository extends BaseRepository {
   }
 
   @override
-  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) async {
-    if (changeTracker == null || items.isEmpty) {
+  Future<int> insertTransactionsBatch(
+    List<TransactionsCompanion> items, {
+    bool recordChanges = true,
+  }) async {
+    // recordChanges=false:FullPull 走静默写入路径,云端拉下来的数据**不**再
+    // 反向 push 回去(否则 10k 条 fullPull 会产生 10k 行 local_changes,触发
+    // SyncCoordinator 反向同步,白白多一轮)。
+    if (!recordChanges || changeTracker == null || items.isEmpty) {
       return _transactionRepo.insertTransactionsBatch(items);
     }
     // 预填充 syncId,这样插入完能根据 syncId 查回行,逐条登记 create change。
@@ -431,8 +439,68 @@ class LocalRepository extends BaseRepository {
   Future<Transaction?> getTransactionById(int id) => _transactionRepo.getTransactionById(id);
 
   @override
-  Future<int> insertTransactionCompanion(TransactionsCompanion item) async {
-    if (changeTracker == null) {
+  Future<List<int>> insertTransactionsBatchWithRelations({
+    required List<TransactionsCompanion> transactions,
+    Map<int, List<int>> tagIdsByIndex = const {},
+    Map<int, List<BatchAttachmentData>> attachmentsByIndex = const {},
+    bool recordChanges = true,
+  }) async {
+    if (transactions.isEmpty) return const [];
+    // recordChanges=false / 没挂 changeTracker → 直接走子仓库,不补 change log。
+    if (!recordChanges || changeTracker == null) {
+      return _transactionRepo.insertTransactionsBatchWithRelations(
+        transactions: transactions,
+        tagIdsByIndex: tagIdsByIndex,
+        attachmentsByIndex: attachmentsByIndex,
+      );
+    }
+    // 预填充 syncId 让 wrapper 也能根据 syncId 查回行后登记 change(子仓库会
+    // 看到这些已填的 syncId,不会重复生成)。
+    final effective = transactions.map((tx) {
+      if (tx.syncId == const d.Value.absent() || tx.syncId.value == null) {
+        return tx.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return tx;
+    }).toList();
+    return db.transaction(() async {
+      final ids = await _transactionRepo.insertTransactionsBatchWithRelations(
+        transactions: effective,
+        tagIdsByIndex: tagIdsByIndex,
+        attachmentsByIndex: attachmentsByIndex,
+      );
+      // 一次性 batch insert N 条 transaction:create change,代替逐条
+      // recordLedgerChange,把 N 次跨 isolate boundary 摊成 1 次。
+      final syncIds =
+          effective.map((c) => c.syncId.value).whereType<String>().toList();
+      if (syncIds.isEmpty) return ids;
+      final inserted = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      await db.batch((b) {
+        for (final tx in inserted) {
+          if (tx.syncId == null) continue;
+          b.insert(
+            db.localChanges,
+            LocalChangesCompanion.insert(
+              entityType: 'transaction',
+              entityId: tx.id,
+              entitySyncId: tx.syncId!,
+              ledgerId: tx.ledgerId,
+              action: 'create',
+            ),
+          );
+        }
+      });
+      return ids;
+    });
+  }
+
+  @override
+  Future<int> insertTransactionCompanion(
+    TransactionsCompanion item, {
+    bool recordChanges = true,
+  }) async {
+    if (!recordChanges || changeTracker == null) {
       return _transactionRepo.insertTransactionCompanion(item);
     }
     // 带标签/附件的交易走这条单条插入路径(见 data_import_service.dart:510)。
@@ -629,6 +697,81 @@ class LocalRepository extends BaseRepository {
   @override
   Future<void> deleteTransactionBySyncId(String syncId) =>
       _transactionRepo.deleteTransactionBySyncId(syncId);
+
+  @override
+  Future<Map<String, int>> updateTransactionsBatchBySyncId(
+    List<TransactionUpdateBySyncIdData> updates, {
+    bool recordChanges = true,
+  }) async {
+    if (updates.isEmpty) return const {};
+    if (!recordChanges || changeTracker == null) {
+      return _transactionRepo.updateTransactionsBatchBySyncId(updates);
+    }
+    return db.transaction(() async {
+      final syncIdToTxId =
+          await _transactionRepo.updateTransactionsBatchBySyncId(updates);
+      if (syncIdToTxId.isEmpty) return syncIdToTxId;
+      // 反查 ledgerId 用于 change log
+      final txs = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIdToTxId.keys.toList())))
+          .get();
+      await db.batch((b) {
+        for (final tx in txs) {
+          if (tx.syncId == null) continue;
+          b.insert(
+            db.localChanges,
+            LocalChangesCompanion.insert(
+              entityType: 'transaction',
+              entityId: tx.id,
+              entitySyncId: tx.syncId!,
+              ledgerId: tx.ledgerId,
+              action: 'update',
+            ),
+          );
+        }
+      });
+      return syncIdToTxId;
+    });
+  }
+
+  @override
+  Future<int> deleteTransactionsBatchBySyncIds(
+    List<String> syncIds, {
+    bool recordChanges = true,
+  }) async {
+    if (syncIds.isEmpty) return 0;
+    // recordChanges=false / 无 changeTracker → 直接走子仓库,不写 change log
+    if (!recordChanges || changeTracker == null) {
+      return _transactionRepo.deleteTransactionsBatchBySyncIds(syncIds);
+    }
+    return db.transaction(() async {
+      // 先 SELECT 出待删的 tx(留下 ledgerId / syncId 用于 change log)
+      final rows = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      if (rows.isEmpty) return 0;
+      final deleted =
+          await _transactionRepo.deleteTransactionsBatchBySyncIds(syncIds);
+      // 一次性 batch insert N 条 transaction:delete change,代替逐条
+      // recordLedgerChange,跨 isolate boundary 从 N 次降到 1 次。
+      await db.batch((b) {
+        for (final tx in rows) {
+          if (tx.syncId == null) continue;
+          b.insert(
+            db.localChanges,
+            LocalChangesCompanion.insert(
+              entityType: 'transaction',
+              entityId: tx.id,
+              entitySyncId: tx.syncId!,
+              ledgerId: tx.ledgerId,
+              action: 'delete',
+            ),
+          );
+        }
+      });
+      return deleted;
+    });
+  }
 
   @override
   Future<int> createAdjustmentTransaction({

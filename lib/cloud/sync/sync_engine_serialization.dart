@@ -9,7 +9,7 @@ part of 'sync_engine.dart';
 ///
 /// 所有方法都是 private,只在 library 内被 `_push` / `fullPush` 调用,所以
 /// extension 保持 private。
-extension _SyncEngineSerialization on SyncEngine {
+extension SyncEngineSerializationExt on SyncEngine {
   /// 从 DB 读取实体并序列化为 push payload
   Future<Map<String, dynamic>> _serializeEntityForPush({
     required String entityType,

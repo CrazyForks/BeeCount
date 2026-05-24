@@ -1,6 +1,6 @@
 # Uncomment this line to define a global platform for your project
-# 设置为15.5（MLKit要求）
-# AppIntents功能通过弱链接和条件编译实现，仅iOS 16+可用
+# 历史:之前为 MLKit 锁 15.5,v3.2.1 删 OCR 后没了硬要求,保留 15.5 是因为
+# AppIntents 系列 API 仍要 iOS 16+(弱链接 + 条件编译运行时回退)。
 platform :ios, '15.5'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
@@ -34,9 +34,6 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-
-  # 添加中文文本识别支持
-  pod 'GoogleMLKit/TextRecognitionChinese', '~> 7.0.0'
 
   target 'RunnerTests' do
     inherit! :search_paths

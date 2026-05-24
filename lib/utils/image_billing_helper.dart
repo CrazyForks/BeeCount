@@ -4,8 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../providers.dart';
-import '../services/billing/ocr_service.dart';
+import '../services/billing/bill_recognition_result.dart';
 import '../services/billing/bill_creation_service.dart';
+import '../services/ai/ai_constants.dart';
+import '../services/ai/ai_provider_config.dart';
+import '../services/ai/bill_extraction_service.dart';
+import '../services/ai/ai_provider_manager.dart';
 import '../services/billing/post_processor.dart';
 import '../services/data/tag_seed_service.dart';
 import '../services/attachment_service.dart';
@@ -83,21 +87,43 @@ class ImageBillingHelper {
         ),
       );
 
-      // OCR识别
-      final ocrService = OcrService();
+      // AI 视觉识别(替代历史 OCR)
       final imageFile = File(pickedFile.path);
-      final ocrResult = await ocrService.recognizePaymentImage(imageFile);
+
+      // 兜底:AI vision 未配置 → 关掉 loading + toast 提示用户去配置
+      if (!await AIProviderManager.isCapabilityConfigured(AICapabilityType.vision)) {
+        if (!context.mounted) return;
+        Navigator.of(context).pop();
+        showToast(context, l10n.aiNotConfiguredHint);
+        return;
+      }
+
+      final billInfo = await BillExtractionService().extractFromImage(imageFile);
 
       if (!context.mounted) return;
-
-      // 关闭加载提示
       Navigator.of(context).pop();
 
-      // 验证识别结果
-      if (ocrResult.amount == null || ocrResult.amount!.abs() <= 0) {
+      // billInfo == null:AI 调用失败 / 无效 / 解析不出账单(自身或网络问题)
+      if (billInfo == null) {
+        showToast(context, l10n.aiOcrFailed(l10n.aiNotConfiguredHint));
+        return;
+      }
+
+      if (billInfo.amount == null || billInfo.amount!.abs() <= 0) {
         showToast(context, l10n.aiOcrNoAmount);
         return;
       }
+
+      // 把 BillInfo 转成下游 BillCreationService 接受的 OcrResult
+      final ocrResult = OcrResult(
+        amount: billInfo.amount,
+        note: billInfo.note,
+        time: billInfo.time,
+        aiCategoryName: billInfo.category,
+        aiType: billInfo.type?.toString().split('.').last,
+        aiAccountName: billInfo.account,
+        aiEnhanced: true,
+      );
 
       // 获取当前账本
       final currentLedger = await ref.read(currentLedgerProvider.future);

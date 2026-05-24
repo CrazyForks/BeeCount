@@ -79,6 +79,12 @@ class AIConfigNotifier extends StateNotifier<AIConfigData> {
         prefs.getString(AIConstants.keyAiStrategy) ?? 'cloud_first';
     final strategy = _parseStrategy(strategyStr);
 
+    // mounted 检查防 dispose-after-await:server profile_change 触发
+    // sync_providers 的 ref.invalidate(aiConfigProvider) 会让老 notifier dispose,
+    // 但本方法的 SharedPreferences.getInstance() / 后续 setter 已经在飞,
+    // dispose 后再设 state 会抛 "Tried to use AIConfigNotifier after dispose"。
+    if (!mounted) return;
+
     state = AIConfigData(
       enabled: prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false,
       useVision: prefs.getBool(AIConstants.keyAiUseVision) ?? true,

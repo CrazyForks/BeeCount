@@ -205,19 +205,45 @@ jobs:
       - name: Rename Android artifacts with version
         run: |
           VERSION="${{ steps.meta.outputs.tag_name }}"
-          cd build/app/outputs
-          # 重命名 APK
-          if [ -f flutter-apk/app-prod-release.apk ]; then
-            mv flutter-apk/app-prod-release.apk flutter-apk/beecount-${VERSION}.apk
-            echo "Renamed APK to: beecount-${VERSION}.apk"
-          fi
-          # 重命名 AAB
-          if [ -f bundle/prodRelease/app-prod-release.aab ]; then
-            mv bundle/prodRelease/app-prod-release.aab bundle/prodRelease/beecount-${VERSION}.aab
+          APK_DIR="build/app/outputs/apk/prod/release"
+          # AGP splits.abi 产出 4 个 APK,gradle 内 outputFileName 已经按 ABI 分名:
+          #   - app-prod-release-vX.apk              主分发(arm64-v8a)
+          #   - app-prod-armeabi-v7a-release-vX.apk  armv7 老设备兼容
+          #   - app-prod-x86_64-release-vX.apk       Intel/Win/Linux 模拟器
+          #   - app-prod-universal-release-vX.apk    三 ABI 兜底
+          # 全部重命名成 beecount-<VERSION>-[<abi>].apk 上 Release。
+          for src in "$APK_DIR"/app-prod-*.apk; do
+            [ -f "$src" ] || continue
+            name="$(basename "$src")"
+            case "$name" in
+              app-prod-release-v*.apk)
+                dest="$APK_DIR/beecount-${VERSION}.apk"
+                ;;
+              app-prod-armeabi-v7a-release-v*.apk)
+                dest="$APK_DIR/beecount-${VERSION}-armeabi-v7a.apk"
+                ;;
+              app-prod-x86_64-release-v*.apk)
+                dest="$APK_DIR/beecount-${VERSION}-x86_64.apk"
+                ;;
+              app-prod-universal-release-v*.apk)
+                dest="$APK_DIR/beecount-${VERSION}-universal.apk"
+                ;;
+              *)
+                echo "Unknown APK pattern, skipping: $name"
+                continue
+                ;;
+            esac
+            mv "$src" "$dest"
+            echo "Renamed: $name → $(basename "$dest")"
+          done
+          # 重命名 AAB(AAB 不按 ABI 拆,Google Play 按设备分发)
+          if [ -f build/app/outputs/bundle/prodRelease/app-prod-release.aab ]; then
+            mv build/app/outputs/bundle/prodRelease/app-prod-release.aab \
+               build/app/outputs/bundle/prodRelease/beecount-${VERSION}.aab
             echo "Renamed AAB to: beecount-${VERSION}.aab"
           fi
           echo "=== Final Android artifacts ==="
-          find . -name "*.apk" -o -name "*.aab"
+          find build/app/outputs -name "beecount-*"
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
@@ -225,7 +251,7 @@ jobs:
           name: android
           if-no-files-found: error
           path: |
-            build/app/outputs/flutter-apk/beecount-*.apk
+            build/app/outputs/apk/prod/release/beecount-*.apk
             build/app/outputs/bundle/prodRelease/beecount-*.aab
 
       - name: Upload AAB to Google Play Console

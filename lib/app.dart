@@ -152,6 +152,18 @@ class _BeeAppState extends ConsumerState<BeeApp>
       }
     });
 
+    // 启动同步走 `Future.microtask` 而**不是** `addPostFrameCallback`。
+    //
+    // 历史:之前为了首屏更快试过 addPostFrameCallback,首帧渲染完才开始 sync,
+    // 代价是 sync 完成后 bump 一堆 refresh ticker → home 已渲染好的内容触发
+    // 二次 cascade rebuild,FutureProvider invalidate 走 loading→data 切换,
+    // 用户感知"进首页 → 出现预算卡片 / 列表展开 → 整页刷新一遍"。
+    //
+    // 改回 microtask:让 sync 在首屏渲染**之前**就开始抢占主线程跑,首屏出
+    // 来时 ticker bump 已经发生或正在发生,跟首屏渲染叠加成单次"加载",没
+    // 有"先显示后又刷新"的二次绘制感。Phase1/Phase2 分层结构保留(下面的
+    // `_triggerInitialCloudSync` 还是分层并行,避免多账本场景重复跑用户级
+    // 操作),只换了 trigger 时机。
     Future.microtask(() async {
       try {
         final syncService = ref.read(syncServiceProvider);
@@ -162,7 +174,7 @@ class _BeeAppState extends ConsumerState<BeeApp>
           _triggerInitialCloudSync(syncService);
         }
       } catch (e) {
-        // 静默失败，不影响App启动
+        // 静默失败,不影响 App 启动
       }
     });
 
@@ -181,36 +193,139 @@ class _BeeAppState extends ConsumerState<BeeApp>
   void _triggerInitialCloudSync(SyncEngine engine) {
     Future(() async {
       try {
-        // 用户可能有多个本地账本。原先只同步 currentLedgerIdProvider，其他账本
-        // 永远不会被推送上去。这里遍历所有本地账本，挨个触发一次 sync()。
+        // 启动同步分层策略(2026-05-24 改造):
+        //
+        // 旧实现 `for (ledger in ledgers) { engine.sync(ledger) }` 串行 5
+        // 次完整 sync,每次内部都跑 `syncMyProfile` / `storage.list` / `pull`
+        // 等**用户级**操作(跟 ledgerId 无关),5 次重复浪费;且串行 HTTP 任
+        // 一慢就累积卡 UI。
+        //
+        // 改造:
+        //   Phase 1 — 用户级数据(只跑一次,跨 ledger 共享)
+        //     a. syncMyProfile         HTTP profile/me
+        //     b. storage.list          HTTP /sync/ledgers 拿远端账本列表
+        //     c. pull                  HTTP /sync/pull 用户级 sync_changes 流
+        //   Phase 2 — 每个 ledger 并行(push + 附件上下行)
+        //     a. fast skip:无 unpushed change + 已在远端 → 跳
+        //     b. 否则:uploadAttachments + push + downloadAttachments
+        //   并发限制由 SQLite mutex 自然控制(Drift 内部排队,不会真并发写)
         final db = ref.read(databaseProvider);
         final ledgers = await db.select(db.ledgers).get();
         if (ledgers.isEmpty) {
-          logger.info('AppStart', '本地无账本，跳过首次同步');
+          logger.info('AppStart', '本地无账本,跳过首次同步');
           return;
         }
-        logger.info('AppStart', '触发 BeeCount Cloud 首次同步，本地账本数=${ledgers.length}');
-        int totalPushed = 0;
-        int totalPulled = 0;
-        for (final ledger in ledgers) {
-          try {
-            final result = await engine.sync(ledgerId: ledger.id.toString());
-            if (result.hasError) {
-              logger.error('AppStart',
-                  '账本 ${ledger.name}(${ledger.id}) 同步失败: ${result.error}');
-            } else {
-              totalPushed += result.pushed;
-              totalPulled += result.pulled;
-              logger.info('AppStart',
-                  '账本 ${ledger.name}(${ledger.id}) 同步完成: pushed=${result.pushed}, pulled=${result.pulled}');
-            }
-          } catch (e, st) {
-            logger.error('AppStart',
-                '账本 ${ledger.name}(${ledger.id}) 同步异常', e, st);
-          }
-        }
         logger.info('AppStart',
-            'BeeCount Cloud 首次同步汇总: pushed=$totalPushed, pulled=$totalPulled');
+            'BeeCount Cloud 首次同步: 本地账本数=${ledgers.length}');
+        final overallStart = DateTime.now();
+
+        // ========== Phase 1: 用户级一次性 ==========
+        // a) profile + appearance + AI config + avatar
+        unawaited(() async {
+          try {
+            await engine.syncMyProfile();
+          } catch (e, st) {
+            logger.warning('AppStart', 'syncMyProfile 失败', st);
+            logger.warning('AppStart', 'error: $e');
+          }
+        }());
+
+        // b) 远端账本列表(单次拉,所有 ledger 用同一份决定 fullPush)
+        List<dynamic>? remoteLedgers;
+        try {
+          remoteLedgers = await engine.provider.storage.list(path: '');
+          logger.info(
+              'AppStart', 'Phase1: 远端账本=${remoteLedgers.length}');
+        } catch (e, st) {
+          logger.warning('AppStart', 'Phase1: 拉 remote_ledgers 失败,fallback', st);
+          logger.warning('AppStart', 'error: $e');
+        }
+
+        // c) 用户级 sync_changes 流(只拉一次,所有 ledger 共享 cursor)
+        try {
+          final pulled = await engine.pull('');
+          logger.info('AppStart', 'Phase1: pull(用户级) applied=$pulled');
+        } catch (e, st) {
+          logger.error('AppStart', 'Phase1: pull 失败', e, st);
+        }
+
+        // ========== Phase 2: 每个 ledger 并行 push + 附件 ==========
+        final remoteSyncIds = <String>{
+          if (remoteLedgers != null)
+            for (final r in remoteLedgers)
+              if (r.path is String) r.path as String,
+        };
+
+        final futures = ledgers.map((ledger) async {
+          final tag = '${ledger.name}(${ledger.id})';
+          try {
+            final unpushed = await engine.changeTracker
+                .getUnpushedChangesForLedger(ledger.id);
+            final mySyncId = ledger.syncId;
+            final hasSyncId = mySyncId != null && mySyncId.isNotEmpty;
+            final inRemote = hasSyncId && remoteSyncIds.contains(mySyncId);
+
+            // fast skip:无待推送 + 已在远端 + 非共享 Editor 或 Owner
+            if (unpushed.isEmpty && inRemote) {
+              logger.info('AppStart', 'Phase2 skip $tag (无待推送 + 已绑定)');
+              return _LedgerSyncResult.skip();
+            }
+
+            // 共享账本 Editor:只 push 自己的 unpushed change,不 fullPush
+            // (会覆盖 Owner 数据)
+            final isSharedAsEditor =
+                ledger.isShared && ledger.myRole != 'owner';
+
+            // 需要 fullPush:非 Editor 且账本不在远端
+            if (!inRemote && !isSharedAsEditor) {
+              logger.info('AppStart', 'Phase2 $tag → fullPush');
+              try {
+                await engine.uploadAttachments(ledgerId: ledger.id);
+              } catch (e, st) {
+                logger.warning('AppStart', '$tag uploadAttachments 失败', st);
+                logger.warning('AppStart', 'error: $e');
+              }
+              await engine.fullPush(ledgerId: ledger.id);
+              // 推剩余 delete change
+              final extra = await engine.push(ledger.id.toString());
+              try {
+                await engine.downloadAttachments(ledgerId: ledger.id);
+              } catch (e, st) {
+                logger.warning('AppStart', '$tag downloadAttachments 失败', st);
+                logger.warning('AppStart', 'error: $e');
+              }
+              return _LedgerSyncResult(pushed: extra + 1, pulled: 0);
+            }
+
+            // 普通 push 路径:有 unpushed 才走附件 + push
+            try {
+              await engine.uploadAttachments(ledgerId: ledger.id);
+            } catch (e, st) {
+              logger.warning('AppStart', '$tag uploadAttachments 失败', st);
+              logger.warning('AppStart', 'error: $e');
+            }
+            final pushed = await engine.push(ledger.id.toString());
+            try {
+              await engine.downloadAttachments(ledgerId: ledger.id);
+            } catch (e, st) {
+              logger.warning('AppStart', '$tag downloadAttachments 失败', st);
+              logger.warning('AppStart', 'error: $e');
+            }
+            logger.info('AppStart', 'Phase2 $tag done: pushed=$pushed');
+            return _LedgerSyncResult(pushed: pushed, pulled: 0);
+          } catch (e, st) {
+            logger.error('AppStart', 'Phase2 $tag 异常', e, st);
+            return _LedgerSyncResult(pushed: 0, pulled: 0);
+          }
+        });
+        final results = await Future.wait(futures);
+
+        final totalPushed = results.fold<int>(0, (a, b) => a + b.pushed);
+        final skipped = results.where((r) => r.skipped).length;
+        final totalMs =
+            DateTime.now().difference(overallStart).inMilliseconds;
+        logger.info('AppStart',
+            'BeeCount Cloud 首次同步完成: synced=${ledgers.length - skipped} skipped=$skipped pushed=$totalPushed 总耗时 ${totalMs}ms');
         ref.read(syncStatusRefreshProvider.notifier).state++;
         ref.read(ledgerListRefreshProvider.notifier).state++;
       } catch (e, st) {
@@ -950,4 +1065,17 @@ class _SpeedDialOverlay extends StatelessWidget {
     }
     return result;
   }
+}
+
+/// `_triggerInitialCloudSync` Phase2 单 ledger 处理结果。
+class _LedgerSyncResult {
+  const _LedgerSyncResult({required this.pushed, required this.pulled})
+      : skipped = false;
+  const _LedgerSyncResult.skip()
+      : pushed = 0,
+        pulled = 0,
+        skipped = true;
+  final int pushed;
+  final int pulled;
+  final bool skipped;
 }

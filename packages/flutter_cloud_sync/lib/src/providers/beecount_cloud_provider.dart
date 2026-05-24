@@ -305,16 +305,27 @@ class BeeCountCloudProvider implements CloudProvider {
     return storage.downloadMyAvatar(userId: userId, version: version);
   }
 
+  /// 拉取增量变更。
+  ///
+  /// [persistCursor] 默认 true 兼容老 caller。传 false 时,本方法返回 cursor
+  /// 但**不**持久化到 SharedPreferences,由 caller 自己在 apply 成功后决定何时
+  /// 推进。这是为了避免"cursor 已推进但本地 apply 失败"导致这一页 change 永远
+  /// 拉不回的经典 bug,详见 BeeCount 项目 `.docs/full-pull-refactor/`。
   Future<BeeCountCloudPullResult> pullChanges({
     int? since,
     int limit = 1000,
+    bool persistCursor = true,
   }) async {
     final storage = _storage;
     if (storage == null) {
       throw CloudConfigurationException(
           'BeeCount Cloud storage is not initialized.');
     }
-    return storage.pullChanges(since: since, limit: limit);
+    return storage.pullChanges(
+      since: since,
+      limit: limit,
+      persistCursor: persistCursor,
+    );
   }
 
   /// 推送增量变更（个体实体级别，非 ledger_snapshot 包装）
@@ -2017,6 +2028,7 @@ class BeeCountCloudStorageService implements CloudStorageService {
   Future<BeeCountCloudPullResult> pullChanges({
     int? since,
     int limit = 1000,
+    bool persistCursor = true,
   }) async {
     final currentCursor = since ?? await _loadCursor();
     final query = <String, String>{
@@ -2078,7 +2090,9 @@ class BeeCountCloudStorageService implements CloudStorageService {
       }
     }
 
-    await _saveCursor(nextCursor);
+    if (persistCursor) {
+      await _saveCursor(nextCursor);
+    }
     return BeeCountCloudPullResult(
       changes: changes,
       serverCursor: nextCursor,

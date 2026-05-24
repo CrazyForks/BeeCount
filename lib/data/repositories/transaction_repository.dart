@@ -1,5 +1,52 @@
 import '../db.dart';
 
+/// 批量按 syncId 更新交易时的单条 update payload。
+class TransactionUpdateBySyncIdData {
+  final String syncId;
+  final String type;
+  final double amount;
+  final int? categoryId;
+  final int? accountId;
+  final int? toAccountId;
+  final DateTime happenedAt;
+  final String? note;
+
+  const TransactionUpdateBySyncIdData({
+    required this.syncId,
+    required this.type,
+    required this.amount,
+    this.categoryId,
+    this.accountId,
+    this.toAccountId,
+    required this.happenedAt,
+    this.note,
+  });
+}
+
+/// 批量插入交易时附带的附件元数据。交易行还没插入,txId 未知,
+/// repo 内部按 batch 内 index 找到刚插入的 txId 再组装 AttachmentsCompanion。
+class BatchAttachmentData {
+  final String fileName;
+  final String? originalName;
+  final int? fileSize;
+  final int? width;
+  final int? height;
+  final int sortOrder;
+  final String? cloudFileId;
+  final String? cloudSha256;
+
+  const BatchAttachmentData({
+    required this.fileName,
+    this.originalName,
+    this.fileSize,
+    this.width,
+    this.height,
+    this.sortOrder = 0,
+    this.cloudFileId,
+    this.cloudSha256,
+  });
+}
+
 /// 交易Repository接口
 /// 定义交易相关的所有数据操作
 abstract class TransactionRepository {
@@ -77,11 +124,42 @@ abstract class TransactionRepository {
     String? toAccountSyncIdOverride,
   });
 
-  /// 批量新增交易，单事务内插入，返回插入条数
-  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items);
+  /// 批量新增交易，单事务内插入，返回插入条数。
+  ///
+  /// [recordChanges] 默认 true,会逐条登记 changeTracker.recordLedgerChange。
+  /// FullPull 路径需要传 false 避免"从云端拉下来的数据又被反向 push 回去"。
+  Future<int> insertTransactionsBatch(
+    List<TransactionsCompanion> items, {
+    bool recordChanges = true,
+  });
 
   /// 插入单条交易（使用 Companion 对象）
-  Future<int> insertTransactionCompanion(TransactionsCompanion item);
+  ///
+  /// [recordChanges] 同 [insertTransactionsBatch]。
+  Future<int> insertTransactionCompanion(
+    TransactionsCompanion item, {
+    bool recordChanges = true,
+  });
+
+  /// 批量插入交易 + 关联数据(tag / attachment),全部在单事务内完成。
+  ///
+  /// 用于带标签 / 带附件的 import 路径 — 原本的"单条 insert + 单条
+  /// updateTransactionTags + 单条 createAttachment"会引发 N+1 + 嵌套事务,
+  /// 1 万条带标签数据耗时数十分钟;本方法把 N 次单条事务折叠成 1 次,
+  /// 并用 `db.batch` 合并 tag / attachment / local_changes 的 INSERT。
+  ///
+  /// [tagIdsByIndex] - 批次内 index → tagId 列表。调用方需保证 tagIds 去重
+  ///   (TransactionTags 表无 UNIQUE 约束,本方法不做 select 防重)。
+  /// [attachmentsByIndex] - 批次内 index → 附件元数据列表。
+  /// [recordChanges] - 同 [insertTransactionsBatch]。
+  ///
+  /// 返回插入的 tx id 列表,顺序跟 [transactions] 输入对齐。
+  Future<List<int>> insertTransactionsBatchWithRelations({
+    required List<TransactionsCompanion> transactions,
+    Map<int, List<int>> tagIdsByIndex = const {},
+    Map<int, List<BatchAttachmentData>> attachmentsByIndex = const {},
+    bool recordChanges = true,
+  });
 
   /// 更新交易
   Future<void> updateTransaction({
@@ -204,6 +282,27 @@ abstract class TransactionRepository {
 
   /// 根据 syncId 删除交易
   Future<void> deleteTransactionBySyncId(String syncId);
+
+  /// 批量按 syncId 删除交易(WebDAV/Supabase 同步从远端拉账本时,如果本地有
+  /// 旧账本 + 用户选择"以远端为准"覆盖,N 条 delete by syncId 单条 await 会
+  /// 跑几分钟;本方法用单条 `DELETE WHERE syncId IN (...)` 一次性删除)。
+  ///
+  /// [recordChanges] 默认 true,wrapper 会批量补 transaction:delete change log。
+  /// 返回实际删除的条数。
+  Future<int> deleteTransactionsBatchBySyncIds(
+    List<String> syncIds, {
+    bool recordChanges = true,
+  });
+
+  /// 批量按 syncId 更新交易主表字段。同事务内逐条 UPDATE,N 次跨 isolate
+  /// boundary 但 BEGIN/COMMIT 只跑一次。
+  ///
+  /// **不涉及 tag 更新** — caller 拿到 returned `Map<syncId, txId>` 后自己批量
+  /// 调 `updateTransactionTags`(或者更高效的 batch 接口,如果将来加的话)。
+  Future<Map<String, int>> updateTransactionsBatchBySyncId(
+    List<TransactionUpdateBySyncIdData> updates, {
+    bool recordChanges = true,
+  });
 
   /// 创建估值调整交易
   Future<int> createAdjustmentTransaction({

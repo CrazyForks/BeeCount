@@ -23,6 +23,7 @@ import '../report/annual_report_page.dart';
 import '../calendar/calendar_page.dart';
 import '../../widgets/biz/ledger_picker_sheet.dart';
 import '../../widgets/biz/home_budget_summary.dart';
+import 'ledgers_page_new.dart';
 import '../../providers/shared_ledger_providers.dart';
 
 // 优化版首页 - 使用FlutterListView实现精准定位和丝滑跳转
@@ -46,6 +47,17 @@ class _HomePageState extends ConsumerState<HomePage> {
   // StreamBuilder 刷新计数器
   int _streamBuilderKey = 0;
   int? _lastLedgerId;
+
+  // home build 缓存的 tx stream。repo.transactionsWithCategoryAll 内部每次调
+  // 都 new StreamController,如果在 build 里直接调,只要 home 因任何 setState
+  // (例如 _showBudgetSetupHint / _showLastMonthReminder 异步加载完成)重 build,
+  // StreamBuilder 看到 stream 引用变了就重新订阅 → snapshot.data 短暂为 null
+  // → fallback 到 cachedFullData(只有前 20 条预加载)→ 等 Drift 推数据 → 切回
+  // 完整列表,视觉上"整页闪一下"。这里把 stream 缓存到 State,只在 ledgerId
+  // 变化时重建,无关 setState 重 build 时复用同一 stream 引用。
+  Stream<List<({Transaction t, Category? category, Account? account, Account? toAccount})>>?
+      _txStream;
+  int? _txStreamLedgerId;
 
   // 月初提醒状态
   bool _showLastMonthReminder = false;
@@ -701,87 +713,130 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     final currentLedger =
                                         ref.watch(currentLedgerProvider);
                                     return currentLedger.when(
-                                      data: (ledger) => GestureDetector(
-                                        onTap: () => showLedgerPicker(context),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 6,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                        .brightness ==
-                                                    Brightness.dark
-                                                ? Colors.white
-                                                    .withValues(alpha: 0.1)
-                                                : Colors.black
-                                                    .withValues(alpha: 0.05),
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Flexible(
-                                                child: Text(
-                                                  ledger?.name == null
-                                                      ? ''
-                                                      : translateLedgerName(
-                                                          context,
-                                                          ledger!.name),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w500,
+                                      // invalidate(远端改名 / 改币种)期间继续
+                                      // 显示旧值,避免账本名胶囊瞬间消失再出现 —
+                                      // 用户感知"首页全量刷新"的主要来源。
+                                      skipLoadingOnReload: true,
+                                      data: (ledger) {
+                                        // ledger == null:还没有账本(welcome 未勾默认账本
+                                        // / 老用户导入配置不含账本),胶囊直接显示「新建账本」
+                                        // + 加号图标,点击 push LedgersPage 并自动弹创建对
+                                        // 话框,省两步点击。
+                                        final isEmpty = ledger == null;
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (isEmpty) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const LedgersPageNew(
+                                                          autoOpenCreateDialog:
+                                                              true),
+                                                ),
+                                              );
+                                            } else {
+                                              showLedgerPicker(context);
+                                            }
+                                          },
+                                          child: Container(
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 6),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                      .withValues(alpha: 0.1)
+                                                  : Colors.black
+                                                      .withValues(alpha: 0.05),
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                if (isEmpty) ...[
+                                                  Icon(
+                                                    Icons.add,
+                                                    size: 16,
                                                     color: Theme.of(context)
                                                         .textTheme
                                                         .bodyLarge
                                                         ?.color,
                                                   ),
+                                                  const SizedBox(width: 4),
+                                                ],
+                                                Flexible(
+                                                  child: Text(
+                                                    isEmpty
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .ledgersNew
+                                                        : translateLedgerName(
+                                                            context,
+                                                            ledger.name),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    softWrap: false,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyLarge
+                                                          ?.color,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              // v24 共享账本:header 也显示 🤝 角标 + 成员数
-                                              if (ledger != null && ledger.isShared) ...[
-                                                const SizedBox(width: 4),
-                                                Icon(
-                                                  Icons.handshake,
-                                                  size: 12,
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium
-                                                      ?.color
-                                                      ?.withOpacity(0.7),
-                                                ),
-                                                const SizedBox(width: 1),
-                                                Text(
-                                                  '${ledger.memberCount}',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
+                                                // v24 共享账本:header 也显示 🤝 角标 + 成员数
+                                                if (!isEmpty &&
+                                                    ledger.isShared) ...[
+                                                  const SizedBox(width: 4),
+                                                  Icon(
+                                                    Icons.handshake,
+                                                    size: 12,
                                                     color: Theme.of(context)
                                                         .textTheme
                                                         .bodyMedium
                                                         ?.color
                                                         ?.withOpacity(0.7),
                                                   ),
-                                                ),
+                                                  const SizedBox(width: 1),
+                                                  Text(
+                                                    '${ledger.memberCount}',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.color
+                                                          ?.withOpacity(0.7),
+                                                    ),
+                                                  ),
+                                                ],
+                                                // 没账本时不显示下拉箭头(没东西可选)
+                                                if (!isEmpty) ...[
+                                                  const SizedBox(width: 2),
+                                                  Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    size: 16,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.color
+                                                        ?.withOpacity(0.5),
+                                                  ),
+                                                ],
                                               ],
-                                              const SizedBox(width: 2),
-                                              Icon(
-                                                Icons.keyboard_arrow_down,
-                                                size: 16,
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.color
-                                                    ?.withOpacity(0.5),
-                                              ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                       loading: () => const SizedBox.shrink(),
                                       error: (_, __) => const SizedBox.shrink(),
                                     );
@@ -970,7 +1025,16 @@ class _HomePageState extends ConsumerState<HomePage> {
           Expanded(
             child: StreamBuilder<List<({Transaction t, Category? category, Account? account, Account? toAccount})>>(
               key: ValueKey('transactions_$_streamBuilderKey'), // 使用递增key强制重建
-              stream: repo.transactionsWithCategoryAll(ledgerId: ledgerId),
+              stream: () {
+                // ledgerId 变了或第一次进来才重建 stream;无关 setState(预算
+                // 提示卡片、月度提醒等)的 home rebuild 复用同一 stream 引用,
+                // StreamBuilder 不会重新订阅,不会闪到 fallback 数据。
+                if (_txStream == null || _txStreamLedgerId != ledgerId) {
+                  _txStream = repo.transactionsWithCategoryAll(ledgerId: ledgerId);
+                  _txStreamLedgerId = ledgerId;
+                }
+                return _txStream;
+              }(),
               builder: (context, snapshot) {
                 // Stream 数据到来前，使用预加载数据；到来后使用 Stream 数据
                 final streamData = snapshot.data;

@@ -26,7 +26,6 @@ import '../category/category_migration_page.dart';
 import '../transaction/recurring_transaction_page.dart';
 import '../settings/reminder_settings_page.dart';
 import '../settings/language_settings_page.dart';
-import '../budget/budget_page.dart';
 import '../settings/widget_management_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import '../ai/ai_settings_page.dart';
@@ -330,23 +329,8 @@ class MinePage extends ConsumerWidget {
                         },
                       ),
                       BeeTokens.cardDivider(context),
-                      // 预算管理
-                      AppListTile(
-                        leading: Icons.pie_chart_outline_rounded,
-                        title: AppLocalizations.of(context).budgetManagement,
-                        subtitle:
-                            AppLocalizations.of(context).budgetManagementDesc,
-                        trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context),
-                            size: 20), // ⭐ 使用 Token
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const BudgetPage()),
-                          );
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
+                      // 预算管理 已挪到「账本管理 → 长按某账本 → 预算管理」
+                      // (每个账本独立预算,放在账本菜单内语义更匹配)。
                       // 自动化功能
                       AppListTile(
                         leading: Icons.schedule_outlined,

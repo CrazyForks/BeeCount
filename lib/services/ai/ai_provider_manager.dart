@@ -356,6 +356,14 @@ class AIProviderManager {
     return await getProvider(providerId);
   }
 
+  /// 指定能力对应的 provider 是否已配置好(有 apiKey)。
+  /// v3.2.1 删 OCR 后,图片/语音记账完全依赖 AI,UI 调用前先检查,未配置直接
+  /// 提示用户去 AI 设置页,避免 vision()/speechToText() 内部抛异常用户看不懂。
+  static Future<bool> isCapabilityConfigured(AICapabilityType type) async {
+    final provider = await getProviderForCapability(type);
+    return provider != null && provider.isValid;
+  }
+
   /// 迁移旧配置到新格式
   static Future<void> migrateFromOldConfig() async {
     final prefs = await SharedPreferences.getInstance();
