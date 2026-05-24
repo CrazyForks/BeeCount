@@ -191,20 +191,20 @@ class DataImportService {
     }
 
     // 2. 导入账户
-    final accountNameToId = await _importAccounts(
+    final accountNameToId = await importAccounts(
       repo,
       data.accounts,
       defaultCurrency: data.currency ?? defaultCurrency,
     );
 
     // 3. 导入分类
-    final categoryCache = await _importCategories(repo, data.categories);
+    final categoryCache = await importCategories(repo, data.categories);
 
     // 4. 导入标签
-    final tagNameToId = await _importTags(repo, data.tags);
+    final tagNameToId = await importTags(repo, data.tags);
 
     // 5. 导入交易
-    final result = await _importTransactions(
+    final result = await importTransactions(
       repo,
       ledgerId,
       data.transactions,
@@ -218,8 +218,8 @@ class DataImportService {
     return result;
   }
 
-  /// 导入账户（全局按名称去重）
-  Future<Map<String, int>> _importAccounts(
+  /// 导入账户(全局按名称去重)。public — sync_diff_service 也复用,避免维护两套。
+  Future<Map<String, int>> importAccounts(
     BaseRepository repo,
     List<ImportAccount> accounts,
     {String defaultCurrency = 'CNY'}
@@ -227,42 +227,49 @@ class DataImportService {
     final accountNameToId = <String, int>{};
 
     if (accounts.isEmpty) return accountNameToId;
+    logger.info('AccountImport', '开始导入账户: ${accounts.length} 个');
+    final sw = Stopwatch()..start();
+    int created = 0;
 
     try {
-      // 获取所有现有账户（全局去重）
       final existingAccounts = await repo.getAllAccounts();
       for (final acc in existingAccounts) {
         accountNameToId[acc.name] = acc.id;
       }
 
-      // 创建不存在的账户
       for (final acc in accounts) {
         if (!accountNameToId.containsKey(acc.name)) {
           final id = await repo.createAccount(
-            ledgerId: 0, // 账户独立，不绑定账本
+            ledgerId: 0, // 账户独立,不绑定账本
             name: acc.name,
             type: acc.type ?? 'cash',
             currency: acc.currency ?? defaultCurrency,
             initialBalance: acc.initialBalance ?? 0.0,
           );
           accountNameToId[acc.name] = id;
+          created++;
         }
       }
-    } catch (_) {
-      // 账户导入失败不影响交易导入
+      logger.info('AccountImport',
+          '账户导入完成: 新增=$created 已存在=${accounts.length - created} 耗时=${sw.elapsedMilliseconds}ms');
+    } catch (e, st) {
+      logger.error('AccountImport', '账户导入失败', e, st);
     }
 
     return accountNameToId;
   }
 
-  /// 导入分类（先一级后二级）
-  Future<Map<String, int>> _importCategories(
+  /// 导入分类(先一级后二级)。public — sync_diff_service 复用。
+  Future<Map<String, int>> importCategories(
     BaseRepository repo,
     List<ImportCategory> categories,
   ) async {
     final categoryCache = <String, int>{}; // key: kind|name -> id
 
     if (categories.isEmpty) return categoryCache;
+    logger.info('CategoryImport', '开始导入分类: ${categories.length} 个');
+    final sw = Stopwatch()..start();
+    int created = 0;
 
     try {
       // 获取所有现有分类
@@ -296,6 +303,7 @@ class DataImportService {
             sortOrder: cat.sortOrder,
           );
           categoryCache[key] = id;
+          created++;
 
           // 如果有自定义图标信息，更新图标
           if (cat.iconType != null && cat.iconType != 'material') {
@@ -342,15 +350,17 @@ class DataImportService {
           }
         }
       }
-    } catch (_) {
-      // 分类导入失败不影响交易导入
+      logger.info('CategoryImport',
+          '分类导入完成: 新增=$created 已存在=${categories.length - created} 耗时=${sw.elapsedMilliseconds}ms');
+    } catch (e, st) {
+      logger.error('CategoryImport', '分类导入失败', e, st);
     }
 
     return categoryCache;
   }
 
-  /// 导入标签
-  Future<Map<String, int>> _importTags(
+  /// 导入标签。public — sync_diff_service 复用。
+  Future<Map<String, int>> importTags(
     BaseRepository repo,
     List<ImportTag> tags,
   ) async {
@@ -358,10 +368,12 @@ class DataImportService {
 
     if (tags.isEmpty) return tagNameToId;
 
-    logger.info('TagImport', '开始导入标签: ${tags.length}个');
+    logger.info('TagImport', '开始导入标签: ${tags.length} 个');
+    final sw = Stopwatch()..start();
+    int created = 0;
+    int updated = 0;
 
     try {
-      // 获取所有现有标签
       final existingTags = await repo.getAllTags();
       final existingTagMap = <String, Tag>{};
       for (final tag in existingTags) {
@@ -369,30 +381,26 @@ class DataImportService {
         existingTagMap[tag.name] = tag;
       }
 
-      // 创建不存在的标签，更新已存在标签的颜色
+      // 单条 await 循环 — 标签量通常小(<100),没批量接口暂保持,但去掉 per-row
+      // INFO 日志:N 个标签会打 3N 条 INFO,把 logger 队列冲爆,导致后续 import
+      // 阶段的日志被淹没,用户感知"日志不全"。
       for (final tag in tags) {
-        logger.info('TagImport', '处理标签: name="${tag.name}", color="${tag.color}"');
         if (!tagNameToId.containsKey(tag.name)) {
-          // 创建新标签
-          logger.info('TagImport', '创建新标签: name="${tag.name}", color="${tag.color}"');
           final id = await repo.createTag(name: tag.name, color: tag.color);
           tagNameToId[tag.name] = id;
-          // 验证创建结果
-          final created = await repo.getTagById(id);
-          logger.info('TagImport', '创建结果: id=$id, name="${created?.name}", color="${created?.color}"');
+          created++;
         } else if (tag.color != null) {
-          // 标签已存在，检查是否需要更新颜色
           final existingTag = existingTagMap[tag.name];
           if (existingTag != null && existingTag.color != tag.color) {
-            logger.info('TagImport', '更新标签颜色: ${tag.name}, "${existingTag.color}" -> "${tag.color}"');
             await repo.updateTag(existingTag.id, color: tag.color);
+            updated++;
           }
         }
       }
-      logger.info('TagImport', '标签导入完成');
-    } catch (e) {
-      logger.error('TagImport', '标签导入失败', e);
-      // 标签导入失败不影响交易导入
+      logger.info('TagImport',
+          '标签导入完成: 新增=$created 更新=$updated 耗时=${sw.elapsedMilliseconds}ms');
+    } catch (e, st) {
+      logger.error('TagImport', '标签导入失败', e, st);
     }
 
     return tagNameToId;
@@ -408,7 +416,9 @@ class DataImportService {
   /// **现在**:全部走 `insertTransactionsBatchWithRelations`,500 条 / 批,
   /// 一个 db.transaction 内 batch insert tx + tag + attachment + local_changes,
   /// 把 N 次 BEGIN/COMMIT/fsync 折叠成 1 次。
-  Future<ImportResult> _importTransactions(
+  ///
+  /// public — sync_diff_service 复用。
+  Future<ImportResult> importTransactions(
     BaseRepository repo,
     int ledgerId,
     List<ImportTransaction> transactions, {
@@ -422,6 +432,9 @@ class DataImportService {
     int failed = 0;
     int processed = 0;
     final total = transactions.length;
+    logger.info('TxImport',
+        '开始导入交易: $total 条 (recordChanges=$recordChanges)');
+    final overallSw = Stopwatch()..start();
 
     const batchSize = 500;
     // 批次缓冲:tx 列表 + 按 batch 内 index 索引的关联数据
@@ -435,6 +448,7 @@ class DataImportService {
     Future<void> flush() async {
       if (batchTx.isEmpty) return;
       final size = batchTx.length;
+      final batchSw = Stopwatch()..start();
       try {
         final ids = await repo.insertTransactionsBatchWithRelations(
           transactions: List.of(batchTx),
@@ -443,8 +457,10 @@ class DataImportService {
           recordChanges: recordChanges,
         );
         inserted += ids.length;
+        logger.info('TxImport',
+            'flush 批次: size=$size 耗时=${batchSw.elapsedMilliseconds}ms 累计=${processed + size}/$total');
       } catch (e, st) {
-        logger.error('DataImport', '批次 flush 失败,本批 $size 条算 failed', e, st);
+        logger.error('TxImport', '批次 flush 失败,本批 $size 条算 failed', e, st);
         failed += size;
       }
       processed += size;
@@ -563,6 +579,8 @@ class DataImportService {
     // 刷剩余
     await flush();
 
+    logger.info('TxImport',
+        '交易导入完成: 总数=$total 成功=$inserted 失败=$failed 总耗时=${overallSw.elapsedMilliseconds}ms');
     return ImportResult(inserted: inserted, failed: failed);
   }
 }

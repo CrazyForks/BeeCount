@@ -1283,6 +1283,71 @@ class LocalTransactionRepository implements TransactionRepository {
   }
 
   @override
+  Future<Map<String, int>> updateTransactionsBatchBySyncId(
+    List<TransactionUpdateBySyncIdData> updates, {
+    bool recordChanges = true,
+  }) async {
+    if (updates.isEmpty) return const {};
+    return db.transaction(() async {
+      await db.batch((b) {
+        for (final u in updates) {
+          b.update(
+            db.transactions,
+            TransactionsCompanion(
+              type: d.Value(u.type),
+              amount: d.Value(u.amount),
+              categoryId: d.Value(u.categoryId),
+              accountId: d.Value(u.accountId),
+              toAccountId: d.Value(u.toAccountId),
+              happenedAt: d.Value(u.happenedAt),
+              note: d.Value(u.note),
+            ),
+            where: (t) => t.syncId.equals(u.syncId),
+          );
+        }
+      });
+      // 反查 (syncId, txId) 映射,caller 用它批量更新 tag 关联
+      final syncIds = updates.map((u) => u.syncId).toList();
+      final rows = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      return {
+        for (final tx in rows)
+          if (tx.syncId != null) tx.syncId!: tx.id,
+      };
+    });
+  }
+
+  @override
+  Future<int> deleteTransactionsBatchBySyncIds(
+    List<String> syncIds, {
+    bool recordChanges = true,
+  }) async {
+    // recordChanges 由 LocalRepository wrapper 处理(子仓库无 changeTracker)。
+    if (syncIds.isEmpty) return 0;
+    return db.transaction(() async {
+      // 先 SELECT 拿到 tx id 列表(用来删 transactionTags / attachments 关联)
+      final rows = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      final txIds = rows.map((r) => r.id).toList();
+      if (txIds.isEmpty) return 0;
+      // 删关联数据(级联)
+      await (db.delete(db.transactionTags)
+            ..where((t) => t.transactionId.isIn(txIds)))
+          .go();
+      await (db.delete(db.transactionAttachments)
+            ..where((t) => t.transactionId.isIn(txIds)))
+          .go();
+      // 主表 DELETE WHERE IN — 一次 SQL 删 N 条
+      final deleted = await (db.delete(db.transactions)
+            ..where((t) => t.id.isIn(txIds)))
+          .go();
+      return deleted;
+    });
+  }
+
+  @override
   Future<int> createAdjustmentTransaction({
     required int ledgerId,
     required int accountId,

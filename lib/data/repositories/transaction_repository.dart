@@ -1,5 +1,28 @@
 import '../db.dart';
 
+/// 批量按 syncId 更新交易时的单条 update payload。
+class TransactionUpdateBySyncIdData {
+  final String syncId;
+  final String type;
+  final double amount;
+  final int? categoryId;
+  final int? accountId;
+  final int? toAccountId;
+  final DateTime happenedAt;
+  final String? note;
+
+  const TransactionUpdateBySyncIdData({
+    required this.syncId,
+    required this.type,
+    required this.amount,
+    this.categoryId,
+    this.accountId,
+    this.toAccountId,
+    required this.happenedAt,
+    this.note,
+  });
+}
+
 /// 批量插入交易时附带的附件元数据。交易行还没插入,txId 未知,
 /// repo 内部按 batch 内 index 找到刚插入的 txId 再组装 AttachmentsCompanion。
 class BatchAttachmentData {
@@ -259,6 +282,27 @@ abstract class TransactionRepository {
 
   /// 根据 syncId 删除交易
   Future<void> deleteTransactionBySyncId(String syncId);
+
+  /// 批量按 syncId 删除交易(WebDAV/Supabase 同步从远端拉账本时,如果本地有
+  /// 旧账本 + 用户选择"以远端为准"覆盖,N 条 delete by syncId 单条 await 会
+  /// 跑几分钟;本方法用单条 `DELETE WHERE syncId IN (...)` 一次性删除)。
+  ///
+  /// [recordChanges] 默认 true,wrapper 会批量补 transaction:delete change log。
+  /// 返回实际删除的条数。
+  Future<int> deleteTransactionsBatchBySyncIds(
+    List<String> syncIds, {
+    bool recordChanges = true,
+  });
+
+  /// 批量按 syncId 更新交易主表字段。同事务内逐条 UPDATE,N 次跨 isolate
+  /// boundary 但 BEGIN/COMMIT 只跑一次。
+  ///
+  /// **不涉及 tag 更新** — caller 拿到 returned `Map<syncId, txId>` 后自己批量
+  /// 调 `updateTransactionTags`(或者更高效的 batch 接口,如果将来加的话)。
+  Future<Map<String, int>> updateTransactionsBatchBySyncId(
+    List<TransactionUpdateBySyncIdData> updates, {
+    bool recordChanges = true,
+  });
 
   /// 创建估值调整交易
   Future<int> createAdjustmentTransaction({

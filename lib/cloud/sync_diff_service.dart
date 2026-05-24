@@ -1,5 +1,7 @@
 import '../data/db.dart';
 import '../data/repositories/base_repository.dart';
+import '../data/repositories/transaction_repository.dart'
+    show TransactionUpdateBySyncIdData;
 import '../services/data_import_service.dart';
 import '../services/system/logger_service.dart';
 
@@ -283,95 +285,144 @@ class SyncDiffService {
       return const SyncApplyResult();
     }
 
-    // 先导入分类/账户/标签（复用现有逻辑）
-    final categoryCache = await _importCategories(repo, importData.categories);
-    final accountNameToId = await _importAccounts(
+    // 分类/账户/标签:复用 DataImportService(同一份 batch 优化只在一处维护)
+    final categoryCache =
+        await dataImportService.importCategories(repo, importData.categories);
+    final accountNameToId = await dataImportService.importAccounts(
       repo,
       importData.accounts,
       defaultCurrency: importData.currency ?? 'CNY',
     );
-    final tagNameToId = await _importTags(repo, importData.tags);
+    final tagNameToId =
+        await dataImportService.importTags(repo, importData.tags);
 
     int addedCount = 0;
     int modifiedCount = 0;
     int deletedCount = 0;
 
-    for (final change in selectedChanges) {
+    // 按类型分桶 — added 走批量(WebDAV/Supabase 从远端拉账本场景一次可能上万
+    // 条全 added,单条 for 循环要几十分钟;modified/deleted 数量通常小,保持
+    // 单条 await)
+    final addedChanges = <SyncChange>[];
+    final modifiedChanges = <SyncChange>[];
+    final deletedChanges = <SyncChange>[];
+    for (final c in selectedChanges) {
+      switch (c.type) {
+        case SyncChangeType.added:
+          addedChanges.add(c);
+          break;
+        case SyncChangeType.modified:
+          modifiedChanges.add(c);
+          break;
+        case SyncChangeType.deleted:
+          deletedChanges.add(c);
+          break;
+      }
+    }
+
+    // ============ added: 复用 DataImportService 的批量插入路径 ============
+    // 把 SyncChange → ImportTransaction(cloudTransaction 本来就是 ImportTransaction
+    // 类型),直接交给 DataImportService.importTransactions 走 batch:500 条 /
+    // 批,一个 db.transaction 内 batch insert tx + tag + attachment + local_changes,
+    // 把 N 次单条 await(WebDAV 1 万条全 added 要几十分钟)折叠成 N/500 批。
+    if (addedChanges.isNotEmpty) {
+      final addedTxs = addedChanges
+          .map((c) => c.cloudTransaction!)
+          .toList(growable: false);
+      final result = await dataImportService.importTransactions(
+        repo,
+        ledgerId,
+        addedTxs,
+        accountNameToId: accountNameToId,
+        categoryCache: categoryCache,
+        tagNameToId: tagNameToId,
+      );
+      addedCount = result.inserted;
+    }
+
+    // ============ modified: 主表用批量 UPDATE,tag 关联单条 await ============
+    // 主表 update 跨 isolate boundary 是 N 次但 BEGIN/COMMIT 一次。tag 更新仍
+    // 是 N 次单条(每条 tx 的 tagIds 不同,需要先 DELETE WHERE tx_id = ? 再
+    // INSERT 新关联);如果 modified 量大到 tag update 也成瓶颈,后续可加专
+    // 门的 batch tag-update 接口。
+    if (modifiedChanges.isNotEmpty) {
+      final sw = Stopwatch()..start();
+      final updates = <TransactionUpdateBySyncIdData>[];
+      final tagIdsBySyncId = <String, List<int>>{};
+      for (final change in modifiedChanges) {
+        final cloud = change.cloudTransaction!;
+        final syncId = cloud.syncId!;
+        final categoryId = _resolveCategoryId(cloud, categoryCache);
+        final accountId = _resolveAccountId(cloud, accountNameToId);
+        final toAccountId = _resolveToAccountId(cloud, accountNameToId);
+        final tagIds = _resolveTagIds(cloud, tagNameToId).toSet().toList();
+        updates.add(TransactionUpdateBySyncIdData(
+          syncId: syncId,
+          type: cloud.type,
+          amount: cloud.amount,
+          categoryId: cloud.type == 'transfer' ? null : categoryId,
+          accountId: accountId,
+          toAccountId: toAccountId,
+          happenedAt: cloud.happenedAt,
+          note: cloud.note,
+        ));
+        tagIdsBySyncId[syncId] = tagIds;
+      }
       try {
-        switch (change.type) {
-          case SyncChangeType.added:
-            final cloud = change.cloudTransaction!;
-            final categoryId = _resolveCategoryId(cloud, categoryCache);
-            final accountId = _resolveAccountId(cloud, accountNameToId);
-            final toAccountId = _resolveToAccountId(cloud, accountNameToId);
-            final tagIds = _resolveTagIds(cloud, tagNameToId);
-
-            final txId = await repo.addTransaction(
-              ledgerId: ledgerId,
-              type: cloud.type,
-              amount: cloud.amount,
-              categoryId: cloud.type == 'transfer' ? null : categoryId,
-              accountId: accountId,
-              toAccountId: toAccountId,
-              happenedAt: cloud.happenedAt,
-              note: cloud.note,
-              syncId: cloud.syncId,
+        final syncIdToTxId =
+            await repo.updateTransactionsBatchBySyncId(updates);
+        modifiedCount = syncIdToTxId.length;
+        // tag 关联逐条 update(tag 数量通常很小,这里没批量接口)
+        for (final entry in tagIdsBySyncId.entries) {
+          final txId = syncIdToTxId[entry.key];
+          if (txId == null) continue;
+          try {
+            await repo.updateTransactionTags(
+              transactionId: txId,
+              tagIds: entry.value,
             );
-
-            // 关联标签
-            if (tagIds.isNotEmpty) {
-              await repo.updateTransactionTags(
-                transactionId: txId,
-                tagIds: tagIds,
-              );
-            }
-
-            addedCount++;
-            break;
-
-          case SyncChangeType.modified:
-            final cloud = change.cloudTransaction!;
-            final syncId = cloud.syncId!;
-            final categoryId = _resolveCategoryId(cloud, categoryCache);
-            final accountId = _resolveAccountId(cloud, accountNameToId);
-            final toAccountId = _resolveToAccountId(cloud, accountNameToId);
-            final tagIds = _resolveTagIds(cloud, tagNameToId);
-
-            await repo.updateTransactionBySyncId(
-              syncId: syncId,
-              type: cloud.type,
-              amount: cloud.amount,
-              categoryId: cloud.type == 'transfer' ? null : categoryId,
-              accountId: accountId,
-              toAccountId: toAccountId,
-              happenedAt: cloud.happenedAt,
-              note: cloud.note,
-            );
-
-            // 更新标签
-            final localTx = await repo.getTransactionBySyncId(syncId);
-            if (localTx != null) {
-              await repo.updateTransactionTags(
-                transactionId: localTx.id,
-                tagIds: tagIds,
-              );
-            }
-
-            modifiedCount++;
-            break;
-
-          case SyncChangeType.deleted:
-            final localTx = change.localTransaction!;
-            if (localTx.syncId != null) {
-              await repo.deleteTransactionBySyncId(localTx.syncId!);
-            } else {
-              await repo.deleteTransaction(localTx.id);
-            }
-            deletedCount++;
-            break;
+          } catch (e, st) {
+            logger.error('SyncDiff', 'tag 关联更新失败 syncId=${entry.key}', e, st);
+          }
         }
-      } catch (e, stackTrace) {
-        logger.error('SyncDiff', '应用变更失败', e, stackTrace);
+        logger.info('SyncDiff',
+            '批量更新: size=${updates.length} 成功=$modifiedCount 耗时=${sw.elapsedMilliseconds}ms');
+      } catch (e, st) {
+        logger.error('SyncDiff', '批量更新失败', e, st);
+      }
+    }
+
+    // ============ deleted: 批量按 syncId 删除 ============
+    // 有 syncId 的批量走单条 DELETE WHERE IN;没 syncId 的(老数据)兜底单条
+    if (deletedChanges.isNotEmpty) {
+      final withSyncIds = <String>[];
+      final fallbackIds = <int>[];
+      for (final change in deletedChanges) {
+        final localTx = change.localTransaction!;
+        if (localTx.syncId != null && localTx.syncId!.isNotEmpty) {
+          withSyncIds.add(localTx.syncId!);
+        } else {
+          fallbackIds.add(localTx.id);
+        }
+      }
+      if (withSyncIds.isNotEmpty) {
+        try {
+          final n =
+              await repo.deleteTransactionsBatchBySyncIds(withSyncIds);
+          deletedCount += n;
+          logger.info('SyncDiff',
+              '批量删除: syncId 路径 size=${withSyncIds.length} 实删=$n');
+        } catch (e, st) {
+          logger.error('SyncDiff', '批量删除失败', e, st);
+        }
+      }
+      for (final id in fallbackIds) {
+        try {
+          await repo.deleteTransaction(id);
+          deletedCount++;
+        } catch (e, st) {
+          logger.error('SyncDiff', '兜底单条删除失败 id=$id', e, st);
+        }
       }
     }
 
@@ -427,126 +478,9 @@ class SyncDiffService {
         .toList();
   }
 
-  // 复用 DataImportService 的分类/账户/标签导入逻辑（简化版）
-
-  Future<Map<String, int>> _importCategories(
-      BaseRepository repo, List<ImportCategory> categories) async {
-    final cache = <String, int>{};
-    if (categories.isEmpty) return cache;
-
-    try {
-      final existingExpense = await repo.getTopLevelCategories('expense');
-      final existingIncome = await repo.getTopLevelCategories('income');
-
-      for (final cat in [...existingExpense, ...existingIncome]) {
-        cache['${cat.kind}|${cat.name}'] = cat.id;
-        final subs = await repo.getSubCategories(cat.id);
-        for (final sub in subs) {
-          cache['${sub.kind}|${sub.name}'] = sub.id;
-        }
-      }
-
-      final level1 =
-          categories.where((c) => c.level == 1 || c.parentName == null);
-      final level2 =
-          categories.where((c) => c.level == 2 && c.parentName != null);
-
-      for (final cat in level1) {
-        final key = '${cat.kind}|${cat.name}';
-        if (!cache.containsKey(key)) {
-          final id = await repo.createCategory(
-            name: cat.name,
-            kind: cat.kind,
-            icon: cat.icon,
-            sortOrder: cat.sortOrder,
-          );
-          cache[key] = id;
-        }
-      }
-
-      for (final cat in level2) {
-        final key = '${cat.kind}|${cat.name}';
-        if (!cache.containsKey(key)) {
-          final parentKey = '${cat.kind}|${cat.parentName}';
-          final parentId = cache[parentKey];
-          if (parentId != null) {
-            final id = await repo.createSubCategory(
-              parentId: parentId,
-              name: cat.name,
-              kind: cat.kind,
-              icon: cat.icon,
-              sortOrder: cat.sortOrder,
-            );
-            cache[key] = id;
-          }
-        }
-      }
-    } catch (e, st) {
-      // Best-effort import — log and continue with partial cache so the caller
-      // can still apply transactions against what did land. Previously swallowed
-      // silently which made "why is my data stale" un-diagnosable.
-      logger.error('SyncDiff', '分类导入失败（部分）', e, st);
-    }
-
-    return cache;
-  }
-
-  Future<Map<String, int>> _importAccounts(
-    BaseRepository repo,
-    List<ImportAccount> accounts, {
-    String defaultCurrency = 'CNY',
-  }) async {
-    final nameToId = <String, int>{};
-    if (accounts.isEmpty) return nameToId;
-
-    try {
-      final existing = await repo.getAllAccounts();
-      for (final acc in existing) {
-        nameToId[acc.name] = acc.id;
-      }
-
-      for (final acc in accounts) {
-        if (!nameToId.containsKey(acc.name)) {
-          final id = await repo.createAccount(
-            ledgerId: 0,
-            name: acc.name,
-            type: acc.type ?? 'cash',
-            currency: acc.currency ?? defaultCurrency,
-            initialBalance: acc.initialBalance ?? 0.0,
-          );
-          nameToId[acc.name] = id;
-        }
-      }
-    } catch (e, st) {
-      logger.error('SyncDiff', '账户导入失败（部分）', e, st);
-    }
-
-    return nameToId;
-  }
-
-  Future<Map<String, int>> _importTags(
-      BaseRepository repo, List<ImportTag> tags) async {
-    final nameToId = <String, int>{};
-    if (tags.isEmpty) return nameToId;
-
-    try {
-      final existing = await repo.getAllTags();
-      for (final tag in existing) {
-        nameToId[tag.name] = tag.id;
-      }
-
-      for (final tag in tags) {
-        if (!nameToId.containsKey(tag.name)) {
-          final id = await repo.createTag(name: tag.name, color: tag.color);
-          nameToId[tag.name] = id;
-        }
-      }
-    } catch (e, st) {
-      logger.error('SyncDiff', '标签导入失败（部分）', e, st);
-    }
-
-    return nameToId;
-  }
+  // 分类/账户/标签的导入逻辑统一委托给 DataImportService.importCategories /
+  // importAccounts / importTags(本文件之前有 3 个"简化版"副本,跟主文件不
+  // 一致 + 双份维护成本,2026-05-24 重构合并)。
 }
 
 /// 全局单例

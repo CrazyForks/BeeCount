@@ -6,7 +6,8 @@ import '../../../cloud/sync/change_tracker.dart';
 import '../../../services/system/logger_service.dart';
 import '../base_repository.dart';
 import '../budget_repository.dart';
-import '../transaction_repository.dart' show BatchAttachmentData;
+import '../transaction_repository.dart'
+    show BatchAttachmentData, TransactionUpdateBySyncIdData;
 import 'local_ledger_repository.dart';
 import 'local_transaction_repository.dart';
 import 'local_category_repository.dart';
@@ -696,6 +697,81 @@ class LocalRepository extends BaseRepository {
   @override
   Future<void> deleteTransactionBySyncId(String syncId) =>
       _transactionRepo.deleteTransactionBySyncId(syncId);
+
+  @override
+  Future<Map<String, int>> updateTransactionsBatchBySyncId(
+    List<TransactionUpdateBySyncIdData> updates, {
+    bool recordChanges = true,
+  }) async {
+    if (updates.isEmpty) return const {};
+    if (!recordChanges || changeTracker == null) {
+      return _transactionRepo.updateTransactionsBatchBySyncId(updates);
+    }
+    return db.transaction(() async {
+      final syncIdToTxId =
+          await _transactionRepo.updateTransactionsBatchBySyncId(updates);
+      if (syncIdToTxId.isEmpty) return syncIdToTxId;
+      // 反查 ledgerId 用于 change log
+      final txs = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIdToTxId.keys.toList())))
+          .get();
+      await db.batch((b) {
+        for (final tx in txs) {
+          if (tx.syncId == null) continue;
+          b.insert(
+            db.localChanges,
+            LocalChangesCompanion.insert(
+              entityType: 'transaction',
+              entityId: tx.id,
+              entitySyncId: tx.syncId!,
+              ledgerId: tx.ledgerId,
+              action: 'update',
+            ),
+          );
+        }
+      });
+      return syncIdToTxId;
+    });
+  }
+
+  @override
+  Future<int> deleteTransactionsBatchBySyncIds(
+    List<String> syncIds, {
+    bool recordChanges = true,
+  }) async {
+    if (syncIds.isEmpty) return 0;
+    // recordChanges=false / 无 changeTracker → 直接走子仓库,不写 change log
+    if (!recordChanges || changeTracker == null) {
+      return _transactionRepo.deleteTransactionsBatchBySyncIds(syncIds);
+    }
+    return db.transaction(() async {
+      // 先 SELECT 出待删的 tx(留下 ledgerId / syncId 用于 change log)
+      final rows = await (db.select(db.transactions)
+            ..where((t) => t.syncId.isIn(syncIds)))
+          .get();
+      if (rows.isEmpty) return 0;
+      final deleted =
+          await _transactionRepo.deleteTransactionsBatchBySyncIds(syncIds);
+      // 一次性 batch insert N 条 transaction:delete change,代替逐条
+      // recordLedgerChange,跨 isolate boundary 从 N 次降到 1 次。
+      await db.batch((b) {
+        for (final tx in rows) {
+          if (tx.syncId == null) continue;
+          b.insert(
+            db.localChanges,
+            LocalChangesCompanion.insert(
+              entityType: 'transaction',
+              entityId: tx.id,
+              entitySyncId: tx.syncId!,
+              ledgerId: tx.ledgerId,
+              action: 'delete',
+            ),
+          );
+        }
+      });
+      return deleted;
+    });
+  }
 
   @override
   Future<int> createAdjustmentTransaction({

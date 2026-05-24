@@ -94,8 +94,6 @@ class LocalAccountRepository implements AccountRepository {
     String? cardLastFour,
     String? note,
   }) async {
-    logger.info('AccountCreate', '📝 开始创建账户: name=$name, ledgerId=$ledgerId, type=$type, currency=$currency, initialBalance=$initialBalance');
-
     try {
       // 计算同类型最大 sortOrder + 1
       final maxSortOrderResult = await db.customSelect(
@@ -122,14 +120,13 @@ class LocalAccountRepository implements AccountRepository {
         syncId: d.Value(_uuid.v4()),
       );
 
-      logger.info('AccountCreate', '📦 Companion 创建成功，准备插入数据库');
-
       final id = await db.into(db.accounts).insert(companion);
-
-      logger.info('AccountCreate', '✅ 账户创建成功！ID=$id');
+      // 单条 INFO 日志(import 批量场景下 3 条/账户 会把 logger 队列冲爆,降级
+      // 到 debug;只在出错时 error)
+      logger.debug('AccountCreate', '账户创建: id=$id name=$name type=$type');
       return id;
     } catch (e, stack) {
-      logger.error('AccountCreate', '❌ 创建账户失败', e, stack);
+      logger.error('AccountCreate', '创建账户失败 name=$name', e, stack);
       rethrow;
     }
   }
