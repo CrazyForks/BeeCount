@@ -167,12 +167,16 @@ class DataImportService {
   /// [data] - 导入数据
   /// [defaultCurrency] - 默认货币（用于创建账户）
   /// [onProgress] - 进度回调 (done, total)
+  /// [recordChanges] - 默认 true,会调 repo.insertTransactionsBatch 时登记
+  ///   changeTracker。FullPull 路径传 false,避免"从云端拉下来的数据又反向推
+  ///   回去"。
   Future<ImportResult> importData(
     BaseRepository repo,
     int ledgerId,
     ImportData data, {
     String defaultCurrency = 'CNY',
     void Function(int done, int total)? onProgress,
+    bool recordChanges = true,
   }) async {
     // 1. 更新账本信息（如果提供）
     if (data.ledgerName != null || data.currency != null) {
@@ -207,6 +211,7 @@ class DataImportService {
       categoryCache: categoryCache,
       tagNameToId: tagNameToId,
       onProgress: onProgress,
+      recordChanges: recordChanges,
     );
 
     return result;
@@ -401,6 +406,7 @@ class DataImportService {
     required Map<String, int> categoryCache,
     required Map<String, int> tagNameToId,
     void Function(int done, int total)? onProgress,
+    bool recordChanges = true,
   }) async {
     int inserted = 0;
     int failed = 0;
@@ -507,7 +513,10 @@ class DataImportService {
       final hasAttachments = tx.attachments != null && tx.attachments!.isNotEmpty;
       if (tagIds.isNotEmpty || hasAttachments) {
         try {
-          final txId = await repo.insertTransactionCompanion(txCompanion);
+          final txId = await repo.insertTransactionCompanion(
+            txCompanion,
+            recordChanges: recordChanges,
+          );
           // 关联标签
           if (tagIds.isNotEmpty) {
             await repo.updateTransactionTags(
@@ -548,7 +557,10 @@ class DataImportService {
       // 批量写入
       if (toInsert.length >= batchSize) {
         try {
-          final n = await repo.insertTransactionsBatch(List.of(toInsert));
+          final n = await repo.insertTransactionsBatch(
+            List.of(toInsert),
+            recordChanges: recordChanges,
+          );
           inserted += n;
           processed += n;
         } catch (_) {
@@ -563,7 +575,10 @@ class DataImportService {
     // 刷新剩余缓冲
     if (toInsert.isNotEmpty) {
       try {
-        final n = await repo.insertTransactionsBatch(toInsert);
+        final n = await repo.insertTransactionsBatch(
+          toInsert,
+          recordChanges: recordChanges,
+        );
         inserted += n;
         processed += n;
       } catch (_) {

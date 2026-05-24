@@ -331,8 +331,14 @@ class LocalRepository extends BaseRepository {
   }
 
   @override
-  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) async {
-    if (changeTracker == null || items.isEmpty) {
+  Future<int> insertTransactionsBatch(
+    List<TransactionsCompanion> items, {
+    bool recordChanges = true,
+  }) async {
+    // recordChanges=false:FullPull 走静默写入路径,云端拉下来的数据**不**再
+    // 反向 push 回去(否则 10k 条 fullPull 会产生 10k 行 local_changes,触发
+    // SyncCoordinator 反向同步,白白多一轮)。
+    if (!recordChanges || changeTracker == null || items.isEmpty) {
       return _transactionRepo.insertTransactionsBatch(items);
     }
     // 预填充 syncId,这样插入完能根据 syncId 查回行,逐条登记 create change。
@@ -431,8 +437,11 @@ class LocalRepository extends BaseRepository {
   Future<Transaction?> getTransactionById(int id) => _transactionRepo.getTransactionById(id);
 
   @override
-  Future<int> insertTransactionCompanion(TransactionsCompanion item) async {
-    if (changeTracker == null) {
+  Future<int> insertTransactionCompanion(
+    TransactionsCompanion item, {
+    bool recordChanges = true,
+  }) async {
+    if (!recordChanges || changeTracker == null) {
       return _transactionRepo.insertTransactionCompanion(item);
     }
     // 带标签/附件的交易走这条单条插入路径(见 data_import_service.dart:510)。

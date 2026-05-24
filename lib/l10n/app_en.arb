@@ -2885,5 +2885,8 @@
   "maintenanceOrphanCleanSuccess": "Cleaned {count} item(s)",
   "@maintenanceOrphanCleanSuccess": { "placeholders": { "count": { "type": "int" } } },
   "maintenanceOrphanCleanPartial": "Cleaned {ok} item(s), {fail} failed",
-  "@maintenanceOrphanCleanPartial": { "placeholders": { "ok": { "type": "int" }, "fail": { "type": "int" } } }
+  "@maintenanceOrphanCleanPartial": { "placeholders": { "ok": { "type": "int" }, "fail": { "type": "int" } } },
+  "syncProgressTitle": "Syncing",
+  "syncProgressCount": "{applied} / {total}",
+  "@syncProgressCount": { "placeholders": { "applied": { "type": "int" }, "total": { "type": "int" } } }
 }

@@ -208,6 +208,27 @@ class TransactionTagOverrides extends Table {
   Set<Column> get primaryKey => {transactionSyncId, tagSyncId};
 }
 
+// v26: sync pull 时 server 端下发的 change 在本地 apply 抛错的持久化记录。
+// 健康用户这张表是空的;只在出错时写入,供 UI 暴露 + 用户重试/跳过 + 开发者
+// 远程诊断。详见 .docs/full-pull-refactor/04-data-model.md。
+class SyncPullErrors extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get changeId => integer().unique()();      // server change_id,唯一
+  TextColumn get ledgerExternalId => text().nullable()(); // user-global change 可空
+  TextColumn get entityType => text()();
+  TextColumn get entitySyncId => text()();
+  TextColumn get action => text()();                   // upsert / delete
+  TextColumn get rawChangeJson => text()();            // 完整 change JSON,供诊断 + 复制给用户
+  TextColumn get errorClass => text().nullable()();    // Dart exception 类名
+  TextColumn get errorMessage => text().nullable()();  // exception.toString() 首行
+  TextColumn get stackTrace => text().nullable()();    // 截断到 ~2KB
+  DateTimeColumn get firstSeenAt => dateTime()();
+  DateTimeColumn get lastAttemptAt => dateTime()();
+  IntColumn get attemptCount => integer().withDefault(const Constant(1))();
+  TextColumn get userAction => text().nullable()();    // null / 'skip' / 'retry_requested'
+  DateTimeColumn get resolvedAt => dateTime().nullable()();
+}
+
 // 交易附件表
 class TransactionAttachments extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -356,6 +377,7 @@ class SharedLedgerTags extends Table {
   SharedLedgerAccounts,
   SharedLedgerTags,
   TransactionTagOverrides,
+  SyncPullErrors,
 ])
 class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
@@ -366,7 +388,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase.forTesting(QueryExecutor executor) : super(executor);
 
   @override
-  int get schemaVersion => 25; // v25: SharedLedgerCategories.parent_sync_id — 共享账本二级分类父子关系
+  int get schemaVersion => 26; // v26: sync_pull_errors — pull 失败 change 持久化(供 UI 暴露 + 用户重试/跳过)
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -1023,6 +1045,14 @@ class BeeDatabase extends _$BeeDatabase {
             // reset server_cursor 让后续 pull 重拉 user-global category change。
             await customStatement('UPDATE sync_state SET server_cursor = 0');
             logger.info('DBMigration', 'v25 迁移完成');
+          }
+          if (from < 26) {
+            // v26: 新增 sync_pull_errors 表。健康用户为空,只在 pull apply
+            // 抛错时写入,UI 据此显示"同步异常"banner + 重试/跳过操作。
+            // 详见 .docs/full-pull-refactor/04-data-model.md
+            logger.info('DBMigration', '开始迁移到 v26: sync_pull_errors');
+            await _createTableIfMissing(migrator, 'sync_pull_errors', syncPullErrors);
+            logger.info('DBMigration', 'v26 迁移完成');
           }
         },
       );

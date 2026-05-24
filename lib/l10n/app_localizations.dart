@@ -12155,6 +12155,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cleaned {ok} item(s), {fail} failed'**
   String maintenanceOrphanCleanPartial(int ok, int fail);
+
+  /// No description provided for @syncProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing'**
+  String get syncProgressTitle;
+
+  /// No description provided for @syncProgressCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{applied} / {total}'**
+  String syncProgressCount(int applied, int total);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

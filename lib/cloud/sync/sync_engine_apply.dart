@@ -5,10 +5,10 @@ part of 'sync_engine.dart';
 ///
 /// 这里所有方法都是 private(以 `_` 开头),只在主 library 内被 `_pull` 调
 /// 用,所以 extension 可以保持 private。
-extension _SyncEngineApply on SyncEngine {
+extension SyncEngineApplyExt on SyncEngine {
   /// 应用单条远程变更到本地数据库
   /// 返回 true 表示已应用，false 表示跳过
-  Future<bool> _applyRemoteChange(BeeCountCloudSyncChange change) async {
+  Future<bool> applyRemoteChange(BeeCountCloudSyncChange change) async {
     // 跳过本设备自己的变更
     final deviceId = await _getDeviceId();
     if (change.updatedByDeviceId == deviceId) return false;
@@ -56,25 +56,29 @@ extension _SyncEngineApply on SyncEngine {
     final syncId = change.entitySyncId;
 
     if (change.action == 'delete') {
-      final existing = await (db.select(db.transactions)
-            ..where((t) => t.syncId.equals(syncId)))
-          .getSingleOrNull();
-      if (existing != null) {
+      // delete 路径:先看 cache 拿 id(避免 N+1 SELECT);cache miss 再 DB
+      final cachedTx = activePullCache?.transaction(syncId);
+      int? existingId = cachedTx?.id;
+      if (existingId == null && activePullCache == null) {
+        final existing = await (db.select(db.transactions)
+              ..where((t) => t.syncId.equals(syncId)))
+            .getSingleOrNull();
+        existingId = existing?.id;
+      }
+      if (existingId != null) {
         // 先清磁盘附件(原图 + 缩略图),再删 transaction_attachments 行 ——
-        // 反过来就查不到 fileName 了。历史 bug:这段只做 db.delete 不清磁盘,
-        // 设备 A 删交易时设备 B sync pull 下来只删表,attachments/*.jpg 永远
-        // 残留。跟主动删交易路径(LocalTransactionRepository.deleteTransaction)
-        // 对齐。
-        await _cleanupTxAttachmentFilesOnDisk(existing.id);
+        // 反过来就查不到 fileName 了。
+        await _cleanupTxAttachmentFilesOnDisk(existingId);
         await (db.delete(db.transactionTags)
-              ..where((tt) => tt.transactionId.equals(existing.id)))
+              ..where((tt) => tt.transactionId.equals(existingId!)))
             .go();
         await (db.delete(db.transactionAttachments)
-              ..where((ta) => ta.transactionId.equals(existing.id)))
+              ..where((ta) => ta.transactionId.equals(existingId!)))
             .go();
         await (db.delete(db.transactions)
-              ..where((t) => t.id.equals(existing.id)))
+              ..where((t) => t.id.equals(existingId!)))
             .go();
+        activePullCache?.removeTransaction(syncId);
         logger.debug('SyncEngine', 'pull: 删除交易 $syncId');
       }
       return;
@@ -162,9 +166,19 @@ extension _SyncEngineApply on SyncEngine {
       if (shared != null) toAccountSyncIdOverride = shared.syncId;
     }
 
-    final existing = await (db.select(db.transactions)
-          ..where((t) => t.syncId.equals(syncId)))
-        .getSingleOrNull();
+    // 查 existing 优先走 LookupCache(prime 时已全表加载 transactions 的
+    // syncId / id / createdByUserId),消除 10k 条 = 10k 次 SELECT 的 N+1。
+    // miss(冷启动新设备 / 老数据)再走 DB。
+    final cachedTx = activePullCache?.transaction(syncId);
+    int? existingId = cachedTx?.id;
+    String? existingCreatedByUserId = cachedTx?.createdByUserId;
+    if (existingId == null && activePullCache == null) {
+      final existing = await (db.select(db.transactions)
+            ..where((t) => t.syncId.equals(syncId)))
+          .getSingleOrNull();
+      existingId = existing?.id;
+      existingCreatedByUserId = existing?.createdByUserId;
+    }
 
     // 共享账本(v24):server 注入 createdByUserId / updatedByUserId,本地用来
     // 在 tx 末尾显示"X 记的"。payload 用 camelCase(server snapshot_mutator 出来的
@@ -173,17 +187,12 @@ extension _SyncEngineApply on SyncEngine {
     final createdByUserId = payload['createdByUserId'] as String?;
     final lastEditedByUserId = (payload['updatedByUserId'] as String?) ?? createdByUserId;
 
-    if (existing != null) {
-      // 更新 — createdByUserId 走"本地为 null 就回填,否则保持"的策略:
-      //   - 本地已有值:不接受 server 覆盖(避免 server 数据修复路径反过来
-      //     污染本地;创建人是稳定属性,本地一旦有值就以本地为准)
-      //   - 本地为 null + payload 非 null:从 server 兜底补一次。覆盖
-      //     mobile 早期版本本地未填 created_by_user_id 列 + 服务端 SyncChange
-      //     enrichment 修复前留下的脏数据
+    if (existingId != null) {
+      // 更新 — createdByUserId 走"本地为 null 就回填,否则保持"的策略。
       final shouldBackfillCreator =
-          existing.createdByUserId == null && createdByUserId != null;
+          existingCreatedByUserId == null && createdByUserId != null;
       await (db.update(db.transactions)
-            ..where((t) => t.id.equals(existing.id)))
+            ..where((t) => t.id.equals(existingId!)))
           .write(TransactionsCompanion(
         type: d.Value(type),
         amount: d.Value(amount),
@@ -200,9 +209,9 @@ extension _SyncEngineApply on SyncEngine {
             : const d.Value.absent(),
         lastEditedByUserId: d.Value(lastEditedByUserId),
       ));
-      // 更新标签和附件
-      await _syncTransactionTags(existing.id, payload);
-      await _syncTransactionAttachments(existing.id, payload);
+      // 更新标签和附件(existing 路径)
+      await _syncTransactionTags(existingId, syncId, payload);
+      await _syncTransactionAttachments(existingId, payload);
       logger.debug('SyncEngine', 'pull: 更新交易 $syncId');
     } else {
       // 插入
@@ -224,9 +233,11 @@ extension _SyncEngineApply on SyncEngine {
               toAccountSyncIdOverride: d.Value(toAccountSyncIdOverride),
             ),
           );
-      // 同步标签和附件
-      await _syncTransactionTags(id, payload);
-      await _syncTransactionAttachments(id, payload);
+      // 写回 cache,后续同 syncId 的 update change 能命中
+      activePullCache?.putTransaction(syncId, id, createdByUserId);
+      // 同步标签和附件(新插入路径 — existing 必空,跳过相关 SELECT/DELETE)
+      await _syncTransactionTags(id, syncId, payload, isNewlyInserted: true);
+      await _syncTransactionAttachments(id, payload, isNewlyInserted: true);
       logger.debug('SyncEngine', 'pull: 新增交易 $syncId');
     }
   }
@@ -303,7 +314,7 @@ extension _SyncEngineApply on SyncEngine {
       ));
       logger.debug('SyncEngine', 'pull: 更新账户 $syncId');
     } else {
-      await db.into(db.accounts).insert(
+      final newId = await db.into(db.accounts).insert(
             AccountsCompanion.insert(
               ledgerId: ledgerIdInt,
               name: name,
@@ -324,6 +335,7 @@ extension _SyncEngineApply on SyncEngine {
               syncId: d.Value(syncId),
             ),
           );
+      activePullCache?.putAccount(syncId, newId);
       logger.debug('SyncEngine', 'pull: 新增账户 $syncId');
     }
   }
@@ -395,61 +407,50 @@ extension _SyncEngineApply on SyncEngine {
       }
     }
 
-    // P3 —— 自定义图标二进制下载。payload.iconCloudFileId 非空说明是 custom
-    // 图标，server snapshot 里存着 attachment 引用。本地如果没这张图就下载，
-    // 有就 skip（checked by customIconPath 文件是否存在）。Drift Category
-    // 表不单独存 cloudFileId/sha256，A push 时是动态上传的，B 这里只需要最终
-    // 的 customIconPath 指到本地文件即可。
-    String? resolvedCustomIconPath = payload['customIconPath'] as String?;
+    // §Phase 3:自定义图标的 customIconPath 处理。
+    //
+    // payload.customIconPath 是 **A 端的本地路径**(如 "custom_icons/12_172123.png"),
+    // 直接写进本地 categories 表 → B 端 UI 读取时拼绝对路径 → 文件不存在 →
+    // 显示无图标。所以**绝不能直接落 server 推下来的 path**。
+    //
+    // 正确策略:
+    //   - 本地已有同 cloudFileId 的图标文件(existing.customIconPath 含 fileId)→
+    //     保留 existing.customIconPath,不入队
+    //   - 否则:apply 内 customIconPath 写 null(或保持 existing 旧值),把下载
+    //     任务入队 [pendingCustomIconJobs];事务 commit 后 drainCustomIconQueue
+    //     并发下载,完成时写真正的 B 端路径 "custom_icons/<fileId>.<ext>"
+    //
+    // 这样即使 drain 半路失败 / app 重启,UI 看到的是"无 icon"(占位)而不是
+    // "指向不存在文件的死链接",且下次 sync 同 entity 再来一遍 change 时,
+    // 入队条件命中(existing.customIconPath 仍不含 fileId)会重新下载。
     final cloudFileId = payload['iconCloudFileId'] as String?;
+    String? resolvedCustomIconPath;
+    bool needIconDownload = false;
     if (iconType == 'custom' &&
         cloudFileId != null &&
         cloudFileId.isNotEmpty) {
-      // 如果本地已有图片文件，且 path 看起来指向已下载的 fileId（相同 basename），
-      // 就 skip 下载。否则重新下。
-      bool needsDownload = true;
-      if (existing != null && (existing.customIconPath ?? '').isNotEmpty) {
-        try {
-          final abs = await CustomIconService().resolveIconPath(
-              existing.customIconPath!);
-          if (await File(abs).exists() &&
-              existing.customIconPath!.contains(cloudFileId)) {
-            needsDownload = false;
-            resolvedCustomIconPath = existing.customIconPath;
-          }
-        } catch (_) {}
+      if (existing != null &&
+          (existing.customIconPath ?? '').contains(cloudFileId)) {
+        // 本地已下载,保留路径,不重新下
+        resolvedCustomIconPath = existing.customIconPath;
+      } else {
+        // 还没下载:写 null,等 drain 写本地路径
+        resolvedCustomIconPath = null;
+        needIconDownload = true;
       }
-      if (needsDownload) {
-        try {
-          final bytes = await provider.downloadAttachment(fileId: cloudFileId);
-          // 写到 `custom_icons/<fileId>.<ext>`。扩展名按下面优先级解析:
-          //   1. payload.customIconPath 末尾的扩展名(设备 A 上传时生成的
-          //      规范名 `<categoryId>_<ts>.png` 一般会带)
-          //   2. 下载 bytes 的 magic bytes 探测 (PNG/JPEG/WebP)
-          //   3. fallback `.png` (历史 custom icon 都是 96x96 PNG)
-          // 之前这里直接用 cloudFileId(UUID)做 safeName,导致本地路径无扩展
-          // 名;再被 fullPush 用 `split('/').last` 当 fileName 推回 server,
-          // 形成 server 端 `<uuid>_<uuid>` 无扩展名的恶性循环。
-          final originalPath = payload['customIconPath'] as String?;
-          final ext = _detectIconExtension(bytes, originalPath: originalPath);
-          final iconDir = await CustomIconService().getIconDirectory();
-          final safeName = '${cloudFileId.replaceAll('/', '_')}$ext';
-          final absPath = '${iconDir.path}/$safeName';
-          await File(absPath).writeAsBytes(bytes);
-          resolvedCustomIconPath = 'custom_icons/$safeName';
-          logger.info('SyncEngine',
-              'pull: custom icon downloaded fileId=$cloudFileId ext=$ext size=${bytes.length}B');
-        } catch (e, st) {
-          logger.warning('SyncEngine',
-              'pull: custom icon download failed fileId=$cloudFileId: $e', st);
-        }
-      }
+    } else if (iconType != 'custom') {
+      // 非 custom(material / community)— customIconPath 不适用
+      resolvedCustomIconPath = null;
+    } else {
+      // iconType=custom 但没 cloudFileId(老数据):保留 existing path 兜底
+      resolvedCustomIconPath = existing?.customIconPath;
     }
 
+    int? localCategoryId;
     if (existing != null) {
-      final localId = existing.id;
+      localCategoryId = existing.id;
       await (db.update(db.categories)
-            ..where((c) => c.id.equals(localId)))
+            ..where((c) => c.id.equals(localCategoryId!)))
           .write(CategoriesCompanion(
         name: d.Value(name),
         kind: d.Value(kind),
@@ -464,7 +465,7 @@ extension _SyncEngineApply on SyncEngine {
       ));
       logger.debug('SyncEngine', 'pull: 更新分类 $syncId');
     } else {
-      await db.into(db.categories).insert(
+      localCategoryId = await db.into(db.categories).insert(
             CategoriesCompanion.insert(
               name: name,
               kind: kind,
@@ -479,7 +480,19 @@ extension _SyncEngineApply on SyncEngine {
               syncId: d.Value(syncId),
             ),
           );
+      activePullCache?.putCategory(syncId, localCategoryId);
       logger.debug('SyncEngine', 'pull: 新增分类 $syncId');
+    }
+
+    // §Phase 3:入队下载任务,主事务 commit 后由 drainCustomIconQueue 并发处理。
+    // needIconDownload 为 true 说明本地没有同 cloudFileId 的图标文件,
+    // 此时 categories.customIconPath 已经写成 null,drain 完成后写真本地路径。
+    if (needIconDownload && cloudFileId != null) {
+      pendingCustomIconJobs.add(CustomIconDownloadJob(
+        categoryId: localCategoryId,
+        cloudFileId: cloudFileId,
+        expectedPath: payload['customIconPath'] as String?,
+      ));
     }
   }
 
@@ -537,7 +550,7 @@ extension _SyncEngineApply on SyncEngine {
       ));
       logger.debug('SyncEngine', 'pull: 更新标签 $syncId');
     } else {
-      await db.into(db.tags).insert(
+      final newId = await db.into(db.tags).insert(
             TagsCompanion.insert(
               name: name,
               color: d.Value(color),
@@ -545,6 +558,7 @@ extension _SyncEngineApply on SyncEngine {
               syncId: d.Value(syncId),
             ),
           );
+      activePullCache?.putTag(syncId, newId);
       logger.debug('SyncEngine', 'pull: 新增标签 $syncId');
     }
   }
@@ -639,9 +653,28 @@ extension _SyncEngineApply on SyncEngine {
     final ledgerList = await (db.select(db.ledgers)
           ..where((l) => l.syncId.equals(syncId)))
         .get();
+    final name = payload['ledgerName'] as String?;
+    final currency = payload['currency'] as String?;
     if (ledgerList.isEmpty) {
+      // 本地未就绪 — 之前的"跳过等 snapshot 路径"会导致 web 端新建账本时
+      // app 拉到 ledger change 但永远不 insert,新账本永远不出现。
+      //
+      // 现在:payload 至少有 name + currency 时,主动 insert 一行本地
+      // ledger。payload 缺关键字段时仍 skip(等下次 syncLedgersFromServer
+      // 或 snapshot 拉到完整 meta)。
+      if (name == null || name.isEmpty) {
+        logger.info('SyncEngine',
+            'pull: 账本 $syncId 本地未就绪 + payload 无 name,跳过(等 snapshot)');
+        return;
+      }
+      await db.into(db.ledgers).insert(LedgersCompanion.insert(
+            name: name,
+            currency: d.Value(currency ?? 'CNY'),
+            syncId: d.Value(syncId),
+          ));
       logger.info('SyncEngine',
-          'pull: 账本 $syncId 本地未就绪,跳过 meta 更新(等 snapshot 路径)');
+          'pull: 新增账本 syncId=$syncId name=$name currency=${currency ?? "CNY"}');
+      activePullCache?.putLedger(syncId, (await (db.select(db.ledgers)..where((l) => l.syncId.equals(syncId))).getSingle()).id);
       return;
     }
     final ledger = ledgerList.first;
@@ -658,8 +691,6 @@ extension _SyncEngineApply on SyncEngine {
       await (db.delete(db.ledgers)..where((l) => l.id.isIn(dupIds))).go();
     }
 
-    final name = payload['ledgerName'] as String?;
-    final currency = payload['currency'] as String?;
     final comp = LedgersCompanion(
       name: name != null ? d.Value(name) : const d.Value.absent(),
       currency: currency != null ? d.Value(currency) : const d.Value.absent(),
@@ -673,19 +704,23 @@ extension _SyncEngineApply on SyncEngine {
   // ==================== Helper ====================
 
   /// 同步交易标签关联
+  ///
+  /// [txSyncId] 是 transaction.syncId(已知,由 caller 传入)— 避免每条 tx
+  /// 都 `SELECT FROM transactions WHERE id = ?` 一次拿 syncId,这是 10k 条 =
+  /// 10k 次 SELECT 的 N+1 大头。
+  /// [isNewlyInserted] 为 true 时表示 transaction 是本次刚 INSERT 的,跳过
+  /// "删旧关联"步骤(必然空)。
   Future<void> _syncTransactionTags(
-      int transactionId, Map<String, dynamic> payload) async {
-    // 删除旧关联,按新 payload 重建(主表 + override)
-    await (db.delete(db.transactionTags)
-          ..where((tt) => tt.transactionId.equals(transactionId)))
-        .go();
-
-    // 拿 tx.syncId 用于 override 表
-    final txRow = await (db.select(db.transactions)
-          ..where((t) => t.id.equals(transactionId)))
-        .getSingleOrNull();
-    final txSyncId = txRow?.syncId;
-    if (txSyncId != null) {
+    int transactionId,
+    String txSyncId,
+    Map<String, dynamic> payload, {
+    bool isNewlyInserted = false,
+  }) async {
+    // 删除旧关联,按新 payload 重建(主表 + override)。新插入路径跳过 — 必空。
+    if (!isNewlyInserted) {
+      await (db.delete(db.transactionTags)
+            ..where((tt) => tt.transactionId.equals(transactionId)))
+          .go();
       await (db.delete(db.transactionTagOverrides)
             ..where((t) => t.transactionSyncId.equals(txSyncId)))
           .go();
@@ -706,10 +741,17 @@ extension _SyncEngineApply on SyncEngine {
     if (tagIds.isNotEmpty) {
       for (var i = 0; i < tagIds.length; i++) {
         final syncId = tagIds[i];
+        // 优先查 LookupCache(pull 路径已 prime),消除 N+1 tag SELECT
+        final cachedTagId = activePullCache?.tagId(syncId);
+        if (cachedTagId != null) {
+          linkedLocalIds.add(cachedTagId);
+          continue;
+        }
         var tag = await (db.select(db.tags)
               ..where((t) => t.syncId.equals(syncId)))
             .getSingleOrNull();
         if (tag != null) {
+          activePullCache?.putTag(syncId, tag.id);
           linkedLocalIds.add(tag.id);
           continue;
         }
@@ -731,7 +773,10 @@ extension _SyncEngineApply on SyncEngine {
             await (db.update(db.tags)..where((t) => t.id.equals(tag!.id)))
                 .write(TagsCompanion(syncId: d.Value(syncId)));
           }
-          if (tag != null) linkedLocalIds.add(tag.id);
+          if (tag != null) {
+            activePullCache?.putTag(syncId, tag.id);
+            linkedLocalIds.add(tag.id);
+          }
         }
       }
     } else {
@@ -741,12 +786,14 @@ extension _SyncEngineApply on SyncEngine {
               ..where((t) => t.name.equals(name)))
             .getSingleOrNull();
         if (tag == null) {
+          final newSyncId = _uuid.v4();
           final id = await db.into(db.tags).insert(
                 TagsCompanion.insert(
                   name: name,
-                  syncId: d.Value(_uuid.v4()),
+                  syncId: d.Value(newSyncId),
                 ),
               );
+          activePullCache?.putTag(newSyncId, id);
           tag = await (db.select(db.tags)
                 ..where((t) => t.id.equals(id)))
               .getSingle();
@@ -755,25 +802,34 @@ extension _SyncEngineApply on SyncEngine {
       }
     }
 
-    for (final tagId in linkedLocalIds) {
-      await db.into(db.transactionTags).insert(
+    // 批量插入 transactionTags + transactionTagOverrides,一次 db.batch
+    // (单 fsync) 替代逐条 db.into().insert() (N 次小写入)。
+    if (linkedLocalIds.isNotEmpty ||
+        (txSyncId.isNotEmpty && overrideSyncIds.isNotEmpty)) {
+      final now = DateTime.now().toUtc();
+      await db.batch((b) {
+        for (final tagId in linkedLocalIds) {
+          b.insert(
+            db.transactionTags,
             TransactionTagsCompanion.insert(
               transactionId: transactionId,
               tagId: tagId,
             ),
           );
-    }
-    if (txSyncId != null && overrideSyncIds.isNotEmpty) {
-      final now = DateTime.now().toUtc();
-      for (final sid in overrideSyncIds) {
-        await db.into(db.transactionTagOverrides).insert(
+        }
+        if (txSyncId.isNotEmpty) {
+          for (final sid in overrideSyncIds) {
+            b.insert(
+              db.transactionTagOverrides,
               TransactionTagOverridesCompanion.insert(
                 transactionSyncId: txSyncId,
                 tagSyncId: sid,
                 createdAt: now,
               ),
             );
-      }
+          }
+        }
+      });
     }
   }
 
@@ -782,22 +838,36 @@ extension _SyncEngineApply on SyncEngine {
   /// payload 里 attachments 的三种情况：
   ///   - 缺失（key 不存在）：legacy 调用 / 没附件信息 → 不动本地
   ///   - `[]`（空数组）：A 端把附件全删光了 → 本地同步删光
-  ///   - `[...]`：权威列表 → 本地按 fileName 对齐，多余的删，缺的加
+  ///   - `[...]`：权威列表 → 本地按 fileName 对齐,多余的删,缺的加
+  ///
+  /// [isNewlyInserted] 新插入 tx 路径,existing 必空,跳过 SELECT 省 N+1。
   Future<void> _syncTransactionAttachments(
-      int transactionId, Map<String, dynamic> payload) async {
+    int transactionId,
+    Map<String, dynamic> payload, {
+    bool isNewlyInserted = false,
+  }) async {
     // key 缺失 → legacy 行为，不碰本地
     if (!payload.containsKey('attachments')) return;
     final attachmentsList =
         (payload['attachments'] as List<dynamic>?) ?? const <dynamic>[];
 
-    // 获取现有附件，按 fileName 索引
-    final existing = await (db.select(db.transactionAttachments)
-          ..where((a) => a.transactionId.equals(transactionId)))
-        .get();
+    // 获取现有附件,按 fileName 索引。新插入路径 existing 必空,跳过 SELECT。
+    final existing = isNewlyInserted
+        ? const <TransactionAttachment>[]
+        : await (db.select(db.transactionAttachments)
+              ..where((a) => a.transactionId.equals(transactionId)))
+            .get();
     final existingByFileName = {for (final a in existing) a.fileName: a};
 
     // 远端权威列表里的 fileName 集合
     final remoteFileNames = <String>{};
+
+    // 收集 attachment 增/改/删的操作,统一用 db.batch 一次写,替代逐条
+     /// db.into().insert / db.update().write / db.delete().go(N 次小 fsync)。
+    final inserts = <TransactionAttachmentsCompanion>[];
+    final updates = <({int id, TransactionAttachmentsCompanion data})>[];
+    final attachmentsToDeleteFromDisk = <String>[];
+    final deleteIds = <int>[];
 
     for (final att in attachmentsList) {
       final attMap = att as Map<String, dynamic>;
@@ -809,99 +879,70 @@ extension _SyncEngineApply on SyncEngine {
       final cloudSha256 = attMap['cloudSha256'] as String?;
 
       if (existingByFileName.containsKey(fileName)) {
-        // 已存在 → 更新 cloudFileId/cloudSha256（如果远端有新值）
         final ex = existingByFileName[fileName]!;
         if (cloudFileId != null && ex.cloudFileId != cloudFileId) {
-          await (db.update(db.transactionAttachments)
-                ..where((a) => a.id.equals(ex.id)))
-              .write(TransactionAttachmentsCompanion(
-            cloudFileId: d.Value(cloudFileId),
-            cloudSha256: d.Value(cloudSha256),
+          updates.add((
+            id: ex.id,
+            data: TransactionAttachmentsCompanion(
+              cloudFileId: d.Value(cloudFileId),
+              cloudSha256: d.Value(cloudSha256),
+            ),
           ));
         }
       } else {
-        // 不存在 → 创建附件记录
-        await db.into(db.transactionAttachments).insert(
-              TransactionAttachmentsCompanion.insert(
-                transactionId: transactionId,
-                fileName: fileName,
-                originalName: d.Value(attMap['originalName'] as String?),
-                fileSize: d.Value(attMap['fileSize'] as int?),
-                width: d.Value(attMap['width'] as int?),
-                height: d.Value(attMap['height'] as int?),
-                sortOrder: d.Value(attMap['sortOrder'] as int? ?? 0),
-                cloudFileId: d.Value(cloudFileId),
-                cloudSha256: d.Value(cloudSha256),
-              ),
-            );
+        inserts.add(TransactionAttachmentsCompanion.insert(
+          transactionId: transactionId,
+          fileName: fileName,
+          originalName: d.Value(attMap['originalName'] as String?),
+          fileSize: d.Value(attMap['fileSize'] as int?),
+          width: d.Value(attMap['width'] as int?),
+          height: d.Value(attMap['height'] as int?),
+          sortOrder: d.Value(attMap['sortOrder'] as int? ?? 0),
+          cloudFileId: d.Value(cloudFileId),
+          cloudSha256: d.Value(cloudSha256),
+        ));
       }
     }
 
-    // 本地有但远端没有的附件 → 对端已删，本地也删。同时清掉落地文件，
-    // 避免孤立图片占空间。
     for (final ex in existing) {
       if (remoteFileNames.contains(ex.fileName)) continue;
-      await (db.delete(db.transactionAttachments)
-            ..where((a) => a.id.equals(ex.id)))
-          .go();
+      deleteIds.add(ex.id);
+      attachmentsToDeleteFromDisk.add(ex.fileName);
+    }
+
+    if (inserts.isNotEmpty || updates.isNotEmpty || deleteIds.isNotEmpty) {
+      await db.batch((b) {
+        if (inserts.isNotEmpty) {
+          b.insertAll(db.transactionAttachments, inserts);
+        }
+        for (final u in updates) {
+          b.update<TransactionAttachments, TransactionAttachment>(
+            db.transactionAttachments,
+            u.data,
+            where: ($) => $.id.equals(u.id),
+          );
+        }
+        if (deleteIds.isNotEmpty) {
+          b.deleteWhere(
+              db.transactionAttachments, ($) => $.id.isIn(deleteIds));
+        }
+      });
+    }
+
+    // 磁盘清理跑在事务外(IO 失败不影响 DB 状态)
+    for (final fn in attachmentsToDeleteFromDisk) {
       try {
-        final file = await _getAttachmentFile(ex.fileName);
+        final file = await _getAttachmentFile(fn);
         if (file != null && file.existsSync()) {
           await file.delete();
         }
       } catch (e, st) {
-        logger.warning(
-            'SyncEngine', '删除本地孤立附件文件失败: ${ex.fileName}', st);
+        logger.warning('SyncEngine', '删除本地孤立附件文件失败: $fn', st);
       }
     }
   }
 }
 
-/// 探测分类图标的扩展名,保证本地落地文件名能被正确识别为图片。
-///
-/// 优先级:
-///   1. originalPath 末尾的扩展名(payload.customIconPath 来自上游 saveCustomIcon
-///      生成的 `<id>_<ts>.png` 规范名)
-///   2. bytes 前几个 magic bytes:
-///      - PNG: `89 50 4E 47 0D 0A 1A 0A`
-///      - JPEG: `FF D8 FF`
-///      - WebP: `52 49 46 46 .. .. .. .. 57 45 42 50` (RIFF....WEBP)
-///   3. fallback `.png` (历史分类图标都是 96x96 PNG)
-String _detectIconExtension(List<int> bytes, {String? originalPath}) {
-  if (originalPath != null && originalPath.isNotEmpty) {
-    final dot = originalPath.lastIndexOf('.');
-    if (dot >= 0 && dot < originalPath.length - 1) {
-      final ext = originalPath.substring(dot).toLowerCase();
-      // 防御:扩展名长度合理,且只包含字母/数字
-      if (ext.length <= 6 &&
-          RegExp(r'^\.[a-z0-9]+$').hasMatch(ext)) {
-        return ext;
-      }
-    }
-  }
-  if (bytes.length >= 8 &&
-      bytes[0] == 0x89 &&
-      bytes[1] == 0x50 &&
-      bytes[2] == 0x4E &&
-      bytes[3] == 0x47) {
-    return '.png';
-  }
-  if (bytes.length >= 3 &&
-      bytes[0] == 0xFF &&
-      bytes[1] == 0xD8 &&
-      bytes[2] == 0xFF) {
-    return '.jpg';
-  }
-  if (bytes.length >= 12 &&
-      bytes[0] == 0x52 &&
-      bytes[1] == 0x49 &&
-      bytes[2] == 0x46 &&
-      bytes[3] == 0x46 &&
-      bytes[8] == 0x57 &&
-      bytes[9] == 0x45 &&
-      bytes[10] == 0x42 &&
-      bytes[11] == 0x50) {
-    return '.webp';
-  }
-  return '.png';
-}
+// §Phase 3:`_detectIconExtension` 搬到 `attachments.dart`,因为自定义图标
+// 下载从 _applyCategoryChange 内部移出,主事务只入队下载任务。原位置的函数
+// 不再被任何路径调用,直接删除。

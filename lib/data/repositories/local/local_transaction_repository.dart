@@ -364,9 +364,13 @@ class LocalTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) async {
+  Future<int> insertTransactionsBatch(
+    List<TransactionsCompanion> items, {
+    bool recordChanges = true,
+  }) async {
+    // 子仓库不挂 changeTracker,recordChanges 参数对它无作用 — 真正的 record
+    // 在 LocalRepository wrapper 那一层。这里保留参数只是为了接口一致。
     if (items.isEmpty) return 0;
-    // 自动补上 syncId
     final effectiveItems = items.map((item) {
       if (item.syncId == const d.Value.absent() || item.syncId.value == null) {
         return item.copyWith(syncId: d.Value(_uuid.v4()));
@@ -505,8 +509,11 @@ class LocalTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<int> insertTransactionCompanion(TransactionsCompanion item) async {
-    // 自动补上 syncId（如果未提供）
+  Future<int> insertTransactionCompanion(
+    TransactionsCompanion item, {
+    bool recordChanges = true,
+  }) async {
+    // 子仓库不挂 changeTracker,recordChanges 仅为接口一致保留。
     final effective = item.syncId == const d.Value.absent() || item.syncId.value == null
         ? item.copyWith(syncId: d.Value(_uuid.v4()))
         : item;

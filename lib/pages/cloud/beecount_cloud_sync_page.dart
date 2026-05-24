@@ -52,15 +52,17 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
   }
 
   Future<void> _onRefresh() async {
+    // 整个流程异步跑得久(10k 数据可能几分钟),用户随时可能切走页面 →
+    // widget dispose,ref 失效。所有访问 ref 的地方都先看 mounted。
+    if (!mounted) return;
     final engine = ref.read(syncServiceProvider);
     final ledgerId = ref.read(currentLedgerIdProvider);
     if (engine is! SyncEngine || ledgerId <= 0) return;
 
     setState(() => _checking = true);
     try {
-      // Step 1: 对账 profile(主题 / 收支 / 外观 / AI 配置)。把"server 上
-      // 缺但本地有"的字段补推上去。用户在"修改过设置"之外,也能通过下拉
-      // 刷新触发同步,不再要非得先动一下配置才会 sync。
+      // Step 1: 对账 profile。把"server 上缺但本地有"的字段补推上去。
+      if (!mounted) return;
       await reconcileProfileToServer(
         cloudProviderFuture: ref.read(beecountCloudProviderInstance.future),
         currentThemeColor: ref.read(primaryColorProvider),
@@ -69,46 +71,47 @@ class _BeeCountCloudSyncPageState extends ConsumerState<BeeCountCloudSyncPage> {
         currentCompactAmount: ref.read(compactAmountProvider),
         currentShowTransactionTime: ref.read(showTransactionTimeProvider),
       );
-      // 再从 server 拉一遍应用到本地,B 设备能读到 A 刚推的
+      if (!mounted) return;
       await engine.syncMyProfile();
 
+      if (!mounted) return;
       var report = await engine.checkSyncHealth(ledgerId: ledgerId);
       if (!mounted) return;
       setState(() => _latestReport = report);
 
-      // 若本地 tag/account/category 比远端多但没 unpushed change,
-      // 说明历史上有"绕过 changeTracker 插入"的实体(种子代码 bug),
-      // 先 backfill 把它们登记到 sync_changes,再让下一步 sync 推上去。
       if (report.needsBackfill) {
         final backfilled =
             await engine.backfillUntrackedEntities(ledgerId: ledgerId);
         logger.info('CloudSyncPage',
             '_onRefresh: backfill 补写 $backfilled 条 sync_change');
-        if (backfilled > 0) {
+        if (backfilled > 0 && mounted) {
           report = await engine.checkSyncHealth(ledgerId: ledgerId);
           if (mounted) setState(() => _latestReport = report);
         }
       }
 
-      if (report.hasDiff) {
-        // 差异存在 → 自动 sync(用户偏好:检测到差异就自动 sync,不需手动确认)
+      if (report.hasDiff && mounted) {
         setState(() => _autoSyncing = true);
         try {
           await engine.sync(ledgerId: ledgerId.toString());
-          // sync 后重拉一次 health 报告,让 UI 反映最新计数
+          if (!mounted) return;
           final after = await engine.checkSyncHealth(ledgerId: ledgerId);
           if (mounted) setState(() => _latestReport = after);
         } catch (e) {
           if (mounted) {
-            showToast(context, '${AppLocalizations.of(context).commonFailed}: $e');
+            showToast(
+                context, '${AppLocalizations.of(context).commonFailed}: $e');
           }
         } finally {
           if (mounted) setState(() => _autoSyncing = false);
         }
       }
 
-      // 不管是否 sync,都 bump 下 UI tick
-      ref.read(syncStatusRefreshProvider.notifier).state++;
+      // 不管是否 sync,都 bump 下 UI tick。widget 已 dispose 时跳过 —
+      // 否则 ref.read 会抛 StateError "Cannot use ref after the widget was disposed"。
+      if (mounted) {
+        ref.read(syncStatusRefreshProvider.notifier).state++;
+      }
     } finally {
       if (mounted) setState(() => _checking = false);
     }

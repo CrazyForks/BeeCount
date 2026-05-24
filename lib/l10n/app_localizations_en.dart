@@ -6419,4 +6419,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String maintenanceOrphanCleanPartial(int ok, int fail) {
     return 'Cleaned $ok item(s), $fail failed';
   }
+
+  @override
+  String get syncProgressTitle => 'Syncing';
+
+  @override
+  String syncProgressCount(int applied, int total) {
+    return '$applied / $total';
+  }
 }

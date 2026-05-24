@@ -77,11 +77,22 @@ abstract class TransactionRepository {
     String? toAccountSyncIdOverride,
   });
 
-  /// 批量新增交易，单事务内插入，返回插入条数
-  Future<int> insertTransactionsBatch(List<TransactionsCompanion> items);
+  /// 批量新增交易，单事务内插入，返回插入条数。
+  ///
+  /// [recordChanges] 默认 true,会逐条登记 changeTracker.recordLedgerChange。
+  /// FullPull 路径需要传 false 避免"从云端拉下来的数据又被反向 push 回去"。
+  Future<int> insertTransactionsBatch(
+    List<TransactionsCompanion> items, {
+    bool recordChanges = true,
+  });
 
   /// 插入单条交易（使用 Companion 对象）
-  Future<int> insertTransactionCompanion(TransactionsCompanion item);
+  ///
+  /// [recordChanges] 同 [insertTransactionsBatch]。
+  Future<int> insertTransactionCompanion(
+    TransactionsCompanion item, {
+    bool recordChanges = true,
+  });
 
   /// 更新交易
   Future<void> updateTransaction({

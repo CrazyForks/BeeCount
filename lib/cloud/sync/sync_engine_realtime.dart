@@ -89,9 +89,17 @@ extension SyncEngineRealtime on SyncEngine {
             'auto sync 触发 (reason=$reason, ledger=$ledgerId)');
         // §7 共享账本:WS 重连 / 网络恢复时,顺手对账 ledger 列表 + 共享账本
         // 状态。如果 WS 期间错过了 member_change.removed(被踢),GC 1 会自动
-        // 清掉本地残留共享账本;还有 dup ledger 检测兜底。reason=ws_connected
-        // / network_restored 时跑,频率可控。
-        if (reason == 'ws_connected' || reason == 'network_restored') {
+        // 清掉本地残留共享账本;还有 dup ledger 检测兜底。
+        //
+        // reason 字符串包括:
+        //   - `ws_connected`:WS 首连 / 重连
+        //   - `network_restored` / `connectivity_restored`:网络恢复
+        //     (sync_providers.dart 内 connectivity_plus listener 传的是
+        //     `connectivity_restored`)
+        // 这里同时匹配三种以兼容历史 caller。
+        if (reason == 'ws_connected' ||
+            reason == 'network_restored' ||
+            reason == 'connectivity_restored') {
           try {
             await syncLedgersFromServer();
           } catch (e, st) {
@@ -457,7 +465,7 @@ extension SyncEngineRealtime on SyncEngine {
       await fetchAndStoreSharedResources(ledgerExternalId);
 
       // 拉历史 tx — 让 Editor 看到 Owner 之前记的账。
-      // 关键:不能走 _pull(默认用 SharedPreferences cursor,B 设备如果之前
+      // 关键:不能走 pull(默认用 SharedPreferences cursor,B 设备如果之前
       // sync 过自己单人账本,cursor 已经在最新位置,A 之前的 sync_changes
       // change_id 已小于 cursor → 拉不回历史 tx / budget。
       // 强制 sinceOverride=0 走 replayAllChanges,server pull 路径会按
@@ -614,8 +622,28 @@ extension SyncEngineRealtime on SyncEngine {
           return;
         }
         logger.info('SyncEngine', '自动 pull 开始: ledger=$targetLedgerId');
-        final pulled = await _pull(targetLedgerId);
+        final pulled = await pull(targetLedgerId);
         logger.info('SyncEngine', '自动 pull 完成: $pulled 条变更');
+
+        // pull 完成后顺手对账一次 ledger 列表 — catch "web 端新建账本"
+        // 的场景:server 推 ledger entity change 进 sync_changes,但有些
+        // server 实现可能不带完整 payload(只有 syncId)→ _applyLedgerChange
+        // 无法直接 insert。这里主动调一次 syncLedgersFromServer 拉完整
+        // /sync/ledgers 列表兜底。
+        //
+        // syncLedgersFromServer 内部有 static 单飞锁,_pull 多次触发不会
+        // 真重复跑;且只在远端 list 有差异时 insert 新账本,无差异是 nop。
+        try {
+          final inserted = await syncLedgersFromServer();
+          if (inserted > 0) {
+            logger.info('SyncEngine',
+                '自动 pull 后 syncLedgersFromServer 新增 $inserted 个账本');
+          }
+        } catch (e, st) {
+          logger.warning(
+              'SyncEngine', '自动 pull 后 syncLedgersFromServer 失败', st);
+          logger.warning('SyncEngine', 'error: $e');
+        }
         // 附件二进制：metadata 已经在 _pull 里写到 Drift 了，文件本身需要额
         // 外调 downloadAttachments 才会下。之前只有 full `sync()` 调用它，
         // WS 触发的 pull 不调 → A 设备上传附件后 B 设备要重启才能看到图。

@@ -2845,5 +2845,8 @@
   "maintenanceOrphanCleanSuccess": "已清理 {count} 项",
   "@maintenanceOrphanCleanSuccess": { "placeholders": { "count": { "type": "int" } } },
   "maintenanceOrphanCleanPartial": "成功 {ok} 项,失败 {fail} 项",
-  "@maintenanceOrphanCleanPartial": { "placeholders": { "ok": { "type": "int" }, "fail": { "type": "int" } } }
+  "@maintenanceOrphanCleanPartial": { "placeholders": { "ok": { "type": "int" }, "fail": { "type": "int" } } },
+  "syncProgressTitle": "正在同步",
+  "syncProgressCount": "{applied} / {total} 条",
+  "@syncProgressCount": { "placeholders": { "applied": { "type": "int" }, "total": { "type": "int" } } }
 }

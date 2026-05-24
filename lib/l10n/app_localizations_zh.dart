@@ -6419,6 +6419,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String maintenanceOrphanCleanPartial(int ok, int fail) {
     return '成功 $ok 项,失败 $fail 项';
   }
+
+  @override
+  String get syncProgressTitle => '正在同步';
+
+  @override
+  String syncProgressCount(int applied, int total) {
+    return '$applied / $total 条';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -12807,5 +12815,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String maintenanceOrphanCleanPartial(int ok, int fail) {
     return '成功 $ok 項,失敗 $fail 項';
+  }
+
+  @override
+  String get syncProgressTitle => '正在同步';
+
+  @override
+  String syncProgressCount(int applied, int total) {
+    return '$applied / $total 條';
   }
 }

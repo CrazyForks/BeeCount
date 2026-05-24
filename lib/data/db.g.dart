@@ -9075,6 +9075,756 @@ class TransactionTagOverridesCompanion
   }
 }
 
+class $SyncPullErrorsTable extends SyncPullErrors
+    with TableInfo<$SyncPullErrorsTable, SyncPullError> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncPullErrorsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _changeIdMeta =
+      const VerificationMeta('changeId');
+  @override
+  late final GeneratedColumn<int> changeId = GeneratedColumn<int>(
+      'change_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _ledgerExternalIdMeta =
+      const VerificationMeta('ledgerExternalId');
+  @override
+  late final GeneratedColumn<String> ledgerExternalId = GeneratedColumn<String>(
+      'ledger_external_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _entityTypeMeta =
+      const VerificationMeta('entityType');
+  @override
+  late final GeneratedColumn<String> entityType = GeneratedColumn<String>(
+      'entity_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _entitySyncIdMeta =
+      const VerificationMeta('entitySyncId');
+  @override
+  late final GeneratedColumn<String> entitySyncId = GeneratedColumn<String>(
+      'entity_sync_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _actionMeta = const VerificationMeta('action');
+  @override
+  late final GeneratedColumn<String> action = GeneratedColumn<String>(
+      'action', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _rawChangeJsonMeta =
+      const VerificationMeta('rawChangeJson');
+  @override
+  late final GeneratedColumn<String> rawChangeJson = GeneratedColumn<String>(
+      'raw_change_json', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _errorClassMeta =
+      const VerificationMeta('errorClass');
+  @override
+  late final GeneratedColumn<String> errorClass = GeneratedColumn<String>(
+      'error_class', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _errorMessageMeta =
+      const VerificationMeta('errorMessage');
+  @override
+  late final GeneratedColumn<String> errorMessage = GeneratedColumn<String>(
+      'error_message', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _stackTraceMeta =
+      const VerificationMeta('stackTrace');
+  @override
+  late final GeneratedColumn<String> stackTrace = GeneratedColumn<String>(
+      'stack_trace', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _firstSeenAtMeta =
+      const VerificationMeta('firstSeenAt');
+  @override
+  late final GeneratedColumn<DateTime> firstSeenAt = GeneratedColumn<DateTime>(
+      'first_seen_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastAttemptAtMeta =
+      const VerificationMeta('lastAttemptAt');
+  @override
+  late final GeneratedColumn<DateTime> lastAttemptAt =
+      GeneratedColumn<DateTime>('last_attempt_at', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _attemptCountMeta =
+      const VerificationMeta('attemptCount');
+  @override
+  late final GeneratedColumn<int> attemptCount = GeneratedColumn<int>(
+      'attempt_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _userActionMeta =
+      const VerificationMeta('userAction');
+  @override
+  late final GeneratedColumn<String> userAction = GeneratedColumn<String>(
+      'user_action', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _resolvedAtMeta =
+      const VerificationMeta('resolvedAt');
+  @override
+  late final GeneratedColumn<DateTime> resolvedAt = GeneratedColumn<DateTime>(
+      'resolved_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        changeId,
+        ledgerExternalId,
+        entityType,
+        entitySyncId,
+        action,
+        rawChangeJson,
+        errorClass,
+        errorMessage,
+        stackTrace,
+        firstSeenAt,
+        lastAttemptAt,
+        attemptCount,
+        userAction,
+        resolvedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_pull_errors';
+  @override
+  VerificationContext validateIntegrity(Insertable<SyncPullError> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('change_id')) {
+      context.handle(_changeIdMeta,
+          changeId.isAcceptableOrUnknown(data['change_id']!, _changeIdMeta));
+    } else if (isInserting) {
+      context.missing(_changeIdMeta);
+    }
+    if (data.containsKey('ledger_external_id')) {
+      context.handle(
+          _ledgerExternalIdMeta,
+          ledgerExternalId.isAcceptableOrUnknown(
+              data['ledger_external_id']!, _ledgerExternalIdMeta));
+    }
+    if (data.containsKey('entity_type')) {
+      context.handle(
+          _entityTypeMeta,
+          entityType.isAcceptableOrUnknown(
+              data['entity_type']!, _entityTypeMeta));
+    } else if (isInserting) {
+      context.missing(_entityTypeMeta);
+    }
+    if (data.containsKey('entity_sync_id')) {
+      context.handle(
+          _entitySyncIdMeta,
+          entitySyncId.isAcceptableOrUnknown(
+              data['entity_sync_id']!, _entitySyncIdMeta));
+    } else if (isInserting) {
+      context.missing(_entitySyncIdMeta);
+    }
+    if (data.containsKey('action')) {
+      context.handle(_actionMeta,
+          action.isAcceptableOrUnknown(data['action']!, _actionMeta));
+    } else if (isInserting) {
+      context.missing(_actionMeta);
+    }
+    if (data.containsKey('raw_change_json')) {
+      context.handle(
+          _rawChangeJsonMeta,
+          rawChangeJson.isAcceptableOrUnknown(
+              data['raw_change_json']!, _rawChangeJsonMeta));
+    } else if (isInserting) {
+      context.missing(_rawChangeJsonMeta);
+    }
+    if (data.containsKey('error_class')) {
+      context.handle(
+          _errorClassMeta,
+          errorClass.isAcceptableOrUnknown(
+              data['error_class']!, _errorClassMeta));
+    }
+    if (data.containsKey('error_message')) {
+      context.handle(
+          _errorMessageMeta,
+          errorMessage.isAcceptableOrUnknown(
+              data['error_message']!, _errorMessageMeta));
+    }
+    if (data.containsKey('stack_trace')) {
+      context.handle(
+          _stackTraceMeta,
+          stackTrace.isAcceptableOrUnknown(
+              data['stack_trace']!, _stackTraceMeta));
+    }
+    if (data.containsKey('first_seen_at')) {
+      context.handle(
+          _firstSeenAtMeta,
+          firstSeenAt.isAcceptableOrUnknown(
+              data['first_seen_at']!, _firstSeenAtMeta));
+    } else if (isInserting) {
+      context.missing(_firstSeenAtMeta);
+    }
+    if (data.containsKey('last_attempt_at')) {
+      context.handle(
+          _lastAttemptAtMeta,
+          lastAttemptAt.isAcceptableOrUnknown(
+              data['last_attempt_at']!, _lastAttemptAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastAttemptAtMeta);
+    }
+    if (data.containsKey('attempt_count')) {
+      context.handle(
+          _attemptCountMeta,
+          attemptCount.isAcceptableOrUnknown(
+              data['attempt_count']!, _attemptCountMeta));
+    }
+    if (data.containsKey('user_action')) {
+      context.handle(
+          _userActionMeta,
+          userAction.isAcceptableOrUnknown(
+              data['user_action']!, _userActionMeta));
+    }
+    if (data.containsKey('resolved_at')) {
+      context.handle(
+          _resolvedAtMeta,
+          resolvedAt.isAcceptableOrUnknown(
+              data['resolved_at']!, _resolvedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SyncPullError map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncPullError(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      changeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}change_id'])!,
+      ledgerExternalId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}ledger_external_id']),
+      entityType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entity_type'])!,
+      entitySyncId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entity_sync_id'])!,
+      action: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}action'])!,
+      rawChangeJson: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}raw_change_json'])!,
+      errorClass: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}error_class']),
+      errorMessage: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}error_message']),
+      stackTrace: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}stack_trace']),
+      firstSeenAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}first_seen_at'])!,
+      lastAttemptAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_attempt_at'])!,
+      attemptCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}attempt_count'])!,
+      userAction: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_action']),
+      resolvedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}resolved_at']),
+    );
+  }
+
+  @override
+  $SyncPullErrorsTable createAlias(String alias) {
+    return $SyncPullErrorsTable(attachedDatabase, alias);
+  }
+}
+
+class SyncPullError extends DataClass implements Insertable<SyncPullError> {
+  final int id;
+  final int changeId;
+  final String? ledgerExternalId;
+  final String entityType;
+  final String entitySyncId;
+  final String action;
+  final String rawChangeJson;
+  final String? errorClass;
+  final String? errorMessage;
+  final String? stackTrace;
+  final DateTime firstSeenAt;
+  final DateTime lastAttemptAt;
+  final int attemptCount;
+  final String? userAction;
+  final DateTime? resolvedAt;
+  const SyncPullError(
+      {required this.id,
+      required this.changeId,
+      this.ledgerExternalId,
+      required this.entityType,
+      required this.entitySyncId,
+      required this.action,
+      required this.rawChangeJson,
+      this.errorClass,
+      this.errorMessage,
+      this.stackTrace,
+      required this.firstSeenAt,
+      required this.lastAttemptAt,
+      required this.attemptCount,
+      this.userAction,
+      this.resolvedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['change_id'] = Variable<int>(changeId);
+    if (!nullToAbsent || ledgerExternalId != null) {
+      map['ledger_external_id'] = Variable<String>(ledgerExternalId);
+    }
+    map['entity_type'] = Variable<String>(entityType);
+    map['entity_sync_id'] = Variable<String>(entitySyncId);
+    map['action'] = Variable<String>(action);
+    map['raw_change_json'] = Variable<String>(rawChangeJson);
+    if (!nullToAbsent || errorClass != null) {
+      map['error_class'] = Variable<String>(errorClass);
+    }
+    if (!nullToAbsent || errorMessage != null) {
+      map['error_message'] = Variable<String>(errorMessage);
+    }
+    if (!nullToAbsent || stackTrace != null) {
+      map['stack_trace'] = Variable<String>(stackTrace);
+    }
+    map['first_seen_at'] = Variable<DateTime>(firstSeenAt);
+    map['last_attempt_at'] = Variable<DateTime>(lastAttemptAt);
+    map['attempt_count'] = Variable<int>(attemptCount);
+    if (!nullToAbsent || userAction != null) {
+      map['user_action'] = Variable<String>(userAction);
+    }
+    if (!nullToAbsent || resolvedAt != null) {
+      map['resolved_at'] = Variable<DateTime>(resolvedAt);
+    }
+    return map;
+  }
+
+  SyncPullErrorsCompanion toCompanion(bool nullToAbsent) {
+    return SyncPullErrorsCompanion(
+      id: Value(id),
+      changeId: Value(changeId),
+      ledgerExternalId: ledgerExternalId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ledgerExternalId),
+      entityType: Value(entityType),
+      entitySyncId: Value(entitySyncId),
+      action: Value(action),
+      rawChangeJson: Value(rawChangeJson),
+      errorClass: errorClass == null && nullToAbsent
+          ? const Value.absent()
+          : Value(errorClass),
+      errorMessage: errorMessage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(errorMessage),
+      stackTrace: stackTrace == null && nullToAbsent
+          ? const Value.absent()
+          : Value(stackTrace),
+      firstSeenAt: Value(firstSeenAt),
+      lastAttemptAt: Value(lastAttemptAt),
+      attemptCount: Value(attemptCount),
+      userAction: userAction == null && nullToAbsent
+          ? const Value.absent()
+          : Value(userAction),
+      resolvedAt: resolvedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(resolvedAt),
+    );
+  }
+
+  factory SyncPullError.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncPullError(
+      id: serializer.fromJson<int>(json['id']),
+      changeId: serializer.fromJson<int>(json['changeId']),
+      ledgerExternalId: serializer.fromJson<String?>(json['ledgerExternalId']),
+      entityType: serializer.fromJson<String>(json['entityType']),
+      entitySyncId: serializer.fromJson<String>(json['entitySyncId']),
+      action: serializer.fromJson<String>(json['action']),
+      rawChangeJson: serializer.fromJson<String>(json['rawChangeJson']),
+      errorClass: serializer.fromJson<String?>(json['errorClass']),
+      errorMessage: serializer.fromJson<String?>(json['errorMessage']),
+      stackTrace: serializer.fromJson<String?>(json['stackTrace']),
+      firstSeenAt: serializer.fromJson<DateTime>(json['firstSeenAt']),
+      lastAttemptAt: serializer.fromJson<DateTime>(json['lastAttemptAt']),
+      attemptCount: serializer.fromJson<int>(json['attemptCount']),
+      userAction: serializer.fromJson<String?>(json['userAction']),
+      resolvedAt: serializer.fromJson<DateTime?>(json['resolvedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'changeId': serializer.toJson<int>(changeId),
+      'ledgerExternalId': serializer.toJson<String?>(ledgerExternalId),
+      'entityType': serializer.toJson<String>(entityType),
+      'entitySyncId': serializer.toJson<String>(entitySyncId),
+      'action': serializer.toJson<String>(action),
+      'rawChangeJson': serializer.toJson<String>(rawChangeJson),
+      'errorClass': serializer.toJson<String?>(errorClass),
+      'errorMessage': serializer.toJson<String?>(errorMessage),
+      'stackTrace': serializer.toJson<String?>(stackTrace),
+      'firstSeenAt': serializer.toJson<DateTime>(firstSeenAt),
+      'lastAttemptAt': serializer.toJson<DateTime>(lastAttemptAt),
+      'attemptCount': serializer.toJson<int>(attemptCount),
+      'userAction': serializer.toJson<String?>(userAction),
+      'resolvedAt': serializer.toJson<DateTime?>(resolvedAt),
+    };
+  }
+
+  SyncPullError copyWith(
+          {int? id,
+          int? changeId,
+          Value<String?> ledgerExternalId = const Value.absent(),
+          String? entityType,
+          String? entitySyncId,
+          String? action,
+          String? rawChangeJson,
+          Value<String?> errorClass = const Value.absent(),
+          Value<String?> errorMessage = const Value.absent(),
+          Value<String?> stackTrace = const Value.absent(),
+          DateTime? firstSeenAt,
+          DateTime? lastAttemptAt,
+          int? attemptCount,
+          Value<String?> userAction = const Value.absent(),
+          Value<DateTime?> resolvedAt = const Value.absent()}) =>
+      SyncPullError(
+        id: id ?? this.id,
+        changeId: changeId ?? this.changeId,
+        ledgerExternalId: ledgerExternalId.present
+            ? ledgerExternalId.value
+            : this.ledgerExternalId,
+        entityType: entityType ?? this.entityType,
+        entitySyncId: entitySyncId ?? this.entitySyncId,
+        action: action ?? this.action,
+        rawChangeJson: rawChangeJson ?? this.rawChangeJson,
+        errorClass: errorClass.present ? errorClass.value : this.errorClass,
+        errorMessage:
+            errorMessage.present ? errorMessage.value : this.errorMessage,
+        stackTrace: stackTrace.present ? stackTrace.value : this.stackTrace,
+        firstSeenAt: firstSeenAt ?? this.firstSeenAt,
+        lastAttemptAt: lastAttemptAt ?? this.lastAttemptAt,
+        attemptCount: attemptCount ?? this.attemptCount,
+        userAction: userAction.present ? userAction.value : this.userAction,
+        resolvedAt: resolvedAt.present ? resolvedAt.value : this.resolvedAt,
+      );
+  SyncPullError copyWithCompanion(SyncPullErrorsCompanion data) {
+    return SyncPullError(
+      id: data.id.present ? data.id.value : this.id,
+      changeId: data.changeId.present ? data.changeId.value : this.changeId,
+      ledgerExternalId: data.ledgerExternalId.present
+          ? data.ledgerExternalId.value
+          : this.ledgerExternalId,
+      entityType:
+          data.entityType.present ? data.entityType.value : this.entityType,
+      entitySyncId: data.entitySyncId.present
+          ? data.entitySyncId.value
+          : this.entitySyncId,
+      action: data.action.present ? data.action.value : this.action,
+      rawChangeJson: data.rawChangeJson.present
+          ? data.rawChangeJson.value
+          : this.rawChangeJson,
+      errorClass:
+          data.errorClass.present ? data.errorClass.value : this.errorClass,
+      errorMessage: data.errorMessage.present
+          ? data.errorMessage.value
+          : this.errorMessage,
+      stackTrace:
+          data.stackTrace.present ? data.stackTrace.value : this.stackTrace,
+      firstSeenAt:
+          data.firstSeenAt.present ? data.firstSeenAt.value : this.firstSeenAt,
+      lastAttemptAt: data.lastAttemptAt.present
+          ? data.lastAttemptAt.value
+          : this.lastAttemptAt,
+      attemptCount: data.attemptCount.present
+          ? data.attemptCount.value
+          : this.attemptCount,
+      userAction:
+          data.userAction.present ? data.userAction.value : this.userAction,
+      resolvedAt:
+          data.resolvedAt.present ? data.resolvedAt.value : this.resolvedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncPullError(')
+          ..write('id: $id, ')
+          ..write('changeId: $changeId, ')
+          ..write('ledgerExternalId: $ledgerExternalId, ')
+          ..write('entityType: $entityType, ')
+          ..write('entitySyncId: $entitySyncId, ')
+          ..write('action: $action, ')
+          ..write('rawChangeJson: $rawChangeJson, ')
+          ..write('errorClass: $errorClass, ')
+          ..write('errorMessage: $errorMessage, ')
+          ..write('stackTrace: $stackTrace, ')
+          ..write('firstSeenAt: $firstSeenAt, ')
+          ..write('lastAttemptAt: $lastAttemptAt, ')
+          ..write('attemptCount: $attemptCount, ')
+          ..write('userAction: $userAction, ')
+          ..write('resolvedAt: $resolvedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      changeId,
+      ledgerExternalId,
+      entityType,
+      entitySyncId,
+      action,
+      rawChangeJson,
+      errorClass,
+      errorMessage,
+      stackTrace,
+      firstSeenAt,
+      lastAttemptAt,
+      attemptCount,
+      userAction,
+      resolvedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncPullError &&
+          other.id == this.id &&
+          other.changeId == this.changeId &&
+          other.ledgerExternalId == this.ledgerExternalId &&
+          other.entityType == this.entityType &&
+          other.entitySyncId == this.entitySyncId &&
+          other.action == this.action &&
+          other.rawChangeJson == this.rawChangeJson &&
+          other.errorClass == this.errorClass &&
+          other.errorMessage == this.errorMessage &&
+          other.stackTrace == this.stackTrace &&
+          other.firstSeenAt == this.firstSeenAt &&
+          other.lastAttemptAt == this.lastAttemptAt &&
+          other.attemptCount == this.attemptCount &&
+          other.userAction == this.userAction &&
+          other.resolvedAt == this.resolvedAt);
+}
+
+class SyncPullErrorsCompanion extends UpdateCompanion<SyncPullError> {
+  final Value<int> id;
+  final Value<int> changeId;
+  final Value<String?> ledgerExternalId;
+  final Value<String> entityType;
+  final Value<String> entitySyncId;
+  final Value<String> action;
+  final Value<String> rawChangeJson;
+  final Value<String?> errorClass;
+  final Value<String?> errorMessage;
+  final Value<String?> stackTrace;
+  final Value<DateTime> firstSeenAt;
+  final Value<DateTime> lastAttemptAt;
+  final Value<int> attemptCount;
+  final Value<String?> userAction;
+  final Value<DateTime?> resolvedAt;
+  const SyncPullErrorsCompanion({
+    this.id = const Value.absent(),
+    this.changeId = const Value.absent(),
+    this.ledgerExternalId = const Value.absent(),
+    this.entityType = const Value.absent(),
+    this.entitySyncId = const Value.absent(),
+    this.action = const Value.absent(),
+    this.rawChangeJson = const Value.absent(),
+    this.errorClass = const Value.absent(),
+    this.errorMessage = const Value.absent(),
+    this.stackTrace = const Value.absent(),
+    this.firstSeenAt = const Value.absent(),
+    this.lastAttemptAt = const Value.absent(),
+    this.attemptCount = const Value.absent(),
+    this.userAction = const Value.absent(),
+    this.resolvedAt = const Value.absent(),
+  });
+  SyncPullErrorsCompanion.insert({
+    this.id = const Value.absent(),
+    required int changeId,
+    this.ledgerExternalId = const Value.absent(),
+    required String entityType,
+    required String entitySyncId,
+    required String action,
+    required String rawChangeJson,
+    this.errorClass = const Value.absent(),
+    this.errorMessage = const Value.absent(),
+    this.stackTrace = const Value.absent(),
+    required DateTime firstSeenAt,
+    required DateTime lastAttemptAt,
+    this.attemptCount = const Value.absent(),
+    this.userAction = const Value.absent(),
+    this.resolvedAt = const Value.absent(),
+  })  : changeId = Value(changeId),
+        entityType = Value(entityType),
+        entitySyncId = Value(entitySyncId),
+        action = Value(action),
+        rawChangeJson = Value(rawChangeJson),
+        firstSeenAt = Value(firstSeenAt),
+        lastAttemptAt = Value(lastAttemptAt);
+  static Insertable<SyncPullError> custom({
+    Expression<int>? id,
+    Expression<int>? changeId,
+    Expression<String>? ledgerExternalId,
+    Expression<String>? entityType,
+    Expression<String>? entitySyncId,
+    Expression<String>? action,
+    Expression<String>? rawChangeJson,
+    Expression<String>? errorClass,
+    Expression<String>? errorMessage,
+    Expression<String>? stackTrace,
+    Expression<DateTime>? firstSeenAt,
+    Expression<DateTime>? lastAttemptAt,
+    Expression<int>? attemptCount,
+    Expression<String>? userAction,
+    Expression<DateTime>? resolvedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (changeId != null) 'change_id': changeId,
+      if (ledgerExternalId != null) 'ledger_external_id': ledgerExternalId,
+      if (entityType != null) 'entity_type': entityType,
+      if (entitySyncId != null) 'entity_sync_id': entitySyncId,
+      if (action != null) 'action': action,
+      if (rawChangeJson != null) 'raw_change_json': rawChangeJson,
+      if (errorClass != null) 'error_class': errorClass,
+      if (errorMessage != null) 'error_message': errorMessage,
+      if (stackTrace != null) 'stack_trace': stackTrace,
+      if (firstSeenAt != null) 'first_seen_at': firstSeenAt,
+      if (lastAttemptAt != null) 'last_attempt_at': lastAttemptAt,
+      if (attemptCount != null) 'attempt_count': attemptCount,
+      if (userAction != null) 'user_action': userAction,
+      if (resolvedAt != null) 'resolved_at': resolvedAt,
+    });
+  }
+
+  SyncPullErrorsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? changeId,
+      Value<String?>? ledgerExternalId,
+      Value<String>? entityType,
+      Value<String>? entitySyncId,
+      Value<String>? action,
+      Value<String>? rawChangeJson,
+      Value<String?>? errorClass,
+      Value<String?>? errorMessage,
+      Value<String?>? stackTrace,
+      Value<DateTime>? firstSeenAt,
+      Value<DateTime>? lastAttemptAt,
+      Value<int>? attemptCount,
+      Value<String?>? userAction,
+      Value<DateTime?>? resolvedAt}) {
+    return SyncPullErrorsCompanion(
+      id: id ?? this.id,
+      changeId: changeId ?? this.changeId,
+      ledgerExternalId: ledgerExternalId ?? this.ledgerExternalId,
+      entityType: entityType ?? this.entityType,
+      entitySyncId: entitySyncId ?? this.entitySyncId,
+      action: action ?? this.action,
+      rawChangeJson: rawChangeJson ?? this.rawChangeJson,
+      errorClass: errorClass ?? this.errorClass,
+      errorMessage: errorMessage ?? this.errorMessage,
+      stackTrace: stackTrace ?? this.stackTrace,
+      firstSeenAt: firstSeenAt ?? this.firstSeenAt,
+      lastAttemptAt: lastAttemptAt ?? this.lastAttemptAt,
+      attemptCount: attemptCount ?? this.attemptCount,
+      userAction: userAction ?? this.userAction,
+      resolvedAt: resolvedAt ?? this.resolvedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (changeId.present) {
+      map['change_id'] = Variable<int>(changeId.value);
+    }
+    if (ledgerExternalId.present) {
+      map['ledger_external_id'] = Variable<String>(ledgerExternalId.value);
+    }
+    if (entityType.present) {
+      map['entity_type'] = Variable<String>(entityType.value);
+    }
+    if (entitySyncId.present) {
+      map['entity_sync_id'] = Variable<String>(entitySyncId.value);
+    }
+    if (action.present) {
+      map['action'] = Variable<String>(action.value);
+    }
+    if (rawChangeJson.present) {
+      map['raw_change_json'] = Variable<String>(rawChangeJson.value);
+    }
+    if (errorClass.present) {
+      map['error_class'] = Variable<String>(errorClass.value);
+    }
+    if (errorMessage.present) {
+      map['error_message'] = Variable<String>(errorMessage.value);
+    }
+    if (stackTrace.present) {
+      map['stack_trace'] = Variable<String>(stackTrace.value);
+    }
+    if (firstSeenAt.present) {
+      map['first_seen_at'] = Variable<DateTime>(firstSeenAt.value);
+    }
+    if (lastAttemptAt.present) {
+      map['last_attempt_at'] = Variable<DateTime>(lastAttemptAt.value);
+    }
+    if (attemptCount.present) {
+      map['attempt_count'] = Variable<int>(attemptCount.value);
+    }
+    if (userAction.present) {
+      map['user_action'] = Variable<String>(userAction.value);
+    }
+    if (resolvedAt.present) {
+      map['resolved_at'] = Variable<DateTime>(resolvedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncPullErrorsCompanion(')
+          ..write('id: $id, ')
+          ..write('changeId: $changeId, ')
+          ..write('ledgerExternalId: $ledgerExternalId, ')
+          ..write('entityType: $entityType, ')
+          ..write('entitySyncId: $entitySyncId, ')
+          ..write('action: $action, ')
+          ..write('rawChangeJson: $rawChangeJson, ')
+          ..write('errorClass: $errorClass, ')
+          ..write('errorMessage: $errorMessage, ')
+          ..write('stackTrace: $stackTrace, ')
+          ..write('firstSeenAt: $firstSeenAt, ')
+          ..write('lastAttemptAt: $lastAttemptAt, ')
+          ..write('attemptCount: $attemptCount, ')
+          ..write('userAction: $userAction, ')
+          ..write('resolvedAt: $resolvedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BeeDatabase extends GeneratedDatabase {
   _$BeeDatabase(QueryExecutor e) : super(e);
   $BeeDatabaseManager get managers => $BeeDatabaseManager(this);
@@ -9103,6 +9853,7 @@ abstract class _$BeeDatabase extends GeneratedDatabase {
       $SharedLedgerTagsTable(this);
   late final $TransactionTagOverridesTable transactionTagOverrides =
       $TransactionTagOverridesTable(this);
+  late final $SyncPullErrorsTable syncPullErrors = $SyncPullErrorsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -9125,7 +9876,8 @@ abstract class _$BeeDatabase extends GeneratedDatabase {
         sharedLedgerCategories,
         sharedLedgerAccounts,
         sharedLedgerTags,
-        transactionTagOverrides
+        transactionTagOverrides,
+        syncPullErrors
       ];
 }
 
@@ -13470,6 +14222,331 @@ typedef $$TransactionTagOverridesTableProcessedTableManager
         ),
         TransactionTagOverride,
         PrefetchHooks Function()>;
+typedef $$SyncPullErrorsTableCreateCompanionBuilder = SyncPullErrorsCompanion
+    Function({
+  Value<int> id,
+  required int changeId,
+  Value<String?> ledgerExternalId,
+  required String entityType,
+  required String entitySyncId,
+  required String action,
+  required String rawChangeJson,
+  Value<String?> errorClass,
+  Value<String?> errorMessage,
+  Value<String?> stackTrace,
+  required DateTime firstSeenAt,
+  required DateTime lastAttemptAt,
+  Value<int> attemptCount,
+  Value<String?> userAction,
+  Value<DateTime?> resolvedAt,
+});
+typedef $$SyncPullErrorsTableUpdateCompanionBuilder = SyncPullErrorsCompanion
+    Function({
+  Value<int> id,
+  Value<int> changeId,
+  Value<String?> ledgerExternalId,
+  Value<String> entityType,
+  Value<String> entitySyncId,
+  Value<String> action,
+  Value<String> rawChangeJson,
+  Value<String?> errorClass,
+  Value<String?> errorMessage,
+  Value<String?> stackTrace,
+  Value<DateTime> firstSeenAt,
+  Value<DateTime> lastAttemptAt,
+  Value<int> attemptCount,
+  Value<String?> userAction,
+  Value<DateTime?> resolvedAt,
+});
+
+class $$SyncPullErrorsTableFilterComposer
+    extends Composer<_$BeeDatabase, $SyncPullErrorsTable> {
+  $$SyncPullErrorsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get changeId => $composableBuilder(
+      column: $table.changeId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get ledgerExternalId => $composableBuilder(
+      column: $table.ledgerExternalId,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get entitySyncId => $composableBuilder(
+      column: $table.entitySyncId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get action => $composableBuilder(
+      column: $table.action, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get rawChangeJson => $composableBuilder(
+      column: $table.rawChangeJson, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get errorClass => $composableBuilder(
+      column: $table.errorClass, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get errorMessage => $composableBuilder(
+      column: $table.errorMessage, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get stackTrace => $composableBuilder(
+      column: $table.stackTrace, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get firstSeenAt => $composableBuilder(
+      column: $table.firstSeenAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastAttemptAt => $composableBuilder(
+      column: $table.lastAttemptAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get attemptCount => $composableBuilder(
+      column: $table.attemptCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get userAction => $composableBuilder(
+      column: $table.userAction, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get resolvedAt => $composableBuilder(
+      column: $table.resolvedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$SyncPullErrorsTableOrderingComposer
+    extends Composer<_$BeeDatabase, $SyncPullErrorsTable> {
+  $$SyncPullErrorsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get changeId => $composableBuilder(
+      column: $table.changeId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get ledgerExternalId => $composableBuilder(
+      column: $table.ledgerExternalId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get entitySyncId => $composableBuilder(
+      column: $table.entitySyncId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get action => $composableBuilder(
+      column: $table.action, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get rawChangeJson => $composableBuilder(
+      column: $table.rawChangeJson,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get errorClass => $composableBuilder(
+      column: $table.errorClass, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get errorMessage => $composableBuilder(
+      column: $table.errorMessage,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get stackTrace => $composableBuilder(
+      column: $table.stackTrace, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get firstSeenAt => $composableBuilder(
+      column: $table.firstSeenAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastAttemptAt => $composableBuilder(
+      column: $table.lastAttemptAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get attemptCount => $composableBuilder(
+      column: $table.attemptCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get userAction => $composableBuilder(
+      column: $table.userAction, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get resolvedAt => $composableBuilder(
+      column: $table.resolvedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SyncPullErrorsTableAnnotationComposer
+    extends Composer<_$BeeDatabase, $SyncPullErrorsTable> {
+  $$SyncPullErrorsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get changeId =>
+      $composableBuilder(column: $table.changeId, builder: (column) => column);
+
+  GeneratedColumn<String> get ledgerExternalId => $composableBuilder(
+      column: $table.ledgerExternalId, builder: (column) => column);
+
+  GeneratedColumn<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => column);
+
+  GeneratedColumn<String> get entitySyncId => $composableBuilder(
+      column: $table.entitySyncId, builder: (column) => column);
+
+  GeneratedColumn<String> get action =>
+      $composableBuilder(column: $table.action, builder: (column) => column);
+
+  GeneratedColumn<String> get rawChangeJson => $composableBuilder(
+      column: $table.rawChangeJson, builder: (column) => column);
+
+  GeneratedColumn<String> get errorClass => $composableBuilder(
+      column: $table.errorClass, builder: (column) => column);
+
+  GeneratedColumn<String> get errorMessage => $composableBuilder(
+      column: $table.errorMessage, builder: (column) => column);
+
+  GeneratedColumn<String> get stackTrace => $composableBuilder(
+      column: $table.stackTrace, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get firstSeenAt => $composableBuilder(
+      column: $table.firstSeenAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastAttemptAt => $composableBuilder(
+      column: $table.lastAttemptAt, builder: (column) => column);
+
+  GeneratedColumn<int> get attemptCount => $composableBuilder(
+      column: $table.attemptCount, builder: (column) => column);
+
+  GeneratedColumn<String> get userAction => $composableBuilder(
+      column: $table.userAction, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get resolvedAt => $composableBuilder(
+      column: $table.resolvedAt, builder: (column) => column);
+}
+
+class $$SyncPullErrorsTableTableManager extends RootTableManager<
+    _$BeeDatabase,
+    $SyncPullErrorsTable,
+    SyncPullError,
+    $$SyncPullErrorsTableFilterComposer,
+    $$SyncPullErrorsTableOrderingComposer,
+    $$SyncPullErrorsTableAnnotationComposer,
+    $$SyncPullErrorsTableCreateCompanionBuilder,
+    $$SyncPullErrorsTableUpdateCompanionBuilder,
+    (
+      SyncPullError,
+      BaseReferences<_$BeeDatabase, $SyncPullErrorsTable, SyncPullError>
+    ),
+    SyncPullError,
+    PrefetchHooks Function()> {
+  $$SyncPullErrorsTableTableManager(
+      _$BeeDatabase db, $SyncPullErrorsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncPullErrorsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncPullErrorsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncPullErrorsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> changeId = const Value.absent(),
+            Value<String?> ledgerExternalId = const Value.absent(),
+            Value<String> entityType = const Value.absent(),
+            Value<String> entitySyncId = const Value.absent(),
+            Value<String> action = const Value.absent(),
+            Value<String> rawChangeJson = const Value.absent(),
+            Value<String?> errorClass = const Value.absent(),
+            Value<String?> errorMessage = const Value.absent(),
+            Value<String?> stackTrace = const Value.absent(),
+            Value<DateTime> firstSeenAt = const Value.absent(),
+            Value<DateTime> lastAttemptAt = const Value.absent(),
+            Value<int> attemptCount = const Value.absent(),
+            Value<String?> userAction = const Value.absent(),
+            Value<DateTime?> resolvedAt = const Value.absent(),
+          }) =>
+              SyncPullErrorsCompanion(
+            id: id,
+            changeId: changeId,
+            ledgerExternalId: ledgerExternalId,
+            entityType: entityType,
+            entitySyncId: entitySyncId,
+            action: action,
+            rawChangeJson: rawChangeJson,
+            errorClass: errorClass,
+            errorMessage: errorMessage,
+            stackTrace: stackTrace,
+            firstSeenAt: firstSeenAt,
+            lastAttemptAt: lastAttemptAt,
+            attemptCount: attemptCount,
+            userAction: userAction,
+            resolvedAt: resolvedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int changeId,
+            Value<String?> ledgerExternalId = const Value.absent(),
+            required String entityType,
+            required String entitySyncId,
+            required String action,
+            required String rawChangeJson,
+            Value<String?> errorClass = const Value.absent(),
+            Value<String?> errorMessage = const Value.absent(),
+            Value<String?> stackTrace = const Value.absent(),
+            required DateTime firstSeenAt,
+            required DateTime lastAttemptAt,
+            Value<int> attemptCount = const Value.absent(),
+            Value<String?> userAction = const Value.absent(),
+            Value<DateTime?> resolvedAt = const Value.absent(),
+          }) =>
+              SyncPullErrorsCompanion.insert(
+            id: id,
+            changeId: changeId,
+            ledgerExternalId: ledgerExternalId,
+            entityType: entityType,
+            entitySyncId: entitySyncId,
+            action: action,
+            rawChangeJson: rawChangeJson,
+            errorClass: errorClass,
+            errorMessage: errorMessage,
+            stackTrace: stackTrace,
+            firstSeenAt: firstSeenAt,
+            lastAttemptAt: lastAttemptAt,
+            attemptCount: attemptCount,
+            userAction: userAction,
+            resolvedAt: resolvedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SyncPullErrorsTableProcessedTableManager = ProcessedTableManager<
+    _$BeeDatabase,
+    $SyncPullErrorsTable,
+    SyncPullError,
+    $$SyncPullErrorsTableFilterComposer,
+    $$SyncPullErrorsTableOrderingComposer,
+    $$SyncPullErrorsTableAnnotationComposer,
+    $$SyncPullErrorsTableCreateCompanionBuilder,
+    $$SyncPullErrorsTableUpdateCompanionBuilder,
+    (
+      SyncPullError,
+      BaseReferences<_$BeeDatabase, $SyncPullErrorsTable, SyncPullError>
+    ),
+    SyncPullError,
+    PrefetchHooks Function()>;
 
 class $BeeDatabaseManager {
   final _$BeeDatabase _db;
@@ -13512,4 +14589,6 @@ class $BeeDatabaseManager {
   $$TransactionTagOverridesTableTableManager get transactionTagOverrides =>
       $$TransactionTagOverridesTableTableManager(
           _db, _db.transactionTagOverrides);
+  $$SyncPullErrorsTableTableManager get syncPullErrors =>
+      $$SyncPullErrorsTableTableManager(_db, _db.syncPullErrors);
 }

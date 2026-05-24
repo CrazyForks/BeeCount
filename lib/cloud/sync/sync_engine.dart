@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:drift/drift.dart' as d;
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../data/db.dart';
@@ -19,13 +21,15 @@ import 'change_tracker.dart';
 import 'entity_serializer.dart';
 
 // SyncEngine 按职责拆分到多个 part 文件,共享同一 library:
-// - sync_engine_attachments.dart: 附件上传 / 下载 / 本地清理 / 分类图标上传
+// - sync_engine_attachments.dart: 附件上传 / 下载 / 本地清理 / 分类图标上传(并发 + retry)
 // - sync_engine_resolvers.dart:   跨设备 ID 解析(syncId ↔ 本地 int id)
 // - sync_engine_status.dart:      健康检查 + 历史种子数据补登
 // - sync_engine_realtime.dart:    WS 事件监听 + auto sync / pull 防抖调度
 // - sync_engine_profile.dart:     profile + avatar 同步(theme/income/appearance/ai)
 // - sync_engine_apply.dart:       pull 路径远端变更 → 本地 Drift apply(6 种 entityType)
 // - sync_engine_serialization.dart: push 路径本地实体 → server payload 序列化 + fullPush
+// - sync_engine_pull.dart:        pull 路径错误恢复 — AppCursorStore + SyncErrorStore
+//                                 (cursor 安全 + 失败 change 持久化暴露给 UI)
 part 'sync_engine_attachments.dart';
 part 'sync_engine_resolvers.dart';
 part 'sync_engine_status.dart';
@@ -33,6 +37,7 @@ part 'sync_engine_realtime.dart';
 part 'sync_engine_profile.dart';
 part 'sync_engine_apply.dart';
 part 'sync_engine_serialization.dart';
+part 'sync_engine_pull.dart';
 
 const _uuid = Uuid();
 
@@ -118,12 +123,31 @@ class SyncEngine implements app.SyncService {
   /// 渲一次,出现"启动后头像闪一下"的体感。
   void Function()? onAvatarChanged;
 
+  /// app 侧 cursor + pull 失败 change 持久化的 DAO。
+  /// 详见 [AppCursorStore] / [SyncErrorStore](sync_engine_pull.dart)。
+  late final AppCursorStore appCursor;
+  late final SyncErrorStore pullErrors;
+
+  /// 自定义分类图标下载队列。`_applyCategoryChange` 在主事务内 enqueue,
+  /// `pull` 在事务 commit 之后调 [drainCustomIconQueue] 并发处理。详见
+  /// [CustomIconDownloadJob](sync_engine_pull.dart) 和
+  /// [drainCustomIconQueue](sync_engine_attachments.dart)。
+  final List<CustomIconDownloadJob> pendingCustomIconJobs = [];
+
+  /// pull 期间生效的 [LookupCache]。pull 入口 new + prime,pull 结束清 null。
+  /// resolvers 路径(`sync_engine_resolvers.dart`)优先查它,消除 N+1 SELECT。
+  /// 详见 [LookupCache](sync_engine_pull.dart)。
+  LookupCache? activePullCache;
+
   SyncEngine({
     required this.db,
     required this.provider,
     required this.changeTracker,
     required this.repo,
-  });
+  }) {
+    appCursor = AppCursorStore(provider);
+    pullErrors = SyncErrorStore(db);
+  }
 
   // ==================== SyncService 接口实现 ====================
 
@@ -145,7 +169,7 @@ class SyncEngine implements app.SyncService {
     //
     // 增量 push 只推 changeTracker 登记过的本地操作，不会把没 own 的数据
     // 误推回去，所以是安全的。本地没变更时直接返回，不需要 fallback。
-    final pushed = await _push(ledgerId.toString());
+    final pushed = await push(ledgerId.toString());
     logger.info('SyncEngine', '上传账本完成：增量推送 $pushed 条变更');
 
     _statusCache.remove(ledgerId);
@@ -158,14 +182,14 @@ class SyncEngine implements app.SyncService {
     logger.info('SyncEngine', '下载并恢复账本 ledger=$ledgerId');
 
     // 先尝试增量拉取
-    final pulled = await _pull(ledgerId.toString());
+    final pulled = await pull(ledgerId.toString());
     if (pulled > 0) {
       _statusCache.remove(ledgerId);
       return (inserted: pulled, deletedDup: 0);
     }
 
     // 增量拉取无数据，尝试全量拉取
-    final result = await _fullPull(ledgerId: ledgerId);
+    final result = await runFullPull(ledgerId: ledgerId);
     _statusCache.remove(ledgerId);
     return result;
   }
@@ -333,7 +357,7 @@ class SyncEngine implements app.SyncService {
       // delete + transaction:delete + budget:delete 推到 server,清掉 canonical
       // state,否则 remote ledgers 列表里还会显示这个被删的账本。
       if (ledgerRow == null) {
-        final pushed = await _push(ledgerId);
+        final pushed = await push(ledgerId);
         logger.info(
             'SyncEngine', '账本 $ledgerId 已本地删除,push delete changes: $pushed 条');
         return SyncResult(pushed: pushed, pulled: 0);
@@ -387,14 +411,14 @@ class SyncEngine implements app.SyncService {
         // fullPush 不处理 delete change(_pushAllEntities 只 upsert 当前实体)。
         // fullPush 已把非 delete change 都 markPushed,这里 _push 推剩余的
         // delete change,清掉 server canonical state。
-        final extraPushed = await _push(ledgerId);
+        final extraPushed = await push(ledgerId);
         pushed = localTxCount + extraPushed;
       } else {
-        pushed = await _push(ledgerId);
+        pushed = await push(ledgerId);
         logger.info('SyncEngine', '增量推送: $pushed 条');
       }
 
-      final pulled = await _pull(ledgerId);
+      final pulled = await pull(ledgerId);
 
       // 下载远端附件文件（上传已在 push 前完成）
       try {
@@ -604,7 +628,7 @@ class SyncEngine implements app.SyncService {
   }
 
   /// 推送本地未同步的变更到服务端
-  Future<int> _push(String ledgerId) async {
+  Future<int> push(String ledgerId) async {
     final ledgerIdInt = int.tryParse(ledgerId) ?? -1;
     final ledger = await (db.select(db.ledgers)
           ..where((l) => l.id.equals(ledgerIdInt)))
@@ -714,53 +738,229 @@ class SyncEngine implements app.SyncService {
     return changes.length;
   }
 
-  /// 拉取远程变更并应用到本地。每一页变更用 `db.transaction` 包起来，把
-  /// "逐条 select + insert" 合成一个事务，初次同步几百条实体时的"感觉一条
-  /// 一条蹦出来"变成一次性写入，iOS SQLite 的 fsync 代价减一大截。
+  /// 拉取远程变更并应用到本地。
   ///
-  /// 默认用 provider 存在 SharedPreferences 里的全局 cursor；传 [sinceOverride]
-  /// 可以强制从指定 change_id 重拉（用 0 表示从头）。BeeCount Cloud apply 是
-  /// 按 entity_sync_id 做 upsert 的，所以重拉历史是幂等的，用于"cursor 推到顶
-  /// 但本地状态跟实际脱节"的恢复场景。
-  Future<int> _pull(String ledgerId, {int? sinceOverride}) async {
-    int totalPulled = 0;
-
-    bool hasMore = true;
-    int? nextSince = sinceOverride;
-    while (hasMore) {
-      final result = await provider.pullChanges(since: nextSince, limit: 500);
+  /// 改造点(详见 `.docs/full-pull-refactor/`):
+  /// 1. **cursor 安全**:cloud-sync 包 `pullChanges(persistCursor: false)`,
+  ///    app 侧用 [appCursor] 管,**整页 apply 成功后**才推进
+  /// 2. **失败隔离**:整页 apply 抛错 → rollback + 错误入 [pullErrors] 表 +
+  ///    cursor 不推进 + 后续页不再拉,UI 显示"同步暂停"
+  /// 3. **busy retry**:SQLite busy/locked 单条 retry 2 次
+  /// 4. **小颗粒度**:单页 limit 50(原 500),让 retry 范围 + UI 反馈更可控
+  ///
+  /// 传 [sinceOverride]=0 = 从头重放(等价旧 replayAllChanges)。
+  ///
+  /// **单飞锁**:多个 caller(bootstrap / WS push / ledger switch /
+  /// connectivity restored / 用户下拉刷新)同时触发 pull 时,SQLite 排队 +
+  /// main isolate 拥塞会让 apply 时间翻倍。这里用 [_pullInFlight] 互斥:
+  /// - 普通 pull(sinceOverride=null)碰到 in-flight 时**复用结果**(节省一
+  ///   轮)
+  /// - replay(sinceOverride 非 null)语义独立,等 in-flight 完成后再自己跑
+  Future<int> pull(String ledgerId, {int? sinceOverride}) async {
+    // 1. in-flight 单飞
+    final inFlight = _pullInFlight;
+    if (inFlight != null) {
+      if (sinceOverride == null && _pullInFlightSince == null) {
+        // 普通 pull 复用 in-flight 结果
+        logger.info('SyncEngine', 'pull 已在执行中,复用 in-flight 结果');
+        return inFlight.future;
+      }
+      // replay / since 不同 → 等当前 pull 完成再独立跑
       logger.info('SyncEngine',
-          'pull: since=$nextSince got ${result.changes.length} changes hasMore=${result.hasMore}');
+          'pull(sinceOverride=$sinceOverride) 等待 in-flight pull 完成');
+      try {
+        await inFlight.future;
+      } catch (_) {/* 忽略 in-flight 的错,自己单独跑 */}
+    }
+
+    final completer = Completer<int>();
+    _pullInFlight = completer;
+    _pullInFlightSince = sinceOverride;
+    try {
+      final n = await _doPull(ledgerId, sinceOverride);
+      completer.complete(n);
+      return n;
+    } catch (e, st) {
+      completer.completeError(e, st);
+      rethrow;
+    } finally {
+      if (_pullInFlight == completer) {
+        _pullInFlight = null;
+        _pullInFlightSince = null;
+      }
+    }
+  }
+
+  /// pull 单飞锁。多个 caller 同时调 pull 时,只第一个真跑,后续复用 / 等待。
+  Completer<int>? _pullInFlight;
+  int? _pullInFlightSince;
+
+  Future<int> _doPull(String ledgerId, int? sinceOverride) async {
+    int? nextSince = sinceOverride ?? await appCursor.read();
+    if (nextSince == 0 && sinceOverride == null) {
+      await appCursor.migrateFromProviderCursor();
+      nextSince = await appCursor.read();
+    }
+
+    // **Lazy prime**:先 HTTP 一次试探有没有数据。99% 场景(无变更)直接
+    // return,跳过 LookupCache 全表 SELECT(transactions 10k+ 行的 prime
+    // 每次都要 200-500ms 主线程时间)。多账本场景这里是大头 — 启动时 5 个
+    // ledger 各跑一次 sync,空跑也要 prime 5 次,白白卡 1-2s。
+    final probe = await provider.pullChanges(
+      since: nextSince,
+      limit: 500,
+      persistCursor: false,
+    );
+    if (probe.changes.isEmpty) {
+      logger.info('SyncEngine',
+          'pull: since=$nextSince 无新变更,跳过 LookupCache prime');
+      return 0;
+    }
+
+    // 有数据 → prime LookupCache,然后跑 loop(把已拉的第一页喂进去)
+    final cache = LookupCache();
+    await cache.prime(db);
+    activePullCache = cache;
+
+    try {
+      return await _runPullLoop(ledgerId, nextSince, firstPage: probe);
+    } finally {
+      activePullCache = null;
+    }
+  }
+
+  Future<int> _runPullLoop(
+    String ledgerId,
+    int? nextSince, {
+    BeeCountCloudPullResult? firstPage,
+  }) async {
+    int totalApplied = 0;
+    bool hasMore = true;
+    int pageIndex = 0;
+    final loopStart = DateTime.now();
+    BeeCountCloudPullResult? reuseResult = firstPage;
+    while (hasMore) {
+      pageIndex++;
+      final pageStart = DateTime.now();
+      final BeeCountCloudPullResult result;
+      if (reuseResult != null) {
+        // 第一轮:复用 _doPull 的探针结果,不再发一次 HTTP
+        result = reuseResult;
+        reuseResult = null;
+        logger.info('SyncEngine',
+            'pull #$pageIndex: since=$nextSince got ${result.changes.length} hasMore=${result.hasMore} (reused probe)');
+      } else {
+        result = await provider.pullChanges(
+          since: nextSince,
+          limit: 500,
+          persistCursor: false, // cursor 由 appCursor 接管
+        );
+        final httpMs = DateTime.now().difference(pageStart).inMilliseconds;
+        logger.info('SyncEngine',
+            'pull #$pageIndex: since=$nextSince got ${result.changes.length} hasMore=${result.hasMore} (HTTP ${httpMs}ms)');
+      }
       if (result.changes.isEmpty) break;
 
-      final pageApplied = await db.transaction<int>(() async {
-        int pageCount = 0;
-        int skipped = 0;
-        for (final change in result.changes) {
-          final applied = await _applyRemoteChange(change);
-          if (applied) {
-            pageCount++;
+      final applyStart = DateTime.now();
+      final outcome = await _applyPullPage(result.changes);
+      final applyMs = DateTime.now().difference(applyStart).inMilliseconds;
+      logger.info('SyncEngine',
+          'pull #$pageIndex: applied ${outcome.applied}/${result.changes.length} (apply ${applyMs}ms, page total ${DateTime.now().difference(pageStart).inMilliseconds}ms)');
+      totalApplied += outcome.applied;
+      if (outcome.blocked) {
+        logger.warning('SyncEngine',
+            'pull 被错误阻塞 cursor 停在 $nextSince — UI 应显示同步异常');
+        break;
+      }
+
+      // 整页成功:推进 cursor,处理本页 enqueue 的自定义图标
+      await appCursor.commit(result.serverCursor);
+      nextSince = result.serverCursor;
+
+      // 同 change_id 之前如果有未 resolved 错误(server 修了脏数据 + 推新
+      // change → apply 通过)→ markResolved 让 UI 不再显示
+      for (final ch in result.changes) {
+        await pullErrors.markResolved(ch.changeId);
+      }
+
+      // 主事务已 commit,fire-and-forget 并发处理图标 queue,不阻塞下一页
+      if (pendingCustomIconJobs.isNotEmpty) {
+        unawaited(drainCustomIconQueue());
+      }
+
+      hasMore = result.hasMore;
+    }
+
+    final totalMs = DateTime.now().difference(loopStart).inMilliseconds;
+    if (totalApplied > 0 || pageIndex > 0) {
+      logger.info('SyncEngine',
+          'pull: 累计 apply $totalApplied 条 / $pageIndex 页 / 总耗时 ${totalMs}ms');
+    }
+    return totalApplied;
+  }
+
+  /// 单页 apply。整页事务 try/catch:
+  /// - 不可恢复异常 → rollback + 错误入 [pullErrors] + return blocked
+  /// - SQLite busy/locked → 单条 retry 2 次
+  Future<_PullPageOutcome> _applyPullPage(
+      List<BeeCountCloudSyncChange> changes) async {
+    int applied = 0;
+    int skipped = 0;
+    BeeCountCloudSyncChange? failingChange;
+
+    try {
+      await db.transaction(() async {
+        for (final ch in changes) {
+          failingChange = ch;
+          final ok = await _applyOneWithBusyRetry(ch);
+          if (ok) {
+            applied++;
           } else {
             skipped++;
           }
         }
-        if (skipped > 0) {
-          logger.info('SyncEngine', 'pull: 应用 $pageCount / 跳过 $skipped 条 (本页)');
-        }
-        return pageCount;
       });
-      totalPulled += pageApplied;
-
-      hasMore = result.hasMore;
-      // 下一页接着上一页的 cursor 往后翻；pullChanges 内部也会 save，这里
-      // 只是显式把下一个页面的 since 对齐到 server 返回的最新 cursor。
-      if (hasMore) nextSince = result.serverCursor;
+      if (skipped > 0) {
+        logger.info('SyncEngine', 'pull: 应用 $applied / 跳过 $skipped (本页)');
+      }
+      return _PullPageOutcome(applied: applied, blocked: false);
+    } catch (e, st) {
+      // 整页 rollback 已自动完成(Drift transaction 抛错回滚)
+      logger.error(
+          'SyncEngine',
+          '本页 apply 抛错 change_id=${failingChange?.changeId} '
+              'type=${failingChange?.entityType}',
+          e,
+          st);
+      final ch = failingChange;
+      if (ch != null) {
+        await pullErrors.record(change: ch, error: e, stackTrace: st);
+      }
+      return const _PullPageOutcome(applied: 0, blocked: true);
     }
+  }
 
-    if (totalPulled > 0) {
-      logger.info('SyncEngine', 'pull: 应用 $totalPulled 条远程变更');
+  /// 单条 apply 带 SQLite busy/locked retry。其它异常直接抛,让外层整页 rollback。
+  ///
+  /// 用 `e.toString()` 探测 SqliteException 类型,避免引入 sqlite3 包依赖
+  /// (Drift 内部用,但这里直接 import 会触发 depend_on_referenced_packages)。
+  Future<bool> _applyOneWithBusyRetry(BeeCountCloudSyncChange ch) async {
+    var attempts = 0;
+    while (true) {
+      try {
+        return await applyRemoteChange(ch);
+      } catch (e) {
+        final msg = e.toString().toLowerCase();
+        final transient = (msg.contains('sqlite') || msg.contains('database'))
+            && (msg.contains('busy') || msg.contains('locked'));
+        if (transient && attempts < 2) {
+          attempts++;
+          await Future.delayed(Duration(milliseconds: 50 * (1 << attempts)));
+          continue;
+        }
+        rethrow;
+      }
     }
-    return totalPulled;
   }
 
   /// 从 change_id=0 起把整段 sync_changes 重拉一遍并幂等应用。
@@ -769,7 +969,7 @@ class SyncEngine implements app.SyncService {
   /// Cloud 的增量日志，只是把起点拨回 0，符合 BeeCount Cloud 的同步模型。
   Future<int> replayAllChanges() async {
     logger.info('SyncEngine', 'replayAllChanges: 从 0 开始重拉 sync_changes');
-    return _pull('', sinceOverride: 0);
+    return pull('', sinceOverride: 0);
   }
 
   // 附件相关方法搬到 sync_engine_attachments.dart 这个 part 文件:
@@ -778,7 +978,7 @@ class SyncEngine implements app.SyncService {
   //   _cleanupCategoryIconFilesOnDisk
 
   /// 新设备全量拉取
-  Future<({int inserted, int deletedDup})> _fullPull(
+  Future<({int inserted, int deletedDup})> runFullPull(
       {required int ledgerId}) async {
     logger.info('SyncEngine', '开始全量拉取 ledger=$ledgerId');
 
@@ -793,8 +993,15 @@ class SyncEngine implements app.SyncService {
       return (inserted: 0, deletedDup: 0);
     }
 
-    // 复用 importTransactionsJson
-    final result = await importTransactionsJson(repo, ledgerId, data);
+    // 复用 importTransactionsJson;recordChanges:false 阻止反向回流:
+    // 从云端拉下来的数据**不应该**再以 local_changes 形式推回去,否则 10k
+    // 条 fullPull 会触发 SyncCoordinator 反向 sync,白白多一轮 10k push。
+    final result = await importTransactionsJson(
+      repo,
+      ledgerId,
+      data,
+      recordChanges: false,
+    );
     logger.info('SyncEngine', '全量拉取完成: inserted=${result.inserted}');
 
     // 下载附件
@@ -921,4 +1128,15 @@ class SyncHealthReport {
     if (tags.remote >= 0 && tags.local > tags.remote) return true;
     return false;
   }
+}
+
+/// pull 单页处理结果。详见 [SyncEngine._applyPullPage]。
+class _PullPageOutcome {
+  const _PullPageOutcome({required this.applied, required this.blocked});
+
+  /// 本页成功 apply 的条数。整页 rollback 时为 0。
+  final int applied;
+
+  /// 是否被错误阻塞(整页 rollback,cursor 不推进)。
+  final bool blocked;
 }
