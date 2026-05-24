@@ -5,7 +5,7 @@ import 'ai_provider_config.dart';
 import 'ai_provider_factory.dart';
 import 'ai_provider_manager.dart';
 import '../billing/bill_creation_service.dart';
-import '../billing/ocr_service.dart';
+import '../billing/bill_recognition_result.dart';
 import '../data/tag_seed_service.dart';
 import '../../ai/tasks/bill_extraction_task.dart';
 import '../../data/repositories/base_repository.dart';

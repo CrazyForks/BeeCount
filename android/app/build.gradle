@@ -169,9 +169,6 @@ flutter {
 }
 
 dependencies {
-    // Google ML Kit 中文文本识别
-    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0'
-
     // Java language desugaring support for older Android devices.
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 }

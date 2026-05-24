@@ -7,7 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../system/logger_service.dart';
 import '../data/tag_seed_service.dart';
 import 'category_matcher.dart';
-import 'ocr_service.dart';
+import 'bill_recognition_result.dart';
 
 /// 账单创建服务
 ///

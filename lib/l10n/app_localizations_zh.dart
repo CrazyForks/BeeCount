@@ -3809,7 +3809,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiEnableTitle => '启用AI小助手';
 
   @override
-  String get aiEnableSubtitle => '使用AI增强OCR识别准确度，提取金额、商家、时间等信息，并支持自然语言对话';
+  String get aiEnableSubtitle => '使用 AI 视觉识别账单截图,提取金额、商家、时间等信息,并支持自然语言对话';
 
   @override
   String get aiEnableToastOn => 'AI小助手已启用';
@@ -3884,6 +3884,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiOcrNoAmount => '未识别到有效金额，请手动记账';
+
+  @override
+  String get aiNotConfiguredHint => '未配置 AI 服务，请前往「我的 → AI 设置」配置';
+
+  @override
+  String get aiNotConfiguredNotificationTitle => '❌ 无法识别截图';
+
+  @override
+  String get aiNotConfiguredNotificationBody => '未配置 AI 服务，点击前往设置';
 
   @override
   String get aiOcrNoLedger => '未找到账本';
@@ -4006,7 +4015,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get smartBilling => '智能记账';
 
   @override
-  String get smartBillingDesc => 'AI小助手、OCR扫描、自动记账';
+  String get smartBillingDesc => 'AI 助手、智能识别、自动记账';
 
   @override
   String get smartBillingPageTitle => '智能记账';
@@ -4024,7 +4033,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get smartBillingImageBillingDesc => '从相册选择支付截图进行识别';
 
   @override
-  String get smartBillingImageBillingGuide => '在首页长按底部中间的 + 按钮，选择「相册」即可使用图片记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。';
+  String get smartBillingImageBillingGuide => '在首页长按底部中间的 + 按钮,选择「相册」即可使用图片记账功能。需先在「我的 → AI 设置」配置 AI 服务,AI 视觉模型会自动识别金额、商家、时间等账单信息。';
 
   @override
   String get smartBillingAIOptional => 'AI 识别为可选功能，配置后可提高识别准确度';
@@ -4036,7 +4045,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get smartBillingCameraBillingDesc => '拍摄支付截图进行识别';
 
   @override
-  String get smartBillingCameraBillingGuide => '在首页长按底部中间的 + 按钮，选择「拍照」即可使用拍照记账功能。配置AI后可智能识别账单信息，未配置时仍可通过OCR识别文字。';
+  String get smartBillingCameraBillingGuide => '在首页长按底部中间的 + 按钮,选择「拍照」即可使用拍照记账功能。需先在「我的 → AI 设置」配置 AI 服务,AI 视觉模型会自动识别金额、商家、时间等账单信息。';
 
   @override
   String get smartBillingVoiceBilling => '语音记账';
@@ -4846,7 +4855,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiPromptVarCurrentDate => '当前日期，如\"2025-01-15\"';
 
   @override
-  String get aiPromptVarOcrText => '用户输入或OCR识别的文本内容';
+  String get aiPromptVarOcrText => '用户输入的文本内容';
 
   @override
   String get aiPromptVarCategories => '支出和收入分类列表';
@@ -4870,21 +4879,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String aiModelSwitched(String modelName) {
     return '已切换到 $modelName';
   }
-
-  @override
-  String get aiUsingVisionDesc => '启用图像识别，以获得更高的识别精度';
-
-  @override
-  String get aiUnUsingVisionDesc => '已关闭图片识别，仅使用OCR文本';
-
-  @override
-  String get aiUploadImage => '上传图片到AI';
-
-  @override
-  String get aiUseVisionDesc => '使用视觉模型，识别更准确';
-
-  @override
-  String get aiUnUseVisionDesc => '仅使用文本模型分析OCR结果';
 
   @override
   String get aiCustomBaseUrlHelper => '标准聊天补全API地址，例如 https://api.example.com/v1';
@@ -10236,7 +10230,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiEnableTitle => '啟用 AI 小助手';
 
   @override
-  String get aiEnableSubtitle => '使用 AI 增強 OCR 識別準確度，提取金額、商家、時間等資訊，並支援自然語言對話';
+  String get aiEnableSubtitle => '使用 AI 視覺識別帳單截圖,提取金額、商家、時間等資訊,並支援自然語言對話';
 
   @override
   String get aiEnableToastOn => 'AI 小助手已啟用';
@@ -10311,6 +10305,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiOcrNoAmount => '未識別到有效金額，請手動記帳';
+
+  @override
+  String get aiNotConfiguredHint => '未配置 AI 服務，請前往「我的 → AI 設定」配置';
+
+  @override
+  String get aiNotConfiguredNotificationTitle => '❌ 無法識別截圖';
+
+  @override
+  String get aiNotConfiguredNotificationBody => '未配置 AI 服務，點選前往設定';
 
   @override
   String get aiOcrNoLedger => '未找到帳本';
@@ -10433,7 +10436,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get smartBilling => '智慧記帳';
 
   @override
-  String get smartBillingDesc => 'AI 小助手、OCR掃描、自動記帳';
+  String get smartBillingDesc => 'AI 助手、智慧識別、自動記帳';
 
   @override
   String get smartBillingPageTitle => '智慧記帳';
@@ -10451,7 +10454,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get smartBillingImageBillingDesc => '從相簿選擇支付截圖進行識別';
 
   @override
-  String get smartBillingImageBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「相簿」即可使用圖片記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。';
+  String get smartBillingImageBillingGuide => '在首頁長按底部中間的 + 按鈕,選擇「相簿」即可使用圖片記帳功能。需先在「我的 → AI 設定」配置 AI 服務,AI 視覺模型會自動識別金額、商家、時間等帳單資訊。';
 
   @override
   String get smartBillingAIOptional => 'AI 識別為可選功能，配置後可提高識別準確度';
@@ -10463,7 +10466,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get smartBillingCameraBillingDesc => '拍攝支付截圖進行識別';
 
   @override
-  String get smartBillingCameraBillingGuide => '在首頁長按底部中間的 + 按鈕，選擇「拍照」即可使用拍照記帳功能。配置AI後可智慧識別帳單資訊，未配置時仍可透過OCR識別文字。';
+  String get smartBillingCameraBillingGuide => '在首頁長按底部中間的 + 按鈕,選擇「拍照」即可使用拍照記帳功能。需先在「我的 → AI 設定」配置 AI 服務,AI 視覺模型會自動識別金額、商家、時間等帳單資訊。';
 
   @override
   String get smartBillingVoiceBilling => '語音記帳';
@@ -11273,7 +11276,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aiPromptVarCurrentDate => '目前日期，如「2025-01-15」';
 
   @override
-  String get aiPromptVarOcrText => '使用者輸入或 OCR 識別的文字內容';
+  String get aiPromptVarOcrText => '使用者輸入的文字內容';
 
   @override
   String get aiPromptVarCategories => '支出和收入分類清單';
@@ -11297,21 +11300,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String aiModelSwitched(String modelName) {
     return '已切換到 $modelName';
   }
-
-  @override
-  String get aiUsingVisionDesc => '啟用影像識別，以獲得更高的識別精度';
-
-  @override
-  String get aiUnUsingVisionDesc => '已關閉圖片識別，僅使用OCR文字';
-
-  @override
-  String get aiUploadImage => '上傳圖片到AI';
-
-  @override
-  String get aiUseVisionDesc => '使用視覺模型，辨識更準確';
-
-  @override
-  String get aiUnUseVisionDesc => '僅使用文字模型分析OCR結果';
 
   @override
   String get aiCustomBaseUrlHelper => '標準聊天補全API位址，例如 https://api.example.com/v1';

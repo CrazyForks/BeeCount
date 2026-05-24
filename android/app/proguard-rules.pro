@@ -115,16 +115,9 @@
 -dontwarn io.flutter.app.FlutterPlayStoreSplitApplication
 -dontwarn io.flutter.embedding.engine.deferredcomponents.PlayStoreDeferredComponentManager**
 
-# Keep Google ML Kit Text Recognition classes
--keep class com.google.mlkit.vision.text.** { *; }
--dontwarn com.google.mlkit.vision.text.chinese.**
--dontwarn com.google.mlkit.vision.text.devanagari.**
--dontwarn com.google.mlkit.vision.text.japanese.**
--dontwarn com.google.mlkit.vision.text.korean.**
-
-# Keep ML Kit common classes
--keep class com.google.mlkit.common.** { *; }
--keep class com.google.android.gms.internal.mlkit_vision_text_common.** { *; }
+# v3.2.1 删 OCR(google_mlkit_text_recognition + GoogleMLKit/TextRecognitionChinese
+# Android/iOS 端依赖)后,这里原本的 mlkit keep / dontwarn 规则全部不再需要,
+# R8 shrinker 也不会再 hit mlkit 类。
 
 # TensorFlow Lite - 暂时注释掉本地模型依赖，只使用云端API
 -dontwarn org.tensorflow.lite.**

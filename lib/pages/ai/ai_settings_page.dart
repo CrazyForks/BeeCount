@@ -95,28 +95,9 @@ class _AISettingsPageState extends ConsumerState<AISettingsPage> {
             subtitle: Text(l10n.aiEnableSubtitle),
             activeColor: primaryColor,
           ),
-          BeeTokens.cardDivider(context),
-          SwitchListTile(
-            value: config.useVision,
-            onChanged: config.enabled
-                ? (value) async {
-                    await notifier.setUseVision(value);
-                    if (mounted) {
-                      showToast(
-                        context,
-                        value ? l10n.aiUsingVisionDesc : l10n.aiUnUsingVisionDesc,
-                      );
-                    }
-                  }
-                : null,
-            title: Text(
-              l10n.aiUploadImage,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            subtitle: Text(
-                config.useVision ? l10n.aiUseVisionDesc : l10n.aiUnUseVisionDesc),
-            activeColor: primaryColor,
-          ),
+          // v3.2.1 删 OCR 后,图片识别完全走 AI 视觉,无需用户开关。原「上传
+          // 图片到 AI」(useVision)开关在此移除;底层 pref key 保留以兼容
+          // 老配置导入导出。
         ],
       ),
     );
