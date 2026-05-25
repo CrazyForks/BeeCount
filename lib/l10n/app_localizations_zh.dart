@@ -3880,6 +3880,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiNotConfiguredHint => '未配置 AI 服务，请前往「我的 → AI 设置」配置';
 
   @override
+  String get aiOcrCheckLog => '识别失败，请查看日志了解详情';
+
+  @override
   String get aiNotConfiguredNotificationTitle => '❌ 无法识别截图';
 
   @override
@@ -10290,6 +10293,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiNotConfiguredHint => '未配置 AI 服務，請前往「我的 → AI 設定」配置';
+
+  @override
+  String get aiOcrCheckLog => '識別失敗，請查看日誌瞭解詳情';
 
   @override
   String get aiNotConfiguredNotificationTitle => '❌ 無法識別截圖';

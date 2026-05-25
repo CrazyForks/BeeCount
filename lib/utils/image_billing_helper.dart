@@ -98,14 +98,17 @@ class ImageBillingHelper {
         return;
       }
 
+      // BillExtractionService 内部 lazy init,首次 extract 自动加载用户自定义 prompt。
       final billInfo = await BillExtractionService().extractFromImage(imageFile);
 
       if (!context.mounted) return;
       Navigator.of(context).pop();
 
-      // billInfo == null:AI 调用失败 / 无效 / 解析不出账单(自身或网络问题)
+      // billInfo == null:AI 调用失败 / 返回格式错 / 网络问题。具体原因 service
+      // 内部已经 logger.warning/error 打了,UI 统一提示让用户去看日志,避免英文化
+      // AI 原始错误造成的乱码 / 隐私问题。
       if (billInfo == null) {
-        showToast(context, l10n.aiOcrFailed(l10n.aiNotConfiguredHint));
+        showToast(context, l10n.aiOcrCheckLog);
         return;
       }
 
