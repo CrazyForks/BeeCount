@@ -134,6 +134,7 @@
   "aiOcrFailed": "識別失敗: {error}",
   "aiOcrNoAmount": "未識別到有效金額，請手動記帳",
   "aiNotConfiguredHint": "未配置 AI 服務，請前往「我的 → AI 設定」配置",
+  "aiOcrCheckLog": "識別失敗，請查看日誌瞭解詳情",
   "aiNotConfiguredNotificationTitle": "❌ 無法識別截圖",
   "aiNotConfiguredNotificationBody": "未配置 AI 服務，點選前往設定",
   "aiOcrNoLedger": "未找到帳本",

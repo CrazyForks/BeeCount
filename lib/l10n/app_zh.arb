@@ -1539,6 +1539,7 @@
   "aiOcrRecognizing": "正在识别账单...",
   "aiOcrNoAmount": "未识别到有效金额，请手动记账",
   "aiNotConfiguredHint": "未配置 AI 服务，请前往「我的 → AI 设置」配置",
+  "aiOcrCheckLog": "识别失败，请查看日志了解详情",
   "aiNotConfiguredNotificationTitle": "❌ 无法识别截图",
   "aiNotConfiguredNotificationBody": "未配置 AI 服务，点击前往设置",
   "aiOcrNoLedger": "未找到账本",

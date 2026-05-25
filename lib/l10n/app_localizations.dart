@@ -7410,6 +7410,12 @@ abstract class AppLocalizations {
   /// **'AI service not configured. Go to \"Me → AI Settings\" to set up.'**
   String get aiNotConfiguredHint;
 
+  /// No description provided for @aiOcrCheckLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognition failed. Check logs for details.'**
+  String get aiOcrCheckLog;
+
   /// No description provided for @aiNotConfiguredNotificationTitle.
   ///
   /// In en, this message translates to:

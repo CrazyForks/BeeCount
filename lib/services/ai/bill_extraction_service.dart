@@ -28,20 +28,33 @@ class BillExtractionService {
   /// 用户自定义提示词模板
   String? _customPromptTemplate;
 
+  /// Lazy init future。构造时不立即跑 SharedPreferences read,首次 extract 调
+  /// 用前自动 await(也允许 caller 显式提前调 [init] 预热)。避免 caller 漏调
+  /// init() 导致自定义提示词失效。
+  Future<void>? _initFuture;
+
   BillExtractionService({
     this.expenseCategories,
     this.incomeCategories,
     this.accounts,
   });
 
-  /// 初始化（加载用户配置）
-  Future<void> init() async {
+  /// 初始化(加载用户配置)。可显式调用预热,也可由 [_ensureInitialized] 自动
+  /// 触发。重复调用幂等 — 第一次 init 后 [_initFuture] 已固定,后续 extract
+  /// 复用同一个 future,不重复读 prefs。
+  Future<void> init() {
+    return _initFuture ??= _doInit();
+  }
+
+  Future<void> _doInit() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(AIConstants.keyAiCustomPrompt);
-    // 空字符串视为未配置，避免新装/异常下走出空提示词导致 AI 无法识账
+    // 空字符串视为未配置,避免新装/异常下走出空提示词导致 AI 无法识账
     _customPromptTemplate =
         (saved != null && saved.trim().isNotEmpty) ? saved : null;
   }
+
+  Future<void> _ensureInitialized() => init();
 
   // ============================================================
   // 公开 API
@@ -55,6 +68,7 @@ class BillExtractionService {
       logger.warning(_tag, '输入文本为空');
       return null;
     }
+    await _ensureInitialized();
 
     try {
       final prompt = _buildPrompt(
@@ -63,6 +77,8 @@ class BillExtractionService {
       );
 
       logger.debug(_tag, '提取文本账单，prompt长度: ${prompt.length}');
+      // 打印完整 prompt 用于诊断自定义提示词是否生效(空模板 fallback 默认模板等)
+      logger.debug(_tag, '完整 prompt:\n$prompt');
 
       final response = await AIProviderFactory.chat(
         prompt,
@@ -88,6 +104,7 @@ class BillExtractionService {
       logger.warning(_tag, '图片文件不存在');
       return null;
     }
+    await _ensureInitialized();
 
     try {
       final prompt = _buildPrompt(
@@ -96,6 +113,8 @@ class BillExtractionService {
       );
 
       logger.debug(_tag, '提取图片账单，prompt长度: ${prompt.length}');
+      // 打印完整 prompt 用于诊断自定义提示词是否生效
+      logger.debug(_tag, '完整 prompt:\n$prompt');
 
       final response = await AIProviderFactory.vision(
         image,

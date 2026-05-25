@@ -3880,6 +3880,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiNotConfiguredHint => 'AI service not configured. Go to \"Me → AI Settings\" to set up.';
 
   @override
+  String get aiOcrCheckLog => 'Recognition failed. Check logs for details.';
+
+  @override
   String get aiNotConfiguredNotificationTitle => '❌ Cannot recognize screenshot';
 
   @override
