@@ -65,6 +65,15 @@ class _BeeAppState extends ConsumerState<BeeApp>
   static bool _isHandlingAppLink = false;
   static DateTime? _lastAppLinkHandleTime;
 
+  // _triggerInitialCloudSync 节流戳。app 启动期 microtask + listenManual
+  // 两路都会触发,曾导致 fullPush 2-3 路并发把 sync_changes 表撑膨胀 2-2.5x
+  // (详见 .docs/concurrent-fullpush-bloat.md)。5 秒内只跑第一次。
+  //
+  // 注意:fullPush / push 内部已经有 in-flight 单飞兜底,这里是防御性的第二
+  // 层 —— 避免 trigger 内的 phase 1(syncMyProfile / storage.list / pull)
+  // 重复跑浪费 HTTP。
+  DateTime? _lastInitialCloudSyncTriggeredAt;
+
   // 记账按钮相关状态
   late AnimationController _expandController;
   late Animation<double> _expandAnimation;
@@ -191,6 +200,17 @@ class _BeeAppState extends ConsumerState<BeeApp>
   }
 
   void _triggerInitialCloudSync(SyncEngine engine) {
+    // 5 秒幂等节流:microtask + listenManual 在启动期可能两路都触发,这里挡掉
+    // 第二次,phase 1 / phase 2 都只跑一次。详见 [_lastInitialCloudSyncTriggeredAt]。
+    final now = DateTime.now();
+    final last = _lastInitialCloudSyncTriggeredAt;
+    if (last != null && now.difference(last).inSeconds < 5) {
+      logger.info('AppStart',
+          '_triggerInitialCloudSync 5 秒内已触发过(${now.difference(last).inMilliseconds}ms 前),跳过');
+      return;
+    }
+    _lastInitialCloudSyncTriggeredAt = now;
+
     Future(() async {
       try {
         // 启动同步分层策略(2026-05-24 改造):
@@ -246,6 +266,19 @@ class _BeeAppState extends ConsumerState<BeeApp>
           logger.info('AppStart', 'Phase1: pull(用户级) applied=$pulled');
         } catch (e, st) {
           logger.error('AppStart', 'Phase1: pull 失败', e, st);
+        }
+
+        // d) 推 user-global change(account / category / tag)。
+        //    放在 Phase 2(每个 ledger 并行)之前显式跑一次,确保:
+        //    1) Phase 2 并发 push 时,各 ledger 的 _push/fullPush 调
+        //       pushUserGlobalEntities 都会复用这次的 in-flight,不会重复推
+        //    2) 即使 Phase 2 全部 fast-skip(无 ledger-scope 待推 + 已在远端),
+        //       user-global 的新增/重命名也能推上去(原来 Phase 2 skip 时会漏)
+        try {
+          final pushed = await engine.pushUserGlobalEntities();
+          logger.info('AppStart', 'Phase1: pushUserGlobalEntities pushed=$pushed');
+        } catch (e, st) {
+          logger.error('AppStart', 'Phase1: pushUserGlobalEntities 失败', e, st);
         }
 
         // ========== Phase 2: 每个 ledger 并行 push + 附件 ==========
